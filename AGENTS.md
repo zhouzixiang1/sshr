@@ -151,7 +151,7 @@ Tests are located in `sshr/tests/` and run with pytest.
     - Paper example `0x46B9`
     - **All 256** 3-bit Boolean functions
     - A random sample of 200 4-bit functions
-  - Conditionally tests `sshr_i` on the paper example if PuLP/Gurobi is available.
+  - Conditionally tests `sshr_i` on the paper example if Gurobi is available.
 
 - **`tests/test_mcts_correctness.py`**:
   - Runs `sshr_mcts` (v1) on all 255 non-zero 3-bit functions and checks simulation correctness.
@@ -213,10 +213,37 @@ When modifying any synthesis algorithm, preserve the update semantics specific t
 - `.gitignore` already excludes `__pycache__`, `*.pyc`, `.pytest_cache/`, and `.DS_Store`.
 - No external API keys or secrets are required. The only optional commercial dependency is Gurobi, which must be licensed separately by the user.
 
+## Version Control Workflow
+
+This repository uses Git with a single `main` branch. **Every completed change must be committed and pushed to `origin/main` immediately.**
+
+### Commit Policy
+
+- **Commit early, commit often**: stage related changes into focused, atomic commits.
+- **Commit message format**: `<type>: <description>`
+  - `feat:` — new algorithm, experiment, or capability
+  - `fix:` — bug fix
+  - `refactor:` — code restructuring without behavior change
+  - `docs:` — documentation or comment updates
+  - `chore:` — build, tooling, or repository maintenance (e.g., `.gitignore`, directory reorganization)
+- **Push after every commit**: do not leave unpushed commits on the local branch.
+
+### What to Exclude from Git
+
+The following are already listed in `.gitignore`:
+
+- Python cache: `__pycache__/`, `*.pyc`, `.pytest_cache/`
+- Runtime logs: `gurobi.log`
+- LaTeX build artifacts: `tex/build/`, `*.aux`, `*.bbl`, `*.blg`, `*.log`, `*.synctex*`
+- Generated visualizations: `sshr/viz/*.png`, `sshr/viz/*.pdf`
+- OS files: `.DS_Store`
+
+Never commit large binary build artifacts or generated plot images.
+
 ## Tips for Agents
 
 - When adding a new synthesis algorithm, place it as a new top-level file in `sshr/` and follow the existing pattern: accept `BooleanFunction`, return `QuantumCircuit(n+1)`.
-- When adding experiments, place them in `sshr/experiments/` and import `make_test_set` from `run_tables.py` or `evaluate.py` to ensure consistent test-set generation (seed=42, 2000 random functions for n≥5).
+- When adding experiments, place them in `sshr/experiments/` (or `sshr/experiments/ilp/` for ILP-specific scripts) and import `make_test_set` from `run_tables.py` or `evaluate.py` to ensure consistent test-set generation (seed=42, 2000 random functions for n≥5).
 - If you need to optimize hot paths, replicate the numpy bitmask engine pattern from `sshr_mcts_v2.py` or `sshr_beam.py`.
 - Before claiming a result matches the paper, compare against the hard-coded reference data in `sshr/paper_data.py`.
 - The `sshr/debug/` directory contains many historical scripts; treat them as read-only references rather than code to refactor or extend.
