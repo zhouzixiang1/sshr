@@ -1,6 +1,6 @@
 """Table VII n=4: T-obj two-stage with relative-phase Toffoli."""
 import sys, os, time
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from bool_func import BooleanFunction, mct_cost, mct_cost_rp
 from sshr_i import sshr_i
 from npn_reps_n4 import NPN_REPS_N4

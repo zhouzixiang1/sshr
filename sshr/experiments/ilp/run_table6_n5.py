@@ -1,6 +1,6 @@
 """Run Table VI SSHR-I (CNOT objective) for n=5, 2000 random functions."""
 import sys, os, time, random
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from bool_func import BooleanFunction, mct_cost
 from sshr_i import sshr_i
 from paper_data import TABLE_VI_SSHR_I_CNOT, TABLE_V_ESOP, cnot_count

@@ -192,9 +192,9 @@ def test_sshr_h_all_4bit_sample():
 def test_sshr_i_paper_example():
     """Paper example: 4-bit function with ID=0x46B9 using SSHR-I."""
     try:
-        import pulp
+        import gurobipy
     except ImportError:
-        pytest.skip("PuLP not installed")
+        pytest.skip("gurobipy not installed")
     from sshr_i import sshr_i
     n = 4
     bf = BooleanFunction.from_hex(n, "46B9")

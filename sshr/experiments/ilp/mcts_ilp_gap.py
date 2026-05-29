@@ -7,7 +7,7 @@ n=7: 20 fns, MCTS vs SSHR-H only (ILP completely infeasible)
 n=8: 20 fns, MCTS vs SSHR-H only
 """
 import sys, os, time, random
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from bool_func import BooleanFunction, mct_cost
 from sshr_h import sshr_h
 from sshr_mcts import sshr_mcts

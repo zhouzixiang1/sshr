@@ -5,9 +5,9 @@ Saves results after each function to a JSON checkpoint file.
 Can resume from the last checkpoint if the process is killed.
 
 Usage:
-  /opt/anaconda3/envs/sshr/bin/python experiments/run_ilp_checkpoint.py --n 5 --objective cnot --timeout 120
-  /opt/anaconda3/envs/sshr/bin/python experiments/run_ilp_checkpoint.py --n 6 --objective cnot --timeout 120 --fns 100
-  /opt/anaconda3/envs/sshr/bin/python experiments/run_ilp_checkpoint.py --n 5 --objective cnot --resume  # resume from checkpoint
+  /opt/anaconda3/envs/sshr/bin/python experiments/ilp/run_ilp_checkpoint.py --n 5 --objective cnot --timeout 120
+  /opt/anaconda3/envs/sshr/bin/python experiments/ilp/run_ilp_checkpoint.py --n 6 --objective cnot --timeout 120 --fns 100
+  /opt/anaconda3/envs/sshr/bin/python experiments/ilp/run_ilp_checkpoint.py --n 5 --objective cnot --resume  # resume from checkpoint
 """
 import sys
 import os
@@ -16,7 +16,7 @@ import random
 import argparse
 import json
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from bool_func import BooleanFunction, mct_cost
 from sshr_i import sshr_i

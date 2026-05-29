@@ -7,10 +7,7 @@ Formulates the synthesis as a Weighted Parity Set Covering Problem (WP-SCP):
   - Each minterm in off-set must be covered EVEN number of times
   - Minimize total CNOT cost (or T-count, depending on `objective`)
 
-Solver priority:
-  1. Gurobi (gurobipy) — commercial, fastest
-  2. PuLP + CBC/GLPK — open source fallback
-  3. OR-Tools CP-SAT — open source fallback
+Solver: Gurobi (gurobipy) only. A valid Gurobi license is required.
 
 Time limit: 120 seconds per function (return best solution found).
 """
@@ -142,117 +139,6 @@ def _solve_ilp_gurobi_t_then_cnot(
     return [i for i in range(m) if x1[i].X > 0.5]
 
 
-def _solve_ilp_pulp(
-    parallelotopes: List[Parallelotope],
-    all_minterms: List[int],
-    onset: List[int],
-    costs: List[float],
-    timeout: float,
-) -> List[int]:
-    """Return list of selected parallelotope indices using PuLP (CBC solver)."""
-    import pulp
-
-    onset_set = set(onset)
-    m = len(parallelotopes)
-    N = len(all_minterms)
-
-    prob = pulp.LpProblem("WP_SCP", pulp.LpMinimize)
-
-    x = [pulp.LpVariable(f"x_{i}", cat="Binary") for i in range(m)]
-    V = [pulp.LpVariable(f"V_{j}", lowBound=0, cat="Integer") for j in range(N)]
-    y = [pulp.LpVariable(f"y_{j}", lowBound=0, cat="Integer") for j in range(N)]
-    z = [pulp.LpVariable(f"z_{j}", lowBound=0, cat="Integer") for j in range(N)]
-
-    # Objective
-    prob += pulp.lpSum(costs[i] * x[i] for i in range(m))
-
-    # C1
-    for j, minterm in enumerate(all_minterms):
-        covering = [i for i, p in enumerate(parallelotopes) if minterm in p.vertices()]
-        prob += (V[j] == pulp.lpSum(x[i] for i in covering))
-
-    # C2 / C3
-    for j, minterm in enumerate(all_minterms):
-        if minterm in onset_set:
-            prob += (V[j] == 2 * y[j] + 1)
-        else:
-            prob += (V[j] == 2 * z[j])
-
-    solver = pulp.PULP_CBC_CMD(msg=0, timeLimit=int(timeout))
-    prob.solve(solver)
-
-    if pulp.LpStatus[prob.status] not in ("Optimal", "Not Solved"):
-        # try to extract partial solution
-        pass
-    return [i for i in range(m) if pulp.value(x[i]) is not None and pulp.value(x[i]) > 0.5]
-
-
-def _solve_ilp_highs(
-    parallelotopes: List[Parallelotope],
-    all_minterms: List[int],
-    onset: List[int],
-    costs: List[float],
-    timeout: float,
-) -> List[int]:
-    """Return list of selected parallelotope indices using HiGHS (no size limit)."""
-    import highspy
-
-    onset_set = set(onset)
-    P = len(parallelotopes)
-    M = len(all_minterms)
-    m_idx = {v: i for i, v in enumerate(all_minterms)}
-
-    h = highspy.Highs()
-    h.silent()
-    h.setOptionValue('time_limit', timeout)
-
-    # Variables: x[0..P-1] binary, V[P..P+M-1] integer, y/z[P+M..P+2M-1] integer
-    h.addBinaries(P)
-    h.addIntegrals(M)
-    h.addIntegrals(M)
-    for j in range(M):
-        h.changeColBounds(P + j, 0, float(P))      # V_j bounds
-        h.changeColBounds(P + M + j, 0, float(P))  # y/z_j bounds
-
-    # Objective: min sum cost[i] * x[i]
-    for i in range(P):
-        h.changeColCost(i, costs[i])
-
-    # Build covering index: for each minterm j, which parallelotopes cover it?
-    covers: dict = {j: [] for j in range(M)}
-    for i, p in enumerate(parallelotopes):
-        for v in p.vertices():
-            j = m_idx.get(v)
-            if j is not None:
-                covers[j].append(i)
-
-    for j, mint in enumerate(all_minterms):
-        # C1: sum_{i covers j} x_i - V_j = 0
-        inds = covers[j] + [P + j]
-        vals = [1.0] * len(covers[j]) + [-1.0]
-        h.addRow(0.0, 0.0, len(inds), inds, vals)
-
-        # C2/C3: V_j - 2*(y/z)_j = 1 (onset) or 0 (offset)
-        rhs = 1.0 if mint in onset_set else 0.0
-        h.addRow(rhs, rhs, 2, [P + j, P + M + j], [1.0, -2.0])
-
-    h.minimize()
-
-    status = str(h.getModelStatus())
-    if 'Infeasible' in status or 'NotSet' in status:
-        return []
-
-    # Extract solution (binary vars)
-    sol = [h.getInfoValue('primal_solution_status')[1]]
-    try:
-        vals_out = [h.val(i) for i in range(P)]
-    except Exception:
-        vals_out = [h.getInfoValue('objective_function_value')[1]]
-        return []
-
-    return [i for i in range(P) if vals_out[i] > 0.5]
-
-
 def _solve_ilp(
     parallelotopes: List[Parallelotope],
     all_minterms: List[int],
@@ -260,31 +146,14 @@ def _solve_ilp(
     costs: List[float],
     timeout: float,
 ) -> List[int]:
-    """Try Gurobi first, then HiGHS, then PuLP."""
+    """Solve WP-SCP using Gurobi. Raises RuntimeError if gurobipy is not available."""
     try:
         return _solve_ilp_gurobi(parallelotopes, all_minterms, onset, costs, timeout)
     except ImportError:
-        pass
-    except Exception as e:
-        # Gurobi model too large for restricted license → fall through to HiGHS
-        if 'too large' in str(e).lower() or 'size' in str(e).lower():
-            pass
-        else:
-            raise
-    try:
-        return _solve_ilp_highs(parallelotopes, all_minterms, onset, costs, timeout)
-    except ImportError:
-        pass
-    try:
-        return _solve_ilp_pulp(parallelotopes, all_minterms, onset, costs, timeout)
-    except ImportError:
-        pass
-    raise RuntimeError(
-        "No ILP solver found. Install gurobipy, highspy, or pulp:\n"
-        "  pip install gurobipy   (needs Gurobi license)\n"
-        "  pip install highspy    (free, no size limit)\n"
-        "  pip install pulp"
-    )
+        raise RuntimeError(
+            "gurobipy is required for SSHR-I. Install it with:\n"
+            "  pip install gurobipy   (needs a Gurobi license)"
+        )
 
 
 def sshr_i(
@@ -349,12 +218,13 @@ def sshr_i(
         # (2) fix T budget and minimize CNOT
         t_costs = [float(block_t_cost_rp(p, n)) for p in parallelotopes]
         cnot_costs = [float(block_cnot_cost(p, n)) for p in parallelotopes]
-        try:
-            selected_indices = _solve_ilp_gurobi_t_then_cnot(
-                parallelotopes, all_minterms, onset, t_costs, cnot_costs, timeout
+        selected_indices = _solve_ilp_gurobi_t_then_cnot(
+            parallelotopes, all_minterms, onset, t_costs, cnot_costs, timeout
+        )
+        if not selected_indices:
+            selected_indices = _solve_ilp_gurobi(
+                parallelotopes, all_minterms, onset, t_costs, timeout
             )
-        except Exception:
-            selected_indices = _solve_ilp(parallelotopes, all_minterms, onset, t_costs, timeout)
 
     if not selected_indices:
         # ILP failed / timeout with no solution: fall back to SSHR-H

@@ -1,6 +1,6 @@
 """Table VII: SSHR-I T-count objective, n=3."""
 import sys, os, time
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from bool_func import BooleanFunction, mct_cost
 from sshr_i import sshr_i
 from paper_data import TABLE_VII_SSHR_I_T

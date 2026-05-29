@@ -2,9 +2,9 @@
 Reproduce paper Table VI (SSHR-I CNOT objective) and Table VII (SSHR-I T objective).
 
 Usage:
-  /opt/anaconda3/envs/sshr/bin/python experiments/run_ilp_tables.py
-  /opt/anaconda3/envs/sshr/bin/python experiments/run_ilp_tables.py --n 3 4 --timeout 60
-  /opt/anaconda3/envs/sshr/bin/python experiments/run_ilp_tables.py --n 5 6 --timeout 120 --fns 2000
+  /opt/anaconda3/envs/sshr/bin/python experiments/ilp/run_ilp_tables.py
+  /opt/anaconda3/envs/sshr/bin/python experiments/ilp/run_ilp_tables.py --n 3 4 --timeout 60
+  /opt/anaconda3/envs/sshr/bin/python experiments/ilp/run_ilp_tables.py --n 5 6 --timeout 120 --fns 2000
 
 Requirements:
   - Gurobi (gurobipy) license in sshr conda environment
@@ -16,7 +16,7 @@ import time
 import random
 import argparse
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from bool_func import BooleanFunction, mct_cost
 from sshr_i import sshr_i

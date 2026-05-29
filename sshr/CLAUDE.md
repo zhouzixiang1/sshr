@@ -77,7 +77,7 @@ Algorithm 1：平行多面体 → 量子电路块。
 **Algorithm 3：SSHR-I ILP 精确求解。**
 - `sshr_i(bf, objective="cnot", timeout=120)` — ILP 求解器合成，目标为 min CNOT 或 min T
 - 建模为 WP-SCP（加权奇偶集覆盖问题）：on-set 每点覆盖奇数次，off-set 覆盖偶数次
-- 优先使用 Gurobi，fallback 到 PuLP；n≥6 时 ILP 不可行（超时）
+- 仅使用 Gurobi；n≥6 时 ILP 不可行（超时）
 - T 目标使用相对相位 Toffoli（T=4 for k=2）两阶段优化
 
 ### `sshr_mcts.py`
@@ -160,7 +160,7 @@ n=4 的 222 个 NPN 规范代表元（预计算常量）。
 ### `experiments/mcts_vs_greedy.py`
 MCTS vs SSHR-H 大规模对比，n=3..8，每组 50 个随机函数。
 
-### `experiments/mcts_ilp_gap.py`
+### `experiments/ilp/mcts_ilp_gap.py`
 MCTS vs ILP 差距分析，证明 SSHR-I 的最优性。
 
 ### `experiments/reproduction_summary.py`
@@ -175,7 +175,7 @@ MCTS 评估脚本，支持 `--n` 参数指定变量数。
 ### `experiments/final_report.py`
 生成最终复现报告，汇总所有算法在各 n 下的表现。
 
-### `experiments/run_table6_n5.py`、`run_table7_n3.py`、`run_table7_n4.py`、`run_table7_n4_v2.py`
+### `experiments/ilp/run_table6_n5.py`、`run_table7_n3.py`、`run_table7_n4.py`、`run_table7_n4_v2.py`
 分别运行 Table VI（CNOT objective）和 Table VII（T objective）的单独实验脚本。
 
 ### `experiments/quick_*.py`
@@ -248,7 +248,7 @@ MCTS 快速正确性验证，对 n=3 全部 255 个非零函数运行 SSHR-MCTS 
 
 ## 注意事项
 
-- `sshr_i.py` 需要 Gurobi（优先）或 PuLP 作为 fallback；n≥6 时 ILP 超时不可行
+- `sshr_i.py` 需要 Gurobi；n≥6 时 ILP 超时不可行
 - `enumerate_parallelotopes` 是性能瓶颈：n=6 约 10K 候选，n=8 约 609K；sshr_h.py 用 `lru_cache` 对全超立方体结果缓存，同 n 的多个函数只枚举一次
 - `QuantumCircuit.simulate(input_vec)` 逐门模拟，可用于正确性验证
 - n≥5 的实验默认使用 2000 个随机函数（seed=42），与论文测试集一致

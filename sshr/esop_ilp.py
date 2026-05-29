@@ -91,44 +91,36 @@ def esop_ilp(
     else:
         costs = [float(_cube_mct_cost(cm, n)["T"]) for cm, v in cubes]
 
-    # Solve ILP (same WP-SCP formulation)
-    try:
-        import gurobipy as gp
-        from gurobipy import GRB
+    # Solve ILP (same WP-SCP formulation) using Gurobi only
+    import gurobipy as gp
+    from gurobipy import GRB
 
-        m = len(cubes)
-        N = len(all_minterms)
-        minterm_idx = {v: i for i, v in enumerate(all_minterms)}
+    m = len(cubes)
+    N = len(all_minterms)
 
-        model = gp.Model()
-        model.setParam("OutputFlag", 0)
-        model.setParam("TimeLimit", timeout)
+    model = gp.Model()
+    model.setParam("OutputFlag", 0)
+    model.setParam("TimeLimit", timeout)
 
-        x = model.addVars(m, vtype=GRB.BINARY, name="x")
-        V = model.addVars(N, vtype=GRB.INTEGER, lb=0, name="V")
-        y = model.addVars(N, vtype=GRB.INTEGER, lb=0, name="y")
-        z = model.addVars(N, vtype=GRB.INTEGER, lb=0, name="z")
+    x = model.addVars(m, vtype=GRB.BINARY, name="x")
+    V = model.addVars(N, vtype=GRB.INTEGER, lb=0, name="V")
+    y = model.addVars(N, vtype=GRB.INTEGER, lb=0, name="y")
+    z = model.addVars(N, vtype=GRB.INTEGER, lb=0, name="z")
 
-        for j, mint in enumerate(all_minterms):
-            covering = [i for i, verts in enumerate(verts_list) if mint in verts]
-            model.addConstr(V[j] == gp.quicksum(x[i] for i in covering))
+    for j, mint in enumerate(all_minterms):
+        covering = [i for i, verts in enumerate(verts_list) if mint in verts]
+        model.addConstr(V[j] == gp.quicksum(x[i] for i in covering))
 
-        for j, mint in enumerate(all_minterms):
-            if mint in onset_set:
-                model.addConstr(V[j] == 2 * y[j] + 1)
-            else:
-                model.addConstr(V[j] == 2 * z[j])
+    for j, mint in enumerate(all_minterms):
+        if mint in onset_set:
+            model.addConstr(V[j] == 2 * y[j] + 1)
+        else:
+            model.addConstr(V[j] == 2 * z[j])
 
-        model.setObjective(gp.quicksum(costs[i] * x[i] for i in range(m)), GRB.MINIMIZE)
-        model.optimize()
+    model.setObjective(gp.quicksum(costs[i] * x[i] for i in range(m)), GRB.MINIMIZE)
+    model.optimize()
 
-        selected = [i for i in range(m) if model.SolCount > 0 and x[i].X > 0.5]
-    except Exception:
-        # Fallback: one MCT per minterm
-        selected = []
-        for i, (cm, v) in enumerate(cubes):
-            if verts_list[i] == frozenset([list(onset)[0] if len(onset)==1 else -1]):
-                pass
+    selected = [i for i in range(m) if model.SolCount > 0 and x[i].X > 0.5]
 
     output_qubit = n
     for i in selected:
