@@ -20,6 +20,11 @@ tex/build/
 sshr/viz/*.png
 sshr/viz/*.pdf
 
+# Unreferenced LaTeX figure variants / archives
+tex/figure/固定N/
+tex/figure/固定S/
+tex/figure/S=N/S=N*系数*.png
+
 # IDE / Editor
 .vscode/
 .idea/
