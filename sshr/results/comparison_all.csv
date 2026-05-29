@@ -1,0 +1,2 @@
+n,method,n_functions,T,CNOT,ancilla,time_s
+6,mcts_v2(1000iters),2000,300327,155896,15503,489.9

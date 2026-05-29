@@ -1,0 +1,165 @@
+\begin{thebibliography}{24}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{#1}
+\expandafter\ifx\csname urlstyle\endcsname\relax\else
+  \urlstyle{same}\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \DeclareUrlCommand\doi{\urlstyle{rm}}
+  \def\eprint#1#2{#2}
+\else
+  \def\doi#1{\href{https://doi.org/#1}{\nolinkurl{#1}}}
+  \let\eprint\href
+\fi
+
+\bibitem[Deutsch et~al.(1992)Deutsch and Jozsa]{deutsch1992rapid}
+DEUTSCH D, JOZSA R.
+\newblock Rapid solution of problems by quantum computation\allowbreak[J].
+\newblock Proceedings of the Royal Society of London. Series A: Mathematical
+  and Physical Sciences, 1992, 439\allowbreak (1907): 553-558.
+
+\bibitem[Grover(1996)]{grover1996fast}
+GROVER L~K.
+\newblock A fast quantum mechanical algorithm for database
+  search\allowbreak[C]//\allowbreak
+Proceedings of the twenty-eighth annual ACM symposium on Theory of computing.
+\newblock 1996: 212-219.
+
+\bibitem[Shor(1994)]{Shor1994Polynominal}
+SHOR P~W.
+\newblock Polynominal time algorithms for discrete logarithms and factoring on
+  a quantum computer\allowbreak[C]//\allowbreak
+Algorithmic Number Theory, First International Symposium, ANTS-I, Ithaca, NY,
+  USA, May 6-9, 1994, Proceedings.
+\newblock 1994.
+
+\bibitem[Biamonte et~al.(2017)Biamonte, Wittek, Pancotti, Rebentrost, Wiebe,
+  and Lloyd]{biamonte2017quantum}
+BIAMONTE J, WITTEK P, PANCOTTI N, et~al.
+\newblock Quantum machine learning\allowbreak[J].
+\newblock Nature, 2017, 549\allowbreak (7671): 195-202.
+
+\bibitem[Berry et~al.(2015)Berry, Childs, Cleve, Kothari, and
+  Somma]{berry2015simulating}
+BERRY D~W, CHILDS A~M, CLEVE R, et~al.
+\newblock Simulating hamiltonian dynamics with a truncated taylor
+  series\allowbreak[J].
+\newblock Physical review letters, 2015, 114\allowbreak (9): 090502.
+
+\bibitem[Low et~al.(2017)Low and Chuang]{low2017optimal}
+LOW G~H, CHUANG I~L.
+\newblock Optimal hamiltonian simulation by quantum signal
+  processing\allowbreak[J].
+\newblock Physical review letters, 2017, 118\allowbreak (1): 010501.
+
+\bibitem[{G. H. Low and I. L. Chuang}(2019)]{low2019hamiltonian}
+{G. H. Low and I. L. Chuang}.
+\newblock Hamiltonian simulation by qubitization\allowbreak[J].
+\newblock Quantum, 2019, 3: 163.
+
+\bibitem[Berry et~al.(2015)Berry, Childs, and Kothari]{berry2015hamiltonian}
+BERRY D~W, CHILDS A~M, KOTHARI R.
+\newblock Hamiltonian simulation with nearly optimal dependence on all
+  parameters\allowbreak[C]//\allowbreak
+2015 IEEE 56th Annual Symposium on Foundations of Computer Science.
+\newblock IEEE, 2015: 792-809.
+
+\bibitem[Aaronson(2004)]{aaronson2004multilinear}
+AARONSON S.
+\newblock Multilinear formulas and skepticism of quantum
+  computing\allowbreak[C]//\allowbreak
+Proceedings of the thirty-sixth annual ACM symposium on Theory of computing.
+\newblock 2004: 118-127.
+
+\bibitem[Knill(1995)]{knill1995approximation}
+KNILL E.
+\newblock Approximation by quantum circuits\allowbreak[A].
+\newblock 1995.
+
+\bibitem[Mottonen et~al.(2004)Mottonen, Vartiainen, Bergholm, and
+  Salomaa]{mottonen2004transformation}
+MOTTONEN M, VARTIAINEN J~J, BERGHOLM V, et~al.
+\newblock Transformation of quantum states using uniformly controlled
+  rotations\allowbreak[A].
+\newblock 2004.
+
+\bibitem[Bausch(2022)]{bausch2022fast}
+BAUSCH J.
+\newblock Fast black-box quantum state preparation\allowbreak[J].
+\newblock Quantum, 2022, 6: 773.
+
+\bibitem[Gonzalez-Conde et~al.(2024)Gonzalez-Conde, Watts, Rodriguez-Grasa, and
+  Sanz]{gonzalez2024efficient}
+GONZALEZ-CONDE J, WATTS T~W, RODRIGUEZ-GRASA P, et~al.
+\newblock Efficient quantum amplitude encoding of polynomial
+  functions\allowbreak[J].
+\newblock Quantum, 2024, 8: 1297.
+
+\bibitem[Holmes et~al.(2020)Holmes and Matsuura]{holmes2020efficient}
+HOLMES A, MATSUURA A~Y.
+\newblock Efficient quantum circuits for accurate state preparation of smooth,
+  differentiable functions\allowbreak[C]//\allowbreak
+2020 IEEE International Conference on Quantum Computing and Engineering (QCE).
+\newblock IEEE, 2020: 169-179.
+
+\bibitem[Marin-Sanchez et~al.(2023)Marin-Sanchez, Gonzalez-Conde, and
+  Sanz]{marin2023quantum}
+MARIN-SANCHEZ G, GONZALEZ-CONDE J, SANZ M.
+\newblock Quantum algorithms for approximate function loading\allowbreak[J].
+\newblock Physical Review Research, 2023, 5\allowbreak (3): 033114.
+
+\bibitem[Rattew et~al.(2022)Rattew and Koczor]{rattew2022preparing}
+RATTEW A~G, KOCZOR B.
+\newblock Preparing arbitrary continuous functions in quantum registers with
+  logarithmic complexity\allowbreak[A].
+\newblock 2022.
+
+\bibitem[Sanders et~al.(2019)Sanders, Low, Scherer, and
+  Berry]{sanders2019black}
+SANDERS Y~R, LOW G~H, SCHERER A, et~al.
+\newblock Black-box quantum state preparation without arithmetic\allowbreak[J].
+\newblock Physical review letters, 2019, 122\allowbreak (2): 020502.
+
+\bibitem[Gleinig et~al.(2021)Gleinig and Hoefler]{gleinig2021efficient}
+GLEINIG N, HOEFLER T.
+\newblock An efficient algorithm for sparse quantum state
+  preparation\allowbreak[C]//\allowbreak
+2021 58th ACM/IEEE Design Automation Conference (DAC).
+\newblock IEEE, 2021: 433-438.
+
+\bibitem[Malvetti et~al.(2021)Malvetti, Iten, and Colbeck]{malvetti2021quantum}
+MALVETTI E, ITEN R, COLBECK R.
+\newblock Quantum circuits for sparse isometries\allowbreak[J].
+\newblock Quantum, 2021, 5: 412.
+
+\bibitem[Li et~al.(2024)Li and Luo]{li2024nearly}
+LI L, LUO J.
+\newblock Nearly optimal circuit size for sparse quantum state
+  preparation\allowbreak[A].
+\newblock 2024.
+
+\bibitem[Mao et~al.(2024)Mao, Tian, and Sun]{mao2024toward}
+MAO R, TIAN G, SUN X.
+\newblock Toward optimal circuit size for sparse quantum state
+  preparation\allowbreak[J].
+\newblock Physical Review A, 2024, 110\allowbreak (3): 032439.
+
+\bibitem[Gidney(2015)]{Gidney2015}
+GIDNEY C.
+\newblock Constructing large controlled nots\allowbreak[EB/OL].
+\newblock 2015.
+\newblock
+  \url{https://algassert.com/circuits/2015/06/05/Constructing-Large-Controlled-Nots.html}.
+
+\bibitem[Barenco et~al.(1995)Barenco, Bennett, Cleve, DiVincenzo, Margolus,
+  Shor, Sleator, Smolin, and Weinfurter]{barenco1995elementary}
+BARENCO A, BENNETT C~H, CLEVE R, et~al.
+\newblock Elementary gates for quantum computation\allowbreak[J].
+\newblock Physical review A, 1995, 52\allowbreak (5): 3457.
+
+\bibitem[Zou et~al.(2024)Zou, Treinish, Hartman, Ivrii, and
+  Lishman]{zou2024lightsabre}
+ZOU H, TREINISH M, HARTMAN K, et~al.
+\newblock Lightsabre: A lightweight and enhanced sabre algorithm\allowbreak[A].
+\newblock 2024.
+
+\end{thebibliography}

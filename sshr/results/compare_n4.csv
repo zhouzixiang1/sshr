@@ -1,0 +1,5 @@
+n, method            , n_functions, T   , CNOT, ancilla, time_s
+4, sshr_h            ,         221, 6686, 5800,     246,    0.1
+4, sshr_h_paper      ,         221, 8328, 7218,     402,    0.1
+4, mcts_v2(1000iters),         221, 8278, 6902,     398,    0.3
+4, "beam(w=50,b=10)" ,         221, 8278, 6902,     398,    0.2

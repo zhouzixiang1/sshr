@@ -1,0 +1,3 @@
+n,method,n_functions,T,CNOT,ancilla,time_s
+8,sshr_h,2000,1349648,833840,73621,922.6
+8,sshr_h_paper,2000,1355032,799728,76016,62.1
