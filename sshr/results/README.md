@@ -1,20 +1,21 @@
 # Results Directory
 
-This directory stores CSV result files from benchmark runs.
+This directory stores CSV result files and text summaries from benchmark runs.
 
-## File Naming Convention
+## Subdirectories
 
-- `compare_n<N>.csv` — Comparison of SSHR-H, SSHR-H-Paper, MCTS, and Beam search for n variables
-- `comparison_all.csv` — Aggregated comparison summary
-- `mcts_greedy_result.txt` — MCTS vs Greedy heuristic comparison results
+- `comparison/` — Multi-method comparison CSVs produced by `mcts_beam_compare.py`
+  - `compare_n<N>.csv` — Per-n comparison of SSHR-H, SSHR-H-Paper, MCTS, and Beam
+  - `comparison_all.csv` — Aggregated summary across all n
+- `mcts/` — MCTS-specific result files
+  - `mcts_greedy_result.txt` — MCTS vs Greedy heuristic comparison
 
 ## Generating Results
 
-Results are produced by scripts in `sshr/experiments/`.
-Example:
+Run the corresponding experiment script from `sshr/experiments/`:
 ```bash
 cd sshr
-/opt/anaconda3/envs/mcts-qoracle/bin/python experiments/run_tables.py --tables 5 --n 3 4 5 6
+/opt/anaconda3/envs/mcts-qoracle/bin/python experiments/mcts/mcts_beam_compare.py
 ```
 
 ## Note

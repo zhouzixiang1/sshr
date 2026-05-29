@@ -3,7 +3,7 @@ Unified comparison: SSHR-H / SSHR-H(paper) / MCTS v2 / Beam on n=3..8.
 
 Features:
   - tqdm progress bars per (n, method)
-  - Per-n separate CSV (results/compare_n3.csv, ..., compare_n8.csv)
+  - Per-n separate CSV (results/comparison/compare_n3.csv, ..., compare_n8.csv)
   - Multi-core parallelism (14 workers by default)
   - Runs n=3..8 directly, no args needed
 
@@ -22,8 +22,8 @@ Usage:
   python experiments/mcts/mcts_beam_compare.py --n 8 --skip-mcts
 
 Output:
-  results/compare_n3.csv ... compare_n8.csv  (per-n, one row per method)
-  results/comparison_all.csv                 (combined summary)
+  results/comparison/compare_n3.csv ... compare_n8.csv  (per-n, one row per method)
+  results/comparison/comparison_all.csv                 (combined summary)
 """
 import sys
 import os
@@ -162,7 +162,7 @@ def main():
     args = parser.parse_args()
 
     results_dir = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'results')
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'results', 'comparison')
     os.makedirs(results_dir, exist_ok=True)
 
     all_rows = []
