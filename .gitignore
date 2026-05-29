@@ -2,3 +2,27 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# Runtime logs
+gurobi.log
+
+# LaTeX build artifacts
+tex/build/
+*.aux
+*.bbl
+*.blg
+*.log
+*.synctex*
+*.fls
+*.fdb_latexmk
+
+# Generated visualizations
+sshr/viz/*.png
+sshr/viz/*.pdf
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
