@@ -1,6 +1,6 @@
 """Direct n=4 SSHR-I CNOT objective run with progress output."""
 import sys, os, time
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from bool_func import BooleanFunction, mct_cost
 from parallelotope_enum import enumerate_parallelotopes
 from parallelotope import Parallelotope

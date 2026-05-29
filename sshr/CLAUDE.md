@@ -151,13 +151,13 @@ n=4 的 222 个 NPN 规范代表元（预计算常量）。
 - `--seed 42`：随机种子（n≥5 时生成 2000 个随机函数）
 - Table VIII（候选集大小）精确匹配论文
 
-### `experiments/run_sshrh_n56.py`
+### `experiments/greedy/run_sshrh_n56.py`
 专门运行 n=5,6 的 SSHR-H（2000 随机函数），对应 Table IV/V。
 
-### `experiments/run_npn_n4.py`
+### `experiments/ilp/run_npn_n4.py`
 对 n=4 的 221 个非零 NPN 代表元运行 SSHR-I，对应 Table VI n=4。
 
-### `experiments/mcts_vs_greedy.py`
+### `experiments/mcts/mcts_vs_greedy.py`
 MCTS vs SSHR-H 大规模对比，n=3..8，每组 50 个随机函数。
 
 ### `experiments/ilp/mcts_ilp_gap.py`
@@ -179,9 +179,11 @@ MCTS 评估脚本，支持 `--n` 参数指定变量数。
 分别运行 Table VI（CNOT objective）和 Table VII（T objective）的单独实验脚本。
 
 ### `experiments/quick_*.py`
-快速验证脚本（quick_n4、quick_n5、quick_n5_mcts、quick_sample、quick_mcts_compare），用于快速检查单个 n 的结果，无需跑完整 2000 个函数。
+快速验证脚本，用于快速检查单个 n 的结果，无需跑完整 2000 个函数：
+- `ilp/quick_n4.py`、`ilp/quick_n5.py`、`ilp/quick_sample.py` — ILP 快速验证
+- `mcts/quick_mcts_compare.py`、`mcts/quick_n5_mcts.py` — MCTS 快速验证
 
-### `experiments/run_comparison.py`、`run_n4_direct.py`
+### `experiments/ilp/run_comparison.py`、`ilp/run_n4_direct.py`
 辅助对比脚本，直接输出进度信息的 n=4 SSHR-I 运行。
 
 ---

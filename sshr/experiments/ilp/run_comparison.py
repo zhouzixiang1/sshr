@@ -3,7 +3,7 @@ Run SSHR-I vs ESOP comparison for n=3 and n=4.
 Reproduces Table VI (CNOT objective).
 """
 import sys, os, time, random
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 from bool_func import BooleanFunction, mct_cost
 from sshr_i import sshr_i

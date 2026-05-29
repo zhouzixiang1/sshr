@@ -1,11 +1,9 @@
 """Run SSHR-I on 222 NPN representatives for n=4 and compare with paper."""
 import sys, os, time
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from bool_func import BooleanFunction, mct_cost
 from sshr_i import sshr_i
 from paper_data import TABLE_VI_SSHR_I_CNOT
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from npn_reps_n4 import NPN_REPS_N4
 
 n = 4

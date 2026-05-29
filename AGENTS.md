@@ -41,7 +41,9 @@ No `pyproject.toml`, `setup.py`, `requirements.txt`, or `Makefile` exists. Depen
 │   ├── paper_data.py      # Reference data from the paper (Tables IV–VIII)
 │   ├── analysis/          # One-off diagnostic / tuning scripts
 │   ├── experiments/       # Paper reproduction and comparison experiments
-│   │   └── ilp/           # ILP-specific reproduction scripts (Table VI/VII)
+│   │   ├── greedy/        # SSHR-H (greedy heuristic) scripts
+│   │   ├── ilp/           # ILP-specific scripts (Table VI/VII)
+│   │   └── mcts/          # MCTS and Beam search scripts
 │   ├── tests/             # pytest correctness tests
 │   ├── viz/               # Circuit visualization scripts and PNG outputs
 │   ├── results/           # CSV result files from prior runs
@@ -134,7 +136,9 @@ cd sshr
 
 - **`experiments/run_tables.py`** — Main reproduction entry point for Tables IV–VIII.
 - **`experiments/evaluate.py`** — Generic evaluation harness with per-table logic.
-- **`experiments/run_sshrh_n56.py`, `run_npn_n4.py`, `run_table6_n5.py`, etc.** — Individual table scripts.
+- **`experiments/greedy/run_sshrh_n56.py`** — SSHR-H specific scripts.
+- **`experiments/ilp/run_npn_n4.py`, `ilp/run_table6_n5.py`, etc.** — ILP-specific table scripts.
+- **`experiments/mcts/mcts_beam_compare.py`, `mcts/mcts_vs_greedy.py`, etc.** — MCTS and Beam search scripts.
 - **`experiments/quick_*.py`** — Fast smoke-test scripts that run a small sample instead of the full 2000-function benchmark.
 - **`analysis/`** — Development-time diagnostic scripts (e.g., `approach_paper.py`, `tiebreak_study.py`). These are not maintained as primary entry points.
 
@@ -243,7 +247,7 @@ Never commit large binary build artifacts or generated plot images.
 ## Tips for Agents
 
 - When adding a new synthesis algorithm, place it as a new top-level file in `sshr/` and follow the existing pattern: accept `BooleanFunction`, return `QuantumCircuit(n+1)`.
-- When adding experiments, place them in `sshr/experiments/` (or `sshr/experiments/ilp/` for ILP-specific scripts) and import `make_test_set` from `run_tables.py` or `evaluate.py` to ensure consistent test-set generation (seed=42, 2000 random functions for n≥5).
+- When adding experiments, place them in `sshr/experiments/` (or the appropriate subdirectory: `greedy/` for SSHR-H, `ilp/` for ILP, `mcts/` for MCTS/Beam) and import `make_test_set` from `run_tables.py` or `evaluate.py` to ensure consistent test-set generation (seed=42, 2000 random functions for n≥5).
 - If you need to optimize hot paths, replicate the numpy bitmask engine pattern from `sshr_mcts_v2.py` or `sshr_beam.py`.
 - Before claiming a result matches the paper, compare against the hard-coded reference data in `sshr/paper_data.py`.
 - The `sshr/debug/` directory contains many historical scripts; treat them as read-only references rather than code to refactor or extend.

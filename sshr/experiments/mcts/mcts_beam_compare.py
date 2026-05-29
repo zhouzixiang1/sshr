@@ -9,17 +9,17 @@ Features:
 
 Usage:
   # Default: n=3..8, 14 cores, paper-standard test sets
-  python experiments/mcts_beam_compare.py
+  python experiments/mcts/mcts_beam_compare.py
 
   # Quick test
-  python experiments/mcts_beam_compare.py --n 3 --fns 50
+  python experiments/mcts/mcts_beam_compare.py --n 3 --fns 50
 
   # Specific n values
-  python experiments/mcts_beam_compare.py --n 5 6 --fns 2000
+  python experiments/mcts/mcts_beam_compare.py --n 5 6 --fns 2000
 
   # Skip methods
-  python experiments/mcts_beam_compare.py --n 5 --skip-mcts
-  python experiments/mcts_beam_compare.py --n 8 --skip-mcts
+  python experiments/mcts/mcts_beam_compare.py --n 5 --skip-mcts
+  python experiments/mcts/mcts_beam_compare.py --n 8 --skip-mcts
 
 Output:
   results/compare_n3.csv ... compare_n8.csv  (per-n, one row per method)
@@ -34,7 +34,7 @@ import csv
 from multiprocessing import Pool
 from tqdm import tqdm
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from bool_func import BooleanFunction, mct_cost
 from sshr_h import sshr_h
@@ -162,7 +162,7 @@ def main():
     args = parser.parse_args()
 
     results_dir = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'results')
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'results')
     os.makedirs(results_dir, exist_ok=True)
 
     all_rows = []

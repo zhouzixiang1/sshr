@@ -1,6 +1,6 @@
 """MCTS vs SSHR-H (greedy) for n=3..8, 50 random functions each."""
 import sys, os, time, random
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from bool_func import BooleanFunction, mct_cost
 from sshr_h import sshr_h
 from sshr_mcts import sshr_mcts
