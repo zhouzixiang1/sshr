@@ -23,6 +23,7 @@ sshr/viz/*.pdf
 # IDE / Editor
 .vscode/
 .idea/
+.claude/
 *.swp
 *.swo
 *~
