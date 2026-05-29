@@ -24,12 +24,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```
 sshr/
 ├── 核心算法（根目录）
-├── analysis/      调试阶段分析脚本
-├── experiments/   论文复现与对比实验
-├── debug/         历史调试脚本（一次性用途，不维护）
-├── tests/         正确性测试
-├── viz/           电路可视化
-└── results/       实验结果文件
+├── analysis/          调试阶段分析脚本
+├── experiments/       论文复现与对比实验
+│   ├── greedy/        SSHR-H 贪心启发式实验
+│   ├── ilp/           ILP 精确求解实验（Table VI/VII）
+│   └── mcts/          MCTS / Beam 搜索实验
+├── debug/             历史调试脚本（一次性用途，不维护）
+├── tests/             正确性测试
+├── viz/               电路可视化
+└── results/           实验结果文件（CSV）
 ```
 
 ---
