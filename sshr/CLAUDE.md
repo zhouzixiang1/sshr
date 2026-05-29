@@ -15,6 +15,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # 关键实验示例
 /opt/anaconda3/envs/mcts-qoracle/bin/python experiments/run_tables.py --tables 8
 /opt/anaconda3/envs/mcts-qoracle/bin/python experiments/run_tables.py --tables 5 --n 3 4 5 6
+
+# ILP 实验（需要 Gurobi）
+/opt/anaconda3/envs/mcts-qoracle/bin/python experiments/ilp/run_ilp_tables.py --n 3 4
+/opt/anaconda3/envs/mcts-qoracle/bin/python experiments/ilp/run_table6_n5.py
+
+# MCTS 对比实验
+/opt/anaconda3/envs/mcts-qoracle/bin/python experiments/mcts/mcts_beam_compare.py --n 3 4
+
+# SSHR-H 实验
+/opt/anaconda3/envs/mcts-qoracle/bin/python experiments/greedy/run_sshrh_n56.py
 ```
 
 ---
@@ -33,6 +43,8 @@ sshr/
 ├── tests/             正确性测试
 ├── viz/               电路可视化
 └── results/           实验结果文件（CSV）
+    ├── comparison/    多方法对比 CSV
+    └── mcts/          MCTS 专项结果
 ```
 
 ---
