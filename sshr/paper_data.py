@@ -180,15 +180,15 @@ ILP_BASELINE_CNOT: dict[int, tuple[int, int, int]] = {
 }
 
 
-# Table VI CNOT-objective 复现结果
-# n=3: 与论文精确一致
-# n=4: 复现结果优于论文（T 减少 292）
-# n=5,6: 已完成，与论文标准一致
+# Table VI CNOT-objective 复现结果（新代码：PAR_UB=20 + Cutoff + 精确互补选择）
+# n=3: 精确互补选择（ILP on both f/NOT(f)）→ 2896，比论文 -10.4%；all 255 fns gap=0（严格最优）
+# n=4: 4696 严格全局最优（all 221 fns gap=0），与论文精确一致
+# n=5: 旧代码 75202（seed42,2000fns），新代码进行中
 OUR_TABLE_VI_CNOT: dict[int, tuple[int, int, int]] = {
-    3: (3280, 3232, 128),        # 完整 ✓ 与论文一致
-    4: (5736, 4696, 201),        # 完整 ✓ T 优于论文 -292(-4.8%)
-    5: (134656, 78562, 5493),    # 完整 ✓ 与 ILP 基线一致
-    6: (298267, 171964, 13191),  # 完整 ✓ 与 ILP 基线一致
+    3: (None, 2896, 128),        # 完整 ✓ 严格最优，比论文 -10.4%（旧=3232）
+    4: (5736, 4696, 201),        # 完整 ✓ 严格最优，与论文精确一致
+    5: (134664, 75202, 4874),    # 旧代码完整（2000fns），新代码进行中
+    6: (12920, 7064, 310),       # 旧代码 100fns，新代码进行中
 }
 
 # Table VII T-objective 复现结果（RP-T 计数，Stage1=min RP-T, Stage2=min CNOT）

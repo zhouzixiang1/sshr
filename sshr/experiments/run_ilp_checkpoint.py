@@ -16,7 +16,7 @@ import random
 import argparse
 import json
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from bool_func import BooleanFunction, mct_cost
 from sshr_i import sshr_i
@@ -109,10 +109,13 @@ def run_ilp_checkpoint(n, objective, timeout, fns, ref_table, label, ckpt_path, 
     else:
         t0 = time.time()
 
+        # n=4 uses NPN_REPS_N4 (already optimally complemented); disable complement selection
+        use_comp = (n >= 5)
+
         for i in range(start_idx, len(fns)):
             bf = fns[i]
             t_fn = time.time()
-            circ = sshr_i(bf, objective=objective, timeout=timeout)
+            circ = sshr_i(bf, objective=objective, timeout=timeout, try_complement=use_comp)
             elapsed_fn = time.time() - t_fn
 
             if elapsed_fn >= timeout * 0.99:

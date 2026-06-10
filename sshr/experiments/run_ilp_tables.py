@@ -16,7 +16,7 @@ import time
 import random
 import argparse
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from bool_func import BooleanFunction, mct_cost
 from sshr_i import sshr_i
@@ -84,9 +84,10 @@ def run_ilp(n, objective, timeout, fns, ref_table, label):
     print(f"n={n}  {label}  [{len(fns)} functions, timeout={timeout}s]")
     print(f"{'─'*72}")
 
+    use_comp = (n >= 5)  # n=4 uses NPN_REPS_N4 (already optimally complemented)
     for i, bf in enumerate(fns):
         t_fn = time.time()
-        circ = sshr_i(bf, objective=objective, timeout=timeout)
+        circ = sshr_i(bf, objective=objective, timeout=timeout, try_complement=use_comp)
         elapsed_fn = time.time() - t_fn
 
         if elapsed_fn >= timeout * 0.99:
