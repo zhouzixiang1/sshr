@@ -1,0 +1,13 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Large regenerable training data.
+# n5_ilp_cnot.csv is 103 MB (decimal) — exceeds GitHub's 100 MB per-file limit.
+# n5_ilp_cnot_100sub.csv is a regenerable 100-function subset (17 MB).
+# Both are reproducible via: data.data_collector --n 5 --teacher ilp
+data/ilp/n5_ilp_cnot.csv
+data/ilp/n5_ilp_cnot_100sub.csv
+
+# Run logs (regenerable)
+logs/

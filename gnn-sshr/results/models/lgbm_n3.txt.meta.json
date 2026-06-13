@@ -1,0 +1,30 @@
+{
+  "objective": "lambdarank",
+  "feature_cols": [
+    "dim",
+    "size",
+    "log2_size",
+    "on_overlap",
+    "off_overlap",
+    "on_ratio",
+    "cnot_cost_estimate",
+    "t_cost_estimate",
+    "control_count",
+    "is_singleton",
+    "overlap_ratio",
+    "off_ratio",
+    "position_entropy",
+    "structural_rarity"
+  ],
+  "params": {
+    "n_estimators": 200,
+    "max_depth": 6,
+    "learning_rate": 0.05,
+    "num_leaves": 31,
+    "min_data_in_leaf": 5,
+    "feature_fraction": 0.9,
+    "bagging_fraction": 0.9,
+    "bagging_freq": 5,
+    "verbose": -1
+  }
+}

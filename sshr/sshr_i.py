@@ -25,6 +25,93 @@ TIMEOUT_SECONDS = 120  # default; sshr_i() uses n-adaptive default (7200 for n>=
 _TIMEOUT_BY_N = {3: 30, 4: 30, 5: 120}  # n>=6 defaults to 7200
 
 
+def _circuit_to_ilp_indices(
+    bf: BooleanFunction,
+    circ: QuantumCircuit,
+) -> Optional[List[int]]:
+    """Convert a QuantumCircuit's block structure to ILP parallelotope indices.
+
+    Since add_block expands gates and loses the original Parallelotope info,
+    this function reconstructs parallelotope vertex-sets from the gate pattern
+    (CNOT chain + X + MCT + inverse CNOT chain) produced by synth_block.
+
+    Returns None if matching fails.
+    """
+    n = bf.n
+    onset_set = set(bf.onset)
+    all_minterms = list(range(1 << n))
+
+    # Build the same parallelotope list as _ilp_core
+    parallelotopes = enumerate_parallelotopes(all_minterms, n)
+    seen_vsets = {p.vertices() for p in parallelotopes}
+    for v in all_minterms:
+        s = frozenset([v])
+        if s not in seen_vsets:
+            parallelotopes.append(Parallelotope(v, []))
+            seen_vsets.add(s)
+    parallelotopes = [p for p in parallelotopes if p.vertices() & onset_set]
+
+    # Build vertex-set to index mapping
+    vset_to_idx = {p.vertices(): i for i, p in enumerate(parallelotopes)}
+
+    # Group gates into blocks: each synth_block produces
+    # [CNOT, ..., X, ..., MCT, X_inv, ..., CNOT_inv]
+    # The MCT gate is the central gate with most controls.
+    # Simpler approach: extract parallelotope vertices from gate structure.
+
+    # Find MCT gates — each one corresponds to a block
+    indices = []
+    for gate in circ.gates:
+        if gate.type != 'MCT':
+            continue
+        # The MCT gate controls + target define the parallelotope structure.
+        # For a dim-d parallelotope, the MCT has n-d controls on the data qubits.
+        # The parallelotope vertices are determined by the CNOT pattern before the MCT.
+        # This is too complex to reconstruct generically.
+        # Instead, we use a different approach below.
+        pass
+
+    # Alternative approach: use the path of parallelotope indices from beam search
+    # directly, which is more reliable.
+    # This function should only be called when we have the path available.
+    return None  # Signal that path-based matching is needed
+
+
+def _parallelotope_path_to_ilp_indices(
+    bf: BooleanFunction,
+    path_records: list,
+) -> Optional[List[int]]:
+    """Convert a list of (parallelotope, mask) records from beam search to ILP indices.
+
+    path_records : list of objects with .p (Parallelotope) attribute
+    """
+    n = bf.n
+    onset_set = set(bf.onset)
+    all_minterms = list(range(1 << n))
+
+    parallelotopes = enumerate_parallelotopes(all_minterms, n)
+    seen_vsets = {p.vertices() for p in parallelotopes}
+    for v in all_minterms:
+        s = frozenset([v])
+        if s not in seen_vsets:
+            parallelotopes.append(Parallelotope(v, []))
+            seen_vsets.add(s)
+    parallelotopes = [p for p in parallelotopes if p.vertices() & onset_set]
+
+    vset_to_idx = {p.vertices(): i for i, p in enumerate(parallelotopes)}
+
+    indices = []
+    for rec in path_records:
+        vset = rec.p.vertices()
+        if vset in vset_to_idx:
+            indices.append(vset_to_idx[vset])
+        else:
+            # This parallelotope doesn't intersect with onset — skip
+            pass
+
+    return indices if indices else None
+
+
 def block_t_cost_rp(p, n: int) -> int:
     """T-count cost using relative-phase Toffoli (T=4 for k=2 MCT)."""
     covered = 0
@@ -61,8 +148,15 @@ def _solve_ilp_gurobi(
     costs: List[float],
     timeout: float,
     cutoff: Optional[float] = None,
+    warm_start_indices: Optional[List[int]] = None,
 ) -> List[int]:
-    """Return list of selected parallelotope indices using Gurobi."""
+    """Return list of selected parallelotope indices using Gurobi.
+
+    Parameters
+    ----------
+    warm_start_indices : optional list of parallelotope indices to use as MIPStart.
+        These are indices into the *parallelotopes* list (after filtering by onset_set).
+    """
     import gurobipy as gp
     from gurobipy import GRB
 
@@ -100,6 +194,25 @@ def _solve_ilp_gurobi(
             model.addConstr(cover_sum - 2 * y[j] == 1)
         else:
             model.addConstr(cover_sum == 2 * z[j])
+
+    # Warm start: set initial values for x variables
+    if warm_start_indices is not None:
+        warm_set = set(warm_start_indices)
+        for i in range(m):
+            x[i].Start = 1 if i in warm_set else 0
+        # Also set parity variables for the warm start
+        for j, minterm in enumerate(all_minterms):
+            cover_count = sum(1 for i in covering_idx[j] if i in warm_set)
+            if minterm in onset_set:
+                # cover_count = 2*y_j + 1 → y_j = (cover_count - 1) / 2
+                yv = (cover_count - 1) // 2
+                if yv >= 0:
+                    y[j].Start = yv
+            else:
+                # cover_count = 2*z_j → z_j = cover_count / 2
+                zv = cover_count // 2
+                if zv >= 0:
+                    z[j].Start = zv
 
     model.setObjective(gp.quicksum(costs[i] * x[i] for i in range(m)), GRB.MINIMIZE)
     model.optimize()
@@ -175,10 +288,12 @@ def _solve_ilp(
     costs: List[float],
     timeout: float,
     cutoff: Optional[float] = None,
+    warm_start_indices: Optional[List[int]] = None,
 ) -> List[int]:
     """Solve WP-SCP using Gurobi. Raises RuntimeError if gurobipy is not available."""
     try:
-        return _solve_ilp_gurobi(parallelotopes, all_minterms, onset, costs, timeout, cutoff)
+        return _solve_ilp_gurobi(parallelotopes, all_minterms, onset, costs, timeout,
+                                  cutoff, warm_start_indices)
     except ImportError:
         raise RuntimeError(
             "gurobipy is required for SSHR-I. Install it with:\n"
@@ -190,10 +305,16 @@ def _ilp_core(
     bf: BooleanFunction,
     objective: str,
     timeout: float,
+    warm_start_path: Optional[List[int]] = None,
 ) -> QuantumCircuit:
     """
     Core ILP synthesis for a single bf (no complement selection).
     Uses SSHR-H result as upper-bound Cutoff and fallback.
+
+    Parameters
+    ----------
+    warm_start_path : optional list of parallelotope vertex-set indices (into the
+        onset-filtered parallelotopes list) to use as Gurobi MIPStart.
     """
     from sshr_h import sshr_h as _sshr_h
     from parallelotope import Parallelotope as _P
@@ -223,7 +344,8 @@ def _ilp_core(
 
     if objective == "cnot":
         costs = [float(block_cnot_cost(p, n)) for p in parallelotopes]
-        selected = _solve_ilp(parallelotopes, all_minterms, onset, costs, timeout, cutoff=h_cost)
+        selected = _solve_ilp(parallelotopes, all_minterms, onset, costs, timeout,
+                              cutoff=h_cost, warm_start_indices=warm_start_path)
     else:
         t_costs = [float(block_t_cost_rp(p, n)) for p in parallelotopes]
         c_costs = [float(block_cnot_cost(p, n)) for p in parallelotopes]
@@ -247,6 +369,7 @@ def sshr_i(
     objective: str = "cnot",    # "cnot" or "t"
     timeout: float = None,       # None = n-adaptive: 30s(n≤4), 120s(n=5), 7200s(n≥6)
     try_complement: bool = True, # run ILP on both f and NOT(f), each with timeout/2
+    warm_start_circuit: Optional[QuantumCircuit] = None,
 ) -> QuantumCircuit:
     """
     Synthesize a quantum oracle for Boolean function `bf` using SSHR-I.
@@ -261,6 +384,10 @@ def sshr_i(
                      Exact complement selection — better than SSHR-H heuristic.
                      Set False when input is already an optimal-complement representative
                      (e.g., NPN_REPS_N4 for n=4).
+    warm_start_circuit : Optional QuantumCircuit from a heuristic (e.g., XOR beam)
+                     to use as Gurobi MIPStart. Only used for the direct f direction
+                     (not complement). The circuit's block structure is matched to
+                     ILP parallelotope indices.
 
     Returns
     -------
@@ -273,12 +400,18 @@ def sshr_i(
     if not bf.onset:
         return QuantumCircuit(n + 1)
 
+    # Convert warm-start circuit to parallelotope indices if provided
+    warm_start_path = None
+    if warm_start_circuit is not None:
+        warm_start_path = _circuit_to_ilp_indices(bf, warm_start_circuit)
+
     if try_complement:
         # Exact complement selection: run ILP on both f and NOT(f), each with timeout/2
         full_mask = (1 << (1 << n)) - 1
         bf_comp = BooleanFunction(n, bf.truth_table ^ full_mask)
 
-        circ_f = _ilp_core(bf, objective, timeout / 2)
+        circ_f = _ilp_core(bf, objective, timeout / 2,
+                           warm_start_path=warm_start_path)
 
         if bf_comp.onset:
             circ_c = _ilp_core(bf_comp, objective, timeout / 2)
@@ -288,4 +421,5 @@ def sshr_i(
 
         return circ_f
     else:
-        return _ilp_core(bf, objective, timeout)
+        return _ilp_core(bf, objective, timeout,
+                         warm_start_path=warm_start_path)

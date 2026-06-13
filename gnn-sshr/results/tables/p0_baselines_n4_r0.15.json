@@ -1,0 +1,98 @@
+[
+  {
+    "method": "paper_sshr_h",
+    "n": 4,
+    "T": 7391,
+    "CNOT": 6540,
+    "Anc": 308,
+    "gain_vs_paper_sshr_h_cnot": 0.0,
+    "n_evaluated": 0,
+    "n_skipped": 0,
+    "time_s": 0.0,
+    "note": "paper reference"
+  },
+  {
+    "method": "paper_sshr_i_cnot",
+    "n": 4,
+    "T": 6028,
+    "CNOT": 4696,
+    "Anc": 212,
+    "gain_vs_paper_sshr_h_cnot": 28.19571865443425,
+    "n_evaluated": 0,
+    "n_skipped": 0,
+    "time_s": 0.0,
+    "note": "paper reference"
+  },
+  {
+    "method": "paper_xag",
+    "n": 4,
+    "T": 11692,
+    "CNOT": 19148,
+    "Anc": 1459,
+    "gain_vs_paper_sshr_h_cnot": -192.782874617737,
+    "n_evaluated": 0,
+    "n_skipped": 0,
+    "time_s": 0.0,
+    "note": "paper reference"
+  },
+  {
+    "method": "our_sshr_h",
+    "n": 4,
+    "T": 6726,
+    "CNOT": 6064,
+    "Anc": 2,
+    "gain_vs_paper_sshr_h_cnot": 7.2782874617737,
+    "n_evaluated": 221,
+    "n_skipped": 0,
+    "time_s": 0.02303910255432129,
+    "note": ""
+  },
+  {
+    "method": "our_sshr_beam",
+    "n": 4,
+    "T": 7958,
+    "CNOT": 6711,
+    "Anc": 4,
+    "gain_vs_paper_sshr_h_cnot": -2.614678899082569,
+    "n_evaluated": 221,
+    "n_skipped": 0,
+    "time_s": 0.3671891689300537,
+    "note": "width=20"
+  },
+  {
+    "method": "rule_pruned_ilp",
+    "n": 4,
+    "T": 11751,
+    "CNOT": 6501,
+    "Anc": 6,
+    "gain_vs_paper_sshr_h_cnot": 0.5963302752293578,
+    "n_evaluated": 221,
+    "n_skipped": 0,
+    "time_s": 3.258507013320923,
+    "note": "keep=0.15"
+  },
+  {
+    "method": "lgb_pruned_ilp",
+    "n": 4,
+    "T": 8993,
+    "CNOT": 5976,
+    "Anc": 5,
+    "gain_vs_paper_sshr_h_cnot": 8.623853211009175,
+    "n_evaluated": 221,
+    "n_skipped": 0,
+    "time_s": 1.9601202011108398,
+    "note": "keep=0.15"
+  },
+  {
+    "method": "gnn_pruned_ilp",
+    "n": 4,
+    "T": 16228,
+    "CNOT": 8493,
+    "Anc": 8,
+    "gain_vs_paper_sshr_h_cnot": -29.862385321100916,
+    "n_evaluated": 221,
+    "n_skipped": 0,
+    "time_s": 2.7269580364227295,
+    "note": "keep=0.15"
+  }
+]

@@ -1,0 +1,98 @@
+[
+  {
+    "method": "paper_sshr_h",
+    "n": 4,
+    "T": 7391,
+    "CNOT": 6540,
+    "Anc": 308,
+    "gain_vs_paper_sshr_h_cnot": 0.0,
+    "n_evaluated": 0,
+    "n_skipped": 0,
+    "time_s": 0.0,
+    "note": "paper reference"
+  },
+  {
+    "method": "paper_sshr_i_cnot",
+    "n": 4,
+    "T": 6028,
+    "CNOT": 4696,
+    "Anc": 212,
+    "gain_vs_paper_sshr_h_cnot": 28.19571865443425,
+    "n_evaluated": 0,
+    "n_skipped": 0,
+    "time_s": 0.0,
+    "note": "paper reference"
+  },
+  {
+    "method": "paper_xag",
+    "n": 4,
+    "T": 11692,
+    "CNOT": 19148,
+    "Anc": 1459,
+    "gain_vs_paper_sshr_h_cnot": -192.782874617737,
+    "n_evaluated": 0,
+    "n_skipped": 0,
+    "time_s": 0.0,
+    "note": "paper reference"
+  },
+  {
+    "method": "our_sshr_h",
+    "n": 4,
+    "T": 6726,
+    "CNOT": 6064,
+    "Anc": 2,
+    "gain_vs_paper_sshr_h_cnot": 7.2782874617737,
+    "n_evaluated": 221,
+    "n_skipped": 0,
+    "time_s": 0.02342391014099121,
+    "note": ""
+  },
+  {
+    "method": "our_sshr_beam",
+    "n": 4,
+    "T": 7958,
+    "CNOT": 6711,
+    "Anc": 4,
+    "gain_vs_paper_sshr_h_cnot": -2.614678899082569,
+    "n_evaluated": 221,
+    "n_skipped": 0,
+    "time_s": 0.3670921325683594,
+    "note": "width=20"
+  },
+  {
+    "method": "rule_pruned_ilp",
+    "n": 4,
+    "T": 10455,
+    "CNOT": 5757,
+    "Anc": 5,
+    "gain_vs_paper_sshr_h_cnot": 11.972477064220184,
+    "n_evaluated": 221,
+    "n_skipped": 0,
+    "time_s": 5.670116901397705,
+    "note": "keep=0.3"
+  },
+  {
+    "method": "lgb_pruned_ilp",
+    "n": 4,
+    "T": 7099,
+    "CNOT": 5267,
+    "Anc": 3,
+    "gain_vs_paper_sshr_h_cnot": 19.464831804281346,
+    "n_evaluated": 221,
+    "n_skipped": 0,
+    "time_s": 4.0867180824279785,
+    "note": "keep=0.3"
+  },
+  {
+    "method": "gnn_pruned_ilp",
+    "n": 4,
+    "T": 9056,
+    "CNOT": 5509,
+    "Anc": 4,
+    "gain_vs_paper_sshr_h_cnot": 15.764525993883794,
+    "n_evaluated": 221,
+    "n_skipped": 0,
+    "time_s": 5.563097238540649,
+    "note": "keep=0.3"
+  }
+]
