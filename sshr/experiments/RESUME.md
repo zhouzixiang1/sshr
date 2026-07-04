@@ -20,7 +20,7 @@
 ### 恢复 n=5（从第 51 个函数继续）
 
 ```bash
-cd /Users/zhouzixiang/Desktop/tzb/claude/sshr
+cd /Users/zhouzixiang/Desktop/tzb/src/sshr
 
 nohup /opt/anaconda3/envs/sshr/bin/python experiments/run_ilp_checkpoint.py \
   --n 5 --objective cnot --fns 2000 \
@@ -34,7 +34,7 @@ echo "PID=$!"
 ### 重启 n=6（从头开始）
 
 ```bash
-cd /Users/zhouzixiang/Desktop/tzb/claude/sshr
+cd /Users/zhouzixiang/Desktop/tzb/src/sshr
 
 # 先删除损坏的检查点文件
 rm experiments/checkpoints/ilp_n6_cnot_fns200_seed42.json

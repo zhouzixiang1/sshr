@@ -32,7 +32,7 @@ those are added:
 
 ## 2. Smoke commands
 
-Run all commands from `gnn-sshr/` (i.e. `cd /Users/zhouzixiang/Desktop/tzb/claude/gnn-sshr`).
+Run all commands from `gnn-sshr/` (i.e. `cd /Users/zhouzixiang/Desktop/tzb/src/gnn-sshr`).
 `PYTHONPATH=src` is required so module names resolve without an `src.`
 prefix (e.g. `data.data_collector`, not `src.data.data_collector`).
 
@@ -97,7 +97,7 @@ default `--solver ilp` (and any pruning safeguards) reach Gurobi.
 ## 5. P0 GNN training & evaluation
 
 End-to-end commands to reproduce the P0 GNN result reported in
-`PROGRESS.md §7`. All run from `/Users/zhouzixiang/Desktop/tzb/claude/gnn-sshr`.
+`PROGRESS.md §7`. All run from `/Users/zhouzixiang/Desktop/tzb/src/gnn-sshr`.
 
 ### a. (Re-)collect the n=3 ILP dataset
 
@@ -177,7 +177,7 @@ PYTHONPATH=src /opt/anaconda3/envs/sshr/bin/python -m eval.compare_methods \
 ## 7. P0.1 commands (June 13 2026)
 
 End-to-end commands to reproduce PROGRESS §8. All run from
-`/Users/zhouzixiang/Desktop/tzb/claude/gnn-sshr`. The
+`/Users/zhouzixiang/Desktop/tzb/src/gnn-sshr`. The
 `src/search/pruned_search.py` coverage-repair fix is now baked in;
 re-running these with the existing checkpoints produces the post-fix
 numbers cited in PROGRESS §8.
@@ -288,7 +288,7 @@ Reference best CNOT (`n_skipped == 0`): lgb = 5267 @ 0.30, gnn = 5509 @
 
 End-to-end commands to reproduce PROGRESS §9 (cost-aware 11-dim GNN,
 ancilla-sum aggregation, n=3/n=4 retrain, n=5 first run). All run from
-`/Users/zhouzixiang/Desktop/tzb/claude/gnn-sshr`. The 11-dim candidate
+`/Users/zhouzixiang/Desktop/tzb/src/gnn-sshr`. The 11-dim candidate
 features in `src/data/graph_builder.py` (§9.1 of DESIGN) and the
 `_aggregate_costs` ancilla-sum change (§10 of DESIGN) are baked in.
 

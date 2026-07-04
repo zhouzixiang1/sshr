@@ -2,8 +2,8 @@
 import sys
 import time
 
-sys.path.insert(0, "/Users/zhouzixiang/Desktop/tzb/claude/sshr")
-sys.path.insert(0, "/Users/zhouzixiang/Desktop/tzb/claude/ai_sshr_experiment")
+sys.path.insert(0, "/Users/zhouzixiang/Desktop/tzb/src/sshr")
+sys.path.insert(0, "/Users/zhouzixiang/Desktop/tzb/src/ai_sshr_experiment")
 
 from bool_func import BooleanFunction, mct_cost
 from feature_extractor import ensure_sshr_on_path

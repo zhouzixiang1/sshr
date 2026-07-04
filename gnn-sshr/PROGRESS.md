@@ -29,7 +29,7 @@ gnn-sshr/
 
 ### SSHR core copied & adapted to `src/sshr_core/`
 
-All eleven modules from `claude/sshr/` were lifted with import paths
+All eleven modules from `src/sshr/` were lifted with import paths
 rewritten for the package layout. Line counts (from `wc -l`):
 
 | File | LoC |
@@ -68,12 +68,12 @@ Verbatim report from the smoke run:
   "label_pos": 5,
   "label_neg": 191,
   "lgbm_train_ok": true,
-  "lgbm_path": "/Users/zhouzixiang/Desktop/tzb/claude/gnn-sshr/results/models/lgbm_n3_smoke.txt",
+  "lgbm_path": "/Users/zhouzixiang/Desktop/tzb/src/gnn-sshr/results/models/lgbm_n3_smoke.txt",
   "errors": [
     "pandas was missing in /opt/anaconda3/envs/sshr; installed pandas + lightgbm via pip into that env (one-time fix).",
     "Gurobi WLS license token endpoint hit SSL cert errors on 4 of 8 tt values (tt=0x1..0x4) early in the run: 'SSL: no alternative certificate subject name matches target hostname token.gurobi.com'. The 5th call onward succeeded (license cached locally) and 4 functions were solved. End-to-end pipeline still produced labeled rows, so the smoke test was successful."
   ],
-  "notes": "CSV: /Users/zhouzixiang/Desktop/tzb/claude/gnn-sshr/data/ilp/n3_ilp_cnot.csv (196 rows, 24 cols, 4 unique func_id, 49 candidates each). 4/8 functions failed teacher (Gurobi SSL on initial token request — likely transient network/cert issue, the license then resolved itself for later calls). LightGBM pruner trained successfully with lambdarank objective on 14 feature columns; score range [-8.36, 2.61]. Saved to results/models/lgbm_n3_smoke.txt (237KB). Recommend retrying the failed tt values to confirm the SSL issue is purely transient before scaling to n=4/5."
+  "notes": "CSV: /Users/zhouzixiang/Desktop/tzb/src/gnn-sshr/data/ilp/n3_ilp_cnot.csv (196 rows, 24 cols, 4 unique func_id, 49 candidates each). 4/8 functions failed teacher (Gurobi SSL on initial token request — likely transient network/cert issue, the license then resolved itself for later calls). LightGBM pruner trained successfully with lambdarank objective on 14 feature columns; score range [-8.36, 2.61]. Saved to results/models/lgbm_n3_smoke.txt (237KB). Recommend retrying the failed tt values to confirm the SSL issue is purely transient before scaling to n=4/5."
 }
 ```
 

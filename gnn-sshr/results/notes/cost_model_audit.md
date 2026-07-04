@@ -2,7 +2,7 @@
 
 Date: 2026-06-13
 Author: cost-model audit subagent
-Repo: `/Users/zhouzixiang/Desktop/tzb/claude/gnn-sshr`
+Repo: `/Users/zhouzixiang/Desktop/tzb/src/gnn-sshr`
 Trigger: `results/tables/p0_baselines_n3.md` reports
 `our_sshr_h` = (T 2993 / CNOT 3191 / Anc 1) vs paper SSHR-H = (T 3588 / CNOT 3672 / Anc 128).
 The Anc=1 vs Anc=128 gap looked suspicious; CNOT and T deltas (-13.10% / -16.6%) also

@@ -87,7 +87,9 @@ class FuncSample:
 
 
 def _select_device() -> torch.device:
-    """MPS if available, else CPU. CUDA is not part of the spec."""
+    """CUDA if available (cloud GPU), else MPS (Apple Silicon), else CPU."""
+    if torch.cuda.is_available():
+        return torch.device("cuda")
     if torch.backends.mps.is_available():
         return torch.device("mps")
     return torch.device("cpu")
