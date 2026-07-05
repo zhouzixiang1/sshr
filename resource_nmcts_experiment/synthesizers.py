@@ -289,12 +289,12 @@ def _best_affine_plan(
         trial_limit = 1
         term_cap = 160
     else:
-        affine_budget = 1
+        affine_budget = 4 if not use_neural_refine else 1
         rank_polarities = 1
         rank_mcts = 6
         rank_neural_mcts = 8
         trial_limit = 1
-        term_cap = 220
+        term_cap = 2200 if not use_neural_refine else 220
     budget = max(1, min(config.max_polarities, affine_budget))
     rank_config = replace(
         config,
@@ -335,7 +335,7 @@ def _best_affine_plan(
         solver = NeuralMCTSSolver(rank_config, simulations=rank_config.mcts_simulations, seed=seed)
         plan = solver.solve(terms)
         best = (plan.cost.score(config.weights), candidate_transforms(bf.n, seed, 1)[0], bf, 0, terms, plan, plan.cost)
-    if use_guard:
+    if use_guard and bf.n <= 12:
         try:
             terms = frozenset(anf_monomials(bf))
             solver = NeuralMCTSSolver(config, simulations=config.mcts_simulations, seed=seed)
@@ -491,11 +491,15 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             max_polarities=min(config.max_polarities, 8),
         )
         portfolio: list[SynthesisResult] = []
-        child_specs = [
-            ("direct_anf", config),
-            ("fprm_greedy", fast_config),
-            ("affine_nmcts", fast_config),
-        ]
+        child_specs = [("direct_anf", config)]
+        if bf.n <= 12:
+            child_specs.append(("fprm_greedy", fast_config))
+            child_specs.append(("affine_nmcts", fast_config))
+        else:
+            # At n=14+ the current affine candidates tie FPRM on the random-ANF
+            # stress suite while adding a large runtime tail, so keep only the
+            # bounded FPRM branch in the scalable guard.
+            child_specs.append(("fprm_greedy", fast_config))
         if bf.n <= 6:
             child_specs.append(("cube_beam", cube_config))
         if bf.n <= 10:
@@ -527,7 +531,13 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         portfolio: list[SynthesisResult] = []
         profile_configs = _profile_candidate_configs(config)
         base_config = profile_configs[0][1]
-        child_specs: list[tuple[str, SearchConfig]] = [("fprm_direct", config)]
+        if bf.n > 12:
+            child_specs: list[tuple[str, SearchConfig]] = [
+                ("direct_anf", config),
+                ("fprm_greedy", base_config),
+            ]
+        else:
+            child_specs = [("fprm_direct", config)]
         if bf.n <= 6:
             child_specs.append(("resource_nmcts", config))
             for _label, child_config in profile_configs:
@@ -549,7 +559,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
                     ("affine_greedy", base_config),
                 ]
             )
-        else:
+        elif bf.n <= 12:
             # Larger random-ANF instances are where broad profile portfolios can
             # create long tails.  Keep only cheap diversity on top of the stable
             # direct/FPRM candidates.
@@ -559,6 +569,8 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
                     ("affine_greedy", base_config),
                 ]
             )
+        else:
+            child_specs.append(("fprm_greedy", base_config))
 
         seen_specs = set()
         for child_method, child_config in child_specs:

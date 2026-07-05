@@ -17,6 +17,7 @@ PAPER_TABLES = THIS_DIR / "paper_latex" / "tables"
 METHOD_ORDER = [
     "direct_anf",
     "and_direct_anf",
+    "and_fprm_greedy",
     "and_mcts_factor",
     "and_affine_greedy",
     "and_affine_no_guard",
@@ -31,6 +32,7 @@ METHOD_ORDER = [
 METHOD_LABELS = {
     "direct_anf": "Direct ANF",
     "and_direct_anf": "AND-direct ANF",
+    "and_fprm_greedy": "FPRM-greedy",
     "and_mcts_factor": "Fixed MCTS",
     "and_affine_greedy": "Affine-greedy",
     "and_affine_no_guard": "Affine-no-guard",

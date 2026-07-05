@@ -125,6 +125,13 @@ PRESETS = {
         "structured_limit": 10_000,
         "workers": 6,
     },
+    "highdim_resource": {
+        "methods": ["direct_anf", "and_direct_anf", "and_fprm_greedy", "and_affine_greedy", "and_resource_nmcts", "and_profile_resource_nmcts"],
+        "random_truth": [],
+        "random_anf": [(14, 64)],
+        "structured_limit": 0,
+        "workers": 8,
+    },
 }
 
 
@@ -357,12 +364,12 @@ def main(argv: Iterable[str] | None = None) -> int:
         "candidate_top_k": 24,
         "min_factor_count": 2,
         "use_relative_phase": True,
-        "mcts_simulations": 24 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core"} else (48 if args.preset == "pilot" else (32 if args.preset == "large" else 96)),
-        "neural_mcts_simulations": 32 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core"} else (64 if args.preset == "pilot" else (32 if args.preset == "large" else 128)),
-        "max_polarities": 32 if args.preset in {"smoke", "pilot"} else (12 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core"} else (16 if args.preset == "large_fast" else (48 if args.preset == "large" else 384))),
+        "mcts_simulations": 24 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core", "highdim_resource"} else (48 if args.preset == "pilot" else (32 if args.preset == "large" else 96)),
+        "neural_mcts_simulations": 32 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core", "highdim_resource"} else (64 if args.preset == "pilot" else (32 if args.preset == "large" else 128)),
+        "max_polarities": 32 if args.preset in {"smoke", "pilot"} else (12 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core", "highdim_resource"} else (16 if args.preset == "large_fast" else (48 if args.preset == "large" else 384))),
         "gate_mode": "mct",
         "neural_prior_weight": 2.5,
-        "task_timeout_s": 300 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core"} else (120 if args.preset == "pilot" else (180 if args.preset in {"large", "large_fast"} else (300 if args.preset == "main" else 0))),
+        "task_timeout_s": 300 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core"} else (180 if args.preset == "highdim_resource" else (120 if args.preset == "pilot" else (180 if args.preset in {"large", "large_fast"} else (300 if args.preset == "main" else 0)))),
     }
     methods = cfg["methods"]
     tasks = [
@@ -370,14 +377,16 @@ def main(argv: Iterable[str] | None = None) -> int:
         for i, (name, bf) in enumerate(suite)
         for method in methods
     ]
-    if args.preset in {"large_resource", "large_resource_core"}:
+    if args.preset in {"large_resource", "large_resource_core", "highdim_resource"}:
         method_rank = {
             "direct_anf": 0,
             "and_direct_anf": 1,
-            "and_mcts_factor": 2,
-            "and_affine_nmcts": 3,
-            "and_resource_nmcts": 4,
-            "and_profile_resource_nmcts": 5,
+            "and_fprm_greedy": 2,
+            "and_mcts_factor": 3,
+            "and_affine_greedy": 4,
+            "and_affine_nmcts": 5,
+            "and_resource_nmcts": 6,
+            "and_profile_resource_nmcts": 7,
         }
         tasks.sort(key=lambda t: (method_rank.get(t[2], 99), t[1].n, t[0]))
 

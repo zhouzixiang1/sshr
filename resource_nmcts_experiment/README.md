@@ -32,6 +32,9 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset large_resource_core --model models/action_scorer_rollout_logical_and.pt --resume --workers 6 --checkpoint-every 1 --isolate-timeouts
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset large_resource_core
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset large_resource_core
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 8 --checkpoint-every 25 --isolate-timeouts
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset highdim_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset highdim_resource
 ```
 
 Current presets:
@@ -53,9 +56,11 @@ Current presets:
 - `large_resource_core`: 330-function large logical benchmark through `n=12`,
   now including the profile-aware Resource-NMCTS variant and process-isolated
   hard timeouts for long-tail tasks.
+- `highdim_resource`: isolated `n=14` random-ANF stress benchmark with direct
+  ANF, logical-AND direct ANF, FPRM-greedy, bounded affine-greedy,
+  Resource-NMCTS, and Profile-Resource-NMCTS.
 - `large_resource`: experimental `n=14` stress extension.  This preset exposed
-  the current high-dimensional runtime tail and is not used as paper-facing
-  evidence.
+  the mixed-suite runtime tail and is kept for broader engineering sweeps.
 - `main`: large-scale placeholder for broader sweeps.
 
 Outputs are written to `results/`.  The neural prior is saved at
@@ -161,9 +166,26 @@ Large-scale core evidence from `results/analysis_large_resource_core.md` and
 - `and_profile_resource_nmcts` trades score for a shorter large-core runtime
   tail: 330/330 completed, median 2.292 s, p95 25.682 s, max 67.609 s, mean
   score 286.54 versus 273.72 for `and_resource_nmcts`.
-- The attempted `n=14` extension exposed a runtime long tail for the current
-  implementation.  Treat `n=14` as the next stress target rather than as
-  paper-facing evidence.
+
+High-dimensional stress evidence from `results/analysis_highdim_resource.md`
+and `results/runtime_highdim_resource.md`:
+
+- 64 random ANF functions at `n=14`, 6 methods, 384 result rows, 0 errors, and
+  0 skips.
+- `and_resource_nmcts` and `and_profile_resource_nmcts` complete all 64
+  functions under process-isolated timeouts.
+- Compared with direct ANF, both Resource-NMCTS variants have 51 T-count wins,
+  0 losses, and 13 ties, with a 52.51% mean T-count reduction and a 50.19%
+  mean score reduction.
+- Compared with logical-AND direct ANF, they have 51 T-count wins, 0 losses,
+  and 13 ties, with a 26.49% mean T-count reduction and a 25.86% mean score
+  reduction.
+- Compared with FPRM-greedy and affine-greedy, the high-dimensional guarded
+  variants tie on all 64 functions.  This is a scaling guard result, not an
+  `n=14` dominance result over the strongest cheap Reed-Muller baseline.
+- Runtime tails remain visible but bounded: `and_resource_nmcts` completes
+  64/64 with median 8.258 s and p95 133.567 s; `and_profile_resource_nmcts`
+  completes 64/64 with median 6.687 s and p95 76.210 s.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost
