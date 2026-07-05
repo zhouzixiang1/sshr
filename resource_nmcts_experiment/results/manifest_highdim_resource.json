@@ -3,16 +3,13 @@
   "seed": 42,
   "functions": 64,
   "methods": [
-    "direct_anf",
-    "and_direct_anf",
-    "and_fprm_greedy",
-    "and_affine_greedy",
+    "and_fprm_root_beam",
     "and_resource_nmcts",
     "and_profile_resource_nmcts"
   ],
   "model": "models/action_scorer_rollout_logical_and.pt",
   "workers": 8,
-  "seconds": 183.06871104240417,
+  "seconds": 237.17639303207397,
   "config": {
     "weights": {
       "t": 1.0,
@@ -31,6 +28,6 @@
     "max_polarities": 12,
     "gate_mode": "mct",
     "neural_prior_weight": 2.5,
-    "task_timeout_s": 180
+    "task_timeout_s": 300
   }
 }

@@ -48,11 +48,11 @@ and \profilemethod{} complete all functions, and \method{} reduces mean
 T-count by 60.37\% relative to direct ANF and by 37.25\% relative to
 logical-AND direct ANF, while fixed-coordinate MCTS times out on five $n=12$
 rows.  An isolated
-$n=14$ stress benchmark adds 64 random ANF functions and 384 rows with no
+$n=14$ stress benchmark adds 64 random ANF functions and 448 rows with no
 errors or skips; the guarded high-dimensional variants reduce mean T-count by
-52.51\% relative to direct ANF and by 26.49\% relative to logical-AND direct
-ANF, while tying FPRM/affine-greedy on this scale.  The method is evaluated
-only at the logical circuit layer;
+52.63\% relative to direct ANF and by 26.73\% relative to logical-AND direct
+ANF, with 32 score wins and no losses against FPRM-greedy.  The method is
+evaluated only at the logical circuit layer;
 hardware mapping and connectivity constraints are outside the present scope.
 \end{abstract}
 
@@ -154,7 +154,11 @@ criterion over internally generated candidates.  For each function it evaluates
 direct ANF, FPRM/greedy factoring, and a budgeted \affinemethod{} candidate.
 When the configured dimension guard permits it, the portfolio also evaluates
 fixed-coordinate logical-AND MCTS; for $n\leq 6$, it additionally evaluates
-ESOP cube-beam search.  It returns the correct candidate with the smallest
+ESOP cube-beam search.  For $n>12$, where full fixed-coordinate MCTS and broad
+affine search create long tails, it replaces the expensive branches by a
+bounded FPRM root-beam candidate: many polarities are screened by direct cost,
+then several root factor choices are evaluated while all child subproblems
+remain ordinary greedy plans.  It returns the correct candidate with the smallest
 weighted score, breaking ties by T-count, CNOT count, depth, and peak ancilla.
 SSHR is used only as an external baseline in the experiments and is not part of
 this portfolio.  This final guard converts the affine neural search into a
@@ -170,8 +174,8 @@ internal candidates that create long runtime tails.
 For $n\leq 6$, it evaluates additional T-aggressive, CNOT/depth-oriented, and
 ancilla-tight FPRM, affine-greedy, and ESOP cube-beam candidates before
 selecting by the active weighted score.  For larger random-ANF instances, the
-same method switches to a cheap high-dimensional guard: it keeps direct and
-FPRM/affine-greedy candidates but avoids expensive fixed-coordinate MCTS guards.
+same method switches to a high-dimensional guard: it keeps direct and bounded
+FPRM root-beam candidates but avoids expensive fixed-coordinate MCTS guards.
 This design separates two roles.  On small functions it tests whether the
 resource profile can change the selected circuit; on large functions it acts as
 a runtime-tail guard rather than a score-dominance guarantee.
@@ -380,11 +384,11 @@ tail-reducing extension, not as the large-scale score winner.
 
 The \highdimdataset{} run isolates high-dimensional random ANF instances rather
 than mixing them with small structured functions.  It contains 64 $n=14$
-functions and six methods, for 384 method/function rows with no errors or
+functions and seven methods, for 448 method/function rows with no errors or
 skips.  This experiment uses the high-dimensional guard described above:
-fixed-coordinate MCTS and slow multi-polarity FPRM passes are avoided inside
-the guarded methods, while direct ANF and bounded affine-greedy candidates
-remain available.
+fixed-coordinate MCTS and broad affine search are avoided inside the guarded
+methods, while direct ANF and bounded FPRM root-beam candidates remain
+available.
 
 \begin{table}[t]
 \centering
@@ -405,17 +409,18 @@ benchmark.}
 \end{table}
 
 Both \method{} and \profilemethod{} complete all 64 functions.  Relative to
-direct ANF, each has 51 T-count wins, no losses, and 13 ties, with a 52.51\%
-mean T-count reduction and a 50.19\% mean composite-score reduction.  Relative
+direct ANF, each has 51 T-count wins, no losses, and 13 ties, with a 52.63\%
+mean T-count reduction and a 50.31\% mean composite-score reduction.  Relative
 to logical-AND direct ANF, each again has 51 wins, no losses, and 13 ties, with
-a 26.49\% mean T-count reduction and a 25.86\% mean score reduction.  However,
-both guarded methods tie FPRM-greedy and affine-greedy on every $n=14$
-function in this suite.  Thus the high-dimensional result is evidence that the
-guarded method remains scalable and preserves strong Reed--Muller-level gains,
-not evidence that the current high-dimensional guard improves beyond the
-strongest cheap FPRM baseline.  The runtime tail is bounded but still
-substantial: \method{} has p95 runtime 133.57 s, while \profilemethod{} reduces
-this to 76.21 s.
+a 26.73\% mean T-count reduction and a 26.09\% mean score reduction.  Against
+FPRM-greedy, the guarded methods have 29 T-count wins, no losses, and 35 ties;
+by weighted score they have 32 wins, no losses, and 32 ties.  The mean T-count
+falls from 2263.69 for FPRM-greedy to 2253.62 for \method{} and
+\profilemethod{}.  The improvement is modest in mean value but important
+mechanistically: a bounded root-beam correction now improves high-dimensional
+quality without introducing timeouts.  Runtime tails remain bounded:
+\method{} has p95 runtime 64.18 s, while \profilemethod{} has p95 runtime
+63.49 s.
 
 \section{Discussion}
 
@@ -439,9 +444,10 @@ runtime 1.31 s and p95 runtime 58.86 s; the fixed-coordinate MCTS baseline has
 five timeouts.  The guarded \profilemethod{} variant reduces the p95 runtime to
 25.68 s on the same large benchmark, at the cost of a higher mean score.  On
 the isolated $n=14$ stress test, both guarded variants complete all 64
-functions, but their resources tie FPRM-greedy.  This shows that the current
-high-dimensional guard is scalable but not yet a quality breakthrough beyond
-Reed--Muller polarity search.
+functions and improve over FPRM-greedy with no score losses.  This shows that
+the current high-dimensional guard is no longer only a scalability fallback:
+the first-factor root beam can correct a measurable part of the greedy
+Reed--Muller search error.
 
 The main current limitations are the absence of hardware mapping, the use of a
 local benchmark suite rather than standardized external oracle benchmarks, and
@@ -452,10 +458,10 @@ submission-ready claim.  The resource-profile sweep shows that profile-specific
 candidate generation improves objective robustness on small functions, but the
 large benchmark shows the corresponding high-dimensional tradeoff: conservative
 profile guards reduce runtime tails but give up some score.  The $n=14$ stress
-test narrows this limitation further: bounded affine/FPRM guards are enough to
-keep the run finite and to retain large gains over direct ANF, but stronger
-high-dimensional candidate generation is still needed for a publishable claim
-of improvement over the best cheap Boolean baseline.
+test narrows this limitation further: bounded FPRM root-beam search keeps the
+run finite and improves over FPRM-greedy, but the mean improvement is still
+small.  Stronger high-dimensional candidate generation is needed before the
+paper can claim a large margin over the best cheap Boolean baseline.
 
 \section{Conclusion}
 
@@ -469,8 +475,8 @@ score regressions against internal ESOP cube-beam candidates and remains
 competitive against weighted ESOP MILP.  Resource-profile and \largedataset{}
 benchmarks show that this advantage is robust across several weighted
 objectives and larger random ANF instances.  The new $n=14$ stress test shows
-that bounded guards scale without timeouts, but also that the high-dimensional
-method currently ties rather than beats FPRM-greedy.  The next step is to add
+that bounded guards scale without timeouts and now beat FPRM-greedy on 32 of
+64 weighted-score comparisons without losses.  The next step is to add
 standardized external baselines and stronger high-dimensional candidate
 generation so the empirical claim is submission-ready.
 

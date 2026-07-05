@@ -57,8 +57,8 @@ Current presets:
   now including the profile-aware Resource-NMCTS variant and process-isolated
   hard timeouts for long-tail tasks.
 - `highdim_resource`: isolated `n=14` random-ANF stress benchmark with direct
-  ANF, logical-AND direct ANF, FPRM-greedy, bounded affine-greedy,
-  Resource-NMCTS, and Profile-Resource-NMCTS.
+  ANF, logical-AND direct ANF, FPRM-greedy, bounded FPRM root-beam,
+  bounded affine-greedy, Resource-NMCTS, and Profile-Resource-NMCTS.
 - `large_resource`: experimental `n=14` stress extension.  This preset exposed
   the mixed-suite runtime tail and is kept for broader engineering sweeps.
 - `main`: large-scale placeholder for broader sweeps.
@@ -170,22 +170,24 @@ Large-scale core evidence from `results/analysis_large_resource_core.md` and
 High-dimensional stress evidence from `results/analysis_highdim_resource.md`
 and `results/runtime_highdim_resource.md`:
 
-- 64 random ANF functions at `n=14`, 6 methods, 384 result rows, 0 errors, and
+- 64 random ANF functions at `n=14`, 7 methods, 448 result rows, 0 errors, and
   0 skips.
 - `and_resource_nmcts` and `and_profile_resource_nmcts` complete all 64
   functions under process-isolated timeouts.
 - Compared with direct ANF, both Resource-NMCTS variants have 51 T-count wins,
-  0 losses, and 13 ties, with a 52.51% mean T-count reduction and a 50.19%
+  0 losses, and 13 ties, with a 52.63% mean T-count reduction and a 50.31%
   mean score reduction.
 - Compared with logical-AND direct ANF, they have 51 T-count wins, 0 losses,
-  and 13 ties, with a 26.49% mean T-count reduction and a 25.86% mean score
+  and 13 ties, with a 26.73% mean T-count reduction and a 26.09% mean score
   reduction.
-- Compared with FPRM-greedy and affine-greedy, the high-dimensional guarded
-  variants tie on all 64 functions.  This is a scaling guard result, not an
-  `n=14` dominance result over the strongest cheap Reed-Muller baseline.
+- Compared with FPRM-greedy, the high-dimensional guarded variants have
+  29 T-count wins, 0 losses, and 35 ties; by weighted score they have
+  32 wins, 0 losses, and 32 ties.  The improvement comes from the bounded
+  FPRM root-beam candidate, which evaluates multiple first-factor choices
+  after cheap direct-cost polarity screening.
 - Runtime tails remain visible but bounded: `and_resource_nmcts` completes
-  64/64 with median 8.258 s and p95 133.567 s; `and_profile_resource_nmcts`
-  completes 64/64 with median 6.687 s and p95 76.210 s.
+  64/64 with median 7.952 s and p95 64.177 s; `and_profile_resource_nmcts`
+  completes 64/64 with median 7.794 s and p95 63.488 s.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost

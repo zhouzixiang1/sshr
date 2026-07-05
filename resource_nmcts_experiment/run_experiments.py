@@ -126,7 +126,7 @@ PRESETS = {
         "workers": 6,
     },
     "highdim_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_fprm_greedy", "and_affine_greedy", "and_resource_nmcts", "and_profile_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_fprm_greedy", "and_fprm_root_beam", "and_affine_greedy", "and_resource_nmcts", "and_profile_resource_nmcts"],
         "random_truth": [],
         "random_anf": [(14, 64)],
         "structured_limit": 0,
@@ -349,6 +349,8 @@ def main(argv: Iterable[str] | None = None) -> int:
     ap.add_argument("--model", default=str(DEFAULT_MODEL))
     ap.add_argument("--out-dir", default=str(RESULTS))
     ap.add_argument("--resume", action="store_true", help="skip rows already present in the raw CSV")
+    ap.add_argument("--only-methods", default="", help="comma-separated method subset for targeted reruns")
+    ap.add_argument("--replace-methods", action="store_true", help="drop existing rows for selected methods before a resume run")
     ap.add_argument("--checkpoint-every", type=int, default=None)
     ap.add_argument("--isolate-timeouts", action="store_true", help="run tasks in disposable child processes with a hard timeout")
     args = ap.parse_args(list(argv) if argv is not None else None)
@@ -369,9 +371,15 @@ def main(argv: Iterable[str] | None = None) -> int:
         "max_polarities": 32 if args.preset in {"smoke", "pilot"} else (12 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core", "highdim_resource"} else (16 if args.preset == "large_fast" else (48 if args.preset == "large" else 384))),
         "gate_mode": "mct",
         "neural_prior_weight": 2.5,
-        "task_timeout_s": 300 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core"} else (180 if args.preset == "highdim_resource" else (120 if args.preset == "pilot" else (180 if args.preset in {"large", "large_fast"} else (300 if args.preset == "main" else 0)))),
+        "task_timeout_s": 300 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core", "highdim_resource"} else (120 if args.preset == "pilot" else (180 if args.preset in {"large", "large_fast"} else (300 if args.preset == "main" else 0))),
     }
     methods = cfg["methods"]
+    if args.only_methods:
+        requested = [m.strip() for m in args.only_methods.split(",") if m.strip()]
+        unknown = sorted(set(requested) - set(methods))
+        if unknown:
+            raise SystemExit(f"unknown methods for preset {args.preset}: {', '.join(unknown)}")
+        methods = requested
     tasks = [
         (name, bf, method, args.seed + i, config_dict, model_path)
         for i, (name, bf) in enumerate(suite)
@@ -382,11 +390,12 @@ def main(argv: Iterable[str] | None = None) -> int:
             "direct_anf": 0,
             "and_direct_anf": 1,
             "and_fprm_greedy": 2,
-            "and_mcts_factor": 3,
-            "and_affine_greedy": 4,
-            "and_affine_nmcts": 5,
-            "and_resource_nmcts": 6,
-            "and_profile_resource_nmcts": 7,
+            "and_fprm_root_beam": 3,
+            "and_mcts_factor": 4,
+            "and_affine_greedy": 5,
+            "and_affine_nmcts": 6,
+            "and_resource_nmcts": 7,
+            "and_profile_resource_nmcts": 8,
         }
         tasks.sort(key=lambda t: (method_rank.get(t[2], 99), t[1].n, t[0]))
 
@@ -402,6 +411,9 @@ def main(argv: Iterable[str] | None = None) -> int:
     if args.resume and raw.exists():
         with raw.open(newline="", encoding="utf-8") as f:
             rows.extend(csv.DictReader(f))
+        if args.replace_methods:
+            replace_set = set(methods)
+            rows = [r for r in rows if r.get("method") not in replace_set]
         completed = {(r.get("name"), r.get("method")) for r in rows}
         tasks = [task for task in tasks if (task[0], task[2]) not in completed]
         print(f"resuming from {len(rows)} rows; remaining {len(tasks)}", flush=True)

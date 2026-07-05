@@ -267,6 +267,52 @@ def greedy_plan(
     return best
 
 
+def root_beam_plan(
+    terms: frozenset[int],
+    prefix_len: int = 0,
+    live_factor_ancilla: int = 0,
+    config: SearchConfig = SearchConfig(),
+    neural_scorer=None,
+    root_width: int | None = None,
+) -> Plan:
+    """Evaluate several root factor choices, then use ordinary greedy subplans.
+
+    This is a bounded-discrepancy variant of ``greedy_plan``.  It keeps the
+    recursive subproblems cheap while correcting the most expensive failure mode
+    seen on high-dimensional random ANF instances: a locally plausible first
+    factor can dominate the rest of the plan.
+    """
+    best = direct_plan(terms, prefix_len, live_factor_ancilla, config)
+    actions = candidate_actions(terms, prefix_len, live_factor_ancilla, config, neural_scorer)
+    if not actions:
+        return best
+    width = root_width if root_width is not None else max(2, min(8, config.candidate_top_k // 2))
+    memo: dict[tuple[frozenset[int], int, int], Plan] = {}
+    child_config = replace(config, greedy_eval_limit=1)
+    for action in actions[: max(1, min(width, len(actions)))]:
+        group = greedy_plan(
+            action.residuals,
+            prefix_len + 1,
+            live_factor_ancilla + 1,
+            child_config,
+            neural_scorer,
+            memo,
+        )
+        rest = greedy_plan(
+            action.rest,
+            prefix_len,
+            live_factor_ancilla,
+            child_config,
+            neural_scorer,
+            memo,
+        )
+        cost = factor_cost(action, group, rest, live_factor_ancilla, config)
+        plan = Plan("factor", terms, cost, factor=action.factor, group=group, rest=rest)
+        if plan.score(config.weights) < best.score(config.weights):
+            best = plan
+    return best
+
+
 def _emit_direct(circ: QuantumCircuit, terms: frozenset[int], prefix_controls: List[int], n_inputs: int) -> None:
     output = n_inputs
     for term in sorted(terms, key=lambda x: (x.bit_count(), x)):

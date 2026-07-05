@@ -125,6 +125,7 @@ def main() -> int:
         ("and_resource_nmcts", "direct_anf"),
         ("and_resource_nmcts", "and_direct_anf"),
         ("and_resource_nmcts", "and_fprm_greedy"),
+        ("and_resource_nmcts", "and_fprm_root_beam"),
         ("and_resource_nmcts", "and_affine_greedy"),
         ("and_resource_nmcts", "and_affine_nmcts"),
         ("and_resource_nmcts", "and_mcts_factor"),
@@ -134,6 +135,7 @@ def main() -> int:
         ("and_profile_resource_nmcts", "direct_anf"),
         ("and_profile_resource_nmcts", "and_direct_anf"),
         ("and_profile_resource_nmcts", "and_fprm_greedy"),
+        ("and_profile_resource_nmcts", "and_fprm_root_beam"),
         ("and_profile_resource_nmcts", "and_affine_greedy"),
         ("and_profile_resource_nmcts", "and_resource_nmcts"),
         ("and_profile_resource_nmcts", "and_affine_nmcts"),
@@ -143,6 +145,8 @@ def main() -> int:
         ("and_profile_resource_nmcts", "sshr_h"),
         ("and_affine_no_guard", "and_affine_greedy"),
         ("and_affine_no_guard", "and_mcts_factor"),
+        ("and_fprm_root_beam", "and_fprm_greedy"),
+        ("and_fprm_root_beam", "and_affine_greedy"),
         ("and_affine_greedy", "and_fprm_greedy"),
         ("and_affine_greedy", "and_mcts_factor"),
         ("and_cube_beam", "and_esop_milp"),
@@ -161,7 +165,7 @@ def main() -> int:
             wins, losses, ties, mean = comparison_rows(by_name, target, base, metric)
             lines.append(f"| {target} | {base} | {metric} | {wins} | {losses} | {ties} | {mean:+.2f}% |")
 
-    for focus in ["and_rc_nmcts", "and_affine_nmcts", "and_resource_nmcts", "and_profile_resource_nmcts", "and_affine_no_guard", "and_affine_greedy", "and_fprm_greedy", "and_cube_beam", "and_esop_milp", "and_fprm_neural_mcts", "and_fprm_mcts", "fprm_mcts"]:
+    for focus in ["and_rc_nmcts", "and_affine_nmcts", "and_resource_nmcts", "and_profile_resource_nmcts", "and_affine_no_guard", "and_affine_greedy", "and_fprm_greedy", "and_fprm_root_beam", "and_cube_beam", "and_esop_milp", "and_fprm_neural_mcts", "and_fprm_mcts", "fprm_mcts"]:
         if not any(focus in table for table in by_name.values()):
             continue
         label = focus.replace("_", "-")

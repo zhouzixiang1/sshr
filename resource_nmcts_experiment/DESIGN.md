@@ -335,24 +335,24 @@ Main `large_resource_core` evidence:
 
 The `highdim_resource` stress test isolates the next scale point rather than
 mixing it into the structured suite.  It covers 64 random ANF functions at
-`n=14`, six methods, and 384 method/function rows, with 0 errors and 0 skips
+`n=14`, seven methods, and 448 method/function rows, with 0 errors and 0 skips
 after the high-dimensional guard was tightened to avoid fixed-coordinate MCTS
-and slow multi-polarity FPRM passes.
+tails and to add a bounded FPRM root-beam candidate.
 
 Main `highdim_resource` evidence:
 
 - `and_resource_nmcts` and `and_profile_resource_nmcts` complete all 64
   functions under process-isolated timeouts.
 - Compared with direct ANF, both guarded methods have 51 T-count wins, 0
-  losses, and 13 ties, with a 52.51% mean T-count reduction and a 50.19% mean
+  losses, and 13 ties, with a 52.63% mean T-count reduction and a 50.31% mean
   composite-score reduction.
 - Compared with logical-AND direct ANF, both have 51 T-count wins, 0 losses,
-  and 13 ties, with a 26.49% mean T-count reduction and a 25.86% mean score
+  and 13 ties, with a 26.73% mean T-count reduction and a 26.09% mean score
   reduction.
-- Compared with FPRM-greedy and affine-greedy, both guarded methods tie on all
-  64 functions.  This is useful scaling evidence, but it also means the current
-  high-dimensional guard does not yet improve over the strongest cheap
-  Reed-Muller baseline.
+- Compared with FPRM-greedy, both guarded methods have 29 T-count wins, 0
+  losses, and 35 ties; by weighted score they have 32 wins, 0 losses, and 32
+  ties.  The bounded root-beam candidate corrects the first-factor choice while
+  preserving the same polarity-screening budget.
 - Runtime remains bounded but nontrivial: `and_resource_nmcts` has median
-  runtime 8.258 s, p95 133.567 s, and max 155.398 s; the profile variant has
-  median 6.687 s, p95 76.210 s, and max 90.298 s.
+  runtime 7.952 s, p95 64.177 s, and max 80.002 s; the profile variant has
+  median 7.794 s, p95 63.488 s, and max 80.596 s.

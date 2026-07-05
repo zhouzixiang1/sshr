@@ -23,7 +23,7 @@ from affine_search import affine_wrap_cost, candidate_transforms, emit_affine_wr
 from anf_utils import anf_monomials, shifted_function
 from cube_search import cube_beam_plan, cube_greedy_plan, emit_cube_plan
 from esop_milp import synthesize_esop_milp_circuit
-from factor_plan import SearchConfig, direct_plan, emit_plan_to_circuit, greedy_plan, verify_oracle
+from factor_plan import SearchConfig, direct_plan, emit_plan_to_circuit, greedy_plan, root_beam_plan, verify_oracle
 from neural_policy import NeuralScorer
 from nmcts_solver import NeuralMCTSSolver
 from resource_model import ResourceCost
@@ -171,11 +171,56 @@ def _ranked_polarities(
     return sorted(scored.values(), key=lambda x: (x[0], int(x[1]).bit_count(), x[1]))[:max_pol]
 
 
+def _direct_screened_polarities(
+    bf: BooleanFunction,
+    config: SearchConfig,
+    seed: int,
+    budget: int,
+    top_k: int,
+) -> list[tuple[float, int, frozenset[int], object]]:
+    """Rank many polarities by direct-cost screening before expensive planning."""
+    import random
+
+    total = 1 << bf.n
+    rng = random.Random(seed)
+    values = {0, total - 1}
+    for bit in range(bf.n):
+        values.add(1 << bit)
+        values.add((total - 1) ^ (1 << bit))
+    while len(values) < min(total, budget):
+        values.add(rng.randrange(total))
+
+    scored = []
+    for polarity in values:
+        shifted = shifted_function(bf, polarity)
+        terms = frozenset(anf_monomials(shifted))
+        direct = direct_plan(terms, 0, 0, config).cost + _wrap_cost(polarity)
+        scored.append((direct.score(config.weights), polarity, terms, None))
+    scored.sort(key=lambda x: (x[0], len(x[2]), int(x[1]).bit_count(), x[1]))
+    selected = []
+    seen = set()
+    for item in scored:
+        if item[1] in seen:
+            continue
+        selected.append(item)
+        seen.add(item[1])
+        if len(selected) >= top_k:
+            break
+    if 0 not in seen:
+        for item in scored:
+            if item[1] == 0:
+                selected.append(item)
+                break
+    return selected
+
+
 def _solve_plan(method: str, terms: frozenset[int], config: SearchConfig, seed: int, neural):
     if method in {"direct_anf", "fprm_direct"}:
         return direct_plan(terms, 0, 0, config)
     if method in {"greedy_factor", "neural_greedy", "fprm_greedy"}:
         return greedy_plan(terms, config=config, neural_scorer=neural if method == "neural_greedy" else None)
+    if method in {"root_beam_factor", "fprm_root_beam"}:
+        return root_beam_plan(terms, config=config, neural_scorer=neural if method == "root_beam_factor" else None)
     if method in {"mcts_factor", "fprm_mcts"}:
         solver = NeuralMCTSSolver(config, simulations=config.mcts_simulations, seed=seed)
         return solver.solve(terms)
@@ -198,7 +243,16 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
     # path uses local search in polarity space, so the prior changes which
     # fixed-polarity Reed-Muller forms are explored rather than only reordering
     # factor actions inside a fixed polarity.
-    if neural_guided:
+    if method == "fprm_root_beam" and bf.n > 12 and len(anf_monomials(bf)) > 128:
+        ranked = _direct_screened_polarities(
+            bf,
+            config,
+            seed,
+            budget=max(32, min(64, 4 * max(1, config.max_polarities))),
+            top_k=2,
+        )
+        trials = list(ranked)
+    elif neural_guided:
         baseline_ranked = _ranked_polarities(bf, config, seed, neural=None, neural_guided=False)
         neural_ranked = _ranked_polarities(bf, config, seed, neural=neural, neural_guided=True)
         trials = []
@@ -219,7 +273,7 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
         ranked = baseline_ranked + [item for item in neural_ranked if item[1] not in {x[1] for x in baseline_ranked}]
     else:
         ranked = _ranked_polarities(bf, config, seed, neural, neural_guided)
-        trial_count = 1 if method in {"fprm_direct", "fprm_greedy"} else min(8, len(ranked))
+        trial_count = 1 if method in {"fprm_direct", "fprm_greedy", "fprm_root_beam"} else min(8, len(ranked))
         trials = list(ranked[:trial_count])
     if not any(polarity == 0 for _, polarity, _, _ in trials):
         for item in ranked:
@@ -231,6 +285,8 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
             plan = greedy
         elif method == "fprm_direct":
             plan = direct_plan(terms, 0, 0, config)
+        elif method == "fprm_root_beam":
+            plan = root_beam_plan(terms, config=config)
         elif method == "fprm_mcts":
             solver = NeuralMCTSSolver(config, simulations=config.mcts_simulations, seed=seed)
             plan = solver.solve(terms)
@@ -496,10 +552,9 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             child_specs.append(("fprm_greedy", fast_config))
             child_specs.append(("affine_nmcts", fast_config))
         else:
-            # At n=14+ the current affine candidates tie FPRM on the random-ANF
-            # stress suite while adding a large runtime tail, so keep only the
-            # bounded FPRM branch in the scalable guard.
-            child_specs.append(("fprm_greedy", fast_config))
+            # At n=14+ the root-beam FPRM branch corrects the first-factor
+            # choice while avoiding the fixed-MCTS and affine-transform tails.
+            child_specs.append(("fprm_root_beam", fast_config))
         if bf.n <= 6:
             child_specs.append(("cube_beam", cube_config))
         if bf.n <= 10:
@@ -534,7 +589,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         if bf.n > 12:
             child_specs: list[tuple[str, SearchConfig]] = [
                 ("direct_anf", config),
-                ("fprm_greedy", base_config),
+                ("fprm_root_beam", base_config),
             ]
         else:
             child_specs = [("fprm_direct", config)]
@@ -570,7 +625,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
                 ]
             )
         else:
-            child_specs.append(("fprm_greedy", base_config))
+            child_specs.append(("fprm_root_beam", base_config))
 
         seen_specs = set()
         for child_method, child_config in child_specs:
@@ -614,6 +669,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         "direct_anf",
         "greedy_factor",
         "neural_greedy",
+        "root_beam_factor",
         "mcts_factor",
         "neural_mcts",
     }:
@@ -626,7 +682,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             min(config.max_factor_ancilla, plan.cost.explicit_ancilla),
             polarity=polarity,
         )
-    elif method in {"fprm_direct", "fprm_greedy", "fprm_mcts", "fprm_neural_mcts"}:
+    elif method in {"fprm_direct", "fprm_greedy", "fprm_root_beam", "fprm_mcts", "fprm_neural_mcts"}:
         polarity, terms, plan, cost = _best_polarity_plan(method, bf, config, seed, neural)
         circ = emit_plan_to_circuit(
             plan,
