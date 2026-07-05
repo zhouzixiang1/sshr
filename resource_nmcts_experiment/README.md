@@ -122,18 +122,17 @@ Traditional Boolean/ESOP baseline evidence from
 Resource-profile stress-test evidence from
 `results/analysis_resource_sweep.md`:
 
-- 47 functions with $n \leq 6$, 4 resource profiles, 6 methods, 1128 result
+- 47 functions with $n \leq 6$, 4 resource profiles, 7 methods, 1316 result
   rows, 0 errors, and 0 skips.
-- `and_resource_nmcts` is best-or-tied on 42/47 functions under T-heavy
-  weights, 42/47 under balanced weights, 40/47 under CNOT-depth-heavy weights,
+- `and_profile_resource_nmcts` is best-or-tied on 42/47 functions under T-heavy
+  weights, 42/47 under balanced weights, 41/47 under CNOT-depth-heavy weights,
   and 42/47 under ancilla-tight weights.
-- Against Affine-NMCTS, `and_resource_nmcts` has no score losses in any
-  profile; against fixed-coordinate MCTS, it has no score losses in any
-  profile.
-- The mean Resource-NMCTS resource vector changes only modestly across profiles
-  (mean T 41.28--43.06; mean CNOT 84.13--85.57; mean depth 88.32--89.32).
-  This supports objective robustness but still shows that the search is not yet
-  a full profile-sensitive Pareto optimizer.
+- Against Resource-NMCTS, `and_profile_resource_nmcts` has no score losses in
+  any profile, with score wins/ties of 5/42, 6/41, 7/40, and 4/43.
+- The mean Profile-Resource-NMCTS resource vector changes modestly across
+  profiles (mean T 40.34--42.38; mean CNOT 82.43--84.79; mean depth
+  86.72--88.72).  This supports objective robustness but still shows that the
+  search is not yet a full profile-sensitive Pareto optimizer.
 
 Large-scale core evidence from `results/analysis_large_resource_core.md` and
 `results/runtime_large_resource_core.md`:

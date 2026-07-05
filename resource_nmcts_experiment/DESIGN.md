@@ -272,22 +272,26 @@ Main `traditional_resource` evidence:
 The `resource_sweep` stress test checks whether the method remains competitive
 under different resource objectives.  It uses 47 functions with `n <= 6`, four
 profiles (T-heavy, balanced, CNOT-depth-heavy, and ancilla-tight), six methods,
-and 1128 method/profile/function rows.  There are 0 errors and 0 skips.
+plus a profile-specialized Resource-NMCTS variant, and 1316
+method/profile/function rows.  There are 0 errors and 0 skips.
 
 Main `resource_sweep` evidence:
 
-- `and_resource_nmcts` is best-or-tied on 42/47 functions under T-heavy
-  weights, 42/47 under balanced weights, 40/47 under CNOT-depth-heavy weights,
+- `and_profile_resource_nmcts` is best-or-tied on 42/47 functions under T-heavy
+  weights, 42/47 under balanced weights, 41/47 under CNOT-depth-heavy weights,
   and 42/47 under ancilla-tight weights.
-- Compared with `and_affine_nmcts`, it has score wins/losses/ties of 2/0/45,
-  2/0/45, 3/0/44, and 3/0/44 across the four profiles.
+- Compared with `and_resource_nmcts`, it has score wins/losses/ties of 5/0/42,
+  6/0/41, 7/0/40, and 4/0/43 across the four profiles.
+- Compared with `and_affine_nmcts`, it has score wins/losses/ties of 5/0/42,
+  6/0/41, 8/0/39, and 7/0/40 across the four profiles.
 - Compared with fixed-coordinate MCTS, it has score wins/losses/ties of
-  35/0/12, 35/0/12, 35/0/12, and 34/0/13.
-- The mean resource vector changes only modestly across profiles.  This is
-  evidence of robustness and nondegrading internal portfolio selection, not yet
-  evidence of strong profile-sensitive Pareto optimization.  A submission
-  version should add resource-profile-specific candidate generation if it wants
-  to claim adaptive resource tradeoffs.
+  35/0/12, 35/0/12, 35/0/12, and 35/0/12.
+- The mean Profile-Resource-NMCTS vector changes modestly across profiles
+  (mean T 40.34--42.38, mean CNOT 82.43--84.79, mean depth 86.72--88.72).
+  This is evidence of robustness and nondegrading internal portfolio selection,
+  not yet evidence of strong profile-sensitive Pareto optimization.  A
+  submission version should add stronger resource-profile-specific candidate
+  generation if it wants to claim adaptive resource tradeoffs.
 
 The `large_resource_core` run is the current large-scale paper-facing
 benchmark.  It covers 330 functions through `n <= 12`, five methods, and 1650

@@ -348,6 +348,92 @@ def _best_affine_plan(
     return best[1], best[3], best[4], best[5], best[6]
 
 
+def _profile_candidate_configs(config: SearchConfig) -> list[tuple[str, SearchConfig]]:
+    """Return diverse bounded configs for resource-profile candidate generation."""
+    base = replace(
+        config,
+        candidate_top_k=min(config.candidate_top_k, 18),
+        mcts_simulations=min(config.mcts_simulations, 32),
+        neural_mcts_simulations=min(config.neural_mcts_simulations, 40),
+        max_polarities=min(config.max_polarities, 16),
+    )
+    configs: list[tuple[str, SearchConfig]] = [("base", base)]
+
+    if config.max_factor_ancilla >= 2:
+        configs.append(
+            (
+                "t_aggressive",
+                replace(
+                    config,
+                    max_factor_size=min(max(config.max_factor_size, 6), 6),
+                    candidate_top_k=min(max(config.candidate_top_k, 28), 32),
+                    greedy_eval_limit=2,
+                    max_polarities=min(max(config.max_polarities, 18), 24),
+                    mcts_simulations=min(max(config.mcts_simulations, 28), 40),
+                    neural_mcts_simulations=min(max(config.neural_mcts_simulations, 36), 48),
+                ),
+            )
+        )
+
+    configs.append(
+        (
+            "cnot_depth",
+            replace(
+                config,
+                max_factor_ancilla=min(config.max_factor_ancilla, 2),
+                max_factor_size=min(config.max_factor_size, 3),
+                candidate_top_k=min(config.candidate_top_k, 16),
+                greedy_eval_limit=2,
+                max_polarities=min(config.max_polarities, 10),
+                mcts_simulations=min(config.mcts_simulations, 24),
+                neural_mcts_simulations=min(config.neural_mcts_simulations, 32),
+            ),
+        )
+    )
+    configs.append(
+        (
+            "ancilla_tight",
+            replace(
+                config,
+                max_factor_ancilla=min(config.max_factor_ancilla, 1),
+                max_factor_size=min(config.max_factor_size, 3),
+                candidate_top_k=min(config.candidate_top_k, 14),
+                greedy_eval_limit=1,
+                max_polarities=min(config.max_polarities, 8),
+                mcts_simulations=min(config.mcts_simulations, 20),
+                neural_mcts_simulations=min(config.neural_mcts_simulations, 24),
+            ),
+        )
+    )
+
+    deduped: list[tuple[str, SearchConfig]] = []
+    seen = set()
+    for label, cfg in configs:
+        key = (
+            cfg.max_factor_ancilla,
+            cfg.max_factor_size,
+            cfg.candidate_top_k,
+            cfg.greedy_eval_limit,
+            cfg.max_polarities,
+            cfg.mcts_simulations,
+            cfg.neural_mcts_simulations,
+        )
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append((label, cfg))
+    return deduped
+
+
+def _resource_selection_key(result: SynthesisResult, weights) -> tuple[float, int, int, int, int]:
+    score = result.cost.score(weights)
+    if weights.ancilla >= max(4.0, 4.0 * weights.t):
+        return (score, result.cost.peak_ancilla, result.cost.T, result.cost.CNOT, result.cost.depth)
+    if weights.cnot >= 0.10 or weights.depth >= 0.05:
+        return (score, result.cost.CNOT, result.cost.depth, result.cost.T, result.cost.peak_ancilla)
+    return (score, result.cost.T, result.cost.CNOT, result.cost.depth, result.cost.peak_ancilla)
+
+
 def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int = 0, model_path: str | None = None) -> SynthesisResult:
     t0 = time.time()
     requested_method = method
@@ -427,16 +513,63 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
                 portfolio.append(child)
         if not portfolio:
             raise RuntimeError("Resource-NMCTS portfolio produced no correct candidate")
-        best = min(
-            portfolio,
-            key=lambda r: (
-                r.cost.score(config.weights),
-                r.cost.T,
-                r.cost.CNOT,
-                r.cost.depth,
-                r.cost.peak_ancilla,
-            ),
+        best = min(portfolio, key=lambda r: _resource_selection_key(r, config.weights))
+        return SynthesisResult(
+            method=requested_method,
+            cost=best.cost,
+            time_s=time.time() - t0,
+            correct=best.correct,
+            terms=best.terms,
+            gates=best.gates,
+            n_qubits=best.n_qubits,
         )
+    if method == "profile_resource_nmcts":
+        portfolio: list[SynthesisResult] = []
+        child_specs: list[tuple[str, SearchConfig]] = [("direct_anf", config), ("fprm_direct", config)]
+        for _label, child_config in _profile_candidate_configs(config):
+            child_specs.extend(
+                [
+                    ("fprm_greedy", child_config),
+                    ("affine_greedy", child_config),
+                ]
+            )
+        # Keep the expensive neural affine candidate once, then add tractable
+        # small-function candidates that are useful under CNOT/depth and
+        # ancilla-heavy profiles.
+        base_config = _profile_candidate_configs(config)[0][1]
+        child_specs.append(("affine_nmcts", base_config))
+        if bf.n <= 6:
+            for _label, child_config in _profile_candidate_configs(config):
+                child_specs.append(("cube_beam", child_config))
+        if bf.n <= 10:
+            child_specs.append(("mcts_factor", config))
+
+        seen_specs = set()
+        for child_method, child_config in child_specs:
+            key = (
+                child_method,
+                child_config.max_factor_ancilla,
+                child_config.max_factor_size,
+                child_config.candidate_top_k,
+                child_config.greedy_eval_limit,
+                child_config.max_polarities,
+            )
+            if key in seen_specs:
+                continue
+            seen_specs.add(key)
+            try:
+                child = synthesize(child_method, bf, child_config, seed=seed, model_path=model_path)
+            except TimeoutError:
+                if portfolio:
+                    break
+                raise
+            except Exception:
+                continue
+            if child.correct:
+                portfolio.append(child)
+        if not portfolio:
+            raise RuntimeError("Profile-Resource-NMCTS portfolio produced no correct candidate")
+        best = min(portfolio, key=lambda r: _resource_selection_key(r, config.weights))
         return SynthesisResult(
             method=requested_method,
             cost=best.cost,

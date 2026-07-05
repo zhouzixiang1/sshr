@@ -112,14 +112,14 @@ PRESETS = {
         "workers": 10,
     },
     "large_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_resource_nmcts", "and_profile_resource_nmcts"],
         "random_truth": [(4, 48), (5, 48), (6, 32)],
         "random_anf": [(8, 64), (10, 64), (12, 48), (14, 24)],
         "structured_limit": 10_000,
         "workers": 4,
     },
     "large_resource_core": {
-        "methods": ["direct_anf", "and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_resource_nmcts", "and_profile_resource_nmcts"],
         "random_truth": [(4, 48), (5, 48), (6, 32)],
         "random_anf": [(8, 64), (10, 64), (12, 48)],
         "structured_limit": 10_000,
@@ -174,7 +174,7 @@ def run_one(task):
         neural_prior_weight=config_dict.get("neural_prior_weight", 1.0),
     )
     base_method = method[len("and_") :] if method.startswith("and_") else method
-    neural_methods = {"neural_greedy", "neural_mcts", "fprm_neural_mcts", "affine_nmcts", "affine_no_guard", "rc_nmcts", "resource_nmcts"}
+    neural_methods = {"neural_greedy", "neural_mcts", "fprm_neural_mcts", "affine_nmcts", "affine_no_guard", "rc_nmcts", "resource_nmcts", "profile_resource_nmcts"}
     use_model = model_path if base_method in neural_methods and model_path else None
     if method == "esop_greedy" and bf.n > 4:
         return {
@@ -301,7 +301,7 @@ def write_csv(path: Path, rows: List[dict]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     fieldnames = sorted({k for row in rows for k in row.keys()})
     with path.open("w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
+        w = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore", lineterminator="\n")
         w.writeheader()
         w.writerows(rows)
 
@@ -377,6 +377,7 @@ def main(argv: Iterable[str] | None = None) -> int:
             "and_mcts_factor": 2,
             "and_affine_nmcts": 3,
             "and_resource_nmcts": 4,
+            "and_profile_resource_nmcts": 5,
         }
         tasks.sort(key=lambda t: (method_rank.get(t[2], 99), t[1].n, t[0]))
 

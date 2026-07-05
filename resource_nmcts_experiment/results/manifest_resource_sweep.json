@@ -6,6 +6,7 @@
     "and_mcts_factor",
     "and_affine_nmcts",
     "and_resource_nmcts",
+    "and_profile_resource_nmcts",
     "and_cube_beam",
     "sshr_h"
   ],
@@ -57,5 +58,5 @@
   },
   "model": "models/action_scorer_rollout_logical_and.pt",
   "workers": 10,
-  "seconds": 55.958593130111694
+  "seconds": 36.98137712478638
 }

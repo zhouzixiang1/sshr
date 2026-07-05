@@ -8,6 +8,7 @@
 
 \newcommand{\method}{Resource-NMCTS}
 \newcommand{\affinemethod}{Affine-NMCTS}
+\newcommand{\profilemethod}{Profile-Resource-NMCTS}
 \newcommand{\dataset}{evidence\_affine}
 \newcommand{\ablationdataset}{ablation\_affine}
 \newcommand{\traditionaldataset}{traditional\_resource}
@@ -38,9 +39,9 @@ all functions and reduces mean T-count by 61.83\% relative to direct ANF
 synthesis.  On a separate $n\leq 6$ traditional-baseline slice, \method{} has
 172 T-count wins and no losses against ESOP cube beam search, and 162 T-count
 wins, 1 loss, and 14 ties against time-limited weighted ESOP MILP.  A
-resource-profile stress test shows that \method{} is best or tied on 42/47,
-42/47, 40/47, and 42/47 functions under T-heavy, balanced, CNOT-depth-heavy, and
-ancilla-tight objectives.  A larger core benchmark through $n=12$ contains 330
+resource-profile stress test shows that \profilemethod{} is best or tied on
+42/47, 42/47, 41/47, and 42/47 functions under T-heavy, balanced,
+CNOT-depth-heavy, and ancilla-tight objectives.  A larger core benchmark through $n=12$ contains 330
 functions and 1650 method/function rows; \method{} completes all functions and
 reduces mean T-count by 60.37\% relative to direct ANF and by 37.25\% relative
 to logical-AND direct ANF, while fixed-coordinate MCTS times out on five
@@ -285,7 +286,7 @@ not directly comparable to all-suite means.}
 
 To test whether the method remains competitive under different resource
 objectives, we ran a 47-function $n\leq 6$ sweep under four profiles: T-heavy,
-balanced, CNOT-depth-heavy, and ancilla-tight.  The sweep produced 1128
+balanced, CNOT-depth-heavy, and ancilla-tight.  The sweep produced 1316
 method/profile/function rows with no errors or skips.  Scores are comparable
 within a profile but not across profiles because each profile uses a different
 weighted objective.
@@ -300,15 +301,16 @@ minimum score on a function.}
 \input{tables/resource_sweep_winners}
 \end{table}
 
-\method{} was best or tied on 42/47 functions under T-heavy weights, 42/47
-under balanced weights, 40/47 under CNOT-depth-heavy weights, and 42/47 under
-ancilla-tight weights.  It had no score losses against \affinemethod{} in any
-profile and no score losses against fixed-coordinate MCTS.  However, the mean
-\method{} resource vector changed only modestly across the four profiles: mean
-T-count ranged from 41.28 to 43.06, mean CNOT count from 84.13 to 85.57, and
-mean depth from 88.32 to 89.32.  This result shows that the portfolio guard
-improves resource-objective robustness, but the search still needs more
-profile-specific candidate generation before claiming a full Pareto optimizer.
+\profilemethod{} was best or tied on 42/47 functions under T-heavy weights,
+42/47 under balanced weights, 41/47 under CNOT-depth-heavy weights, and 42/47
+under ancilla-tight weights.  Relative to \method{}, it had score wins/ties of
+5/42, 6/41, 7/40, and 4/43, with no score losses.  Relative to
+\affinemethod{}, it also had no score losses in any profile.  The mean
+\profilemethod{} resource vector changed modestly across the four profiles:
+mean T-count ranged from 40.34 to 42.38, mean CNOT count from 82.43 to 84.79,
+and mean depth from 86.72 to 88.72.  This result shows that profile-specific
+candidate generation improves resource-objective robustness, but it is still a
+bounded portfolio rather than a full Pareto optimizer.
 
 \subsection{Large-scale core benchmark}
 
