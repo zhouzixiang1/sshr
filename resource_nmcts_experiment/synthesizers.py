@@ -365,12 +365,16 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         portfolio: list[SynthesisResult] = []
         for child_method, child_config in [
             ("direct_anf", config),
-            ("mcts_factor", config),
             ("fprm_greedy", fast_config),
             ("affine_nmcts", fast_config),
+            ("mcts_factor", config),
         ]:
             try:
                 child = synthesize(child_method, bf, child_config, seed=seed, model_path=model_path)
+            except TimeoutError:
+                if portfolio:
+                    break
+                raise
             except Exception:
                 continue
             if child.correct:
@@ -403,15 +407,20 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         portfolio: list[SynthesisResult] = []
         child_specs = [
             ("direct_anf", config),
-            ("mcts_factor", config),
             ("fprm_greedy", fast_config),
             ("affine_nmcts", fast_config),
         ]
         if bf.n <= 6:
             child_specs.append(("cube_beam", cube_config))
+        if bf.n <= 10:
+            child_specs.append(("mcts_factor", config))
         for child_method, child_config in child_specs:
             try:
                 child = synthesize(child_method, bf, child_config, seed=seed, model_path=model_path)
+            except TimeoutError:
+                if portfolio:
+                    break
+                raise
             except Exception:
                 continue
             if child.correct:

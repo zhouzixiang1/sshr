@@ -122,6 +122,8 @@ def main() -> int:
         ("and_affine_nmcts", "and_cube_beam"),
         ("and_affine_nmcts", "and_esop_milp"),
         ("and_affine_nmcts", "sshr_h"),
+        ("and_resource_nmcts", "direct_anf"),
+        ("and_resource_nmcts", "and_direct_anf"),
         ("and_resource_nmcts", "and_affine_nmcts"),
         ("and_resource_nmcts", "and_mcts_factor"),
         ("and_resource_nmcts", "and_cube_beam"),

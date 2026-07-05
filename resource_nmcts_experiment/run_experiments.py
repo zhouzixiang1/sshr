@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import multiprocessing as mp
 import random
 import signal
 import statistics
@@ -109,6 +110,20 @@ PRESETS = {
         "structured_limit": 10_000,
         "max_n": 6,
         "workers": 10,
+    },
+    "large_resource": {
+        "methods": ["direct_anf", "and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_resource_nmcts"],
+        "random_truth": [(4, 48), (5, 48), (6, 32)],
+        "random_anf": [(8, 64), (10, 64), (12, 48), (14, 24)],
+        "structured_limit": 10_000,
+        "workers": 4,
+    },
+    "large_resource_core": {
+        "methods": ["direct_anf", "and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_resource_nmcts"],
+        "random_truth": [(4, 48), (5, 48), (6, 32)],
+        "random_anf": [(8, 64), (10, 64), (12, 48)],
+        "structured_limit": 10_000,
+        "workers": 6,
     },
 }
 
@@ -221,6 +236,67 @@ def run_one(task):
         signal.alarm(0)
 
 
+def _isolated_worker(task, queue):
+    try:
+        queue.put(run_one(task))
+    except BaseException as exc:
+        name, bf, method, *_ = task
+        queue.put(
+            {
+                "name": name,
+                "n": bf.n,
+                "truth_table_hex": f"{bf.truth_table:X}",
+                "anf_terms": len(anf_monomials(bf)),
+                "method": method,
+                "correct": False,
+                "error": repr(exc),
+                "skipped": "",
+            }
+        )
+
+
+def run_one_isolated(task):
+    """Run one task in a disposable child process with a hard wall-time cap."""
+    name, bf, method, _seed, config_dict, _model_path = task
+    timeout_s = int(config_dict.get("task_timeout_s", 0) or 0)
+    hard_timeout = timeout_s + 30 if timeout_s > 0 else 0
+    if hard_timeout <= 0:
+        return run_one(task)
+    ctx = mp.get_context("spawn")
+    queue = ctx.Queue(maxsize=1)
+    proc = ctx.Process(target=_isolated_worker, args=(task, queue))
+    proc.start()
+    proc.join(hard_timeout)
+    if proc.is_alive():
+        proc.terminate()
+        proc.join(5)
+        if proc.is_alive():
+            proc.kill()
+            proc.join()
+        return {
+            "name": name,
+            "n": bf.n,
+            "truth_table_hex": f"{bf.truth_table:X}",
+            "anf_terms": len(anf_monomials(bf)),
+            "method": method,
+            "correct": False,
+            "error": f"ProcessTimeout({hard_timeout}s)",
+            "skipped": "",
+        }
+    if not queue.empty():
+        return queue.get()
+    return {
+        "name": name,
+        "n": bf.n,
+        "truth_table_hex": f"{bf.truth_table:X}",
+        "anf_terms": len(anf_monomials(bf)),
+        "method": method,
+        "correct": False,
+        "error": f"ProcessExited({proc.exitcode})",
+        "skipped": "",
+    }
+
+
 def write_csv(path: Path, rows: List[dict]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     fieldnames = sorted({k for row in rows for k in row.keys()})
@@ -267,6 +343,7 @@ def main(argv: Iterable[str] | None = None) -> int:
     ap.add_argument("--out-dir", default=str(RESULTS))
     ap.add_argument("--resume", action="store_true", help="skip rows already present in the raw CSV")
     ap.add_argument("--checkpoint-every", type=int, default=None)
+    ap.add_argument("--isolate-timeouts", action="store_true", help="run tasks in disposable child processes with a hard timeout")
     args = ap.parse_args(list(argv) if argv is not None else None)
 
     cfg = PRESETS[args.preset]
@@ -280,12 +357,12 @@ def main(argv: Iterable[str] | None = None) -> int:
         "candidate_top_k": 24,
         "min_factor_count": 2,
         "use_relative_phase": True,
-        "mcts_simulations": 24 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource"} else (48 if args.preset == "pilot" else (32 if args.preset == "large" else 96)),
-        "neural_mcts_simulations": 32 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource"} else (64 if args.preset == "pilot" else (32 if args.preset == "large" else 128)),
-        "max_polarities": 32 if args.preset in {"smoke", "pilot"} else (12 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource"} else (16 if args.preset == "large_fast" else (48 if args.preset == "large" else 384))),
+        "mcts_simulations": 24 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core"} else (48 if args.preset == "pilot" else (32 if args.preset == "large" else 96)),
+        "neural_mcts_simulations": 32 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core"} else (64 if args.preset == "pilot" else (32 if args.preset == "large" else 128)),
+        "max_polarities": 32 if args.preset in {"smoke", "pilot"} else (12 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core"} else (16 if args.preset == "large_fast" else (48 if args.preset == "large" else 384))),
         "gate_mode": "mct",
         "neural_prior_weight": 2.5,
-        "task_timeout_s": 300 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource"} else (120 if args.preset == "pilot" else (180 if args.preset in {"large", "large_fast"} else (300 if args.preset == "main" else 0))),
+        "task_timeout_s": 300 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core"} else (120 if args.preset == "pilot" else (180 if args.preset in {"large", "large_fast"} else (300 if args.preset == "main" else 0))),
     }
     methods = cfg["methods"]
     tasks = [
@@ -293,6 +370,15 @@ def main(argv: Iterable[str] | None = None) -> int:
         for i, (name, bf) in enumerate(suite)
         for method in methods
     ]
+    if args.preset in {"large_resource", "large_resource_core"}:
+        method_rank = {
+            "direct_anf": 0,
+            "and_direct_anf": 1,
+            "and_mcts_factor": 2,
+            "and_affine_nmcts": 3,
+            "and_resource_nmcts": 4,
+        }
+        tasks.sort(key=lambda t: (method_rank.get(t[2], 99), t[1].n, t[0]))
 
     started = time.time()
     rows: List[dict] = []
@@ -309,15 +395,16 @@ def main(argv: Iterable[str] | None = None) -> int:
         completed = {(r.get("name"), r.get("method")) for r in rows}
         tasks = [task for task in tasks if (task[0], task[2]) not in completed]
         print(f"resuming from {len(rows)} rows; remaining {len(tasks)}", flush=True)
+    runner = run_one_isolated if args.isolate_timeouts else run_one
     if workers <= 1:
         for i, task in enumerate(tasks, 1):
-            rows.append(run_one(task))
+            rows.append(runner(task))
             if i % checkpoint_every == 0:
                 write_csv(raw, rows)
                 print(f"{i}/{len(tasks)}", flush=True)
     else:
         with ProcessPoolExecutor(max_workers=workers) as ex:
-            futures = [ex.submit(run_one, task) for task in tasks]
+            futures = [ex.submit(runner, task) for task in tasks]
             for i, fut in enumerate(as_completed(futures), 1):
                 rows.append(fut.result())
                 if i % checkpoint_every == 0:

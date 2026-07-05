@@ -52,9 +52,12 @@ four ingredients to fixed-coordinate ANF factoring:
    baseline, while retaining large wins when affine coordinates reveal stronger
    factorizations.
 4. **Resource portfolio guard.** The full method compares internally generated
-   direct ANF, fixed-coordinate MCTS, FPRM/greedy, affine-neural, and small-$n$
-   ESOP cube-beam candidates under the active weighted objective.  SSHR is not
-   part of this portfolio; it remains an external baseline.
+   direct ANF, FPRM/greedy, budgeted affine-neural, dimension-guarded
+   fixed-coordinate MCTS, and small-$n$ ESOP cube-beam candidates under the
+   active weighted objective.  SSHR is not part of this portfolio; it remains
+   an external baseline.  The guard is intentionally budgeted for larger
+   functions rather than a full dominance certificate over every internal
+   solver.
 
 ## Representation
 
@@ -159,7 +162,9 @@ Datasets:
 
 - exhaustive small functions for `n=3`;
 - random truth-table functions for `n=4..6`;
-- random sparse/dense ANF functions for `n=6..12`;
+- random sparse/dense ANF functions for `n=6..12` in the paper-facing core
+  benchmark, with an experimental `n=14` stress preset kept as a runtime-boundary
+  target;
 - structured oracles such as parity, majority, threshold, mux, adders, and
   multipliers.
 
@@ -181,6 +186,9 @@ The current paper-facing run is:
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset traditional_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_resource_sweep.py --model models/action_scorer_rollout_logical_and.pt --workers 10
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_resource_sweep.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset large_resource_core --model models/action_scorer_rollout_logical_and.pt --resume --workers 6 --checkpoint-every 1 --isolate-timeouts
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset large_resource_core
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset large_resource_core
 ```
 
 It covers 322 functions and 1610 method/function rows.  The main results are:
@@ -280,3 +288,35 @@ Main `resource_sweep` evidence:
   evidence of strong profile-sensitive Pareto optimization.  A submission
   version should add resource-profile-specific candidate generation if it wants
   to claim adaptive resource tradeoffs.
+
+The `large_resource_core` run is the current large-scale paper-facing
+benchmark.  It covers 330 functions through `n <= 12`, five methods, and 1650
+method/function rows.  The stable run used process-isolated hard timeouts on an
+Apple M4 Pro with 14 logical CPU cores and 24 GB memory.  There are 5 timeout
+rows, all from fixed-coordinate MCTS on `n=12` random ANF functions;
+`and_resource_nmcts` completes all 330 functions.
+
+Main `large_resource_core` evidence:
+
+- Compared with direct ANF, `and_resource_nmcts` has 291 T-count wins, 0
+  losses, and 39 ties, with a 60.37% mean T-count reduction and a 56.84% mean
+  composite-score reduction.
+- Compared with logical-AND direct ANF, it has 286 T-count wins, 0 losses, and
+  44 ties, with a 37.25% mean T-count reduction and a 35.21% mean score
+  reduction.
+- Compared with fixed-coordinate MCTS on completed pairs, it has 139 T-count
+  wins, 15 losses, and 171 ties, with an 11.41% mean score reduction.  Because
+  fixed-coordinate MCTS timed out on five hard rows, its completed-row mean is
+  censored and should not be interpreted as an all-suite dominance result.
+- Compared with standalone `and_affine_nmcts`, the budgeted Resource-NMCTS
+  portfolio has 29 score wins, 16 score losses, and 285 ties, with a 0.20% mean
+  score reduction.  The large-scale claim is scalable resource-aware selection,
+  not strict nondegradation against the full affine solver under tighter
+  high-dimensional budgets.
+- Runtime for `and_resource_nmcts` is 330/330 completed, median 1.311 s, p95
+  58.857 s, and max 300.848 s.  Fixed-coordinate MCTS completes 325/330 and
+  has five timeouts.
+
+An attempted `n=14` extension exposed a long runtime tail in the current
+implementation.  It should be discussed as a boundary and next engineering
+target, not as the formal large-scale result.

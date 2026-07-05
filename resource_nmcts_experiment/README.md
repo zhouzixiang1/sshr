@@ -29,6 +29,9 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset traditional_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_resource_sweep.py --model models/action_scorer_rollout_logical_and.pt --workers 10
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_resource_sweep.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset large_resource_core --model models/action_scorer_rollout_logical_and.pt --resume --workers 6 --checkpoint-every 1 --isolate-timeouts
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset large_resource_core
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset large_resource_core
 ```
 
 Current presets:
@@ -47,6 +50,11 @@ Current presets:
   neural MCTS, ESOP cube beam, time-limited weighted ESOP MILP, and SSHR-H.
 - `traditional_resource`: same $n \leq 6$ slice with the full Resource-NMCTS
   portfolio guard added.
+- `large_resource_core`: 330-function large logical benchmark through `n=12`,
+  using process-isolated hard timeouts for long-tail tasks.
+- `large_resource`: experimental `n=14` stress extension.  This preset exposed
+  the current high-dimensional runtime tail and is not used as paper-facing
+  evidence.
 - `main`: large-scale placeholder for broader sweeps.
 
 Outputs are written to `results/`.  The neural prior is saved at
@@ -126,6 +134,33 @@ Resource-profile stress-test evidence from
   (mean T 41.28--43.06; mean CNOT 84.13--85.57; mean depth 88.32--89.32).
   This supports objective robustness but still shows that the search is not yet
   a full profile-sensitive Pareto optimizer.
+
+Large-scale core evidence from `results/analysis_large_resource_core.md` and
+`results/runtime_large_resource_core.md`:
+
+- 330 functions through `n=12`, 5 methods, 1650 result rows, 5 fixed-MCTS
+  timeout rows, and 0 skips.  The stable run used process-isolated hard
+  timeouts on an Apple M4 Pro with 14 logical CPU cores and 24 GB memory.
+- `and_resource_nmcts` completed all 330 functions.  Fixed-coordinate MCTS
+  timed out on 5 `n=12` random ANF functions.
+- Compared with direct ANF, `and_resource_nmcts` has 291 T-count wins, 0
+  losses, and 39 ties, with a 60.37% mean T-count reduction and a 56.84% mean
+  score reduction.
+- Compared with logical-AND direct ANF, it has 286 T-count wins, 0 losses, and
+  44 ties, with a 37.25% mean T-count reduction and a 35.21% mean score
+  reduction.
+- Compared with fixed-coordinate MCTS on completed pairs, it has 139 T-count
+  wins, 15 losses, and 171 ties, with an 11.41% mean score reduction.  The
+  fixed-MCTS completed-row mean excludes its five timeout rows, so those means
+  are censored toward easier functions.
+- Compared with standalone Affine-NMCTS, it has 29 score wins, 16 score losses,
+  and 285 ties, with a 0.20% mean score reduction.  This is a scalable budgeted
+  portfolio result, not a dominance guarantee over the full affine search.
+- Runtime for `and_resource_nmcts`: 330/330 completed, median 1.311 s, p95
+  58.857 s, max 300.848 s.
+- The attempted `n=14` extension exposed a runtime long tail for the current
+  implementation.  Treat `n=14` as the next stress target rather than as
+  paper-facing evidence.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost
