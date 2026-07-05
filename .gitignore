@@ -8,10 +8,13 @@ gurobi.log
 
 # LaTeX build artifacts
 tex/build/
+rl_mcts_experiment/paper/build/*
+!rl_mcts_experiment/paper/build/main.pdf
 *.aux
 *.bbl
 *.blg
 *.log
+*.out
 *.synctex*
 *.fls
 *.fdb_latexmk

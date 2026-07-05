@@ -1,0 +1,227 @@
+\documentclass[11pt,letterpaper]{ctexart}
+
+\usepackage[margin=1.05in,top=0.95in,bottom=0.95in,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage[hypcap=false]{caption}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=false,
+  pdfauthor={AI-SSHR Experiment},
+  pdftitle={面向量子布尔函数综合的策略-价值引导块级搜索}
+}
+
+\SetKwInput{KwInput}{Input}
+\SetKwInput{KwOutput}{Output}
+\SetKwComment{tcp}{// }{}
+\DontPrintSemicolon
+
+\title{面向量子布尔函数综合的策略-价值引导块级搜索}
+\author{AI-SSHR 实验复现}
+\date{2026 年 7 月}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+量子布尔函数综合可以被看作一个序列决策问题，但直接在量子门级别
+使用强化学习和蒙特卡洛树搜索会面对巨大的动作空间、稀疏终局奖励和
+不可扩展的酉矩阵状态表示。本文将原始的策略-价值搜索思路改写为
+SSHR 结构上的块级搜索：状态为尚未综合的 on-set 掩码，动作为选择一
+个平行多面体块，转移由该块的顶点集合决定，量子线路则由确定性的
+block synthesis 生成。基于这一表述，本文实现了 cost-aware policy、
+greedy value 和 PUCT 搜索组成的 PV-MCTS，并与 SSHR-H、单调 Beam、
+rollout MCTS 以及三种 XOR-aware beam 变体进行对比。实验覆盖
+$n=3$ 的全部 255 个非零布尔函数，以及 $n=4,5,6$ 的 1024、256 和
+48 个随机函数；10 种方法共 15830 次综合全部通过逐输入仿真验证。
+结果表明，单调 PV-MCTS 在 $n=5$ 上相对 Beam 降低 0.14\% CNOT，
+在 $n=6$ 上相对 rollout MCTS 降低 2.09\% CNOT；更重要的是，允许
+XOR 语义的搜索显著优于单调搜索，最佳方法相对 SSHR-H 的 CNOT 降幅
+在 $n=3$ 到 $n=6$ 上为 5.99\%--28.09\%。这些结果说明，策略-价值
+思想适合用于结构块选择，而进一步提升的关键在于同时保留 SSHR 的
+XOR 奇偶覆盖能力和搜索过程的反振荡控制。
+\end{abstract}
+
+\section{引言}
+
+量子布尔函数综合的目标是将一个给定布尔函数 $f:\{0,1\}^n\to\{0,1\}$
+编译为量子 oracle，使其在计算基上实现
+\[
+  |x,y\rangle \mapsto |x, y \oplus f(x)\rangle .
+\]
+在小规模布尔函数上，SSHR 方法利用布尔超立方体中的平行多面体结构
+构造可综合的线路块，并通过启发式或 ILP 选择块集合，从而优化 CNOT
+或 T 成本。该路线的优势是每个动作都有清晰的逻辑语义，且选定块后
+线路可由确定性过程生成；其难点是候选平行多面体数量随 $n$ 快速增长，
+导致贪心选择、Beam 搜索和 MCTS 都需要在大动作空间中做取舍。
+
+原始设想将综合问题建模为强化学习与 MCTS 结合的序列决策过程。若
+直接把“动作”定义为单个量子门，把“状态”定义为当前酉矩阵，这一
+表述虽然通用，但很难在本项目关注的布尔函数规模上运行：酉矩阵表示
+随 $2^n\times 2^n$ 增长，随机门序列几乎无法通过稀疏终局奖励得到
+有效学习信号，且大量中间电路并不保持 oracle 结构。本文因此采用更
+保守但可验证的改写：不让智能体直接生成底层量子门，而让它在 SSHR
+候选块上进行策略-价值搜索。
+
+本文的核心论点是：策略-价值 MCTS 可以作为平行多面体块选择器，而
+不是门序列生成器；在该设定下，正确性由块级语义和最终仿真闭合，
+实验能够公平地与现有 SSHR-H、Beam 和 MCTS 后端比较。本文进一步
+比较了两类状态转移语义：单调语义只允许选择完全位于当前 active set
+中的块，保证不会循环；XOR 语义允许块含有少量 off-set 顶点，通过奇偶
+覆盖降低线路成本，但需要深度限制、状态缓存或代价剪枝来控制振荡。
+
+\section{方法}
+
+\subsection{块级 MDP 表述}
+
+给定布尔函数 $f$ 的 on-set $A_0=\{x:f(x)=1\}$，本文将状态写作一个
+整数位掩码 $A_t$，其第 $v$ 位为 1 表示 minterm $v$ 仍需被修正。动作
+不是单个量子门，而是一个平行多面体 $P$。该平行多面体由基点 $v_0$
+和若干两两支撑不相交的基向量定义，其顶点集合记为 $V(P)$。选择动作
+后，线路中加入由 \texttt{synth\_block(P)} 生成的量子线路块。
+
+本文实现并比较两种转移语义。单调语义要求
+\[
+  V(P)\subseteq A_t,\qquad A_{t+1}=A_t\setminus V(P),
+\]
+因此状态严格缩小，搜索不会产生循环。XOR 语义使用
+\[
+  A_{t+1}=A_t \triangle V(P),
+\]
+并要求 $|A_t\cap V(P)|/|V(P)|\ge R$。该语义与 SSHR-H 的奇偶覆盖思想
+一致，允许临时引入 off-set 顶点，因而可能得到更少的块或更低的 CNOT
+成本，但必须通过搜索控制避免状态反复震荡。
+
+\subsection{策略先验与价值估计}
+
+在 PV-MCTS 中，策略先验不由神经网络训练得到，而由一个可复现的
+cost-aware 评分函数给出：
+\[
+  s(P)=0.70\log_2(|V(P)|+1)+0.30\log(1+|V(P)|/c(P))-0.015c(P),
+\]
+其中 $c(P)$ 为该块的 CNOT 成本。该先验偏好覆盖较大、单位成本较低的
+候选块，并对过高控制成本施加惩罚。给定状态 $A$，仅对合法动作集合
+中的候选做 softmax 归一化，得到 PUCT 中使用的 $P(A,P)$。
+
+价值估计使用同一先验驱动的贪心补全成本。具体来说，从当前状态出发
+重复选择评分最高的合法块，直到 $A=0$，并累计其 CNOT 成本。该值不是
+最优下界，而是低成本的 cost-to-go 估计，用于替代随机 rollout。这样做
+保留了原始文档中“策略网络提供先验、价值网络评估状态”的结构，同时
+避免了训练神经网络所需的大量 teacher 数据。
+
+\subsection{PUCT 搜索}
+
+PV-MCTS 在每个状态展开排名前 $K$ 个合法动作。对已展开动作 $P$，搜索
+维护访问次数 $N(A,P)$ 和平均剩余成本 $Q(A,P)$，并选择
+\[
+  \arg\min_P \left[
+    Q(A,P)-c_{\mathrm{puct}}P(A,P)\frac{\sqrt{N(A)}}{1+N(A,P)}
+  \right].
+\]
+每次模拟返回从当前动作开始的估计总成本，并沿路径反向更新平均成本。
+最终决策选择已访问动作中 $Q(A,P)$ 最小者。算法~\ref{alg:pvmcts}
+给出了核心流程。
+
+\begin{algorithm}[t]
+\caption{块级 PV-MCTS}
+\label{alg:pvmcts}
+\KwInput{当前 active set $A$，候选块集合 $\mathcal{P}$，模拟次数 $N_{\mathrm{sim}}$}
+\KwOutput{块序列 $\mathcal{S}$}
+$\mathcal{S}\leftarrow \emptyset$\;
+\While{$A\ne \emptyset$}{
+  以 $A$ 为根节点运行 $N_{\mathrm{sim}}$ 次 PUCT 模拟\;
+  每个叶节点用策略贪心补全成本估计 value\;
+  选择根节点处平均估计成本最低的块 $P^\star$\;
+  $\mathcal{S}\leftarrow \mathcal{S}\cup \{P^\star\}$\;
+  $A\leftarrow A\setminus V(P^\star)$\;
+}
+\Return{$\mathcal{S}$}
+\end{algorithm}
+
+\subsection{XOR-aware 搜索变体}
+
+为检验单调约束是否限制了线路质量，本文还纳入三种 XOR-aware beam
+变体。XOR-Beam 使用规则 ranker 和 $R=0.75$ 的覆盖阈值进行 beam 搜索；
+XOR-Beam-v2 加入多重 greedy restart、自适应阈值和基于上界的代价剪枝；
+XOR-Beam-best 在多个阈值下运行 XOR-Beam，并用扰动-重解策略进一步
+改进候选路径。这些方法不属于单调 PV-MCTS，但它们保留了原始 SSHR 的
+奇偶覆盖能力，是评价“策略/价值搜索是否应该保留 XOR 语义”的关键对照。
+
+\section{实验设计}
+
+\subsection{数据集与评价指标}
+
+实验使用同一随机种子 42 构造测试集。对于 $n=3$，枚举全部 255 个非零
+布尔函数；对于 $n=4,5,6$，分别随机采样 1024、256 和 48 个 on-set 大小
+不超过 $2^{n-1}$ 的布尔函数。所有方法均输出量子 oracle 线路，并通过
+逐输入经典仿真检查输出位是否等于 $f(x)$。主要评价指标为总 CNOT 成本、
+平均 CNOT 成本、每函数平均运行时间和正确性通过数。
+
+对比方法包括 SSHR-H、从当前 on-set 重新枚举的 SSHR-H-literal、单调
+Beam、已有 rollout MCTS、PV-Greedy、带一阶 lookahead 的 PV-Greedy、
+本文实现的 PV-MCTS，以及三种 XOR-aware beam 变体。所有结果均由
+\texttt{run\_experiments.py --preset main} 生成，原始逐函数记录保存在
+\texttt{results/raw\_main.csv}，汇总表保存在
+\texttt{results/summary\_main.csv}。
+
+\subsection{总体结果}
+
+10 种方法在 1583 个函数上共完成 15830 次综合，所有生成线路均通过
+逐输入仿真验证，说明块级动作的确定性综合和最终验证能够闭合正确性。
+表~\ref{tab:main-results} 汇总了各方法的 CNOT 成本和运行时间。
+
+\input{generated_tables.tex}
+
+\subsection{策略-价值搜索的作用}
+
+单调 PV-MCTS 的主要作用体现在相对简单策略的改进上。相对 PV-Greedy，
+PV-MCTS 在 $n=3,4,5,6$ 上分别降低 0.44\%、0.77\%、1.74\% 和 6.86\%
+CNOT；相对已有 rollout MCTS，PV-MCTS 在 $n=5$ 和 $n=6$ 分别降低
+0.24\% 和 2.09\%。这表明用 cost-aware policy 限制展开，并用贪心
+value 替代随机 rollout，可以在较大候选空间中提供稳定但有限的收益。
+同时，PV-MCTS 在 $n=3,4$ 上与 Beam 持平，在 $n=5$ 上略优于 Beam
+0.14\%，在 $n=6$ 上略高于 Beam 0.17\%。因此，单调 PV-MCTS 更适合
+被视为 Beam/MCTS 的稳健替代或局部改进，而不是当前最强线路质量方法。
+
+\subsection{XOR 语义的重要性}
+
+最显著的改进来自 XOR-aware 搜索。最佳方法在 $n=3,4,5$ 上为
+XOR-Beam-v2，在 $n=6$ 上为 XOR-Beam-best。相对 SSHR-H，最佳方法
+的总 CNOT 成本分别降低 5.99\%、14.39\%、27.61\% 和 28.09\%；相对
+单调 Beam，分别降低 17.85\%、24.95\%、11.55\% 和 7.60\%。
+这说明，在小到中等规模的布尔函数上，允许临时引入 off-set 顶点的
+奇偶覆盖搜索比严格单调覆盖更有表达力。单调搜索的正确性和终止性更
+容易保证，但它牺牲了通过 XOR 组合低成本块的机会。
+
+\section{讨论}
+
+本文实验给出两个结论。第一，原始 RL+MCTS 思路若直接应用于门级搜索，
+会因状态和动作空间过大而难以形成可复现实验；将动作提升为 SSHR 的
+平行多面体块后，策略、价值和 MCTS 的概念可以自然落地，并且每一步
+都有明确的线路语义。第二，搜索语义比搜索框架本身更关键。单调 PV-MCTS
+能够小幅改善贪心与 rollout，但只要限制为 $V(P)\subseteq A$，它就很难
+超过保留 XOR 奇偶覆盖能力的方法。XOR-aware beam 的优势说明，后续若要
+训练真正的策略网络或价值网络，应优先服务于 XOR 状态下的候选排序、
+循环控制和代价上界估计，而不是只优化单调覆盖。
+
+这些结果也限定了本文方法的适用边界。实验中的 policy 和 value 是
+手工 cost-aware 估计，不是通过强化学习训练得到的神经网络；因此本文
+证明的是“策略-价值结构在块级搜索中可运行且有局部收益”，而不是证明
+神经 RL 已经优于全部 SSHR 变体。此外，$n=6$ 仅采样 48 个函数，且
+XOR-Beam-best 的平均时间达到 1.9161 秒，说明高质量 XOR 搜索在更大
+规模上仍存在计算成本。未来工作应将 GNN/LightGBM 候选剪枝与 XOR-aware
+MCTS 结合，在保持奇偶覆盖表达力的同时减少候选评估成本。
+
+\section{结论}
+
+本文将基于强化学习与 MCTS 的量子布尔函数综合设想改造成可执行的
+SSHR 块级实验框架，并在 \texttt{src/rl\_mcts\_experiment} 中给出完整实现、
+对比脚本和可复现实验结果。实验表明，单调 PV-MCTS 能够改善朴素策略
+贪心和部分 rollout MCTS，但当前最强的 CNOT 降幅来自 XOR-aware beam
+搜索。因而，面向后续 AI-SSHR 的更合理路线不是直接学习量子门序列，
+而是学习在 XOR 奇偶覆盖语义下选择和组合平行多面体块。
+
+\end{document}

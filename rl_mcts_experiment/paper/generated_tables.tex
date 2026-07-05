@@ -1,0 +1,75 @@
+\begin{center}
+\scriptsize
+\begin{longtable}{llrrrr}
+\caption{不同综合方法在测试集上的 CNOT 成本与平均运行时间。Correct 表示通过逐输入仿真的函数数。}
+\label{tab:main-results}\\
+\toprule
+$n$ & 方法 & 函数数 & Correct & 总 CNOT & 平均时间(s) \\
+\midrule
+\endfirsthead
+\toprule
+$n$ & 方法 & 函数数 & Correct & 总 CNOT & 平均时间(s) \\
+\midrule
+\endhead
+3 & SSHR-H & 255 & 255 & 3191 & 0.0000 \\
+ & SSHR-H-literal & 255 & 255 & 3788 & 0.0000 \\
+ & Beam & 255 & 255 & 3652 & 0.0002 \\
+ & Rollout-MCTS & 255 & 255 & 3652 & 0.0014 \\
+ & PV-Greedy & 255 & 255 & 3668 & 0.0002 \\
+ & PV-Greedy-LA & 255 & 255 & 3652 & 0.0002 \\
+ & PV-MCTS & 255 & 255 & 3652 & 0.0008 \\
+ & XOR-Beam & 255 & 255 & 3024 & 0.0003 \\
+ & XOR-Beam-v2 & 255 & 255 & 3000 & 0.0007 \\
+ & XOR-Beam-best & 255 & 255 & 3024 & 0.0011 \\
+\midrule
+4 & SSHR-H & 1024 & 1024 & 26622 & 0.0001 \\
+ & SSHR-H-literal & 1024 & 1024 & 31759 & 0.0000 \\
+ & Beam & 1024 & 1024 & 30369 & 0.0016 \\
+ & Rollout-MCTS & 1024 & 1024 & 30369 & 0.0030 \\
+ & PV-Greedy & 1024 & 1024 & 30605 & 0.0014 \\
+ & PV-Greedy-LA & 1024 & 1024 & 30369 & 0.0017 \\
+ & PV-MCTS & 1024 & 1024 & 30369 & 0.0029 \\
+ & XOR-Beam & 1024 & 1024 & 23161 & 0.0020 \\
+ & XOR-Beam-v2 & 1024 & 1024 & 22792 & 0.0023 \\
+ & XOR-Beam-best & 1024 & 1024 & 23161 & 0.0047 \\
+\midrule
+5 & SSHR-H & 256 & 256 & 13972 & 0.0008 \\
+ & SSHR-H-literal & 256 & 256 & 12368 & 0.0003 \\
+ & Beam & 256 & 256 & 11436 & 0.0188 \\
+ & Rollout-MCTS & 256 & 256 & 11448 & 0.0187 \\
+ & PV-Greedy & 256 & 256 & 11622 & 0.0148 \\
+ & PV-Greedy-LA & 256 & 256 & 11422 & 0.0294 \\
+ & PV-MCTS & 256 & 256 & 11420 & 0.0349 \\
+ & XOR-Beam & 256 & 256 & 10164 & 0.0397 \\
+ & XOR-Beam-v2 & 256 & 256 & 10115 & 0.0160 \\
+ & XOR-Beam-best & 256 & 256 & 10123 & 0.0823 \\
+\midrule
+6 & SSHR-H & 48 & 48 & 4564 & 0.0117 \\
+ & SSHR-H-literal & 48 & 48 & 4058 & 0.0017 \\
+ & Beam & 48 & 48 & 3552 & 0.2410 \\
+ & Rollout-MCTS & 48 & 48 & 3634 & 0.1952 \\
+ & PV-Greedy & 48 & 48 & 3820 & 0.1832 \\
+ & PV-Greedy-LA & 48 & 48 & 3564 & 0.4452 \\
+ & PV-MCTS & 48 & 48 & 3558 & 0.5728 \\
+ & XOR-Beam & 48 & 48 & 3306 & 0.9490 \\
+ & XOR-Beam-v2 & 48 & 48 & 3508 & 0.1643 \\
+ & XOR-Beam-best & 48 & 48 & 3282 & 1.9161 \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\begin{center}
+\small
+\captionof{table}{最佳方法相对于 SSHR-H 与单调 Beam 的 CNOT 降幅。负值表示 CNOT 成本降低。}
+\label{tab:improvements}
+\begin{tabular}{llrrr}
+\toprule
+$n$ & 最佳方法 & 总 CNOT & 相对 SSHR-H & 相对 Beam \\
+\midrule
+3 & XOR-Beam-v2 & 3000 & -5.99\% & -17.85\% \\
+4 & XOR-Beam-v2 & 22792 & -14.39\% & -24.95\% \\
+5 & XOR-Beam-v2 & 10115 & -27.61\% & -11.55\% \\
+6 & XOR-Beam-best & 3282 & -28.09\% & -7.60\% \\
+\bottomrule
+\end{tabular}
+\end{center}

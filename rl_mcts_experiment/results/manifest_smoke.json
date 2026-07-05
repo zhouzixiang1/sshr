@@ -1,0 +1,19 @@
+{
+  "preset": "smoke",
+  "seed": 42,
+  "suite": [
+    [
+      3,
+      16
+    ]
+  ],
+  "methods": [
+    "sshr_h",
+    "beam",
+    "xor_beam_rule",
+    "pv_greedy",
+    "pv_greedy_lookahead",
+    "pv_mcts"
+  ],
+  "started_at": "2026-07-05 13:27:01"
+}

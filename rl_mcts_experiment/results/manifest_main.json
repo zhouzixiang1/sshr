@@ -1,0 +1,35 @@
+{
+  "preset": "main",
+  "seed": 42,
+  "suite": [
+    [
+      3,
+      -1
+    ],
+    [
+      4,
+      1024
+    ],
+    [
+      5,
+      256
+    ],
+    [
+      6,
+      48
+    ]
+  ],
+  "methods": [
+    "sshr_h",
+    "sshr_h_literal",
+    "beam",
+    "mcts_rollout",
+    "xor_beam_rule",
+    "xor_beam_v2",
+    "xor_beam_best",
+    "pv_greedy",
+    "pv_greedy_lookahead",
+    "pv_mcts"
+  ],
+  "started_at": "2026-07-05 13:02:44"
+}
