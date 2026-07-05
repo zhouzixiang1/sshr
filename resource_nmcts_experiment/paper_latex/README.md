@@ -2,12 +2,12 @@
 
 Working title:
 
-> Neural Monte Carlo Tree Search with Affine Boolean Preconditioning for Resource-Constrained Quantum Oracle Synthesis
+> Resource-NMCTS: Neural Monte Carlo Tree Search with Affine Boolean Preconditioning for Resource-Constrained Quantum Oracle Synthesis
 
 This folder is the manuscript workspace for the resource-constrained quantum
 Boolean oracle synthesis project.  The draft is intentionally evidence-first:
 claims in `main.tex` are limited to the current `evidence_affine`,
-`ablation_affine`, `traditional_small`, and `resource_sweep` results.
+`ablation_affine`, `traditional_resource`, and `resource_sweep` results.
 
 Build:
 
@@ -22,17 +22,18 @@ Current source evidence:
 - ablation CSV: `../results/raw_ablation_affine.csv`
 - compact ablation analysis: `../results/analysis_ablation_affine.md`
 - runtime/resource analysis: `../results/runtime_ablation_affine.md`
-- traditional baseline CSV: `../results/raw_traditional_small.csv`
-- traditional baseline analysis: `../results/analysis_traditional_small.md`
+- traditional baseline CSV: `../results/raw_traditional_resource.csv`
+- traditional baseline analysis: `../results/analysis_traditional_resource.md`
 - traditional runtime/resource analysis:
-  `../results/runtime_traditional_small.md`
+  `../results/runtime_traditional_resource.md`
 - resource-sweep CSV: `../results/raw_resource_sweep.csv`
 - resource-sweep analysis: `../results/analysis_resource_sweep.md`
 - LaTeX tables: `tables/runtime_ablation_affine.tex`,
   `tables/resource_ablation_affine.tex`,
-  `tables/resource_traditional_small.tex`,
-  `tables/runtime_traditional_small.tex`,
+  `tables/resource_traditional_resource.tex`,
+  `tables/runtime_traditional_resource.tex`,
   `tables/resource_sweep_affine.tex`,
+  `tables/resource_sweep_resource.tex`,
   `tables/resource_sweep_winners.tex`
 - manifest: `../results/manifest_evidence_affine.json`
 

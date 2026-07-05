@@ -102,6 +102,14 @@ PRESETS = {
         "max_n": 6,
         "workers": 10,
     },
+    "traditional_resource": {
+        "methods": ["direct_anf", "and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_resource_nmcts", "and_cube_beam", "and_esop_milp", "sshr_h"],
+        "random_truth": [(4, 64), (5, 64), (6, 32)],
+        "random_anf": [],
+        "structured_limit": 10_000,
+        "max_n": 6,
+        "workers": 10,
+    },
 }
 
 
@@ -151,7 +159,7 @@ def run_one(task):
         neural_prior_weight=config_dict.get("neural_prior_weight", 1.0),
     )
     base_method = method[len("and_") :] if method.startswith("and_") else method
-    neural_methods = {"neural_greedy", "neural_mcts", "fprm_neural_mcts", "affine_nmcts", "affine_no_guard", "rc_nmcts"}
+    neural_methods = {"neural_greedy", "neural_mcts", "fprm_neural_mcts", "affine_nmcts", "affine_no_guard", "rc_nmcts", "resource_nmcts"}
     use_model = model_path if base_method in neural_methods and model_path else None
     if method == "esop_greedy" and bf.n > 4:
         return {
@@ -272,12 +280,12 @@ def main(argv: Iterable[str] | None = None) -> int:
         "candidate_top_k": 24,
         "min_factor_count": 2,
         "use_relative_phase": True,
-        "mcts_simulations": 24 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small"} else (48 if args.preset == "pilot" else (32 if args.preset == "large" else 96)),
-        "neural_mcts_simulations": 32 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small"} else (64 if args.preset == "pilot" else (32 if args.preset == "large" else 128)),
-        "max_polarities": 32 if args.preset in {"smoke", "pilot"} else (12 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small"} else (16 if args.preset == "large_fast" else (48 if args.preset == "large" else 384))),
+        "mcts_simulations": 24 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource"} else (48 if args.preset == "pilot" else (32 if args.preset == "large" else 96)),
+        "neural_mcts_simulations": 32 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource"} else (64 if args.preset == "pilot" else (32 if args.preset == "large" else 128)),
+        "max_polarities": 32 if args.preset in {"smoke", "pilot"} else (12 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource"} else (16 if args.preset == "large_fast" else (48 if args.preset == "large" else 384))),
         "gate_mode": "mct",
         "neural_prior_weight": 2.5,
-        "task_timeout_s": 300 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small"} else (120 if args.preset == "pilot" else (180 if args.preset in {"large", "large_fast"} else (300 if args.preset == "main" else 0))),
+        "task_timeout_s": 300 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource"} else (120 if args.preset == "pilot" else (180 if args.preset in {"large", "large_fast"} else (300 if args.preset == "main" else 0))),
     }
     methods = cfg["methods"]
     tasks = [

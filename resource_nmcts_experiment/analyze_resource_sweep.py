@@ -20,11 +20,12 @@ PROFILE_LABELS = {
     "cnot_depth": "CNOT-depth",
     "ancilla_tight": "Ancilla-tight",
 }
-METHOD_ORDER = ["and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_cube_beam", "sshr_h"]
+METHOD_ORDER = ["and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_resource_nmcts", "and_cube_beam", "sshr_h"]
 METHOD_LABELS = {
     "and_direct_anf": "AND-direct ANF",
     "and_mcts_factor": "Fixed MCTS",
     "and_affine_nmcts": "Affine-NMCTS",
+    "and_resource_nmcts": "Resource-NMCTS",
     "and_cube_beam": "ESOP cube beam",
     "sshr_h": "SSHR-H",
 }
@@ -120,8 +121,10 @@ def winner_counts(grouped: dict[str, dict[str, dict[str, dict[str, str]]]]) -> d
     for profile, functions in grouped.items():
         counts: Counter[str] = Counter()
         for table in functions.values():
-            best = min(table.values(), key=lambda row: (float(row["score"]), float(row["T"]), float(row["CNOT"])))
-            counts[best["method"]] += 1
+            best_score = min(float(row["score"]) for row in table.values())
+            for row in table.values():
+                if abs(float(row["score"]) - best_score) <= 1e-9:
+                    counts[row["method"]] += 1
         winners[profile] = counts
     return winners
 
@@ -153,14 +156,41 @@ def write_latex_affine_table(summaries: list[dict[str, object]]) -> Path:
     return out
 
 
-def write_latex_winner_table(winners: dict[str, Counter[str]]) -> Path:
+def write_latex_resource_table(summaries: list[dict[str, object]]) -> Path:
     PAPER_TABLES.mkdir(parents=True, exist_ok=True)
-    out = PAPER_TABLES / "resource_sweep_winners.tex"
-    columns = ["and_affine_nmcts", "and_mcts_factor", "sshr_h", "and_direct_anf", "and_cube_beam"]
+    out = PAPER_TABLES / "resource_sweep_resource.tex"
+    rows = [s for s in summaries if s["method"] == "and_resource_nmcts"]
+    rows.sort(key=lambda s: profile_sort(str(s["profile"])))
     lines = [
         r"\begin{tabular}{lrrrrr}",
         r"\toprule",
-        r"Profile & Affine & Fixed MCTS & SSHR-H & AND-direct & ESOP beam \\",
+        r"Profile & Mean T & Mean CNOT & Mean depth & Mean ancilla & Mean score \\",
+        r"\midrule",
+    ]
+    for s in rows:
+        lines.append(
+            "{profile} & {mean_T} & {mean_CNOT} & {mean_depth} & {mean_peak_ancilla} & {mean_score} \\\\".format(
+                profile=tex_escape(str(s["profile_label"])),
+                mean_T=fmt(float(s["mean_T"]), 1),
+                mean_CNOT=fmt(float(s["mean_CNOT"]), 1),
+                mean_depth=fmt(float(s["mean_depth"]), 1),
+                mean_peak_ancilla=fmt(float(s["mean_peak_ancilla"]), 2),
+                mean_score=fmt(float(s["mean_score"]), 1),
+            )
+        )
+    lines.extend([r"\bottomrule", r"\end{tabular}"])
+    out.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return out
+
+
+def write_latex_winner_table(winners: dict[str, Counter[str]]) -> Path:
+    PAPER_TABLES.mkdir(parents=True, exist_ok=True)
+    out = PAPER_TABLES / "resource_sweep_winners.tex"
+    columns = ["and_resource_nmcts", "and_affine_nmcts", "and_mcts_factor", "sshr_h", "and_direct_anf", "and_cube_beam"]
+    lines = [
+        r"\begin{tabular}{lrrrrrr}",
+        r"\toprule",
+        r"Profile & Resource & Affine & Fixed MCTS & SSHR-H & AND-direct & ESOP beam \\",
         r"\midrule",
     ]
     for profile in sorted(winners, key=profile_sort):
@@ -212,9 +242,9 @@ def main() -> int:
     lines.extend(
         [
             "",
-            "## Objective winners by profile",
+            "## Objective best-or-tied counts by profile",
             "",
-            "| profile | winner method | functions |",
+            "| profile | best-or-tied method | functions |",
             "|---|---|---:|",
         ]
     )
@@ -225,26 +255,28 @@ def main() -> int:
     lines.extend(
         [
             "",
-            "## Focused Affine-NMCTS comparisons",
+            "## Focused Resource-NMCTS comparisons",
             "",
             "| profile | baseline | metric | wins | losses | ties | mean relative |",
             "|---|---|---|---:|---:|---:|---:|",
         ]
     )
     for profile in sorted(grouped, key=profile_sort):
-        for base in ["and_mcts_factor", "and_cube_beam", "sshr_h"]:
+        for base in ["and_affine_nmcts", "and_mcts_factor", "and_cube_beam", "sshr_h"]:
             for metric in ["score", "T", "CNOT", "depth", "peak_ancilla"]:
-                wins, losses, ties, rel = comparison(grouped, profile, "and_affine_nmcts", base, metric)
+                wins, losses, ties, rel = comparison(grouped, profile, "and_resource_nmcts", base, metric)
                 lines.append(
                     f"| {PROFILE_LABELS.get(profile, profile)} | {METHOD_LABELS.get(base, base)} | {metric} | {wins} | {losses} | {ties} | {rel:+.2f}% |"
                 )
 
     affine_tex = write_latex_affine_table(summaries)
+    resource_tex = write_latex_resource_table(summaries)
     winners_tex = write_latex_winner_table(winners)
     out = RESULTS / "analysis_resource_sweep.md"
     out.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"wrote {out}")
     print(f"wrote {affine_tex}")
+    print(f"wrote {resource_tex}")
     print(f"wrote {winners_tex}")
     return 0
 

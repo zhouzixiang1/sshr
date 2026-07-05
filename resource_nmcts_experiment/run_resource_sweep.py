@@ -45,7 +45,7 @@ PROFILES = {
     },
 }
 
-METHODS = ["and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_cube_beam", "sshr_h"]
+METHODS = ["and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_resource_nmcts", "and_cube_beam", "sshr_h"]
 RANDOM_TRUTH = [(4, 12), (5, 12), (6, 6)]
 
 
@@ -107,7 +107,7 @@ def run_one(task):
         neural_prior_weight=config_dict["neural_prior_weight"],
     )
     base_method = method[len("and_") :] if method.startswith("and_") else method
-    neural_methods = {"affine_nmcts"}
+    neural_methods = {"affine_nmcts", "resource_nmcts"}
     use_model = model_path if base_method in neural_methods and model_path else None
     try:
         timeout_s = int(config_dict.get("task_timeout_s", 0) or 0)

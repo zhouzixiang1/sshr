@@ -6,12 +6,13 @@
 \usepackage{hyperref}
 \usepackage{microtype}
 
-\newcommand{\method}{Affine-NMCTS}
+\newcommand{\method}{Resource-NMCTS}
+\newcommand{\affinemethod}{Affine-NMCTS}
 \newcommand{\dataset}{evidence\_affine}
 \newcommand{\ablationdataset}{ablation\_affine}
-\newcommand{\traditionaldataset}{traditional\_small}
+\newcommand{\traditionaldataset}{traditional\_resource}
 
-\title{Neural Monte Carlo Tree Search with Affine Boolean Preconditioning for Resource-Constrained Quantum Oracle Synthesis}
+\title{Resource-NMCTS: Neural Monte Carlo Tree Search with Affine Boolean Preconditioning for Resource-Constrained Quantum Oracle Synthesis}
 \author{Zixiang Zhou}
 \date{\today}
 
@@ -23,23 +24,23 @@ Quantum Boolean oracle synthesis is a central subroutine in many quantum
 algorithms, yet direct algebraic-normal-form constructions can be expensive in
 T-count, depth, and ancillary workspace.  We study oracle synthesis as a
 logic-level search problem over compute/uncompute factorizations of Boolean
-monomials.  The proposed \method{} method combines resource-weighted neural
+monomials.  The core \affinemethod{} solver combines resource-weighted neural
 Monte Carlo tree search with affine Boolean input preconditioning, allowing the
 search to change the XOR coordinate system before factoring the resulting
-fixed-polarity Reed--Muller representation.  On the current \dataset{} benchmark
-of 322 Boolean functions, \method{} is correct on all functions and reduces mean
-T-count by 61.83\% relative to direct ANF synthesis and by 40.12\% relative to
-logical-AND direct ANF synthesis.  Against fixed-coordinate logical-AND MCTS, it
-has 161 T-count wins, 160 ties, and no losses over the 321 completed baseline
-pairs, with a 16.18\% mean T-count reduction.  On a separate $n\leq 6$
-traditional-baseline slice, \method{} reduces mean T-count by 34.61\% relative
-to ESOP cube beam search and by 29.45\% relative to time-limited weighted ESOP
-MILP.  An ablation on the same
-322-function suite shows that affine coordinate search is the dominant source
-of improvement, while neural refinement and the fixed-coordinate MCTS guard add
-nondegrading score improvements.  The method is evaluated only at the logical
-circuit layer; hardware mapping and connectivity constraints are outside the
-present scope.
+fixed-polarity Reed--Muller representation.  The full \method{} method adds a
+resource-adaptive portfolio guard that selects, under the current weighted
+objective, among direct ANF, fixed-coordinate MCTS, FPRM/affine neural MCTS, and
+ESOP cube-beam candidates; it does not use SSHR candidates.  On the current
+\dataset{} benchmark of 322 Boolean functions, \affinemethod{} is correct on
+all functions and reduces mean T-count by 61.83\% relative to direct ANF
+synthesis.  On a separate $n\leq 6$ traditional-baseline slice, \method{} has
+172 T-count wins and no losses against ESOP cube beam search, and 162 T-count
+wins, 1 loss, and 14 ties against time-limited weighted ESOP MILP.  A
+resource-profile stress test shows that \method{} is best or tied on 42/47,
+42/47, 40/47, and 42/47 functions under T-heavy, balanced, CNOT-depth-heavy, and
+ancilla-tight objectives.  The method is evaluated only at the logical circuit
+layer; hardware mapping and connectivity constraints are outside the present
+scope.
 \end{abstract}
 
 \section{Introduction}
@@ -64,8 +65,8 @@ This paper frames quantum Boolean oracle synthesis as a resource-constrained
 search over algebraic-normal-form (ANF) and fixed-polarity Reed--Muller (FPRM)
 factorizations.  The central claim is that affine changes of Boolean coordinates
 can expose low-T decompositions that fixed-coordinate ANF factoring misses, and
-that a neural MCTS policy can search this space while retaining a guard against
-degradation relative to fixed-coordinate MCTS.
+that a resource-adaptive neural MCTS portfolio can retain these wins while
+guarding against degradation under different weighted objectives.
 
 \section{Problem Formulation}
 
@@ -117,7 +118,7 @@ labels, then used as an additive prior during action ranking.
 
 \subsection{Affine Boolean preconditioning}
 
-\method{} searches invertible linear transforms $y=Bx$ before ANF/FPRM
+\affinemethod{} searches invertible linear transforms $y=Bx$ before ANF/FPRM
 factorization.  For each candidate transform, it synthesizes
 $h(y)=f(B^{-1}y)$ and wraps the body circuit by CNOT networks implementing and
 undoing $B$.  Candidate transforms include the identity, star-like XOR
@@ -133,6 +134,19 @@ weighted score.  The lower-score plan is returned.  This guard makes the method
 nondegrading in score on completed fixed-coordinate MCTS pairs, while preserving
 affine improvements when coordinate changes reveal better factorizations.
 
+\subsection{Resource-adaptive portfolio guard}
+
+The full \method{} solver treats the weighted resource objective as a selection
+criterion over internally generated candidates.  For each function it evaluates
+direct ANF, fixed-coordinate logical-AND MCTS, FPRM/greedy factoring,
+\affinemethod{}, and, for $n\leq 6$, ESOP cube-beam search.  It returns the
+correct candidate with the smallest weighted score, breaking ties by T-count,
+CNOT count, depth, and peak ancilla.  SSHR is used only as an external baseline
+in the experiments and is not part of this portfolio.  This final guard converts
+the affine neural search into a resource-constrained synthesis method: when
+affine coordinates are best, they are retained; when a simpler internal
+construction is better under the active weights, the method can select it.
+
 \section{Experiments}
 
 \subsection{Benchmark and baselines}
@@ -141,10 +155,10 @@ The current \dataset{} run contains 322 Boolean functions: structured oracles
 such as parity, majority, threshold, mux, adders, and multipliers; random truth
 tables for $n=4,5,6$; and random ANF functions for $n=8,10,12$.  We compare:
 direct ANF, logical-AND direct ANF, fixed-coordinate logical-AND MCTS,
-\method{}, and SSHR-H for functions with $n\leq 6$.
+\affinemethod{}, and SSHR-H for functions with $n\leq 6$.
 A separate \traditionaldataset{} slice restricts the benchmark to $n\leq 6$
-and adds two traditional Boolean baselines: ESOP cube beam search and a
-time-limited weighted ESOP MILP over candidate cubes.
+and adds \method{}, ESOP cube beam search, and a time-limited weighted ESOP
+MILP over candidate cubes.
 
 \subsection{Main results}
 
@@ -157,17 +171,18 @@ over functions where both methods completed.}
 \toprule
 Comparison & Functions & Wins & Ties & Mean $\Delta T$ \\
 \midrule
-\method{} vs direct ANF & 322 & 286 & 36 & $-61.83\%$ \\
-\method{} vs logical-AND direct ANF & 322 & 284 & 38 & $-40.12\%$ \\
-\method{} vs fixed-coordinate MCTS & 321 & 161 & 160 & $-16.18\%$ \\
-\method{} vs SSHR-H & 177 & 171 & 5 & $-43.89\%$ \\
+\affinemethod{} vs direct ANF & 322 & 286 & 36 & $-61.83\%$ \\
+\affinemethod{} vs logical-AND direct ANF & 322 & 284 & 38 & $-40.12\%$ \\
+\affinemethod{} vs fixed-coordinate MCTS & 321 & 161 & 160 & $-16.18\%$ \\
+\affinemethod{} vs SSHR-H & 177 & 171 & 5 & $-43.89\%$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\method{} was correct on all 322 functions.  Fixed-coordinate MCTS timed out on
-one $n=12$ random ANF function after a 600 s repair attempt; \method{} completed
-the same function within the experiment budget and produced a valid circuit.
+\affinemethod{} was correct on all 322 functions.  Fixed-coordinate MCTS timed
+out on one $n=12$ random ANF function after a 600 s repair attempt;
+\affinemethod{} completed the same function within the experiment budget and
+produced a valid circuit.
 The largest direct-ANF reductions exceeded 80\% T-count on several structured
 and random small functions.
 
@@ -175,8 +190,8 @@ and random small functions.
 
 The \traditionaldataset{} slice tests whether the gain persists against
 traditional Boolean/ESOP-style synthesis rather than only direct ANF and MCTS
-variants.  It contains 177 functions with $n\leq 6$ and seven methods, producing
-1239 method/function rows with no errors or skips.  On this slice, \method{}
+variants.  It contains 177 functions with $n\leq 6$ and eight methods, producing
+1416 method/function rows with no errors or skips.  On this slice, \method{}
 had the lowest mean T-count and the lowest mean composite score among all
 tested methods.
 
@@ -186,16 +201,17 @@ tested methods.
 \caption{Mean logical resources on the \traditionaldataset{} slice.  ESOP MILP
 is a time-limited weighted ESOP optimization over candidate cubes.}
 \label{tab:traditional-resources}
-\input{tables/resource_traditional_small}
+\input{tables/resource_traditional_resource}
 \end{table}
 
-Against ESOP cube beam search, \method{} had 171 T-count wins, 3 losses, and 3
-ties, with a 34.61\% mean T-count reduction and a 32.16\% mean composite-score
+Against ESOP cube beam search, \method{} had 172 T-count wins, no losses, and 5
+ties, with a 34.72\% mean T-count reduction and a 32.28\% mean composite-score
 reduction.  Against weighted ESOP MILP, \method{} had 162 T-count wins, 1 loss,
-and 14 ties, with a 29.45\% mean T-count reduction and a 26.88\% mean
-composite-score reduction.  SSHR-H retained the lowest mean CNOT count on this
-small-function slice, so this result supports low-T and weighted-resource
-synthesis rather than CNOT-only optimality.
+and 14 ties, with a 29.50\% mean T-count reduction and a 26.95\% mean
+composite-score reduction.  Against SSHR-H, \method{} had 171 T-count wins, 1
+loss, and 5 ties, and 171 score wins with 6 score losses.  SSHR-H retained the
+lowest mean CNOT count on this small-function slice, so this result supports
+low-T and weighted-resource synthesis rather than CNOT-only optimality.
 
 \subsection{Ablation}
 
@@ -214,10 +230,10 @@ losses use the composite resource score unless otherwise stated.}
 \toprule
 Comparison & Wins & Ties & Losses & Mean relative score \\
 \midrule
-\method{} vs affine-greedy & 153 & 169 & 0 & $-2.82\%$ \\
+\affinemethod{} vs affine-greedy & 153 & 169 & 0 & $-2.82\%$ \\
 affine-no-guard vs affine-greedy & 65 & 257 & 0 & $-1.08\%$ \\
-\method{} vs affine-no-guard & 88 & 234 & 0 & $-1.74\%$ \\
-\method{} vs fixed-coordinate MCTS & 165 & 156 & 0 & $-14.82\%$ \\
+\affinemethod{} vs affine-no-guard & 88 & 234 & 0 & $-1.74\%$ \\
+\affinemethod{} vs fixed-coordinate MCTS & 165 & 156 & 0 & $-14.82\%$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -231,7 +247,7 @@ neither introduced score losses on the benchmark.
 
 The ablation also exposes the computational cost of the search components.
 Affine-greedy completed all 322 functions with a 0.03 s median runtime and a
-1.82 s maximum runtime, while the full \method{} method had a 0.61 s median
+1.82 s maximum runtime, while the full \affinemethod{} method had a 0.61 s median
 runtime and a 300.02 s maximum runtime because it invokes the fixed-coordinate
 MCTS guard.  Fixed-coordinate MCTS timed out on one $n=12$ function, whereas all
 affine variants completed every function.
@@ -259,7 +275,7 @@ not directly comparable to all-suite means.}
 
 To test whether the method remains competitive under different resource
 objectives, we ran a 47-function $n\leq 6$ sweep under four profiles: T-heavy,
-balanced, CNOT-depth-heavy, and ancilla-tight.  The sweep produced 940
+balanced, CNOT-depth-heavy, and ancilla-tight.  The sweep produced 1128
 method/profile/function rows with no errors or skips.  Scores are comparable
 within a profile but not across profiles because each profile uses a different
 weighted objective.
@@ -267,36 +283,39 @@ weighted objective.
 \begin{table}[t]
 \centering
 \small
-\caption{Objective-score winners in the resource-profile sweep.  Each row sums
-to 47 functions.}
+\caption{Objective-score best-or-tied counts in the resource-profile sweep.
+Rows may sum to more than 47 because several methods can achieve the same
+minimum score on a function.}
 \label{tab:resource-sweep-winners}
 \input{tables/resource_sweep_winners}
 \end{table}
 
-\method{} was the objective winner on 32/47 functions under T-heavy weights,
-32/47 under balanced weights, 29/47 under CNOT-depth-heavy weights, and 30/47
-under ancilla-tight weights.  It had no score losses against fixed-coordinate
-MCTS in any profile, with score wins/ties of 35/12, 35/12, 35/12, and 33/14.
-However, the mean \method{} resource vector changed only modestly across the
-four profiles: mean T-count ranged from 41.62 to 43.32, mean CNOT count from
-84.89 to 86.43, and mean depth from 89.09 to 90.23.  This result is therefore
-best interpreted as robustness under resource-profile stress, not as evidence
-of a fully profile-adaptive Pareto optimizer.
+\method{} was best or tied on 42/47 functions under T-heavy weights, 42/47
+under balanced weights, 40/47 under CNOT-depth-heavy weights, and 42/47 under
+ancilla-tight weights.  It had no score losses against \affinemethod{} in any
+profile and no score losses against fixed-coordinate MCTS.  However, the mean
+\method{} resource vector changed only modestly across the four profiles: mean
+T-count ranged from 41.28 to 43.06, mean CNOT count from 84.13 to 85.57, and
+mean depth from 88.32 to 89.32.  This result shows that the portfolio guard
+improves resource-objective robustness, but the search still needs more
+profile-specific candidate generation before claiming a full Pareto optimizer.
 
 \section{Discussion}
 
 The results support the central hypothesis that affine Boolean coordinates are
-a useful search dimension for quantum oracle synthesis.  The wins are strongest
-in T-count and composite resource score.  Against SSHR-H, the method often uses
-more CNOTs and depth, which is expected because SSHR-H is a CNOT-oriented
-small-function baseline.  The present contribution should therefore be framed
-as low-T, resource-constrained logical synthesis, not as a CNOT-only optimizer.
+a useful search dimension for quantum oracle synthesis and that a
+resource-adaptive internal portfolio can remove avoidable score regressions.
+The wins are strongest in T-count and composite resource score.  Against
+SSHR-H, the method often uses more CNOTs and depth, which is expected because
+SSHR-H is a CNOT-oriented small-function baseline and is not included in the
+\method{} portfolio.  The present contribution should therefore be framed as
+low-T, resource-constrained logical synthesis, not as a CNOT-only optimizer.
 
 The runtime results show a practical tradeoff.  Affine-greedy captures most of
 the T-count gain at very low runtime, making it the best fast setting in the
-current implementation.  The full \method{} configuration is slower, but its
-guard removes score regressions relative to fixed-coordinate MCTS on completed
-pairs and resolves the observed fixed-coordinate timeout case.
+current implementation.  \method{} is slower than \affinemethod{} on the
+$n\leq 6$ slice because it evaluates additional internal candidates, but its
+median runtime remains below 1 s in the current small-function experiment.
 
 The main current limitations are the absence of hardware mapping, the use of a
 local benchmark suite rather than standardized external oracle benchmarks, and
@@ -310,14 +329,17 @@ candidate generation is a natural next extension.
 \section{Conclusion}
 
 We introduced a logic-level quantum Boolean oracle synthesis method that
-combines resource-aware neural MCTS with affine Boolean preconditioning.  On the
-current benchmark, the method substantially reduces T-count versus direct ANF,
-logical-AND direct ANF, fixed-coordinate MCTS, SSHR-H on supported functions,
-and in-harness ESOP cube-beam and weighted-MILP baselines on the $n\leq 6$
-slice.  A resource-profile stress test shows that this advantage is robust
-across several weighted objectives, while also exposing limited profile
-sensitivity.  The next step is to add standardized external baselines and
-stronger runtime-stress tests so the empirical claim is submission-ready.
+combines resource-aware neural MCTS, affine Boolean preconditioning, and a
+resource-adaptive portfolio guard.  On the current benchmark, the affine neural
+component substantially reduces T-count versus direct ANF, logical-AND direct
+ANF, fixed-coordinate MCTS, and SSHR-H on supported functions.  On the
+$n\leq 6$ traditional-baseline slice, the full \method{} method further avoids
+score regressions against internal ESOP cube-beam candidates and remains
+competitive against weighted ESOP MILP.  A resource-profile stress test shows
+that this advantage is robust across several weighted objectives, while also
+exposing limited profile sensitivity.  The next step is to add standardized
+external baselines and stronger runtime-stress tests so the empirical claim is
+submission-ready.
 
 \bibliographystyle{plain}
 \bibliography{references}

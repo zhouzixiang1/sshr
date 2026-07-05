@@ -387,6 +387,56 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             gates=best.gates,
             n_qubits=best.n_qubits,
         )
+    if method == "resource_nmcts":
+        fast_config = replace(
+            config,
+            candidate_top_k=min(config.candidate_top_k, 18),
+            mcts_simulations=min(config.mcts_simulations, 32),
+            neural_mcts_simulations=min(config.neural_mcts_simulations, 40),
+            max_polarities=min(config.max_polarities, 16),
+        )
+        cube_config = replace(
+            config,
+            candidate_top_k=min(config.candidate_top_k, 18),
+            max_polarities=min(config.max_polarities, 8),
+        )
+        portfolio: list[SynthesisResult] = []
+        child_specs = [
+            ("direct_anf", config),
+            ("mcts_factor", config),
+            ("fprm_greedy", fast_config),
+            ("affine_nmcts", fast_config),
+        ]
+        if bf.n <= 6:
+            child_specs.append(("cube_beam", cube_config))
+        for child_method, child_config in child_specs:
+            try:
+                child = synthesize(child_method, bf, child_config, seed=seed, model_path=model_path)
+            except Exception:
+                continue
+            if child.correct:
+                portfolio.append(child)
+        if not portfolio:
+            raise RuntimeError("Resource-NMCTS portfolio produced no correct candidate")
+        best = min(
+            portfolio,
+            key=lambda r: (
+                r.cost.score(config.weights),
+                r.cost.T,
+                r.cost.CNOT,
+                r.cost.depth,
+                r.cost.peak_ancilla,
+            ),
+        )
+        return SynthesisResult(
+            method=requested_method,
+            cost=best.cost,
+            time_s=time.time() - t0,
+            correct=best.correct,
+            terms=best.terms,
+            gates=best.gates,
+            n_qubits=best.n_qubits,
+        )
     terms = frozenset(anf_monomials(bf))
     neural = _cached_scorer(model_path or "")
 

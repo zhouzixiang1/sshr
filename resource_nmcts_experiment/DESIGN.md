@@ -34,8 +34,9 @@ symbolic Boolean construction plans, with explicit multi-resource objectives.
 
 ## Current Contribution
 
-The current strongest method is `and_affine_nmcts`, a guarded affine-preconditioned
-neural MCTS solver.  It adds three ingredients to fixed-coordinate ANF factoring:
+The current strongest method is `and_resource_nmcts`, a resource-adaptive
+portfolio around a guarded affine-preconditioned neural MCTS solver.  It adds
+four ingredients to fixed-coordinate ANF factoring:
 
 1. **Logical-AND resource accounting.** Temporary conjunctions are charged as
    low-T logical ANDs, with T-free Clifford/measurement uncomputation in the
@@ -50,6 +51,10 @@ neural MCTS solver.  It adds three ingredients to fixed-coordinate ANF factoring
    affine method score-nondegrading relative to the fixed-coordinate MCTS
    baseline, while retaining large wins when affine coordinates reveal stronger
    factorizations.
+4. **Resource portfolio guard.** The full method compares internally generated
+   direct ANF, fixed-coordinate MCTS, FPRM/greedy, affine-neural, and small-$n$
+   ESOP cube-beam candidates under the active weighted objective.  SSHR is not
+   part of this portfolio; it remains an external baseline.
 
 ## Representation
 
@@ -171,6 +176,9 @@ The current paper-facing run is:
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_small --model models/action_scorer_rollout_logical_and.pt --resume
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset traditional_small
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset traditional_small
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_resource --model models/action_scorer_rollout_logical_and.pt
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset traditional_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset traditional_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_resource_sweep.py --model models/action_scorer_rollout_logical_and.pt --workers 10
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_resource_sweep.py
 ```
@@ -229,43 +237,46 @@ CNOT-oriented circuits.  The paper should frame the contribution as
 resource-constrained low-T logical Boolean synthesis rather than CNOT-only
 optimization.
 
-The `traditional_small` run adds a stronger small-function comparison against
-traditional Boolean/ESOP baselines.  It covers 177 functions with `n <= 6`, 7
-methods, 1239 method/function rows, 0 errors, and 0 skips.  The added baselines
-are an ESOP cube-beam search and a time-limited weighted ESOP MILP over
-candidate cubes, both evaluated under the same logical-AND resource accounting
-where applicable.
+The `traditional_resource` run adds a stronger small-function comparison
+against traditional Boolean/ESOP baselines and the full Resource-NMCTS portfolio
+guard.  It covers 177 functions with `n <= 6`, 8 methods, 1416 method/function
+rows, 0 errors, and 0 skips.  The added baselines are an ESOP cube-beam search
+and a time-limited weighted ESOP MILP over candidate cubes, both evaluated under
+the same logical-AND resource accounting where applicable.
 
-Main `traditional_small` evidence:
+Main `traditional_resource` evidence:
 
-- Mean T-count / composite score: `and_affine_nmcts` 45.88 / 55.37, fixed MCTS
-  62.06 / 73.09, ESOP cube beam 71.32 / 83.82, ESOP MILP 83.55 / 96.67, and
-  SSHR-H 81.04 / 88.19.
-- `and_affine_nmcts` beats ESOP cube beam in T-count on 171 functions, loses on
-  3, ties on 3, and reduces mean T-count by 34.61%.
-- `and_affine_nmcts` beats ESOP MILP in T-count on 162 functions, loses on 1,
-  ties on 14, and reduces mean T-count by 29.45%.
-- The same comparisons show mean composite-score reductions of 32.16% versus
-  ESOP cube beam and 26.88% versus ESOP MILP.
+- Mean T-count / composite score: `and_resource_nmcts` 45.74 / 55.21,
+  `and_affine_nmcts` 45.88 / 55.37, fixed MCTS 62.06 / 73.09, ESOP cube beam
+  71.32 / 83.82, ESOP MILP 83.59 / 96.73, and SSHR-H 81.04 / 88.19.
+- `and_resource_nmcts` beats `and_affine_nmcts` in score on 8 functions, loses
+  on 0, and ties on 169.
+- `and_resource_nmcts` beats ESOP cube beam in T-count on 172 functions, loses
+  on 0, ties on 5, and reduces mean T-count by 34.72%.
+- `and_resource_nmcts` beats ESOP MILP in T-count on 162 functions, loses on 1,
+  ties on 14, and reduces mean T-count by 29.50%.
+- The same comparisons show mean composite-score reductions of 32.28% versus
+  ESOP cube beam and 26.95% versus ESOP MILP.
 - SSHR-H remains better in mean CNOT count and often depth on the small
   supported subset.  This is a useful limitation, not a contradiction of the
   low-T/resource-score claim.
 
 The `resource_sweep` stress test checks whether the method remains competitive
 under different resource objectives.  It uses 47 functions with `n <= 6`, four
-profiles (T-heavy, balanced, CNOT-depth-heavy, and ancilla-tight), five methods,
-and 940 method/profile/function rows.  There are 0 errors and 0 skips.
+profiles (T-heavy, balanced, CNOT-depth-heavy, and ancilla-tight), six methods,
+and 1128 method/profile/function rows.  There are 0 errors and 0 skips.
 
 Main `resource_sweep` evidence:
 
-- `and_affine_nmcts` is the objective-score winner on 32/47 functions under
-  T-heavy weights, 32/47 under balanced weights, 29/47 under CNOT-depth-heavy
-  weights, and 30/47 under ancilla-tight weights.
+- `and_resource_nmcts` is best-or-tied on 42/47 functions under T-heavy
+  weights, 42/47 under balanced weights, 40/47 under CNOT-depth-heavy weights,
+  and 42/47 under ancilla-tight weights.
+- Compared with `and_affine_nmcts`, it has score wins/losses/ties of 2/0/45,
+  2/0/45, 3/0/44, and 3/0/44 across the four profiles.
 - Compared with fixed-coordinate MCTS, it has score wins/losses/ties of
-  35/0/12, 35/0/12, 35/0/12, and 33/0/14 across the four profiles.
-- Compared with ESOP cube beam, it has score wins/losses/ties of 46/0/1,
-  46/0/1, 45/1/1, and 46/0/1.
+  35/0/12, 35/0/12, 35/0/12, and 34/0/13.
 - The mean resource vector changes only modestly across profiles.  This is
-  evidence of robustness, not yet evidence of strong profile-sensitive Pareto
-  optimization.  A submission version should add resource-profile-specific
-  candidate generation if it wants to claim adaptive resource tradeoffs.
+  evidence of robustness and nondegrading internal portfolio selection, not yet
+  evidence of strong profile-sensitive Pareto optimization.  A submission
+  version should add resource-profile-specific candidate generation if it wants
+  to claim adaptive resource tradeoffs.

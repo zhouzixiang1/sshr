@@ -24,6 +24,9 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_small --model models/action_scorer_rollout_logical_and.pt --resume
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset traditional_small
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset traditional_small
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_resource --model models/action_scorer_rollout_logical_and.pt
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset traditional_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset traditional_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_resource_sweep.py --model models/action_scorer_rollout_logical_and.pt --workers 10
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_resource_sweep.py
 ```
@@ -42,6 +45,8 @@ Current presets:
 - `traditional_small`: $n \leq 6$ comparison slice with direct ANF,
   logical-AND direct ANF, fixed-coordinate logical-AND MCTS, affine-preconditioned
   neural MCTS, ESOP cube beam, time-limited weighted ESOP MILP, and SSHR-H.
+- `traditional_resource`: same $n \leq 6$ slice with the full Resource-NMCTS
+  portfolio guard added.
 - `main`: large-scale placeholder for broader sweeps.
 
 Outputs are written to `results/`.  The neural prior is saved at
@@ -86,20 +91,22 @@ Runtime/resource evidence from `results/runtime_ablation_affine.md`:
   setting.
 
 Traditional Boolean/ESOP baseline evidence from
-`results/analysis_traditional_small.md` and
-`results/runtime_traditional_small.md`:
+`results/analysis_traditional_resource.md` and
+`results/runtime_traditional_resource.md`:
 
-- 177 functions with $n \leq 6$, 7 methods, 1239 result rows, 0 errors, and 0
+- 177 functions with $n \leq 6$, 8 methods, 1416 result rows, 0 errors, and 0
   skips.
-- Mean T-count / composite score: `and_affine_nmcts` 45.88 / 55.37, fixed MCTS
-  62.06 / 73.09, ESOP cube beam 71.32 / 83.82, ESOP MILP 83.55 / 96.67, and
-  SSHR-H 81.04 / 88.19.
-- Against ESOP cube beam, `and_affine_nmcts` has 171 T-count wins, 3 losses,
-  and 3 ties, with a 34.61% mean T-count reduction and a 32.16% mean score
+- Mean T-count / composite score: `and_resource_nmcts` 45.74 / 55.21,
+  `and_affine_nmcts` 45.88 / 55.37, fixed MCTS 62.06 / 73.09, ESOP cube beam
+  71.32 / 83.82, ESOP MILP 83.59 / 96.73, and SSHR-H 81.04 / 88.19.
+- Against Affine-NMCTS, `and_resource_nmcts` has 8 score wins, 0 score losses,
+  and 169 score ties.
+- Against ESOP cube beam, `and_resource_nmcts` has 172 T-count wins, 0 losses,
+  and 5 ties, with a 34.72% mean T-count reduction and a 32.28% mean score
   reduction.
-- Against time-limited weighted ESOP MILP, `and_affine_nmcts` has 162 T-count
-  wins, 1 loss, and 14 ties, with a 29.45% mean T-count reduction and a
-  26.88% mean score reduction.
+- Against time-limited weighted ESOP MILP, `and_resource_nmcts` has 162 T-count
+  wins, 1 loss, and 14 ties, with a 29.50% mean T-count reduction and a
+  26.95% mean score reduction.
 - SSHR-H still has the lowest mean CNOT count on this small-function slice, so
   the claim remains low-T/resource-score synthesis rather than CNOT-only
   optimality.
@@ -107,17 +114,18 @@ Traditional Boolean/ESOP baseline evidence from
 Resource-profile stress-test evidence from
 `results/analysis_resource_sweep.md`:
 
-- 47 functions with $n \leq 6$, 4 resource profiles, 5 methods, 940 result
+- 47 functions with $n \leq 6$, 4 resource profiles, 6 methods, 1128 result
   rows, 0 errors, and 0 skips.
-- `and_affine_nmcts` is the objective-score winner on 32/47 functions under
-  T-heavy weights, 32/47 under balanced weights, 29/47 under CNOT-depth-heavy
-  weights, and 30/47 under ancilla-tight weights.
-- Against fixed-coordinate MCTS, `and_affine_nmcts` has score wins/losses/ties
-  of 35/0/12, 35/0/12, 35/0/12, and 33/0/14 across the four profiles.
-- The mean Affine-NMCTS resource vector changes only modestly across profiles
-  (mean T 41.62--43.32; mean CNOT 84.89--86.43; mean depth 89.09--90.23).
-  This supports robustness under resource profiles but also shows that the
-  current candidate generator is not yet a strong Pareto-front optimizer.
+- `and_resource_nmcts` is best-or-tied on 42/47 functions under T-heavy
+  weights, 42/47 under balanced weights, 40/47 under CNOT-depth-heavy weights,
+  and 42/47 under ancilla-tight weights.
+- Against Affine-NMCTS, `and_resource_nmcts` has no score losses in any
+  profile; against fixed-coordinate MCTS, it has no score losses in any
+  profile.
+- The mean Resource-NMCTS resource vector changes only modestly across profiles
+  (mean T 41.28--43.06; mean CNOT 84.13--85.57; mean depth 88.32--89.32).
+  This supports objective robustness but still shows that the search is not yet
+  a full profile-sensitive Pareto optimizer.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost
