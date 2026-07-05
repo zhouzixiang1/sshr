@@ -21,6 +21,8 @@ METHOD_ORDER = [
     "and_affine_greedy",
     "and_affine_no_guard",
     "and_affine_nmcts",
+    "and_cube_beam",
+    "and_esop_milp",
     "sshr_h",
 ]
 
@@ -31,6 +33,8 @@ METHOD_LABELS = {
     "and_affine_greedy": "Affine-greedy",
     "and_affine_no_guard": "Affine-no-guard",
     "and_affine_nmcts": "Affine-NMCTS",
+    "and_cube_beam": "ESOP cube beam",
+    "and_esop_milp": "ESOP MILP",
     "sshr_h": "SSHR-H",
 }
 

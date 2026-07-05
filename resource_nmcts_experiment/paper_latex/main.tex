@@ -9,6 +9,7 @@
 \newcommand{\method}{Affine-NMCTS}
 \newcommand{\dataset}{evidence\_affine}
 \newcommand{\ablationdataset}{ablation\_affine}
+\newcommand{\traditionaldataset}{traditional\_small}
 
 \title{Neural Monte Carlo Tree Search with Affine Boolean Preconditioning for Resource-Constrained Quantum Oracle Synthesis}
 \author{Zixiang Zhou}
@@ -30,7 +31,10 @@ of 322 Boolean functions, \method{} is correct on all functions and reduces mean
 T-count by 61.83\% relative to direct ANF synthesis and by 40.12\% relative to
 logical-AND direct ANF synthesis.  Against fixed-coordinate logical-AND MCTS, it
 has 161 T-count wins, 160 ties, and no losses over the 321 completed baseline
-pairs, with a 16.18\% mean T-count reduction.  An ablation on the same
+pairs, with a 16.18\% mean T-count reduction.  On a separate $n\leq 6$
+traditional-baseline slice, \method{} reduces mean T-count by 34.61\% relative
+to ESOP cube beam search and by 29.45\% relative to time-limited weighted ESOP
+MILP.  An ablation on the same
 322-function suite shows that affine coordinate search is the dominant source
 of improvement, while neural refinement and the fixed-coordinate MCTS guard add
 nondegrading score improvements.  The method is evaluated only at the logical
@@ -138,6 +142,9 @@ such as parity, majority, threshold, mux, adders, and multipliers; random truth
 tables for $n=4,5,6$; and random ANF functions for $n=8,10,12$.  We compare:
 direct ANF, logical-AND direct ANF, fixed-coordinate logical-AND MCTS,
 \method{}, and SSHR-H for functions with $n\leq 6$.
+A separate \traditionaldataset{} slice restricts the benchmark to $n\leq 6$
+and adds two traditional Boolean baselines: ESOP cube beam search and a
+time-limited weighted ESOP MILP over candidate cubes.
 
 \subsection{Main results}
 
@@ -163,6 +170,32 @@ one $n=12$ random ANF function after a 600 s repair attempt; \method{} completed
 the same function within the experiment budget and produced a valid circuit.
 The largest direct-ANF reductions exceeded 80\% T-count on several structured
 and random small functions.
+
+\subsection{Traditional ESOP baselines}
+
+The \traditionaldataset{} slice tests whether the gain persists against
+traditional Boolean/ESOP-style synthesis rather than only direct ANF and MCTS
+variants.  It contains 177 functions with $n\leq 6$ and seven methods, producing
+1239 method/function rows with no errors or skips.  On this slice, \method{}
+had the lowest mean T-count and the lowest mean composite score among all
+tested methods.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Mean logical resources on the \traditionaldataset{} slice.  ESOP MILP
+is a time-limited weighted ESOP optimization over candidate cubes.}
+\label{tab:traditional-resources}
+\input{tables/resource_traditional_small}
+\end{table}
+
+Against ESOP cube beam search, \method{} had 171 T-count wins, 3 losses, and 3
+ties, with a 34.61\% mean T-count reduction and a 32.16\% mean composite-score
+reduction.  Against weighted ESOP MILP, \method{} had 162 T-count wins, 1 loss,
+and 14 ties, with a 29.45\% mean T-count reduction and a 26.88\% mean
+composite-score reduction.  SSHR-H retained the lowest mean CNOT count on this
+small-function slice, so this result supports low-T and weighted-resource
+synthesis rather than CNOT-only optimality.
 
 \subsection{Ablation}
 
@@ -239,18 +272,21 @@ pairs and resolves the observed fixed-coordinate timeout case.
 
 The main current limitations are the absence of hardware mapping, the use of a
 local benchmark suite rather than standardized external oracle benchmarks, and
-the lack of an external XAG/ROS implementation in the comparison set.  These
-limitations define the next experiments before submission.
+the lack of a reproduced external XAG/ROS toolchain in the comparison set.  The
+in-harness ESOP cube-beam and weighted-MILP baselines strengthen the Boolean
+synthesis comparison, but external implementations remain necessary before a
+submission-ready claim.
 
 \section{Conclusion}
 
 We introduced a logic-level quantum Boolean oracle synthesis method that
 combines resource-aware neural MCTS with affine Boolean preconditioning.  On the
 current benchmark, the method substantially reduces T-count versus direct ANF,
-logical-AND direct ANF, fixed-coordinate MCTS, and SSHR-H on supported
-functions, while remaining bounded to logical resource accounting.  The next
-step is to add standardized external baselines and stronger runtime-stress
-tests so the empirical claim is submission-ready.
+logical-AND direct ANF, fixed-coordinate MCTS, SSHR-H on supported functions,
+and in-harness ESOP cube-beam and weighted-MILP baselines on the $n\leq 6$
+slice, while remaining bounded to logical resource accounting.  The next step
+is to add standardized external baselines and stronger runtime-stress tests so
+the empirical claim is submission-ready.
 
 \bibliographystyle{plain}
 \bibliography{references}

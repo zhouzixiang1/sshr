@@ -94,6 +94,14 @@ PRESETS = {
         "structured_limit": 10_000,
         "workers": 10,
     },
+    "traditional_small": {
+        "methods": ["direct_anf", "and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_cube_beam", "and_esop_milp", "sshr_h"],
+        "random_truth": [(4, 64), (5, 64), (6, 32)],
+        "random_anf": [],
+        "structured_limit": 10_000,
+        "max_n": 6,
+        "workers": 10,
+    },
 }
 
 
@@ -101,7 +109,11 @@ def make_suite(preset: str, seed: int):
     cfg = PRESETS[preset]
     rng = random.Random(seed)
     suite: list[tuple[str, object]] = []
-    suite.extend(structured_suite()[: cfg["structured_limit"]])
+    max_n = cfg.get("max_n")
+    structured = structured_suite()[: cfg["structured_limit"]]
+    if max_n is not None:
+        structured = [(name, bf) for name, bf in structured if bf.n <= max_n]
+    suite.extend(structured)
     for n, count in cfg["random_truth"]:
         seen = set()
         for i in range(count):
@@ -149,6 +161,15 @@ def run_one(task):
             "anf_terms": len(anf_monomials(bf)),
             "method": method,
             "skipped": "legacy ESOP greedy is limited to n<=4 in this harness",
+        }
+    if base_method == "esop_milp" and bf.n > 6:
+        return {
+            "name": name,
+            "n": bf.n,
+            "truth_table_hex": f"{bf.truth_table:X}",
+            "anf_terms": len(anf_monomials(bf)),
+            "method": method,
+            "skipped": "ESOP MILP is limited to n<=6 in this harness",
         }
     if method.startswith("sshr") and bf.n > 6:
         return {
@@ -251,12 +272,12 @@ def main(argv: Iterable[str] | None = None) -> int:
         "candidate_top_k": 24,
         "min_factor_count": 2,
         "use_relative_phase": True,
-        "mcts_simulations": 24 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine"} else (48 if args.preset == "pilot" else (32 if args.preset == "large" else 96)),
-        "neural_mcts_simulations": 32 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine"} else (64 if args.preset == "pilot" else (32 if args.preset == "large" else 128)),
-        "max_polarities": 32 if args.preset in {"smoke", "pilot"} else (12 if args.preset in {"evidence", "evidence_affine", "ablation_affine"} else (16 if args.preset == "large_fast" else (48 if args.preset == "large" else 384))),
+        "mcts_simulations": 24 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small"} else (48 if args.preset == "pilot" else (32 if args.preset == "large" else 96)),
+        "neural_mcts_simulations": 32 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small"} else (64 if args.preset == "pilot" else (32 if args.preset == "large" else 128)),
+        "max_polarities": 32 if args.preset in {"smoke", "pilot"} else (12 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small"} else (16 if args.preset == "large_fast" else (48 if args.preset == "large" else 384))),
         "gate_mode": "mct",
         "neural_prior_weight": 2.5,
-        "task_timeout_s": 300 if args.preset in {"evidence", "evidence_affine", "ablation_affine"} else (120 if args.preset == "pilot" else (180 if args.preset in {"large", "large_fast"} else (300 if args.preset == "main" else 0))),
+        "task_timeout_s": 300 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small"} else (120 if args.preset == "pilot" else (180 if args.preset in {"large", "large_fast"} else (300 if args.preset == "main" else 0))),
     }
     methods = cfg["methods"]
     tasks = [

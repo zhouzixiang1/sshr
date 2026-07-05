@@ -43,6 +43,7 @@ def esop_milp_plan(
     max_controls: int | None = None,
     timeout: float = 20.0,
     use_relative_phase: bool = True,
+    gate_mode: str = "mct",
 ) -> MilpResult:
     n = bf.n
     max_controls = n if max_controls is None else min(max_controls, n)
@@ -51,7 +52,7 @@ def esop_milp_plan(
             n,
             max_controls,
             use_relative_phase,
-            "mct",
+            gate_mode,
             (weights.t, weights.cnot, weights.depth, weights.gates, weights.ancilla),
         )
     )
@@ -102,6 +103,7 @@ def synthesize_esop_milp_circuit(
     weights: ResourceWeights,
     max_controls: int | None = None,
     timeout: float = 20.0,
+    gate_mode: str = "mct",
 ):
-    result = esop_milp_plan(bf, weights, max_controls=max_controls, timeout=timeout)
+    result = esop_milp_plan(bf, weights, max_controls=max_controls, timeout=timeout, gate_mode=gate_mode)
     return emit_cube_plan(result.plan, bf.n), result

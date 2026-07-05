@@ -458,6 +458,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             config.weights,
             max_controls=min(bf.n, max(2, config.max_factor_size + 1)),
             timeout=10.0 if bf.n <= 6 else 30.0,
+            gate_mode=config.gate_mode,
         )
         cost = milp_result.plan.cost
     elif method == "esop_greedy":

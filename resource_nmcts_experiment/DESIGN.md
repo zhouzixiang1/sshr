@@ -130,6 +130,8 @@ The first implementation compares against:
 - logical-AND direct ANF synthesis;
 - fixed-coordinate logical-AND MCTS factoring;
 - affine-preconditioned logical-AND neural MCTS;
+- ESOP cube beam search;
+- time-limited weighted ESOP MILP;
 - SSHR-H as a CNOT-oriented reference for small `n`.
 
 Later baselines should add XAG/ROS/LUT tooling if external binaries become
@@ -166,6 +168,9 @@ The current paper-facing run is:
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset ablation_affine --model models/action_scorer_rollout_logical_and.pt --resume
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset ablation_affine
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset ablation_affine
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_small --model models/action_scorer_rollout_logical_and.pt --resume
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset traditional_small
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset traditional_small
 ```
 
 It covers 322 functions and 1610 method/function rows.  The main results are:
@@ -221,3 +226,25 @@ T-count strongly but often spends more CNOTs and depth against SSHR's
 CNOT-oriented circuits.  The paper should frame the contribution as
 resource-constrained low-T logical Boolean synthesis rather than CNOT-only
 optimization.
+
+The `traditional_small` run adds a stronger small-function comparison against
+traditional Boolean/ESOP baselines.  It covers 177 functions with `n <= 6`, 7
+methods, 1239 method/function rows, 0 errors, and 0 skips.  The added baselines
+are an ESOP cube-beam search and a time-limited weighted ESOP MILP over
+candidate cubes, both evaluated under the same logical-AND resource accounting
+where applicable.
+
+Main `traditional_small` evidence:
+
+- Mean T-count / composite score: `and_affine_nmcts` 45.88 / 55.37, fixed MCTS
+  62.06 / 73.09, ESOP cube beam 71.32 / 83.82, ESOP MILP 83.55 / 96.67, and
+  SSHR-H 81.04 / 88.19.
+- `and_affine_nmcts` beats ESOP cube beam in T-count on 171 functions, loses on
+  3, ties on 3, and reduces mean T-count by 34.61%.
+- `and_affine_nmcts` beats ESOP MILP in T-count on 162 functions, loses on 1,
+  ties on 14, and reduces mean T-count by 29.45%.
+- The same comparisons show mean composite-score reductions of 32.16% versus
+  ESOP cube beam and 26.88% versus ESOP MILP.
+- SSHR-H remains better in mean CNOT count and often depth on the small
+  supported subset.  This is a useful limitation, not a contradiction of the
+  low-T/resource-score claim.

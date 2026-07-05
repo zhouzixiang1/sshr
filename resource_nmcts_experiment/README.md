@@ -21,6 +21,9 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset ablation_affine --model models/action_scorer_rollout_logical_and.pt --resume
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset ablation_affine
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset ablation_affine
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_small --model models/action_scorer_rollout_logical_and.pt --resume
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset traditional_small
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset traditional_small
 ```
 
 Current presets:
@@ -34,6 +37,9 @@ Current presets:
 - `ablation_affine`: same 322-function suite with affine-greedy and
   affine-no-guard variants added to isolate the neural refine and guard
   contributions.
+- `traditional_small`: $n \leq 6$ comparison slice with direct ANF,
+  logical-AND direct ANF, fixed-coordinate logical-AND MCTS, affine-preconditioned
+  neural MCTS, ESOP cube beam, time-limited weighted ESOP MILP, and SSHR-H.
 - `main`: large-scale placeholder for broader sweeps.
 
 Outputs are written to `results/`.  The neural prior is saved at
@@ -76,6 +82,25 @@ Runtime/resource evidence from `results/runtime_ablation_affine.md`:
 - full `and_affine_nmcts` has the lowest all-suite mean T-count and composite
   score among the non-SSHR methods, while affine-greedy is the fastest strong
   setting.
+
+Traditional Boolean/ESOP baseline evidence from
+`results/analysis_traditional_small.md` and
+`results/runtime_traditional_small.md`:
+
+- 177 functions with $n \leq 6$, 7 methods, 1239 result rows, 0 errors, and 0
+  skips.
+- Mean T-count / composite score: `and_affine_nmcts` 45.88 / 55.37, fixed MCTS
+  62.06 / 73.09, ESOP cube beam 71.32 / 83.82, ESOP MILP 83.55 / 96.67, and
+  SSHR-H 81.04 / 88.19.
+- Against ESOP cube beam, `and_affine_nmcts` has 171 T-count wins, 3 losses,
+  and 3 ties, with a 34.61% mean T-count reduction and a 32.16% mean score
+  reduction.
+- Against time-limited weighted ESOP MILP, `and_affine_nmcts` has 162 T-count
+  wins, 1 loss, and 14 ties, with a 29.45% mean T-count reduction and a
+  26.88% mean score reduction.
+- SSHR-H still has the lowest mean CNOT count on this small-function slice, so
+  the claim remains low-T/resource-score synthesis rather than CNOT-only
+  optimality.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost
