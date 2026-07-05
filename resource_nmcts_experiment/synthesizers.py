@@ -258,7 +258,14 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
     return best[1], best[2], best[3], best[4]
 
 
-def _best_affine_plan(bf: BooleanFunction, config: SearchConfig, seed: int, neural):
+def _best_affine_plan(
+    bf: BooleanFunction,
+    config: SearchConfig,
+    seed: int,
+    neural,
+    use_neural_refine: bool = True,
+    use_guard: bool = True,
+):
     best = None
     if bf.n <= 5:
         affine_budget = 10
@@ -309,7 +316,7 @@ def _best_affine_plan(bf: BooleanFunction, config: SearchConfig, seed: int, neur
         total_cost = cost + affine_wrap_cost(transform.rows)
         ranked.append((total_cost.score(config.weights), transform, shifted_bf, polarity, terms, plan, total_cost))
     ranked.sort(key=lambda x: x[0])
-    if bf.n >= 6 and ranked:
+    if (bf.n >= 6 or not use_neural_refine) and ranked:
         _, transform, _, polarity, terms, plan, total_cost = ranked[0]
         best = (total_cost.score(config.weights), transform, bf, polarity, terms, plan, total_cost)
     else:
@@ -328,15 +335,16 @@ def _best_affine_plan(bf: BooleanFunction, config: SearchConfig, seed: int, neur
         solver = NeuralMCTSSolver(rank_config, simulations=rank_config.mcts_simulations, seed=seed)
         plan = solver.solve(terms)
         best = (plan.cost.score(config.weights), candidate_transforms(bf.n, seed, 1)[0], bf, 0, terms, plan, plan.cost)
-    try:
-        terms = frozenset(anf_monomials(bf))
-        solver = NeuralMCTSSolver(config, simulations=config.mcts_simulations, seed=seed)
-        plan = solver.solve(terms)
-        score = plan.cost.score(config.weights)
-        if score < best[0]:
-            best = (score, candidate_transforms(bf.n, seed, 1)[0], bf, 0, terms, plan, plan.cost)
-    except Exception:
-        pass
+    if use_guard:
+        try:
+            terms = frozenset(anf_monomials(bf))
+            solver = NeuralMCTSSolver(config, simulations=config.mcts_simulations, seed=seed)
+            plan = solver.solve(terms)
+            score = plan.cost.score(config.weights)
+            if score < best[0]:
+                best = (score, candidate_transforms(bf.n, seed, 1)[0], bf, 0, terms, plan, plan.cost)
+        except Exception:
+            pass
     return best[1], best[3], best[4], best[5], best[6]
 
 
@@ -406,8 +414,15 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             min(config.max_factor_ancilla, plan.cost.explicit_ancilla),
             polarity=polarity,
         )
-    elif method == "affine_nmcts":
-        transform, polarity, terms, plan, cost = _best_affine_plan(bf, config, seed, neural)
+    elif method in {"affine_nmcts", "affine_no_guard", "affine_greedy", "affine_guard_greedy"}:
+        transform, polarity, terms, plan, cost = _best_affine_plan(
+            bf,
+            config,
+            seed,
+            neural,
+            use_neural_refine=method in {"affine_nmcts", "affine_no_guard"},
+            use_guard=method in {"affine_nmcts", "affine_guard_greedy"},
+        )
         body = emit_plan_to_circuit(
             plan,
             bf.n,

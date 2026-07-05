@@ -8,6 +8,7 @@
 
 \newcommand{\method}{Affine-NMCTS}
 \newcommand{\dataset}{evidence\_affine}
+\newcommand{\ablationdataset}{ablation\_affine}
 
 \title{Neural Monte Carlo Tree Search with Affine Boolean Preconditioning for Resource-Constrained Quantum Oracle Synthesis}
 \author{Zixiang Zhou}
@@ -29,9 +30,12 @@ of 322 Boolean functions, \method{} is correct on all functions and reduces mean
 T-count by 61.83\% relative to direct ANF synthesis and by 40.12\% relative to
 logical-AND direct ANF synthesis.  Against fixed-coordinate logical-AND MCTS, it
 has 161 T-count wins, 160 ties, and no losses over the 321 completed baseline
-pairs, with a 16.18\% mean T-count reduction.  The method is evaluated only at
-the logical circuit layer; hardware mapping and connectivity constraints are
-outside the present scope.
+pairs, with a 16.18\% mean T-count reduction.  An ablation on the same
+322-function suite shows that affine coordinate search is the dominant source
+of improvement, while neural refinement and the fixed-coordinate MCTS guard add
+nondegrading score improvements.  The method is evaluated only at the logical
+circuit layer; hardware mapping and connectivity constraints are outside the
+present scope.
 \end{abstract}
 
 \section{Introduction}
@@ -160,6 +164,36 @@ the same function within the experiment budget and produced a valid circuit.
 The largest direct-ANF reductions exceeded 80\% T-count on several structured
 and random small functions.
 
+\subsection{Ablation}
+
+The \ablationdataset{} run used the same 322-function suite and added two
+variants: affine-greedy, which performs affine transform search followed by
+FPRM/greedy factoring, and affine-no-guard, which adds neural refinement but
+does not compare against fixed-coordinate MCTS.  This ablation separates the
+effect of coordinate search, neural refinement, and the final guard.
+
+\begin{table}[t]
+\centering
+\caption{Ablation results on the same 322-function suite.  Wins, ties, and
+losses use the composite resource score unless otherwise stated.}
+\label{tab:ablation}
+\begin{tabular}{lrrrr}
+\toprule
+Comparison & Wins & Ties & Losses & Mean relative score \\
+\midrule
+\method{} vs affine-greedy & 153 & 169 & 0 & $-2.82\%$ \\
+affine-no-guard vs affine-greedy & 65 & 257 & 0 & $-1.08\%$ \\
+\method{} vs affine-no-guard & 88 & 234 & 0 & $-1.74\%$ \\
+\method{} vs fixed-coordinate MCTS & 165 & 156 & 0 & $-14.82\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Affine-greedy alone reduced mean T-count by 60.92\% relative to direct ANF,
+showing that the affine coordinate search is the dominant contributor.  Neural
+refinement and the guard were smaller but monotone under the composite score:
+neither introduced score losses on the benchmark.
+
 \section{Discussion}
 
 The results support the central hypothesis that affine Boolean coordinates are
@@ -169,11 +203,10 @@ more CNOTs and depth, which is expected because SSHR-H is a CNOT-oriented
 small-function baseline.  The present contribution should therefore be framed
 as low-T, resource-constrained logical synthesis, not as a CNOT-only optimizer.
 
-The main current limitations are the absence of hardware mapping, the need for
-ablation studies separating affine preconditioning from the neural prior and
-MCTS guard, and the use of a local benchmark suite rather than standardized
-external oracle benchmarks.  These limitations define the next experiments
-before submission.
+The main current limitations are the absence of hardware mapping, the use of a
+local benchmark suite rather than standardized external oracle benchmarks, and
+the lack of an external XAG/ROS implementation in the comparison set.  These
+limitations define the next experiments before submission.
 
 \section{Conclusion}
 
@@ -182,8 +215,8 @@ combines resource-aware neural MCTS with affine Boolean preconditioning.  On the
 current benchmark, the method substantially reduces T-count versus direct ANF,
 logical-AND direct ANF, fixed-coordinate MCTS, and SSHR-H on supported
 functions, while remaining bounded to logical resource accounting.  The next
-step is to add ablations and standardized external baselines so the empirical
-claim is submission-ready.
+step is to add standardized external baselines and stronger runtime-stress
+tests so the empirical claim is submission-ready.
 
 \bibliographystyle{plain}
 \bibliography{references}

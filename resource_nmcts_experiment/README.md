@@ -18,6 +18,8 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset smoke
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset evidence_affine --model models/action_scorer_rollout_logical_and.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset evidence_affine
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset ablation_affine --model models/action_scorer_rollout_logical_and.pt --resume
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset ablation_affine
 ```
 
 Current presets:
@@ -28,6 +30,9 @@ Current presets:
 - `evidence_affine`: current paper-facing run.  It compares direct ANF,
   logical-AND direct ANF, fixed-coordinate logical-AND MCTS, affine-preconditioned
   neural MCTS, and SSHR-H on 322 Boolean functions.
+- `ablation_affine`: same 322-function suite with affine-greedy and
+  affine-no-guard variants added to isolate the neural refine and guard
+  contributions.
 - `main`: large-scale placeholder for broader sweeps.
 
 Outputs are written to `results/`.  The neural prior is saved at
@@ -46,6 +51,18 @@ Current evidence from `results/analysis_evidence_affine.md`:
   ties, and 1 loss in T-count; mean T-count reduction is 43.89%.
 - One fixed-coordinate MCTS baseline row (`anf_n12_10`) timed out at 600 s.
   The affine method completed that same function within the experiment budget.
+
+Ablation evidence from `results/analysis_ablation_affine.md`:
+
+- `and_affine_greedy` alone already reduces mean T-count by 60.92% versus
+  direct ANF, showing that affine coordinate search is the dominant source of
+  improvement.
+- `and_affine_no_guard` improves over `and_affine_greedy` in 65 score cases
+  with 0 score losses, isolating the low-dimensional neural-refine benefit.
+- `and_affine_nmcts` improves over `and_affine_no_guard` in 88 score cases
+  with 0 score losses, isolating the fixed-coordinate MCTS guard benefit.
+- `and_affine_nmcts` improves over `and_affine_greedy` in 153 score cases
+  with 0 score losses.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost

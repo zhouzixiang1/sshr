@@ -163,6 +163,8 @@ The current paper-facing run is:
 ```bash
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset evidence_affine --model models/action_scorer_rollout_logical_and.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset evidence_affine
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset ablation_affine --model models/action_scorer_rollout_logical_and.pt --resume
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset ablation_affine
 ```
 
 It covers 322 functions and 1610 method/function rows.  The main results are:
@@ -179,6 +181,25 @@ It covers 322 functions and 1610 method/function rows.  The main results are:
   loss in T-count; mean T-count reduction is 43.89%.
 - Fixed-coordinate MCTS times out on `anf_n12_10` at 600 s, while the affine
   method completes that function within the experiment budget.
+
+The `ablation_affine` run uses the same 322-function suite and adds two method
+variants:
+
+- `and_affine_greedy`: affine transform search plus FPRM/greedy factoring, with
+  no neural refinement and no fixed-coordinate MCTS guard.
+- `and_affine_no_guard`: affine transform search plus neural refinement, with
+  no fixed-coordinate MCTS guard.
+
+This run isolates the mechanism:
+
+- Affine-greedy alone reduces mean T-count by 60.92% relative to direct ANF,
+  so the affine coordinate search is the dominant contributor.
+- Neural refinement gives 65 score wins, 257 ties, and 0 score losses over
+  affine-greedy.
+- The MCTS guard gives 88 score wins, 234 ties, and 0 score losses over
+  affine-no-guard.
+- The full method gives 153 score wins, 169 ties, and 0 score losses over
+  affine-greedy.
 
 The main weakness is CNOT/depth relative to SSHR-H: the affine method wins
 T-count strongly but often spends more CNOTs and depth against SSHR's
