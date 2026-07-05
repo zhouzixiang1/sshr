@@ -165,6 +165,7 @@ The current paper-facing run is:
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset evidence_affine
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset ablation_affine --model models/action_scorer_rollout_logical_and.pt --resume
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset ablation_affine
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset ablation_affine
 ```
 
 It covers 322 functions and 1610 method/function rows.  The main results are:
@@ -200,6 +201,20 @@ This run isolates the mechanism:
   affine-no-guard.
 - The full method gives 153 score wins, 169 ties, and 0 score losses over
   affine-greedy.
+
+The runtime/resource table in `results/runtime_ablation_affine.md` adds the
+cost side of the argument:
+
+- Affine-greedy is the fast strong setting: 322/322 completed, median runtime
+  0.033 s, maximum runtime 1.825 s.
+- Full `and_affine_nmcts` is slower because it runs the fixed-coordinate MCTS
+  guard: 322/322 completed, median runtime 0.609 s, p95 runtime 13.670 s, and
+  maximum runtime 300.025 s.
+- Fixed-coordinate MCTS has one timeout, while the full affine method completes
+  that same function.
+- Among non-SSHR methods over the all-suite completed rows, full
+  `and_affine_nmcts` has the best mean T-count and composite score; SSHR-H has
+  lower CNOT-oriented costs only on its supported `n <= 6` subset.
 
 The main weakness is CNOT/depth relative to SSHR-H: the affine method wins
 T-count strongly but often spends more CNOTs and depth against SSHR's

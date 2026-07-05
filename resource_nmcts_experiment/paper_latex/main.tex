@@ -194,6 +194,34 @@ showing that the affine coordinate search is the dominant contributor.  Neural
 refinement and the guard were smaller but monotone under the composite score:
 neither introduced score losses on the benchmark.
 
+\subsection{Runtime and resource tradeoff}
+
+The ablation also exposes the computational cost of the search components.
+Affine-greedy completed all 322 functions with a 0.03 s median runtime and a
+1.82 s maximum runtime, while the full \method{} method had a 0.61 s median
+runtime and a 300.02 s maximum runtime because it invokes the fixed-coordinate
+MCTS guard.  Fixed-coordinate MCTS timed out on one $n=12$ function, whereas all
+affine variants completed every function.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Runtime distribution on the \ablationdataset{} suite.  SSHR-H is
+skipped for $n>6$ by the harness.}
+\label{tab:runtime}
+\input{tables/runtime_ablation_affine}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Mean logical resources on completed rows in the \ablationdataset{}
+suite.  SSHR-H means are over its supported $n\leq 6$ subset and therefore are
+not directly comparable to all-suite means.}
+\label{tab:resources}
+\input{tables/resource_ablation_affine}
+\end{table}
+
 \section{Discussion}
 
 The results support the central hypothesis that affine Boolean coordinates are
@@ -202,6 +230,12 @@ in T-count and composite resource score.  Against SSHR-H, the method often uses
 more CNOTs and depth, which is expected because SSHR-H is a CNOT-oriented
 small-function baseline.  The present contribution should therefore be framed
 as low-T, resource-constrained logical synthesis, not as a CNOT-only optimizer.
+
+The runtime results show a practical tradeoff.  Affine-greedy captures most of
+the T-count gain at very low runtime, making it the best fast setting in the
+current implementation.  The full \method{} configuration is slower, but its
+guard removes score regressions relative to fixed-coordinate MCTS on completed
+pairs and resolves the observed fixed-coordinate timeout case.
 
 The main current limitations are the absence of hardware mapping, the use of a
 local benchmark suite rather than standardized external oracle benchmarks, and

@@ -20,6 +20,7 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset evidence_affine
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset ablation_affine --model models/action_scorer_rollout_logical_and.pt --resume
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset ablation_affine
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset ablation_affine
 ```
 
 Current presets:
@@ -63,6 +64,18 @@ Ablation evidence from `results/analysis_ablation_affine.md`:
   with 0 score losses, isolating the fixed-coordinate MCTS guard benefit.
 - `and_affine_nmcts` improves over `and_affine_greedy` in 153 score cases
   with 0 score losses.
+
+Runtime/resource evidence from `results/runtime_ablation_affine.md`:
+
+- affine-greedy completed all 322 functions with median runtime 0.033 s and
+  max runtime 1.825 s.
+- full `and_affine_nmcts` completed all 322 functions with median runtime
+  0.609 s and max runtime 300.025 s.
+- fixed-coordinate MCTS completed 321 functions and timed out once; its median
+  runtime was 0.076 s and max completed runtime was 89.897 s.
+- full `and_affine_nmcts` has the lowest all-suite mean T-count and composite
+  score among the non-SSHR methods, while affine-greedy is the fastest strong
+  setting.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost

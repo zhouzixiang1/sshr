@@ -20,10 +20,12 @@ Current source evidence:
 - compact analysis: `../results/analysis_evidence_affine.md`
 - ablation CSV: `../results/raw_ablation_affine.csv`
 - compact ablation analysis: `../results/analysis_ablation_affine.md`
+- runtime/resource analysis: `../results/runtime_ablation_affine.md`
+- LaTeX tables: `tables/runtime_ablation_affine.tex`,
+  `tables/resource_ablation_affine.tex`
 - manifest: `../results/manifest_evidence_affine.json`
 
 Known manuscript gaps:
 
-- add runtime distribution plots and timeout reporting;
 - verify all BibTeX metadata against publisher/arXiv records before submission;
 - decide the target venue and required reference/section style.
