@@ -11,7 +11,7 @@ import torch
 from torch import nn
 
 from anf_utils import anf_monomials, random_anf_function, random_truth_function, structured_suite
-from factor_plan import SearchConfig, action_features, candidate_actions, direct_plan
+from factor_plan import SearchConfig, action_features, candidate_actions, direct_plan, factor_cost, greedy_plan
 from neural_policy import ActionNet, default_device, save_model
 
 
@@ -20,6 +20,7 @@ THIS_DIR = Path(__file__).resolve().parent
 
 PRESETS = {
     "smoke": {"samples": 80, "epochs": 30, "n_min": 3, "n_max": 7},
+    "rollout": {"samples": 520, "epochs": 60, "n_min": 3, "n_max": 9},
     "main": {"samples": 2200, "epochs": 80, "n_min": 3, "n_max": 10},
 }
 
@@ -29,17 +30,23 @@ def collect_from_terms(
     config: SearchConfig,
     rows: List[List[float]],
     labels: List[float],
+    prefix_len: int = 0,
+    live_factor_ancilla: int = 0,
     depth: int = 0,
     max_depth: int = 4,
+    child_branch: int = 3,
+    label_mode: str = "immediate",
+    greedy_memo: dict | None = None,
 ) -> None:
-    direct_score = direct_plan(terms, 0, 0, config).score(config.weights)
-    actions = candidate_actions(terms, 0, 0, config)
+    greedy_memo = {} if greedy_memo is None else greedy_memo
+    direct_score = direct_plan(terms, prefix_len, live_factor_ancilla, config).score(config.weights)
+    actions = candidate_actions(terms, prefix_len, live_factor_ancilla, config)
     for action in actions:
         rows.append(
             action_features(
                 terms,
-                0,
-                0,
+                prefix_len,
+                live_factor_ancilla,
                 action.factor,
                 action.group,
                 action.residuals,
@@ -48,16 +55,66 @@ def collect_from_terms(
                 direct_score,
             )
         )
-        labels.append(max(-2.0, min(2.0, 8.0 * action.immediate_gain / max(direct_score, 1.0))))
+        if label_mode == "rollout":
+            group = greedy_plan(
+                action.residuals,
+                prefix_len + 1,
+                live_factor_ancilla + 1,
+                config,
+                memo=greedy_memo,
+            )
+            rest = greedy_plan(
+                action.rest,
+                prefix_len,
+                live_factor_ancilla,
+                config,
+                memo=greedy_memo,
+            )
+            action_score = factor_cost(action, group, rest, live_factor_ancilla, config).score(config.weights)
+            improvement = direct_score - action_score
+        else:
+            improvement = action.immediate_gain
+        labels.append(max(-2.0, min(2.0, 8.0 * improvement / max(direct_score, 1.0))))
     if depth >= max_depth or not actions:
         return
     # Follow a few strong actions to collect child-state contexts.
-    for action in actions[:3]:
-        collect_from_terms(action.residuals, config, rows, labels, depth + 1, max_depth)
-        collect_from_terms(action.rest, config, rows, labels, depth + 1, max_depth)
+    for action in actions[:child_branch]:
+        collect_from_terms(
+            action.residuals,
+            config,
+            rows,
+            labels,
+            prefix_len + 1,
+            live_factor_ancilla + 1,
+            depth + 1,
+            max_depth,
+            child_branch,
+            label_mode,
+            greedy_memo,
+        )
+        collect_from_terms(
+            action.rest,
+            config,
+            rows,
+            labels,
+            prefix_len,
+            live_factor_ancilla,
+            depth + 1,
+            max_depth,
+            child_branch,
+            label_mode,
+            greedy_memo,
+        )
 
 
-def build_dataset(preset: str, seed: int, config: SearchConfig) -> Tuple[torch.Tensor, torch.Tensor]:
+def build_dataset(
+    preset: str,
+    seed: int,
+    config: SearchConfig,
+    label_mode: str,
+    max_depth: int,
+    child_branch: int,
+) -> Tuple[torch.Tensor, torch.Tensor]:
     cfg = PRESETS[preset]
     rng = random.Random(seed)
     rows: List[List[float]] = []
@@ -65,7 +122,15 @@ def build_dataset(preset: str, seed: int, config: SearchConfig) -> Tuple[torch.T
 
     for _, bf in structured_suite():
         if cfg["n_min"] <= bf.n <= cfg["n_max"]:
-            collect_from_terms(frozenset(anf_monomials(bf)), config, rows, labels)
+            collect_from_terms(
+                frozenset(anf_monomials(bf)),
+                config,
+                rows,
+                labels,
+                max_depth=max_depth,
+                child_branch=child_branch,
+                label_mode=label_mode,
+            )
 
     for _ in range(cfg["samples"]):
         n = rng.randint(cfg["n_min"], cfg["n_max"])
@@ -75,7 +140,15 @@ def build_dataset(preset: str, seed: int, config: SearchConfig) -> Tuple[torch.T
             term_prob = rng.uniform(0.04, 0.22)
             max_degree = rng.randint(2, min(n, 6))
             bf = random_anf_function(n, rng, term_prob=term_prob, max_degree=max_degree)
-        collect_from_terms(frozenset(anf_monomials(bf)), config, rows, labels)
+        collect_from_terms(
+            frozenset(anf_monomials(bf)),
+            config,
+            rows,
+            labels,
+            max_depth=max_depth,
+            child_branch=child_branch,
+            label_mode=label_mode,
+        )
 
     if not rows:
         raise RuntimeError("no training rows collected")
@@ -86,11 +159,15 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--preset", choices=sorted(PRESETS), default="smoke")
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--gate-mode", choices=["mct", "logical_and"], default="mct")
+    ap.add_argument("--label-mode", choices=["immediate", "rollout"], default="immediate")
+    ap.add_argument("--max-depth", type=int, default=4)
+    ap.add_argument("--child-branch", type=int, default=3)
     ap.add_argument("--out", default=str(THIS_DIR / "models" / "action_scorer.pt"))
     args = ap.parse_args()
 
-    config = SearchConfig(max_factor_ancilla=4, max_factor_size=5, candidate_top_k=24)
-    x, y = build_dataset(args.preset, args.seed, config)
+    config = SearchConfig(max_factor_ancilla=4, max_factor_size=5, candidate_top_k=24, gate_mode=args.gate_mode)
+    x, y = build_dataset(args.preset, args.seed, config, args.label_mode, args.max_depth, args.child_branch)
     mean = x.mean(dim=0)
     std = x.std(dim=0).clamp_min(1e-6)
     x = (x - mean) / std
@@ -138,4 +215,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

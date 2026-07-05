@@ -14,6 +14,29 @@ def pct(new: float, base: float) -> float:
     return (new - base) / max(base, 1.0) * 100.0
 
 
+def comparison_rows(
+    by_name: dict[str, dict[str, dict]],
+    target: str,
+    base: str,
+    metric: str,
+) -> tuple[int, int, int, float]:
+    vals = []
+    wins = losses = ties = 0
+    for table in by_name.values():
+        if target not in table or base not in table:
+            continue
+        new = float(table[target][metric])
+        old = float(table[base][metric])
+        vals.append(pct(new, old))
+        if new < old:
+            wins += 1
+        elif new > old:
+            losses += 1
+        else:
+            ties += 1
+    return wins, losses, ties, sum(vals) / len(vals) if vals else float("nan")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--preset", default="pilot")
@@ -31,11 +54,29 @@ def main() -> int:
         "",
         f"Rows: {len(rows)}; usable: {len(usable)}; errors: {sum(1 for r in rows if r.get('error'))}; skipped: {sum(1 for r in rows if r.get('skipped'))}.",
         "",
+    ]
+    error_rows = [r for r in rows if r.get("error")]
+    if error_rows:
+        lines.extend(
+            [
+                "## Timeout / error rows",
+                "",
+                "| function | n | method | error |",
+                "|---|---:|---|---|",
+            ]
+        )
+        for r in error_rows:
+            lines.append(f"| {r.get('name', '')} | {r.get('n', '')} | {r.get('method', '')} | {r.get('error', '')} |")
+        lines.append("")
+
+    lines.extend(
+        [
         "## Mean T-count improvement vs direct ANF",
         "",
         "| method | functions | mean relative T | best | worst |",
         "|---|---:|---:|---:|---:|",
-    ]
+        ]
+    )
     methods = sorted({r["method"] for r in usable if r["method"] != "direct_anf"})
     for method in methods:
         vals = []
@@ -56,16 +97,84 @@ def main() -> int:
             losses = sum(1 for v in vals if v >= 0)
             lines.append(f"| {method} | {wins} | {losses} | {sum(vals)/len(vals):+.2f}% |")
 
-    lines.extend(["", "## Largest FPRM-MCTS gains vs direct ANF", "", "| function | n | direct T | fprm_mcts T | relative |", "|---|---:|---:|---:|---:|"])
-    cases = []
-    for name, table in by_name.items():
-        if "direct_anf" in table and "fprm_mcts" in table:
-            rel = pct(float(table["fprm_mcts"]["T"]), float(table["direct_anf"]["T"]))
-            cases.append((rel, name, table))
-    for rel, name, table in sorted(cases)[:12]:
-        lines.append(
-            f"| {name} | {table['direct_anf']['n']} | {table['direct_anf']['T']} | {table['fprm_mcts']['T']} | {rel:+.2f}% |"
+    lines.extend(
+        [
+            "",
+            "## Focused method comparisons",
+            "",
+            "| target | baseline | metric | wins | losses | ties | mean relative |",
+            "|---|---|---|---:|---:|---:|---:|",
+        ]
+    )
+    focus_pairs = [
+        ("and_rc_nmcts", "direct_anf"),
+        ("and_rc_nmcts", "and_direct_anf"),
+        ("and_rc_nmcts", "and_mcts_factor"),
+        ("and_rc_nmcts", "and_affine_nmcts"),
+        ("and_rc_nmcts", "and_fprm_mcts"),
+        ("and_rc_nmcts", "and_fprm_neural_mcts"),
+        ("and_rc_nmcts", "sshr_h"),
+        ("and_affine_nmcts", "direct_anf"),
+        ("and_affine_nmcts", "and_direct_anf"),
+        ("and_affine_nmcts", "and_mcts_factor"),
+        ("and_affine_nmcts", "sshr_h"),
+        ("and_fprm_neural_mcts", "direct_anf"),
+        ("and_fprm_neural_mcts", "and_direct_anf"),
+        ("and_fprm_neural_mcts", "and_fprm_mcts"),
+        ("and_fprm_neural_mcts", "sshr_h"),
+        ("and_fprm_mcts", "sshr_h"),
+    ]
+    for target, base in focus_pairs:
+        if not any(target in table and base in table for table in by_name.values()):
+            continue
+        for metric in ["T", "CNOT", "depth", "peak_ancilla", "score"]:
+            wins, losses, ties, mean = comparison_rows(by_name, target, base, metric)
+            lines.append(f"| {target} | {base} | {metric} | {wins} | {losses} | {ties} | {mean:+.2f}% |")
+
+    for focus in ["and_rc_nmcts", "and_affine_nmcts", "and_fprm_neural_mcts", "and_fprm_mcts", "fprm_mcts"]:
+        if not any(focus in table for table in by_name.values()):
+            continue
+        label = focus.replace("_", "-")
+        lines.extend(
+            [
+                "",
+                f"## Largest {label} gains vs direct ANF",
+                "",
+                f"| function | n | direct T | {focus} T | relative |",
+                "|---|---:|---:|---:|---:|",
+            ]
         )
+        cases = []
+        for name, table in by_name.items():
+            if "direct_anf" in table and focus in table:
+                rel = pct(float(table[focus]["T"]), float(table["direct_anf"]["T"]))
+                cases.append((rel, name, table))
+        for rel, name, table in sorted(cases)[:12]:
+            lines.append(
+                f"| {name} | {table['direct_anf']['n']} | {table['direct_anf']['T']} | {table[focus]['T']} | {rel:+.2f}% |"
+            )
+
+    for focus in ["and_rc_nmcts", "and_affine_nmcts", "and_fprm_neural_mcts", "and_fprm_mcts"]:
+        if not any("sshr_h" in table and focus in table for table in by_name.values()):
+            continue
+        lines.extend(
+            [
+                "",
+                f"## {focus} vs SSHR-H",
+                "",
+                f"| function | n | SSHR-H T | {focus} T | relative | peak ancilla |",
+                "|---|---:|---:|---:|---:|---:|",
+            ]
+        )
+        cases = []
+        for name, table in by_name.items():
+            if "sshr_h" in table and focus in table:
+                rel = pct(float(table[focus]["T"]), float(table["sshr_h"]["T"]))
+                cases.append((rel, name, table))
+        for rel, name, table in sorted(cases):
+            lines.append(
+                f"| {name} | {table['sshr_h']['n']} | {table['sshr_h']['T']} | {table[focus]['T']} | {rel:+.2f}% | {table[focus]['peak_ancilla']} |"
+            )
 
     out = THIS_DIR / "results" / f"analysis_{args.preset}.md"
     out.write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -75,4 +184,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

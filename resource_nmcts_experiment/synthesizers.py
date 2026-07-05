@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import time
 from dataclasses import asdict, dataclass
+from dataclasses import replace
 from functools import lru_cache
 from pathlib import Path
 import sys
@@ -18,7 +19,10 @@ from baselines import esop_synthesize  # noqa: E402
 from sshr_h import sshr_h  # noqa: E402
 from sshr_beam import sshr_beam  # noqa: E402
 
+from affine_search import affine_wrap_cost, candidate_transforms, emit_affine_wrapped, transform_function
 from anf_utils import anf_monomials, shifted_function
+from cube_search import cube_beam_plan, cube_greedy_plan, emit_cube_plan
+from esop_milp import synthesize_esop_milp_circuit
 from factor_plan import SearchConfig, direct_plan, emit_plan_to_circuit, greedy_plan, verify_oracle
 from neural_policy import NeuralScorer
 from nmcts_solver import NeuralMCTSSolver
@@ -99,6 +103,74 @@ def _polarity_candidates(n: int, seed: int, max_polarities: int) -> list[int]:
     return sorted(values)
 
 
+def _ranked_polarities(
+    bf: BooleanFunction,
+    config: SearchConfig,
+    seed: int,
+    neural,
+    neural_guided: bool,
+) -> list[tuple[float, int, frozenset[int], object]]:
+    max_pol = max(1, config.max_polarities)
+    total = 1 << bf.n
+    scored: dict[int, tuple[float, int, frozenset[int], object]] = {}
+
+    def score_polarity(polarity: int) -> tuple[float, int, frozenset[int], object]:
+        existing = scored.get(polarity)
+        if existing is not None:
+            return existing
+        shifted = shifted_function(bf, polarity)
+        terms = frozenset(anf_monomials(shifted))
+        greedy = greedy_plan(
+            terms,
+            config=config,
+            neural_scorer=neural if neural_guided else None,
+        )
+        score = (greedy.cost + _wrap_cost(polarity)).score(config.weights)
+        item = (score, polarity, terms, greedy)
+        scored[polarity] = item
+        return item
+
+    if total <= max_pol or not neural_guided:
+        for polarity in _polarity_candidates(bf.n, seed, max_pol):
+            score_polarity(polarity)
+        return sorted(scored.values(), key=lambda x: (x[0], int(x[1]).bit_count(), x[1]))
+
+    import random
+
+    rng = random.Random(seed)
+    seeds = {0, total - 1}
+    while len(seeds) < min(total, max(6, max_pol // 2)):
+        seeds.add(rng.randrange(total))
+    for polarity in seeds:
+        score_polarity(polarity)
+
+    budget = min(total, max_pol)
+    beam = max(4, min(10, max_pol // 2))
+    while len(scored) < budget:
+        expanded = False
+        frontier = sorted(scored.values(), key=lambda x: (x[0], int(x[1]).bit_count(), x[1]))[:beam]
+        for _, polarity, _, _ in frontier:
+            bits = list(range(bf.n))
+            rng.shuffle(bits)
+            for bit in bits:
+                cand = polarity ^ (1 << bit)
+                if cand not in scored:
+                    score_polarity(cand)
+                    expanded = True
+                    if len(scored) >= budget:
+                        break
+            if len(scored) >= budget:
+                break
+        if not expanded:
+            while len(scored) < budget:
+                score_polarity(rng.randrange(total))
+                if len(scored) >= total:
+                    break
+            break
+
+    return sorted(scored.values(), key=lambda x: (x[0], int(x[1]).bit_count(), x[1]))[:max_pol]
+
+
 def _solve_plan(method: str, terms: frozenset[int], config: SearchConfig, seed: int, neural):
     if method in {"direct_anf", "fprm_direct"}:
         return direct_plan(terms, 0, 0, config)
@@ -119,20 +191,36 @@ def _solve_plan(method: str, terms: frozenset[int], config: SearchConfig, seed: 
 
 
 def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, seed: int, neural):
-    max_pol = max(1, config.max_polarities)
     best = None
-    # First rank polarities with greedy factoring; then run MCTS only on the
-    # most promising few to keep large benchmarks tractable.
-    ranked = []
-    for polarity in _polarity_candidates(bf.n, seed, max_pol):
-        shifted = shifted_function(bf, polarity)
-        terms = frozenset(anf_monomials(shifted))
-        greedy = greedy_plan(terms, config=config)
-        score = (greedy.cost + _wrap_cost(polarity)).score(config.weights)
-        ranked.append((score, polarity, terms, greedy))
-    ranked.sort(key=lambda x: (x[0], int(x[1]).bit_count(), x[1]))
-    trial_count = 1 if method in {"fprm_direct", "fprm_greedy"} else min(8, len(ranked))
-    trials = list(ranked[:trial_count])
+    neural_guided = method == "fprm_neural_mcts" and neural is not None
+    # First rank polarities with fast factored plans; then run MCTS only on the
+    # most promising few to keep large benchmarks tractable.  The neural-guided
+    # path uses local search in polarity space, so the prior changes which
+    # fixed-polarity Reed-Muller forms are explored rather than only reordering
+    # factor actions inside a fixed polarity.
+    if neural_guided:
+        baseline_ranked = _ranked_polarities(bf, config, seed, neural=None, neural_guided=False)
+        neural_ranked = _ranked_polarities(bf, config, seed, neural=neural, neural_guided=True)
+        trials = []
+        seen = set()
+
+        def add_trials(items, limit):
+            for item in items:
+                polarity = item[1]
+                if polarity in seen:
+                    continue
+                trials.append(item)
+                seen.add(polarity)
+                if len(trials) >= limit:
+                    break
+
+        add_trials(baseline_ranked[: min(8, len(baseline_ranked))], 8)
+        add_trials(neural_ranked, min(12, len(baseline_ranked) + len(neural_ranked)))
+        ranked = baseline_ranked + [item for item in neural_ranked if item[1] not in {x[1] for x in baseline_ranked}]
+    else:
+        ranked = _ranked_polarities(bf, config, seed, neural, neural_guided)
+        trial_count = 1 if method in {"fprm_direct", "fprm_greedy"} else min(8, len(ranked))
+        trials = list(ranked[:trial_count])
     if not any(polarity == 0 for _, polarity, _, _ in trials):
         for item in ranked:
             if item[1] == 0:
@@ -147,8 +235,19 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
             solver = NeuralMCTSSolver(config, simulations=config.mcts_simulations, seed=seed)
             plan = solver.solve(terms)
         elif method == "fprm_neural_mcts":
-            solver = NeuralMCTSSolver(config, simulations=config.neural_mcts_simulations, seed=seed, neural_scorer=neural)
-            plan = solver.solve(terms)
+            baseline_solver = NeuralMCTSSolver(config, simulations=config.mcts_simulations, seed=seed)
+            baseline_plan = baseline_solver.solve(terms)
+            neural_solver = NeuralMCTSSolver(
+                config,
+                simulations=config.neural_mcts_simulations,
+                seed=seed,
+                neural_scorer=neural,
+            )
+            neural_plan = neural_solver.solve(terms)
+            plan = min(
+                [baseline_plan, neural_plan],
+                key=lambda p: (p.cost + _wrap_cost(polarity)).score(config.weights),
+            )
         else:
             raise ValueError(method)
         cost = plan.cost + _wrap_cost(polarity)
@@ -159,8 +258,127 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
     return best[1], best[2], best[3], best[4]
 
 
+def _best_affine_plan(bf: BooleanFunction, config: SearchConfig, seed: int, neural):
+    best = None
+    if bf.n <= 5:
+        affine_budget = 10
+        rank_polarities = 8
+        rank_mcts = 16
+        rank_neural_mcts = 20
+        trial_limit = 3
+        term_cap = None
+    elif bf.n <= 6:
+        affine_budget = 4
+        rank_polarities = 6
+        rank_mcts = 12
+        rank_neural_mcts = 16
+        trial_limit = 2
+        term_cap = None
+    elif bf.n <= 8:
+        affine_budget = 2
+        rank_polarities = 2
+        rank_mcts = 8
+        rank_neural_mcts = 10
+        trial_limit = 1
+        term_cap = 160
+    else:
+        affine_budget = 1
+        rank_polarities = 1
+        rank_mcts = 6
+        rank_neural_mcts = 8
+        trial_limit = 1
+        term_cap = 220
+    budget = max(1, min(config.max_polarities, affine_budget))
+    rank_config = replace(
+        config,
+        max_polarities=max(1, min(config.max_polarities, rank_polarities)),
+        candidate_top_k=min(config.candidate_top_k, 16 if bf.n <= 6 else 10),
+        mcts_simulations=max(1, min(config.mcts_simulations, rank_mcts)),
+        neural_mcts_simulations=max(1, min(config.neural_mcts_simulations, rank_neural_mcts)),
+    )
+    ranked = []
+    for transform in candidate_transforms(bf.n, seed, budget):
+        shifted_bf = transform_function(bf, transform.rows)
+        shifted_terms = frozenset(anf_monomials(shifted_bf))
+        if term_cap is not None and len(shifted_terms) > term_cap and transform.rows != tuple(1 << i for i in range(bf.n)):
+            continue
+        try:
+            polarity, terms, plan, cost = _best_polarity_plan("fprm_greedy", shifted_bf, rank_config, seed, neural)
+        except Exception:
+            continue
+        total_cost = cost + affine_wrap_cost(transform.rows)
+        ranked.append((total_cost.score(config.weights), transform, shifted_bf, polarity, terms, plan, total_cost))
+    ranked.sort(key=lambda x: x[0])
+    if bf.n >= 6 and ranked:
+        _, transform, _, polarity, terms, plan, total_cost = ranked[0]
+        best = (total_cost.score(config.weights), transform, bf, polarity, terms, plan, total_cost)
+    else:
+        trials = ranked[: max(1, min(trial_limit, len(ranked)))]
+        for _, transform, shifted_bf, _, _, _, _ in trials:
+            try:
+                polarity, terms, plan, cost = _best_polarity_plan("fprm_neural_mcts", shifted_bf, rank_config, seed, neural)
+            except Exception:
+                continue
+            total_cost = cost + affine_wrap_cost(transform.rows)
+            score = total_cost.score(config.weights)
+            if best is None or score < best[0]:
+                best = (score, transform, shifted_bf, polarity, terms, plan, total_cost)
+    if best is None:
+        terms = frozenset(anf_monomials(bf))
+        solver = NeuralMCTSSolver(rank_config, simulations=rank_config.mcts_simulations, seed=seed)
+        plan = solver.solve(terms)
+        best = (plan.cost.score(config.weights), candidate_transforms(bf.n, seed, 1)[0], bf, 0, terms, plan, plan.cost)
+    try:
+        terms = frozenset(anf_monomials(bf))
+        solver = NeuralMCTSSolver(config, simulations=config.mcts_simulations, seed=seed)
+        plan = solver.solve(terms)
+        score = plan.cost.score(config.weights)
+        if score < best[0]:
+            best = (score, candidate_transforms(bf.n, seed, 1)[0], bf, 0, terms, plan, plan.cost)
+    except Exception:
+        pass
+    return best[1], best[3], best[4], best[5], best[6]
+
+
 def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int = 0, model_path: str | None = None) -> SynthesisResult:
     t0 = time.time()
+    requested_method = method
+    if method.startswith("and_"):
+        config = replace(config, gate_mode="logical_and")
+        method = method[len("and_") :]
+    if method == "rc_nmcts":
+        fast_config = replace(
+            config,
+            candidate_top_k=min(config.candidate_top_k, 18),
+            mcts_simulations=min(config.mcts_simulations, 40),
+            neural_mcts_simulations=min(config.neural_mcts_simulations, 48),
+            max_polarities=min(config.max_polarities, 24),
+        )
+        portfolio: list[SynthesisResult] = []
+        for child_method, child_config in [
+            ("direct_anf", config),
+            ("mcts_factor", config),
+            ("fprm_greedy", fast_config),
+            ("affine_nmcts", fast_config),
+        ]:
+            try:
+                child = synthesize(child_method, bf, child_config, seed=seed, model_path=model_path)
+            except Exception:
+                continue
+            if child.correct:
+                portfolio.append(child)
+        if not portfolio:
+            raise RuntimeError("RC-NMCTS portfolio produced no correct candidate")
+        best = min(portfolio, key=lambda r: (r.cost.score(config.weights), r.cost.T, r.cost.CNOT, r.cost.depth))
+        return SynthesisResult(
+            method=requested_method,
+            cost=best.cost,
+            time_s=time.time() - t0,
+            correct=best.correct,
+            terms=best.terms,
+            gates=best.gates,
+            n_qubits=best.n_qubits,
+        )
     terms = frozenset(anf_monomials(bf))
     neural = _cached_scorer(model_path or "")
 
@@ -188,6 +406,45 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             min(config.max_factor_ancilla, plan.cost.explicit_ancilla),
             polarity=polarity,
         )
+    elif method == "affine_nmcts":
+        transform, polarity, terms, plan, cost = _best_affine_plan(bf, config, seed, neural)
+        body = emit_plan_to_circuit(
+            plan,
+            bf.n,
+            min(config.max_factor_ancilla, plan.cost.explicit_ancilla),
+            polarity=polarity,
+        )
+        circ = emit_affine_wrapped(body, transform.rows)
+    elif method == "cube_greedy":
+        plan = cube_greedy_plan(
+            bf,
+            config.weights,
+            max_controls=min(bf.n, max(2, config.max_factor_size + 1)),
+            use_relative_phase=config.use_relative_phase,
+            gate_mode=config.gate_mode,
+        )
+        circ = emit_cube_plan(plan, bf.n)
+        cost = plan.cost
+    elif method == "cube_beam":
+        plan = cube_beam_plan(
+            bf,
+            config.weights,
+            max_controls=min(bf.n, max(2, config.max_factor_size + 1)),
+            width=max(12, config.candidate_top_k),
+            branch=max(8, config.candidate_top_k // 2),
+            use_relative_phase=config.use_relative_phase,
+            gate_mode=config.gate_mode,
+        )
+        circ = emit_cube_plan(plan, bf.n)
+        cost = plan.cost
+    elif method == "esop_milp":
+        circ, milp_result = synthesize_esop_milp_circuit(
+            bf,
+            config.weights,
+            max_controls=min(bf.n, max(2, config.max_factor_size + 1)),
+            timeout=10.0 if bf.n <= 6 else 30.0,
+        )
+        cost = milp_result.plan.cost
     elif method == "esop_greedy":
         circ = esop_synthesize(bf)
         cost = _existing_circuit_cost(circ, bf.n)
@@ -203,7 +460,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
     dt = time.time() - t0
     correct = verify_oracle(circ, bf)
     return SynthesisResult(
-        method=method,
+        method=requested_method,
         cost=cost,
         time_s=dt,
         correct=correct,

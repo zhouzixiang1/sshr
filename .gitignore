@@ -18,6 +18,7 @@ rl_mcts_experiment/paper/build/*
 *.synctex*
 *.fls
 *.fdb_latexmk
+resource_nmcts_experiment/paper_latex/*.pdf
 
 # Generated visualizations
 sshr/viz/*.png

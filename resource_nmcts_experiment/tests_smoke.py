@@ -40,11 +40,21 @@ def main() -> int:
         greedy = synthesize("greedy_factor", bf, config)
         mcts = synthesize("mcts_factor", bf, config, seed=7)
         fprm = synthesize("fprm_mcts", bf, config, seed=7)
-        for result in [direct, greedy, mcts, fprm]:
+        cube_greedy = synthesize("cube_greedy", bf, config, seed=7)
+        cube_beam = synthesize("cube_beam", bf, config, seed=7)
+        and_fprm = synthesize("and_fprm_mcts", bf, config, seed=7)
+        and_fprm_neural = synthesize("and_fprm_neural_mcts", bf, config, seed=7)
+        and_affine = synthesize("and_affine_nmcts", bf, config, seed=7)
+        rc_nmcts = synthesize("and_rc_nmcts", bf, config, seed=7)
+        for result in [direct, greedy, mcts, fprm, cube_greedy, cube_beam, and_fprm, and_fprm_neural, and_affine, rc_nmcts]:
             assert result.correct, (result.method, bf.n, bf.truth_table)
         assert greedy.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
         assert mcts.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
         assert fprm.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
+        assert and_fprm.cost.T <= direct.cost.T
+        assert and_fprm_neural.cost.T <= direct.cost.T
+        assert and_affine.cost.T <= direct.cost.T
+        assert rc_nmcts.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
     print("smoke ok")
     return 0
 

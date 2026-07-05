@@ -6,6 +6,7 @@ import argparse
 import csv
 import json
 import random
+import signal
 import statistics
 import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -28,25 +29,61 @@ RESULTS = THIS_DIR / "results"
 DEFAULT_MODEL = THIS_DIR / "models" / "action_scorer.pt"
 
 
+class TaskTimeout(TimeoutError):
+    pass
+
+
+def _timeout_handler(signum, frame):
+    raise TaskTimeout("synthesis task timed out")
+
+
 PRESETS = {
     "smoke": {
-        "methods": ["direct_anf", "greedy_factor", "mcts_factor", "fprm_mcts", "neural_mcts", "sshr_h"],
+        "methods": ["direct_anf", "and_direct_anf", "and_rc_nmcts", "and_affine_nmcts", "greedy_factor", "mcts_factor", "fprm_mcts", "and_fprm_mcts", "and_fprm_neural_mcts", "cube_greedy", "cube_beam", "neural_mcts", "sshr_h"],
         "random_truth": [(3, 4)],
         "random_anf": [(5, 4)],
         "structured_limit": 4,
         "workers": 1,
     },
     "pilot": {
-        "methods": ["direct_anf", "greedy_factor", "mcts_factor", "fprm_greedy", "fprm_mcts", "neural_mcts", "sshr_h"],
+        "methods": ["direct_anf", "and_direct_anf", "and_rc_nmcts", "and_affine_nmcts", "greedy_factor", "mcts_factor", "and_mcts_factor", "fprm_greedy", "fprm_mcts", "and_fprm_mcts", "and_fprm_neural_mcts", "cube_greedy", "cube_beam", "neural_mcts", "sshr_h"],
         "random_truth": [],
         "random_anf": [(8, 4)],
         "structured_limit": 10_000,
         "workers": 6,
     },
     "main": {
-        "methods": ["direct_anf", "greedy_factor", "mcts_factor", "fprm_greedy", "fprm_mcts", "neural_mcts", "fprm_neural_mcts", "sshr_h", "sshr_beam"],
+        "methods": ["direct_anf", "and_direct_anf", "and_rc_nmcts", "and_affine_nmcts", "greedy_factor", "mcts_factor", "and_mcts_factor", "fprm_greedy", "fprm_mcts", "and_fprm_mcts", "and_fprm_neural_mcts", "cube_greedy", "cube_beam", "neural_mcts", "fprm_neural_mcts", "sshr_h", "sshr_beam"],
         "random_truth": [(3, 255), (4, 256), (5, 128), (6, 64)],
         "random_anf": [(7, 256), (8, 256), (10, 128), (12, 64)],
+        "structured_limit": 10_000,
+        "workers": 10,
+    },
+    "large": {
+        "methods": ["direct_anf", "and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_fprm_mcts", "and_fprm_neural_mcts", "and_rc_nmcts", "sshr_h"],
+        "random_truth": [(4, 96), (5, 96), (6, 64)],
+        "random_anf": [(8, 96), (10, 96), (12, 64)],
+        "structured_limit": 10_000,
+        "workers": 10,
+    },
+    "large_fast": {
+        "methods": ["direct_anf", "and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_fprm_mcts", "and_fprm_neural_mcts", "and_rc_nmcts", "sshr_h"],
+        "random_truth": [(4, 48), (5, 48), (6, 32)],
+        "random_anf": [(8, 48), (10, 32)],
+        "structured_limit": 10_000,
+        "workers": 10,
+    },
+    "evidence": {
+        "methods": ["direct_anf", "and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_rc_nmcts", "sshr_h"],
+        "random_truth": [(4, 64), (5, 64), (6, 32)],
+        "random_anf": [(8, 64), (10, 48), (12, 24)],
+        "structured_limit": 10_000,
+        "workers": 10,
+    },
+    "evidence_affine": {
+        "methods": ["direct_anf", "and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "sshr_h"],
+        "random_truth": [(4, 64), (5, 64), (6, 32)],
+        "random_anf": [(8, 64), (10, 48), (12, 24)],
         "structured_limit": 10_000,
         "workers": 10,
     },
@@ -86,11 +123,17 @@ def run_one(task):
         max_factor_ancilla=config_dict["max_factor_ancilla"],
         max_factor_size=config_dict["max_factor_size"],
         candidate_top_k=config_dict["candidate_top_k"],
+        min_factor_count=config_dict.get("min_factor_count", 2),
+        use_relative_phase=config_dict.get("use_relative_phase", True),
         mcts_simulations=config_dict["mcts_simulations"],
         neural_mcts_simulations=config_dict["neural_mcts_simulations"],
         max_polarities=config_dict["max_polarities"],
+        gate_mode=config_dict.get("gate_mode", "mct"),
+        neural_prior_weight=config_dict.get("neural_prior_weight", 1.0),
     )
-    use_model = model_path if method in {"neural_greedy", "neural_mcts"} and model_path else None
+    base_method = method[len("and_") :] if method.startswith("and_") else method
+    neural_methods = {"neural_greedy", "neural_mcts", "fprm_neural_mcts", "affine_nmcts", "rc_nmcts"}
+    use_model = model_path if base_method in neural_methods and model_path else None
     if method == "esop_greedy" and bf.n > 4:
         return {
             "name": name,
@@ -110,6 +153,10 @@ def run_one(task):
             "skipped": "n>6 for SSHR reference in this harness",
         }
     try:
+        timeout_s = int(config_dict.get("task_timeout_s", 0) or 0)
+        if timeout_s > 0:
+            signal.signal(signal.SIGALRM, _timeout_handler)
+            signal.alarm(timeout_s)
         result = synthesize(method, bf, config, seed=seed, model_path=use_model)
         row = result.to_row()
         row.update(
@@ -134,6 +181,8 @@ def run_one(task):
             "error": repr(exc),
             "skipped": "",
         }
+    finally:
+        signal.alarm(0)
 
 
 def write_csv(path: Path, rows: List[dict]) -> None:
@@ -180,6 +229,8 @@ def main(argv: Iterable[str] | None = None) -> int:
     ap.add_argument("--workers", type=int, default=None)
     ap.add_argument("--model", default=str(DEFAULT_MODEL))
     ap.add_argument("--out-dir", default=str(RESULTS))
+    ap.add_argument("--resume", action="store_true", help="skip rows already present in the raw CSV")
+    ap.add_argument("--checkpoint-every", type=int, default=None)
     args = ap.parse_args(list(argv) if argv is not None else None)
 
     cfg = PRESETS[args.preset]
@@ -191,9 +242,14 @@ def main(argv: Iterable[str] | None = None) -> int:
         "max_factor_ancilla": 4,
         "max_factor_size": 5,
         "candidate_top_k": 24,
-        "mcts_simulations": 24 if args.preset == "smoke" else (48 if args.preset == "pilot" else 96),
-        "neural_mcts_simulations": 32 if args.preset == "smoke" else (64 if args.preset == "pilot" else 128),
-        "max_polarities": 32 if args.preset == "smoke" else (32 if args.preset == "pilot" else 384),
+        "min_factor_count": 2,
+        "use_relative_phase": True,
+        "mcts_simulations": 24 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine"} else (48 if args.preset == "pilot" else (32 if args.preset == "large" else 96)),
+        "neural_mcts_simulations": 32 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine"} else (64 if args.preset == "pilot" else (32 if args.preset == "large" else 128)),
+        "max_polarities": 32 if args.preset in {"smoke", "pilot"} else (12 if args.preset in {"evidence", "evidence_affine"} else (16 if args.preset == "large_fast" else (48 if args.preset == "large" else 384))),
+        "gate_mode": "mct",
+        "neural_prior_weight": 2.5,
+        "task_timeout_s": 300 if args.preset in {"evidence", "evidence_affine"} else (120 if args.preset == "pilot" else (180 if args.preset in {"large", "large_fast"} else (300 if args.preset == "main" else 0))),
     }
     methods = cfg["methods"]
     tasks = [
@@ -204,24 +260,34 @@ def main(argv: Iterable[str] | None = None) -> int:
 
     started = time.time()
     rows: List[dict] = []
+    out_dir = Path(args.out_dir)
+    raw = out_dir / f"raw_{args.preset}.csv"
+    summary_path = out_dir / f"summary_{args.preset}.csv"
+    manifest = out_dir / f"manifest_{args.preset}.json"
+    out_dir.mkdir(parents=True, exist_ok=True)
     workers = args.workers if args.workers is not None else cfg["workers"]
+    checkpoint_every = args.checkpoint_every or (25 if args.preset.startswith("evidence") else 100)
+    if args.resume and raw.exists():
+        with raw.open(newline="", encoding="utf-8") as f:
+            rows.extend(csv.DictReader(f))
+        completed = {(r.get("name"), r.get("method")) for r in rows}
+        tasks = [task for task in tasks if (task[0], task[2]) not in completed]
+        print(f"resuming from {len(rows)} rows; remaining {len(tasks)}", flush=True)
     if workers <= 1:
         for i, task in enumerate(tasks, 1):
             rows.append(run_one(task))
-            if i % 50 == 0:
-                print(f"{i}/{len(tasks)}")
+            if i % checkpoint_every == 0:
+                write_csv(raw, rows)
+                print(f"{i}/{len(tasks)}", flush=True)
     else:
         with ProcessPoolExecutor(max_workers=workers) as ex:
             futures = [ex.submit(run_one, task) for task in tasks]
             for i, fut in enumerate(as_completed(futures), 1):
                 rows.append(fut.result())
-                if i % 100 == 0:
-                    print(f"{i}/{len(tasks)}")
+                if i % checkpoint_every == 0:
+                    write_csv(raw, rows)
+                    print(f"{i}/{len(tasks)}", flush=True)
 
-    out_dir = Path(args.out_dir)
-    raw = out_dir / f"raw_{args.preset}.csv"
-    summary_path = out_dir / f"summary_{args.preset}.csv"
-    manifest = out_dir / f"manifest_{args.preset}.json"
     write_csv(raw, rows)
     summary = summarize(rows)
     write_csv(summary_path, summary)

@@ -58,6 +58,7 @@ def gate_cost(
     weights: ResourceWeights | None = None,
     use_relative_phase: bool = True,
     alloc_target_ancilla: bool = False,
+    gate_mode: str = "mct",
 ) -> ResourceCost:
     """Return resource estimate for one logical controlled-X operation."""
     live = live_factor_ancilla + (1 if alloc_target_ancilla else 0)
@@ -65,6 +66,19 @@ def gate_cost(
         return ResourceCost(gates=1, depth=1, explicit_ancilla=live, peak_ancilla=live)
     if controls == 1:
         return ResourceCost(CNOT=1, gates=1, depth=1, explicit_ancilla=live, peak_ancilla=live)
+    if gate_mode == "logical_and":
+        ands = controls - 1
+        temp = max(0, controls - 2)
+        return ResourceCost(
+            T=4 * ands,
+            CNOT=6 * ands + 1,
+            gates=2 * ands + 1,
+            depth=6 * ands + 1,
+            explicit_ancilla=live,
+            peak_ancilla=live + temp,
+        )
+    if gate_mode != "mct":
+        raise ValueError(f"unknown gate_mode: {gate_mode}")
     c = mct_cost_rp(controls) if use_relative_phase else mct_cost(controls)
     # Sequential decomposed-depth estimate; enough for relative comparisons.
     depth = max(1, int(c["CNOT"]))
@@ -79,11 +93,48 @@ def gate_cost(
     )
 
 
+def gate_uncompute_cost(
+    controls: int,
+    live_factor_ancilla: int,
+    use_relative_phase: bool = True,
+    alloc_target_ancilla: bool = False,
+    gate_mode: str = "mct",
+) -> ResourceCost:
+    """Return the cleanup cost for a temporary logical conjunction.
+
+    In ``logical_and`` mode this follows the common low-T accounting where a
+    temporary logical AND is computed with four T gates and uncomputed with
+    Clifford operations and measurement/feed-forward.  The emitted verifier
+    circuit remains a deterministic MCT circuit; this function is only the
+    logic-level resource model used by the search objective.
+    """
+    live = live_factor_ancilla + (1 if alloc_target_ancilla else 0)
+    if gate_mode == "logical_and" and controls >= 2:
+        ands = controls - 1
+        temp = max(0, controls - 2)
+        return ResourceCost(
+            T=0,
+            CNOT=3 * ands,
+            gates=ands,
+            depth=3 * ands,
+            explicit_ancilla=live,
+            peak_ancilla=live + temp,
+        )
+    return gate_cost(
+        controls,
+        live_factor_ancilla,
+        use_relative_phase=use_relative_phase,
+        alloc_target_ancilla=alloc_target_ancilla,
+        gate_mode=gate_mode,
+    )
+
+
 def direct_cost_for_terms(
     terms: frozenset[int],
     prefix_len: int,
     live_factor_ancilla: int,
     use_relative_phase: bool = True,
+    gate_mode: str = "mct",
 ) -> ResourceCost:
     out = ResourceCost(explicit_ancilla=live_factor_ancilla, peak_ancilla=live_factor_ancilla)
     for term in terms:
@@ -91,6 +142,6 @@ def direct_cost_for_terms(
             prefix_len + int(term).bit_count(),
             live_factor_ancilla=live_factor_ancilla,
             use_relative_phase=use_relative_phase,
+            gate_mode=gate_mode,
         )
     return out
-

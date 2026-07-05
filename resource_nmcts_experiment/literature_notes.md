@@ -56,3 +56,9 @@ explicit resource weights.  This differs from unitary-level RL and from SSHR's
 parallelotope space, while still matching the XAG/ROS literature's focus on
 T-count, CNOT count, depth, and ancilla.
 
+The strongest current novelty is the combination of affine Boolean coordinate
+search with resource-weighted neural MCTS.  The affine step changes the ANF/FPRM
+basis before factoring, so it can discover low-T decompositions that are not
+available to fixed-coordinate monomial factoring.  SSHR remains a comparison
+point for small functions, but the method does not call SSHR or use SSHR
+parallelotopes.

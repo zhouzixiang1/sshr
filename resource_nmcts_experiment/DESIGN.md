@@ -32,6 +32,25 @@ CNOT-oriented small Boolean-function baseline.
 This project targets the open space between them: AI-guided search over
 symbolic Boolean construction plans, with explicit multi-resource objectives.
 
+## Current Contribution
+
+The current strongest method is `and_affine_nmcts`, a guarded affine-preconditioned
+neural MCTS solver.  It adds three ingredients to fixed-coordinate ANF factoring:
+
+1. **Logical-AND resource accounting.** Temporary conjunctions are charged as
+   low-T logical ANDs, with T-free Clifford/measurement uncomputation in the
+   objective.  The emitted verifier circuit remains deterministic for classical
+   correctness checking; this is a logic-level cost model, not a hardware
+   mapping model.
+2. **Affine Boolean preconditioning.** The solver searches invertible linear
+   changes of input coordinates before ANF/FPRM factoring.  This exposes
+   decompositions that are invisible in the raw ANF basis.
+3. **MCTS guard.** The affine plan is compared against a fixed-coordinate MCTS
+   plan under the same resource score.  On completed pairs this makes the
+   affine method score-nondegrading relative to the fixed-coordinate MCTS
+   baseline, while retaining large wins when affine coordinates reveal stronger
+   factorizations.
+
 ## Representation
 
 For a Boolean function `f`, compute its algebraic normal form (ANF):
@@ -65,6 +84,25 @@ This is a logical compute/uncompute version of XAG-style factoring.  It can
 reduce T-count, CNOT count, gate count, and depth at the cost of explicit
 ancilla.  The action is independent of SSHR.
 
+## Affine Preconditioning
+
+Before the factor search, `and_affine_nmcts` considers invertible row-encoded
+linear transforms `y = Bx` and synthesizes `h(y) = f(B^{-1}y)`.  The final
+oracle wraps the synthesized body with CNOT networks that implement and undo
+`B`.  The transform search currently uses:
+
+- identity;
+- star-like XOR transforms;
+- single-CNOT transforms;
+- random short CNOT sequences for larger budgets.
+
+Candidate transforms are ranked by a fast FPRM/greedy plan.  For `n <= 6`, the
+top candidates are refined by neural MCTS.  For larger instances, affine search
+uses conservative budgets and term-count guards to avoid densifying sparse ANF
+instances into intractable transformed forms.  This staged policy is important:
+low-dimensional truth-table functions benefit from strong search, while large
+random ANF functions require predictable runtime.
+
 ## Search
 
 The main solver is a recursive PUCT/MCTS over factorization actions.  It uses:
@@ -89,11 +127,10 @@ tradeoffs rather than a single CNOT-only table.
 The first implementation compares against:
 
 - direct ANF synthesis;
-- greedy resource-aware ANF factoring;
-- untrained/heuristic MCTS;
-- neural-prior MCTS;
-- greedy ESOP from the existing repository;
-- SSHR-H / SSHR-Beam as CNOT-oriented references for small `n`.
+- logical-AND direct ANF synthesis;
+- fixed-coordinate logical-AND MCTS factoring;
+- affine-preconditioned logical-AND neural MCTS;
+- SSHR-H as a CNOT-oriented reference for small `n`.
 
 Later baselines should add XAG/ROS/LUT tooling if external binaries become
 available.
@@ -119,3 +156,32 @@ Datasets:
 - structured oracles such as parity, majority, threshold, mux, adders, and
   multipliers.
 
+## Current Evidence
+
+The current paper-facing run is:
+
+```bash
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset evidence_affine --model models/action_scorer_rollout_logical_and.pt
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset evidence_affine
+```
+
+It covers 322 functions and 1610 method/function rows.  The main results are:
+
+- `and_affine_nmcts` is correct on all 322 functions.
+- Compared with direct ANF, it reduces mean T-count by 61.83% and mean
+  composite score by 58.12%.
+- Compared with logical-AND direct ANF, it reduces mean T-count by 40.12% and
+  mean score by 37.77%.
+- Compared with fixed-coordinate logical-AND MCTS, it has 161 T-count wins,
+  160 ties, and 0 losses over 321 completed baseline pairs; mean T-count
+  reduction is 16.18% and mean score reduction is 14.82%.
+- Compared with SSHR-H on supported functions, it has 171 wins, 5 ties, and 1
+  loss in T-count; mean T-count reduction is 43.89%.
+- Fixed-coordinate MCTS times out on `anf_n12_10` at 600 s, while the affine
+  method completes that function within the experiment budget.
+
+The main weakness is CNOT/depth relative to SSHR-H: the affine method wins
+T-count strongly but often spends more CNOTs and depth against SSHR's
+CNOT-oriented circuits.  The paper should frame the contribution as
+resource-constrained low-T logical Boolean synthesis rather than CNOT-only
+optimization.

@@ -1,0 +1,191 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{microtype}
+
+\newcommand{\method}{Affine-NMCTS}
+\newcommand{\dataset}{evidence\_affine}
+
+\title{Neural Monte Carlo Tree Search with Affine Boolean Preconditioning for Resource-Constrained Quantum Oracle Synthesis}
+\author{Zixiang Zhou}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Quantum Boolean oracle synthesis is a central subroutine in many quantum
+algorithms, yet direct algebraic-normal-form constructions can be expensive in
+T-count, depth, and ancillary workspace.  We study oracle synthesis as a
+logic-level search problem over compute/uncompute factorizations of Boolean
+monomials.  The proposed \method{} method combines resource-weighted neural
+Monte Carlo tree search with affine Boolean input preconditioning, allowing the
+search to change the XOR coordinate system before factoring the resulting
+fixed-polarity Reed--Muller representation.  On the current \dataset{} benchmark
+of 322 Boolean functions, \method{} is correct on all functions and reduces mean
+T-count by 61.83\% relative to direct ANF synthesis and by 40.12\% relative to
+logical-AND direct ANF synthesis.  Against fixed-coordinate logical-AND MCTS, it
+has 161 T-count wins, 160 ties, and no losses over the 321 completed baseline
+pairs, with a 16.18\% mean T-count reduction.  The method is evaluated only at
+the logical circuit layer; hardware mapping and connectivity constraints are
+outside the present scope.
+\end{abstract}
+
+\section{Introduction}
+
+Boolean oracles translate classical predicates into reversible quantum
+subroutines.  In fault-tolerant settings, the cost of such oracles is often
+dominated by non-Clifford resources, so synthesis methods must account for
+T-count, depth, and ancillary workspace rather than only the number of reversible
+gates.  Existing Boolean-oriented approaches include XAG-based compilation,
+resource-constrained oracle synthesis, multiplicative-complexity methods, and
+BDD-based reversible synthesis~\cite{meuli2022xag,meuli2020ros,meuli2019multiplicative,wille2009bdd}.
+
+Recent learning-guided synthesis work has shown that reinforcement learning and
+tree search can optimize quantum circuits in nontrivial spaces, including
+Clifford+T unitary synthesis, non-Clifford-count optimization, MCTS-based
+quantum circuit synthesis, and ZX-calculus rewriting~\cite{rietsch2024unitary,kremer2025nonclifford,machiya2026monteq,riu2025rlzx}.
+However, these systems do not directly solve the symbolic Boolean oracle
+problem studied here: choosing reusable Boolean intermediates under a
+multi-resource objective.
+
+This paper frames quantum Boolean oracle synthesis as a resource-constrained
+search over algebraic-normal-form (ANF) and fixed-polarity Reed--Muller (FPRM)
+factorizations.  The central claim is that affine changes of Boolean coordinates
+can expose low-T decompositions that fixed-coordinate ANF factoring misses, and
+that a neural MCTS policy can search this space while retaining a guard against
+degradation relative to fixed-coordinate MCTS.
+
+\section{Problem Formulation}
+
+Let $f:\{0,1\}^n\rightarrow\{0,1\}$ be a Boolean function.  The target oracle
+maps
+\[
+  |x\rangle |y\rangle \mapsto |x\rangle |y \oplus f(x)\rangle .
+\]
+We represent $f$ by its ANF,
+\[
+  f(x) = \bigoplus_{m\in M}\prod_{i\in m} x_i,
+\]
+where each monomial is encoded as a bit mask.  Direct ANF synthesis applies one
+controlled operation per monomial.  The search problem is to replace this direct
+construction by reusable compute/uncompute subplans that lower the weighted
+resource score
+\[
+  S = w_T T + w_C CNOT + w_D D + w_G G + w_A A,
+\]
+where $T$ is T-count, $D$ is logical depth, $G$ is gate count, and $A$ is peak
+ancilla.
+
+\section{Method}
+
+\subsection{Resource-aware ANF factorization}
+
+At each search state, the remaining ANF terms are a set of monomial masks.  An
+action chooses a common factor $S$ appearing in at least two terms, computes
+$S$ into a clean temporary ancilla, synthesizes the residual terms using that
+ancilla as an additional control, uncomputes $S$, and then synthesizes the
+remaining terms.  The implementation restricts the number of live factor
+ancillae and ranks candidate factors by immediate weighted resource gain.
+
+\subsection{Logical-AND cost model}
+
+The reported resource objective uses a logical-AND accounting mode: temporary
+ANDs are charged four T gates for compute and T-free Clifford/measurement-based
+cleanup for uncompute.  The verifier circuit remains deterministic and is
+checked by exhaustive classical simulation over the truth table.  Thus the
+paper reports logic-level resource estimates rather than mapped hardware
+circuits.
+
+\subsection{Neural Monte Carlo tree search}
+
+The MCTS solver recursively applies PUCT-style selection to factorization
+actions.  Unvisited subproblems use a greedy rollout value.  A small neural
+action scorer is trained from synthetic ANF states with rollout-improvement
+labels, then used as an additive prior during action ranking.
+
+\subsection{Affine Boolean preconditioning}
+
+\method{} searches invertible linear transforms $y=Bx$ before ANF/FPRM
+factorization.  For each candidate transform, it synthesizes
+$h(y)=f(B^{-1}y)$ and wraps the body circuit by CNOT networks implementing and
+undoing $B$.  Candidate transforms include the identity, star-like XOR
+transforms, single-CNOT transforms, and random short CNOT sequences.  The
+candidate list is first ranked by fast FPRM/greedy factoring; low-dimensional
+instances are then refined by neural MCTS, while large instances use term-count
+guards to avoid affine densification.
+
+\subsection{Guard against fixed-coordinate degradation}
+
+The affine plan is compared against a fixed-coordinate MCTS plan under the same
+weighted score.  The lower-score plan is returned.  This guard makes the method
+nondegrading in score on completed fixed-coordinate MCTS pairs, while preserving
+affine improvements when coordinate changes reveal better factorizations.
+
+\section{Experiments}
+
+\subsection{Benchmark and baselines}
+
+The current \dataset{} run contains 322 Boolean functions: structured oracles
+such as parity, majority, threshold, mux, adders, and multipliers; random truth
+tables for $n=4,5,6$; and random ANF functions for $n=8,10,12$.  We compare:
+direct ANF, logical-AND direct ANF, fixed-coordinate logical-AND MCTS,
+\method{}, and SSHR-H for functions with $n\leq 6$.
+
+\subsection{Main results}
+
+\begin{table}[t]
+\centering
+\caption{Current \dataset{} results.  Improvements are relative T-count means
+over functions where both methods completed.}
+\label{tab:main-results}
+\begin{tabular}{lrrrr}
+\toprule
+Comparison & Functions & Wins & Ties & Mean $\Delta T$ \\
+\midrule
+\method{} vs direct ANF & 322 & 286 & 36 & $-61.83\%$ \\
+\method{} vs logical-AND direct ANF & 322 & 284 & 38 & $-40.12\%$ \\
+\method{} vs fixed-coordinate MCTS & 321 & 161 & 160 & $-16.18\%$ \\
+\method{} vs SSHR-H & 177 & 171 & 5 & $-43.89\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\method{} was correct on all 322 functions.  Fixed-coordinate MCTS timed out on
+one $n=12$ random ANF function after a 600 s repair attempt; \method{} completed
+the same function within the experiment budget and produced a valid circuit.
+The largest direct-ANF reductions exceeded 80\% T-count on several structured
+and random small functions.
+
+\section{Discussion}
+
+The results support the central hypothesis that affine Boolean coordinates are
+a useful search dimension for quantum oracle synthesis.  The wins are strongest
+in T-count and composite resource score.  Against SSHR-H, the method often uses
+more CNOTs and depth, which is expected because SSHR-H is a CNOT-oriented
+small-function baseline.  The present contribution should therefore be framed
+as low-T, resource-constrained logical synthesis, not as a CNOT-only optimizer.
+
+The main current limitations are the absence of hardware mapping, the need for
+ablation studies separating affine preconditioning from the neural prior and
+MCTS guard, and the use of a local benchmark suite rather than standardized
+external oracle benchmarks.  These limitations define the next experiments
+before submission.
+
+\section{Conclusion}
+
+We introduced a logic-level quantum Boolean oracle synthesis method that
+combines resource-aware neural MCTS with affine Boolean preconditioning.  On the
+current benchmark, the method substantially reduces T-count versus direct ANF,
+logical-AND direct ANF, fixed-coordinate MCTS, and SSHR-H on supported
+functions, while remaining bounded to logical resource accounting.  The next
+step is to add ablations and standardized external baselines so the empirical
+claim is submission-ready.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

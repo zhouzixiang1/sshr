@@ -1,26 +1,17 @@
 {
-  "preset": "pilot",
+  "preset": "evidence_affine",
   "seed": 42,
-  "functions": 30,
+  "functions": 322,
   "methods": [
     "direct_anf",
     "and_direct_anf",
-    "and_rc_nmcts",
-    "greedy_factor",
-    "mcts_factor",
     "and_mcts_factor",
-    "fprm_greedy",
-    "fprm_mcts",
-    "and_fprm_mcts",
-    "and_fprm_neural_mcts",
-    "cube_greedy",
-    "cube_beam",
-    "neural_mcts",
+    "and_affine_nmcts",
     "sshr_h"
   ],
   "model": "models/action_scorer_rollout_logical_and.pt",
-  "workers": 6,
-  "seconds": 371.93079686164856,
+  "workers": 10,
+  "seconds": 522.3685390949249,
   "config": {
     "weights": {
       "t": 1.0,
@@ -34,11 +25,23 @@
     "candidate_top_k": 24,
     "min_factor_count": 2,
     "use_relative_phase": true,
-    "mcts_simulations": 48,
-    "neural_mcts_simulations": 64,
-    "max_polarities": 32,
+    "mcts_simulations": 24,
+    "neural_mcts_simulations": 32,
+    "max_polarities": 12,
     "gate_mode": "mct",
     "neural_prior_weight": 2.5,
-    "task_timeout_s": 120
-  }
+    "task_timeout_s": 300
+  },
+  "repairs": [
+    {
+      "reran_errors": 3,
+      "seconds": 759.2879312038422,
+      "task_timeout_s": 600
+    },
+    {
+      "reran_affine_guard_rows": 2,
+      "seconds": 165.03307604789734,
+      "task_timeout_s": 600
+    }
+  ]
 }

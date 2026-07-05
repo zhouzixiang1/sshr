@@ -15,7 +15,7 @@ if str(SSHR_DIR) not in sys.path:
 from bool_func import BooleanFunction, QuantumCircuit  # noqa: E402
 
 from anf_utils import anf_monomials
-from resource_model import ResourceCost, ResourceWeights, direct_cost_for_terms, gate_cost
+from resource_model import ResourceCost, ResourceWeights, direct_cost_for_terms, gate_cost, gate_uncompute_cost
 
 
 @dataclass(frozen=True)
@@ -29,6 +29,9 @@ class SearchConfig:
     mcts_simulations: int = 96
     neural_mcts_simulations: int = 128
     max_polarities: int = 384
+    gate_mode: str = "mct"
+    neural_prior_weight: float = 1.0
+    greedy_eval_limit: int = 1
 
 
 @dataclass(frozen=True)
@@ -86,7 +89,7 @@ def candidate_actions(
             counts[s] = counts.get(s, 0) + 1
 
     direct_total = direct_cost_for_terms(
-        terms, prefix_len, live_factor_ancilla, config.use_relative_phase
+        terms, prefix_len, live_factor_ancilla, config.use_relative_phase, config.gate_mode
     ).score(config.weights)
     actions: List[FactorAction] = []
     for factor, cnt in counts.items():
@@ -99,21 +102,26 @@ def candidate_actions(
             continue
 
         group_direct = direct_cost_for_terms(
-            group, prefix_len, live_factor_ancilla, config.use_relative_phase
+            group, prefix_len, live_factor_ancilla, config.use_relative_phase, config.gate_mode
         ).score(config.weights)
         residual_direct = direct_cost_for_terms(
-            residuals, prefix_len + 1, live_factor_ancilla + 1, config.use_relative_phase
+            residuals, prefix_len + 1, live_factor_ancilla + 1, config.use_relative_phase, config.gate_mode
         ).score(config.weights)
-        compute = (
-            gate_cost(
-                factor.bit_count(),
-                live_factor_ancilla,
-                use_relative_phase=config.use_relative_phase,
-                alloc_target_ancilla=True,
-            ).score(config.weights)
-            * 2.0
+        compute = gate_cost(
+            factor.bit_count(),
+            live_factor_ancilla,
+            use_relative_phase=config.use_relative_phase,
+            alloc_target_ancilla=True,
+            gate_mode=config.gate_mode,
         )
-        gain = group_direct - compute - residual_direct
+        uncompute = gate_uncompute_cost(
+            factor.bit_count(),
+            live_factor_ancilla,
+            use_relative_phase=config.use_relative_phase,
+            alloc_target_ancilla=True,
+            gate_mode=config.gate_mode,
+        )
+        gain = group_direct - compute.score(config.weights) - uncompute.score(config.weights) - residual_direct
         coverage = len(group) / max(len(terms), 1)
         density = sum(t.bit_count() for t in residuals) / max(len(residuals), 1)
         heuristic_prior = (
@@ -150,7 +158,10 @@ def candidate_actions(
             for action in actions
         ]
         scores = neural_scorer.score_many(features)
-        actions = [replace(action, prior=action.prior + float(score)) for action, score in zip(actions, scores)]
+        actions = [
+            replace(action, prior=action.prior + config.neural_prior_weight * float(score))
+            for action, score in zip(actions, scores)
+        ]
 
     actions.sort(key=lambda a: (-a.prior, -a.immediate_gain, -a.factor.bit_count(), a.factor))
     return actions[: config.candidate_top_k]
@@ -194,7 +205,13 @@ def direct_plan(
     return Plan(
         kind="direct",
         terms=terms,
-        cost=direct_cost_for_terms(terms, prefix_len, live_factor_ancilla, config.use_relative_phase),
+        cost=direct_cost_for_terms(
+            terms,
+            prefix_len,
+            live_factor_ancilla,
+            config.use_relative_phase,
+            config.gate_mode,
+        ),
     )
 
 
@@ -210,8 +227,16 @@ def factor_cost(
         live_factor_ancilla,
         use_relative_phase=config.use_relative_phase,
         alloc_target_ancilla=True,
+        gate_mode=config.gate_mode,
     )
-    return compute + group_plan.cost + compute + rest_plan.cost
+    uncompute = gate_uncompute_cost(
+        action.factor.bit_count(),
+        live_factor_ancilla,
+        use_relative_phase=config.use_relative_phase,
+        alloc_target_ancilla=True,
+        gate_mode=config.gate_mode,
+    )
+    return compute + group_plan.cost + uncompute + rest_plan.cost
 
 
 def greedy_plan(
@@ -228,7 +253,8 @@ def greedy_plan(
         return memo[key]
     best = direct_plan(terms, prefix_len, live_factor_ancilla, config)
     actions = candidate_actions(terms, prefix_len, live_factor_ancilla, config, neural_scorer)
-    for action in actions[: max(1, min(6, config.candidate_top_k))]:
+    limit = max(1, min(config.greedy_eval_limit, config.candidate_top_k))
+    for action in actions[:limit]:
         group = greedy_plan(
             action.residuals, prefix_len + 1, live_factor_ancilla + 1, config, neural_scorer, memo
         )
@@ -237,7 +263,6 @@ def greedy_plan(
         plan = Plan("factor", terms, cost, factor=action.factor, group=group, rest=rest)
         if plan.score(config.weights) < best.score(config.weights):
             best = plan
-            break
     memo[key] = best
     return best
 
