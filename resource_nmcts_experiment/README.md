@@ -51,7 +51,8 @@ Current presets:
 - `traditional_resource`: same $n \leq 6$ slice with the full Resource-NMCTS
   portfolio guard added.
 - `large_resource_core`: 330-function large logical benchmark through `n=12`,
-  using process-isolated hard timeouts for long-tail tasks.
+  now including the profile-aware Resource-NMCTS variant and process-isolated
+  hard timeouts for long-tail tasks.
 - `large_resource`: experimental `n=14` stress extension.  This preset exposed
   the current high-dimensional runtime tail and is not used as paper-facing
   evidence.
@@ -137,11 +138,11 @@ Resource-profile stress-test evidence from
 Large-scale core evidence from `results/analysis_large_resource_core.md` and
 `results/runtime_large_resource_core.md`:
 
-- 330 functions through `n=12`, 5 methods, 1650 result rows, 5 fixed-MCTS
+- 330 functions through `n=12`, 6 methods, 1980 result rows, 5 fixed-MCTS
   timeout rows, and 0 skips.  The stable run used process-isolated hard
   timeouts on an Apple M4 Pro with 14 logical CPU cores and 24 GB memory.
-- `and_resource_nmcts` completed all 330 functions.  Fixed-coordinate MCTS
-  timed out on 5 `n=12` random ANF functions.
+- `and_resource_nmcts` and `and_profile_resource_nmcts` completed all 330
+  functions.  Fixed-coordinate MCTS timed out on 5 `n=12` random ANF functions.
 - Compared with direct ANF, `and_resource_nmcts` has 291 T-count wins, 0
   losses, and 39 ties, with a 60.37% mean T-count reduction and a 56.84% mean
   score reduction.
@@ -157,6 +158,9 @@ Large-scale core evidence from `results/analysis_large_resource_core.md` and
   portfolio result, not a dominance guarantee over the full affine search.
 - Runtime for `and_resource_nmcts`: 330/330 completed, median 1.311 s, p95
   58.857 s, max 300.848 s.
+- `and_profile_resource_nmcts` trades score for a shorter large-core runtime
+  tail: 330/330 completed, median 2.292 s, p95 25.682 s, max 67.609 s, mean
+  score 286.54 versus 273.72 for `and_resource_nmcts`.
 - The attempted `n=14` extension exposed a runtime long tail for the current
   implementation.  Treat `n=14` as the next stress target rather than as
   paper-facing evidence.

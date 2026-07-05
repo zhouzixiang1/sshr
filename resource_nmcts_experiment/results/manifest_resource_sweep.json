@@ -58,5 +58,5 @@
   },
   "model": "models/action_scorer_rollout_logical_and.pt",
   "workers": 10,
-  "seconds": 36.98137712478638
+  "seconds": 63.47301888465881
 }

@@ -525,24 +525,40 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         )
     if method == "profile_resource_nmcts":
         portfolio: list[SynthesisResult] = []
-        child_specs: list[tuple[str, SearchConfig]] = [("direct_anf", config), ("fprm_direct", config)]
-        for _label, child_config in _profile_candidate_configs(config):
+        profile_configs = _profile_candidate_configs(config)
+        base_config = profile_configs[0][1]
+        child_specs: list[tuple[str, SearchConfig]] = [("fprm_direct", config)]
+        if bf.n <= 6:
+            child_specs.append(("resource_nmcts", config))
+            for _label, child_config in profile_configs:
+                child_specs.extend(
+                    [
+                        ("fprm_greedy", child_config),
+                        ("affine_greedy", child_config),
+                    ]
+                )
+            child_specs.append(("affine_nmcts", base_config))
+            for _label, child_config in profile_configs:
+                child_specs.append(("cube_beam", child_config))
+            child_specs.append(("mcts_factor", config))
+        elif bf.n <= 8:
             child_specs.extend(
                 [
-                    ("fprm_greedy", child_config),
-                    ("affine_greedy", child_config),
+                    ("resource_nmcts", config),
+                    ("fprm_greedy", base_config),
+                    ("affine_greedy", base_config),
                 ]
             )
-        # Keep the expensive neural affine candidate once, then add tractable
-        # small-function candidates that are useful under CNOT/depth and
-        # ancilla-heavy profiles.
-        base_config = _profile_candidate_configs(config)[0][1]
-        child_specs.append(("affine_nmcts", base_config))
-        if bf.n <= 6:
-            for _label, child_config in _profile_candidate_configs(config):
-                child_specs.append(("cube_beam", child_config))
-        if bf.n <= 10:
-            child_specs.append(("mcts_factor", config))
+        else:
+            # Larger random-ANF instances are where broad profile portfolios can
+            # create long tails.  Keep only cheap diversity on top of the stable
+            # direct/FPRM candidates.
+            child_specs.extend(
+                [
+                    ("fprm_greedy", base_config),
+                    ("affine_greedy", base_config),
+                ]
+            )
 
         seen_specs = set()
         for child_method, child_config in child_specs:

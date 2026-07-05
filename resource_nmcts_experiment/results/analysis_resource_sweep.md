@@ -10,28 +10,28 @@ Rows: 1316; usable: 1316; errors: 0; skipped: 0.
 | T-heavy | Fixed MCTS | 47 | 54.81 | 109.49 | 109.77 | 1.55 | 58.79 | 0.144 |
 | T-heavy | Affine-NMCTS | 47 | 41.62 | 85.02 | 89.21 | 1.62 | 45.17 | 1.259 |
 | T-heavy | Resource-NMCTS | 47 | 41.36 | 84.45 | 88.60 | 1.62 | 44.90 | 1.410 |
-| T-heavy | Profile-Resource-NMCTS | 47 | 40.43 | 82.96 | 87.06 | 1.57 | 43.88 | 1.949 |
+| T-heavy | Profile-Resource-NMCTS | 47 | 40.43 | 82.96 | 87.06 | 1.57 | 43.88 | 3.323 |
 | T-heavy | ESOP cube beam | 47 | 83.91 | 134.23 | 161.68 | 2.45 | 89.57 | 0.017 |
 | T-heavy | SSHR-H | 47 | 73.70 | 64.60 | 83.30 | 1.19 | 76.47 | 0.075 |
 | Balanced | AND-direct ANF | 47 | 86.98 | 143.47 | 143.74 | 1.79 | 99.02 | 0.000 |
 | Balanced | Fixed MCTS | 47 | 54.64 | 109.15 | 109.43 | 1.55 | 64.22 | 0.146 |
 | Balanced | Affine-NMCTS | 47 | 41.62 | 84.89 | 89.09 | 1.62 | 50.00 | 1.260 |
 | Balanced | Resource-NMCTS | 47 | 41.28 | 84.32 | 88.47 | 1.62 | 49.63 | 1.420 |
-| Balanced | Profile-Resource-NMCTS | 47 | 40.34 | 82.91 | 87.02 | 1.57 | 48.52 | 1.850 |
+| Balanced | Profile-Resource-NMCTS | 47 | 40.34 | 82.91 | 87.02 | 1.57 | 48.52 | 3.215 |
 | Balanced | ESOP cube beam | 47 | 83.23 | 133.17 | 160.60 | 2.45 | 96.64 | 0.019 |
 | Balanced | SSHR-H | 47 | 73.70 | 64.60 | 83.30 | 1.19 | 80.30 | 0.027 |
 | CNOT-depth | AND-direct ANF | 47 | 86.98 | 143.47 | 143.74 | 1.79 | 98.00 | 0.000 |
 | CNOT-depth | Fixed MCTS | 47 | 54.89 | 109.21 | 109.49 | 1.55 | 67.68 | 0.142 |
 | CNOT-depth | Affine-NMCTS | 47 | 41.96 | 85.45 | 89.55 | 1.64 | 53.52 | 1.232 |
 | CNOT-depth | Resource-NMCTS | 47 | 41.70 | 84.13 | 88.32 | 1.64 | 53.01 | 1.388 |
-| CNOT-depth | Profile-Resource-NMCTS | 47 | 40.51 | 82.43 | 86.72 | 1.60 | 51.71 | 1.821 |
+| CNOT-depth | Profile-Resource-NMCTS | 47 | 40.51 | 82.43 | 86.72 | 1.60 | 51.71 | 3.151 |
 | CNOT-depth | ESOP cube beam | 47 | 83.49 | 133.64 | 160.87 | 2.45 | 96.86 | 0.019 |
 | CNOT-depth | SSHR-H | 47 | 73.70 | 64.60 | 83.30 | 1.19 | 68.96 | 0.016 |
 | Ancilla-tight | AND-direct ANF | 47 | 86.98 | 143.47 | 143.74 | 1.79 | 109.74 | 0.000 |
 | Ancilla-tight | Fixed MCTS | 47 | 55.06 | 109.30 | 109.57 | 1.55 | 73.98 | 0.138 |
 | Ancilla-tight | Affine-NMCTS | 47 | 43.32 | 86.43 | 90.23 | 1.66 | 61.83 | 1.271 |
 | Ancilla-tight | Resource-NMCTS | 47 | 43.06 | 85.57 | 89.32 | 1.64 | 61.35 | 1.407 |
-| Ancilla-tight | Profile-Resource-NMCTS | 47 | 42.38 | 84.79 | 88.72 | 1.62 | 60.46 | 1.659 |
+| Ancilla-tight | Profile-Resource-NMCTS | 47 | 42.38 | 84.79 | 88.72 | 1.62 | 60.46 | 3.028 |
 | Ancilla-tight | ESOP cube beam | 47 | 83.32 | 133.30 | 160.85 | 2.45 | 111.41 | 0.018 |
 | Ancilla-tight | SSHR-H | 47 | 73.70 | 64.60 | 83.30 | 1.19 | 87.45 | 0.008 |
 

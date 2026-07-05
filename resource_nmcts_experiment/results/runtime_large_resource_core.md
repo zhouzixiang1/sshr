@@ -1,6 +1,6 @@
 # Runtime and Resource Tradeoff: large_resource_core
 
-Rows: 1650; errors: 5; skipped: 0.
+Rows: 1980; errors: 5; skipped: 0.
 
 ## Runtime by method
 
@@ -11,6 +11,7 @@ Rows: 1650; errors: 5; skipped: 0.
 | Fixed MCTS | 325 | 5 | 0 | 0.103 | 71.544 | 273.952 | 3425.5 |
 | Affine-NMCTS | 330 | 0 | 0 | 0.719 | 120.451 | 300.420 | 5271.0 |
 | Resource-NMCTS | 330 | 0 | 0 | 1.311 | 58.857 | 300.848 | 3146.9 |
+| Profile-Resource-NMCTS | 330 | 0 | 0 | 2.292 | 25.682 | 67.609 | 2301.5 |
 
 ## Mean resources by method
 
@@ -21,6 +22,7 @@ Rows: 1650; errors: 5; skipped: 0.
 | Fixed MCTS | 325 | 215.16 | 399.35 | 399.60 | 1.89 | 242.51 |
 | Affine-NMCTS | 330 | 245.30 | 448.90 | 451.00 | 1.95 | 275.73 |
 | Resource-NMCTS | 330 | 243.38 | 447.04 | 449.51 | 1.95 | 273.72 |
+| Profile-Resource-NMCTS | 330 | 255.58 | 457.62 | 459.99 | 1.96 | 286.54 |
 
 ## Timeout / error rows
 

@@ -35,8 +35,10 @@ symbolic Boolean construction plans, with explicit multi-resource objectives.
 ## Current Contribution
 
 The current strongest method is `and_resource_nmcts`, a resource-adaptive
-portfolio around a guarded affine-preconditioned neural MCTS solver.  It adds
-four ingredients to fixed-coordinate ANF factoring:
+portfolio around a guarded affine-preconditioned neural MCTS solver.  The
+experimental `and_profile_resource_nmcts` variant adds profile-specialized
+candidate generation.  Together they add five ingredients to fixed-coordinate
+ANF factoring:
 
 1. **Logical-AND resource accounting.** Temporary conjunctions are charged as
    low-T logical ANDs, with T-free Clifford/measurement uncomputation in the
@@ -58,6 +60,10 @@ four ingredients to fixed-coordinate ANF factoring:
    an external baseline.  The guard is intentionally budgeted for larger
    functions rather than a full dominance certificate over every internal
    solver.
+5. **Profile-aware candidate generation.** The profile variant adds
+   T-aggressive, CNOT/depth-oriented, and ancilla-tight candidate configurations
+   on small functions.  For larger random-ANF instances it switches to a cheap
+   direct/FPRM/affine-greedy guard, trading some score for lower runtime tails.
 
 ## Representation
 
@@ -294,11 +300,12 @@ Main `resource_sweep` evidence:
   generation if it wants to claim adaptive resource tradeoffs.
 
 The `large_resource_core` run is the current large-scale paper-facing
-benchmark.  It covers 330 functions through `n <= 12`, five methods, and 1650
+benchmark.  It covers 330 functions through `n <= 12`, six methods, and 1980
 method/function rows.  The stable run used process-isolated hard timeouts on an
 Apple M4 Pro with 14 logical CPU cores and 24 GB memory.  There are 5 timeout
 rows, all from fixed-coordinate MCTS on `n=12` random ANF functions;
-`and_resource_nmcts` completes all 330 functions.
+`and_resource_nmcts` and `and_profile_resource_nmcts` complete all 330
+functions.
 
 Main `large_resource_core` evidence:
 
@@ -320,6 +327,11 @@ Main `large_resource_core` evidence:
 - Runtime for `and_resource_nmcts` is 330/330 completed, median 1.311 s, p95
   58.857 s, and max 300.848 s.  Fixed-coordinate MCTS completes 325/330 and
   has five timeouts.
+- `and_profile_resource_nmcts` completes 330/330 and reduces the large-core
+  runtime tail (p95 25.682 s, max 67.609 s), but its cheap high-dimensional
+  guard has a higher mean score (286.54) than `and_resource_nmcts` (273.72).
+  This should be framed as a profile-aware/tail-control extension, not the
+  score winner on large random ANF functions.
 
 An attempted `n=14` extension exposed a long runtime tail in the current
 implementation.  It should be discussed as a boundary and next engineering

@@ -42,7 +42,7 @@ wins, 1 loss, and 14 ties against time-limited weighted ESOP MILP.  A
 resource-profile stress test shows that \profilemethod{} is best or tied on
 42/47, 42/47, 41/47, and 42/47 functions under T-heavy, balanced,
 CNOT-depth-heavy, and ancilla-tight objectives.  A larger core benchmark through $n=12$ contains 330
-functions and 1650 method/function rows; \method{} completes all functions and
+functions and 1980 method/function rows; \method{} and \profilemethod{} complete all functions and
 reduces mean T-count by 60.37\% relative to direct ANF and by 37.25\% relative
 to logical-AND direct ANF, while fixed-coordinate MCTS times out on five
 $n=12$ rows.  The method is evaluated only at the logical circuit layer;
@@ -156,6 +156,18 @@ are retained; when a simpler internal construction is better under the active
 weights, the method can select it.  The guard is budgeted rather than an
 all-scale dominance certificate: high-dimensional runs deliberately avoid
 internal candidates that create long runtime tails.
+
+\subsection{Profile-aware candidate generation}
+
+\profilemethod{} adds a second portfolio layer for explicit resource profiles.
+For $n\leq 6$, it evaluates additional T-aggressive, CNOT/depth-oriented, and
+ancilla-tight FPRM, affine-greedy, and ESOP cube-beam candidates before
+selecting by the active weighted score.  For larger random-ANF instances, the
+same method switches to a cheap high-dimensional guard: it keeps direct and
+FPRM/affine-greedy candidates but avoids expensive fixed-coordinate MCTS guards.
+This design separates two roles.  On small functions it tests whether the
+resource profile can change the selected circuit; on large functions it acts as
+a runtime-tail guard rather than a score-dominance guarantee.
 
 \section{Experiments}
 
@@ -316,11 +328,11 @@ bounded portfolio rather than a full Pareto optimizer.
 
 The \largedataset{} run contains 330 functions, including structured oracles,
 random truth-table functions up to $n=6$, and random ANF functions up to
-$n=12$.  It produces 1650 method/function rows under process-isolated hard
+$n=12$.  It produces 1980 method/function rows under process-isolated hard
 timeouts on an Apple M4 Pro workstation with 14 logical CPU cores and 24 GB
-memory.  Direct ANF, logical-AND direct ANF, \affinemethod{}, and \method{}
-complete all 330 functions; fixed-coordinate MCTS completes 325 functions and
-times out on five $n=12$ random ANF rows.
+memory.  Direct ANF, logical-AND direct ANF, \affinemethod{}, \method{}, and
+\profilemethod{} complete all 330 functions; fixed-coordinate MCTS completes
+325 functions and times out on five $n=12$ random ANF rows.
 
 \begin{table}[t]
 \centering
@@ -351,8 +363,12 @@ functions.  Relative to standalone \affinemethod{}, the budgeted portfolio has
 29 score wins, 16 score losses, and 285 ties, with a 0.20\% mean score
 reduction.  Thus the portfolio is useful as a scalable resource-aware guard,
 but it is not a dominance guarantee over the full affine search when
-high-dimensional instances force tighter candidate budgets.  An attempted
-$n=14$ extension exposed this runtime long tail and is treated here as a
+high-dimensional instances force tighter candidate budgets.  \profilemethod{}
+has a lower runtime tail than \method{} on this suite, with p95 runtime 25.68 s
+versus 58.86 s, but its cheap high-dimensional guard increases mean score from
+273.72 to 286.54.  We therefore treat it as a profile-sensitive and
+tail-reducing extension, not as the large-scale score winner.  An attempted
+$n=14$ extension exposed a further runtime long tail and is treated here as a
 boundary for the next implementation pass rather than as main evidence.
 
 \section{Discussion}
@@ -374,16 +390,18 @@ $n\leq 6$ slice because it evaluates additional internal candidates, but its
 median runtime remains below 1 s in the current small-function experiment.  On
 the \largedataset{} benchmark, \method{} completes every function with median
 runtime 1.31 s and p95 runtime 58.86 s; the fixed-coordinate MCTS baseline has
-five timeouts.
+five timeouts.  The guarded \profilemethod{} variant reduces the p95 runtime to
+25.68 s on the same large benchmark, at the cost of a higher mean score.
 
 The main current limitations are the absence of hardware mapping, the use of a
 local benchmark suite rather than standardized external oracle benchmarks, and
 the lack of a reproduced external XAG/ROS toolchain in the comparison set.  The
 in-harness ESOP cube-beam and weighted-MILP baselines strengthen the Boolean
 synthesis comparison, but external implementations remain necessary before a
-submission-ready claim.  The resource-profile sweep also shows that the current
-candidate generator is not yet strongly profile-sensitive; resource-specific
-candidate generation is a natural next extension.
+submission-ready claim.  The resource-profile sweep shows that profile-specific
+candidate generation improves objective robustness on small functions, but the
+large benchmark shows the corresponding high-dimensional tradeoff: conservative
+profile guards reduce runtime tails but give up some score.
 
 \section{Conclusion}
 
@@ -396,8 +414,8 @@ $n\leq 6$ traditional-baseline slice, the full \method{} method further avoids
 score regressions against internal ESOP cube-beam candidates and remains
 competitive against weighted ESOP MILP.  Resource-profile and \largedataset{}
 benchmarks show that this advantage is robust across several weighted
-objectives and larger random ANF instances, while also exposing limited profile
-sensitivity and a runtime long tail beyond the present $n\leq 12$ core.  The
+objectives and larger random ANF instances, while also exposing the tradeoff
+between stronger profile sensitivity and high-dimensional runtime control.  The
 next step is to add standardized external baselines and stronger
 high-dimensional candidate generation so the empirical claim is
 submission-ready.

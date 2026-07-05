@@ -7,11 +7,12 @@
     "and_direct_anf",
     "and_mcts_factor",
     "and_affine_nmcts",
-    "and_resource_nmcts"
+    "and_resource_nmcts",
+    "and_profile_resource_nmcts"
   ],
   "model": "models/action_scorer_rollout_logical_and.pt",
   "workers": 6,
-  "seconds": 446.1438901424408,
+  "seconds": 625.8756289482117,
   "config": {
     "weights": {
       "t": 1.0,
