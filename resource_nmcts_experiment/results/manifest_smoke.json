@@ -1,0 +1,31 @@
+{
+  "preset": "smoke",
+  "seed": 42,
+  "functions": 12,
+  "methods": [
+    "direct_anf",
+    "greedy_factor",
+    "mcts_factor",
+    "fprm_mcts",
+    "neural_mcts",
+    "sshr_h"
+  ],
+  "model": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/models/action_scorer.pt",
+  "workers": 1,
+  "seconds": 0.038079023361206055,
+  "config": {
+    "weights": {
+      "t": 1.0,
+      "cnot": 0.04,
+      "depth": 0.015,
+      "gates": 0.01,
+      "ancilla": 2.0
+    },
+    "max_factor_ancilla": 4,
+    "max_factor_size": 5,
+    "candidate_top_k": 24,
+    "mcts_simulations": 24,
+    "neural_mcts_simulations": 32,
+    "max_polarities": 32
+  }
+}
