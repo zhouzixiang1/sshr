@@ -171,6 +171,8 @@ The current paper-facing run is:
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_small --model models/action_scorer_rollout_logical_and.pt --resume
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset traditional_small
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset traditional_small
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_resource_sweep.py --model models/action_scorer_rollout_logical_and.pt --workers 10
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_resource_sweep.py
 ```
 
 It covers 322 functions and 1610 method/function rows.  The main results are:
@@ -248,3 +250,22 @@ Main `traditional_small` evidence:
 - SSHR-H remains better in mean CNOT count and often depth on the small
   supported subset.  This is a useful limitation, not a contradiction of the
   low-T/resource-score claim.
+
+The `resource_sweep` stress test checks whether the method remains competitive
+under different resource objectives.  It uses 47 functions with `n <= 6`, four
+profiles (T-heavy, balanced, CNOT-depth-heavy, and ancilla-tight), five methods,
+and 940 method/profile/function rows.  There are 0 errors and 0 skips.
+
+Main `resource_sweep` evidence:
+
+- `and_affine_nmcts` is the objective-score winner on 32/47 functions under
+  T-heavy weights, 32/47 under balanced weights, 29/47 under CNOT-depth-heavy
+  weights, and 30/47 under ancilla-tight weights.
+- Compared with fixed-coordinate MCTS, it has score wins/losses/ties of
+  35/0/12, 35/0/12, 35/0/12, and 33/0/14 across the four profiles.
+- Compared with ESOP cube beam, it has score wins/losses/ties of 46/0/1,
+  46/0/1, 45/1/1, and 46/0/1.
+- The mean resource vector changes only modestly across profiles.  This is
+  evidence of robustness, not yet evidence of strong profile-sensitive Pareto
+  optimization.  A submission version should add resource-profile-specific
+  candidate generation if it wants to claim adaptive resource tradeoffs.

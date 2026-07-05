@@ -7,7 +7,7 @@ Working title:
 This folder is the manuscript workspace for the resource-constrained quantum
 Boolean oracle synthesis project.  The draft is intentionally evidence-first:
 claims in `main.tex` are limited to the current `evidence_affine`,
-`ablation_affine`, and `traditional_small` results.
+`ablation_affine`, `traditional_small`, and `resource_sweep` results.
 
 Build:
 
@@ -26,10 +26,14 @@ Current source evidence:
 - traditional baseline analysis: `../results/analysis_traditional_small.md`
 - traditional runtime/resource analysis:
   `../results/runtime_traditional_small.md`
+- resource-sweep CSV: `../results/raw_resource_sweep.csv`
+- resource-sweep analysis: `../results/analysis_resource_sweep.md`
 - LaTeX tables: `tables/runtime_ablation_affine.tex`,
   `tables/resource_ablation_affine.tex`,
   `tables/resource_traditional_small.tex`,
-  `tables/runtime_traditional_small.tex`
+  `tables/runtime_traditional_small.tex`,
+  `tables/resource_sweep_affine.tex`,
+  `tables/resource_sweep_winners.tex`
 - manifest: `../results/manifest_evidence_affine.json`
 
 Known manuscript gaps:

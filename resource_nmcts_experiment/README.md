@@ -24,6 +24,8 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_small --model models/action_scorer_rollout_logical_and.pt --resume
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset traditional_small
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset traditional_small
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_resource_sweep.py --model models/action_scorer_rollout_logical_and.pt --workers 10
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_resource_sweep.py
 ```
 
 Current presets:
@@ -101,6 +103,21 @@ Traditional Boolean/ESOP baseline evidence from
 - SSHR-H still has the lowest mean CNOT count on this small-function slice, so
   the claim remains low-T/resource-score synthesis rather than CNOT-only
   optimality.
+
+Resource-profile stress-test evidence from
+`results/analysis_resource_sweep.md`:
+
+- 47 functions with $n \leq 6$, 4 resource profiles, 5 methods, 940 result
+  rows, 0 errors, and 0 skips.
+- `and_affine_nmcts` is the objective-score winner on 32/47 functions under
+  T-heavy weights, 32/47 under balanced weights, 29/47 under CNOT-depth-heavy
+  weights, and 30/47 under ancilla-tight weights.
+- Against fixed-coordinate MCTS, `and_affine_nmcts` has score wins/losses/ties
+  of 35/0/12, 35/0/12, 35/0/12, and 33/0/14 across the four profiles.
+- The mean Affine-NMCTS resource vector changes only modestly across profiles
+  (mean T 41.62--43.32; mean CNOT 84.89--86.43; mean depth 89.09--90.23).
+  This supports robustness under resource profiles but also shows that the
+  current candidate generator is not yet a strong Pareto-front optimizer.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost

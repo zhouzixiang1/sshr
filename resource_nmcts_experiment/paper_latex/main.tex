@@ -255,6 +255,34 @@ not directly comparable to all-suite means.}
 \input{tables/resource_ablation_affine}
 \end{table}
 
+\subsection{Resource-profile stress test}
+
+To test whether the method remains competitive under different resource
+objectives, we ran a 47-function $n\leq 6$ sweep under four profiles: T-heavy,
+balanced, CNOT-depth-heavy, and ancilla-tight.  The sweep produced 940
+method/profile/function rows with no errors or skips.  Scores are comparable
+within a profile but not across profiles because each profile uses a different
+weighted objective.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Objective-score winners in the resource-profile sweep.  Each row sums
+to 47 functions.}
+\label{tab:resource-sweep-winners}
+\input{tables/resource_sweep_winners}
+\end{table}
+
+\method{} was the objective winner on 32/47 functions under T-heavy weights,
+32/47 under balanced weights, 29/47 under CNOT-depth-heavy weights, and 30/47
+under ancilla-tight weights.  It had no score losses against fixed-coordinate
+MCTS in any profile, with score wins/ties of 35/12, 35/12, 35/12, and 33/14.
+However, the mean \method{} resource vector changed only modestly across the
+four profiles: mean T-count ranged from 41.62 to 43.32, mean CNOT count from
+84.89 to 86.43, and mean depth from 89.09 to 90.23.  This result is therefore
+best interpreted as robustness under resource-profile stress, not as evidence
+of a fully profile-adaptive Pareto optimizer.
+
 \section{Discussion}
 
 The results support the central hypothesis that affine Boolean coordinates are
@@ -275,7 +303,9 @@ local benchmark suite rather than standardized external oracle benchmarks, and
 the lack of a reproduced external XAG/ROS toolchain in the comparison set.  The
 in-harness ESOP cube-beam and weighted-MILP baselines strengthen the Boolean
 synthesis comparison, but external implementations remain necessary before a
-submission-ready claim.
+submission-ready claim.  The resource-profile sweep also shows that the current
+candidate generator is not yet strongly profile-sensitive; resource-specific
+candidate generation is a natural next extension.
 
 \section{Conclusion}
 
@@ -284,9 +314,10 @@ combines resource-aware neural MCTS with affine Boolean preconditioning.  On the
 current benchmark, the method substantially reduces T-count versus direct ANF,
 logical-AND direct ANF, fixed-coordinate MCTS, SSHR-H on supported functions,
 and in-harness ESOP cube-beam and weighted-MILP baselines on the $n\leq 6$
-slice, while remaining bounded to logical resource accounting.  The next step
-is to add standardized external baselines and stronger runtime-stress tests so
-the empirical claim is submission-ready.
+slice.  A resource-profile stress test shows that this advantage is robust
+across several weighted objectives, while also exposing limited profile
+sensitivity.  The next step is to add standardized external baselines and
+stronger runtime-stress tests so the empirical claim is submission-ready.
 
 \bibliographystyle{plain}
 \bibliography{references}

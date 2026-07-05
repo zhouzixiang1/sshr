@@ -1,0 +1,60 @@
+{
+  "seed": 42,
+  "functions": 47,
+  "methods": [
+    "and_direct_anf",
+    "and_mcts_factor",
+    "and_affine_nmcts",
+    "and_cube_beam",
+    "sshr_h"
+  ],
+  "profiles": {
+    "t_heavy": {
+      "label": "T-heavy",
+      "weights": {
+        "t": 1.0,
+        "cnot": 0.015,
+        "depth": 0.005,
+        "gates": 0.005,
+        "ancilla": 1.0
+      },
+      "max_factor_ancilla": 4
+    },
+    "balanced": {
+      "label": "Balanced",
+      "weights": {
+        "t": 1.0,
+        "cnot": 0.04,
+        "depth": 0.015,
+        "gates": 0.01,
+        "ancilla": 2.0
+      },
+      "max_factor_ancilla": 4
+    },
+    "cnot_depth": {
+      "label": "CNOT-depth",
+      "weights": {
+        "t": 0.65,
+        "cnot": 0.18,
+        "depth": 0.08,
+        "gates": 0.01,
+        "ancilla": 2.0
+      },
+      "max_factor_ancilla": 4
+    },
+    "ancilla_tight": {
+      "label": "Ancilla-tight",
+      "weights": {
+        "t": 1.0,
+        "cnot": 0.04,
+        "depth": 0.015,
+        "gates": 0.01,
+        "ancilla": 8.0
+      },
+      "max_factor_ancilla": 1
+    }
+  },
+  "model": "models/action_scorer_rollout_logical_and.pt",
+  "workers": 10,
+  "seconds": 29.67691993713379
+}
