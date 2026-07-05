@@ -173,7 +173,7 @@ and `results/runtime_highdim_resource.md`:
 - 64 random ANF functions at `n=14`, 7 methods, 448 result rows, 0 errors, and
   0 skips.
 - `and_resource_nmcts` and `and_profile_resource_nmcts` complete all 64
-  functions under process-isolated timeouts.
+  functions under the high-dimensional bounded guard.
 - Compared with direct ANF, both Resource-NMCTS variants have 51 T-count wins,
   0 losses, and 13 ties, with a 52.63% mean T-count reduction and a 50.31%
   mean score reduction.
@@ -186,8 +186,9 @@ and `results/runtime_highdim_resource.md`:
   FPRM root-beam candidate, which evaluates multiple first-factor choices
   after cheap direct-cost polarity screening.
 - Runtime tails remain visible but bounded: `and_resource_nmcts` completes
-  64/64 with median 7.952 s and p95 64.177 s; `and_profile_resource_nmcts`
-  completes 64/64 with median 7.794 s and p95 63.488 s.
+  64/64 with median 5.134 s and p95 38.834 s; `and_profile_resource_nmcts`
+  completes 64/64 with median 5.116 s and p95 38.586 s.  The standalone
+  FPRM root-beam candidate has median 2.710 s and p95 26.119 s.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost

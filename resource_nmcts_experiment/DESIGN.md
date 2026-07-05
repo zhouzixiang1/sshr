@@ -354,5 +354,6 @@ Main `highdim_resource` evidence:
   ties.  The bounded root-beam candidate corrects the first-factor choice while
   preserving the same polarity-screening budget.
 - Runtime remains bounded but nontrivial: `and_resource_nmcts` has median
-  runtime 7.952 s, p95 64.177 s, and max 80.002 s; the profile variant has
-  median 7.794 s, p95 63.488 s, and max 80.596 s.
+  runtime 5.134 s, p95 38.834 s, and max 49.301 s; the profile variant has
+  median 5.116 s, p95 38.586 s, and max 49.042 s.  The standalone FPRM
+  root-beam candidate has median 2.710 s, p95 26.119 s, and max 32.879 s.

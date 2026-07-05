@@ -51,7 +51,7 @@ rows.  An isolated
 $n=14$ stress benchmark adds 64 random ANF functions and 448 rows with no
 errors or skips; the guarded high-dimensional variants reduce mean T-count by
 52.63\% relative to direct ANF and by 26.73\% relative to logical-AND direct
-ANF, with 32 score wins and no losses against FPRM-greedy.  The method is
+ANF, with 32 score wins, no losses, and 32 ties against FPRM-greedy.  The method is
 evaluated only at the logical circuit layer;
 hardware mapping and connectivity constraints are outside the present scope.
 \end{abstract}
@@ -419,8 +419,8 @@ falls from 2263.69 for FPRM-greedy to 2253.62 for \method{} and
 \profilemethod{}.  The improvement is modest in mean value but important
 mechanistically: a bounded root-beam correction now improves high-dimensional
 quality without introducing timeouts.  Runtime tails remain bounded:
-\method{} has p95 runtime 64.18 s, while \profilemethod{} has p95 runtime
-63.49 s.
+\method{} has p95 runtime 38.83 s, while \profilemethod{} has p95 runtime
+38.59 s; the standalone FPRM root-beam candidate has p95 runtime 26.12 s.
 
 \section{Discussion}
 

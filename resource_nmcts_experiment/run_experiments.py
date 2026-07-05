@@ -436,16 +436,22 @@ def main(argv: Iterable[str] | None = None) -> int:
     write_csv(raw, rows)
     summary = summarize(rows)
     write_csv(summary_path, summary)
+    elapsed = time.time() - started
     manifest.write_text(
         json.dumps(
             {
                 "preset": args.preset,
                 "seed": args.seed,
                 "functions": len(suite),
-                "methods": methods,
+                "methods": cfg["methods"],
+                "last_run_methods": methods,
+                "resume": args.resume,
+                "raw_rows": len(rows),
+                "raw_methods": sorted({str(r.get("method", "")) for r in rows if r.get("method")}),
                 "model": model_path,
                 "workers": workers,
-                "seconds": time.time() - started,
+                "seconds": None if args.resume else elapsed,
+                "seconds_current_run": elapsed,
                 "config": config_dict,
             },
             ensure_ascii=False,
