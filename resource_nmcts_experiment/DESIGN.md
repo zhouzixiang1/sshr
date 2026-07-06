@@ -85,7 +85,9 @@ methods add six ingredients to fixed-coordinate ANF factoring:
    root-child-beam, and CNOT-only linear-pair factorizations before contributing
    the best scored candidate to the Pareto pool.  This turns the small-function
    profile layer from a budget-only portfolio into an explicit local Pareto
-   frontier approximation.
+   frontier approximation.  For high-dimensional ANF stress tests, the Pareto
+   variant uses bounded direct/FPRM/root/linear candidate families under a small
+   set of resource profiles rather than nested affine or full MCTS candidates.
 
 ## Representation
 
@@ -239,10 +241,14 @@ The current paper-facing run is:
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_resource --model models/action_scorer_rollout_logical_and.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset traditional_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset traditional_resource
-/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_resource --only-methods and_affine_nmcts,and_resource_nmcts,and_pareto_resource_nmcts --model /tmp/nonexistent_model.pt --out-dir /tmp/resource_nmcts_traditional_no_model --workers 10 --checkpoint-every 50
-cp /tmp/resource_nmcts_traditional_no_model/raw_traditional_resource.csv results/raw_traditional_resource_no_prior.csv
-cp /tmp/resource_nmcts_traditional_no_model/summary_traditional_resource.csv results/summary_traditional_resource_no_prior.csv
-cp /tmp/resource_nmcts_traditional_no_model/manifest_traditional_resource.json results/manifest_traditional_resource_no_prior.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_resource --only-methods and_affine_nmcts,and_resource_nmcts,and_pareto_resource_nmcts --model models/action_scorer_rollout_logical_and.pt --out-dir /tmp/resource_nmcts_traditional_learned_prior --workers 10 --checkpoint-every 50
+cp /tmp/resource_nmcts_traditional_learned_prior/raw_traditional_resource.csv results/raw_traditional_resource_learned_prior.csv
+cp /tmp/resource_nmcts_traditional_learned_prior/summary_traditional_resource.csv results/summary_traditional_resource_learned_prior.csv
+cp /tmp/resource_nmcts_traditional_learned_prior/manifest_traditional_resource.json results/manifest_traditional_resource_learned_prior.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_resource --only-methods and_affine_nmcts,and_resource_nmcts,and_pareto_resource_nmcts --model /tmp/nonexistent_model.pt --out-dir /tmp/resource_nmcts_traditional_no_prior --workers 10 --checkpoint-every 50
+cp /tmp/resource_nmcts_traditional_no_prior/raw_traditional_resource.csv results/raw_traditional_resource_no_prior.csv
+cp /tmp/resource_nmcts_traditional_no_prior/summary_traditional_resource.csv results/summary_traditional_resource_no_prior.csv
+cp /tmp/resource_nmcts_traditional_no_prior/manifest_traditional_resource.json results/manifest_traditional_resource_no_prior.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_neural_prior_ablation.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_resource_sweep.py --model models/action_scorer_rollout_logical_and.pt --workers 10
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_resource_sweep.py
@@ -305,9 +311,10 @@ compares the model-backed run with a no-prior rerun on all 177
 `traditional_resource` functions for `and_affine_nmcts`, `and_resource_nmcts`,
 and `and_pareto_resource_nmcts`.  It has 1062 usable rows, 0 errors, and 0
 skips.  Learned-prior score wins/losses/ties are 42/0/135, 41/0/136, and
-29/0/148, with mean score reductions of 1.47%, 1.34%, and 0.78%.  Runtime is
-higher for the learned-prior rows on this small-function slice, so the current
-claim is a quality improvement at nonzero inference cost.
+29/0/148, with mean score reductions of 1.47%, 1.34%, and 0.78%.  Paired mean
+relative runtime increases are 91.22%, 87.31%, and 67.44% on this
+small-function slice, so the current claim is a quality improvement at nonzero
+inference cost.
 
 The runtime/resource table in `results/runtime_ablation_affine.md` adds the
 cost side of the argument:
@@ -499,61 +506,79 @@ Main `large_resource_core` evidence:
 
 The `highdim_resource` stress test isolates the next scale point rather than
 mixing it into the structured suite.  It covers 64 random ANF functions at
-`n=14`, eight methods, and 512 method/function rows, with 0 errors and 0 skips
+`n=14`, nine methods, and 576 method/function rows, with 0 errors and 0 skips
 after the high-dimensional guard was tightened to avoid fixed-coordinate MCTS
-tails and to add a bounded recursive FPRM linear-pair candidate.
+tails and to add bounded recursive FPRM linear-pair and Pareto archive
+candidates.
 
 Main `highdim_resource` evidence:
 
-- `and_resource_nmcts` and `and_profile_resource_nmcts` complete all 64
-  functions under the high-dimensional bounded guard.
-- Compared with direct ANF, both guarded methods have 61 T-count wins, 0
-  losses, and 3 ties, with a 57.42% mean T-count reduction and a 54.03% mean
-  composite-score reduction.
-- Compared with logical-AND direct ANF, both have 61 T-count wins, 0 losses,
-  and 3 ties, with a 32.74% mean T-count reduction and a 30.86% mean score
-  reduction.
-- Compared with FPRM-greedy, both guarded methods have 60 T-count wins, 0
+- `and_resource_nmcts`, `and_profile_resource_nmcts`, and
+  `and_pareto_resource_nmcts` complete all 64 functions under the
+  high-dimensional bounded guard.
+- Compared with direct ANF, Pareto-Resource-NMCTS has 61 T-count wins, 0
+  losses, and 3 ties, with a 57.94% mean T-count reduction and a 54.55% mean
+  composite-score reduction; Resource/Profile have the same win/tie pattern
+  with 57.43% and 54.01% reductions.
+- Compared with logical-AND direct ANF, Pareto-Resource-NMCTS has 61 score wins,
+  0 losses, and 3 ties, with a 31.40% mean score reduction.
+- Compared with FPRM-greedy, the guarded methods have 60 T-count wins, 0
   losses, and 4 ties; by weighted score they also have 60 wins, 0 losses, and
-  4 ties, with a 6.25% mean score reduction.  Against the one-layer linear-pair
-  candidate, the recursive guard has 53 T-count wins, 0 losses, and 11 ties.
+  4 ties, with 6.29-6.83% mean score reductions.  Against the one-layer
+  linear-pair candidate, Pareto-Resource-NMCTS has 59 score wins, 0 losses, and
+  5 ties, with a 3.49% mean score reduction.
+- The Pareto archive improves over Resource/Profile in 16 score cases, loses
+  none, ties 48, and lowers mean score by 0.59%.
   The bounded recursive linear-pair candidate factors repeated pairs
   `x_i m xor x_j m` as `(x_i xor x_j) m`, using only CNOTs to compute and
   uncompute the temporary linear control.
 - Runtime remains bounded but nontrivial: `and_resource_nmcts` has median
-  runtime 8.375 s, p95 76.838 s, and max 113.164 s; the profile variant
-  delegates to the same high-dimensional guard.  The standalone one-layer FPRM
-  linear-pair candidate has median 2.574 s, p95 30.760 s, and max 41.593 s.
-  The gain uses more workspace: mean peak ancilla rises from 2.03 to 3.05.
+  runtime 8.571 s, p95 80.429 s, and max 121.219 s; `and_profile_resource_nmcts`
+  has median runtime 9.294 s, p95 84.226 s, and max 122.849 s;
+  `and_pareto_resource_nmcts` has
+  median runtime 67.788 s, p95 300.019 s, and max 300.414 s.  The standalone
+  one-layer FPRM linear-pair candidate has median 2.574 s, p95 30.760 s, and
+  max 41.593 s.  The gain uses more workspace: mean peak ancilla rises from
+  2.03 to about 3.05-3.06.
 
 The `highdim_scale_resource` run extends the same high-dimensional guard to
-32 random ANF functions at `n=15`.  It contains 288 method/function rows across
-nine methods, with 0 errors and 0 skips.  The guarded variants select the
-bounded recursive linear-pair candidate.  Compared with FPRM-greedy, they have
-30 T-count wins, 0 losses, and 2 ties; by weighted score they also have 30
-wins, 0 losses, and 2 ties, with a 5.73% mean score reduction.
-Compared with FPRM root beam, they have 30 score wins, 0 losses, and 2 ties,
-with a 5.28% mean score reduction.  The recursive linear-pair refinement
+32 random ANF functions at `n=15`.  It contains 320 method/function rows across
+ten methods, with 0 errors and 0 skips.  The guarded variants select the
+bounded recursive linear-pair candidate, while the high-dimensional Pareto
+archive evaluates bounded profile variants around the same candidate families.
+Compared with FPRM-greedy, Resource/Profile/Pareto have 30 T-count wins, 0
+losses, and 2 ties; by weighted score they also have 30 wins, 0 losses, and
+2 ties, with 5.73-5.75% mean score reductions.  Compared with FPRM root beam,
+they have 30 score wins, 0 losses, and 2 ties, with 5.28-5.31% mean score
+reductions.  The recursive linear-pair refinement
 improves the one-layer linear-pair candidate in 29 score cases, ties in 3, and
 has 0 score losses, while mean peak ancilla rises from 2.84 to 3.06.  The
 standalone width-three linear-parity ablation is dominated by the recursive
-pair method under the default objective.  The scale check is slower but finite:
-`and_resource_nmcts` has median runtime 16.514 s and p95 135.536 s, while
-`and_profile_resource_nmcts` has median runtime 14.684 s and p95 122.842 s.
+pair method under the default objective.  The Pareto archive gives a smaller
+residual improvement over Resource/Profile: 5 score wins, 0 losses, 27 ties,
+and a 0.03% mean score reduction.  The scale check is slower but finite:
+`and_resource_nmcts` has median runtime 9.701 s and p95 90.017 s,
+`and_profile_resource_nmcts` has median runtime 11.334 s and p95 93.676 s,
+and `and_pareto_resource_nmcts` has median runtime 117.516 s and p95 300.300 s.
 
 The `ultra_highdim_resource` run is an additional scale check at `n=16`.  It
-contains 24 random ANF functions, six methods, and 144 method/function rows
-with 0 errors/skips.  The ultra-scale guard switches Resource/Profile to the
+contains 24 random ANF functions, seven methods, and 168 method/function rows
+with 0 errors/skips.  The ultra-scale Resource/Profile guard switches to the
 one-layer FPRM linear-pair candidate rather than the recursive `n=15` branch,
 so both guarded variants match `and_fprm_linear_pair` on all 24 functions.
-Compared with direct ANF, they have 23 T-count wins, 0 losses, and 1 tie, with
-a 62.08% mean T-count reduction and a 59.52% mean score reduction.  Compared
-with logical-AND direct ANF, they have 23 weighted-score wins, 0 losses, and
-1 tie, with a 31.68% mean score reduction.  Compared with FPRM root beam, they
-have 22 weighted-score wins, 0 losses, and 2 ties, with a 1.88% mean score
-reduction.  Runtime remains finite: `and_resource_nmcts` has median runtime
-17.537 s and p95 59.132 s, while `and_profile_resource_nmcts` has median
-runtime 17.566 s and p95 58.479 s.  The associated Möbius/zeta-transform
+Pareto-Resource-NMCTS adds bounded profile variants around the same
+high-dimensional candidate set and improves Resource/Profile in 9 weighted-score
+cases, ties 15, and has no score losses, with a 0.09% mean score reduction.
+Compared with direct ANF, Pareto-Resource-NMCTS has 23 T-count wins, 0 losses,
+and 1 tie, with a 62.12% mean T-count reduction and a 59.56% mean score
+reduction.  Compared with logical-AND direct ANF, it has 23 weighted-score wins,
+0 losses, and 1 tie, with a 31.75% mean score reduction.  Compared with FPRM
+root beam, it has 22 weighted-score wins, 0 losses, and 2 ties, with a 1.97%
+mean score reduction.  Runtime remains finite but expensive:
+`and_resource_nmcts` has median runtime 7.880 s and p95 27.830 s,
+`and_profile_resource_nmcts` has median runtime 8.426 s and p95 29.765 s, and
+`and_pareto_resource_nmcts` has median runtime 130.923 s and p95 301.097 s.
+The associated Möbius/zeta-transform
 implementation in `anf_utils.py` removes the avoidable per-assignment monomial
 scan and makes larger ANF-derived truth tables practical to generate.
 

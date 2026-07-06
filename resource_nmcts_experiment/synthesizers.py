@@ -619,6 +619,100 @@ def _pareto_candidate_configs(config: SearchConfig) -> list[tuple[str, SearchCon
     return deduped
 
 
+def _highdim_pareto_candidate_configs(config: SearchConfig, n: int) -> list[tuple[str, SearchConfig]]:
+    """Return bounded multi-objective configs for n>12 ANF stress tests.
+
+    The small-function Pareto archive can afford nested affine/MCTS candidates.
+    High-dimensional random ANFs cannot: the useful diversity comes from
+    scoring the same bounded FPRM/root/linear candidate families under
+    intentionally different resource weights.  For n>=18 we keep only two
+    configs so that the root-beam verification boundary remains tractable.
+    """
+    base_top_k = max(8, min(config.candidate_top_k, 24))
+    active = (
+        "active",
+        replace(
+            config,
+            candidate_top_k=base_top_k,
+            max_polarities=min(config.max_polarities, 12),
+            mcts_simulations=min(config.mcts_simulations, 24),
+            neural_mcts_simulations=min(config.neural_mcts_simulations, 32),
+        ),
+    )
+    cnot_depth = (
+        "cnot_depth",
+        replace(
+            config,
+            weights=ResourceWeights(t=0.20, cnot=0.70, depth=0.35, gates=0.02, ancilla=1.0),
+            max_factor_ancilla=min(config.max_factor_ancilla, 2),
+            max_factor_size=min(config.max_factor_size, 3),
+            candidate_top_k=min(base_top_k, 14),
+            greedy_eval_limit=2,
+            max_polarities=min(config.max_polarities, 8),
+            mcts_simulations=min(config.mcts_simulations, 20),
+            neural_mcts_simulations=min(config.neural_mcts_simulations, 24),
+        ),
+    )
+    if n >= 18:
+        configs = [active, cnot_depth]
+    else:
+        configs = [
+            active,
+            (
+                "t_sparse",
+                replace(
+                    config,
+                    weights=ResourceWeights(t=1.0, cnot=0.008, depth=0.003, gates=0.003, ancilla=0.6),
+                    max_factor_size=min(max(config.max_factor_size, 6), 6),
+                    candidate_top_k=min(max(base_top_k, 24), 28),
+                    greedy_eval_limit=2,
+                    max_polarities=min(max(config.max_polarities, 12), 16),
+                    mcts_simulations=min(max(config.mcts_simulations, 24), 32),
+                    neural_mcts_simulations=min(max(config.neural_mcts_simulations, 32), 40),
+                ),
+            ),
+            cnot_depth,
+            (
+                "depth_first",
+                replace(
+                    config,
+                    weights=ResourceWeights(t=0.08, cnot=0.30, depth=1.0, gates=0.01, ancilla=0.8),
+                    max_factor_ancilla=min(config.max_factor_ancilla, 1),
+                    max_factor_size=min(config.max_factor_size, 3),
+                    candidate_top_k=min(base_top_k, 10),
+                    greedy_eval_limit=1,
+                    max_polarities=min(config.max_polarities, 6),
+                    mcts_simulations=min(config.mcts_simulations, 16),
+                    neural_mcts_simulations=min(config.neural_mcts_simulations, 20),
+                ),
+            ),
+            (
+                "ancilla_tight",
+                replace(
+                    config,
+                    weights=ResourceWeights(t=0.80, cnot=0.04, depth=0.015, gates=0.01, ancilla=20.0),
+                    max_factor_ancilla=min(config.max_factor_ancilla, 1),
+                    max_factor_size=min(config.max_factor_size, 3),
+                    candidate_top_k=min(base_top_k, 10),
+                    greedy_eval_limit=1,
+                    max_polarities=min(config.max_polarities, 6),
+                    mcts_simulations=min(config.mcts_simulations, 16),
+                    neural_mcts_simulations=min(config.neural_mcts_simulations, 20),
+                ),
+            ),
+        ]
+
+    deduped: list[tuple[str, SearchConfig]] = []
+    seen = set()
+    for label, cfg in configs:
+        key = _config_key(cfg)
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append((label, cfg))
+    return deduped
+
+
 def _resource_dims(result: SynthesisResult) -> tuple[int, int, int, int, int]:
     return (
         result.cost.T,
@@ -778,27 +872,28 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             n_qubits=best.n_qubits,
         )
     if method == "pareto_resource_nmcts":
-        if bf.n > 12:
-            child = synthesize("resource_nmcts", bf, config, seed=seed, model_path=model_path)
-            return SynthesisResult(
-                method=requested_method,
-                cost=child.cost,
-                time_s=time.time() - t0,
-                correct=child.correct,
-                terms=child.terms,
-                gates=child.gates,
-                n_qubits=child.n_qubits,
-            )
-
         portfolio: list[SynthesisResult] = []
-        pareto_configs = _pareto_candidate_configs(config)
+        pareto_configs = _highdim_pareto_candidate_configs(config, bf.n) if bf.n > 12 else _pareto_candidate_configs(config)
         active_config = pareto_configs[0][1]
         child_specs: list[tuple[str, SearchConfig]] = [
             ("direct_anf", config),
             ("fprm_direct", config),
             ("resource_nmcts", config),
         ]
-        if bf.n <= 6:
+        if bf.n > 12:
+            for label, child_config in pareto_configs:
+                child_specs.append(("fprm_root_beam", child_config))
+                if bf.n < 18:
+                    child_specs.append(("fprm_linear_pair", child_config))
+                    child_specs.append(("fprm_linear_parity", child_config))
+                    if bf.n <= 15 and child_config.max_factor_ancilla >= 2:
+                        child_specs.append(("fprm_linear_pair_deep", child_config))
+                elif label == "cnot_depth":
+                    # Keep n=18 bounded: no linear-pair screen, but do include
+                    # a depth-weighted root-beam candidate that can trade T for
+                    # lower Clifford work under depth-heavy profiles.
+                    child_specs.append(("fprm_direct", child_config))
+        elif bf.n <= 6:
             child_specs.append(("profile_resource_nmcts", config))
             child_specs.append(("fprm_polarity_archive", active_config))
             for label, child_config in pareto_configs:

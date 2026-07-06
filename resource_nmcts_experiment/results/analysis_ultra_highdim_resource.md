@@ -1,6 +1,6 @@
 # Ultra_Highdim_Resource Analysis
 
-Rows: 144; usable: 144; errors: 0; skipped: 0.
+Rows: 168; usable: 168; errors: 0; skipped: 0.
 
 ## Mean T-count improvement vs direct ANF
 
@@ -9,6 +9,7 @@ Rows: 144; usable: 144; errors: 0; skipped: 0.
 | and_direct_anf | 24 | -45.29% | -49.95% | +0.00% |
 | and_fprm_linear_pair | 24 | -62.08% | -69.83% | +0.00% |
 | and_fprm_root_beam | 24 | -60.92% | -69.33% | +0.00% |
+| and_pareto_resource_nmcts | 24 | -62.12% | -69.83% | +0.00% |
 | and_profile_resource_nmcts | 24 | -62.08% | -69.83% | +0.00% |
 | and_resource_nmcts | 24 | -62.08% | -69.83% | +0.00% |
 
@@ -71,6 +72,36 @@ Rows: 144; usable: 144; errors: 0; skipped: 0.
 | and_profile_resource_nmcts | and_fprm_linear_pair | depth | 0 | 0 | 24 | +0.00% |
 | and_profile_resource_nmcts | and_fprm_linear_pair | peak_ancilla | 0 | 0 | 24 | +0.00% |
 | and_profile_resource_nmcts | and_fprm_linear_pair | score | 0 | 0 | 24 | +0.00% |
+| and_pareto_resource_nmcts | direct_anf | T | 23 | 0 | 1 | -62.12% |
+| and_pareto_resource_nmcts | direct_anf | CNOT | 4 | 20 | 0 | +10.46% |
+| and_pareto_resource_nmcts | direct_anf | depth | 4 | 20 | 0 | +10.46% |
+| and_pareto_resource_nmcts | direct_anf | peak_ancilla | 0 | 23 | 1 | +129.17% |
+| and_pareto_resource_nmcts | direct_anf | score | 23 | 1 | 0 | -59.56% |
+| and_pareto_resource_nmcts | and_direct_anf | T | 23 | 0 | 1 | -32.67% |
+| and_pareto_resource_nmcts | and_direct_anf | CNOT | 23 | 0 | 1 | -25.61% |
+| and_pareto_resource_nmcts | and_direct_anf | depth | 23 | 0 | 1 | -25.61% |
+| and_pareto_resource_nmcts | and_direct_anf | peak_ancilla | 0 | 22 | 2 | +47.22% |
+| and_pareto_resource_nmcts | and_direct_anf | score | 23 | 0 | 1 | -31.75% |
+| and_pareto_resource_nmcts | and_resource_nmcts | T | 8 | 0 | 16 | -0.11% |
+| and_pareto_resource_nmcts | and_resource_nmcts | CNOT | 2 | 6 | 16 | +0.03% |
+| and_pareto_resource_nmcts | and_resource_nmcts | depth | 2 | 6 | 16 | +0.03% |
+| and_pareto_resource_nmcts | and_resource_nmcts | peak_ancilla | 0 | 0 | 24 | +0.00% |
+| and_pareto_resource_nmcts | and_resource_nmcts | score | 9 | 0 | 15 | -0.09% |
+| and_pareto_resource_nmcts | and_profile_resource_nmcts | T | 8 | 0 | 16 | -0.11% |
+| and_pareto_resource_nmcts | and_profile_resource_nmcts | CNOT | 2 | 6 | 16 | +0.03% |
+| and_pareto_resource_nmcts | and_profile_resource_nmcts | depth | 2 | 6 | 16 | +0.03% |
+| and_pareto_resource_nmcts | and_profile_resource_nmcts | peak_ancilla | 0 | 0 | 24 | +0.00% |
+| and_pareto_resource_nmcts | and_profile_resource_nmcts | score | 9 | 0 | 15 | -0.09% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair | T | 8 | 0 | 16 | -0.11% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair | CNOT | 2 | 6 | 16 | +0.03% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair | depth | 2 | 6 | 16 | +0.03% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair | peak_ancilla | 0 | 0 | 24 | +0.00% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair | score | 9 | 0 | 15 | -0.09% |
+| and_pareto_resource_nmcts | and_fprm_root_beam | T | 22 | 0 | 2 | -2.28% |
+| and_pareto_resource_nmcts | and_fprm_root_beam | CNOT | 22 | 0 | 2 | -2.08% |
+| and_pareto_resource_nmcts | and_fprm_root_beam | depth | 22 | 0 | 2 | -2.08% |
+| and_pareto_resource_nmcts | and_fprm_root_beam | peak_ancilla | 0 | 22 | 2 | +47.22% |
+| and_pareto_resource_nmcts | and_fprm_root_beam | score | 22 | 0 | 2 | -1.97% |
 
 ## Largest and-resource-nmcts gains vs direct ANF
 
@@ -105,6 +136,23 @@ Rows: 144; usable: 144; errors: 0; skipped: 0.
 | anf_n16_17 | 16 | 18796 | 5956 | -68.31% |
 | anf_n16_22 | 16 | 7856 | 2568 | -67.31% |
 | anf_n16_12 | 16 | 8240 | 2700 | -67.23% |
+
+## Largest and-pareto-resource-nmcts gains vs direct ANF
+
+| function | n | direct T | and_pareto_resource_nmcts T | relative |
+|---|---:|---:|---:|---:|
+| anf_n16_21 | 16 | 22432 | 6768 | -69.83% |
+| anf_n16_19 | 16 | 45620 | 13796 | -69.76% |
+| anf_n16_18 | 16 | 20988 | 6420 | -69.41% |
+| anf_n16_15 | 16 | 34032 | 10424 | -69.37% |
+| anf_n16_20 | 16 | 20828 | 6384 | -69.35% |
+| anf_n16_2 | 16 | 18564 | 5692 | -69.34% |
+| anf_n16_9 | 16 | 17544 | 5400 | -69.22% |
+| anf_n16_5 | 16 | 25300 | 7848 | -68.98% |
+| anf_n16_7 | 16 | 16464 | 5120 | -68.90% |
+| anf_n16_17 | 16 | 18796 | 5932 | -68.44% |
+| anf_n16_22 | 16 | 7856 | 2568 | -67.31% |
+| anf_n16_12 | 16 | 8240 | 2696 | -67.28% |
 
 ## Largest and-fprm-root-beam gains vs direct ANF
 

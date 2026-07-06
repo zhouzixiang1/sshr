@@ -1,6 +1,6 @@
 # Highdim_Scale_Resource Analysis
 
-Rows: 288; usable: 288; errors: 0; skipped: 0.
+Rows: 320; usable: 320; errors: 0; skipped: 0.
 
 ## Mean T-count improvement vs direct ANF
 
@@ -12,6 +12,7 @@ Rows: 288; usable: 288; errors: 0; skipped: 0.
 | and_fprm_linear_pair_deep | 32 | -56.64% | -70.97% | +0.00% |
 | and_fprm_linear_parity | 32 | -55.33% | -70.74% | +0.00% |
 | and_fprm_root_beam | 32 | -52.06% | -69.84% | +0.00% |
+| and_pareto_resource_nmcts | 32 | -56.65% | -70.97% | +0.00% |
 | and_profile_resource_nmcts | 32 | -56.64% | -70.97% | +0.00% |
 | and_resource_nmcts | 32 | -56.64% | -70.97% | +0.00% |
 
@@ -144,6 +145,41 @@ Rows: 288; usable: 288; errors: 0; skipped: 0.
 | and_profile_resource_nmcts | and_fprm_linear_parity | depth | 26 | 2 | 4 | -1.17% |
 | and_profile_resource_nmcts | and_fprm_linear_parity | peak_ancilla | 0 | 7 | 25 | +7.19% |
 | and_profile_resource_nmcts | and_fprm_linear_parity | score | 29 | 0 | 3 | -2.23% |
+| and_pareto_resource_nmcts | direct_anf | T | 30 | 0 | 2 | -56.65% |
+| and_pareto_resource_nmcts | direct_anf | CNOT | 8 | 24 | 0 | +5.57% |
+| and_pareto_resource_nmcts | direct_anf | depth | 7 | 25 | 0 | +8.46% |
+| and_pareto_resource_nmcts | direct_anf | peak_ancilla | 0 | 30 | 2 | +135.94% |
+| and_pareto_resource_nmcts | direct_anf | score | 30 | 2 | 0 | -53.42% |
+| and_pareto_resource_nmcts | and_direct_anf | T | 30 | 0 | 2 | -32.46% |
+| and_pareto_resource_nmcts | and_direct_anf | CNOT | 29 | 0 | 3 | -25.13% |
+| and_pareto_resource_nmcts | and_direct_anf | depth | 28 | 2 | 2 | -22.64% |
+| and_pareto_resource_nmcts | and_direct_anf | peak_ancilla | 0 | 30 | 2 | +60.16% |
+| and_pareto_resource_nmcts | and_direct_anf | score | 30 | 0 | 2 | -30.80% |
+| and_pareto_resource_nmcts | and_resource_nmcts | T | 5 | 0 | 27 | -0.03% |
+| and_pareto_resource_nmcts | and_resource_nmcts | CNOT | 1 | 4 | 27 | +0.02% |
+| and_pareto_resource_nmcts | and_resource_nmcts | depth | 1 | 4 | 27 | +0.02% |
+| and_pareto_resource_nmcts | and_resource_nmcts | peak_ancilla | 0 | 0 | 32 | +0.00% |
+| and_pareto_resource_nmcts | and_resource_nmcts | score | 5 | 0 | 27 | -0.03% |
+| and_pareto_resource_nmcts | and_profile_resource_nmcts | T | 5 | 0 | 27 | -0.03% |
+| and_pareto_resource_nmcts | and_profile_resource_nmcts | CNOT | 1 | 4 | 27 | +0.02% |
+| and_pareto_resource_nmcts | and_profile_resource_nmcts | depth | 1 | 4 | 27 | +0.02% |
+| and_pareto_resource_nmcts | and_profile_resource_nmcts | peak_ancilla | 0 | 0 | 32 | +0.00% |
+| and_pareto_resource_nmcts | and_profile_resource_nmcts | score | 5 | 0 | 27 | -0.03% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair | T | 29 | 0 | 3 | -2.54% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair | CNOT | 28 | 0 | 4 | -2.03% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair | depth | 26 | 2 | 4 | -1.25% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair | peak_ancilla | 0 | 7 | 25 | +7.19% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair | score | 29 | 0 | 3 | -2.39% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair_deep | T | 5 | 0 | 27 | -0.03% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair_deep | CNOT | 1 | 4 | 27 | +0.02% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair_deep | depth | 1 | 4 | 27 | +0.02% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair_deep | peak_ancilla | 0 | 0 | 32 | +0.00% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair_deep | score | 5 | 0 | 27 | -0.03% |
+| and_pareto_resource_nmcts | and_fprm_root_beam | T | 30 | 0 | 2 | -6.46% |
+| and_pareto_resource_nmcts | and_fprm_root_beam | CNOT | 29 | 0 | 3 | -4.87% |
+| and_pareto_resource_nmcts | and_fprm_root_beam | depth | 28 | 2 | 2 | -2.39% |
+| and_pareto_resource_nmcts | and_fprm_root_beam | peak_ancilla | 0 | 30 | 2 | +60.16% |
+| and_pareto_resource_nmcts | and_fprm_root_beam | score | 30 | 0 | 2 | -5.31% |
 | and_fprm_root_beam | and_fprm_greedy | T | 23 | 0 | 9 | -0.48% |
 | and_fprm_root_beam | and_fprm_greedy | CNOT | 16 | 7 | 9 | -0.26% |
 | and_fprm_root_beam | and_fprm_greedy | depth | 16 | 7 | 9 | -0.26% |
@@ -183,6 +219,23 @@ Rows: 288; usable: 288; errors: 0; skipped: 0.
 | anf_n15_26 | 15 | 10484 | 3260 | -68.90% |
 | anf_n15_27 | 15 | 11172 | 3492 | -68.74% |
 | anf_n15_30 | 15 | 8400 | 2656 | -68.38% |
+
+## Largest and-pareto-resource-nmcts gains vs direct ANF
+
+| function | n | direct T | and_pareto_resource_nmcts T | relative |
+|---|---:|---:|---:|---:|
+| anf_n15_16 | 15 | 19744 | 5732 | -70.97% |
+| anf_n15_14 | 15 | 51040 | 14892 | -70.82% |
+| anf_n15_31 | 15 | 45016 | 13232 | -70.61% |
+| anf_n15_25 | 15 | 47292 | 13984 | -70.43% |
+| anf_n15_18 | 15 | 33708 | 10060 | -70.16% |
+| anf_n15_10 | 15 | 37180 | 11120 | -70.09% |
+| anf_n15_11 | 15 | 15016 | 4544 | -69.74% |
+| anf_n15_23 | 15 | 12436 | 3808 | -69.38% |
+| anf_n15_22 | 15 | 12520 | 3884 | -68.98% |
+| anf_n15_26 | 15 | 10484 | 3260 | -68.90% |
+| anf_n15_27 | 15 | 11172 | 3488 | -68.78% |
+| anf_n15_30 | 15 | 8400 | 2652 | -68.43% |
 
 ## Largest and-fprm-greedy gains vs direct ANF
 

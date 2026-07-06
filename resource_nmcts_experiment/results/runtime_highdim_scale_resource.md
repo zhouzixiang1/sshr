@@ -1,6 +1,6 @@
 # Runtime and Resource Tradeoff: highdim_scale_resource
 
-Rows: 288; errors: 0; skipped: 0.
+Rows: 320; errors: 0; skipped: 0.
 
 ## Runtime by method
 
@@ -13,8 +13,9 @@ Rows: 288; errors: 0; skipped: 0.
 | FPRM linear pair | 32 | 0 | 0 | 3.935 | 81.926 | 95.816 | 517.3 |
 | FPRM linear pair deep | 32 | 0 | 0 | 10.297 | 86.717 | 95.545 | 860.7 |
 | FPRM linear parity | 32 | 0 | 0 | 4.102 | 78.675 | 94.468 | 510.5 |
-| Resource-NMCTS | 32 | 0 | 0 | 16.514 | 135.536 | 160.138 | 1344.8 |
-| Profile-Resource-NMCTS | 32 | 0 | 0 | 14.684 | 122.842 | 150.088 | 1235.9 |
+| Resource-NMCTS | 32 | 0 | 0 | 9.701 | 90.017 | 94.550 | 903.6 |
+| Profile-Resource-NMCTS | 32 | 0 | 0 | 11.334 | 93.676 | 102.743 | 948.4 |
+| Pareto-Resource-NMCTS | 32 | 0 | 0 | 117.516 | 300.300 | 300.642 | 5148.0 |
 
 ## Mean resources by method
 
@@ -29,3 +30,4 @@ Rows: 288; errors: 0; skipped: 0.
 | FPRM linear parity | 32 | 3229.88 | 5545.34 | 5545.91 | 2.84 | 3561.91 |
 | Resource-NMCTS | 32 | 3200.25 | 5492.38 | 5493.59 | 3.06 | 3529.63 |
 | Profile-Resource-NMCTS | 32 | 3200.25 | 5492.38 | 5493.59 | 3.06 | 3529.63 |
+| Pareto-Resource-NMCTS | 32 | 3199.62 | 5492.75 | 5493.97 | 3.06 | 3529.02 |

@@ -163,6 +163,7 @@ def main() -> int:
     ap.add_argument("--label-mode", choices=["immediate", "rollout"], default="immediate")
     ap.add_argument("--max-depth", type=int, default=4)
     ap.add_argument("--child-branch", type=int, default=3)
+    ap.add_argument("--hidden", type=int, default=96)
     ap.add_argument("--out", default=str(THIS_DIR / "models" / "action_scorer.pt"))
     args = ap.parse_args()
 
@@ -178,7 +179,7 @@ def main() -> int:
     train_idx, valid_idx = perm[:split], perm[split:]
 
     device = default_device()
-    model = ActionNet().to(device)
+    model = ActionNet(hidden=args.hidden).to(device)
     opt = torch.optim.AdamW(model.parameters(), lr=2e-3, weight_decay=1e-4)
     loss_fn = nn.SmoothL1Loss()
     cfg = PRESETS[args.preset]

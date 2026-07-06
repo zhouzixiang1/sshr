@@ -1,39 +1,35 @@
 {
-  "preset": "highdim_resource",
+  "preset": "traditional_resource",
   "seed": 42,
-  "functions": 64,
+  "functions": 177,
   "methods": [
     "direct_anf",
     "and_direct_anf",
-    "and_fprm_greedy",
-    "and_fprm_root_beam",
-    "and_fprm_linear_pair",
-    "and_affine_greedy",
+    "and_mcts_factor",
+    "and_affine_nmcts",
     "and_resource_nmcts",
-    "and_profile_resource_nmcts",
-    "and_pareto_resource_nmcts"
+    "and_fprm_polarity_archive",
+    "and_pareto_resource_nmcts",
+    "and_cube_beam",
+    "and_esop_milp",
+    "sshr_h"
   ],
   "last_run_methods": [
+    "and_affine_nmcts",
     "and_resource_nmcts",
-    "and_profile_resource_nmcts"
+    "and_pareto_resource_nmcts"
   ],
-  "resume": true,
-  "raw_rows": 576,
+  "resume": false,
+  "raw_rows": 531,
   "raw_methods": [
-    "and_affine_greedy",
-    "and_direct_anf",
-    "and_fprm_greedy",
-    "and_fprm_linear_pair",
-    "and_fprm_root_beam",
+    "and_affine_nmcts",
     "and_pareto_resource_nmcts",
-    "and_profile_resource_nmcts",
-    "and_resource_nmcts",
-    "direct_anf"
+    "and_resource_nmcts"
   ],
   "model": "models/action_scorer_rollout_logical_and.pt",
-  "workers": 8,
-  "seconds": null,
-  "seconds_current_run": 377.76045060157776,
+  "workers": 10,
+  "seconds": 68.9872989654541,
+  "seconds_current_run": 68.9872989654541,
   "config": {
     "weights": {
       "t": 1.0,

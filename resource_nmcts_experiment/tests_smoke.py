@@ -169,6 +169,33 @@ def main() -> int:
         assert rc_nmcts.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
         assert resource_nmcts.cost.score(config.weights) <= and_affine.cost.score(config.weights) + 1e-9
         assert pareto_resource_nmcts.cost.score(config.weights) <= resource_nmcts.cost.score(config.weights) + 1e-9
+    highdim_bf = boolean_from_anf(
+        13,
+        [
+            0b111,
+            0b1101,
+            0b10101,
+            0b100011,
+            0b1000011,
+            0b10000011,
+            0b100000011,
+            0b1000000011,
+        ],
+    )
+    highdim_config = SearchConfig(
+        weights=ResourceWeights(t=1.0, cnot=0.04, depth=0.015, gates=0.01, ancilla=2.0),
+        max_factor_ancilla=3,
+        max_factor_size=4,
+        candidate_top_k=8,
+        mcts_simulations=8,
+        neural_mcts_simulations=8,
+        max_polarities=4,
+    )
+    highdim_resource = synthesize("and_resource_nmcts", highdim_bf, highdim_config, seed=7)
+    highdim_pareto = synthesize("and_pareto_resource_nmcts", highdim_bf, highdim_config, seed=7)
+    assert highdim_resource.correct
+    assert highdim_pareto.correct
+    assert highdim_pareto.cost.score(highdim_config.weights) <= highdim_resource.cost.score(highdim_config.weights) + 1e-9
     print("smoke ok")
     return 0
 

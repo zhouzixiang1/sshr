@@ -62,16 +62,16 @@ and \profilemethod{} complete all functions, and \method{} reduces mean
 T-count by 60.37\% relative to direct ANF and by 37.25\% relative to
 logical-AND direct ANF, while fixed-coordinate MCTS times out on five $n=12$
 rows.  An isolated
-$n=14$ stress benchmark adds 64 random ANF functions and 512 rows with no
-errors or skips; the guarded high-dimensional variants reduce mean T-count by
-57.42\% relative to direct ANF and by 32.74\% relative to logical-AND direct
+$n=14$ stress benchmark adds 64 random ANF functions and 576 rows with no
+errors or skips; the Pareto high-dimensional variant reduces mean T-count by
+57.94\% relative to direct ANF and by 33.30\% relative to logical-AND direct
 ANF, with 60 score wins, no losses, and 4 ties against FPRM-greedy.  A
 follow-up $n=15$ scale check preserves this pattern with 30 score wins, no
 losses, and 2 ties against FPRM-greedy, reducing mean weighted score by
-5.73\%.  A further $n=16$ scale check contains 24 random ANF functions and 144
-rows with no errors or skips; the ultra-scale guard matches its one-layer
-linear-pair child, reduces mean T-count by 62.08\% relative to direct ANF, and
-has 22 score wins, no losses, and 2 ties against bounded FPRM root-beam.  On
+5.73--5.75\%.  A further $n=16$ scale check contains 24 random ANF functions
+and 168 rows with no errors or skips; the Pareto archive reduces mean T-count
+by 62.12\% relative to direct ANF and has 22 score wins, no losses, and 2 ties
+against bounded FPRM root-beam.  On
 a final $n=18$ stress check, 12 random ANF functions produce 60 verified rows
 with no errors or skips; the mega-scale guard switches to bounded FPRM
 root-beam, and \method{} and \profilemethod{} match that child while reducing
@@ -543,10 +543,10 @@ comparison contains 1062 rows over \affinemethod{}, \method{}, and
 monotone score improvements: 42/0/135 score wins/losses/ties for
 \affinemethod{}, 41/0/136 for \method{}, and 29/0/148 for \paretomethod{}.
 Mean score reductions are 1.47\%, 1.34\%, and 0.78\%, respectively.  The cost
-is runtime: the learned-prior rows are slower on these small functions because
-many small neural action batches are evaluated on CPU.  We therefore treat the
-learned prior as a quality-improving search signal, not as the current fastest
-mode.
+is runtime: the paired mean relative runtime increases are 91.22\%, 87.31\%,
+and 67.44\%, because many small neural action batches are evaluated on CPU.
+We therefore treat the learned prior as a quality-improving search signal, not
+as the current fastest mode.
 
 \begin{table}[t]
 \centering
@@ -668,11 +668,11 @@ tail-reducing extension, not as the large-scale score winner.
 
 The \highdimdataset{} run isolates high-dimensional random ANF instances rather
 than mixing them with small structured functions.  It contains 64 $n=14$
-functions and eight methods, for 512 method/function rows with no errors or
+functions and nine methods, for 576 method/function rows with no errors or
 skips.  This experiment uses the high-dimensional guard described above:
 fixed-coordinate MCTS and broad affine search are avoided inside the guarded
-methods, while direct ANF, bounded FPRM root-child beam, and linear-pair
-candidates remain available.
+methods, while direct ANF, bounded FPRM root-child beam, linear-pair candidates,
+and bounded Pareto archive variants remain available.
 
 \begin{table}[t]
 \centering
@@ -692,42 +692,50 @@ benchmark.}
 \input{tables/runtime_highdim_resource}
 \end{table}
 
-Both \method{} and \profilemethod{} complete all 64 functions.  Relative to
-direct ANF, each has 61 T-count wins, no losses, and 3 ties, with a 57.42\%
-mean T-count reduction and a 54.03\% mean composite-score reduction.  Relative
-to logical-AND direct ANF, each again has 61 wins, no losses, and 3 ties, with
-a 32.74\% mean T-count reduction and a 30.86\% mean score reduction.  Against
-FPRM-greedy, the guarded methods have 60 T-count wins, no losses, and 4 ties;
-by weighted score they also have 60 wins, no losses, and 4 ties.  Against the
-one-layer FPRM linear-pair candidate, the recursive guard has 53 T-count wins,
-no losses, and 11 ties; by weighted score it has 55 wins, no losses, and 9
-ties.  The mean T-count falls from 2263.69 for FPRM-greedy, 2248.81 for root
-beam, and 2193.50 for one-layer linear pair to 2152.25 for \method{} and
-\profilemethod{}.  The mean weighted score falls from 2496.97 for FPRM-greedy,
-2481.64 for root beam, and 2422.51 for one-layer linear pair to 2377.89.  The
-improvement is mechanistically different from simply widening the root beam:
-the recursive linear-pair candidate computes $x_i \oplus x_j$ into a temporary
-ancilla with CNOTs, factors the paired residual subplan under that control, and
-then recursively searches the quotient and bounded rest subproblems before
-uncomputing the linear control.  Runtime tails remain bounded but increase:
-\method{} and \profilemethod{} have median runtime 8.38 s and p95 runtime
-76.84 s, while the standalone one-layer FPRM linear-pair candidate has p95
-runtime 30.76 s.  The resource tradeoff is workspace: mean peak ancilla
-increases from 2.03 for FPRM-greedy and root beam to 3.05.
+The Resource/Profile/Pareto guarded methods complete all 64 functions.
+Relative to direct ANF, \paretomethod{} has 61 T-count wins, no losses, and 3
+ties, with a 57.94\% mean T-count reduction and a 54.55\% mean composite-score
+reduction; \method{} and \profilemethod{} have the same win/tie pattern with
+57.43\% and 54.01\% reductions.  Relative to logical-AND direct ANF,
+\paretomethod{} again has 61 score wins, no losses, and 3 ties, with a 31.40\%
+mean score reduction.  Against FPRM-greedy, the guarded methods have 60
+weighted-score wins, no losses, and 4 ties, with 6.29--6.83\% mean score
+reductions.  Against the standalone FPRM root-beam candidate, \paretomethod{}
+has 60 score wins, no losses, and 4 ties, with a 6.31\% mean score reduction.
+Against the active Resource/Profile candidates, \paretomethod{} gives 16 score
+wins, no losses, and 48 ties, reducing mean score by 0.59\%.  The mean T-count
+falls from 2263.69 for FPRM-greedy, 2248.81 for root beam, and 2193.50 for
+one-layer linear pair to 2149.50 for \method{} and 2148.81 for
+\paretomethod{}.  The improvement is mechanistically different from simply
+widening the root beam: the recursive linear-pair candidate computes
+$x_i \oplus x_j$ into a temporary ancilla with CNOTs, factors the paired
+residual subplan under that control, and then recursively searches the quotient
+and bounded rest subproblems before uncomputing the linear control.  Runtime
+tails remain bounded but increase: \method{} has median runtime 8.57 s and
+p95 runtime 80.43 s, \profilemethod{} has median runtime 9.29 s and p95
+runtime 84.23 s, while \paretomethod{} has median
+runtime 67.79 s and p95 runtime 300.02 s.  The resource tradeoff is workspace:
+mean peak ancilla increases from 2.03 for FPRM-greedy and root beam to about
+3.05--3.06 for the guarded variants.
 
 As a scale check, we also run the same high-dimensional guard on 32 random
-$n=15$ ANF functions, producing 288 method/function rows with no errors or
-skips after adding the bounded recursive linear-pair candidate and a standalone
-width-three linear-parity ablation.  Relative to FPRM-greedy, \method{} and
-\profilemethod{} have 30 T-count wins, no losses, and 2 ties, with a 6.89\%
-mean T-count reduction and a 5.73\% mean score reduction.  Relative to the
-standalone FPRM root-beam candidate, they have 30 score wins, no losses, and
-2 ties, with a 5.28\% mean score reduction.  The recursive pair candidate is a
+$n=15$ ANF functions, producing 320 method/function rows with no errors or
+skips after adding the bounded recursive linear-pair candidate, a standalone
+width-three linear-parity ablation, and a bounded Pareto archive.  Relative to
+FPRM-greedy, the Resource/Profile/Pareto guarded variants have 30 T-count
+wins, no losses, and 2 ties, with 6.89--6.93\% mean T-count reductions and
+5.73--5.75\% mean score reductions.  Relative to the standalone FPRM
+root-beam candidate, they have 30 score wins, no losses, and 2 ties, with
+5.28--5.31\% mean score reductions.  The recursive pair candidate is a
 material refinement of the one-layer linear-pair search: it improves weighted
 score in 29 cases, ties in 3, and has no score losses, while increasing mean
-peak ancilla from 2.84 to 3.06.  Runtime remains finite under the 900-term
-recursion guard: \method{} has median runtime 16.51 s and p95 runtime 135.54 s,
-while \profilemethod{} has median runtime 14.68 s and p95 runtime 122.84 s.
+peak ancilla from 2.84 to 3.06.  The Pareto archive extracts a smaller
+residual gain over the active Resource/Profile candidates, with 5 score wins,
+no losses, 27 ties, and a 0.03\% mean score reduction.  Runtime remains finite
+under the 900-term recursion guard: \method{} has median runtime 9.70 s and
+p95 runtime 90.02 s, \profilemethod{} has median runtime 11.33 s and p95
+runtime 93.68 s, and \paretomethod{} has median runtime 117.52 s and p95
+runtime 300.30 s.
 
 \begin{table}[t]
 \centering
@@ -746,19 +754,24 @@ while \profilemethod{} has median runtime 14.68 s and p95 runtime 122.84 s.
 \end{table}
 
 The additional \ultradataset{} run checks whether the same guard remains usable
-one dimension higher.  It contains 24 random ANF functions at $n=16$, six
-methods, and 144 method/function rows with no errors or skips.  For this
-dimension the ultra-scale guard deliberately disables the recursive rest-branch
-linear-pair refinement used at $n=15$ and keeps the one-layer FPRM linear-pair
-candidate.  Consequently \method{} and \profilemethod{} match the standalone
-linear-pair candidate on all 24 functions.  Relative to direct ANF, they have
-23 T-count wins, no losses, and 1 tie, reducing mean T-count by 62.08\% and
-mean weighted score by 59.52\%.  Relative to logical-AND direct ANF, they have
-23 score wins, no losses, and 1 tie, with a 31.68\% mean score reduction.
-Relative to FPRM root-beam, they have 22 score wins, no losses, and 2 ties,
-with a 1.88\% mean score reduction.  The tradeoff remains CNOT/depth against
-plain direct ANF, where the lower-T factored plans use more linear Clifford
-work, but they reduce both CNOT and depth relative to logical-AND direct ANF.
+one dimension higher.  It contains 24 random ANF functions at $n=16$, seven
+methods, and 168 method/function rows with no errors or skips.  For this
+dimension the ultra-scale Resource/Profile guard deliberately disables the
+recursive rest-branch linear-pair refinement used at $n=15$ and keeps the
+one-layer FPRM linear-pair candidate.  Consequently \method{} and
+\profilemethod{} match the standalone linear-pair candidate on all 24
+functions, while \paretomethod{} adds bounded profile variants around the same
+high-dimensional candidate set.  Relative to direct ANF, \paretomethod{} has
+23 T-count wins, no losses, and 1 tie, reducing mean T-count by 62.12\% and
+mean weighted score by 59.56\%.  Relative to logical-AND direct ANF, it has
+23 score wins, no losses, and 1 tie, with a 31.75\% mean score reduction.
+Relative to FPRM root-beam, it has 22 score wins, no losses, and 2 ties, with
+a 1.97\% mean score reduction.  Against the active Resource/Profile candidates,
+\paretomethod{} gives 9 score wins, no losses, and 15 ties, reducing mean score
+by 0.09\%.  The tradeoff remains CNOT/depth against plain direct ANF, where the
+lower-T factored plans use more linear Clifford work, but they reduce both CNOT
+and depth relative to logical-AND direct ANF; the Pareto archive also increases
+median runtime to 130.92 s.
 
 \begin{table}[t]
 \centering
@@ -826,12 +839,13 @@ the \largedataset{} benchmark, \method{} completes every function with median
 runtime 1.31 s and p95 runtime 58.86 s; the fixed-coordinate MCTS baseline has
 five timeouts.  The guarded \profilemethod{} variant reduces the p95 runtime to
 25.68 s on the same large benchmark, at the cost of a higher mean score.  On
-the isolated $n=14$ stress test, both guarded variants complete all 64
-functions and improve over FPRM-greedy with no score losses; the $n=16$ scale
-check also completes without errors after switching to the ultra-scale
-one-layer linear-pair guard.  The $n=18$ stress check completes all 60 rows
-after switching to a root-beam high-dimensional guard, but the guarded variants
-tie that child and have minute-scale runtime tails.  This shows that
+the isolated $n=14$ stress test, the Resource/Profile/Pareto guarded variants
+complete all 64 functions and improve over FPRM-greedy with no score losses;
+the $n=16$ scale check also completes without errors after switching to the
+ultra-scale one-layer linear-pair guard and adding a bounded Pareto archive.
+The $n=18$ stress check completes all 60 rows after Resource/Profile switch to
+a root-beam high-dimensional guard, but those guarded variants tie that child
+and have minute-scale runtime tails.  This shows that
 the current high-dimensional guard is no longer only a scalability fallback:
 pairwise XOR factoring can correct a measurable part of the greedy
 Reed--Muller search error using only Clifford linear preprocessing around the
@@ -843,8 +857,9 @@ exact certificate, the fact that ABC/BDD/ESOP/LUT rows are scored through
 logic-level estimates rather than full reversible-toolchain synthesis, and the
 lack of a reproduced external ROS/mockturtle toolchain in the comparison set.
 At $n=16$, the guarded Resource/Profile variants tie their own one-layer
-linear-pair child, so the ultra result is bounded scalability evidence rather
-than a new search-quality separation.  The same caution applies even more
+linear-pair child, and the Pareto archive improves that child only modestly, so
+the ultra result is bounded scalability evidence plus a residual archive gain
+rather than a large new search-quality separation.  The same caution applies even more
 strongly at $n=18$, where the guard chooses bounded root-beam search and the
 result is a tractability and verification-boundary check rather than evidence
 that the full neural portfolio beats its selected child.
@@ -860,8 +875,9 @@ The large benchmark still shows the corresponding high-dimensional tradeoff:
 conservative profile guards reduce runtime tails but give up some score.  The
 $n=14$ stress test narrows this limitation further: bounded recursive FPRM
 linear-pair search keeps the run finite and improves over FPRM-greedy on most
-functions, and the $n=15$ scale check preserves that margin while keeping all
-runs finite.  The remaining weakness is less the internal high-dimensional
+functions, and the $n=15$--$n=16$ scale checks preserve that margin while
+showing that Pareto archives can extract small residual gains at substantial
+runtime cost.  The remaining weakness is less the internal high-dimensional
 guard than the comparison boundary: the current evidence still lacks
 reproduced ROS or mockturtle reversible-toolchain
 baselines.
@@ -884,8 +900,8 @@ are not an artifact of the internal experiment harness, while also showing that
 CNOT and depth remain important limitations.  The new high-dimensional stress
 tests show that bounded guards scale without timeouts, beat FPRM-greedy on
 60 of 64 weighted-score comparisons at $n=14$ and 30 of 32 comparisons at
-$n=15$, complete all 144 $n=16$ ultra-scale rows under the one-layer guard
-while retaining score wins against FPRM root-beam, complete all 60 $n=18$
+$n=15$, complete all 168 $n=16$ ultra-scale rows while retaining score wins
+against FPRM root-beam, complete all 60 $n=18$
 mega-scale rows under the root-beam guard, and beat exported ABC AIG/XAG/LUT
 and BDD on all 528 high-dimensional weighted-score comparisons.
 The next step is to reproduce ROS/mockturtle-style

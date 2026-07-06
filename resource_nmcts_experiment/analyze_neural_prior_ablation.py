@@ -135,10 +135,11 @@ def write_markdown(path: Path, rows: list[dict], summary: list[dict], paired: li
         "",
         f"Rows: {len(rows)}; usable: {sum(1 for row in rows if usable(row))}; errors: {len(errors)}; skipped: {len(skipped)}.",
         "",
-        "The learned-prior rows reuse the main `traditional_resource` run with",
-        "`models/action_scorer_rollout_logical_and.pt`.  The no-prior rows rerun",
-        "the same functions and methods with an absent model path, so the search",
-        "keeps the heuristic PUCT/action prior but removes the learned action scorer.",
+        "The learned-prior rows come from a matched `traditional_resource` rerun",
+        "with `models/action_scorer_rollout_logical_and.pt`.  The no-prior rows",
+        "rerun the same functions and methods with an absent model path, so the",
+        "search keeps the heuristic PUCT/action prior but removes the learned",
+        "action scorer.",
         "",
         "## Mean Resources",
         "",
@@ -176,7 +177,7 @@ def parse_methods(raw: str) -> list[str]:
 
 def main(argv: Iterable[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--learned-csv", type=Path, default=RESULTS / "raw_traditional_resource.csv")
+    parser.add_argument("--learned-csv", type=Path, default=RESULTS / "raw_traditional_resource_learned_prior.csv")
     parser.add_argument("--no-prior-csv", type=Path, default=RESULTS / "raw_traditional_resource_no_prior.csv")
     parser.add_argument("--methods", default=",".join(DEFAULT_METHODS))
     parser.add_argument("--out-raw", type=Path, default=RESULTS / "raw_neural_prior_ablation.csv")

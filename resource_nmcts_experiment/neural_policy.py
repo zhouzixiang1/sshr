@@ -43,7 +43,7 @@ class NeuralScorer:
         payload = torch.load(model_path, map_location="cpu")
         self.mean = torch.tensor(payload["mean"], dtype=torch.float32, device=self.device)
         self.std = torch.tensor(payload["std"], dtype=torch.float32, device=self.device)
-        self.model = ActionNet()
+        self.model = ActionNet(hidden=int(payload.get("hidden", 96)))
         self.model.load_state_dict(payload["state_dict"])
         self.model.to(self.device)
         self.model.eval()
@@ -67,11 +67,14 @@ class NeuralScorer:
 def save_model(path: str | Path, model: ActionNet, mean: torch.Tensor, std: torch.Tensor) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
+    first_linear = model.net[0]
+    hidden = int(first_linear.out_features) if isinstance(first_linear, nn.Linear) else 96
     torch.save(
         {
             "state_dict": model.state_dict(),
             "mean": mean.detach().cpu().tolist(),
             "std": std.detach().cpu().tolist(),
+            "hidden": hidden,
         },
         path,
     )

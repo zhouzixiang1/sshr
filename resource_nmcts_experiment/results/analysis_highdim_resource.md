@@ -1,6 +1,6 @@
 # Highdim_Resource Analysis
 
-Rows: 512; usable: 512; errors: 0; skipped: 0.
+Rows: 576; usable: 576; errors: 0; skipped: 0.
 
 ## Mean T-count improvement vs direct ANF
 
@@ -11,8 +11,9 @@ Rows: 512; usable: 512; errors: 0; skipped: 0.
 | and_fprm_greedy | 64 | -52.51% | -69.71% | +0.00% |
 | and_fprm_linear_pair | 64 | -55.60% | -70.78% | +0.00% |
 | and_fprm_root_beam | 64 | -52.71% | -69.76% | +0.00% |
-| and_profile_resource_nmcts | 64 | -57.42% | -71.23% | +0.00% |
-| and_resource_nmcts | 64 | -57.42% | -71.23% | +0.00% |
+| and_pareto_resource_nmcts | 64 | -57.94% | -71.23% | +0.00% |
+| and_profile_resource_nmcts | 64 | -57.43% | -71.23% | +0.00% |
+| and_resource_nmcts | 64 | -57.43% | -71.23% | +0.00% |
 
 ## T-count wins/losses vs SSHR-H
 
@@ -23,56 +24,56 @@ Rows: 512; usable: 512; errors: 0; skipped: 0.
 
 | target | baseline | metric | wins | losses | ties | mean relative |
 |---|---|---|---:|---:|---:|---:|
-| and_resource_nmcts | direct_anf | T | 61 | 0 | 3 | -57.42% |
-| and_resource_nmcts | direct_anf | CNOT | 15 | 49 | 0 | +4.92% |
-| and_resource_nmcts | direct_anf | depth | 13 | 51 | 0 | +7.32% |
-| and_resource_nmcts | direct_anf | peak_ancilla | 0 | 60 | 4 | +126.56% |
-| and_resource_nmcts | direct_anf | score | 61 | 3 | 0 | -54.03% |
-| and_resource_nmcts | and_direct_anf | T | 61 | 0 | 3 | -32.74% |
-| and_resource_nmcts | and_direct_anf | CNOT | 61 | 0 | 3 | -24.32% |
-| and_resource_nmcts | and_direct_anf | depth | 53 | 7 | 4 | -22.24% |
-| and_resource_nmcts | and_direct_anf | peak_ancilla | 0 | 59 | 5 | +57.81% |
+| and_resource_nmcts | direct_anf | T | 61 | 0 | 3 | -57.43% |
+| and_resource_nmcts | direct_anf | CNOT | 15 | 49 | 0 | +4.90% |
+| and_resource_nmcts | direct_anf | depth | 13 | 51 | 0 | +8.04% |
+| and_resource_nmcts | direct_anf | peak_ancilla | 0 | 60 | 4 | +127.34% |
+| and_resource_nmcts | direct_anf | score | 61 | 3 | 0 | -54.01% |
+| and_resource_nmcts | and_direct_anf | T | 61 | 0 | 3 | -32.78% |
+| and_resource_nmcts | and_direct_anf | CNOT | 60 | 0 | 4 | -24.30% |
+| and_resource_nmcts | and_direct_anf | depth | 52 | 9 | 3 | -21.59% |
+| and_resource_nmcts | and_direct_anf | peak_ancilla | 0 | 59 | 5 | +58.33% |
 | and_resource_nmcts | and_direct_anf | score | 61 | 0 | 3 | -30.86% |
-| and_resource_nmcts | and_fprm_greedy | T | 60 | 0 | 4 | -7.61% |
-| and_resource_nmcts | and_fprm_greedy | CNOT | 60 | 0 | 4 | -5.11% |
-| and_resource_nmcts | and_fprm_greedy | depth | 52 | 7 | 5 | -3.04% |
-| and_resource_nmcts | and_fprm_greedy | peak_ancilla | 0 | 59 | 5 | +57.81% |
-| and_resource_nmcts | and_fprm_greedy | score | 60 | 0 | 4 | -6.25% |
-| and_resource_nmcts | and_fprm_root_beam | T | 60 | 0 | 4 | -7.06% |
-| and_resource_nmcts | and_fprm_root_beam | CNOT | 60 | 0 | 4 | -4.86% |
-| and_resource_nmcts | and_fprm_root_beam | depth | 52 | 7 | 5 | -2.78% |
-| and_resource_nmcts | and_fprm_root_beam | peak_ancilla | 0 | 59 | 5 | +57.81% |
-| and_resource_nmcts | and_fprm_root_beam | score | 60 | 0 | 4 | -5.73% |
-| and_resource_nmcts | and_affine_greedy | T | 60 | 0 | 4 | -7.61% |
-| and_resource_nmcts | and_affine_greedy | CNOT | 60 | 0 | 4 | -5.11% |
-| and_resource_nmcts | and_affine_greedy | depth | 52 | 7 | 5 | -3.04% |
-| and_resource_nmcts | and_affine_greedy | peak_ancilla | 0 | 59 | 5 | +57.81% |
-| and_resource_nmcts | and_affine_greedy | score | 60 | 0 | 4 | -6.25% |
-| and_profile_resource_nmcts | direct_anf | T | 61 | 0 | 3 | -57.42% |
-| and_profile_resource_nmcts | direct_anf | CNOT | 15 | 49 | 0 | +4.92% |
-| and_profile_resource_nmcts | direct_anf | depth | 13 | 51 | 0 | +7.32% |
-| and_profile_resource_nmcts | direct_anf | peak_ancilla | 0 | 60 | 4 | +126.56% |
-| and_profile_resource_nmcts | direct_anf | score | 61 | 3 | 0 | -54.03% |
-| and_profile_resource_nmcts | and_direct_anf | T | 61 | 0 | 3 | -32.74% |
-| and_profile_resource_nmcts | and_direct_anf | CNOT | 61 | 0 | 3 | -24.32% |
-| and_profile_resource_nmcts | and_direct_anf | depth | 53 | 7 | 4 | -22.24% |
-| and_profile_resource_nmcts | and_direct_anf | peak_ancilla | 0 | 59 | 5 | +57.81% |
+| and_resource_nmcts | and_fprm_greedy | T | 60 | 0 | 4 | -7.68% |
+| and_resource_nmcts | and_fprm_greedy | CNOT | 59 | 0 | 5 | -5.12% |
+| and_resource_nmcts | and_fprm_greedy | depth | 51 | 9 | 4 | -2.41% |
+| and_resource_nmcts | and_fprm_greedy | peak_ancilla | 0 | 59 | 5 | +58.33% |
+| and_resource_nmcts | and_fprm_greedy | score | 60 | 0 | 4 | -6.29% |
+| and_resource_nmcts | and_fprm_root_beam | T | 60 | 0 | 4 | -7.12% |
+| and_resource_nmcts | and_fprm_root_beam | CNOT | 59 | 0 | 5 | -4.87% |
+| and_resource_nmcts | and_fprm_root_beam | depth | 51 | 9 | 4 | -2.16% |
+| and_resource_nmcts | and_fprm_root_beam | peak_ancilla | 0 | 59 | 5 | +58.33% |
+| and_resource_nmcts | and_fprm_root_beam | score | 60 | 0 | 4 | -5.76% |
+| and_resource_nmcts | and_affine_greedy | T | 60 | 0 | 4 | -7.68% |
+| and_resource_nmcts | and_affine_greedy | CNOT | 59 | 0 | 5 | -5.12% |
+| and_resource_nmcts | and_affine_greedy | depth | 51 | 9 | 4 | -2.41% |
+| and_resource_nmcts | and_affine_greedy | peak_ancilla | 0 | 59 | 5 | +58.33% |
+| and_resource_nmcts | and_affine_greedy | score | 60 | 0 | 4 | -6.29% |
+| and_profile_resource_nmcts | direct_anf | T | 61 | 0 | 3 | -57.43% |
+| and_profile_resource_nmcts | direct_anf | CNOT | 15 | 49 | 0 | +4.90% |
+| and_profile_resource_nmcts | direct_anf | depth | 13 | 51 | 0 | +8.04% |
+| and_profile_resource_nmcts | direct_anf | peak_ancilla | 0 | 60 | 4 | +127.34% |
+| and_profile_resource_nmcts | direct_anf | score | 61 | 3 | 0 | -54.01% |
+| and_profile_resource_nmcts | and_direct_anf | T | 61 | 0 | 3 | -32.78% |
+| and_profile_resource_nmcts | and_direct_anf | CNOT | 60 | 0 | 4 | -24.30% |
+| and_profile_resource_nmcts | and_direct_anf | depth | 52 | 9 | 3 | -21.59% |
+| and_profile_resource_nmcts | and_direct_anf | peak_ancilla | 0 | 59 | 5 | +58.33% |
 | and_profile_resource_nmcts | and_direct_anf | score | 61 | 0 | 3 | -30.86% |
-| and_profile_resource_nmcts | and_fprm_greedy | T | 60 | 0 | 4 | -7.61% |
-| and_profile_resource_nmcts | and_fprm_greedy | CNOT | 60 | 0 | 4 | -5.11% |
-| and_profile_resource_nmcts | and_fprm_greedy | depth | 52 | 7 | 5 | -3.04% |
-| and_profile_resource_nmcts | and_fprm_greedy | peak_ancilla | 0 | 59 | 5 | +57.81% |
-| and_profile_resource_nmcts | and_fprm_greedy | score | 60 | 0 | 4 | -6.25% |
-| and_profile_resource_nmcts | and_fprm_root_beam | T | 60 | 0 | 4 | -7.06% |
-| and_profile_resource_nmcts | and_fprm_root_beam | CNOT | 60 | 0 | 4 | -4.86% |
-| and_profile_resource_nmcts | and_fprm_root_beam | depth | 52 | 7 | 5 | -2.78% |
-| and_profile_resource_nmcts | and_fprm_root_beam | peak_ancilla | 0 | 59 | 5 | +57.81% |
-| and_profile_resource_nmcts | and_fprm_root_beam | score | 60 | 0 | 4 | -5.73% |
-| and_profile_resource_nmcts | and_affine_greedy | T | 60 | 0 | 4 | -7.61% |
-| and_profile_resource_nmcts | and_affine_greedy | CNOT | 60 | 0 | 4 | -5.11% |
-| and_profile_resource_nmcts | and_affine_greedy | depth | 52 | 7 | 5 | -3.04% |
-| and_profile_resource_nmcts | and_affine_greedy | peak_ancilla | 0 | 59 | 5 | +57.81% |
-| and_profile_resource_nmcts | and_affine_greedy | score | 60 | 0 | 4 | -6.25% |
+| and_profile_resource_nmcts | and_fprm_greedy | T | 60 | 0 | 4 | -7.68% |
+| and_profile_resource_nmcts | and_fprm_greedy | CNOT | 59 | 0 | 5 | -5.12% |
+| and_profile_resource_nmcts | and_fprm_greedy | depth | 51 | 9 | 4 | -2.41% |
+| and_profile_resource_nmcts | and_fprm_greedy | peak_ancilla | 0 | 59 | 5 | +58.33% |
+| and_profile_resource_nmcts | and_fprm_greedy | score | 60 | 0 | 4 | -6.29% |
+| and_profile_resource_nmcts | and_fprm_root_beam | T | 60 | 0 | 4 | -7.12% |
+| and_profile_resource_nmcts | and_fprm_root_beam | CNOT | 59 | 0 | 5 | -4.87% |
+| and_profile_resource_nmcts | and_fprm_root_beam | depth | 51 | 9 | 4 | -2.16% |
+| and_profile_resource_nmcts | and_fprm_root_beam | peak_ancilla | 0 | 59 | 5 | +58.33% |
+| and_profile_resource_nmcts | and_fprm_root_beam | score | 60 | 0 | 4 | -5.76% |
+| and_profile_resource_nmcts | and_affine_greedy | T | 60 | 0 | 4 | -7.68% |
+| and_profile_resource_nmcts | and_affine_greedy | CNOT | 59 | 0 | 5 | -5.12% |
+| and_profile_resource_nmcts | and_affine_greedy | depth | 51 | 9 | 4 | -2.41% |
+| and_profile_resource_nmcts | and_affine_greedy | peak_ancilla | 0 | 59 | 5 | +58.33% |
+| and_profile_resource_nmcts | and_affine_greedy | score | 60 | 0 | 4 | -6.29% |
 | and_profile_resource_nmcts | and_resource_nmcts | T | 0 | 0 | 64 | +0.00% |
 | and_profile_resource_nmcts | and_resource_nmcts | CNOT | 0 | 0 | 64 | +0.00% |
 | and_profile_resource_nmcts | and_resource_nmcts | depth | 0 | 0 | 64 | +0.00% |
@@ -88,16 +89,46 @@ Rows: 512; usable: 512; errors: 0; skipped: 0.
 | and_fprm_linear_pair | and_fprm_greedy | depth | 54 | 6 | 4 | -1.76% |
 | and_fprm_linear_pair | and_fprm_greedy | peak_ancilla | 0 | 58 | 6 | +54.30% |
 | and_fprm_linear_pair | and_fprm_greedy | score | 60 | 0 | 4 | -3.54% |
-| and_resource_nmcts | and_fprm_linear_pair | T | 53 | 0 | 11 | -3.13% |
-| and_resource_nmcts | and_fprm_linear_pair | CNOT | 54 | 0 | 10 | -1.90% |
-| and_resource_nmcts | and_fprm_linear_pair | depth | 50 | 5 | 9 | -1.19% |
-| and_resource_nmcts | and_fprm_linear_pair | peak_ancilla | 1 | 8 | 55 | +2.84% |
-| and_resource_nmcts | and_fprm_linear_pair | score | 55 | 0 | 9 | -2.87% |
-| and_profile_resource_nmcts | and_fprm_linear_pair | T | 53 | 0 | 11 | -3.13% |
-| and_profile_resource_nmcts | and_fprm_linear_pair | CNOT | 54 | 0 | 10 | -1.90% |
-| and_profile_resource_nmcts | and_fprm_linear_pair | depth | 50 | 5 | 9 | -1.19% |
-| and_profile_resource_nmcts | and_fprm_linear_pair | peak_ancilla | 1 | 8 | 55 | +2.84% |
-| and_profile_resource_nmcts | and_fprm_linear_pair | score | 55 | 0 | 9 | -2.87% |
+| and_resource_nmcts | and_fprm_linear_pair | T | 56 | 0 | 8 | -3.19% |
+| and_resource_nmcts | and_fprm_linear_pair | CNOT | 56 | 1 | 7 | -1.90% |
+| and_resource_nmcts | and_fprm_linear_pair | depth | 51 | 6 | 7 | -0.56% |
+| and_resource_nmcts | and_fprm_linear_pair | peak_ancilla | 1 | 9 | 54 | +3.23% |
+| and_resource_nmcts | and_fprm_linear_pair | score | 57 | 0 | 7 | -2.90% |
+| and_profile_resource_nmcts | and_fprm_linear_pair | T | 56 | 0 | 8 | -3.19% |
+| and_profile_resource_nmcts | and_fprm_linear_pair | CNOT | 56 | 1 | 7 | -1.90% |
+| and_profile_resource_nmcts | and_fprm_linear_pair | depth | 51 | 6 | 7 | -0.56% |
+| and_profile_resource_nmcts | and_fprm_linear_pair | peak_ancilla | 1 | 9 | 54 | +3.23% |
+| and_profile_resource_nmcts | and_fprm_linear_pair | score | 57 | 0 | 7 | -2.90% |
+| and_pareto_resource_nmcts | direct_anf | T | 61 | 0 | 3 | -57.94% |
+| and_pareto_resource_nmcts | direct_anf | CNOT | 16 | 47 | 1 | +4.19% |
+| and_pareto_resource_nmcts | direct_anf | depth | 14 | 50 | 0 | +7.20% |
+| and_pareto_resource_nmcts | direct_anf | peak_ancilla | 0 | 60 | 4 | +127.34% |
+| and_pareto_resource_nmcts | direct_anf | score | 61 | 3 | 0 | -54.55% |
+| and_pareto_resource_nmcts | and_direct_anf | T | 61 | 0 | 3 | -33.30% |
+| and_pareto_resource_nmcts | and_direct_anf | CNOT | 61 | 0 | 3 | -24.91% |
+| and_pareto_resource_nmcts | and_direct_anf | depth | 52 | 9 | 3 | -22.31% |
+| and_pareto_resource_nmcts | and_direct_anf | peak_ancilla | 0 | 59 | 5 | +58.33% |
+| and_pareto_resource_nmcts | and_direct_anf | score | 61 | 0 | 3 | -31.40% |
+| and_pareto_resource_nmcts | and_resource_nmcts | T | 10 | 0 | 54 | -0.64% |
+| and_pareto_resource_nmcts | and_resource_nmcts | CNOT | 9 | 7 | 48 | -0.64% |
+| and_pareto_resource_nmcts | and_resource_nmcts | depth | 7 | 9 | 48 | -0.65% |
+| and_pareto_resource_nmcts | and_resource_nmcts | peak_ancilla | 0 | 0 | 64 | +0.00% |
+| and_pareto_resource_nmcts | and_resource_nmcts | score | 16 | 0 | 48 | -0.59% |
+| and_pareto_resource_nmcts | and_profile_resource_nmcts | T | 10 | 0 | 54 | -0.64% |
+| and_pareto_resource_nmcts | and_profile_resource_nmcts | CNOT | 9 | 7 | 48 | -0.64% |
+| and_pareto_resource_nmcts | and_profile_resource_nmcts | depth | 7 | 9 | 48 | -0.65% |
+| and_pareto_resource_nmcts | and_profile_resource_nmcts | peak_ancilla | 0 | 0 | 64 | +0.00% |
+| and_pareto_resource_nmcts | and_profile_resource_nmcts | score | 16 | 0 | 48 | -0.59% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair | T | 58 | 0 | 6 | -3.83% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair | CNOT | 59 | 0 | 5 | -2.54% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair | depth | 54 | 5 | 5 | -1.26% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair | peak_ancilla | 1 | 9 | 54 | +3.23% |
+| and_pareto_resource_nmcts | and_fprm_linear_pair | score | 59 | 0 | 5 | -3.49% |
+| and_pareto_resource_nmcts | and_fprm_root_beam | T | 60 | 0 | 4 | -7.65% |
+| and_pareto_resource_nmcts | and_fprm_root_beam | CNOT | 60 | 0 | 4 | -5.48% |
+| and_pareto_resource_nmcts | and_fprm_root_beam | depth | 51 | 9 | 4 | -2.88% |
+| and_pareto_resource_nmcts | and_fprm_root_beam | peak_ancilla | 0 | 59 | 5 | +58.33% |
+| and_pareto_resource_nmcts | and_fprm_root_beam | score | 60 | 0 | 4 | -6.31% |
 | and_fprm_root_beam | and_fprm_greedy | T | 40 | 0 | 24 | -0.58% |
 | and_fprm_root_beam | and_fprm_greedy | CNOT | 30 | 9 | 25 | -0.26% |
 | and_fprm_root_beam | and_fprm_greedy | depth | 30 | 9 | 25 | -0.26% |
@@ -125,11 +156,11 @@ Rows: 512; usable: 512; errors: 0; skipped: 0.
 | anf_n14_55 | 14 | 25180 | 7292 | -71.04% |
 | anf_n14_20 | 14 | 33692 | 9816 | -70.87% |
 | anf_n14_10 | 14 | 32156 | 9408 | -70.74% |
+| anf_n14_2 | 14 | 32960 | 9648 | -70.73% |
 | anf_n14_31 | 14 | 21000 | 6148 | -70.72% |
-| anf_n14_2 | 14 | 32960 | 9668 | -70.67% |
+| anf_n14_4 | 14 | 12372 | 3628 | -70.68% |
 | anf_n14_48 | 14 | 23420 | 6884 | -70.61% |
 | anf_n14_6 | 14 | 11968 | 3520 | -70.59% |
-| anf_n14_63 | 14 | 10464 | 3128 | -70.11% |
 
 ## Largest and-profile-resource-nmcts gains vs direct ANF
 
@@ -142,11 +173,28 @@ Rows: 512; usable: 512; errors: 0; skipped: 0.
 | anf_n14_55 | 14 | 25180 | 7292 | -71.04% |
 | anf_n14_20 | 14 | 33692 | 9816 | -70.87% |
 | anf_n14_10 | 14 | 32156 | 9408 | -70.74% |
+| anf_n14_2 | 14 | 32960 | 9648 | -70.73% |
 | anf_n14_31 | 14 | 21000 | 6148 | -70.72% |
-| anf_n14_2 | 14 | 32960 | 9668 | -70.67% |
+| anf_n14_4 | 14 | 12372 | 3628 | -70.68% |
 | anf_n14_48 | 14 | 23420 | 6884 | -70.61% |
 | anf_n14_6 | 14 | 11968 | 3520 | -70.59% |
-| anf_n14_63 | 14 | 10464 | 3128 | -70.11% |
+
+## Largest and-pareto-resource-nmcts gains vs direct ANF
+
+| function | n | direct T | and_pareto_resource_nmcts T | relative |
+|---|---:|---:|---:|---:|
+| anf_n14_41 | 14 | 23608 | 6792 | -71.23% |
+| anf_n14_50 | 14 | 13664 | 3940 | -71.17% |
+| anf_n14_18 | 14 | 26328 | 7616 | -71.07% |
+| anf_n14_13 | 14 | 25056 | 7256 | -71.04% |
+| anf_n14_55 | 14 | 25180 | 7292 | -71.04% |
+| anf_n14_20 | 14 | 33692 | 9816 | -70.87% |
+| anf_n14_10 | 14 | 32156 | 9408 | -70.74% |
+| anf_n14_2 | 14 | 32960 | 9648 | -70.73% |
+| anf_n14_31 | 14 | 21000 | 6148 | -70.72% |
+| anf_n14_4 | 14 | 12372 | 3628 | -70.68% |
+| anf_n14_48 | 14 | 23420 | 6884 | -70.61% |
+| anf_n14_6 | 14 | 11968 | 3520 | -70.59% |
 
 ## Largest and-affine-greedy gains vs direct ANF
 

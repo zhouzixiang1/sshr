@@ -28,8 +28,8 @@
   ],
   "model": "",
   "workers": 10,
-  "seconds": 39.25264573097229,
-  "seconds_current_run": 39.25264573097229,
+  "seconds": 43.045230865478516,
+  "seconds_current_run": 43.045230865478516,
   "config": {
     "weights": {
       "t": 1.0,
