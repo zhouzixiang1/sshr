@@ -47,6 +47,7 @@ class FactorAction:
     immediate_gain: float
     prior: float
     linear: bool = False
+    affine_const: bool = False
 
 
 @dataclass
@@ -57,6 +58,7 @@ class Plan:
     factor: int = 0
     group: Optional["Plan"] = None
     rest: Optional["Plan"] = None
+    affine_const: bool = False
 
     def score(self, weights: ResourceWeights) -> float:
         return self.cost.score(weights)
@@ -181,10 +183,11 @@ def candidate_actions(
     return actions[: config.candidate_top_k]
 
 
-def _linear_factor_resource(factor: int, live_factor_ancilla: int) -> ResourceCost:
+def _linear_factor_resource(factor: int, live_factor_ancilla: int, affine_const: bool = False) -> ResourceCost:
     width = int(factor).bit_count()
     live = live_factor_ancilla + 1
-    return ResourceCost(CNOT=width, gates=width, depth=width, explicit_ancilla=live, peak_ancilla=live)
+    x_ops = 1 if affine_const else 0
+    return ResourceCost(CNOT=width, gates=width + x_ops, depth=width + x_ops, explicit_ancilla=live, peak_ancilla=live)
 
 
 def _subsets_of_size(mask: int, size: int) -> Iterable[int]:
@@ -207,6 +210,7 @@ def linear_factor_actions(
     config: SearchConfig,
     action_width: int | None = None,
     max_linear_width: int = 2,
+    neural_scorer=None,
 ) -> List[FactorAction]:
     """Find linear parity factors ``(x_i xor x_j xor ...) * g`` inside an ANF.
 
@@ -290,6 +294,141 @@ def linear_factor_actions(
             )
         )
 
+    if neural_scorer is not None and actions:
+        features = [
+            action_features(
+                terms,
+                prefix_len,
+                live_factor_ancilla,
+                action.factor,
+                action.group,
+                action.residuals,
+                action.rest,
+                action.immediate_gain,
+                direct_total,
+            )
+            for action in actions
+        ]
+        scores = neural_scorer.score_many(features)
+        actions = [
+            replace(action, prior=action.prior + config.neural_prior_weight * float(score))
+            for action, score in zip(actions, scores)
+        ]
+
+    width = action_width if action_width is not None else max(2, min(config.candidate_top_k, 8))
+    actions.sort(key=lambda a: (-a.prior, -a.immediate_gain, -len(a.group), a.factor))
+    return actions[: max(1, min(width, len(actions)))]
+
+
+def affine_linear_factor_actions(
+    terms: frozenset[int],
+    prefix_len: int,
+    live_factor_ancilla: int,
+    config: SearchConfig,
+    action_width: int | None = None,
+    max_linear_width: int = 2,
+    neural_scorer=None,
+) -> List[FactorAction]:
+    """Find affine-linear factors ``(1 xor x_i xor ...) * g`` in an ANF."""
+    if live_factor_ancilla >= config.max_factor_ancilla or len(terms) < 2 * config.min_factor_count:
+        return []
+    n_bits = max((int(t).bit_length() for t in terms), default=0)
+    if n_bits < 1:
+        return []
+
+    termset = set(terms)
+    support_by_residual: dict[int, int] = {}
+    for term in termset:
+        bits = int(term)
+        while bits:
+            bit = bits & -bits
+            residual = term ^ bit
+            support_by_residual[residual] = support_by_residual.get(residual, 0) | bit
+            bits ^= bit
+
+    residuals_by_factor: dict[int, set[int]] = {}
+    max_width = max(1, min(max_linear_width, n_bits))
+    for residual, support in support_by_residual.items():
+        if residual not in termset:
+            continue
+        available = support & ~residual
+        available_count = available.bit_count()
+        for width in range(1, max_width + 1):
+            if available_count < width:
+                continue
+            for factor in _subsets_of_size(available, width):
+                residuals_by_factor.setdefault(factor, set()).add(residual)
+
+    direct_total = direct_cost_for_terms(
+        terms, prefix_len, live_factor_ancilla, config.use_relative_phase, config.gate_mode
+    ).score(config.weights)
+    actions: List[FactorAction] = []
+    for factor, residuals in residuals_by_factor.items():
+        if len(residuals) < config.min_factor_count:
+            continue
+        factor_bits = [1 << i for i in range(factor.bit_length()) if (factor >> i) & 1]
+        group_terms = set(residuals)
+        group_terms.update(residual | bit for residual in residuals for bit in factor_bits)
+        group = frozenset(group_terms)
+        residual_set = frozenset(residuals)
+        rest = frozenset(t for t in terms if t not in group_terms)
+        group_direct = direct_cost_for_terms(
+            group, prefix_len, live_factor_ancilla, config.use_relative_phase, config.gate_mode
+        ).score(config.weights)
+        residual_direct = direct_cost_for_terms(
+            residual_set,
+            prefix_len + 1,
+            live_factor_ancilla + 1,
+            config.use_relative_phase,
+            config.gate_mode,
+        ).score(config.weights)
+        compute = _linear_factor_resource(factor, live_factor_ancilla, affine_const=True)
+        uncompute = _linear_factor_resource(factor, live_factor_ancilla, affine_const=True)
+        gain = group_direct - compute.score(config.weights) - uncompute.score(config.weights) - residual_direct
+        coverage = len(group) / max(len(terms), 1)
+        density = sum(t.bit_count() for t in residual_set) / max(len(residual_set), 1)
+        heuristic_prior = (
+            gain / max(direct_total, 1.0)
+            + 0.04 * len(group)
+            + 0.08 * coverage
+            + 0.02 * factor.bit_count()
+            - 0.02 * density
+            - 0.01
+        )
+        actions.append(
+            FactorAction(
+                factor=factor,
+                group=group,
+                residuals=residual_set,
+                rest=rest,
+                immediate_gain=gain,
+                prior=heuristic_prior,
+                linear=True,
+                affine_const=True,
+            )
+        )
+
+    if neural_scorer is not None and actions:
+        features = [
+            action_features(
+                terms,
+                prefix_len,
+                live_factor_ancilla,
+                action.factor,
+                action.group,
+                action.residuals,
+                action.rest,
+                action.immediate_gain,
+                direct_total,
+            )
+            for action in actions
+        ]
+        scores = neural_scorer.score_many(features)
+        actions = [
+            replace(action, prior=action.prior + config.neural_prior_weight * float(score))
+            for action, score in zip(actions, scores)
+        ]
+
     width = action_width if action_width is not None else max(2, min(config.candidate_top_k, 8))
     actions.sort(key=lambda a: (-a.prior, -a.immediate_gain, -len(a.group), a.factor))
     return actions[: max(1, min(width, len(actions)))]
@@ -351,8 +490,8 @@ def factor_cost(
     config: SearchConfig,
 ) -> ResourceCost:
     if action.linear:
-        compute = _linear_factor_resource(action.factor, live_factor_ancilla)
-        uncompute = _linear_factor_resource(action.factor, live_factor_ancilla)
+        compute = _linear_factor_resource(action.factor, live_factor_ancilla, action.affine_const)
+        uncompute = _linear_factor_resource(action.factor, live_factor_ancilla, action.affine_const)
     else:
         compute = gate_cost(
             action.factor.bit_count(),
@@ -511,6 +650,7 @@ def linear_pair_beam_plan(
     action_width: int = 4,
     recursive_depth: int = 0,
     max_linear_width: int = 2,
+    neural_scorer=None,
 ) -> Plan:
     """Try CNOT-only pairwise XOR factors above cheap subplans.
 
@@ -521,7 +661,7 @@ def linear_pair_beam_plan(
     the remaining terms; the default keeps the historical one-layer result
     unchanged.
     """
-    best = root_child_beam_plan(terms, prefix_len, live_factor_ancilla, config)
+    best = root_child_beam_plan(terms, prefix_len, live_factor_ancilla, config, neural_scorer=neural_scorer)
     best_score = best.score(config.weights)
     actions = linear_factor_actions(
         terms,
@@ -530,6 +670,7 @@ def linear_pair_beam_plan(
         config,
         action_width=action_width,
         max_linear_width=max_linear_width,
+        neural_scorer=neural_scorer,
     )
     if not actions:
         return best
@@ -545,6 +686,7 @@ def linear_pair_beam_plan(
                 action_width=max(2, action_width - 1),
                 recursive_depth=recursive_depth - 1,
                 max_linear_width=max_linear_width,
+                neural_scorer=neural_scorer,
             )
         else:
             group = greedy_plan(
@@ -552,7 +694,7 @@ def linear_pair_beam_plan(
                 prefix_len + 1,
                 live_factor_ancilla + 1,
                 child_config,
-                None,
+                neural_scorer,
                 memo,
             )
         if recursive_depth > 0 and len(terms) <= LINEAR_REST_RECURSE_TERM_LIMIT:
@@ -564,11 +706,106 @@ def linear_pair_beam_plan(
                 action_width=max(2, action_width - 1),
                 recursive_depth=recursive_depth - 1,
                 max_linear_width=max_linear_width,
+                neural_scorer=neural_scorer,
             )
         else:
-            rest = greedy_plan(action.rest, prefix_len, live_factor_ancilla, child_config, None, memo)
+            rest = greedy_plan(action.rest, prefix_len, live_factor_ancilla, child_config, neural_scorer, memo)
         cost = factor_cost(action, group, rest, live_factor_ancilla, config)
-        plan = Plan("linear_factor", terms, cost, factor=action.factor, group=group, rest=rest)
+        plan = Plan(
+            "linear_factor",
+            terms,
+            cost,
+            factor=action.factor,
+            group=group,
+            rest=rest,
+            affine_const=action.affine_const,
+        )
+        score = plan.score(config.weights)
+        if score < best_score:
+            best = plan
+            best_score = score
+    return best
+
+
+def affine_linear_pair_beam_plan(
+    terms: frozenset[int],
+    prefix_len: int = 0,
+    live_factor_ancilla: int = 0,
+    config: SearchConfig = SearchConfig(),
+    action_width: int = 4,
+    recursive_depth: int = 0,
+    max_linear_width: int = 2,
+    neural_scorer=None,
+) -> Plan:
+    """Try local affine-linear factors above the linear-pair baseline."""
+    best = linear_pair_beam_plan(
+        terms,
+        prefix_len,
+        live_factor_ancilla,
+        config,
+        action_width=action_width,
+        recursive_depth=0,
+        max_linear_width=max_linear_width,
+        neural_scorer=neural_scorer,
+    )
+    best_score = best.score(config.weights)
+    actions = affine_linear_factor_actions(
+        terms,
+        prefix_len,
+        live_factor_ancilla,
+        config,
+        action_width=action_width,
+        max_linear_width=max_linear_width,
+        neural_scorer=neural_scorer,
+    )
+    if not actions:
+        return best
+    child_config = replace(config, greedy_eval_limit=1)
+    memo: dict[tuple[frozenset[int], int, int], Plan] = {}
+    for action in actions:
+        if recursive_depth > 0 and live_factor_ancilla + 1 < config.max_factor_ancilla:
+            group = affine_linear_pair_beam_plan(
+                action.residuals,
+                prefix_len + 1,
+                live_factor_ancilla + 1,
+                child_config,
+                action_width=max(2, action_width - 1),
+                recursive_depth=recursive_depth - 1,
+                max_linear_width=max_linear_width,
+                neural_scorer=neural_scorer,
+            )
+        else:
+            group = greedy_plan(
+                action.residuals,
+                prefix_len + 1,
+                live_factor_ancilla + 1,
+                child_config,
+                neural_scorer,
+                memo,
+            )
+        if recursive_depth > 0 and len(terms) <= LINEAR_REST_RECURSE_TERM_LIMIT:
+            rest = affine_linear_pair_beam_plan(
+                action.rest,
+                prefix_len,
+                live_factor_ancilla,
+                child_config,
+                action_width=max(2, action_width - 1),
+                recursive_depth=recursive_depth - 1,
+                max_linear_width=max_linear_width,
+                neural_scorer=neural_scorer,
+            )
+        else:
+            rest = greedy_plan(action.rest, prefix_len, live_factor_ancilla, child_config, neural_scorer, memo)
+        cost = factor_cost(action, group, rest, live_factor_ancilla, config)
+        plan = Plan(
+            "linear_factor",
+            terms,
+            cost,
+            factor=action.factor,
+            group=group,
+            rest=rest,
+            affine_const=action.affine_const,
+        )
         score = plan.score(config.weights)
         if score < best_score:
             best = plan
@@ -603,6 +840,8 @@ def emit_plan_to_circuit(
         anc = free_ancilla.pop(0)
         controls = [i for i in range(n_inputs) if (node.factor >> i) & 1]
         if node.kind == "linear_factor":
+            if node.affine_const:
+                circ.add_x(anc)
             for control in controls:
                 circ.add_cnot(control, anc)
         else:
@@ -611,6 +850,8 @@ def emit_plan_to_circuit(
         if node.kind == "linear_factor":
             for control in reversed(controls):
                 circ.add_cnot(control, anc)
+            if node.affine_const:
+                circ.add_x(anc)
         else:
             circ.add_mct(controls, anc)
         free_ancilla.insert(0, anc)

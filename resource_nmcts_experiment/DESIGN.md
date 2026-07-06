@@ -76,6 +76,9 @@ methods add six ingredients to fixed-coordinate ANF factoring:
    also reports a standalone width-three linear-parity ablation, but the
    portfolio does not use it because the recursive pair candidate dominates it
    under the default weighted objective.
+   The implementation also exposes an experimental affine-linear factor action
+   `(1 xor x_i xor ...) g`, which computes the temporary affine control with
+   Clifford gates and keeps the ordinary linear-pair plan as a baseline guard.
 6. **Pareto archive selection.** The Pareto variant evaluates child searches
    under active, T-sparse, CNOT/depth-heavy, ancilla-tight, and gate-count-aware
    internal scoring weights, removes candidates dominated in T-count, CNOT
@@ -596,4 +599,7 @@ logical-AND direct ANF, they have 10 score wins, 0 losses, and 2 ties, with a
 construction: `and_resource_nmcts` has median runtime 65.995 s and p95
 143.671 s, while `and_profile_resource_nmcts` has median runtime 66.841 s and
 p95 149.190 s.  This result should be framed as scale and verification evidence,
-not as a new neural-portfolio separation.
+not as a new neural-portfolio separation.  A follow-up isolated
+`and_pareto_resource_nmcts` probe on all 12 `n=18` functions hit the 330 s hard
+timeout on every task, so `n=18` Pareto rows remain excluded until the archive is
+narrowed further.
