@@ -492,6 +492,28 @@ showing that the affine coordinate search is the dominant contributor.  Neural
 refinement and the guard were smaller but monotone under the composite score:
 neither introduced score losses on the benchmark.
 
+We also reran the $n\leq 6$ \traditionaldataset{} slice with the learned action
+scorer removed while keeping the same heuristic PUCT/action prior.  The paired
+comparison contains 1062 rows over \affinemethod{}, \method{}, and
+\paretomethod{}, with no errors or skips.  The learned prior gives modest but
+monotone score improvements: 42/0/135 score wins/losses/ties for
+\affinemethod{}, 41/0/136 for \method{}, and 34/0/143 for \paretomethod{}.
+Mean score reductions are 1.47\%, 1.34\%, and 0.82\%, respectively.  The cost
+is runtime: the learned-prior rows are slower on these small functions because
+many small neural action batches are evaluated on CPU.  We therefore treat the
+learned prior as a quality-improving search signal, not as the current fastest
+mode.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Learned-prior ablation on the $n\leq 6$ \traditionaldataset{} slice.
+Rows compare the learned action scorer against the same search with only the
+heuristic action prior.  Negative mean score change favors the learned prior.}
+\label{tab:neural-prior-ablation}
+\input{tables/neural_prior_ablation}
+\end{table}
+
 \subsection{Runtime and resource tradeoff}
 
 The ablation also exposes the computational cost of the search components.

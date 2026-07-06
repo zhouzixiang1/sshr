@@ -24,6 +24,9 @@ Current source evidence:
 - ablation CSV: `../results/raw_ablation_affine.csv`
 - compact ablation analysis: `../results/analysis_ablation_affine.md`
 - runtime/resource analysis: `../results/runtime_ablation_affine.md`
+- neural-prior ablation CSV: `../results/raw_neural_prior_ablation.csv`
+- neural-prior ablation analysis:
+  `../results/analysis_neural_prior_ablation.md`
 - traditional baseline CSV: `../results/raw_traditional_resource.csv`
 - traditional baseline analysis: `../results/analysis_traditional_resource.md`
 - traditional runtime/resource analysis:
@@ -62,6 +65,7 @@ Current source evidence:
 - external-tool benchmark exporter: `../export_benchmarks.py`
 - LaTeX tables: `tables/runtime_ablation_affine.tex`,
   `tables/resource_ablation_affine.tex`,
+  `tables/neural_prior_ablation.tex`,
   `tables/resource_traditional_resource.tex`,
   `tables/runtime_traditional_resource.tex`,
   `tables/resource_sweep_affine.tex`,
@@ -76,6 +80,7 @@ Current source evidence:
   `tables/external_traditional_resource_n6.tex`,
   `tables/external_highdim_abc_aig.tex`
 - manifests: `../results/manifest_evidence_affine.json`,
+  `../results/manifest_traditional_resource_no_prior.json`,
   `../results/manifest_highdim_resource.json`,
   `../results/manifest_highdim_scale_resource.json`,
   `../results/manifest_external_traditional_resource_n4.json`,

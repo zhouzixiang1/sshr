@@ -27,6 +27,11 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_resource --model models/action_scorer_rollout_logical_and.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset traditional_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset traditional_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_resource --only-methods and_affine_nmcts,and_resource_nmcts,and_pareto_resource_nmcts --model /tmp/nonexistent_model.pt --out-dir /tmp/resource_nmcts_traditional_no_model --workers 10 --checkpoint-every 50
+cp /tmp/resource_nmcts_traditional_no_model/raw_traditional_resource.csv results/raw_traditional_resource_no_prior.csv
+cp /tmp/resource_nmcts_traditional_no_model/summary_traditional_resource.csv results/summary_traditional_resource_no_prior.csv
+cp /tmp/resource_nmcts_traditional_no_model/manifest_traditional_resource.json results/manifest_traditional_resource_no_prior.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_neural_prior_ablation.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_resource_sweep.py --model models/action_scorer_rollout_logical_and.pt --workers 10
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_resource_sweep.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset large_resource_core --model models/action_scorer_rollout_logical_and.pt --resume --workers 6 --checkpoint-every 1 --isolate-timeouts
@@ -158,6 +163,18 @@ Runtime/resource evidence from `results/runtime_ablation_affine.md`:
 - full `and_affine_nmcts` has the lowest all-suite mean T-count and composite
   score among the non-SSHR methods, while affine-greedy is the fastest strong
   setting.
+
+Neural-prior ablation evidence from `results/analysis_neural_prior_ablation.md`:
+
+- 1062 rows over the 177-function `traditional_resource` slice, comparing
+  learned-prior rows against a no-prior rerun for `and_affine_nmcts`,
+  `and_resource_nmcts`, and `and_pareto_resource_nmcts`; 0 errors/skips.
+- Learned prior versus no-prior score wins/losses/ties are 42/0/135 for
+  `and_affine_nmcts`, 41/0/136 for `and_resource_nmcts`, and 34/0/143 for
+  `and_pareto_resource_nmcts`.
+- Mean score reductions are 1.47%, 1.34%, and 0.82%, respectively.  Runtime
+  increases on this small-function slice, so the learned prior is a
+  quality-improving search signal rather than the current fastest mode.
 
 Traditional Boolean/ESOP baseline evidence from
 `results/analysis_traditional_resource.md` and

@@ -146,6 +146,12 @@ The main solver is a recursive PUCT/MCTS over factorization actions.  It uses:
 - a greedy value fallback for unexplored subproblems;
 - an explicit limit on live factor ancilla.
 
+The learned scorer is used as an additive action-prior term rather than as a
+standalone decision oracle.  A no-prior rerun on the `traditional_resource`
+slice keeps the same heuristic PUCT/action prior and removes only the learned
+scorer; this isolates the neural contribution without changing the symbolic
+candidate generator.
+
 The objective is a weighted resource score:
 
 ```text
@@ -230,6 +236,11 @@ The current paper-facing run is:
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_resource --model models/action_scorer_rollout_logical_and.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset traditional_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset traditional_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_resource --only-methods and_affine_nmcts,and_resource_nmcts,and_pareto_resource_nmcts --model /tmp/nonexistent_model.pt --out-dir /tmp/resource_nmcts_traditional_no_model --workers 10 --checkpoint-every 50
+cp /tmp/resource_nmcts_traditional_no_model/raw_traditional_resource.csv results/raw_traditional_resource_no_prior.csv
+cp /tmp/resource_nmcts_traditional_no_model/summary_traditional_resource.csv results/summary_traditional_resource_no_prior.csv
+cp /tmp/resource_nmcts_traditional_no_model/manifest_traditional_resource.json results/manifest_traditional_resource_no_prior.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_neural_prior_ablation.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_resource_sweep.py --model models/action_scorer_rollout_logical_and.pt --workers 10
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_resource_sweep.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset large_resource_core --model models/action_scorer_rollout_logical_and.pt --resume --workers 6 --checkpoint-every 1 --isolate-timeouts
@@ -273,6 +284,15 @@ This run isolates the mechanism:
   affine-no-guard.
 - The full method gives 153 score wins, 169 ties, and 0 score losses over
   affine-greedy.
+
+The learned-prior ablation in `results/analysis_neural_prior_ablation.md`
+compares the model-backed run with a no-prior rerun on all 177
+`traditional_resource` functions for `and_affine_nmcts`, `and_resource_nmcts`,
+and `and_pareto_resource_nmcts`.  It has 1062 usable rows, 0 errors, and 0
+skips.  Learned-prior score wins/losses/ties are 42/0/135, 41/0/136, and
+34/0/143, with mean score reductions of 1.47%, 1.34%, and 0.82%.  Runtime is
+higher for the learned-prior rows on this small-function slice, so the current
+claim is a quality improvement at nonzero inference cost.
 
 The runtime/resource table in `results/runtime_ablation_affine.md` adds the
 cost side of the argument:
