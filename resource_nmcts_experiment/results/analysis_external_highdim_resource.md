@@ -1,6 +1,6 @@
 # External Baseline Analysis
 
-External rows: 192; usable: 192.
+External rows: 256; usable: 256.
 Internal rows: 512; usable: 512.
 
 ## External Summary
@@ -8,6 +8,7 @@ Internal rows: 512; usable: 512.
 | method | n | functions | mean T | mean CNOT | mean score | mean time s |
 |---|---:|---:|---:|---:|---:|---:|
 | external_abc_aig | 14 | 64 | 24801.44 | 62004.59 | 39933.56 | 0.240 |
+| external_abc_lut | 14 | 64 | 138026.38 | 234575.66 | 157445.32 | 0.206 |
 | external_abc_xag | 14 | 64 | 31204.56 | 46928.47 | 48965.29 | 0.143 |
 | external_bdd | 14 | 64 | 22650.25 | 39705.72 | 28049.34 | 0.493 |
 
@@ -20,6 +21,11 @@ Internal rows: 512; usable: 512.
 | and_resource_nmcts | external_abc_aig | depth | 64 | 14 | 50 | 0 | +1410.79% |
 | and_resource_nmcts | external_abc_aig | peak_ancilla | 64 | 64 | 0 | 0 | -99.79% |
 | and_resource_nmcts | external_abc_aig | score | 64 | 64 | 0 | 0 | -94.13% |
+| and_resource_nmcts | external_abc_lut | T | 64 | 64 | 0 | 0 | -97.30% |
+| and_resource_nmcts | external_abc_lut | CNOT | 64 | 64 | 0 | 0 | -97.20% |
+| and_resource_nmcts | external_abc_lut | depth | 64 | 64 | 0 | 0 | -97.15% |
+| and_resource_nmcts | external_abc_lut | peak_ancilla | 64 | 64 | 0 | 0 | -99.46% |
+| and_resource_nmcts | external_abc_lut | score | 64 | 64 | 0 | 0 | -97.44% |
 | and_resource_nmcts | external_abc_xag | T | 64 | 64 | 0 | 0 | -93.61% |
 | and_resource_nmcts | external_abc_xag | CNOT | 64 | 64 | 0 | 0 | -92.42% |
 | and_resource_nmcts | external_abc_xag | depth | 64 | 14 | 50 | 0 | +1160.89% |
@@ -35,6 +41,11 @@ Internal rows: 512; usable: 512.
 | and_profile_resource_nmcts | external_abc_aig | depth | 64 | 14 | 50 | 0 | +1410.79% |
 | and_profile_resource_nmcts | external_abc_aig | peak_ancilla | 64 | 64 | 0 | 0 | -99.79% |
 | and_profile_resource_nmcts | external_abc_aig | score | 64 | 64 | 0 | 0 | -94.13% |
+| and_profile_resource_nmcts | external_abc_lut | T | 64 | 64 | 0 | 0 | -97.30% |
+| and_profile_resource_nmcts | external_abc_lut | CNOT | 64 | 64 | 0 | 0 | -97.20% |
+| and_profile_resource_nmcts | external_abc_lut | depth | 64 | 64 | 0 | 0 | -97.15% |
+| and_profile_resource_nmcts | external_abc_lut | peak_ancilla | 64 | 64 | 0 | 0 | -99.46% |
+| and_profile_resource_nmcts | external_abc_lut | score | 64 | 64 | 0 | 0 | -97.44% |
 | and_profile_resource_nmcts | external_abc_xag | T | 64 | 64 | 0 | 0 | -93.61% |
 | and_profile_resource_nmcts | external_abc_xag | CNOT | 64 | 64 | 0 | 0 | -92.42% |
 | and_profile_resource_nmcts | external_abc_xag | depth | 64 | 14 | 50 | 0 | +1160.89% |
@@ -50,6 +61,11 @@ Internal rows: 512; usable: 512.
 | and_fprm_linear_pair | external_abc_aig | depth | 64 | 14 | 50 | 0 | +1435.32% |
 | and_fprm_linear_pair | external_abc_aig | peak_ancilla | 64 | 64 | 0 | 0 | -99.79% |
 | and_fprm_linear_pair | external_abc_aig | score | 64 | 64 | 0 | 0 | -93.98% |
+| and_fprm_linear_pair | external_abc_lut | T | 64 | 64 | 0 | 0 | -97.23% |
+| and_fprm_linear_pair | external_abc_lut | CNOT | 64 | 64 | 0 | 0 | -97.18% |
+| and_fprm_linear_pair | external_abc_lut | depth | 64 | 64 | 0 | 0 | -97.13% |
+| and_fprm_linear_pair | external_abc_lut | peak_ancilla | 64 | 64 | 0 | 0 | -99.46% |
+| and_fprm_linear_pair | external_abc_lut | score | 64 | 64 | 0 | 0 | -97.38% |
 | and_fprm_linear_pair | external_abc_xag | T | 64 | 64 | 0 | 0 | -93.43% |
 | and_fprm_linear_pair | external_abc_xag | CNOT | 64 | 64 | 0 | 0 | -92.30% |
 | and_fprm_linear_pair | external_abc_xag | depth | 64 | 14 | 50 | 0 | +1180.94% |
@@ -65,6 +81,11 @@ Internal rows: 512; usable: 512.
 | and_fprm_root_beam | external_abc_aig | depth | 64 | 14 | 50 | 0 | +1473.57% |
 | and_fprm_root_beam | external_abc_aig | peak_ancilla | 64 | 64 | 0 | 0 | -99.97% |
 | and_fprm_root_beam | external_abc_aig | score | 64 | 64 | 0 | 0 | -93.80% |
+| and_fprm_root_beam | external_abc_lut | T | 64 | 64 | 0 | 0 | -97.11% |
+| and_fprm_root_beam | external_abc_lut | CNOT | 64 | 64 | 0 | 0 | -97.11% |
+| and_fprm_root_beam | external_abc_lut | depth | 64 | 64 | 0 | 0 | -97.14% |
+| and_fprm_root_beam | external_abc_lut | peak_ancilla | 64 | 64 | 0 | 0 | -99.94% |
+| and_fprm_root_beam | external_abc_lut | score | 64 | 64 | 0 | 0 | -97.31% |
 | and_fprm_root_beam | external_abc_xag | T | 64 | 64 | 0 | 0 | -93.15% |
 | and_fprm_root_beam | external_abc_xag | CNOT | 64 | 64 | 0 | 0 | -92.08% |
 | and_fprm_root_beam | external_abc_xag | depth | 64 | 14 | 50 | 0 | +1212.59% |
@@ -80,6 +101,11 @@ Internal rows: 512; usable: 512.
 | and_fprm_greedy | external_abc_aig | depth | 64 | 14 | 50 | 0 | +1476.88% |
 | and_fprm_greedy | external_abc_aig | peak_ancilla | 64 | 64 | 0 | 0 | -99.97% |
 | and_fprm_greedy | external_abc_aig | score | 64 | 64 | 0 | 0 | -93.78% |
+| and_fprm_greedy | external_abc_lut | T | 64 | 64 | 0 | 0 | -97.11% |
+| and_fprm_greedy | external_abc_lut | CNOT | 64 | 64 | 0 | 0 | -97.11% |
+| and_fprm_greedy | external_abc_lut | depth | 64 | 64 | 0 | 0 | -97.14% |
+| and_fprm_greedy | external_abc_lut | peak_ancilla | 64 | 64 | 0 | 0 | -99.94% |
+| and_fprm_greedy | external_abc_lut | score | 64 | 64 | 0 | 0 | -97.30% |
 | and_fprm_greedy | external_abc_xag | T | 64 | 64 | 0 | 0 | -93.11% |
 | and_fprm_greedy | external_abc_xag | CNOT | 64 | 64 | 0 | 0 | -92.07% |
 | and_fprm_greedy | external_abc_xag | depth | 64 | 14 | 50 | 0 | +1215.42% |
@@ -95,6 +121,11 @@ Internal rows: 512; usable: 512.
 | direct_anf | external_abc_aig | depth | 64 | 14 | 50 | 0 | +1270.19% |
 | direct_anf | external_abc_aig | peak_ancilla | 64 | 64 | 0 | 0 | -99.98% |
 | direct_anf | external_abc_aig | score | 64 | 64 | 0 | 0 | -85.67% |
+| direct_anf | external_abc_lut | T | 64 | 64 | 0 | 0 | -94.72% |
+| direct_anf | external_abc_lut | CNOT | 64 | 64 | 0 | 0 | -97.49% |
+| direct_anf | external_abc_lut | depth | 64 | 64 | 0 | 0 | -97.52% |
+| direct_anf | external_abc_lut | peak_ancilla | 64 | 64 | 0 | 0 | -99.96% |
+| direct_anf | external_abc_lut | score | 64 | 64 | 0 | 0 | -95.26% |
 | direct_anf | external_abc_xag | T | 64 | 64 | 0 | 0 | -82.56% |
 | direct_anf | external_abc_xag | CNOT | 64 | 64 | 0 | 0 | -93.07% |
 | direct_anf | external_abc_xag | depth | 64 | 13 | 51 | 0 | +1047.78% |
@@ -110,6 +141,11 @@ Internal rows: 512; usable: 512.
 | and_direct_anf | external_abc_aig | depth | 64 | 14 | 50 | 0 | +2179.84% |
 | and_direct_anf | external_abc_aig | peak_ancilla | 64 | 64 | 0 | 0 | -99.97% |
 | and_direct_anf | external_abc_aig | score | 64 | 64 | 0 | 0 | -91.39% |
+| and_direct_anf | external_abc_lut | T | 64 | 64 | 0 | 0 | -96.46% |
+| and_direct_anf | external_abc_lut | CNOT | 64 | 64 | 0 | 0 | -96.62% |
+| and_direct_anf | external_abc_lut | depth | 64 | 64 | 0 | 0 | -96.65% |
+| and_direct_anf | external_abc_lut | peak_ancilla | 64 | 64 | 0 | 0 | -99.94% |
+| and_direct_anf | external_abc_lut | score | 64 | 64 | 0 | 0 | -96.70% |
 | and_direct_anf | external_abc_xag | T | 64 | 64 | 0 | 0 | -90.25% |
 | and_direct_anf | external_abc_xag | CNOT | 64 | 64 | 0 | 0 | -89.60% |
 | and_direct_anf | external_abc_xag | depth | 64 | 13 | 51 | 0 | +1793.01% |

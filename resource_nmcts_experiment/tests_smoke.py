@@ -12,6 +12,7 @@ from resource_model import ResourceWeights
 from run_external_baselines import (
     EsopCube,
     bdd_cost,
+    blif_lut_network_cost,
     build_robdd_for_order,
     candidate_bdd_orders,
     blif_truth_table,
@@ -98,6 +99,9 @@ def check_external_truth_verifiers() -> None:
         truth = blif_truth_table(inputs, output, nodes, 2)
         slow_truth = sum(eval_blif(inputs, output, nodes, x) << x for x in range(4))
         assert truth == slow_truth == 0b1110
+        lut_cost = blif_lut_network_cost(inputs, output, nodes, BooleanFunction(2, 0b1110))
+        assert lut_cost.T > 0
+        assert lut_cost.peak_ancilla >= 1
 
     xor_cubes = [EsopCube("1-"), EsopCube("-1")]
     assert verify_esop(xor_cubes, BooleanFunction(2, 0b0110))

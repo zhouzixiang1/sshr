@@ -169,7 +169,7 @@ The first implementation compares against:
 
 `export_benchmarks.py` exports every preset to PLA, BLIF `.names`, and
 truth-table JSON with a manifest, so the exact same Boolean functions can be
-fed to external AIG/XAG/ROS/LUT or mockturtle-style flows.  External tool
+fed to external AIG/XAG/LUT/ROS or mockturtle-style flows.  External tool
 results are now partially covered by `run_external_baselines.py`: the first
 exact pilot consumes the exported `traditional_resource` manifest and runs
 SSHR-H, CNOT-optimized SSHR-I, and T-optimized SSHR-I from the separate
@@ -178,17 +178,18 @@ covers the full `n <= 6` traditional slice with an 8 s Gurobi budget per
 SSHR-I call, a Berkeley ABC AIG backend optimizes the same exported BLIF files
 before bit-parallel full truth-table verification and Bennett-style resource
 estimation, a Berkeley ABC XAG/GIA backend uses `&get; &st -m -L 1` plus
-`&ps -m -x` before verified BLIF scoring with a logical XAG cost model, and an
-ABC ESOP backend runs `&exorcism -q`, verifies the emitted ESOP-PLA, and scores
-the resulting XOR-of-cubes oracle with the logical-AND cube model.  A reduced
-ordered BDD baseline tries several deterministic variable orders, verifies the
-decision diagram, and scores a Shannon-network compute/uncompute estimate.
-The ABC-AIG, ABC-XAG, and BDD paths now also cover the isolated `n=14` and
-`n=15` high-dimensional random-ANF presets; ABC-ESOP remains a small-function
-external baseline because complex high-dimensional ESOP minimization times out.
-ROS/mockturtle adapters are still future work, but the benchmark exchange
-format and SSHR/ABC/BDD comparison paths are now reproducible and independent of
-the synthesis harness.
+`&ps -m -x` before verified BLIF scoring with a logical XAG cost model, an ABC
+LUT backend maps with `strash; if -K 4` before verified mapped-BLIF scoring, and
+an ABC ESOP backend runs `&exorcism -q`, verifies the emitted ESOP-PLA, and
+scores the resulting XOR-of-cubes oracle with the logical-AND cube model.  A
+reduced ordered BDD baseline tries several deterministic variable orders,
+verifies the decision diagram, and scores a Shannon-network compute/uncompute
+estimate.  The ABC-AIG, ABC-XAG, ABC-LUT, and BDD paths now also cover the
+isolated `n=14` and `n=15` high-dimensional random-ANF presets; ABC-ESOP remains
+a small-function external baseline because complex high-dimensional ESOP
+minimization times out.  ROS/mockturtle adapters are still future work, but the
+benchmark exchange format and SSHR/ABC/LUT/BDD comparison paths are now
+reproducible and independent of the synthesis harness.
 
 ## Evaluation
 
@@ -333,14 +334,14 @@ rows with 0 errors/skips:
   This validates the low-T/resource-score framing and rules out a CNOT-only
   claim.
 
-The time-limited exported SSHR-I plus ABC/BDD extension covers all 177 functions
-with `n <= 6`, seven external methods, and 1239 external rows with 0
+The time-limited exported SSHR-I plus ABC/LUT/BDD extension covers all 177
+functions with `n <= 6`, eight external methods, and 1416 external rows with 0
 errors/skips.  The SSHR-I rows use an 8 s per-call Gurobi budget, the
 ABC-AIG rows use Berkeley ABC 1.01 built from
 `bcfdf592289a408cd67ec19260f8a60a37b085b6` with BLIF truth-table
-verification, the ABC-XAG rows use verified ABC GIA/XOR-aware BLIF, the BDD
-rows use verified ROBDDs, and the ABC-ESOP rows use verified `&exorcism -q`
-ESOP-PLA:
+verification, the ABC-XAG rows use verified ABC GIA/XOR-aware BLIF, the ABC-LUT
+rows use verified mapped BLIF after `if -K 4`, the BDD rows use verified ROBDDs,
+and the ABC-ESOP rows use verified `&exorcism -q` ESOP-PLA:
 
 - Against ABC-AIG, `and_resource_nmcts` has 170/2/5 T-count wins/losses/ties,
   wins all 177 CNOT, peak-ancilla, and weighted-score comparisons, and reduces
@@ -350,6 +351,10 @@ ESOP-PLA:
   wins all 177 peak-ancilla and weighted-score comparisons, reduces mean
   weighted score by 63.23%, and reduces mean CNOT by 35.53%.  ABC-XAG has a
   lower depth estimate on 144/177 functions.
+- Against ABC-LUT, `and_resource_nmcts` has 175/0/2 T-count wins/losses/ties,
+  wins all 177 CNOT, depth, peak-ancilla, and weighted-score comparisons, and
+  reduces mean weighted score by 76.41%.  This is a verified mapped-LUT network
+  baseline rather than a complete reversible LUT-mapping toolchain.
 - Against BDD, `and_resource_nmcts` wins all 177 T-count, CNOT, depth,
   peak-ancilla, and weighted-score comparisons, reducing mean weighted score
   by 67.15%.
@@ -366,23 +371,24 @@ ESOP-PLA:
   worse on 168/177 CNOT comparisons against CNOT-opt SSHR-I and on 163/177
   against T-opt SSHR-I.
 
-The high-dimensional exported ABC AIG/XAG plus BDD extension covers the
+The high-dimensional exported ABC AIG/XAG/LUT plus BDD extension covers the
 isolated `n=14` and `n=15` random-ANF stress presets:
 
 - `results/analysis_external_highdim_resource.md`: 64 exported `n=14`
-  functions, 192/192 correct ABC-AIG/ABC-XAG/BDD rows, 0 errors/skips.
-  `and_resource_nmcts` and `and_profile_resource_nmcts` beat all three
+  functions, 256/256 correct ABC-AIG/ABC-XAG/ABC-LUT/BDD rows, 0 errors/skips.
+  `and_resource_nmcts` and `and_profile_resource_nmcts` beat all four
   baselines on all T-count, CNOT, peak-ancilla, and weighted-score
   comparisons, with mean score reductions of 94.13% against AIG and 95.48%
-  against XAG, and 93.24% against BDD.  ABC-AIG and ABC-XAG each have a lower
-  estimated depth on 50/64 functions; BDD does not under the sequential
-  Shannon-network estimate.
+  against XAG, 97.44% against LUT, and 93.24% against BDD.  ABC-AIG and ABC-XAG
+  each have a lower estimated depth on 50/64 functions; ABC-LUT and BDD do not
+  under the sequential local-LUT/Shannon-network estimates.
 - `results/analysis_external_highdim_scale_resource.md`: 32 exported `n=15`
-  functions, 96/96 correct ABC-AIG/ABC-XAG/BDD rows, 0 errors/skips.  The
-  guarded methods again win all T-count, CNOT, peak-ancilla, and weighted-score
+  functions, 128/128 correct ABC-AIG/ABC-XAG/ABC-LUT/BDD rows, 0 errors/skips.
+  The guarded methods again win all T-count, CNOT, peak-ancilla, and weighted-score
   comparisons, with mean score reductions of 94.59% against AIG, 96.33%
-  against XAG, and 94.75% against BDD.  ABC-AIG has a lower estimated depth on
-  25/32 functions and ABC-XAG on 26/32 functions.
+  against XAG, 97.76% against LUT, and 94.75% against BDD.  ABC-AIG has a lower
+  estimated depth on 25/32 functions and ABC-XAG on 26/32 functions; ABC-LUT and
+  BDD are deeper under the current sequential estimates.
 
 The `resource_sweep` stress test checks whether the method remains competitive
 under different resource objectives.  It uses 47 functions with `n <= 6`, four

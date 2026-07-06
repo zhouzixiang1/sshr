@@ -1,24 +1,27 @@
 {
   "abc_binary": "/Users/zhouzixiang/Desktop/tzb/src/tmp/abc/abc",
   "abc_esop_script": "strash; &get",
+  "abc_lut_script": "strash; if -K 4",
   "abc_script": "strash; balance; rewrite; refactor; rewrite -z; balance",
   "abc_xag_script": "&get; &st -m -L 1",
   "bdd_orders": 8,
   "count": null,
-  "elapsed_s": 5.599847078323364,
-  "existing_rows": 64,
+  "elapsed_s": 2.302731990814209,
+  "existing_rows": 96,
   "functions": 32,
   "last_run_methods": [
-    "external_bdd"
+    "external_abc_lut"
   ],
   "max_abc_n": 15,
   "max_bdd_n": 15,
   "max_esop_n": 8,
   "max_ilp_n": 4,
+  "max_lut_n": 15,
   "max_n": 15,
   "max_xag_n": 15,
   "methods": [
     "external_abc_aig",
+    "external_abc_lut",
     "external_abc_xag",
     "external_bdd"
   ],
@@ -27,7 +30,7 @@
   "offset": 0,
   "raw": "results/raw_external_highdim_scale_resource.csv",
   "resume": true,
-  "rows": 96,
+  "rows": 128,
   "source_manifest": "benchmark_exports/highdim_scale_resource_external_seed42/manifest.csv",
   "summary": "results/summary_external_highdim_scale_resource.csv",
   "timeout": 30.0,

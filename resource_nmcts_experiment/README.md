@@ -46,13 +46,14 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_abc_aig --max-n 6 --max-abc-n 6 --timeout 8 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_abc_esop --max-n 6 --max-esop-n 6 --timeout 8 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_abc_xag --max-n 6 --max-xag-n 6 --timeout 10 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_abc_lut --max-n 6 --max-lut-n 6 --timeout 10 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_bdd --max-n 6 --max-bdd-n 6 --bdd-orders 8 --timeout 10 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_traditional_resource_n6.csv --internal-csv results/raw_traditional_resource.csv --out results/analysis_external_traditional_resource_n6.md
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset highdim_resource --formats blif,truth --out-dir benchmark_exports/highdim_resource_external_seed42
-/opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/highdim_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_bdd --min-n 14 --max-n 14 --max-abc-n 14 --max-xag-n 14 --max-bdd-n 14 --bdd-orders 8 --timeout 20 --workers 8 --out results/raw_external_highdim_resource.csv --summary results/summary_external_highdim_resource.csv --run-manifest results/manifest_external_highdim_resource.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/highdim_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_abc_lut,external_bdd --min-n 14 --max-n 14 --max-abc-n 14 --max-xag-n 14 --max-lut-n 14 --max-bdd-n 14 --bdd-orders 8 --timeout 20 --workers 8 --out results/raw_external_highdim_resource.csv --summary results/summary_external_highdim_resource.csv --run-manifest results/manifest_external_highdim_resource.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_highdim_resource.csv --internal-csv results/raw_highdim_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_fprm_linear_pair,and_fprm_root_beam,and_fprm_greedy,direct_anf,and_direct_anf --out results/analysis_external_highdim_resource.md
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset highdim_scale_resource --formats blif,truth --out-dir benchmark_exports/highdim_scale_resource_external_seed42
-/opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/highdim_scale_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_bdd --min-n 15 --max-n 15 --max-abc-n 15 --max-xag-n 15 --max-bdd-n 15 --bdd-orders 8 --timeout 30 --workers 8 --out results/raw_external_highdim_scale_resource.csv --summary results/summary_external_highdim_scale_resource.csv --run-manifest results/manifest_external_highdim_scale_resource.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/highdim_scale_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_abc_lut,external_bdd --min-n 15 --max-n 15 --max-abc-n 15 --max-xag-n 15 --max-lut-n 15 --max-bdd-n 15 --bdd-orders 8 --timeout 30 --workers 8 --out results/raw_external_highdim_scale_resource.csv --summary results/summary_external_highdim_scale_resource.csv --run-manifest results/manifest_external_highdim_scale_resource.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_highdim_scale_resource.csv --internal-csv results/raw_highdim_scale_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_fprm_linear_pair_deep,and_fprm_linear_pair,and_fprm_linear_parity,and_fprm_greedy,direct_anf,and_direct_anf --out results/analysis_external_highdim_scale_resource.md
 ```
 
@@ -101,7 +102,7 @@ External-tool benchmark exchange:
   is intentionally git-ignored because the files are regenerable and can be
   large for `n=12` and `n=14` suites.
 - This is the bridge for reproducing the same Boolean functions in external
-  AIG/XAG/ROS/LUT or mockturtle-style synthesis flows without depending on the
+  AIG/XAG/LUT/ROS or mockturtle-style synthesis flows without depending on the
   Python experiment harness.
 - `run_external_baselines.py` consumes the exported `manifest.csv`/JSON and
   runs cross-directory baseline backends.  The implemented external backends
@@ -111,12 +112,14 @@ External-tool benchmark exchange:
   checker, and maps AIG AND/level statistics to a logic-level Bennett
   compute/uncompute resource estimate.  It also includes an ABC XAG/GIA path
   using `&get; &st -m -L 1` plus `&ps -m -x`, verified BLIF output, and a
-  logical XAG cost model.  It also includes
-  an ABC ESOP path using `&exorcism -q`, verified ESOP-PLA output, and the same
-  logical-AND cube cost model as the internal ESOP baselines.  It also includes
-  a deterministic reduced ordered BDD baseline with multiple variable orders,
-  truth-table verification, and a Shannon-network resource estimate.  ROS and
-  mockturtle adapters are still future work.
+  logical XAG cost model.  It also includes an ABC LUT-mapping path using
+  `strash; if -K 4`, verified mapped BLIF output, and a local LUT-to-ANF
+  resource estimate.  It also includes an ABC ESOP path using `&exorcism -q`,
+  verified ESOP-PLA output, and the same logical-AND cube cost model as the
+  internal ESOP baselines.  It also includes a deterministic reduced ordered BDD
+  baseline with multiple variable orders, truth-table verification, and a
+  Shannon-network resource estimate.  ROS and mockturtle adapters are still
+  future work.
 
 Current evidence from `results/analysis_evidence_affine.md`:
 
@@ -193,12 +196,13 @@ Exported exact SSHR-I pilot evidence from
   win pattern and a 26.21% mean score reduction.  CNOT count is worse on 62/72
   functions.
 
-Time-limited exported SSHR-I, ABC-AIG, ABC-XAG, BDD, and ABC-ESOP extension evidence from
+Time-limited exported SSHR-I, ABC-AIG, ABC-XAG, ABC-LUT, BDD, and ABC-ESOP extension evidence from
 `results/analysis_external_traditional_resource_n6.md`:
 
 - Extends the same exported manifest to all 177 functions with `n <= 6`.
-- Produces 1239 external rows across SSHR-H, CNOT-optimized SSHR-I,
-  T-optimized SSHR-I, ABC-AIG, ABC-XAG, BDD, and ABC-ESOP, with 0 errors/skips.
+- Produces 1416 external rows across SSHR-H, CNOT-optimized SSHR-I,
+  T-optimized SSHR-I, ABC-AIG, ABC-XAG, ABC-LUT, BDD, and ABC-ESOP, with 0
+  errors/skips.
 - The SSHR-I rows use an 8 s per-call Gurobi budget, so this is a
   time-limited extension rather than an exact certificate.
 - The ABC-AIG rows use Berkeley ABC 1.01 built from
@@ -213,6 +217,10 @@ Time-limited exported SSHR-I, ABC-AIG, ABC-XAG, BDD, and ABC-ESOP extension evid
   tie; it wins all 177 peak-ancilla and weighted-score comparisons, with mean
   reductions of 89.85% and 63.23%, respectively.  It reduces mean CNOT by
   35.53%, while ABC-XAG has a lower depth estimate on 144/177 functions.
+- Against ABC-LUT, `and_resource_nmcts` has 175 T-count wins, 0 losses, and 2
+  ties; it wins all 177 CNOT, depth, peak-ancilla, and weighted-score
+  comparisons, with a 76.41% mean score reduction.  This is a verified mapped
+  BLIF/LUT baseline, not a full reversible LUT mapper.
 - Against BDD, `and_resource_nmcts` wins all 177 T-count, CNOT, depth,
   peak-ancilla, and weighted-score comparisons, with a 67.15% mean score
   reduction.  This is a verified ROBDD/Shannon-network baseline rather than a
@@ -228,25 +236,25 @@ Time-limited exported SSHR-I, ABC-AIG, ABC-XAG, BDD, and ABC-ESOP extension evid
 - Against T-optimized SSHR-I, `and_resource_nmcts` has 166 T-count wins, 1
   loss, and 10 ties, with a 26.25% mean score reduction.
 
-Exported high-dimensional ABC-AIG/ABC-XAG/BDD evidence from
+Exported high-dimensional ABC-AIG/ABC-XAG/ABC-LUT/BDD evidence from
 `results/analysis_external_highdim_resource.md` and
 `results/analysis_external_highdim_scale_resource.md`:
 
-- The external AIG/XAG/BDD paths now cover 64 exported `n=14` random-ANF
+- The external AIG/XAG/LUT/BDD paths now cover 64 exported `n=14` random-ANF
   functions and 32 exported `n=15` random-ANF functions for each of ABC-AIG,
-  ABC-XAG, and BDD, with 288/288 correct rows and 0 errors/skips.
+  ABC-XAG, ABC-LUT, and BDD, with 384/384 correct rows and 0 errors/skips.
 - At `n=14`, `and_resource_nmcts` and `and_profile_resource_nmcts` beat
-  ABC-AIG, ABC-XAG, and BDD on all 192 T-count, CNOT, peak-ancilla, and
+  ABC-AIG, ABC-XAG, ABC-LUT, and BDD on all 256 T-count, CNOT, peak-ancilla, and
   weighted-score comparisons.  Mean score reductions are 94.13% against AIG,
-  95.48% against XAG, and 93.24% against BDD.
-- At `n=15`, the same guarded methods beat ABC-AIG, ABC-XAG, and BDD on all
-  96 T-count, CNOT, peak-ancilla, and weighted-score comparisons.  Mean score
-  reductions are 94.59% against AIG, 96.33% against XAG, and 94.75% against
-  BDD.
-- ABC remains shallower under the current level-based estimate on most high
-  dimensional functions, while the BDD Shannon-network estimate is deeper; the
-  claim remains weighted-resource and low-ancilla dominance rather than
-  depth-only dominance against every possible toolchain.
+  95.48% against XAG, 97.44% against LUT, and 93.24% against BDD.
+- At `n=15`, the same guarded methods beat ABC-AIG, ABC-XAG, ABC-LUT, and BDD
+  on all 128 T-count, CNOT, peak-ancilla, and weighted-score comparisons.  Mean
+  score reductions are 94.59% against AIG, 96.33% against XAG, 97.76% against
+  LUT, and 94.75% against BDD.
+- ABC-AIG and ABC-XAG remain shallower under the current level-based estimate on
+  most high-dimensional functions, while ABC-LUT and the BDD Shannon-network
+  estimate are deeper; the claim remains weighted-resource and low-ancilla
+  dominance rather than depth-only dominance against every possible toolchain.
 
 Resource-profile stress-test evidence from
 `results/analysis_resource_sweep.md`:

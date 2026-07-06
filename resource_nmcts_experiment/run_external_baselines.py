@@ -44,6 +44,7 @@ DEFAULT_ABC_BIN = ROOT / "tmp" / "abc" / "abc"
 DEFAULT_ABC_SCRIPT = "strash; balance; rewrite; refactor; rewrite -z; balance"
 DEFAULT_ABC_ESOP_SCRIPT = "strash; &get"
 DEFAULT_ABC_XAG_SCRIPT = "&get; &st -m -L 1"
+DEFAULT_ABC_LUT_SCRIPT = "strash; if -K 4"
 ABC_STATS_RE = re.compile(r"and\s*=\s*(\d+)\s+lev\s*=\s*(\d+)")
 ESOP_STATS_RE = re.compile(r"Final\s+statistics:\s+Cubes\s*=\s*(\d+)\s+Literals\s*=\s*(\d+)\s+QCost\s*=\s*(\d+)")
 XAG_NODE_RE = re.compile(r"\b(?:and|nod)\s*=\s*(\d+)\s+lev\s*=\s*(\d+)")
@@ -175,6 +176,7 @@ def parse_methods(raw: str) -> list[str]:
         "external_sshr_i_t",
         "external_abc_aig",
         "external_abc_esop",
+        "external_abc_lut",
         "external_abc_xag",
         "external_bdd",
     }
@@ -278,21 +280,33 @@ def eval_blif(inputs: list[str], output: str, nodes: list[BlifNode], x: int) -> 
     values: dict[str, int] = {}
     for label in inputs:
         values[label] = (x >> input_label_index(label)) & 1
-    for node in nodes:
-        if not node.inputs:
-            value = node.cover[-1][1] if node.cover else 0
-        else:
-            values_in_cover = {out_value for _pattern, out_value in node.cover}
-            # ABC may emit off-set covers; then the unlisted minterms default to 1.
-            value = 1 if values_in_cover == {0} else 0
-            bits = "".join(str(values[name]) for name in node.inputs)
-            for pattern, out_value in node.cover:
-                if len(pattern) != len(bits):
-                    continue
-                if all(p == "-" or p == b for p, b in zip(pattern, bits)):
-                    value = out_value
-                    break
-        values[node.output] = value
+    pending = list(nodes)
+    while pending:
+        next_pending = []
+        progressed = False
+        for node in pending:
+            if any(name not in values for name in node.inputs):
+                next_pending.append(node)
+                continue
+            if not node.inputs:
+                value = node.cover[-1][1] if node.cover else 0
+            else:
+                values_in_cover = {out_value for _pattern, out_value in node.cover}
+                # ABC may emit off-set covers; then the unlisted minterms default to 1.
+                value = 1 if values_in_cover == {0} else 0
+                bits = "".join(str(values[name]) for name in node.inputs)
+                for pattern, out_value in node.cover:
+                    if len(pattern) != len(bits):
+                        continue
+                    if all(p == "-" or p == b for p, b in zip(pattern, bits)):
+                        value = out_value
+                        break
+            values[node.output] = value
+            progressed = True
+        if not progressed:
+            missing = sorted({name for node in next_pending for name in node.inputs if name not in values})
+            raise ValueError(f"BLIF nodes are not resolvable; missing fanins: {missing[:8]}")
+        pending = next_pending
     if output not in values:
         raise ValueError(f"BLIF output {output} was not driven")
     return values[output]
@@ -329,24 +343,37 @@ def _pattern_mask(pattern: str, input_masks: tuple[int, ...], all_bits: int) -> 
 def blif_truth_table(inputs: list[str], output: str, nodes: list[BlifNode], n: int) -> int:
     values = _input_truth_masks(inputs, n)
     all_bits = _all_truth_bits(n)
-    for node in nodes:
-        if not node.inputs:
-            values[node.output] = all_bits if node.cover and node.cover[-1][1] else 0
-            continue
-
-        values_in_cover = {out_value for _pattern, out_value in node.cover}
-        # ABC sometimes emits off-set covers; then the unlisted minterms default to 1.
-        value = all_bits if values_in_cover == {0} else 0
-        input_masks = tuple(values[name] for name in node.inputs)
-        for pattern, out_value in node.cover:
-            if len(pattern) != len(input_masks):
+    pending = list(nodes)
+    while pending:
+        next_pending = []
+        progressed = False
+        for node in pending:
+            if any(name not in values for name in node.inputs):
+                next_pending.append(node)
                 continue
-            mask = _pattern_mask(pattern, input_masks, all_bits)
-            if out_value:
-                value |= mask
-            else:
-                value &= all_bits ^ mask
-        values[node.output] = value & all_bits
+            if not node.inputs:
+                values[node.output] = all_bits if node.cover and node.cover[-1][1] else 0
+                progressed = True
+                continue
+
+            values_in_cover = {out_value for _pattern, out_value in node.cover}
+            # ABC sometimes emits off-set covers; then the unlisted minterms default to 1.
+            value = all_bits if values_in_cover == {0} else 0
+            input_masks = tuple(values[name] for name in node.inputs)
+            for pattern, out_value in node.cover:
+                if len(pattern) != len(input_masks):
+                    continue
+                mask = _pattern_mask(pattern, input_masks, all_bits)
+                if out_value:
+                    value |= mask
+                else:
+                    value &= all_bits ^ mask
+            values[node.output] = value & all_bits
+            progressed = True
+        if not progressed:
+            missing = sorted({name for node in next_pending for name in node.inputs if name not in values})
+            raise ValueError(f"BLIF nodes are not resolvable; missing fanins: {missing[:8]}")
+        pending = next_pending
     if output not in values:
         raise ValueError(f"BLIF output {output} was not driven")
     return values[output]
@@ -357,6 +384,66 @@ def verify_blif(path: Path, bf: BooleanFunction) -> bool:
     if len(inputs) != bf.n:
         return False
     return blif_truth_table(inputs, output, nodes, bf.n) == bf.truth_table
+
+
+def _cover_local_truth(input_count: int, cover: tuple[tuple[str, int], ...]) -> int:
+    if input_count == 0:
+        return 1 if cover and cover[-1][1] else 0
+    values_in_cover = {out_value for _pattern, out_value in cover}
+    default = 1 if values_in_cover == {0} else 0
+    truth = 0
+    for x in range(1 << input_count):
+        value = default
+        bits = "".join(str((x >> i) & 1) for i in range(input_count))
+        for pattern, out_value in cover:
+            if len(pattern) != input_count:
+                continue
+            if all(p == "-" or p == b for p, b in zip(pattern, bits)):
+                value = out_value
+                break
+        if value:
+            truth |= 1 << x
+    return truth
+
+
+def _anf_terms_from_truth(truth: int, input_count: int) -> list[int]:
+    coeff = [(truth >> i) & 1 for i in range(1 << input_count)]
+    for bit in range(input_count):
+        step = 1 << bit
+        for mask in range(1 << input_count):
+            if mask & step:
+                coeff[mask] ^= coeff[mask ^ step]
+    return [mask for mask, value in enumerate(coeff) if value]
+
+
+def blif_lut_network_cost(inputs: list[str], output: str, nodes: list[BlifNode], bf: BooleanFunction) -> Cost:
+    """Estimate a BLIF LUT network as compute-output-uncompute local ANF nodes."""
+    if output not in {node.output for node in nodes}:
+        output_cnot, output_gate = output_toggle_cost(bf)
+        return Cost(CNOT=output_cnot, gates=output_gate, depth=output_gate)
+
+    compute_t = compute_cnot = compute_gates = compute_depth = 0
+    helper_peak = 0
+    for node in nodes:
+        truth = _cover_local_truth(len(node.inputs), node.cover)
+        for term in _anf_terms_from_truth(truth, len(node.inputs)):
+            cost = _logical_and_gate_cost(int(term).bit_count())
+            compute_t += cost.T
+            compute_cnot += cost.CNOT
+            compute_gates += cost.gates
+            compute_depth += cost.depth
+            helper_peak = max(helper_peak, cost.peak_ancilla)
+
+    output_cnot, output_gate = output_toggle_cost(bf)
+    explicit = len(nodes)
+    return Cost(
+        T=2 * compute_t,
+        CNOT=2 * compute_cnot + output_cnot,
+        gates=2 * compute_gates + output_gate,
+        depth=2 * compute_depth + output_gate,
+        explicit_ancilla=explicit,
+        peak_ancilla=explicit + helper_peak,
+    )
 
 
 def abc_bennett_cost(and_count: int, level: int, bf: BooleanFunction) -> Cost:
@@ -817,6 +904,51 @@ def run_abc_xag(
     }
 
 
+def run_abc_lut(
+    row: dict,
+    bf: BooleanFunction,
+    timeout: float,
+    abc_bin: Path,
+    abc_script: str,
+) -> tuple[Cost, dict]:
+    if not abc_bin.exists():
+        raise FileNotFoundError(f"ABC binary not found: {abc_bin}")
+    rel_blif = row.get("blif")
+    if not rel_blif:
+        raise ValueError("manifest row has no BLIF path")
+    blif = (Path(row["_manifest_abs_dir"]) / rel_blif).resolve()
+    if not blif.exists():
+        raise FileNotFoundError(f"BLIF file not found: {blif}")
+
+    with tempfile.TemporaryDirectory(prefix="abc_lut_") as tmp:
+        opt_blif = Path(tmp) / f"{row['name']}.abc_lut.blif"
+        command = f"read_blif {blif}; {abc_script}; write_blif {opt_blif}; print_stats"
+        proc = subprocess.run(
+            [str(abc_bin), "-c", command],
+            text=True,
+            capture_output=True,
+            timeout=timeout,
+            check=False,
+        )
+        combined = (proc.stdout or "") + (proc.stderr or "")
+        if proc.returncode != 0:
+            raise RuntimeError(f"ABC-LUT failed with code {proc.returncode}: {combined[-1000:]}")
+        if not opt_blif.exists():
+            raise RuntimeError(f"ABC-LUT did not write BLIF file: {combined[-1000:]}")
+        inputs, output, nodes = parse_blif(opt_blif)
+        if len(inputs) != bf.n:
+            raise RuntimeError(f"ABC-LUT BLIF input count mismatch: {len(inputs)} != {bf.n}")
+        correct = blif_truth_table(inputs, output, nodes, bf.n) == bf.truth_table
+    cost = blif_lut_network_cost(inputs, output, nodes, bf)
+    return cost, {
+        "correct": correct,
+        "abc_lut_nodes": len(nodes),
+        "abc_lut_max_fanin": max((len(node.inputs) for node in nodes), default=0),
+        "abc_script": abc_script,
+        "abc_binary": display_path(abc_bin),
+    }
+
+
 def run_abc_esop(
     row: dict,
     bf: BooleanFunction,
@@ -877,7 +1009,7 @@ def synthesize_external(method: str, bf: BooleanFunction, timeout: float) -> Qua
     raise ValueError(method)
 
 
-def run_one(task: tuple[dict, str, float, int, int, int, int, int, int, dict[str, float], Path, str, str, str]) -> dict:
+def run_one(task: tuple[dict, str, float, int, int, int, int, int, int, int, dict[str, float], Path, str, str, str, str]) -> dict:
     (
         row,
         method,
@@ -886,6 +1018,7 @@ def run_one(task: tuple[dict, str, float, int, int, int, int, int, int, dict[str
         max_abc_n,
         max_esop_n,
         max_xag_n,
+        max_lut_n,
         max_bdd_n,
         bdd_orders,
         weights,
@@ -893,6 +1026,7 @@ def run_one(task: tuple[dict, str, float, int, int, int, int, int, int, dict[str
         abc_script,
         abc_esop_script,
         abc_xag_script,
+        abc_lut_script,
     ) = task
     bf = bool_from_row(row)
     base = {
@@ -914,6 +1048,8 @@ def run_one(task: tuple[dict, str, float, int, int, int, int, int, int, dict[str
         return {**base, "skipped": f"ABC-ESOP capped at n<={max_esop_n}", "error": ""}
     if method == "external_abc_xag" and bf.n > max_xag_n:
         return {**base, "skipped": f"ABC-XAG capped at n<={max_xag_n}", "error": ""}
+    if method == "external_abc_lut" and bf.n > max_lut_n:
+        return {**base, "skipped": f"ABC-LUT capped at n<={max_lut_n}", "error": ""}
     if method == "external_bdd" and bf.n > max_bdd_n:
         return {**base, "skipped": f"BDD capped at n<={max_bdd_n}", "error": ""}
     try:
@@ -932,6 +1068,12 @@ def run_one(task: tuple[dict, str, float, int, int, int, int, int, int, dict[str
             gates = cost.gates
         elif method == "external_abc_xag":
             cost, extra = run_abc_xag(row, bf, timeout, abc_bin, abc_xag_script)
+            elapsed = time.time() - start
+            correct = extra.pop("correct")
+            n_qubits = bf.n + 1 + cost.explicit_ancilla
+            gates = cost.gates
+        elif method == "external_abc_lut":
+            cost, extra = run_abc_lut(row, bf, timeout, abc_bin, abc_lut_script)
             elapsed = time.time() - start
             correct = extra.pop("correct")
             n_qubits = bf.n + 1 + cost.explicit_ancilla
@@ -1019,15 +1161,18 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser.add_argument("--max-abc-n", type=int, default=15)
     parser.add_argument("--max-esop-n", type=int, default=8)
     parser.add_argument("--max-xag-n", type=int, default=15)
+    parser.add_argument("--max-lut-n", type=int, default=15)
     parser.add_argument("--max-bdd-n", type=int, default=15)
     parser.add_argument("--bdd-orders", type=int, default=8)
     parser.add_argument("--abc-bin", type=Path, default=DEFAULT_ABC_BIN)
     parser.add_argument("--abc-script", default=DEFAULT_ABC_SCRIPT)
     parser.add_argument("--abc-esop-script", default=DEFAULT_ABC_ESOP_SCRIPT)
     parser.add_argument("--abc-xag-script", default=DEFAULT_ABC_XAG_SCRIPT)
+    parser.add_argument("--abc-lut-script", default=DEFAULT_ABC_LUT_SCRIPT)
     parser.add_argument("--timeout", type=float, default=30.0, help="per SSHR-I call time limit")
     parser.add_argument("--workers", type=int, default=1)
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--replace-methods", action="store_true", help="drop existing rows for selected methods before a resume run")
     args = parser.parse_args(list(argv) if argv is not None else None)
 
     weights = dict(DEFAULT_WEIGHTS)
@@ -1052,6 +1197,7 @@ def main(argv: Iterable[str] | None = None) -> int:
             args.max_abc_n,
             args.max_esop_n,
             args.max_xag_n,
+            args.max_lut_n,
             args.max_bdd_n,
             args.bdd_orders,
             weights,
@@ -1059,6 +1205,7 @@ def main(argv: Iterable[str] | None = None) -> int:
             args.abc_script,
             args.abc_esop_script,
             args.abc_xag_script,
+            args.abc_lut_script,
         )
         for row in manifest_rows
         for method in methods
@@ -1069,6 +1216,9 @@ def main(argv: Iterable[str] | None = None) -> int:
     if args.resume and args.out.exists():
         with args.out.open(newline="", encoding="utf-8") as f:
             rows.extend(csv.DictReader(f))
+        if args.replace_methods:
+            replace_set = set(methods)
+            rows = [row for row in rows if row.get("method") not in replace_set]
         existing_rows = len(rows)
         done = {(row.get("name"), row.get("method")) for row in rows}
         tasks = [task for task in tasks if (task[0]["name"], task[1]) not in done]
@@ -1120,6 +1270,11 @@ def main(argv: Iterable[str] | None = None) -> int:
         if "external_abc_xag" in methods
         else previous_manifest.get("max_xag_n", args.max_xag_n)
     )
+    report_max_lut_n = (
+        args.max_lut_n
+        if "external_abc_lut" in methods
+        else previous_manifest.get("max_lut_n", args.max_lut_n)
+    )
     report_max_bdd_n = (
         args.max_bdd_n
         if "external_bdd" in methods
@@ -1144,12 +1299,14 @@ def main(argv: Iterable[str] | None = None) -> int:
                 "max_abc_n": report_max_abc_n,
                 "max_esop_n": report_max_esop_n,
                 "max_xag_n": report_max_xag_n,
+                "max_lut_n": report_max_lut_n,
                 "max_bdd_n": report_max_bdd_n,
                 "bdd_orders": args.bdd_orders,
                 "abc_binary": display_path(args.abc_bin),
                 "abc_script": args.abc_script,
                 "abc_esop_script": args.abc_esop_script,
                 "abc_xag_script": args.abc_xag_script,
+                "abc_lut_script": args.abc_lut_script,
                 "timeout": args.timeout,
                 "workers": args.workers,
                 "elapsed_s": time.time() - start,
