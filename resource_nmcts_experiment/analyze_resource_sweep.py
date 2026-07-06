@@ -26,6 +26,7 @@ METHOD_ORDER = [
     "and_affine_nmcts",
     "and_resource_nmcts",
     "and_profile_resource_nmcts",
+    "and_pareto_resource_nmcts",
     "and_cube_beam",
     "sshr_h",
 ]
@@ -35,6 +36,7 @@ METHOD_LABELS = {
     "and_affine_nmcts": "Affine-NMCTS",
     "and_resource_nmcts": "Resource-NMCTS",
     "and_profile_resource_nmcts": "Profile-Resource-NMCTS",
+    "and_pareto_resource_nmcts": "Pareto-Resource-NMCTS",
     "and_cube_beam": "ESOP cube beam",
     "sshr_h": "SSHR-H",
 }
@@ -196,6 +198,7 @@ def write_latex_winner_table(winners: dict[str, Counter[str]]) -> Path:
     PAPER_TABLES.mkdir(parents=True, exist_ok=True)
     out = PAPER_TABLES / "resource_sweep_winners.tex"
     columns = [
+        "and_pareto_resource_nmcts",
         "and_profile_resource_nmcts",
         "and_resource_nmcts",
         "and_affine_nmcts",
@@ -205,9 +208,9 @@ def write_latex_winner_table(winners: dict[str, Counter[str]]) -> Path:
         "and_cube_beam",
     ]
     lines = [
-        r"\begin{tabular}{lrrrrrrr}",
+        r"\begin{tabular}{@{}lrrrrrrrr@{}}",
         r"\toprule",
-        r"Profile & Profile-R & Resource & Affine & Fixed MCTS & SSHR-H & AND-direct & ESOP beam \\",
+        r"Profile & Pareto & Profile & Res. & Aff. & MCTS & SSHR & Direct & ESOP \\",
         r"\midrule",
     ]
     for profile in sorted(winners, key=profile_sort):
@@ -282,6 +285,23 @@ def main() -> int:
         for base in ["and_resource_nmcts", "and_affine_nmcts", "and_mcts_factor", "and_cube_beam", "sshr_h"]:
             for metric in ["score", "T", "CNOT", "depth", "peak_ancilla"]:
                 wins, losses, ties, rel = comparison(grouped, profile, "and_profile_resource_nmcts", base, metric)
+                lines.append(
+                    f"| {PROFILE_LABELS.get(profile, profile)} | {METHOD_LABELS.get(base, base)} | {metric} | {wins} | {losses} | {ties} | {rel:+.2f}% |"
+                )
+
+    lines.extend(
+        [
+            "",
+            "## Focused Pareto-Resource-NMCTS comparisons",
+            "",
+            "| profile | baseline | metric | wins | losses | ties | mean relative |",
+            "|---|---|---|---:|---:|---:|---:|",
+        ]
+    )
+    for profile in sorted(grouped, key=profile_sort):
+        for base in ["and_profile_resource_nmcts", "and_resource_nmcts", "and_affine_nmcts", "and_mcts_factor", "and_cube_beam", "sshr_h"]:
+            for metric in ["score", "T", "CNOT", "depth", "peak_ancilla"]:
+                wins, losses, ties, rel = comparison(grouped, profile, "and_pareto_resource_nmcts", base, metric)
                 lines.append(
                     f"| {PROFILE_LABELS.get(profile, profile)} | {METHOD_LABELS.get(base, base)} | {metric} | {wins} | {losses} | {ties} | {rel:+.2f}% |"
                 )

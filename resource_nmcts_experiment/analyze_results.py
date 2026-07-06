@@ -158,6 +158,15 @@ def main() -> int:
         ("and_profile_resource_nmcts", "and_fprm_linear_pair"),
         ("and_profile_resource_nmcts", "and_fprm_linear_pair_deep"),
         ("and_profile_resource_nmcts", "and_fprm_linear_parity"),
+        ("and_pareto_resource_nmcts", "direct_anf"),
+        ("and_pareto_resource_nmcts", "and_direct_anf"),
+        ("and_pareto_resource_nmcts", "and_resource_nmcts"),
+        ("and_pareto_resource_nmcts", "and_profile_resource_nmcts"),
+        ("and_pareto_resource_nmcts", "and_affine_nmcts"),
+        ("and_pareto_resource_nmcts", "and_mcts_factor"),
+        ("and_pareto_resource_nmcts", "and_cube_beam"),
+        ("and_pareto_resource_nmcts", "and_esop_milp"),
+        ("and_pareto_resource_nmcts", "sshr_h"),
         ("and_affine_no_guard", "and_affine_greedy"),
         ("and_affine_no_guard", "and_mcts_factor"),
         ("and_fprm_root_beam", "and_fprm_greedy"),
@@ -180,7 +189,7 @@ def main() -> int:
             wins, losses, ties, mean = comparison_rows(by_name, target, base, metric)
             lines.append(f"| {target} | {base} | {metric} | {wins} | {losses} | {ties} | {mean:+.2f}% |")
 
-    for focus in ["and_rc_nmcts", "and_affine_nmcts", "and_resource_nmcts", "and_profile_resource_nmcts", "and_affine_no_guard", "and_affine_greedy", "and_fprm_greedy", "and_fprm_root_beam", "and_fprm_linear_pair", "and_fprm_linear_pair_deep", "and_fprm_linear_parity", "and_cube_beam", "and_esop_milp", "and_fprm_neural_mcts", "and_fprm_mcts", "fprm_mcts"]:
+    for focus in ["and_rc_nmcts", "and_affine_nmcts", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts", "and_affine_no_guard", "and_affine_greedy", "and_fprm_greedy", "and_fprm_root_beam", "and_fprm_linear_pair", "and_fprm_linear_pair_deep", "and_fprm_linear_parity", "and_cube_beam", "and_esop_milp", "and_fprm_neural_mcts", "and_fprm_mcts", "fprm_mcts"]:
         if not any(focus in table for table in by_name.values()):
             continue
         label = focus.replace("_", "-")
@@ -203,7 +212,7 @@ def main() -> int:
                 f"| {name} | {table['direct_anf']['n']} | {table['direct_anf']['T']} | {table[focus]['T']} | {rel:+.2f}% |"
             )
 
-    for focus in ["and_rc_nmcts", "and_affine_nmcts", "and_resource_nmcts", "and_profile_resource_nmcts", "and_affine_no_guard", "and_affine_greedy", "and_cube_beam", "and_esop_milp", "and_fprm_neural_mcts", "and_fprm_mcts"]:
+    for focus in ["and_rc_nmcts", "and_affine_nmcts", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts", "and_affine_no_guard", "and_affine_greedy", "and_cube_beam", "and_esop_milp", "and_fprm_neural_mcts", "and_fprm_mcts"]:
         if not any("sshr_h" in table and focus in table for table in by_name.values()):
             continue
         lines.extend(

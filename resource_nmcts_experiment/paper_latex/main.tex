@@ -9,6 +9,7 @@
 \newcommand{\method}{Resource-NMCTS}
 \newcommand{\affinemethod}{Affine-NMCTS}
 \newcommand{\profilemethod}{Profile-Resource-NMCTS}
+\newcommand{\paretomethod}{Pareto-Resource-NMCTS}
 \newcommand{\dataset}{evidence\_affine}
 \newcommand{\ablationdataset}{ablation\_affine}
 \newcommand{\traditionaldataset}{traditional\_resource}
@@ -38,9 +39,11 @@ fixed-coordinate MCTS or ESOP cube-beam candidates; it does not use SSHR
 candidates.  On the current
 \dataset{} benchmark of 322 Boolean functions, \affinemethod{} is correct on
 all functions and reduces mean T-count by 61.83\% relative to direct ANF
-synthesis.  On a separate $n\leq 6$ traditional-baseline slice, \method{} has
-172 T-count wins and no losses against ESOP cube beam search, and 162 T-count
-wins, 1 loss, and 14 ties against time-limited weighted ESOP MILP.  On an
+synthesis.  On a separate $n\leq 6$ traditional-baseline slice, the
+\paretomethod{} archive has the lowest mean T-count and weighted score, and
+improves on \method{} with 68 score wins, no losses, and 109 ties.  It has
+174 score wins and no losses against ESOP cube beam search, and 167 score
+wins, 3 losses, and 7 ties against time-limited weighted ESOP MILP.  On an
 exported external comparison, \method{} has 69 score wins and 3 losses against
 the exact $n\leq 4$ CNOT-optimized SSHR-I pilot, 168 score wins and 9
 losses against the time-limited $n\leq 6$ SSHR-I extension, and 177 score wins
@@ -48,9 +51,10 @@ with no losses against an ABC-AIG baseline on the same $n\leq 6$ export.  It
 also has 177 score wins with no losses against an ABC-XAG/GIA baseline and
 against a BDD/Shannon baseline, and 147 score wins, 24 losses, and 6 ties
 against ABC's quantum-cost ESOP minimization path.  A
-resource-profile stress test shows that \profilemethod{} is best or tied on
-42/47, 42/47, 41/47, and 42/47 functions under T-heavy, balanced,
-CNOT-depth-heavy, and ancilla-tight objectives.  A larger core benchmark
+resource-profile stress test shows that \paretomethod{} is best or tied on
+44/47, 44/47, 42/47, and 43/47 functions under T-heavy, balanced,
+CNOT-depth-heavy, and ancilla-tight objectives, improving on
+\profilemethod{} with no score losses in any profile.  A larger core benchmark
 through $n=12$ contains 330 functions and 1980 method/function rows; \method{}
 and \profilemethod{} complete all functions, and \method{} reduces mean
 T-count by 60.37\% relative to direct ANF and by 37.25\% relative to
@@ -233,6 +237,22 @@ This design separates two roles.  On small functions it tests whether the
 resource profile can change the selected circuit; on large functions it acts as
 a runtime-tail guard rather than a score-dominance guarantee.
 
+\subsection{Pareto resource archive}
+
+\paretomethod{} strengthens the small-function resource-profile search by
+changing the internal objective used to generate candidates, not only the
+search budget.  For each function it evaluates child searches under five
+candidate-generation objectives: the active score, a T-sparse score, a
+CNOT/depth-heavy score, an ancilla-tight score, and a gate-count-sensitive
+score.  The resulting candidates include FPRM greedy, bounded root-child beam,
+CNOT-only linear-pair factoring, affine-greedy, selected affine-neural, and
+ESOP cube-beam plans when the dimension guard permits them.  The method then
+removes candidates dominated simultaneously in T-count, CNOT count, depth,
+gate count, and peak ancilla, and finally selects from this non-dominated
+archive using the active resource profile.  Thus the method keeps the same
+logical verifier and cost model as \method{}, but explicitly approximates a
+local Pareto frontier before profile-specific selection.
+
 \section{Experiments}
 
 \subsection{Benchmark and baselines}
@@ -285,10 +305,10 @@ and random small functions.
 
 The \traditionaldataset{} slice tests whether the gain persists against
 traditional Boolean/ESOP-style synthesis rather than only direct ANF and MCTS
-variants.  It contains 177 functions with $n\leq 6$ and eight methods, producing
-1416 method/function rows with no errors or skips.  On this slice, \method{}
-had the lowest mean T-count and the lowest mean composite score among all
-tested methods.
+variants.  It contains 177 functions with $n\leq 6$ and nine methods,
+producing 1593 method/function rows with no errors or skips.  On this slice,
+\paretomethod{} had the lowest mean T-count and the lowest mean composite
+score among all tested methods.
 
 \begin{table}[t]
 \centering
@@ -299,14 +319,16 @@ is a time-limited weighted ESOP optimization over candidate cubes.}
 \input{tables/resource_traditional_resource}
 \end{table}
 
-Against ESOP cube beam search, \method{} had 172 T-count wins, no losses, and 5
-ties, with a 34.72\% mean T-count reduction and a 32.28\% mean composite-score
-reduction.  Against weighted ESOP MILP, \method{} had 162 T-count wins, 1 loss,
-and 14 ties, with a 29.50\% mean T-count reduction and a 26.95\% mean
-composite-score reduction.  Against SSHR-H, \method{} had 171 T-count wins, 1
-loss, and 5 ties, and 171 score wins with 6 score losses.  SSHR-H retained the
-lowest mean CNOT count on this small-function slice, so this result supports
-low-T and weighted-resource synthesis rather than CNOT-only optimality.
+Against \method{}, \paretomethod{} had 68 score wins, no score losses, and 109
+ties, with a 3.87\% mean composite-score reduction.  Against ESOP cube beam
+search, \paretomethod{} had 174 score wins, no losses, and 3 ties, with a
+35.28\% mean composite-score reduction.  Against weighted ESOP MILP,
+\paretomethod{} had 167 score wins, 3 losses, and 7 ties, with a 29.20\% mean
+composite-score reduction.  Against SSHR-H, \paretomethod{} had 173 T-count
+wins, no T-count losses, 4 ties, and 173 score wins with 4 score losses.
+SSHR-H retained the lowest mean CNOT count on this small-function slice, so
+this result supports low-T and weighted-resource synthesis rather than
+CNOT-only optimality.
 
 \subsection{Exported external baselines}
 
@@ -487,7 +509,7 @@ not directly comparable to all-suite means.}
 
 To test whether the method remains competitive under different resource
 objectives, we ran a 47-function $n\leq 6$ sweep under four profiles: T-heavy,
-balanced, CNOT-depth-heavy, and ancilla-tight.  The sweep produced 1316
+balanced, CNOT-depth-heavy, and ancilla-tight.  The sweep produced 1504
 method/profile/function rows with no errors or skips.  Scores are comparable
 within a profile but not across profiles because each profile uses a different
 weighted objective.
@@ -502,16 +524,19 @@ minimum score on a function.}
 \input{tables/resource_sweep_winners}
 \end{table}
 
-\profilemethod{} was best or tied on 42/47 functions under T-heavy weights,
-42/47 under balanced weights, 41/47 under CNOT-depth-heavy weights, and 42/47
-under ancilla-tight weights.  Relative to \method{}, it had score wins/ties of
-5/42, 6/41, 7/40, and 4/43, with no score losses.  Relative to
-\affinemethod{}, it also had no score losses in any profile.  The mean
-\profilemethod{} resource vector changed modestly across the four profiles:
-mean T-count ranged from 40.34 to 42.38, mean CNOT count from 82.43 to 84.79,
-and mean depth from 86.72 to 88.72.  This result shows that profile-specific
-candidate generation improves resource-objective robustness, but it is still a
-bounded portfolio rather than a full Pareto optimizer.
+\paretomethod{} was best or tied on 44/47 functions under T-heavy weights,
+44/47 under balanced weights, 42/47 under CNOT-depth-heavy weights, and 43/47
+under ancilla-tight weights.  Relative to \profilemethod{}, it had score
+wins/losses/ties of 17/0/30, 17/0/30, 18/0/29, and 12/0/35 across the four
+profiles, with mean score reductions of 4.86\%, 4.31\%, 4.16\%, and 2.35\%.
+Relative to \method{}, it also had no score losses in any profile.  The mean
+\paretomethod{} resource vector changed with the active objective: mean
+T-count stayed at 36.43 for T-heavy, balanced, and CNOT-depth profiles and rose
+to 39.83 under ancilla-tight weights, while mean peak ancilla fell from
+1.83--1.85 to 1.64 in the ancilla-tight profile.  This result shows that
+objective-specific candidate generation and non-dominated archive selection
+produce a stronger profile-sensitive Pareto search than the earlier bounded
+profile portfolio.
 
 \subsection{Large-scale core benchmark}
 
@@ -678,16 +703,16 @@ SSHR-I/ABC/BDD comparisons strengthen the Boolean synthesis comparison, and the
 new high-dimensional ABC/BDD rows show that this external comparison is no
 longer restricted to $n\leq 6$.  More external implementations remain necessary
 before a submission-ready claim.
-The resource-profile sweep shows that profile-specific
-candidate generation improves objective robustness on small functions, but the
-large benchmark shows the corresponding
-high-dimensional tradeoff: conservative profile guards reduce runtime tails but
-give up some score.  The $n=14$ stress test narrows this limitation further:
-bounded recursive FPRM linear-pair search keeps the run finite and improves
-over FPRM-greedy on most functions, and the $n=15$ scale check preserves that
-margin while keeping all runs finite.  The remaining weakness is less the
-internal high-dimensional guard than the comparison boundary: the current
-evidence still lacks reproduced ROS or mockturtle reversible-toolchain
+The resource-profile sweep shows that objective-specific candidate generation
+and non-dominated archive selection improve small-function profile adaptation.
+The large benchmark still shows the corresponding high-dimensional tradeoff:
+conservative profile guards reduce runtime tails but give up some score.  The
+$n=14$ stress test narrows this limitation further: bounded recursive FPRM
+linear-pair search keeps the run finite and improves over FPRM-greedy on most
+functions, and the $n=15$ scale check preserves that margin while keeping all
+runs finite.  The remaining weakness is less the internal high-dimensional
+guard than the comparison boundary: the current evidence still lacks
+reproduced ROS or mockturtle reversible-toolchain
 baselines.
 
 \section{Conclusion}
@@ -697,11 +722,12 @@ combines resource-aware neural MCTS, affine Boolean preconditioning, and a
 resource-adaptive portfolio guard.  On the current benchmark, the affine neural
 component substantially reduces T-count versus direct ANF, logical-AND direct
 ANF, fixed-coordinate MCTS, and SSHR-H on supported functions.  On the
-$n\leq 6$ traditional-baseline slice, the full \method{} method further avoids
-score regressions against internal ESOP cube-beam candidates and remains
-competitive against weighted ESOP MILP.  Resource-profile and \largedataset{}
-benchmarks show that this advantage is robust across several weighted
-objectives and larger random ANF instances.  Exported SSHR, ABC-AIG, ABC-XAG,
+$n\leq 6$ traditional-baseline slice, \paretomethod{} further improves the
+balanced weighted score over \method{}, dominates internal ESOP cube-beam
+candidates by weighted score, and remains competitive against weighted ESOP
+MILP.  Resource-profile and \largedataset{} benchmarks show that this
+advantage is robust across several weighted objectives and larger random ANF
+instances.  Exported SSHR, ABC-AIG, ABC-XAG,
 BDD, and ABC-ESOP baselines add independent cross-tool evidence that the gains
 are not an artifact of the internal experiment harness, while also showing that
 CNOT and depth remain important limitations.  The new high-dimensional stress

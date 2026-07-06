@@ -104,7 +104,7 @@ PRESETS = {
         "workers": 10,
     },
     "traditional_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_resource_nmcts", "and_cube_beam", "and_esop_milp", "sshr_h"],
+        "methods": ["direct_anf", "and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_resource_nmcts", "and_pareto_resource_nmcts", "and_cube_beam", "and_esop_milp", "sshr_h"],
         "random_truth": [(4, 64), (5, 64), (6, 32)],
         "random_anf": [],
         "structured_limit": 10_000,
@@ -188,7 +188,7 @@ def run_one(task):
         neural_prior_weight=config_dict.get("neural_prior_weight", 1.0),
     )
     base_method = method[len("and_") :] if method.startswith("and_") else method
-    neural_methods = {"neural_greedy", "neural_mcts", "fprm_neural_mcts", "affine_nmcts", "affine_no_guard", "rc_nmcts", "resource_nmcts", "profile_resource_nmcts"}
+    neural_methods = {"neural_greedy", "neural_mcts", "fprm_neural_mcts", "affine_nmcts", "affine_no_guard", "rc_nmcts", "resource_nmcts", "profile_resource_nmcts", "pareto_resource_nmcts"}
     use_model = model_path if base_method in neural_methods and model_path else None
     if method == "esop_greedy" and bf.n > 4:
         return {
@@ -406,6 +406,7 @@ def main(argv: Iterable[str] | None = None) -> int:
             "and_affine_nmcts": 9,
             "and_resource_nmcts": 10,
             "and_profile_resource_nmcts": 11,
+            "and_pareto_resource_nmcts": 12,
         }
         tasks.sort(key=lambda t: (method_rank.get(t[2], 99), t[1].n, t[0]))
 

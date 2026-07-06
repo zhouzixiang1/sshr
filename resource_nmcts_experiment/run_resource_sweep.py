@@ -51,6 +51,7 @@ METHODS = [
     "and_affine_nmcts",
     "and_resource_nmcts",
     "and_profile_resource_nmcts",
+    "and_pareto_resource_nmcts",
     "and_cube_beam",
     "sshr_h",
 ]
@@ -115,7 +116,7 @@ def run_one(task):
         neural_prior_weight=config_dict["neural_prior_weight"],
     )
     base_method = method[len("and_") :] if method.startswith("and_") else method
-    neural_methods = {"affine_nmcts", "resource_nmcts", "profile_resource_nmcts"}
+    neural_methods = {"affine_nmcts", "resource_nmcts", "profile_resource_nmcts", "pareto_resource_nmcts"}
     use_model = model_path if base_method in neural_methods and model_path else None
     try:
         timeout_s = int(config_dict.get("task_timeout_s", 0) or 0)
@@ -172,6 +173,8 @@ def main(argv: Iterable[str] | None = None) -> int:
     ap.add_argument("--model", default=str(DEFAULT_MODEL))
     ap.add_argument("--out-dir", default=str(RESULTS))
     ap.add_argument("--resume", action="store_true")
+    ap.add_argument("--only-methods", default="", help="comma-separated method subset for targeted reruns")
+    ap.add_argument("--replace-methods", action="store_true", help="drop existing rows for selected methods before a resume run")
     ap.add_argument("--checkpoint-every", type=int, default=50)
     args = ap.parse_args(list(argv) if argv is not None else None)
 
@@ -180,17 +183,28 @@ def main(argv: Iterable[str] | None = None) -> int:
     out_dir = Path(args.out_dir)
     raw = out_dir / "raw_resource_sweep.csv"
     manifest = out_dir / "manifest_resource_sweep.json"
+    methods = METHODS
+    if args.only_methods:
+        requested = [m.strip() for m in args.only_methods.split(",") if m.strip()]
+        unknown = sorted(set(requested) - set(METHODS))
+        if unknown:
+            raise SystemExit(f"unknown methods for resource sweep: {', '.join(unknown)}")
+        methods = requested
+
     tasks = []
     for profile in PROFILES:
         config_dict = config_for_profile(profile)
         for i, (name, bf) in enumerate(suite):
-            for method in METHODS:
+            for method in methods:
                 tasks.append((profile, name, bf, method, args.seed + i, config_dict, model_path))
 
     rows: list[dict] = []
     if args.resume and raw.exists():
         with raw.open(newline="", encoding="utf-8") as f:
             rows.extend(csv.DictReader(f))
+        if args.replace_methods:
+            replace_set = set(methods)
+            rows = [r for r in rows if r.get("method") not in replace_set]
         completed = {(r.get("profile"), r.get("name"), r.get("method")) for r in rows}
         tasks = [task for task in tasks if (task[0], task[1], task[3]) not in completed]
         print(f"resuming from {len(rows)} rows; remaining {len(tasks)}", flush=True)
@@ -218,6 +232,7 @@ def main(argv: Iterable[str] | None = None) -> int:
                 "seed": args.seed,
                 "functions": len(suite),
                 "methods": METHODS,
+                "last_run_methods": methods,
                 "profiles": {
                     name: {
                         "label": p["label"],

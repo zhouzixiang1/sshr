@@ -71,7 +71,7 @@ Current presets:
   logical-AND direct ANF, fixed-coordinate logical-AND MCTS, affine-preconditioned
   neural MCTS, ESOP cube beam, time-limited weighted ESOP MILP, and SSHR-H.
 - `traditional_resource`: same $n \leq 6$ slice with the full Resource-NMCTS
-  portfolio guard added.
+  portfolio guard and Pareto-Resource-NMCTS archive added.
 - `large_resource_core`: 330-function large logical benchmark through `n=12`,
   now including the profile-aware Resource-NMCTS variant and process-isolated
   hard timeouts for long-tail tasks.
@@ -160,19 +160,20 @@ Traditional Boolean/ESOP baseline evidence from
 `results/analysis_traditional_resource.md` and
 `results/runtime_traditional_resource.md`:
 
-- 177 functions with $n \leq 6$, 8 methods, 1416 result rows, 0 errors, and 0
+- 177 functions with $n \leq 6$, 9 methods, 1593 result rows, 0 errors, and 0
   skips.
-- Mean T-count / composite score: `and_resource_nmcts` 45.74 / 55.21,
+- Mean T-count / composite score: `and_pareto_resource_nmcts` 41.45 / 50.66,
+  `and_resource_nmcts` 45.74 / 55.21,
   `and_affine_nmcts` 45.88 / 55.37, fixed MCTS 62.06 / 73.09, ESOP cube beam
   71.32 / 83.82, ESOP MILP 83.59 / 96.73, and SSHR-H 81.04 / 88.19.
-- Against Affine-NMCTS, `and_resource_nmcts` has 8 score wins, 0 score losses,
-  and 169 score ties.
-- Against ESOP cube beam, `and_resource_nmcts` has 172 T-count wins, 0 losses,
-  and 5 ties, with a 34.72% mean T-count reduction and a 32.28% mean score
-  reduction.
-- Against time-limited weighted ESOP MILP, `and_resource_nmcts` has 162 T-count
-  wins, 1 loss, and 14 ties, with a 29.50% mean T-count reduction and a
-  26.95% mean score reduction.
+- Against Resource-NMCTS, `and_pareto_resource_nmcts` has 68 score wins, 0
+  losses, and 109 ties, with a 3.87% mean score reduction.
+- Against ESOP cube beam, `and_pareto_resource_nmcts` has 174 score wins, 0
+  losses, and 3 ties, with a 35.28% mean score reduction.
+- Against time-limited weighted ESOP MILP, `and_pareto_resource_nmcts` has 167
+  score wins, 3 losses, and 7 ties, with a 29.20% mean score reduction.
+- Against SSHR-H, `and_pareto_resource_nmcts` has 173 T-count wins, 0 losses,
+  and 4 ties, and 173 score wins with 4 score losses.
 - SSHR-H still has the lowest mean CNOT count on this small-function slice, so
   the claim remains low-T/resource-score synthesis rather than CNOT-only
   optimality.
@@ -250,17 +251,18 @@ Exported high-dimensional ABC-AIG/ABC-XAG/BDD evidence from
 Resource-profile stress-test evidence from
 `results/analysis_resource_sweep.md`:
 
-- 47 functions with $n \leq 6$, 4 resource profiles, 7 methods, 1316 result
+- 47 functions with $n \leq 6$, 4 resource profiles, 8 methods, 1504 result
   rows, 0 errors, and 0 skips.
-- `and_profile_resource_nmcts` is best-or-tied on 42/47 functions under T-heavy
-  weights, 42/47 under balanced weights, 41/47 under CNOT-depth-heavy weights,
-  and 42/47 under ancilla-tight weights.
-- Against Resource-NMCTS, `and_profile_resource_nmcts` has no score losses in
-  any profile, with score wins/ties of 5/42, 6/41, 7/40, and 4/43.
-- The mean Profile-Resource-NMCTS resource vector changes modestly across
-  profiles (mean T 40.34--42.38; mean CNOT 82.43--84.79; mean depth
-  86.72--88.72).  This supports objective robustness but still shows that the
-  search is not yet a full profile-sensitive Pareto optimizer.
+- `and_pareto_resource_nmcts` is best-or-tied on 44/47 functions under T-heavy
+  weights, 44/47 under balanced weights, 42/47 under CNOT-depth-heavy weights,
+  and 43/47 under ancilla-tight weights.
+- Against Profile-Resource-NMCTS, `and_pareto_resource_nmcts` has no score
+  losses in any profile, with score wins/ties of 17/30, 17/30, 18/29, and
+  12/35.  Mean score reductions are 4.86%, 4.31%, 4.16%, and 2.35%.
+- Its mean resource vector changes with the active profile: mean T is 36.43
+  under T-heavy/balanced/CNOT-depth weights and 39.83 under ancilla-tight
+  weights, while mean peak ancilla drops from 1.83--1.85 to 1.64 under the
+  ancilla-tight profile.
 
 Large-scale core evidence from `results/analysis_large_resource_core.md` and
 `results/runtime_large_resource_core.md`:

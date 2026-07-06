@@ -7,8 +7,12 @@
     "and_affine_nmcts",
     "and_resource_nmcts",
     "and_profile_resource_nmcts",
+    "and_pareto_resource_nmcts",
     "and_cube_beam",
     "sshr_h"
+  ],
+  "last_run_methods": [
+    "and_pareto_resource_nmcts"
   ],
   "profiles": {
     "t_heavy": {
@@ -58,5 +62,5 @@
   },
   "model": "models/action_scorer_rollout_logical_and.pt",
   "workers": 10,
-  "seconds": 63.47301888465881
+  "seconds": 30.90432906150818
 }

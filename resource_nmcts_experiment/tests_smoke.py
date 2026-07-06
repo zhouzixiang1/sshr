@@ -148,7 +148,8 @@ def main() -> int:
         and_affine = synthesize("and_affine_nmcts", bf, config, seed=7)
         rc_nmcts = synthesize("and_rc_nmcts", bf, config, seed=7)
         resource_nmcts = synthesize("and_resource_nmcts", bf, config, seed=7)
-        for result in [direct, greedy, mcts, fprm, cube_greedy, cube_beam, and_fprm, and_fprm_neural, and_fprm_linear, and_fprm_linear_deep, and_fprm_linear_parity, and_affine, rc_nmcts, resource_nmcts]:
+        pareto_resource_nmcts = synthesize("and_pareto_resource_nmcts", bf, config, seed=7)
+        for result in [direct, greedy, mcts, fprm, cube_greedy, cube_beam, and_fprm, and_fprm_neural, and_fprm_linear, and_fprm_linear_deep, and_fprm_linear_parity, and_affine, rc_nmcts, resource_nmcts, pareto_resource_nmcts]:
             assert result.correct, (result.method, bf.n, bf.truth_table)
         assert greedy.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
         assert mcts.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
@@ -161,6 +162,7 @@ def main() -> int:
         assert and_affine.cost.T <= direct.cost.T
         assert rc_nmcts.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
         assert resource_nmcts.cost.score(config.weights) <= and_affine.cost.score(config.weights) + 1e-9
+        assert pareto_resource_nmcts.cost.score(config.weights) <= resource_nmcts.cost.score(config.weights) + 1e-9
     print("smoke ok")
     return 0
 
