@@ -68,10 +68,11 @@ ANF, with 60 score wins, no losses, and 4 ties against FPRM-greedy.  A
 follow-up $n=15$ scale check preserves this pattern with 30 score wins, no
 losses, and 2 ties against FPRM-greedy, reducing mean weighted score by
 5.73\%.  A further $n=16$ scale check contains 24 random ANF functions and 144
-rows with no errors or skips; the ultra-scale guard reduces mean T-count by
-62.08\% relative to direct ANF and has 22 score wins, no losses, and 2 ties
-against bounded FPRM root-beam.  On exported high-dimensional ABC AIG/XAG/LUT and BDD checks for the
-same $n=14$ and $n=15$ sets, the guarded method wins all 384 weighted-score
+rows with no errors or skips; the ultra-scale guard matches its one-layer
+linear-pair child, reduces mean T-count by 62.08\% relative to direct ANF, and
+has 22 score wins, no losses, and 2 ties against bounded FPRM root-beam.  On
+exported high-dimensional ABC AIG/XAG/LUT and BDD checks for the same $n=14$
+and $n=15$ sets, the guarded method wins all 384 weighted-score
 comparisons with 93.24\%--97.76\% mean score reductions.  ABC-AIG and ABC-XAG
 keep lower estimated depth on most functions, while ABC-LUT and BDD are deeper
 under our sequential network estimates.  The method is
@@ -775,6 +776,9 @@ the exported SSHR-I extension beyond $n\leq 4$ is time-limited rather than an
 exact certificate, the fact that ABC/BDD/ESOP/LUT rows are scored through
 logic-level estimates rather than full reversible-toolchain synthesis, and the
 lack of a reproduced external ROS/mockturtle toolchain in the comparison set.
+At $n=16$, the guarded Resource/Profile variants tie their own one-layer
+linear-pair child, so the ultra result is bounded scalability evidence rather
+than a new search-quality separation.
 The in-harness ESOP cube-beam and weighted-MILP baselines plus the exported
 SSHR-I/ABC/BDD/LUT comparisons strengthen the Boolean synthesis comparison, and
 the new high-dimensional ABC/BDD/LUT rows show that this external comparison is no
@@ -810,9 +814,10 @@ are not an artifact of the internal experiment harness, while also showing that
 CNOT and depth remain important limitations.  The new high-dimensional stress
 tests show that bounded guards scale without timeouts, beat FPRM-greedy on
 60 of 64 weighted-score comparisons at $n=14$ and 30 of 32 comparisons at
-$n=15$, add a stable 24-function $n=16$ scale check against FPRM root-beam, and
-beat exported ABC AIG/XAG/LUT and BDD on all 384 high-dimensional weighted-score
-comparisons.  The next step is to reproduce ROS/mockturtle-style
+$n=15$, complete all 144 $n=16$ ultra-scale rows under the one-layer guard
+while retaining score wins against FPRM root-beam, and beat exported ABC
+AIG/XAG/LUT and BDD on all 384 high-dimensional weighted-score comparisons.
+The next step is to reproduce ROS/mockturtle-style
 toolchain baselines and hardware-aware mappings so the empirical claim is
 submission-ready.
 
