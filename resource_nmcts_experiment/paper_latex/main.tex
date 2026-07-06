@@ -50,8 +50,8 @@ logical-AND direct ANF, while fixed-coordinate MCTS times out on five $n=12$
 rows.  An isolated
 $n=14$ stress benchmark adds 64 random ANF functions and 448 rows with no
 errors or skips; the guarded high-dimensional variants reduce mean T-count by
-52.63\% relative to direct ANF and by 26.73\% relative to logical-AND direct
-ANF, with 32 score wins, no losses, and 32 ties against FPRM-greedy.  The method is
+52.67\% relative to direct ANF and by 26.81\% relative to logical-AND direct
+ANF, with 40 score wins, no losses, and 24 ties against FPRM-greedy.  The method is
 evaluated only at the logical circuit layer;
 hardware mapping and connectivity constraints are outside the present scope.
 \end{abstract}
@@ -409,18 +409,18 @@ benchmark.}
 \end{table}
 
 Both \method{} and \profilemethod{} complete all 64 functions.  Relative to
-direct ANF, each has 51 T-count wins, no losses, and 13 ties, with a 52.63\%
-mean T-count reduction and a 50.31\% mean composite-score reduction.  Relative
+direct ANF, each has 51 T-count wins, no losses, and 13 ties, with a 52.67\%
+mean T-count reduction and a 50.36\% mean composite-score reduction.  Relative
 to logical-AND direct ANF, each again has 51 wins, no losses, and 13 ties, with
-a 26.73\% mean T-count reduction and a 26.09\% mean score reduction.  Against
-FPRM-greedy, the guarded methods have 29 T-count wins, no losses, and 35 ties;
-by weighted score they have 32 wins, no losses, and 32 ties.  The mean T-count
-falls from 2263.69 for FPRM-greedy to 2253.62 for \method{} and
+a 26.81\% mean T-count reduction and a 26.17\% mean score reduction.  Against
+FPRM-greedy, the guarded methods have 38 T-count wins, no losses, and 26 ties;
+by weighted score they have 40 wins, no losses, and 24 ties.  The mean T-count
+falls from 2263.69 for FPRM-greedy to 2250.19 for \method{} and
 \profilemethod{}.  The improvement is modest in mean value but important
 mechanistically: a bounded root-beam correction now improves high-dimensional
 quality without introducing timeouts.  Runtime tails remain bounded:
-\method{} has p95 runtime 38.83 s, while \profilemethod{} has p95 runtime
-38.59 s; the standalone FPRM root-beam candidate has p95 runtime 26.12 s.
+\method{} has p95 runtime 36.90 s, while \profilemethod{} has p95 runtime
+59.69 s; the standalone FPRM root-beam candidate has p95 runtime 25.41 s.
 
 \section{Discussion}
 
@@ -475,7 +475,7 @@ score regressions against internal ESOP cube-beam candidates and remains
 competitive against weighted ESOP MILP.  Resource-profile and \largedataset{}
 benchmarks show that this advantage is robust across several weighted
 objectives and larger random ANF instances.  The new $n=14$ stress test shows
-that bounded guards scale without timeouts and now beat FPRM-greedy on 32 of
+that bounded guards scale without timeouts and now beat FPRM-greedy on 40 of
 64 weighted-score comparisons without losses.  The next step is to add
 standardized external baselines and stronger high-dimensional candidate
 generation so the empirical claim is submission-ready.

@@ -8,7 +8,7 @@ This folder is the manuscript workspace for the resource-constrained quantum
 Boolean oracle synthesis project.  The draft is intentionally evidence-first:
 claims in `main.tex` are limited to the current `evidence_affine`,
 `ablation_affine`, `traditional_resource`, `resource_sweep`, and
-`large_resource_core` results.
+`large_resource_core`, and `highdim_resource` results.
 
 Build:
 
@@ -33,6 +33,10 @@ Current source evidence:
 - large-scale core analysis: `../results/analysis_large_resource_core.md`
 - large-scale core runtime/resource analysis:
   `../results/runtime_large_resource_core.md`
+- high-dimensional stress CSV: `../results/raw_highdim_resource.csv`
+- high-dimensional stress analysis: `../results/analysis_highdim_resource.md`
+- high-dimensional stress runtime/resource analysis:
+  `../results/runtime_highdim_resource.md`
 - LaTeX tables: `tables/runtime_ablation_affine.tex`,
   `tables/resource_ablation_affine.tex`,
   `tables/resource_traditional_resource.tex`,
@@ -41,8 +45,11 @@ Current source evidence:
   `tables/resource_sweep_resource.tex`,
   `tables/resource_sweep_winners.tex`,
   `tables/resource_large_resource_core.tex`,
-  `tables/runtime_large_resource_core.tex`
-- manifest: `../results/manifest_evidence_affine.json`
+  `tables/runtime_large_resource_core.tex`,
+  `tables/resource_highdim_resource.tex`,
+  `tables/runtime_highdim_resource.tex`
+- manifests: `../results/manifest_evidence_affine.json`,
+  `../results/manifest_highdim_resource.json`
 
 Known manuscript gaps:
 

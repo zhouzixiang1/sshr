@@ -12,7 +12,11 @@
     "and_profile_resource_nmcts"
   ],
   "last_run_methods": [
+    "direct_anf",
+    "and_direct_anf",
+    "and_fprm_greedy",
     "and_fprm_root_beam",
+    "and_affine_greedy",
     "and_resource_nmcts",
     "and_profile_resource_nmcts"
   ],
@@ -28,9 +32,9 @@
     "direct_anf"
   ],
   "model": "models/action_scorer_rollout_logical_and.pt",
-  "workers": 8,
+  "workers": 2,
   "seconds": null,
-  "seconds_current_run": 0.02717113494873047,
+  "seconds_current_run": 1002.5345051288605,
   "config": {
     "weights": {
       "t": 1.0,

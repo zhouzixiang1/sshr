@@ -9,9 +9,9 @@ Rows: 448; usable: 448; errors: 0; skipped: 0.
 | and_affine_greedy | 64 | -52.51% | -69.71% | +0.00% |
 | and_direct_anf | 64 | -39.04% | -49.96% | +0.00% |
 | and_fprm_greedy | 64 | -52.51% | -69.71% | +0.00% |
-| and_fprm_root_beam | 64 | -52.63% | -69.71% | +0.00% |
-| and_profile_resource_nmcts | 64 | -52.63% | -69.71% | +0.00% |
-| and_resource_nmcts | 64 | -52.63% | -69.71% | +0.00% |
+| and_fprm_root_beam | 64 | -52.67% | -69.71% | +0.00% |
+| and_profile_resource_nmcts | 64 | -52.67% | -69.71% | +0.00% |
+| and_resource_nmcts | 64 | -52.67% | -69.71% | +0.00% |
 
 ## T-count wins/losses vs SSHR-H
 
@@ -22,71 +22,71 @@ Rows: 448; usable: 448; errors: 0; skipped: 0.
 
 | target | baseline | metric | wins | losses | ties | mean relative |
 |---|---|---|---:|---:|---:|---:|
-| and_resource_nmcts | direct_anf | T | 51 | 0 | 13 | -52.63% |
-| and_resource_nmcts | direct_anf | CNOT | 13 | 51 | 0 | +10.20% |
-| and_resource_nmcts | direct_anf | depth | 13 | 51 | 0 | +10.19% |
+| and_resource_nmcts | direct_anf | T | 51 | 0 | 13 | -52.67% |
+| and_resource_nmcts | direct_anf | CNOT | 13 | 51 | 0 | +10.17% |
+| and_resource_nmcts | direct_anf | depth | 13 | 51 | 0 | +10.16% |
 | and_resource_nmcts | direct_anf | peak_ancilla | 0 | 38 | 26 | +49.22% |
-| and_resource_nmcts | direct_anf | score | 51 | 13 | 0 | -50.31% |
-| and_resource_nmcts | and_direct_anf | T | 51 | 0 | 13 | -26.73% |
-| and_resource_nmcts | and_direct_anf | CNOT | 51 | 0 | 13 | -20.27% |
-| and_resource_nmcts | and_direct_anf | depth | 51 | 0 | 13 | -20.27% |
+| and_resource_nmcts | direct_anf | score | 51 | 13 | 0 | -50.36% |
+| and_resource_nmcts | and_direct_anf | T | 51 | 0 | 13 | -26.81% |
+| and_resource_nmcts | and_direct_anf | CNOT | 51 | 0 | 13 | -20.29% |
+| and_resource_nmcts | and_direct_anf | depth | 51 | 0 | 13 | -20.29% |
 | and_resource_nmcts | and_direct_anf | peak_ancilla | 0 | 0 | 64 | +0.00% |
-| and_resource_nmcts | and_direct_anf | score | 51 | 0 | 13 | -26.09% |
-| and_resource_nmcts | and_fprm_greedy | T | 29 | 0 | 35 | -0.36% |
-| and_resource_nmcts | and_fprm_greedy | CNOT | 24 | 6 | 34 | -0.19% |
-| and_resource_nmcts | and_fprm_greedy | depth | 24 | 6 | 34 | -0.19% |
+| and_resource_nmcts | and_direct_anf | score | 51 | 0 | 13 | -26.17% |
+| and_resource_nmcts | and_fprm_greedy | T | 38 | 0 | 26 | -0.49% |
+| and_resource_nmcts | and_fprm_greedy | CNOT | 29 | 9 | 26 | -0.21% |
+| and_resource_nmcts | and_fprm_greedy | depth | 29 | 9 | 26 | -0.21% |
 | and_resource_nmcts | and_fprm_greedy | peak_ancilla | 0 | 0 | 64 | +0.00% |
-| and_resource_nmcts | and_fprm_greedy | score | 32 | 0 | 32 | -0.34% |
+| and_resource_nmcts | and_fprm_greedy | score | 40 | 0 | 24 | -0.46% |
 | and_resource_nmcts | and_fprm_root_beam | T | 0 | 0 | 64 | +0.00% |
 | and_resource_nmcts | and_fprm_root_beam | CNOT | 0 | 0 | 64 | +0.00% |
 | and_resource_nmcts | and_fprm_root_beam | depth | 0 | 0 | 64 | +0.00% |
 | and_resource_nmcts | and_fprm_root_beam | peak_ancilla | 0 | 0 | 64 | +0.00% |
 | and_resource_nmcts | and_fprm_root_beam | score | 0 | 0 | 64 | +0.00% |
-| and_resource_nmcts | and_affine_greedy | T | 29 | 0 | 35 | -0.36% |
-| and_resource_nmcts | and_affine_greedy | CNOT | 24 | 6 | 34 | -0.19% |
-| and_resource_nmcts | and_affine_greedy | depth | 24 | 6 | 34 | -0.19% |
+| and_resource_nmcts | and_affine_greedy | T | 38 | 0 | 26 | -0.49% |
+| and_resource_nmcts | and_affine_greedy | CNOT | 29 | 9 | 26 | -0.21% |
+| and_resource_nmcts | and_affine_greedy | depth | 29 | 9 | 26 | -0.21% |
 | and_resource_nmcts | and_affine_greedy | peak_ancilla | 0 | 0 | 64 | +0.00% |
-| and_resource_nmcts | and_affine_greedy | score | 32 | 0 | 32 | -0.34% |
-| and_profile_resource_nmcts | direct_anf | T | 51 | 0 | 13 | -52.63% |
-| and_profile_resource_nmcts | direct_anf | CNOT | 13 | 51 | 0 | +10.20% |
-| and_profile_resource_nmcts | direct_anf | depth | 13 | 51 | 0 | +10.19% |
+| and_resource_nmcts | and_affine_greedy | score | 40 | 0 | 24 | -0.46% |
+| and_profile_resource_nmcts | direct_anf | T | 51 | 0 | 13 | -52.67% |
+| and_profile_resource_nmcts | direct_anf | CNOT | 13 | 51 | 0 | +10.17% |
+| and_profile_resource_nmcts | direct_anf | depth | 13 | 51 | 0 | +10.16% |
 | and_profile_resource_nmcts | direct_anf | peak_ancilla | 0 | 38 | 26 | +49.22% |
-| and_profile_resource_nmcts | direct_anf | score | 51 | 13 | 0 | -50.31% |
-| and_profile_resource_nmcts | and_direct_anf | T | 51 | 0 | 13 | -26.73% |
-| and_profile_resource_nmcts | and_direct_anf | CNOT | 51 | 0 | 13 | -20.27% |
-| and_profile_resource_nmcts | and_direct_anf | depth | 51 | 0 | 13 | -20.27% |
+| and_profile_resource_nmcts | direct_anf | score | 51 | 13 | 0 | -50.36% |
+| and_profile_resource_nmcts | and_direct_anf | T | 51 | 0 | 13 | -26.81% |
+| and_profile_resource_nmcts | and_direct_anf | CNOT | 51 | 0 | 13 | -20.29% |
+| and_profile_resource_nmcts | and_direct_anf | depth | 51 | 0 | 13 | -20.29% |
 | and_profile_resource_nmcts | and_direct_anf | peak_ancilla | 0 | 0 | 64 | +0.00% |
-| and_profile_resource_nmcts | and_direct_anf | score | 51 | 0 | 13 | -26.09% |
-| and_profile_resource_nmcts | and_fprm_greedy | T | 29 | 0 | 35 | -0.36% |
-| and_profile_resource_nmcts | and_fprm_greedy | CNOT | 24 | 6 | 34 | -0.19% |
-| and_profile_resource_nmcts | and_fprm_greedy | depth | 24 | 6 | 34 | -0.19% |
+| and_profile_resource_nmcts | and_direct_anf | score | 51 | 0 | 13 | -26.17% |
+| and_profile_resource_nmcts | and_fprm_greedy | T | 38 | 0 | 26 | -0.49% |
+| and_profile_resource_nmcts | and_fprm_greedy | CNOT | 29 | 9 | 26 | -0.21% |
+| and_profile_resource_nmcts | and_fprm_greedy | depth | 29 | 9 | 26 | -0.21% |
 | and_profile_resource_nmcts | and_fprm_greedy | peak_ancilla | 0 | 0 | 64 | +0.00% |
-| and_profile_resource_nmcts | and_fprm_greedy | score | 32 | 0 | 32 | -0.34% |
+| and_profile_resource_nmcts | and_fprm_greedy | score | 40 | 0 | 24 | -0.46% |
 | and_profile_resource_nmcts | and_fprm_root_beam | T | 0 | 0 | 64 | +0.00% |
 | and_profile_resource_nmcts | and_fprm_root_beam | CNOT | 0 | 0 | 64 | +0.00% |
 | and_profile_resource_nmcts | and_fprm_root_beam | depth | 0 | 0 | 64 | +0.00% |
 | and_profile_resource_nmcts | and_fprm_root_beam | peak_ancilla | 0 | 0 | 64 | +0.00% |
 | and_profile_resource_nmcts | and_fprm_root_beam | score | 0 | 0 | 64 | +0.00% |
-| and_profile_resource_nmcts | and_affine_greedy | T | 29 | 0 | 35 | -0.36% |
-| and_profile_resource_nmcts | and_affine_greedy | CNOT | 24 | 6 | 34 | -0.19% |
-| and_profile_resource_nmcts | and_affine_greedy | depth | 24 | 6 | 34 | -0.19% |
+| and_profile_resource_nmcts | and_affine_greedy | T | 38 | 0 | 26 | -0.49% |
+| and_profile_resource_nmcts | and_affine_greedy | CNOT | 29 | 9 | 26 | -0.21% |
+| and_profile_resource_nmcts | and_affine_greedy | depth | 29 | 9 | 26 | -0.21% |
 | and_profile_resource_nmcts | and_affine_greedy | peak_ancilla | 0 | 0 | 64 | +0.00% |
-| and_profile_resource_nmcts | and_affine_greedy | score | 32 | 0 | 32 | -0.34% |
+| and_profile_resource_nmcts | and_affine_greedy | score | 40 | 0 | 24 | -0.46% |
 | and_profile_resource_nmcts | and_resource_nmcts | T | 0 | 0 | 64 | +0.00% |
 | and_profile_resource_nmcts | and_resource_nmcts | CNOT | 0 | 0 | 64 | +0.00% |
 | and_profile_resource_nmcts | and_resource_nmcts | depth | 0 | 0 | 64 | +0.00% |
 | and_profile_resource_nmcts | and_resource_nmcts | peak_ancilla | 0 | 0 | 64 | +0.00% |
 | and_profile_resource_nmcts | and_resource_nmcts | score | 0 | 0 | 64 | +0.00% |
-| and_fprm_root_beam | and_fprm_greedy | T | 29 | 0 | 35 | -0.36% |
-| and_fprm_root_beam | and_fprm_greedy | CNOT | 24 | 6 | 34 | -0.19% |
-| and_fprm_root_beam | and_fprm_greedy | depth | 24 | 6 | 34 | -0.19% |
+| and_fprm_root_beam | and_fprm_greedy | T | 38 | 0 | 26 | -0.49% |
+| and_fprm_root_beam | and_fprm_greedy | CNOT | 29 | 9 | 26 | -0.21% |
+| and_fprm_root_beam | and_fprm_greedy | depth | 29 | 9 | 26 | -0.21% |
 | and_fprm_root_beam | and_fprm_greedy | peak_ancilla | 0 | 0 | 64 | +0.00% |
-| and_fprm_root_beam | and_fprm_greedy | score | 32 | 0 | 32 | -0.34% |
-| and_fprm_root_beam | and_affine_greedy | T | 29 | 0 | 35 | -0.36% |
-| and_fprm_root_beam | and_affine_greedy | CNOT | 24 | 6 | 34 | -0.19% |
-| and_fprm_root_beam | and_affine_greedy | depth | 24 | 6 | 34 | -0.19% |
+| and_fprm_root_beam | and_fprm_greedy | score | 40 | 0 | 24 | -0.46% |
+| and_fprm_root_beam | and_affine_greedy | T | 38 | 0 | 26 | -0.49% |
+| and_fprm_root_beam | and_affine_greedy | CNOT | 29 | 9 | 26 | -0.21% |
+| and_fprm_root_beam | and_affine_greedy | depth | 29 | 9 | 26 | -0.21% |
 | and_fprm_root_beam | and_affine_greedy | peak_ancilla | 0 | 0 | 64 | +0.00% |
-| and_fprm_root_beam | and_affine_greedy | score | 32 | 0 | 32 | -0.34% |
+| and_fprm_root_beam | and_affine_greedy | score | 40 | 0 | 24 | -0.46% |
 | and_affine_greedy | and_fprm_greedy | T | 0 | 0 | 64 | +0.00% |
 | and_affine_greedy | and_fprm_greedy | CNOT | 0 | 0 | 64 | +0.00% |
 | and_affine_greedy | and_fprm_greedy | depth | 0 | 0 | 64 | +0.00% |
@@ -97,16 +97,16 @@ Rows: 448; usable: 448; errors: 0; skipped: 0.
 
 | function | n | direct T | and_resource_nmcts T | relative |
 |---|---:|---:|---:|---:|
+| anf_n14_20 | 14 | 33692 | 10204 | -69.71% |
 | anf_n14_10 | 14 | 32156 | 9740 | -69.71% |
 | anf_n14_2 | 14 | 32960 | 9984 | -69.71% |
-| anf_n14_20 | 14 | 33692 | 10220 | -69.67% |
-| anf_n14_13 | 14 | 25056 | 7668 | -69.40% |
+| anf_n14_18 | 14 | 26328 | 8032 | -69.49% |
+| anf_n14_13 | 14 | 25056 | 7664 | -69.41% |
+| anf_n14_41 | 14 | 23608 | 7236 | -69.35% |
 | anf_n14_55 | 14 | 25180 | 7720 | -69.34% |
-| anf_n14_18 | 14 | 26328 | 8076 | -69.33% |
-| anf_n14_41 | 14 | 23608 | 7244 | -69.32% |
-| anf_n14_31 | 14 | 21000 | 6472 | -69.18% |
+| anf_n14_31 | 14 | 21000 | 6448 | -69.30% |
 | anf_n14_50 | 14 | 13664 | 4212 | -69.17% |
-| anf_n14_48 | 14 | 23420 | 7236 | -69.10% |
+| anf_n14_48 | 14 | 23420 | 7232 | -69.12% |
 | anf_n14_4 | 14 | 12372 | 3844 | -68.93% |
 | anf_n14_6 | 14 | 11968 | 3720 | -68.92% |
 
@@ -114,16 +114,16 @@ Rows: 448; usable: 448; errors: 0; skipped: 0.
 
 | function | n | direct T | and_profile_resource_nmcts T | relative |
 |---|---:|---:|---:|---:|
+| anf_n14_20 | 14 | 33692 | 10204 | -69.71% |
 | anf_n14_10 | 14 | 32156 | 9740 | -69.71% |
 | anf_n14_2 | 14 | 32960 | 9984 | -69.71% |
-| anf_n14_20 | 14 | 33692 | 10220 | -69.67% |
-| anf_n14_13 | 14 | 25056 | 7668 | -69.40% |
+| anf_n14_18 | 14 | 26328 | 8032 | -69.49% |
+| anf_n14_13 | 14 | 25056 | 7664 | -69.41% |
+| anf_n14_41 | 14 | 23608 | 7236 | -69.35% |
 | anf_n14_55 | 14 | 25180 | 7720 | -69.34% |
-| anf_n14_18 | 14 | 26328 | 8076 | -69.33% |
-| anf_n14_41 | 14 | 23608 | 7244 | -69.32% |
-| anf_n14_31 | 14 | 21000 | 6472 | -69.18% |
+| anf_n14_31 | 14 | 21000 | 6448 | -69.30% |
 | anf_n14_50 | 14 | 13664 | 4212 | -69.17% |
-| anf_n14_48 | 14 | 23420 | 7236 | -69.10% |
+| anf_n14_48 | 14 | 23420 | 7232 | -69.12% |
 | anf_n14_4 | 14 | 12372 | 3844 | -68.93% |
 | anf_n14_6 | 14 | 11968 | 3720 | -68.92% |
 
@@ -165,15 +165,15 @@ Rows: 448; usable: 448; errors: 0; skipped: 0.
 
 | function | n | direct T | and_fprm_root_beam T | relative |
 |---|---:|---:|---:|---:|
+| anf_n14_20 | 14 | 33692 | 10204 | -69.71% |
 | anf_n14_10 | 14 | 32156 | 9740 | -69.71% |
 | anf_n14_2 | 14 | 32960 | 9984 | -69.71% |
-| anf_n14_20 | 14 | 33692 | 10220 | -69.67% |
-| anf_n14_13 | 14 | 25056 | 7668 | -69.40% |
+| anf_n14_18 | 14 | 26328 | 8032 | -69.49% |
+| anf_n14_13 | 14 | 25056 | 7664 | -69.41% |
+| anf_n14_41 | 14 | 23608 | 7236 | -69.35% |
 | anf_n14_55 | 14 | 25180 | 7720 | -69.34% |
-| anf_n14_18 | 14 | 26328 | 8076 | -69.33% |
-| anf_n14_41 | 14 | 23608 | 7244 | -69.32% |
-| anf_n14_31 | 14 | 21000 | 6472 | -69.18% |
+| anf_n14_31 | 14 | 21000 | 6448 | -69.30% |
 | anf_n14_50 | 14 | 13664 | 4212 | -69.17% |
-| anf_n14_48 | 14 | 23420 | 7236 | -69.10% |
+| anf_n14_48 | 14 | 23420 | 7232 | -69.12% |
 | anf_n14_4 | 14 | 12372 | 3844 | -68.93% |
 | anf_n14_6 | 14 | 11968 | 3720 | -68.92% |

@@ -63,7 +63,8 @@ ANF factoring:
 5. **Profile-aware candidate generation.** The profile variant adds
    T-aggressive, CNOT/depth-oriented, and ancilla-tight candidate configurations
    on small functions.  For larger random-ANF instances it switches to a cheap
-   direct/FPRM/affine-greedy guard, trading some score for lower runtime tails.
+   direct/FPRM guard; for `n > 12`, that guard uses a direct-cost polarity
+   screen plus a bounded root-beam correction over the first factor choice.
 
 ## Representation
 
@@ -342,18 +343,18 @@ tails and to add a bounded FPRM root-beam candidate.
 Main `highdim_resource` evidence:
 
 - `and_resource_nmcts` and `and_profile_resource_nmcts` complete all 64
-  functions under process-isolated timeouts.
+  functions under the high-dimensional bounded guard.
 - Compared with direct ANF, both guarded methods have 51 T-count wins, 0
-  losses, and 13 ties, with a 52.63% mean T-count reduction and a 50.31% mean
+  losses, and 13 ties, with a 52.67% mean T-count reduction and a 50.36% mean
   composite-score reduction.
 - Compared with logical-AND direct ANF, both have 51 T-count wins, 0 losses,
-  and 13 ties, with a 26.73% mean T-count reduction and a 26.09% mean score
+  and 13 ties, with a 26.81% mean T-count reduction and a 26.17% mean score
   reduction.
-- Compared with FPRM-greedy, both guarded methods have 29 T-count wins, 0
-  losses, and 35 ties; by weighted score they have 32 wins, 0 losses, and 32
+- Compared with FPRM-greedy, both guarded methods have 38 T-count wins, 0
+  losses, and 26 ties; by weighted score they have 40 wins, 0 losses, and 24
   ties.  The bounded root-beam candidate corrects the first-factor choice while
   preserving the same polarity-screening budget.
 - Runtime remains bounded but nontrivial: `and_resource_nmcts` has median
-  runtime 5.134 s, p95 38.834 s, and max 49.301 s; the profile variant has
-  median 5.116 s, p95 38.586 s, and max 49.042 s.  The standalone FPRM
-  root-beam candidate has median 2.710 s, p95 26.119 s, and max 32.879 s.
+  runtime 3.519 s, p95 36.896 s, and max 88.982 s; the profile variant has
+  median 4.027 s, p95 59.688 s, and max 78.236 s.  The standalone FPRM
+  root-beam candidate has median 2.081 s, p95 25.413 s, and max 33.181 s.
