@@ -78,11 +78,11 @@ root-beam, and \method{} and \profilemethod{} match that child while reducing
 mean T-count by 55.40\% and mean weighted score by 53.08\% relative to direct
 ANF.  On
 exported high-dimensional ABC AIG/XAG/LUT and BDD checks for the same $n=14$,
-$n=15$, and $n=16$ sets, the guarded method wins all 480 weighted-score
-comparisons with 93.24\%--99.00\% mean score reductions.  At $n=16$ the mean
-score reductions are 97.29\% against ABC-AIG, 97.88\% against ABC-XAG,
-99.00\% against ABC-LUT, and 96.81\% against BDD.  ABC-AIG and ABC-XAG keep
-lower estimated depth on most functions, while ABC-LUT and BDD are deeper
+$n=15$, $n=16$, and $n=18$ sets, the guarded method wins all 528
+weighted-score comparisons with 93.24\%--99.66\% mean score reductions.  At
+$n=18$ the mean score reductions are 98.76\% against ABC-AIG, 98.98\% against
+ABC-XAG, 99.66\% against ABC-LUT, and 98.19\% against BDD.  ABC-AIG and ABC-XAG
+keep lower estimated depth on most functions, while ABC-LUT and BDD are deeper
 under our sequential network estimates.  The method is
 evaluated only at the logical circuit layer;
 hardware mapping and connectivity constraints are outside the present scope.
@@ -452,20 +452,23 @@ ROS mapper, but it adds a standard external XOR/ESOP minimizer to the
 comparison boundary.
 
 Finally, we pushed the ABC AIG/XAG/LUT and BDD exchange beyond the small-function
-slice.  The \highdimdataset{}, \scaledataset{}, and \ultradataset{} suites were
+slice.  The \highdimdataset{}, \scaledataset{}, \ultradataset{}, and
+\megadataset{} suites were
 exported to BLIF/truth JSON, optimized or represented by the external-style
 baselines, and verified by a bit-parallel full truth-table checker before
-scoring.  The high-dimensional rows contain 64 $n=14$, 32 $n=15$, and 24
-$n=16$ functions for each of ABC-AIG, ABC-XAG, ABC-LUT, and BDD, all correct
-and with no errors or skips.  Against all four baselines, \method{} and
+scoring.  The high-dimensional rows contain 64 $n=14$, 32 $n=15$, 24 $n=16$,
+and 12 $n=18$ functions for each of ABC-AIG, ABC-XAG, ABC-LUT, and BDD, all
+correct and with no errors or skips.  Against all four baselines, \method{} and
 \profilemethod{} win every T-count, CNOT, peak-ancilla, and weighted-score
-comparison on these 480 external comparisons; the mean score reductions range
-from 93.24\% to 99.00\%.  At $n=16$, the weighted-score reductions are
-97.29\% against ABC-AIG, 97.88\% against ABC-XAG, 99.00\% against ABC-LUT, and
-96.81\% against BDD.  The depth column remains an important counterweight for
-ABC: ABC-AIG has a lower estimated depth on 50/64, 25/32, and 22/24 functions
-across the three high-dimensional suites, and ABC-XAG has a lower estimated
-depth on 50/64, 26/32, and 22/24 functions, respectively.  ABC-LUT and BDD
+comparison for each guarded method across these 528 external rows; the mean
+score reductions range from 93.24\% to 99.66\%.  At $n=18$, the weighted-score
+reductions are
+98.76\% against ABC-AIG, 98.98\% against ABC-XAG, 99.66\% against ABC-LUT, and
+98.19\% against BDD.  The depth column remains an important counterweight for
+ABC: ABC-AIG has a lower estimated depth on 50/64, 25/32, 22/24, and 10/12
+functions across the four high-dimensional suites, and ABC-XAG has a lower
+estimated depth on 50/64, 26/32, 22/24, and 11/12 functions, respectively.
+ABC-LUT and BDD
 depths are much higher under the sequential network estimates.  Thus the
 high-dimensional external result supports the low-ancilla and weighted-resource
 claim, but not depth-only dominance against optimized ABC networks.
@@ -490,6 +493,17 @@ weighted-score wins/losses/ties and mean relative score.  Depth columns expose
 the ABC depth counterweight.}
 \label{tab:external-ultra}
 \input{tables/external_ultra_highdim_resource}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{\method{} compared with exported ABC-AIG, ABC-XAG, ABC-LUT, and BDD
+baselines on the \megadataset{} $n=18$ stress check.  Score columns report
+weighted-score wins/losses/ties and mean relative score.  Depth columns expose
+the ABC depth counterweight.}
+\label{tab:external-mega}
+\input{tables/external_mega_highdim_resource}
 \end{table}
 
 \subsection{Ablation}
@@ -837,8 +851,8 @@ that the full neural portfolio beats its selected child.
 The in-harness ESOP cube-beam and weighted-MILP baselines plus the exported
 SSHR-I/ABC/BDD/LUT comparisons strengthen the Boolean synthesis comparison, and
 the new high-dimensional ABC/BDD/LUT rows show that this external comparison is
-no longer restricted to $n\leq 6$.  The $n=16$ external rows preserve the
-weighted-score advantage, but they also keep the ABC-AIG/XAG depth caveat.
+no longer restricted to $n\leq 6$.  The $n=16$ and $n=18$ external rows preserve
+the weighted-score advantage, but they also keep the ABC-AIG/XAG depth caveat.
 More external implementations remain necessary before a submission-ready claim.
 The resource-profile sweep shows that objective-specific candidate generation
 and non-dominated archive selection improve small-function profile adaptation.
@@ -873,7 +887,7 @@ tests show that bounded guards scale without timeouts, beat FPRM-greedy on
 $n=15$, complete all 144 $n=16$ ultra-scale rows under the one-layer guard
 while retaining score wins against FPRM root-beam, complete all 60 $n=18$
 mega-scale rows under the root-beam guard, and beat exported ABC AIG/XAG/LUT
-and BDD on all 480 high-dimensional weighted-score comparisons.
+and BDD on all 528 high-dimensional weighted-score comparisons.
 The next step is to reproduce ROS/mockturtle-style
 toolchain baselines and hardware-aware mappings so the empirical claim is
 submission-ready.

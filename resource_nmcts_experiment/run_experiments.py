@@ -147,9 +147,9 @@ PRESETS = {
         "workers": 6,
     },
     "mega_highdim_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_fprm_root_beam", "and_fprm_linear_pair", "and_fprm_linear_pair_neural", "and_resource_nmcts", "and_pareto_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_fprm_root_beam", "and_resource_nmcts", "and_profile_resource_nmcts"],
         "random_truth": [],
-        "random_anf": [(18, 8)],
+        "random_anf": [(18, 12)],
         "structured_limit": 0,
         "workers": 4,
     },

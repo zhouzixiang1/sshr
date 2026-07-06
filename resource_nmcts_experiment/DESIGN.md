@@ -252,15 +252,18 @@ cp /tmp/resource_nmcts_traditional_no_model/manifest_traditional_resource.json r
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset highdim_scale_resource --model models/action_scorer_rollout_logical_and.pt --workers 6 --checkpoint-every 8 --resume --isolate-timeouts
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset highdim_scale_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset highdim_scale_resource
-/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset ultra_highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 6 --checkpoint-every 4 --resume --isolate-timeouts
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset ultra_highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 1 --checkpoint-every 8 --resume
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset ultra_highdim_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset ultra_highdim_resource
-/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset mega_highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 4 --checkpoint-every 5 --resume
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset mega_highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 4 --checkpoint-every 5
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset mega_highdim_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset mega_highdim_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset ultra_highdim_resource --formats blif,truth --out-dir benchmark_exports/ultra_highdim_resource_external_seed42
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/ultra_highdim_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_abc_lut,external_bdd --min-n 16 --max-n 16 --max-abc-n 16 --max-xag-n 16 --max-lut-n 16 --max-bdd-n 16 --bdd-orders 8 --timeout 45 --workers 8 --out results/raw_external_ultra_highdim_resource.csv --summary results/summary_external_ultra_highdim_resource.csv --run-manifest results/manifest_external_ultra_highdim_resource.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_ultra_highdim_resource.csv --internal-csv results/raw_ultra_highdim_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_fprm_linear_pair,and_fprm_root_beam,direct_anf,and_direct_anf --out results/analysis_external_ultra_highdim_resource.md
+/opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset mega_highdim_resource --formats blif,truth --out-dir benchmark_exports/mega_highdim_resource_external_seed42
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/mega_highdim_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_abc_lut,external_bdd --min-n 18 --max-n 18 --max-abc-n 18 --max-xag-n 18 --max-lut-n 18 --max-bdd-n 18 --bdd-orders 8 --timeout 90 --workers 8 --out results/raw_external_mega_highdim_resource.csv --summary results/summary_external_mega_highdim_resource.csv --run-manifest results/manifest_external_mega_highdim_resource.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_mega_highdim_resource.csv --internal-csv results/raw_mega_highdim_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_fprm_root_beam,direct_anf,and_direct_anf --out results/analysis_external_mega_highdim_resource.md
 ```
 
 It covers 322 functions and 1610 method/function rows.  The main results are:
@@ -429,6 +432,13 @@ isolated `n=14`, `n=15`, and `n=16` random-ANF stress presets:
   AIG, 97.88% against XAG, 99.00% against LUT, and 96.81% against BDD.
   ABC-AIG and ABC-XAG each have a lower estimated depth on 22/24 functions;
   ABC-LUT and BDD are deeper under the current sequential estimates.
+- `results/analysis_external_mega_highdim_resource.md`: 12 exported `n=18`
+  functions, 48/48 correct ABC-AIG/ABC-XAG/ABC-LUT/BDD rows, 0 errors/skips.
+  The guarded methods again win all T-count, CNOT, peak-ancilla, and
+  weighted-score comparisons, with mean score reductions of 98.76% against
+  AIG, 98.98% against XAG, 99.66% against LUT, and 98.19% against BDD.
+  ABC-AIG has a lower estimated depth on 10/12 functions and ABC-XAG on 11/12
+  functions; ABC-LUT and BDD are deeper under the current sequential estimates.
 
 The `resource_sweep` stress test checks whether the method remains competitive
 under different resource objectives.  It uses 47 functions with `n <= 6`, four
