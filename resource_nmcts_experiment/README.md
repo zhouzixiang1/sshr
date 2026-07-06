@@ -43,6 +43,9 @@ cp /tmp/resource_nmcts_traditional_no_model/manifest_traditional_resource.json r
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset highdim_scale_resource --model models/action_scorer_rollout_logical_and.pt --workers 6 --checkpoint-every 8 --resume --isolate-timeouts
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset highdim_scale_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset highdim_scale_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset ultra_highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 6 --checkpoint-every 4 --resume --isolate-timeouts
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset ultra_highdim_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset ultra_highdim_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset large_resource_core --formats pla,blif,truth
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset traditional_resource --formats pla,blif,truth --out-dir benchmark_exports/traditional_resource_external_seed42
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --max-n 4 --max-ilp-n 4 --timeout 10 --workers 4 --out results/raw_external_traditional_resource_n4.csv --summary results/summary_external_traditional_resource_n4.csv --run-manifest results/manifest_external_traditional_resource_n4.json
@@ -91,9 +94,10 @@ Current presets:
   linear-pair factoring, a one-extra-layer bounded linear-pair refinement,
   a standalone width-three linear-parity ablation, Resource-NMCTS, and
   Profile-Resource-NMCTS.
-- `ultra_highdim_resource`: experimental `n=16` random-ANF stress sandbox with
-  the bounded high-dimensional methods.  It is not paper-facing until a full
-  run and analysis are completed.
+- `ultra_highdim_resource`: isolated `n=16` random-ANF scale check with direct
+  ANF, logical-AND direct ANF, bounded FPRM root-beam, one-layer FPRM
+  linear-pair factoring, Resource-NMCTS, and Profile-Resource-NMCTS.  It uses
+  the ultra-scale guard rather than the recursive n=15 linear-pair branch.
 - `large_resource`: experimental `n=14` stress extension.  This preset exposed
   the mixed-suite runtime tail and is kept for broader engineering sweeps.
 - `main`: large-scale placeholder for broader sweeps.
@@ -371,6 +375,25 @@ Additional scale check from `results/analysis_highdim_scale_resource.md` and
 - Runtime remains finite at `n=15`: `and_resource_nmcts` completes 32/32 with
   median 16.514 s and p95 135.536 s; `and_profile_resource_nmcts` completes
   32/32 with median 14.684 s and p95 122.842 s.
+
+Ultra-high-dimensional scale check from
+`results/analysis_ultra_highdim_resource.md` and
+`results/runtime_ultra_highdim_resource.md`:
+
+- 24 random ANF functions at `n=16`, 6 methods, 144 result rows, 0 errors, and
+  0 skips.
+- The ultra guard switches Resource/Profile to the one-layer FPRM linear-pair
+  candidate.  Both guarded variants match that candidate on all 24 functions.
+- Compared with direct ANF, the guarded variants have 23 T-count wins, 0
+  losses, and 1 tie, with a 62.08% mean T-count reduction and a 59.52% mean
+  score reduction.
+- Compared with logical-AND direct ANF, they have 23 weighted-score wins, 0
+  losses, and 1 tie, with a 31.68% mean score reduction.
+- Compared with FPRM root beam, they have 22 weighted-score wins, 0 losses,
+  and 2 ties, with a 1.88% mean score reduction.
+- Runtime remains finite at `n=16`: `and_resource_nmcts` completes 24/24 with
+  median 17.537 s and p95 59.132 s; `and_profile_resource_nmcts` completes
+  24/24 with median 17.566 s and p95 58.479 s.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost

@@ -252,12 +252,18 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
     # fixed-polarity Reed-Muller forms are explored rather than only reordering
     # factor actions inside a fixed polarity.
     if method in {"fprm_root_beam", "fprm_root_child_beam", "fprm_linear_pair", "fprm_linear_pair_deep", "fprm_linear_parity"} and bf.n > 12 and len(anf_monomials(bf)) > 128:
+        if bf.n >= 16:
+            screen_budget = max(8, min(16, 2 * max(1, config.max_polarities)))
+            screen_top_k = 1
+        else:
+            screen_budget = max(32, min(64, 4 * max(1, config.max_polarities)))
+            screen_top_k = 2
         ranked = _direct_screened_polarities(
             bf,
             config,
             seed,
-            budget=max(32, min(64, 4 * max(1, config.max_polarities))),
-            top_k=2,
+            budget=screen_budget,
+            top_k=screen_top_k,
         )
         trials = list(ranked)
     elif neural_guided:
@@ -735,9 +741,11 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             child_specs.append(("affine_nmcts", fast_config))
         else:
             # At n=14+ the deep linear branch subsumes the shallow linear-pair
-            # candidate, so the portfolio avoids evaluating both variants.
+            # candidate.  At n>=16, truth-table verification and polarity
+            # screening dominate runtime, so the ultra-scale guard keeps only
+            # the one-layer linear candidate.
             highdim_config = replace(fast_config, candidate_top_k=config.candidate_top_k)
-            child_specs.append(("fprm_linear_pair_deep", highdim_config))
+            child_specs.append(("fprm_linear_pair" if bf.n >= 16 else "fprm_linear_pair_deep", highdim_config))
         if bf.n <= 6:
             child_specs.append(("cube_beam", cube_config))
         if bf.n <= 10:
@@ -915,7 +923,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
                 ]
             )
         else:
-            child_specs.append(("fprm_linear_pair_deep", highdim_config))
+            child_specs.append(("fprm_linear_pair" if bf.n >= 16 else "fprm_linear_pair_deep", highdim_config))
 
         seen_specs = set()
         for child_method, child_config in child_specs:

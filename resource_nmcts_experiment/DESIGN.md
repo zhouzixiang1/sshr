@@ -252,6 +252,9 @@ cp /tmp/resource_nmcts_traditional_no_model/manifest_traditional_resource.json r
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset highdim_scale_resource --model models/action_scorer_rollout_logical_and.pt --workers 6 --checkpoint-every 8 --resume --isolate-timeouts
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset highdim_scale_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset highdim_scale_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset ultra_highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 6 --checkpoint-every 4 --resume --isolate-timeouts
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset ultra_highdim_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset ultra_highdim_resource
 ```
 
 It covers 322 functions and 1610 method/function rows.  The main results are:
@@ -515,9 +518,18 @@ pair method under the default objective.  The scale check is slower but finite:
 `and_resource_nmcts` has median runtime 16.514 s and p95 135.536 s, while
 `and_profile_resource_nmcts` has median runtime 14.684 s and p95 122.842 s.
 
-The `ultra_highdim_resource` preset is a sandbox for `n=16` random-ANF stress
-testing.  It is deliberately excluded from the manuscript evidence set until a
-complete run, analysis table, and runtime summary exist.  The associated
-Möbius-transform implementation in `truth_table_from_anf` is kept because it
-removes the avoidable per-assignment monomial scan and makes larger ANF-derived
-truth tables practical to generate.
+The `ultra_highdim_resource` run is an additional scale check at `n=16`.  It
+contains 24 random ANF functions, six methods, and 144 method/function rows
+with 0 errors/skips.  The ultra-scale guard switches Resource/Profile to the
+one-layer FPRM linear-pair candidate rather than the recursive `n=15` branch,
+so both guarded variants match `and_fprm_linear_pair` on all 24 functions.
+Compared with direct ANF, they have 23 T-count wins, 0 losses, and 1 tie, with
+a 62.08% mean T-count reduction and a 59.52% mean score reduction.  Compared
+with logical-AND direct ANF, they have 23 weighted-score wins, 0 losses, and
+1 tie, with a 31.68% mean score reduction.  Compared with FPRM root beam, they
+have 22 weighted-score wins, 0 losses, and 2 ties, with a 1.88% mean score
+reduction.  Runtime remains finite: `and_resource_nmcts` has median runtime
+17.537 s and p95 59.132 s, while `and_profile_resource_nmcts` has median
+runtime 17.566 s and p95 58.479 s.  The associated Möbius/zeta-transform
+implementation in `anf_utils.py` removes the avoidable per-assignment monomial
+scan and makes larger ANF-derived truth tables practical to generate.
