@@ -91,6 +91,9 @@ Current presets:
   linear-pair factoring, a one-extra-layer bounded linear-pair refinement,
   a standalone width-three linear-parity ablation, Resource-NMCTS, and
   Profile-Resource-NMCTS.
+- `ultra_highdim_resource`: experimental `n=16` random-ANF stress sandbox with
+  the bounded high-dimensional methods.  It is not paper-facing until a full
+  run and analysis are completed.
 - `large_resource`: experimental `n=14` stress extension.  This preset exposed
   the mixed-suite runtime tail and is kept for broader engineering sweeps.
 - `main`: large-scale placeholder for broader sweeps.

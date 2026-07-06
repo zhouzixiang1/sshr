@@ -514,3 +514,10 @@ standalone width-three linear-parity ablation is dominated by the recursive
 pair method under the default objective.  The scale check is slower but finite:
 `and_resource_nmcts` has median runtime 16.514 s and p95 135.536 s, while
 `and_profile_resource_nmcts` has median runtime 14.684 s and p95 122.842 s.
+
+The `ultra_highdim_resource` preset is a sandbox for `n=16` random-ANF stress
+testing.  It is deliberately excluded from the manuscript evidence set until a
+complete run, analysis table, and runtime summary exist.  The associated
+Möbius-transform implementation in `truth_table_from_anf` is kept because it
+removes the avoidable per-assignment monomial scan and makes larger ANF-derived
+truth tables practical to generate.

@@ -21,22 +21,28 @@ def anf_monomials(bf: BooleanFunction) -> Set[int]:
     coeff = [(bf.truth_table >> i) & 1 for i in range(1 << bf.n)]
     for bit in range(bf.n):
         step = 1 << bit
-        for mask in range(1 << bf.n):
-            if mask & step:
+        block = step << 1
+        for start in range(0, 1 << bf.n, block):
+            for mask in range(start + step, start + block):
                 coeff[mask] ^= coeff[mask ^ step]
     return {i for i, v in enumerate(coeff) if v & 1}
 
 
 def truth_table_from_anf(n: int, monomials: Iterable[int]) -> int:
     """Evaluate ANF monomials and return a truth-table integer."""
+    coeff = [0] * (1 << n)
+    for m in monomials:
+        coeff[int(m)] ^= 1
+    size = 1 << n
+    for bit in range(n):
+        step = 1 << bit
+        block = step << 1
+        for start in range(0, size, block):
+            for mask in range(start + step, start + block):
+                coeff[mask] ^= coeff[mask ^ step]
     tt = 0
-    monos = list(monomials)
-    for x in range(1 << n):
-        y = 0
-        for m in monos:
-            if m == 0 or (x & m) == m:
-                y ^= 1
-        if y:
+    for x, y in enumerate(coeff):
+        if y & 1:
             tt |= 1 << x
     return tt
 
