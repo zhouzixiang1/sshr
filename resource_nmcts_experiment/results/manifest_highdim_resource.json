@@ -13,7 +13,6 @@
     "and_profile_resource_nmcts"
   ],
   "last_run_methods": [
-    "and_fprm_linear_pair",
     "and_resource_nmcts",
     "and_profile_resource_nmcts"
   ],
@@ -30,9 +29,9 @@
     "direct_anf"
   ],
   "model": "models/action_scorer_rollout_logical_and.pt",
-  "workers": 4,
+  "workers": 1,
   "seconds": null,
-  "seconds_current_run": 488.05345916748047,
+  "seconds_current_run": null,
   "config": {
     "weights": {
       "t": 1.0,

@@ -126,7 +126,7 @@ PRESETS = {
         "workers": 6,
     },
     "highdim_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_fprm_greedy", "and_fprm_root_beam", "and_fprm_linear_pair", "and_fprm_linear_pair_deep", "and_fprm_linear_parity", "and_affine_greedy", "and_resource_nmcts", "and_profile_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_fprm_greedy", "and_fprm_root_beam", "and_fprm_linear_pair", "and_affine_greedy", "and_resource_nmcts", "and_profile_resource_nmcts"],
         "random_truth": [],
         "random_anf": [(14, 64)],
         "structured_limit": 0,

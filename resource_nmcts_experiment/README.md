@@ -42,7 +42,8 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset traditional_resource --formats pla,blif,truth --out-dir benchmark_exports/traditional_resource_external_seed42
 /opt/anaconda3/envs/sshr/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --max-n 4 --max-ilp-n 4 --timeout 10 --workers 4 --out results/raw_external_traditional_resource_n4.csv --summary results/summary_external_traditional_resource_n4.csv --run-manifest results/manifest_external_traditional_resource_n4.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_traditional_resource_n4.csv --internal-csv results/raw_traditional_resource.csv --out results/analysis_external_traditional_resource_n4.md
-/opt/anaconda3/envs/sshr/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --max-n 6 --max-ilp-n 6 --timeout 8 --workers 4 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
+/opt/anaconda3/envs/sshr/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_sshr_h,external_sshr_i_cnot,external_sshr_i_t --max-n 6 --max-ilp-n 6 --timeout 8 --workers 4 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_abc_aig --max-n 6 --max-abc-n 6 --timeout 8 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_traditional_resource_n6.csv --internal-csv results/raw_traditional_resource.csv --out results/analysis_external_traditional_resource_n6.md
 ```
 
@@ -69,7 +70,7 @@ Current presets:
   ANF, logical-AND direct ANF, FPRM-greedy, bounded FPRM root-beam,
   bounded FPRM linear-pair factoring, bounded affine-greedy, Resource-NMCTS,
   and Profile-Resource-NMCTS.  The guarded variants keep the root-child beam
-  baseline and add a CNOT-only pairwise XOR factor candidate.
+  baseline and use a one-extra-layer CNOT-only pairwise XOR factor candidate.
 - `highdim_scale_resource`: isolated `n=15` random-ANF scale check with direct
   ANF, logical-AND direct ANF, FPRM-greedy, bounded FPRM root-beam, FPRM
   linear-pair factoring, a one-extra-layer bounded linear-pair refinement,
@@ -91,12 +92,15 @@ External-tool benchmark exchange:
   is intentionally git-ignored because the files are regenerable and can be
   large for `n=12` and `n=14` suites.
 - This is the bridge for reproducing the same Boolean functions in external
-  XAG/ROS/LUT or mockturtle-style synthesis flows without depending on the
+  AIG/XAG/ROS/LUT or mockturtle-style synthesis flows without depending on the
   Python experiment harness.
 - `run_external_baselines.py` consumes the exported `manifest.csv`/JSON and
-  runs cross-directory baseline backends.  The current implemented external
-  backend is SSHR-H/SSHR-I from `src/sshr`, intended as the first exact-baseline
-  pilot before XAG/ROS/mockturtle command adapters are added.
+  runs cross-directory baseline backends.  The implemented external backends
+  are SSHR-H/SSHR-I from `src/sshr` and a Berkeley ABC AIG path that optimizes
+  exported BLIF with `strash; balance; rewrite; refactor; rewrite -z; balance`,
+  verifies the optimized BLIF truth table, and maps AIG AND/level statistics to
+  a logic-level Bennett compute/uncompute resource estimate.  XAG/ROS and
+  mockturtle adapters are still future work.
 
 Current evidence from `results/analysis_evidence_affine.md`:
 
@@ -172,14 +176,22 @@ Exported exact SSHR-I pilot evidence from
   win pattern and a 26.21% mean score reduction.  CNOT count is worse on 62/72
   functions.
 
-Time-limited exported SSHR-I extension evidence from
+Time-limited exported SSHR-I and ABC-AIG extension evidence from
 `results/analysis_external_traditional_resource_n6.md`:
 
 - Extends the same exported manifest to all 177 functions with `n <= 6`.
-- Produces 531 external rows across SSHR-H, CNOT-optimized SSHR-I, and
-  T-optimized SSHR-I, with 0 errors/skips.
+- Produces 708 external rows across SSHR-H, CNOT-optimized SSHR-I,
+  T-optimized SSHR-I, and ABC-AIG, with 0 errors/skips.
 - The SSHR-I rows use an 8 s per-call Gurobi budget, so this is a
   time-limited extension rather than an exact certificate.
+- The ABC-AIG rows use Berkeley ABC 1.01 built from
+  `bcfdf592289a408cd67ec19260f8a60a37b085b6`; all 177 optimized BLIF outputs
+  pass truth-table verification before resource scoring.
+- Against ABC-AIG, `and_resource_nmcts` has 170 T-count wins, 2 losses, and 5
+  ties; it wins all 177 CNOT, peak-ancilla, and weighted-score comparisons,
+  with mean reductions of 50.60%, 86.29%, and 54.52%, respectively.  ABC-AIG
+  has a lower depth estimate on 126/177 functions, which is the main ABC-side
+  advantage under this Bennett-style resource model.
 - Against CNOT-optimized SSHR-I, `and_resource_nmcts` has 164 T-count wins, 3
   losses, and 10 ties; score wins/losses/ties are 168/9/0 with a 27.92% mean
   score reduction.  CNOT count is worse on 168/177 functions.
@@ -236,26 +248,27 @@ and `results/runtime_highdim_resource.md`:
 - `and_resource_nmcts` and `and_profile_resource_nmcts` complete all 64
   functions under the high-dimensional bounded guard.
 - Compared with direct ANF, both Resource-NMCTS variants have 61 T-count wins,
-  0 losses, and 3 ties, with a 55.60% mean T-count reduction and a 52.27%
+  0 losses, and 3 ties, with a 57.42% mean T-count reduction and a 54.03%
   mean score reduction.
 - Compared with logical-AND direct ANF, they have 61 T-count wins, 0 losses,
-  and 3 ties, with a 30.41% mean T-count reduction and a 28.64% mean score
+  and 3 ties, with a 32.74% mean T-count reduction and a 30.86% mean score
   reduction.
 - Compared with FPRM-greedy, the high-dimensional guarded variants have
   60 T-count wins, 0 losses, and 4 ties; by weighted score they also have
-  60 wins, 0 losses, and 4 ties, with a 3.54% mean score reduction.  The
-  improvement comes from a bounded FPRM linear-pair candidate that factors
+  60 wins, 0 losses, and 4 ties, with a 6.25% mean score reduction.  Against
+  the one-layer FPRM linear-pair candidate, they have 53 T-count wins, 0
+  losses, and 11 ties, with a 2.87% mean score reduction.  The improvement
+  comes from a bounded recursive FPRM linear-pair candidate that factors
   repeated term pairs as `(x_i xor x_j) * g` using CNOT-only linear compute and
   uncompute around the factored subplan.
 - Compared with the standalone FPRM root-beam candidate, the guarded variants
   now have 60 T-count wins, 0 losses, and 4 ties; by weighted score they have
-  60 wins, 0 losses, and 4 ties, with a 3.00% mean score reduction.
+  60 wins, 0 losses, and 4 ties, with a 5.73% mean score reduction.
 - Runtime tails remain visible but bounded: `and_resource_nmcts` completes
-  64/64 with median 3.633 s and p95 34.982 s; `and_profile_resource_nmcts`
-  completes 64/64 with median 3.638 s and p95 35.313 s.  The standalone
-  FPRM linear-pair candidate has median 2.574 s and p95 30.760 s.  The
-  tradeoff is higher mean peak ancilla: 2.94 versus 2.03 for FPRM-greedy and
-  root-beam.
+  64/64 with median 8.375 s and p95 76.838 s; `and_profile_resource_nmcts`
+  delegates to the same high-dimensional guard.  The standalone one-layer FPRM
+  linear-pair candidate has median 2.574 s and p95 30.760 s.  The tradeoff is
+  higher mean peak ancilla: 3.05 versus 2.03 for FPRM-greedy and root-beam.
 
 Additional scale check from `results/analysis_highdim_scale_resource.md` and
 `results/runtime_highdim_scale_resource.md`:

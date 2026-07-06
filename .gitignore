@@ -5,6 +5,7 @@ __pycache__/
 
 # Runtime logs
 gurobi.log
+abc.history
 
 # LaTeX build artifacts
 tex/build/
@@ -20,6 +21,7 @@ rl_mcts_experiment/paper/build/*
 *.fdb_latexmk
 resource_nmcts_experiment/paper_latex/*.pdf
 resource_nmcts_experiment/benchmark_exports/
+tmp/abc/
 
 # Generated visualizations
 sshr/viz/*.png

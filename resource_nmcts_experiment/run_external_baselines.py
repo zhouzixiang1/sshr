@@ -11,8 +11,11 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import re
 import statistics
+import subprocess
 import sys
+import tempfile
 import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
@@ -37,6 +40,10 @@ except Exception:  # pragma: no cover - reported per row when used
 
 DEFAULT_RESULTS = THIS_DIR / "results"
 DEFAULT_WEIGHTS = {"t": 1.0, "cnot": 0.04, "depth": 0.015, "gates": 0.01, "ancilla": 2.0}
+DEFAULT_ABC_BIN = ROOT / "tmp" / "abc" / "abc"
+DEFAULT_ABC_SCRIPT = "strash; balance; rewrite; refactor; rewrite -z; balance"
+ABC_STATS_RE = re.compile(r"and\s*=\s*(\d+)\s+lev\s*=\s*(\d+)")
+ANSI_RE = re.compile(r"\x1b\[[0-9;]*m")
 
 
 @dataclass(frozen=True)
@@ -127,6 +134,7 @@ def load_manifest(path: Path) -> list[dict]:
         rows = list(csv.DictReader(f))
     for row in rows:
         row["_manifest_dir"] = display_path(manifest.parent)
+        row["_manifest_abs_dir"] = str(manifest.parent)
     return rows
 
 
@@ -139,7 +147,7 @@ def display_path(path: Path) -> str:
 
 def parse_methods(raw: str) -> list[str]:
     methods = [item.strip() for item in raw.split(",") if item.strip()]
-    valid = {"external_sshr_h", "external_sshr_i_cnot", "external_sshr_i_t"}
+    valid = {"external_sshr_h", "external_sshr_i_cnot", "external_sshr_i_t", "external_abc_aig"}
     unknown = sorted(set(methods) - valid)
     if unknown:
         raise SystemExit(f"unknown external methods: {', '.join(unknown)}")
@@ -148,6 +156,182 @@ def parse_methods(raw: str) -> list[str]:
 
 def bool_from_row(row: dict) -> BooleanFunction:
     return BooleanFunction(int(row["n"]), int(str(row["truth_table_hex"]), 16))
+
+
+@dataclass(frozen=True)
+class BlifNode:
+    inputs: tuple[str, ...]
+    output: str
+    cover: tuple[tuple[str, int], ...]
+
+
+def parse_blif(path: Path) -> tuple[list[str], str, list[BlifNode]]:
+    inputs: list[str] = []
+    outputs: list[str] = []
+    nodes: list[BlifNode] = []
+    current_names: list[str] | None = None
+    current_cover: list[tuple[str, int]] = []
+
+    def flush_current() -> None:
+        nonlocal current_names, current_cover
+        if current_names is None:
+            return
+        if not current_names:
+            raise ValueError(f"malformed .names in {path}")
+        nodes.append(
+            BlifNode(
+                inputs=tuple(current_names[:-1]),
+                output=current_names[-1],
+                cover=tuple(current_cover),
+            )
+        )
+        current_names = None
+        current_cover = []
+
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.startswith("."):
+            flush_current()
+            parts = line.split()
+            directive = parts[0]
+            if directive == ".inputs":
+                inputs.extend(parts[1:])
+            elif directive == ".outputs":
+                outputs.extend(parts[1:])
+            elif directive == ".names":
+                current_names = parts[1:]
+                current_cover = []
+            elif directive == ".end":
+                break
+            continue
+
+        if current_names is None:
+            raise ValueError(f"cover row outside .names in {path}: {line}")
+        parts = line.split()
+        if len(current_names) == 1:
+            value = int(parts[-1]) if parts else 0
+            current_cover.append(("", value))
+        else:
+            pattern = parts[0]
+            value = int(parts[1]) if len(parts) > 1 else 1
+            current_cover.append((pattern, value))
+    flush_current()
+    if len(outputs) != 1:
+        raise ValueError(f"expected one BLIF output in {path}, got {outputs}")
+    return inputs, outputs[0], nodes
+
+
+def eval_blif(inputs: list[str], output: str, nodes: list[BlifNode], x: int) -> int:
+    values: dict[str, int] = {}
+    for label in inputs:
+        if label.startswith("x") and label[1:].isdigit():
+            values[label] = (x >> int(label[1:])) & 1
+        else:
+            raise ValueError(f"unsupported input label: {label}")
+    for node in nodes:
+        if not node.inputs:
+            value = node.cover[-1][1] if node.cover else 0
+        else:
+            values_in_cover = {out_value for _pattern, out_value in node.cover}
+            # ABC may emit off-set covers; then the unlisted minterms default to 1.
+            value = 1 if values_in_cover == {0} else 0
+            bits = "".join(str(values[name]) for name in node.inputs)
+            for pattern, out_value in node.cover:
+                if len(pattern) != len(bits):
+                    continue
+                if all(p == "-" or p == b for p, b in zip(pattern, bits)):
+                    value = out_value
+                    break
+        values[node.output] = value
+    if output not in values:
+        raise ValueError(f"BLIF output {output} was not driven")
+    return values[output]
+
+
+def verify_blif(path: Path, bf: BooleanFunction) -> bool:
+    inputs, output, nodes = parse_blif(path)
+    if len(inputs) != bf.n:
+        return False
+    for x in range(1 << bf.n):
+        if eval_blif(inputs, output, nodes, x) != bf.evaluate(x):
+            return False
+    return True
+
+
+def abc_bennett_cost(and_count: int, level: int, bf: BooleanFunction) -> Cost:
+    all_ones = (1 << (1 << bf.n)) - 1
+    if bf.truth_table == 0:
+        output_cnot = 0
+        output_gate = 0
+    elif bf.truth_table == all_ones:
+        output_cnot = 0
+        output_gate = 1
+    else:
+        output_cnot = 1
+        output_gate = 1
+    return Cost(
+        T=4 * and_count,
+        CNOT=10 * and_count + output_cnot,
+        gates=4 * and_count + output_gate,
+        depth=10 * level + output_gate,
+        explicit_ancilla=and_count,
+        peak_ancilla=and_count,
+    )
+
+
+def parse_abc_stats(output: str) -> tuple[int, int]:
+    clean = ANSI_RE.sub("", output)
+    matches = ABC_STATS_RE.findall(clean)
+    if not matches:
+        raise RuntimeError(f"could not parse ABC stats from output: {clean[-500:]}")
+    and_count, level = matches[-1]
+    return int(and_count), int(level)
+
+
+def run_abc_aig(
+    row: dict,
+    bf: BooleanFunction,
+    timeout: float,
+    abc_bin: Path,
+    abc_script: str,
+) -> tuple[Cost, dict]:
+    if not abc_bin.exists():
+        raise FileNotFoundError(f"ABC binary not found: {abc_bin}")
+    rel_blif = row.get("blif")
+    if not rel_blif:
+        raise ValueError("manifest row has no BLIF path")
+    blif = (Path(row["_manifest_abs_dir"]) / rel_blif).resolve()
+    if not blif.exists():
+        raise FileNotFoundError(f"BLIF file not found: {blif}")
+
+    with tempfile.TemporaryDirectory(prefix="abc_aig_") as tmp:
+        opt_blif = Path(tmp) / f"{row['name']}.abc.blif"
+        command = (
+            f"read_blif {blif}; {abc_script}; "
+            f"write_blif {opt_blif}; print_stats"
+        )
+        proc = subprocess.run(
+            [str(abc_bin), "-c", command],
+            text=True,
+            capture_output=True,
+            timeout=timeout,
+            check=False,
+        )
+        combined = (proc.stdout or "") + (proc.stderr or "")
+        if proc.returncode != 0:
+            raise RuntimeError(f"ABC failed with code {proc.returncode}: {combined[-1000:]}")
+        and_count, level = parse_abc_stats(combined)
+        correct = verify_blif(opt_blif, bf)
+    cost = abc_bennett_cost(and_count, level, bf)
+    return cost, {
+        "correct": correct,
+        "abc_and": and_count,
+        "abc_level": level,
+        "abc_script": abc_script,
+        "abc_binary": display_path(abc_bin),
+    }
 
 
 def synthesize_external(method: str, bf: BooleanFunction, timeout: float) -> QuantumCircuit:
@@ -164,8 +348,8 @@ def synthesize_external(method: str, bf: BooleanFunction, timeout: float) -> Qua
     raise ValueError(method)
 
 
-def run_one(task: tuple[dict, str, float, int, dict[str, float]]) -> dict:
-    row, method, timeout, max_ilp_n, weights = task
+def run_one(task: tuple[dict, str, float, int, int, dict[str, float], Path, str]) -> dict:
+    row, method, timeout, max_ilp_n, max_abc_n, weights, abc_bin, abc_script = task
     bf = bool_from_row(row)
     base = {
         "index": row.get("index", ""),
@@ -180,19 +364,33 @@ def run_one(task: tuple[dict, str, float, int, dict[str, float]]) -> dict:
     }
     if method.startswith("external_sshr_i") and bf.n > max_ilp_n:
         return {**base, "skipped": f"SSHR-I capped at n<={max_ilp_n}", "error": ""}
+    if method == "external_abc_aig" and bf.n > max_abc_n:
+        return {**base, "skipped": f"ABC-AIG capped at n<={max_abc_n}", "error": ""}
     try:
         start = time.time()
-        circ = synthesize_external(method, bf, timeout)
-        elapsed = time.time() - start
-        cost = circuit_cost(circ, bf.n)
+        if method == "external_abc_aig":
+            cost, extra = run_abc_aig(row, bf, timeout, abc_bin, abc_script)
+            elapsed = time.time() - start
+            correct = extra.pop("correct")
+            n_qubits = bf.n + 1 + cost.explicit_ancilla
+            gates = cost.gates
+        else:
+            circ = synthesize_external(method, bf, timeout)
+            elapsed = time.time() - start
+            cost = circuit_cost(circ, bf.n)
+            extra = {}
+            correct = verify_oracle(circ, bf)
+            n_qubits = circ.n_qubits
+            gates = len(circ.gates)
         return {
             **base,
             **asdict(cost),
             "score": cost.score(weights),
             "time_s": elapsed,
-            "correct": verify_oracle(circ, bf),
-            "gates": len(circ.gates),
-            "n_qubits": circ.n_qubits,
+            "correct": correct,
+            "gates": gates,
+            "n_qubits": n_qubits,
+            **extra,
             "skipped": "",
             "error": "",
         }
@@ -250,6 +448,9 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser.add_argument("--offset", type=int, default=0, help="function offset after n filters")
     parser.add_argument("--count", type=int, default=None, help="function count after n filters")
     parser.add_argument("--max-ilp-n", type=int, default=4)
+    parser.add_argument("--max-abc-n", type=int, default=15)
+    parser.add_argument("--abc-bin", type=Path, default=DEFAULT_ABC_BIN)
+    parser.add_argument("--abc-script", default=DEFAULT_ABC_SCRIPT)
     parser.add_argument("--timeout", type=float, default=30.0, help="per SSHR-I call time limit")
     parser.add_argument("--workers", type=int, default=1)
     parser.add_argument("--resume", action="store_true")
@@ -268,12 +469,27 @@ def main(argv: Iterable[str] | None = None) -> int:
     if args.limit is not None:
         manifest_rows = manifest_rows[: max(0, args.limit)]
     methods = parse_methods(args.methods)
-    tasks = [(row, method, args.timeout, args.max_ilp_n, weights) for row in manifest_rows for method in methods]
+    tasks = [
+        (
+            row,
+            method,
+            args.timeout,
+            args.max_ilp_n,
+            args.max_abc_n,
+            weights,
+            args.abc_bin,
+            args.abc_script,
+        )
+        for row in manifest_rows
+        for method in methods
+    ]
 
     rows: list[dict] = []
+    existing_rows = 0
     if args.resume and args.out.exists():
         with args.out.open(newline="", encoding="utf-8") as f:
             rows.extend(csv.DictReader(f))
+        existing_rows = len(rows)
         done = {(row.get("name"), row.get("method")) for row in rows}
         tasks = [task for task in tasks if (task[0]["name"], task[1]) not in done]
         print(f"resuming from {len(rows)} rows; remaining {len(tasks)}", flush=True)
@@ -305,12 +521,17 @@ def main(argv: Iterable[str] | None = None) -> int:
                 "methods": methods,
                 "functions": len(manifest_rows),
                 "rows": len(rows),
+                "resume": args.resume,
+                "existing_rows": existing_rows,
                 "new_tasks": len(tasks),
                 "max_n": args.max_n,
                 "min_n": args.min_n,
                 "offset": args.offset,
                 "count": args.count,
                 "max_ilp_n": args.max_ilp_n,
+                "max_abc_n": args.max_abc_n,
+                "abc_binary": display_path(args.abc_bin),
+                "abc_script": args.abc_script,
                 "timeout": args.timeout,
                 "workers": args.workers,
                 "elapsed_s": time.time() - start,

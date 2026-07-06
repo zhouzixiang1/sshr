@@ -69,13 +69,12 @@ ANF factoring:
    T-aggressive, CNOT/depth-oriented, and ancilla-tight candidate configurations
    on small functions.  For larger random-ANF instances it switches to a cheap
    direct/FPRM guard; for `n > 12`, that guard uses a direct-cost polarity
-   screen plus a bounded root-child beam baseline and a CNOT-only pairwise
-   XOR-factor candidate.  At the `n=15` scale point, the portfolio also
-   evaluates a one-extra-layer recursive linear-pair refinement over both
-   quotient and rest branches when the subproblem has at most 900 terms.  The
-   `n=15` preset also reports a standalone width-three linear-parity ablation,
-   but the portfolio does not use it because the recursive pair candidate
-   dominates it under the default weighted objective.
+   screen plus a bounded root-child beam baseline and a one-extra-layer
+   recursive CNOT-only pairwise XOR-factor candidate over both quotient and
+   rest branches when the subproblem has at most 900 terms.  The `n=15` preset
+   also reports a standalone width-three linear-parity ablation, but the
+   portfolio does not use it because the recursive pair candidate dominates it
+   under the default weighted objective.
 
 ## Representation
 
@@ -162,15 +161,17 @@ The first implementation compares against:
 
 `export_benchmarks.py` exports every preset to PLA, BLIF `.names`, and
 truth-table JSON with a manifest, so the exact same Boolean functions can be
-fed to external XAG/ROS/LUT or mockturtle-style flows.  External tool results
-are now partially covered by `run_external_baselines.py`: the first exact
-pilot consumes the exported `traditional_resource` manifest and runs SSHR-H,
-CNOT-optimized SSHR-I, and T-optimized SSHR-I from the separate `src/sshr`
-implementation on the `n <= 4` subset.  A time-limited extension covers the
-full `n <= 6` traditional slice with an 8 s Gurobi budget per SSHR-I call.
-XAG/ROS/mockturtle
-adapters are still future work, but the benchmark exchange format and SSHR-I
-comparison path are now reproducible and independent of the synthesis harness.
+fed to external AIG/XAG/ROS/LUT or mockturtle-style flows.  External tool
+results are now partially covered by `run_external_baselines.py`: the first
+exact pilot consumes the exported `traditional_resource` manifest and runs
+SSHR-H, CNOT-optimized SSHR-I, and T-optimized SSHR-I from the separate
+`src/sshr` implementation on the `n <= 4` subset.  A time-limited extension
+covers the full `n <= 6` traditional slice with an 8 s Gurobi budget per
+SSHR-I call, and a Berkeley ABC AIG backend optimizes the same exported BLIF
+files before truth-table verification and Bennett-style resource estimation.
+XAG/ROS/mockturtle adapters are still future work, but the benchmark exchange
+format and SSHR/ABC comparison paths are now reproducible and independent of
+the synthesis harness.
 
 ## Evaluation
 
@@ -314,10 +315,17 @@ rows with 0 errors/skips:
   This validates the low-T/resource-score framing and rules out a CNOT-only
   claim.
 
-The time-limited exported SSHR-I extension covers all 177 functions with
-`n <= 6`, three external methods, and 531 external rows with 0 errors/skips.
-The SSHR-I rows use an 8 s per-call Gurobi budget:
+The time-limited exported SSHR-I plus ABC-AIG extension covers all 177
+functions with `n <= 6`, four external methods, and 708 external rows with 0
+errors/skips.  The SSHR-I rows use an 8 s per-call Gurobi budget, and the
+ABC-AIG rows use Berkeley ABC 1.01 built from
+`bcfdf592289a408cd67ec19260f8a60a37b085b6` with BLIF truth-table
+verification:
 
+- Against ABC-AIG, `and_resource_nmcts` has 170/2/5 T-count wins/losses/ties,
+  wins all 177 CNOT, peak-ancilla, and weighted-score comparisons, and reduces
+  mean weighted score by 54.52%.  ABC-AIG has a lower depth estimate on
+  126/177 functions, so it remains a useful depth-oriented foil.
 - Against CNOT-optimized SSHR-I, `and_resource_nmcts` has 164 T-count wins, 3
   losses, and 10 ties; by weighted score it has 168 wins, 9 losses, and 0 ties,
   with a 27.92% mean score reduction.
@@ -389,28 +397,30 @@ The `highdim_resource` stress test isolates the next scale point rather than
 mixing it into the structured suite.  It covers 64 random ANF functions at
 `n=14`, eight methods, and 512 method/function rows, with 0 errors and 0 skips
 after the high-dimensional guard was tightened to avoid fixed-coordinate MCTS
-tails and to add a bounded FPRM linear-pair candidate.
+tails and to add a bounded recursive FPRM linear-pair candidate.
 
 Main `highdim_resource` evidence:
 
 - `and_resource_nmcts` and `and_profile_resource_nmcts` complete all 64
   functions under the high-dimensional bounded guard.
 - Compared with direct ANF, both guarded methods have 61 T-count wins, 0
-  losses, and 3 ties, with a 55.60% mean T-count reduction and a 52.27% mean
+  losses, and 3 ties, with a 57.42% mean T-count reduction and a 54.03% mean
   composite-score reduction.
 - Compared with logical-AND direct ANF, both have 61 T-count wins, 0 losses,
-  and 3 ties, with a 30.41% mean T-count reduction and a 28.64% mean score
+  and 3 ties, with a 32.74% mean T-count reduction and a 30.86% mean score
   reduction.
 - Compared with FPRM-greedy, both guarded methods have 60 T-count wins, 0
   losses, and 4 ties; by weighted score they also have 60 wins, 0 losses, and
-  4 ties.  The bounded linear-pair candidate factors repeated pairs
+  4 ties, with a 6.25% mean score reduction.  Against the one-layer linear-pair
+  candidate, the recursive guard has 53 T-count wins, 0 losses, and 11 ties.
+  The bounded recursive linear-pair candidate factors repeated pairs
   `x_i m xor x_j m` as `(x_i xor x_j) m`, using only CNOTs to compute and
   uncompute the temporary linear control.
 - Runtime remains bounded but nontrivial: `and_resource_nmcts` has median
-  runtime 3.633 s, p95 34.982 s, and max 47.462 s; the profile variant has
-  median 3.638 s, p95 35.313 s, and max 47.256 s.  The standalone FPRM
+  runtime 8.375 s, p95 76.838 s, and max 113.164 s; the profile variant
+  delegates to the same high-dimensional guard.  The standalone one-layer FPRM
   linear-pair candidate has median 2.574 s, p95 30.760 s, and max 41.593 s.
-  The gain uses more workspace: mean peak ancilla rises from 2.03 to 2.94.
+  The gain uses more workspace: mean peak ancilla rises from 2.03 to 3.05.
 
 The `highdim_scale_resource` run extends the same high-dimensional guard to
 32 random ANF functions at `n=15`.  It contains 288 method/function rows across

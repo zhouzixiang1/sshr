@@ -600,6 +600,17 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             n_qubits=best.n_qubits,
         )
     if method == "profile_resource_nmcts":
+        if bf.n > 12:
+            child = synthesize("resource_nmcts", bf, config, seed=seed, model_path=model_path)
+            return SynthesisResult(
+                method=requested_method,
+                cost=child.cost,
+                time_s=time.time() - t0,
+                correct=child.correct,
+                terms=child.terms,
+                gates=child.gates,
+                n_qubits=child.n_qubits,
+            )
         portfolio: list[SynthesisResult] = []
         profile_configs = _profile_candidate_configs(config)
         base_config = profile_configs[0][1]

@@ -41,9 +41,10 @@ all functions and reduces mean T-count by 61.83\% relative to direct ANF
 synthesis.  On a separate $n\leq 6$ traditional-baseline slice, \method{} has
 172 T-count wins and no losses against ESOP cube beam search, and 162 T-count
 wins, 1 loss, and 14 ties against time-limited weighted ESOP MILP.  On an
-exported SSHR-I comparison, \method{} has 69 score wins and 3 losses against
-the exact $n\leq 4$ CNOT-optimized SSHR-I pilot, and 168 score wins and 9
-losses against the time-limited $n\leq 6$ extension.  A
+exported external comparison, \method{} has 69 score wins and 3 losses against
+the exact $n\leq 4$ CNOT-optimized SSHR-I pilot, 168 score wins and 9
+losses against the time-limited $n\leq 6$ SSHR-I extension, and 177 score wins
+with no losses against an ABC-AIG baseline on the same $n\leq 6$ export.  A
 resource-profile stress test shows that \profilemethod{} is best or tied on
 42/47, 42/47, 41/47, and 42/47 functions under T-heavy, balanced,
 CNOT-depth-heavy, and ancilla-tight objectives.  A larger core benchmark
@@ -54,7 +55,7 @@ logical-AND direct ANF, while fixed-coordinate MCTS times out on five $n=12$
 rows.  An isolated
 $n=14$ stress benchmark adds 64 random ANF functions and 512 rows with no
 errors or skips; the guarded high-dimensional variants reduce mean T-count by
-55.60\% relative to direct ANF and by 30.41\% relative to logical-AND direct
+57.42\% relative to direct ANF and by 32.74\% relative to logical-AND direct
 ANF, with 60 score wins, no losses, and 4 ties against FPRM-greedy.  A
 follow-up $n=15$ scale check preserves this pattern with 30 score wins, no
 losses, and 2 ties against FPRM-greedy, reducing mean weighted score by
@@ -90,8 +91,10 @@ quantum compilation uses XOR-and-AND logic networks to reduce fault-tolerant
 resources; ROS combines LUT mapping with resource-aware oracle synthesis and
 SAT-based garbage management; multiplicative-complexity methods relate the
 number of AND nodes in a Boolean network to T-count and ancilla upper bounds;
+ABC provides a mature AIG rewriting and verification baseline for Boolean logic;
 and BDD-based reversible synthesis scales to large Boolean functions by
-compiling decision-diagram structure~\cite{meuli2022xag,meuli2020ros,meuli2019multiplicative,wille2009bdd}.
+compiling decision-diagram
+structure~\cite{meuli2022xag,meuli2020ros,meuli2019multiplicative,brayton2010abc,wille2009bdd}.
 SSHR is also closely related because it exploits parallelotope structure in the
 Boolean hypercube and provides CNOT-oriented small-function baselines,
 including heuristic and ILP variants~\cite{zheng2025sshr}.  These methods
@@ -191,13 +194,12 @@ When the configured dimension guard permits it, the portfolio also evaluates
 fixed-coordinate logical-AND MCTS; for $n\leq 6$, it additionally evaluates
 ESOP cube-beam search.  For $n>12$, where full fixed-coordinate MCTS and broad
 affine search create long tails, it replaces the expensive branches by a
-bounded FPRM linear-pair candidate: many polarities are screened by direct
-cost, a root-child beam baseline is retained, and repeated term pairs
+bounded recursive FPRM linear-pair candidate: many polarities are screened by
+direct cost, a root-child beam baseline is retained, and repeated term pairs
 $x_i m \oplus x_j m$ can be factored as $(x_i \oplus x_j)m$ using a temporary
-CNOT-computed linear control.  At the $n=15$ scale point it also evaluates a
-one-extra-layer recursive linear-pair variant that applies the same pair search
-to both the quotient and the remaining terms when the subproblem has at most
-900 terms.
+CNOT-computed linear control.  One extra recursive layer applies the same pair
+search to both the quotient and the remaining terms when the subproblem has at
+most 900 terms.
 It returns the correct candidate with the smallest
 weighted score, breaking ties by T-count, CNOT count, depth, and peak ancilla.
 SSHR is used only as an external baseline in the experiments and is not part of
@@ -214,13 +216,12 @@ internal candidates that create long runtime tails.
 For $n\leq 6$, it evaluates additional T-aggressive, CNOT/depth-oriented, and
 ancilla-tight FPRM, affine-greedy, and ESOP cube-beam candidates before
 selecting by the active weighted score.  For larger random-ANF instances, the
-same method switches to a high-dimensional guard: it keeps direct and bounded
-FPRM root-child/linear-pair candidates, including the one-extra-layer
-linear-pair variant at $n=15$, but avoids expensive fixed-coordinate MCTS
-guards.  A width-three linear-parity factor is reported as a standalone
-ablation in the $n=15$ scaling check, but the portfolio uses the recursive
-pair candidate because it dominates the parity ablation under the weighted
-objective.
+same method delegates to the high-dimensional Resource-NMCTS guard: it keeps
+direct ANF and the bounded recursive FPRM linear-pair candidate, but avoids
+expensive fixed-coordinate MCTS guards.  A width-three linear-parity factor is
+reported as a standalone ablation in the $n=15$ scaling check, but the
+portfolio uses the recursive pair candidate because it dominates the parity
+ablation under the weighted objective.
 This design separates two roles.  On small functions it tests whether the
 resource profile can change the selected circuit; on large functions it acts as
 a runtime-tail guard rather than a score-dominance guarantee.
@@ -240,9 +241,10 @@ MILP over candidate cubes.  The \largedataset{} benchmark extends the same
 resource objective to a larger random-ANF core through $n=12$.  To support
 external reproduction, the benchmark generator can export every preset to PLA,
 BLIF \texttt{.names}, and truth-table JSON manifests.  The current draft adds
-an exported exact-SSHR-I pilot on the $n\leq 4$ subset plus a time-limited
-$n\leq 6$ extension covering the full \traditionaldataset{} slice; external
-XAG/ROS/LUT tool results are still future work.
+an exported exact-SSHR-I pilot on the $n\leq 4$ subset, a time-limited
+$n\leq 6$ SSHR-I extension, and a Berkeley ABC AIG baseline covering the full
+\traditionaldataset{} slice; external XAG/ROS/LUT tool results are still
+future work.
 
 \subsection{Main results}
 
@@ -297,24 +299,29 @@ loss, and 5 ties, and 171 score wins with 6 score losses.  SSHR-H retained the
 lowest mean CNOT count on this small-function slice, so this result supports
 low-T and weighted-resource synthesis rather than CNOT-only optimality.
 
-\subsection{Exported SSHR-I baselines}
+\subsection{Exported external baselines}
 
 To check the external-tool exchange path, we exported the
-\traditionaldataset{} benchmark to PLA, BLIF, and truth-table JSON, then ran a
-separate SSHR backend over the exported manifest.  For the 72 functions with
-$n\leq 4$, the SSHR-I runs are exact within the configured Gurobi solve.  This
-exact pilot produced 216 external rows with no errors or skips and confirmed
-that \method{} retains a weighted-score advantage against both CNOT-optimized
-and T-optimized SSHR-I, while spending more CNOTs.
+\traditionaldataset{} benchmark to PLA, BLIF, and truth-table JSON, then ran
+separate external backends over the exported manifest.  The SSHR backend gives
+CNOT-oriented heuristic and ILP baselines.  The ABC-AIG backend optimizes the
+exported BLIF with ABC rewriting, verifies the optimized BLIF truth table, and
+maps AIG AND count and level to a logic-level Bennett compute/uncompute
+resource estimate.  For the 72 functions with $n\leq 4$, the SSHR-I runs are
+exact within the configured Gurobi solve.  This exact pilot produced 216
+external rows with no errors or skips and confirmed that \method{} retains a
+weighted-score advantage against both CNOT-optimized and T-optimized SSHR-I,
+while spending more CNOTs.
 
 \begin{table}[t]
 \centering
 \small
-\caption{\method{} compared with exported SSHR baselines on the 177-function
-$n\leq 6$ time-limited extension.  SSHR-I rows use an 8 s per-call Gurobi
-budget.  Wins/losses/ties count common functions; negative mean relative values
-favor \method{}.}
-\label{tab:external-sshr-i}
+\caption{\method{} compared with exported external baselines on the
+177-function $n\leq 6$ extension.  SSHR-I rows use an 8 s per-call Gurobi
+budget.  ABC-AIG rows use verified ABC-optimized BLIF and Bennett-style
+resource estimates.  Wins/losses/ties count common functions; negative mean
+relative values favor \method{}.}
+\label{tab:external-baselines}
 \input{tables/external_traditional_resource_n6}
 \end{table}
 
@@ -327,14 +334,23 @@ however, \method{} loses CNOT count on most functions.  This supports the
 resource-constrained low-T oracle-synthesis claim, while ruling out any
 CNOT-only optimality claim.
 
-We then ran a time-limited SSHR-I extension over all 177 exported functions
-with $n\leq 6$ using an 8 s per-call ILP budget.  This produced 531 external
-rows with no errors or skips.  Against the CNOT-optimized SSHR-I extension,
+We then ran the external extension over all 177 exported functions with
+$n\leq 6$.  This produced 708 external rows with no errors or skips: 531 SSHR
+rows and 177 ABC-AIG rows.  Against the CNOT-optimized SSHR-I extension,
 \method{} had 164 T-count wins, 3 losses, and 10 ties, and 168 score wins with
 9 score losses; the mean score reduction was 27.92\%.  Against the T-optimized
 extension, \method{} had 166 T-count wins, 1 loss, and 10 ties, with a 26.25\%
 mean score reduction.  The CNOT disadvantage persisted, with \method{} worse on
 168/177 CNOT comparisons against the CNOT-optimized run.
+
+The ABC-AIG comparison strengthens the resource-constrained claim from a
+different direction.  \method{} had 170 T-count wins, 2 losses, and 5 ties
+against ABC-AIG; it won all 177 CNOT, peak-ancilla, and weighted-score
+comparisons, reducing mean weighted score by 54.52\% and mean peak ancilla by
+86.29\%.  ABC-AIG had a lower depth estimate on 126/177 functions, which is
+consistent with a shallow optimized AIG followed by a wide Bennett embedding.
+This makes ABC-AIG a useful foil for the ancilla and weighted-resource
+objective, not a claim that \method{} dominates every metric.
 
 \subsection{Ablation}
 
@@ -498,23 +514,27 @@ benchmark.}
 \end{table}
 
 Both \method{} and \profilemethod{} complete all 64 functions.  Relative to
-direct ANF, each has 61 T-count wins, no losses, and 3 ties, with a 55.60\%
-mean T-count reduction and a 52.27\% mean composite-score reduction.  Relative
+direct ANF, each has 61 T-count wins, no losses, and 3 ties, with a 57.42\%
+mean T-count reduction and a 54.03\% mean composite-score reduction.  Relative
 to logical-AND direct ANF, each again has 61 wins, no losses, and 3 ties, with
-a 30.41\% mean T-count reduction and a 28.64\% mean score reduction.  Against
+a 32.74\% mean T-count reduction and a 30.86\% mean score reduction.  Against
 FPRM-greedy, the guarded methods have 60 T-count wins, no losses, and 4 ties;
-by weighted score they also have 60 wins, no losses, and 4 ties.  The mean
-T-count falls from 2263.69 for FPRM-greedy and 2248.81 for root beam to
-2193.50 for \method{} and \profilemethod{}.  The mean weighted score falls
-from 2496.97 for FPRM-greedy and 2481.64 for root beam to 2422.51.  The
+by weighted score they also have 60 wins, no losses, and 4 ties.  Against the
+one-layer FPRM linear-pair candidate, the recursive guard has 53 T-count wins,
+no losses, and 11 ties; by weighted score it has 55 wins, no losses, and 9
+ties.  The mean T-count falls from 2263.69 for FPRM-greedy, 2248.81 for root
+beam, and 2193.50 for one-layer linear pair to 2152.25 for \method{} and
+\profilemethod{}.  The mean weighted score falls from 2496.97 for FPRM-greedy,
+2481.64 for root beam, and 2422.51 for one-layer linear pair to 2377.89.  The
 improvement is mechanistically different from simply widening the root beam:
-the linear-pair candidate computes $x_i \oplus x_j$ into a temporary ancilla
-with CNOTs, factors the paired residual subplan under that control, and then
-uncomputes the linear control.  Runtime tails remain bounded: \method{} has
-p95 runtime 34.98 s, while \profilemethod{} has p95 runtime 35.31 s; the
-standalone FPRM linear-pair candidate has p95 runtime 30.76 s.  The resource
-tradeoff is workspace: mean peak ancilla increases from 2.03 for FPRM-greedy
-and root beam to 2.94.
+the recursive linear-pair candidate computes $x_i \oplus x_j$ into a temporary
+ancilla with CNOTs, factors the paired residual subplan under that control, and
+then recursively searches the quotient and bounded rest subproblems before
+uncomputing the linear control.  Runtime tails remain bounded but increase:
+\method{} and \profilemethod{} have median runtime 8.38 s and p95 runtime
+76.84 s, while the standalone one-layer FPRM linear-pair candidate has p95
+runtime 30.76 s.  The resource tradeoff is workspace: mean peak ancilla
+increases from 2.03 for FPRM-greedy and root beam to 3.05.
 
 As a scale check, we also run the same high-dimensional guard on 32 random
 $n=15$ ANF functions, producing 288 method/function rows with no errors or
@@ -576,18 +596,20 @@ factored subplan.
 
 The main current limitations are the absence of hardware mapping, the fact that
 the exported SSHR-I extension beyond $n\leq 4$ is time-limited rather than an
-exact certificate, and the lack of a reproduced external XAG/ROS toolchain in
-the comparison set.  The in-harness ESOP cube-beam and weighted-MILP baselines
-plus the exported SSHR-I comparison strengthen the Boolean synthesis
-comparison, but more external implementations remain necessary before a
-submission-ready claim.  The resource-profile sweep shows that profile-specific
+exact certificate, the fact that ABC-AIG is scored through a Bennett-style
+logic-level estimate rather than a full reversible-toolchain synthesis, and the
+lack of a reproduced external XAG/ROS toolchain in the comparison set.  The
+in-harness ESOP cube-beam and weighted-MILP baselines plus the exported
+SSHR-I/ABC-AIG comparisons strengthen the Boolean synthesis comparison, but
+more external implementations remain necessary before a submission-ready claim.
+The resource-profile sweep shows that profile-specific
 candidate generation improves objective robustness on small functions, but the
 large benchmark shows the corresponding
 high-dimensional tradeoff: conservative profile guards reduce runtime tails but
 give up some score.  The $n=14$ stress test narrows this limitation further:
-bounded FPRM linear-pair search keeps the run finite and improves over
-FPRM-greedy on most functions, and the $n=15$ recursive-rest variant widens
-that margin while keeping all runs finite.  The remaining weakness is less the
+bounded recursive FPRM linear-pair search keeps the run finite and improves
+over FPRM-greedy on most functions, and the $n=15$ scale check preserves that
+margin while keeping all runs finite.  The remaining weakness is less the
 internal high-dimensional guard than the comparison boundary: the current
 evidence still lacks reproduced XAG or ROS toolchain baselines.
 
@@ -602,11 +624,15 @@ $n\leq 6$ traditional-baseline slice, the full \method{} method further avoids
 score regressions against internal ESOP cube-beam candidates and remains
 competitive against weighted ESOP MILP.  Resource-profile and \largedataset{}
 benchmarks show that this advantage is robust across several weighted
-objectives and larger random ANF instances.  The new high-dimensional stress
+objectives and larger random ANF instances.  Exported SSHR and ABC-AIG
+baselines add independent cross-tool evidence that the gains are not an
+artifact of the internal experiment harness, while also showing that CNOT and
+depth remain important limitations.  The new high-dimensional stress
 tests show that bounded guards scale without timeouts and beat FPRM-greedy on
 60 of 64 weighted-score comparisons at $n=14$ and 30 of 32 comparisons at
-$n=15$, both without losses.  The next step is to add
-standardized external baselines so the empirical claim is submission-ready.
+$n=15$, both without losses.  The next step is to reproduce XAG/ROS-style
+toolchain baselines and hardware-aware mappings so the empirical claim is
+submission-ready.
 
 \bibliographystyle{plain}
 \bibliography{references}

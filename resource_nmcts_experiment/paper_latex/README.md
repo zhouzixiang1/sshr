@@ -8,7 +8,7 @@ This folder is the manuscript workspace for the resource-constrained quantum
 Boolean oracle synthesis project.  The draft is intentionally evidence-first:
 claims in `main.tex` are limited to the current `evidence_affine`,
 `ablation_affine`, `traditional_resource`, `resource_sweep`, and
-`large_resource_core`, `highdim_resource`, and exported exact SSHR-I pilot
+`large_resource_core`, `highdim_resource`, and exported SSHR/ABC baseline
 results.
 
 Build:
@@ -32,9 +32,9 @@ Current source evidence:
   `../results/raw_external_traditional_resource_n4.csv`
 - external exact SSHR-I pilot analysis:
   `../results/analysis_external_traditional_resource_n4.md`
-- external time-limited SSHR-I extension CSV:
+- external time-limited SSHR-I plus ABC-AIG extension CSV:
   `../results/raw_external_traditional_resource_n6.csv`
-- external time-limited SSHR-I extension analysis:
+- external time-limited SSHR-I plus ABC-AIG extension analysis:
   `../results/analysis_external_traditional_resource_n6.md`
 - resource-sweep CSV: `../results/raw_resource_sweep.csv`
 - resource-sweep analysis: `../results/analysis_resource_sweep.md`
@@ -74,7 +74,7 @@ Current source evidence:
 
 Known manuscript gaps:
 
-- strengthen exported external baselines beyond the current `n <= 6`
-  time-limited SSHR-I extension where runtime allows;
+- extend exported external baselines beyond the current `n <= 6`
+  SSHR/ABC slice where runtime allows;
 - add reproduced XAG/ROS or mockturtle-style toolchain results;
 - decide the target venue and required reference/section style.
