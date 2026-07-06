@@ -64,7 +64,8 @@ ANF factoring:
    T-aggressive, CNOT/depth-oriented, and ancilla-tight candidate configurations
    on small functions.  For larger random-ANF instances it switches to a cheap
    direct/FPRM guard; for `n > 12`, that guard uses a direct-cost polarity
-   screen plus a bounded root-beam correction over the first factor choice.
+   screen plus a bounded root-beam correction and shallow root-child refinement
+   over the first factor choice.
 
 ## Representation
 
@@ -341,7 +342,8 @@ The `highdim_resource` stress test isolates the next scale point rather than
 mixing it into the structured suite.  It covers 64 random ANF functions at
 `n=14`, seven methods, and 448 method/function rows, with 0 errors and 0 skips
 after the high-dimensional guard was tightened to avoid fixed-coordinate MCTS
-tails and to add a bounded FPRM root-beam candidate.
+tails and to add a bounded FPRM root-beam candidate with root-child
+refinement.
 
 Main `highdim_resource` evidence:
 
@@ -354,11 +356,12 @@ Main `highdim_resource` evidence:
   and 13 ties, with a 26.88% mean T-count reduction and a 26.23% mean score
   reduction.
 - Compared with FPRM-greedy, both guarded methods have 40 T-count wins, 0
-  losses, and 24 ties; by weighted score they have 41 wins, 0 losses, and 23
+  losses, and 24 ties; by weighted score they have 42 wins, 0 losses, and 22
   ties.  The bounded root-beam candidate corrects the first-factor choice by
-  evaluating the full ranked root-action list while preserving the same
-  polarity-screening budget.
+  evaluating the full ranked root-action list, then the guarded methods apply a
+  shallow root-child refinement to the best root actions while preserving the
+  same polarity-screening budget.
 - Runtime remains bounded but nontrivial: `and_resource_nmcts` has median
-  runtime 4.765 s, p95 52.113 s, and max 66.654 s; the profile variant has
-  median 3.734 s, p95 40.386 s, and max 53.344 s.  The standalone FPRM
+  runtime 5.048 s, p95 49.063 s, and max 64.263 s; the profile variant has
+  median 6.076 s, p95 58.867 s, and max 87.619 s.  The standalone FPRM
   root-beam candidate has median 2.834 s, p95 37.226 s, and max 49.268 s.

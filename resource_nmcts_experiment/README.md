@@ -59,7 +59,9 @@ Current presets:
   hard timeouts for long-tail tasks.
 - `highdim_resource`: isolated `n=14` random-ANF stress benchmark with direct
   ANF, logical-AND direct ANF, FPRM-greedy, bounded FPRM root-beam,
-  bounded affine-greedy, Resource-NMCTS, and Profile-Resource-NMCTS.
+  bounded affine-greedy, Resource-NMCTS, and Profile-Resource-NMCTS.  The
+  guarded variants add a shallow root-child refinement over the root-beam
+  candidate.
 - `large_resource`: experimental `n=14` stress extension.  This preset exposed
   the mixed-suite runtime tail and is kept for broader engineering sweeps.
 - `main`: large-scale placeholder for broader sweeps.
@@ -195,12 +197,17 @@ and `results/runtime_highdim_resource.md`:
   reduction.
 - Compared with FPRM-greedy, the high-dimensional guarded variants have
   40 T-count wins, 0 losses, and 24 ties; by weighted score they have
-  41 wins, 0 losses, and 23 ties.  The improvement comes from the bounded
-  FPRM root-beam candidate, which evaluates the full ranked first-factor list
-  after cheap direct-cost polarity screening.
+  42 wins, 0 losses, and 22 ties.  The improvement comes from the bounded
+  FPRM root-beam candidate plus a shallow root-child refinement, after cheap
+  direct-cost polarity screening.
+- Compared with the standalone FPRM root-beam candidate, the guarded variants
+  now have 1 T-count win, 0 losses, and 63 ties; by weighted score they have
+  2 wins, 0 losses, and 62 ties.  This is still a small mean gain, but it
+  confirms that the guarded high-dimensional path is no longer just forwarding
+  the root-beam result.
 - Runtime tails remain visible but bounded: `and_resource_nmcts` completes
-  64/64 with median 4.765 s and p95 52.113 s; `and_profile_resource_nmcts`
-  completes 64/64 with median 3.734 s and p95 40.386 s.  The standalone
+  64/64 with median 5.048 s and p95 49.063 s; `and_profile_resource_nmcts`
+  completes 64/64 with median 6.076 s and p95 58.867 s.  The standalone
   FPRM root-beam candidate has median 2.834 s and p95 37.226 s.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier

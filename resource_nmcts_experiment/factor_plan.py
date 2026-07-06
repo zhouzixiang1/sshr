@@ -313,6 +313,64 @@ def root_beam_plan(
     return best
 
 
+def root_child_beam_plan(
+    terms: frozenset[int],
+    prefix_len: int = 0,
+    live_factor_ancilla: int = 0,
+    config: SearchConfig = SearchConfig(),
+    neural_scorer=None,
+    root_width: int | None = None,
+    root_refine_width: int = 2,
+    child_width: int = 2,
+) -> Plan:
+    """Refine a few root choices with one bounded child-level root beam.
+
+    This is intentionally baseline-preserving: it first computes the ordinary
+    root beam, then tries a very small second discrepancy level under the first
+    few root actions.  It gives high-dimensional Resource-NMCTS a deeper search
+    candidate without turning every recursive subproblem into a broad beam.
+    """
+    best = root_beam_plan(
+        terms,
+        prefix_len,
+        live_factor_ancilla,
+        config,
+        neural_scorer,
+        root_width=root_width,
+    )
+    actions = candidate_actions(terms, prefix_len, live_factor_ancilla, config, neural_scorer)
+    if not actions:
+        return best
+    best_score = best.score(config.weights)
+    child_config = replace(config, greedy_eval_limit=1)
+    width = root_width if root_width is not None else max(2, config.candidate_top_k)
+    refine = max(1, min(root_refine_width, width, len(actions)))
+    for action in actions[:refine]:
+        group = root_beam_plan(
+            action.residuals,
+            prefix_len + 1,
+            live_factor_ancilla + 1,
+            child_config,
+            neural_scorer,
+            root_width=child_width,
+        )
+        rest = root_beam_plan(
+            action.rest,
+            prefix_len,
+            live_factor_ancilla,
+            child_config,
+            neural_scorer,
+            root_width=child_width,
+        )
+        cost = factor_cost(action, group, rest, live_factor_ancilla, config)
+        plan = Plan("factor", terms, cost, factor=action.factor, group=group, rest=rest)
+        score = plan.score(config.weights)
+        if score < best_score:
+            best = plan
+            best_score = score
+    return best
+
+
 def _emit_direct(circ: QuantumCircuit, terms: frozenset[int], prefix_controls: List[int], n_inputs: int) -> None:
     output = n_inputs
     for term in sorted(terms, key=lambda x: (x.bit_count(), x)):

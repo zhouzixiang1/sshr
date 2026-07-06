@@ -12,7 +12,6 @@
     "and_profile_resource_nmcts"
   ],
   "last_run_methods": [
-    "and_fprm_root_beam",
     "and_resource_nmcts",
     "and_profile_resource_nmcts"
   ],
@@ -30,7 +29,7 @@
   "model": "models/action_scorer_rollout_logical_and.pt",
   "workers": 2,
   "seconds": null,
-  "seconds_current_run": 1112.9460408687592,
+  "seconds_current_run": 842.9956538677216,
   "config": {
     "weights": {
       "t": 1.0,

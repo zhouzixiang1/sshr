@@ -23,7 +23,7 @@ from affine_search import affine_wrap_cost, candidate_transforms, emit_affine_wr
 from anf_utils import anf_monomials, shifted_function
 from cube_search import cube_beam_plan, cube_greedy_plan, emit_cube_plan
 from esop_milp import synthesize_esop_milp_circuit
-from factor_plan import SearchConfig, direct_plan, emit_plan_to_circuit, greedy_plan, root_beam_plan, verify_oracle
+from factor_plan import SearchConfig, direct_plan, emit_plan_to_circuit, greedy_plan, root_beam_plan, root_child_beam_plan, verify_oracle
 from neural_policy import NeuralScorer
 from nmcts_solver import NeuralMCTSSolver
 from resource_model import ResourceCost
@@ -221,6 +221,8 @@ def _solve_plan(method: str, terms: frozenset[int], config: SearchConfig, seed: 
         return greedy_plan(terms, config=config, neural_scorer=neural if method == "neural_greedy" else None)
     if method in {"root_beam_factor", "fprm_root_beam"}:
         return root_beam_plan(terms, config=config, neural_scorer=neural if method == "root_beam_factor" else None)
+    if method == "fprm_root_child_beam":
+        return root_child_beam_plan(terms, config=config)
     if method in {"mcts_factor", "fprm_mcts"}:
         solver = NeuralMCTSSolver(config, simulations=config.mcts_simulations, seed=seed)
         return solver.solve(terms)
@@ -243,7 +245,7 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
     # path uses local search in polarity space, so the prior changes which
     # fixed-polarity Reed-Muller forms are explored rather than only reordering
     # factor actions inside a fixed polarity.
-    if method == "fprm_root_beam" and bf.n > 12 and len(anf_monomials(bf)) > 128:
+    if method in {"fprm_root_beam", "fprm_root_child_beam"} and bf.n > 12 and len(anf_monomials(bf)) > 128:
         ranked = _direct_screened_polarities(
             bf,
             config,
@@ -287,6 +289,8 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
             plan = direct_plan(terms, 0, 0, config)
         elif method == "fprm_root_beam":
             plan = root_beam_plan(terms, config=config)
+        elif method == "fprm_root_child_beam":
+            plan = root_child_beam_plan(terms, config=config)
         elif method == "fprm_mcts":
             solver = NeuralMCTSSolver(config, simulations=config.mcts_simulations, seed=seed)
             plan = solver.solve(terms)
@@ -554,7 +558,8 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         else:
             # At n=14+ the root-beam FPRM branch corrects the first-factor
             # choice while avoiding the fixed-MCTS and affine-transform tails.
-            child_specs.append(("fprm_root_beam", replace(fast_config, candidate_top_k=config.candidate_top_k)))
+            highdim_config = replace(fast_config, candidate_top_k=config.candidate_top_k)
+            child_specs.append(("fprm_root_child_beam", highdim_config))
         if bf.n <= 6:
             child_specs.append(("cube_beam", cube_config))
         if bf.n <= 10:
@@ -590,7 +595,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             highdim_config = replace(base_config, candidate_top_k=config.candidate_top_k)
             child_specs: list[tuple[str, SearchConfig]] = [
                 ("direct_anf", config),
-                ("fprm_root_beam", highdim_config),
+                ("fprm_root_child_beam", highdim_config),
             ]
         else:
             child_specs = [("fprm_direct", config)]
@@ -626,7 +631,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
                 ]
             )
         else:
-            child_specs.append(("fprm_root_beam", highdim_config))
+            child_specs.append(("fprm_root_child_beam", highdim_config))
 
         seen_specs = set()
         for child_method, child_config in child_specs:
@@ -683,7 +688,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             min(config.max_factor_ancilla, plan.cost.explicit_ancilla),
             polarity=polarity,
         )
-    elif method in {"fprm_direct", "fprm_greedy", "fprm_root_beam", "fprm_mcts", "fprm_neural_mcts"}:
+    elif method in {"fprm_direct", "fprm_greedy", "fprm_root_beam", "fprm_root_child_beam", "fprm_mcts", "fprm_neural_mcts"}:
         polarity, terms, plan, cost = _best_polarity_plan(method, bf, config, seed, neural)
         circ = emit_plan_to_circuit(
             plan,
