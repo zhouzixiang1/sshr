@@ -408,7 +408,7 @@ and the ABC-ESOP rows use verified `&exorcism -q` ESOP-PLA:
   against T-opt SSHR-I.
 
 The high-dimensional exported ABC AIG/XAG/LUT plus BDD extension covers the
-isolated `n=14`, `n=15`, and `n=16` random-ANF stress presets:
+isolated `n=14`, `n=15`, `n=16`, and `n=18` random-ANF stress presets:
 
 - `results/analysis_external_highdim_resource.md`: 64 exported `n=14`
   functions, 256/256 correct ABC-AIG/ABC-XAG/ABC-LUT/BDD rows, 0 errors/skips.
