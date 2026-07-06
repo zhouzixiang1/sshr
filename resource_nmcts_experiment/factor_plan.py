@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
+from functools import lru_cache
 from pathlib import Path
 import sys
 from typing import Iterable, List, Optional
@@ -625,18 +626,57 @@ def emit_plan_to_circuit(
     return circ
 
 
+@lru_cache(maxsize=8)
+def _parallel_input_masks(n: int) -> tuple[int, tuple[int, ...]]:
+    assignments = 1 << n
+    full_mask = (1 << assignments) - 1
+    masks = []
+    for bit in range(n):
+        run = 1 << bit
+        unit_width = run << 1
+        mask = ((1 << run) - 1) << run
+        width = unit_width
+        while width < assignments:
+            mask |= mask << width
+            width <<= 1
+        masks.append(mask & full_mask)
+    return full_mask, tuple(masks)
+
+
 def verify_oracle(circ: QuantumCircuit, bf: BooleanFunction) -> bool:
     n = bf.n
-    for x in range(1 << n):
-        bits = [(x >> i) & 1 for i in range(n)] + [0] * (circ.n_qubits - n)
-        out = circ.simulate(bits)
-        if out[n] != bf.evaluate(x):
+    if circ.n_qubits <= n:
+        return False
+    full_mask, input_masks = _parallel_input_masks(n)
+    bits = list(input_masks) + [0] * (circ.n_qubits - n)
+    for gate in circ.gates:
+        target = int(gate.target)
+        if target < 0 or target >= circ.n_qubits:
             return False
-        if out[:n] != bits[:n]:
+        if gate.type == "X":
+            bits[target] ^= full_mask
+        elif gate.type == "CNOT":
+            if len(gate.controls) != 1:
+                return False
+            control = int(gate.controls[0])
+            if control < 0 or control >= circ.n_qubits:
+                return False
+            bits[target] ^= bits[control]
+        elif gate.type == "MCT":
+            controls = [int(control) for control in gate.controls]
+            if any(control < 0 or control >= circ.n_qubits for control in controls):
+                return False
+            active = full_mask
+            for control in controls:
+                active &= bits[control]
+            bits[target] ^= active
+        else:
             return False
-        if any(out[n + 1 :]):
-            return False
-    return True
+    if bits[n] != (bf.truth_table & full_mask):
+        return False
+    if bits[:n] != list(input_masks):
+        return False
+    return all(value == 0 for value in bits[n + 1 :])
 
 
 def plan_for_function(

@@ -218,8 +218,8 @@ Datasets:
 - exhaustive small functions for `n=3`;
 - random truth-table functions for `n=4..6`;
 - random sparse/dense ANF functions for `n=6..12` in the paper-facing core
-  benchmark, with isolated `n=14` stress, `n=15` scaling, and `n=16`
-  ultra-scale presets kept as runtime-boundary targets;
+  benchmark, with isolated `n=14` stress, `n=15` scaling, `n=16`
+  ultra-scale, and `n=18` mega-scale presets kept as runtime-boundary targets;
 - structured oracles such as parity, majority, threshold, mux, adders, and
   multipliers.
 
@@ -255,6 +255,9 @@ cp /tmp/resource_nmcts_traditional_no_model/manifest_traditional_resource.json r
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset ultra_highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 6 --checkpoint-every 4 --resume --isolate-timeouts
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset ultra_highdim_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset ultra_highdim_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset mega_highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 4 --checkpoint-every 5 --resume
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset mega_highdim_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset mega_highdim_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset ultra_highdim_resource --formats blif,truth --out-dir benchmark_exports/ultra_highdim_resource_external_seed42
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/ultra_highdim_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_abc_lut,external_bdd --min-n 16 --max-n 16 --max-abc-n 16 --max-xag-n 16 --max-lut-n 16 --max-bdd-n 16 --bdd-orders 8 --timeout 45 --workers 8 --out results/raw_external_ultra_highdim_resource.csv --summary results/summary_external_ultra_highdim_resource.csv --run-manifest results/manifest_external_ultra_highdim_resource.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_ultra_highdim_resource.csv --internal-csv results/raw_ultra_highdim_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_fprm_linear_pair,and_fprm_root_beam,direct_anf,and_direct_anf --out results/analysis_external_ultra_highdim_resource.md
@@ -543,3 +546,19 @@ reduction.  Runtime remains finite: `and_resource_nmcts` has median runtime
 runtime 17.566 s and p95 58.479 s.  The associated Möbius/zeta-transform
 implementation in `anf_utils.py` removes the avoidable per-assignment monomial
 scan and makes larger ANF-derived truth tables practical to generate.
+
+The `mega_highdim_resource` run is the current runtime-boundary check at
+`n=18`.  It contains 12 random ANF functions, five methods, and 60
+method/function rows with 0 errors/skips.  At this scale the high-dimensional
+guard switches Resource/Profile to bounded FPRM root-beam rather than
+linear-pair screening, because the pairwise-linear screen develops a
+multi-minute long tail without improving the sampled costs.  The guarded
+variants match `and_fprm_root_beam` on all 12 functions.  Compared with direct
+ANF, they have 10 T-count wins, 0 losses, and 2 ties, with a 55.40% mean
+T-count reduction and a 53.08% mean score reduction.  Compared with
+logical-AND direct ANF, they have 10 score wins, 0 losses, and 2 ties, with a
+27.43% mean score reduction.  Runtime is finite but much slower than direct
+construction: `and_resource_nmcts` has median runtime 65.995 s and p95
+143.671 s, while `and_profile_resource_nmcts` has median runtime 66.841 s and
+p95 149.190 s.  This result should be framed as scale and verification evidence,
+not as a new neural-portfolio separation.

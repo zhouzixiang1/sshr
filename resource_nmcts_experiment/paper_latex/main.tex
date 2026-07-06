@@ -17,6 +17,7 @@
 \newcommand{\highdimdataset}{highdim\_resource}
 \newcommand{\scaledataset}{highdim\_scale\_resource}
 \newcommand{\ultradataset}{ultra\_highdim\_resource}
+\newcommand{\megadataset}{mega\_highdim\_resource}
 
 \title{Resource-NMCTS: Neural Monte Carlo Tree Search with Affine Boolean Preconditioning for Resource-Constrained Quantum Oracle Synthesis}
 \author{Zixiang Zhou}
@@ -71,6 +72,11 @@ losses, and 2 ties against FPRM-greedy, reducing mean weighted score by
 rows with no errors or skips; the ultra-scale guard matches its one-layer
 linear-pair child, reduces mean T-count by 62.08\% relative to direct ANF, and
 has 22 score wins, no losses, and 2 ties against bounded FPRM root-beam.  On
+a final $n=18$ stress check, 12 random ANF functions produce 60 verified rows
+with no errors or skips; the mega-scale guard switches to bounded FPRM
+root-beam, and \method{} and \profilemethod{} match that child while reducing
+mean T-count by 55.40\% and mean weighted score by 53.08\% relative to direct
+ANF.  On
 exported high-dimensional ABC AIG/XAG/LUT and BDD checks for the same $n=14$,
 $n=15$, and $n=16$ sets, the guarded method wins all 480 weighted-score
 comparisons with 93.24\%--99.00\% mean score reductions.  At $n=16$ the mean
@@ -756,6 +762,35 @@ work, but they reduce both CNOT and depth relative to logical-AND direct ANF.
 \input{tables/runtime_ultra_highdim_resource}
 \end{table}
 
+The \megadataset{} run pushes the same harness two more variables beyond the
+ultra check.  It contains 12 random $n=18$ ANF functions and five methods,
+for 60 method/function rows with no errors or skips.  This is not presented as
+a new neural-search separation: at this dimension the guard switches to the
+bounded FPRM root-beam child because the pairwise-linear screen develops a
+multi-minute long tail without improving the sampled costs.  Consequently
+\method{} and \profilemethod{} match the standalone root-beam child on all 12
+functions.  Relative to direct ANF, the guarded variants have 10 T-count wins,
+no losses, and 2 ties, reducing mean T-count by 55.40\% and mean weighted score
+by 53.08\%.  Relative to logical-AND direct ANF, they have 10 score wins, no
+losses, and 2 ties, with a 27.43\% mean score reduction.  The price is runtime:
+median guarded runtime is about 66 s and p95 runtime is about 144--149 s.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Mean logical resources on the \megadataset{} $n=18$ stress check.}
+\label{tab:mega-resources}
+\input{tables/resource_mega_highdim_resource}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Runtime distribution on the \megadataset{} $n=18$ stress check.}
+\label{tab:mega-runtime}
+\input{tables/runtime_mega_highdim_resource}
+\end{table}
+
 \section{Discussion}
 
 The results support the central hypothesis that affine Boolean coordinates are
@@ -780,7 +815,9 @@ five timeouts.  The guarded \profilemethod{} variant reduces the p95 runtime to
 the isolated $n=14$ stress test, both guarded variants complete all 64
 functions and improve over FPRM-greedy with no score losses; the $n=16$ scale
 check also completes without errors after switching to the ultra-scale
-one-layer linear-pair guard.  This shows that
+one-layer linear-pair guard.  The $n=18$ stress check completes all 60 rows
+after switching to a root-beam high-dimensional guard, but the guarded variants
+tie that child and have minute-scale runtime tails.  This shows that
 the current high-dimensional guard is no longer only a scalability fallback:
 pairwise XOR factoring can correct a measurable part of the greedy
 Reed--Muller search error using only Clifford linear preprocessing around the
@@ -793,7 +830,10 @@ logic-level estimates rather than full reversible-toolchain synthesis, and the
 lack of a reproduced external ROS/mockturtle toolchain in the comparison set.
 At $n=16$, the guarded Resource/Profile variants tie their own one-layer
 linear-pair child, so the ultra result is bounded scalability evidence rather
-than a new search-quality separation.
+than a new search-quality separation.  The same caution applies even more
+strongly at $n=18$, where the guard chooses bounded root-beam search and the
+result is a tractability and verification-boundary check rather than evidence
+that the full neural portfolio beats its selected child.
 The in-harness ESOP cube-beam and weighted-MILP baselines plus the exported
 SSHR-I/ABC/BDD/LUT comparisons strengthen the Boolean synthesis comparison, and
 the new high-dimensional ABC/BDD/LUT rows show that this external comparison is
@@ -831,8 +871,9 @@ CNOT and depth remain important limitations.  The new high-dimensional stress
 tests show that bounded guards scale without timeouts, beat FPRM-greedy on
 60 of 64 weighted-score comparisons at $n=14$ and 30 of 32 comparisons at
 $n=15$, complete all 144 $n=16$ ultra-scale rows under the one-layer guard
-while retaining score wins against FPRM root-beam, and beat exported ABC
-AIG/XAG/LUT and BDD on all 480 high-dimensional weighted-score comparisons.
+while retaining score wins against FPRM root-beam, complete all 60 $n=18$
+mega-scale rows under the root-beam guard, and beat exported ABC AIG/XAG/LUT
+and BDD on all 480 high-dimensional weighted-score comparisons.
 The next step is to reproduce ROS/mockturtle-style
 toolchain baselines and hardware-aware mappings so the empirical claim is
 submission-ready.

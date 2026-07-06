@@ -43,9 +43,12 @@ cp /tmp/resource_nmcts_traditional_no_model/manifest_traditional_resource.json r
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset highdim_scale_resource --model models/action_scorer_rollout_logical_and.pt --workers 6 --checkpoint-every 8 --resume --isolate-timeouts
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset highdim_scale_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset highdim_scale_resource
-/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset ultra_highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 1 --checkpoint-every 8 --resume
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset ultra_highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 6 --checkpoint-every 4 --resume --isolate-timeouts
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset ultra_highdim_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset ultra_highdim_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset mega_highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 4 --checkpoint-every 5 --resume
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset mega_highdim_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset mega_highdim_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset large_resource_core --formats pla,blif,truth
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset traditional_resource --formats pla,blif,truth --out-dir benchmark_exports/traditional_resource_external_seed42
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --max-n 4 --max-ilp-n 4 --timeout 10 --workers 4 --out results/raw_external_traditional_resource_n4.csv --summary results/summary_external_traditional_resource_n4.csv --run-manifest results/manifest_external_traditional_resource_n4.json
@@ -64,7 +67,7 @@ cp /tmp/resource_nmcts_traditional_no_model/manifest_traditional_resource.json r
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/highdim_scale_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_abc_lut,external_bdd --min-n 15 --max-n 15 --max-abc-n 15 --max-xag-n 15 --max-lut-n 15 --max-bdd-n 15 --bdd-orders 8 --timeout 30 --workers 8 --out results/raw_external_highdim_scale_resource.csv --summary results/summary_external_highdim_scale_resource.csv --run-manifest results/manifest_external_highdim_scale_resource.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_highdim_scale_resource.csv --internal-csv results/raw_highdim_scale_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_fprm_linear_pair_deep,and_fprm_linear_pair,and_fprm_linear_parity,and_fprm_greedy,direct_anf,and_direct_anf --out results/analysis_external_highdim_scale_resource.md
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset ultra_highdim_resource --formats blif,truth --out-dir benchmark_exports/ultra_highdim_resource_external_seed42
-/opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/ultra_highdim_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_abc_lut,external_bdd --min-n 16 --max-n 16 --max-abc-n 16 --max-xag-n 16 --max-lut-n 16 --max-bdd-n 16 --bdd-orders 8 --timeout 60 --workers 4 --out results/raw_external_ultra_highdim_resource.csv --summary results/summary_external_ultra_highdim_resource.csv --run-manifest results/manifest_external_ultra_highdim_resource.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/ultra_highdim_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_abc_lut,external_bdd --min-n 16 --max-n 16 --max-abc-n 16 --max-xag-n 16 --max-lut-n 16 --max-bdd-n 16 --bdd-orders 8 --timeout 45 --workers 8 --out results/raw_external_ultra_highdim_resource.csv --summary results/summary_external_ultra_highdim_resource.csv --run-manifest results/manifest_external_ultra_highdim_resource.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_ultra_highdim_resource.csv --internal-csv results/raw_ultra_highdim_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_fprm_linear_pair,and_fprm_root_beam,direct_anf,and_direct_anf --out results/analysis_external_ultra_highdim_resource.md
 ```
 
@@ -101,6 +104,10 @@ Current presets:
   ANF, logical-AND direct ANF, bounded FPRM root-beam, one-layer FPRM
   linear-pair factoring, Resource-NMCTS, and Profile-Resource-NMCTS.  It uses
   the ultra-scale guard rather than the recursive n=15 linear-pair branch.
+- `mega_highdim_resource`: isolated `n=18` random-ANF stress check with direct
+  ANF, logical-AND direct ANF, bounded FPRM root-beam, Resource-NMCTS, and
+  Profile-Resource-NMCTS.  It uses the root-beam high-dimensional guard because
+  the linear-pair screen has a multi-minute long tail at this scale.
 - `large_resource`: experimental `n=14` stress extension.  This preset exposed
   the mixed-suite runtime tail and is kept for broader engineering sweeps.
 - `main`: large-scale placeholder for broader sweeps.
@@ -404,6 +411,24 @@ Ultra-high-dimensional scale check from
 - Runtime remains finite at `n=16`: `and_resource_nmcts` completes 24/24 with
   median 17.537 s and p95 59.132 s; `and_profile_resource_nmcts` completes
   24/24 with median 17.566 s and p95 58.479 s.
+
+`results/analysis_mega_highdim_resource.md` and
+`results/runtime_mega_highdim_resource.md`:
+
+- 12 random ANF functions at `n=18`, 5 methods, 60 result rows, 0 errors, and
+  0 skips.
+- The mega guard switches Resource/Profile to the bounded FPRM root-beam child.
+  Both guarded variants match that child on all 12 functions; this is scale and
+  verification evidence rather than a new portfolio-separation claim.
+- Compared with direct ANF, the guarded variants have 10 T-count wins, 0
+  losses, and 2 ties, with a 55.40% mean T-count reduction and a 53.08% mean
+  score reduction.
+- Compared with logical-AND direct ANF, they have 10 weighted-score wins, 0
+  losses, and 2 ties, with a 27.43% mean score reduction.
+- Runtime remains finite but has a minute-scale tail: `and_resource_nmcts`
+  completes 12/12 with median 65.995 s and p95 143.671 s;
+  `and_profile_resource_nmcts` completes 12/12 with median 66.841 s and p95
+  149.190 s.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost

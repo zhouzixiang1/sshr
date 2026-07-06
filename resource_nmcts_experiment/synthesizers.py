@@ -742,10 +742,14 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         else:
             # At n=14+ the deep linear branch subsumes the shallow linear-pair
             # candidate.  At n>=16, truth-table verification and polarity
-            # screening dominate runtime, so the ultra-scale guard keeps only
-            # the one-layer linear candidate.
+            # screening dominate runtime.  The n=18 stress path uses the
+            # root-beam guard because pairwise-linear screening develops a
+            # multi-minute long tail without improving the sampled costs.
             highdim_config = replace(fast_config, candidate_top_k=config.candidate_top_k)
-            child_specs.append(("fprm_linear_pair" if bf.n >= 16 else "fprm_linear_pair_deep", highdim_config))
+            if bf.n >= 18:
+                child_specs.append(("fprm_root_beam", highdim_config))
+            else:
+                child_specs.append(("fprm_linear_pair" if bf.n >= 16 else "fprm_linear_pair_deep", highdim_config))
         if bf.n <= 6:
             child_specs.append(("cube_beam", cube_config))
         if bf.n <= 10:
