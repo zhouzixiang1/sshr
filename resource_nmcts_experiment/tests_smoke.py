@@ -9,7 +9,18 @@ from anf_utils import anf_monomials, boolean_from_anf, majority_function, parity
 from export_benchmarks import export_suite, selected_formats
 from factor_plan import SearchConfig
 from resource_model import ResourceWeights
-from run_external_baselines import EsopCube, blif_truth_table, eval_blif, parse_blif, verify_blif, verify_esop
+from run_external_baselines import (
+    EsopCube,
+    bdd_cost,
+    build_robdd_for_order,
+    candidate_bdd_orders,
+    blif_truth_table,
+    eval_blif,
+    parse_blif,
+    verify_bdd,
+    verify_blif,
+    verify_esop,
+)
 from synthesizers import synthesize
 
 
@@ -90,6 +101,12 @@ def check_external_truth_verifiers() -> None:
 
     xor_cubes = [EsopCube("1-"), EsopCube("-1")]
     assert verify_esop(xor_cubes, BooleanFunction(2, 0b0110))
+
+    xor_bdd = build_robdd_for_order(BooleanFunction(2, 0b0110), (0, 1))
+    assert verify_bdd(xor_bdd, BooleanFunction(2, 0b0110))
+    assert len(xor_bdd.nodes) >= 2
+    assert bdd_cost(xor_bdd, BooleanFunction(2, 0b0110)).CNOT > 0
+    assert candidate_bdd_orders(BooleanFunction(1, 0b10), seed=1, max_orders=8) == [(0,)]
 
 
 def main() -> int:

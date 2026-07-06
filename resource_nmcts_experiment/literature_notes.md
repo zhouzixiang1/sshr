@@ -87,6 +87,7 @@ parallelotope cover space.
 The strongest current novelty is the combination of affine Boolean coordinate
 search with resource-weighted neural MCTS and guarded high-dimensional FPRM
 linear-pair factoring.  The current high-dimensional evidence is promising
-against direct ANF, logical-AND direct ANF, root-beam, and FPRM-greedy, but a
-submission-ready paper still needs external XAG/ROS/SSHR-I style toolchain
-results on the exported benchmarks.
+against direct ANF, logical-AND direct ANF, root-beam, FPRM-greedy, ABC
+AIG/XAG, and a verified BDD/Shannon baseline, but a submission-ready paper
+still needs reproduced ROS or mockturtle-style reversible-toolchain results on
+the exported benchmarks.

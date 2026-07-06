@@ -3,14 +3,16 @@
   "abc_esop_script": "strash; &get",
   "abc_script": "strash; balance; rewrite; refactor; rewrite -z; balance",
   "abc_xag_script": "&get; &st -m -L 1",
+  "bdd_orders": 8,
   "count": null,
-  "elapsed_s": 0.8943650722503662,
-  "existing_rows": 885,
+  "elapsed_s": 0.10620784759521484,
+  "existing_rows": 1062,
   "functions": 177,
   "last_run_methods": [
-    "external_abc_xag"
+    "external_bdd"
   ],
   "max_abc_n": 6,
+  "max_bdd_n": 6,
   "max_esop_n": 6,
   "max_ilp_n": 6,
   "max_n": 6,
@@ -19,6 +21,7 @@
     "external_abc_aig",
     "external_abc_esop",
     "external_abc_xag",
+    "external_bdd",
     "external_sshr_h",
     "external_sshr_i_cnot",
     "external_sshr_i_t"
@@ -28,7 +31,7 @@
   "offset": 0,
   "raw": "results/raw_external_traditional_resource_n6.csv",
   "resume": true,
-  "rows": 1062,
+  "rows": 1239,
   "source_manifest": "benchmark_exports/traditional_resource_external_seed42/manifest.csv",
   "summary": "results/summary_external_traditional_resource_n6.csv",
   "timeout": 10.0,

@@ -3,8 +3,8 @@
 
 This script intentionally consumes the files produced by ``export_benchmarks.py``
 instead of calling the in-harness experiment preset directly.  That keeps the
-baseline path close to future XAG/ROS/mockturtle integrations: every backend
-sees the same exported truth table manifest.
+baseline path close to future ROS/mockturtle integrations: every backend sees
+the same exported truth table manifest.
 """
 from __future__ import annotations
 
@@ -71,6 +71,20 @@ class Cost:
             + weights["gates"] * self.gates
             + weights["ancilla"] * self.peak_ancilla
         )
+
+
+@dataclass(frozen=True)
+class BddNode:
+    var: int
+    low: int
+    high: int
+
+
+@dataclass(frozen=True)
+class BddNetwork:
+    root: int
+    nodes: dict[int, BddNode]
+    order: tuple[int, ...]
 
 
 def anf_term_count(bf: BooleanFunction) -> int:
@@ -162,6 +176,7 @@ def parse_methods(raw: str) -> list[str]:
         "external_abc_aig",
         "external_abc_esop",
         "external_abc_xag",
+        "external_bdd",
     }
     unknown = sorted(set(methods) - valid)
     if unknown:
@@ -385,6 +400,208 @@ def abc_xag_cost(and_count: int, xor_count: int, mux_count: int, level: int, bf:
         explicit_ancilla=nonlinear + linear,
         peak_ancilla=nonlinear + linear,
     )
+
+
+def _reordered_truth_table(bf: BooleanFunction, order: tuple[int, ...]) -> int:
+    local = 0
+    for local_idx in range(1 << bf.n):
+        original_idx = 0
+        for pos, var in enumerate(order):
+            if (local_idx >> pos) & 1:
+                original_idx |= 1 << var
+        if (bf.truth_table >> original_idx) & 1:
+            local |= 1 << local_idx
+    return local
+
+
+def _split_local_truth(tt: int, remaining_vars: int) -> tuple[int, int]:
+    low = 0
+    high = 0
+    for rest_idx in range(1 << (remaining_vars - 1)):
+        low_bit = 1 << (2 * rest_idx)
+        high_bit = 1 << (2 * rest_idx + 1)
+        if tt & low_bit:
+            low |= 1 << rest_idx
+        if tt & high_bit:
+            high |= 1 << rest_idx
+    return low, high
+
+
+def build_robdd_for_order(bf: BooleanFunction, order: tuple[int, ...]) -> BddNetwork:
+    if len(order) != bf.n or set(order) != set(range(bf.n)):
+        raise ValueError(f"invalid BDD order for n={bf.n}: {order}")
+    local_truth = _reordered_truth_table(bf, order)
+    unique: dict[tuple[int, int, int], int] = {}
+    memo: dict[tuple[int, int], int] = {}
+    nodes: dict[int, BddNode] = {}
+    next_id = 2
+
+    def build(level: int, tt: int) -> int:
+        nonlocal next_id
+        remaining = bf.n - level
+        full_mask = (1 << (1 << remaining)) - 1
+        if tt == 0:
+            return 0
+        if tt == full_mask:
+            return 1
+        if remaining == 0:
+            return 1 if tt & 1 else 0
+        key = (level, tt)
+        if key in memo:
+            return memo[key]
+        low, high = _split_local_truth(tt, remaining)
+        low_id = build(level + 1, low)
+        high_id = build(level + 1, high)
+        if low_id == high_id:
+            memo[key] = low_id
+            return low_id
+        node_key = (order[level], low_id, high_id)
+        node_id = unique.get(node_key)
+        if node_id is None:
+            node_id = next_id
+            next_id += 1
+            unique[node_key] = node_id
+            nodes[node_id] = BddNode(var=order[level], low=low_id, high=high_id)
+        memo[key] = node_id
+        return node_id
+
+    return BddNetwork(root=build(0, local_truth), nodes=nodes, order=order)
+
+
+def eval_bdd(network: BddNetwork, x: int) -> int:
+    node_id = network.root
+    while node_id not in {0, 1}:
+        node = network.nodes[node_id]
+        node_id = node.high if ((x >> node.var) & 1) else node.low
+    return node_id
+
+
+def verify_bdd(network: BddNetwork, bf: BooleanFunction) -> bool:
+    for x in range(1 << bf.n):
+        if eval_bdd(network, x) != bf.evaluate(x):
+            return False
+    return True
+
+
+def _variable_influences(bf: BooleanFunction) -> list[tuple[int, int]]:
+    influences = []
+    for var in range(bf.n):
+        count = 0
+        step = 1 << var
+        for x in range(1 << bf.n):
+            if x & step:
+                continue
+            count += ((bf.truth_table >> x) ^ (bf.truth_table >> (x | step))) & 1
+        influences.append((count, var))
+    return influences
+
+
+def candidate_bdd_orders(bf: BooleanFunction, seed: int, max_orders: int) -> list[tuple[int, ...]]:
+    if bf.n == 0:
+        return [()]
+    influences = _variable_influences(bf)
+    descending = tuple(var for _count, var in sorted(influences, key=lambda item: (-item[0], item[1])))
+    ascending = tuple(var for _count, var in sorted(influences, key=lambda item: (item[0], item[1])))
+    natural = tuple(range(bf.n))
+    reverse = tuple(reversed(natural))
+    high_low = tuple(var for pair in zip(descending, reversed(descending)) for var in pair)
+    high_low = tuple(dict.fromkeys(high_low))
+
+    orders: list[tuple[int, ...]] = []
+
+    def add(order: tuple[int, ...]) -> None:
+        if len(orders) >= max_orders:
+            return
+        if len(order) == bf.n and order not in orders:
+            orders.append(order)
+
+    for order in (natural, reverse, descending, ascending, high_low):
+        add(order)
+
+    import random
+
+    rng = random.Random(seed)
+    attempts = 0
+    max_attempts = max(10, 20 * max_orders)
+    while len(orders) < max_orders and attempts < max_attempts:
+        attempts += 1
+        order_list = list(range(bf.n))
+        rng.shuffle(order_list)
+        add(tuple(order_list))
+    return orders
+
+
+def _bdd_branch_compute_cost(child: int, inverted_control: bool) -> Cost:
+    if child == 0:
+        return Cost()
+    wraps = 2 if inverted_control else 0
+    if child == 1:
+        return Cost(CNOT=1, gates=1 + wraps, depth=1 + wraps)
+    and_cost = Cost(T=4, CNOT=7, gates=3, depth=7)
+    return Cost(
+        T=and_cost.T,
+        CNOT=and_cost.CNOT,
+        gates=and_cost.gates + wraps,
+        depth=and_cost.depth + wraps,
+    )
+
+
+def _add_cost(a: Cost, b: Cost) -> Cost:
+    return Cost(
+        T=a.T + b.T,
+        CNOT=a.CNOT + b.CNOT,
+        gates=a.gates + b.gates,
+        depth=a.depth + b.depth,
+        explicit_ancilla=max(a.explicit_ancilla, b.explicit_ancilla),
+        peak_ancilla=max(a.peak_ancilla, b.peak_ancilla),
+    )
+
+
+def bdd_cost(network: BddNetwork, bf: BooleanFunction) -> Cost:
+    if network.root == 0:
+        return Cost()
+    if network.root == 1:
+        return Cost(gates=1, depth=1)
+
+    compute = Cost()
+    for node in network.nodes.values():
+        node_cost = _add_cost(
+            _bdd_branch_compute_cost(node.low, inverted_control=True),
+            _bdd_branch_compute_cost(node.high, inverted_control=False),
+        )
+        compute = _add_cost(compute, node_cost)
+    output_cnot, output_gate = output_toggle_cost(bf)
+    node_count = len(network.nodes)
+    return Cost(
+        T=2 * compute.T,
+        CNOT=2 * compute.CNOT + output_cnot,
+        gates=2 * compute.gates + output_gate,
+        depth=2 * compute.depth + output_gate,
+        explicit_ancilla=node_count,
+        peak_ancilla=node_count,
+    )
+
+
+def run_bdd(row: dict, bf: BooleanFunction, weights: dict[str, float], max_orders: int) -> tuple[Cost, dict]:
+    best: tuple[float, Cost, BddNetwork, int] | None = None
+    orders = candidate_bdd_orders(bf, seed=int(row.get("index") or 0), max_orders=max(1, max_orders))
+    for order in orders:
+        network = build_robdd_for_order(bf, order)
+        cost = bdd_cost(network, bf)
+        score = cost.score(weights)
+        if best is None or (score, len(network.nodes), order) < (best[0], len(best[2].nodes), best[2].order):
+            best = (score, cost, network, len(orders))
+    if best is None:
+        raise RuntimeError("BDD order generation produced no candidates")
+    _score, cost, network, order_count = best
+    correct = verify_bdd(network, bf)
+    return cost, {
+        "correct": correct,
+        "bdd_nodes": len(network.nodes),
+        "bdd_root": network.root,
+        "bdd_order": " ".join(str(var) for var in network.order),
+        "bdd_orders_evaluated": order_count,
+    }
 
 
 @dataclass(frozen=True)
@@ -660,7 +877,7 @@ def synthesize_external(method: str, bf: BooleanFunction, timeout: float) -> Qua
     raise ValueError(method)
 
 
-def run_one(task: tuple[dict, str, float, int, int, int, int, dict[str, float], Path, str, str, str]) -> dict:
+def run_one(task: tuple[dict, str, float, int, int, int, int, int, int, dict[str, float], Path, str, str, str]) -> dict:
     (
         row,
         method,
@@ -669,6 +886,8 @@ def run_one(task: tuple[dict, str, float, int, int, int, int, dict[str, float], 
         max_abc_n,
         max_esop_n,
         max_xag_n,
+        max_bdd_n,
+        bdd_orders,
         weights,
         abc_bin,
         abc_script,
@@ -695,6 +914,8 @@ def run_one(task: tuple[dict, str, float, int, int, int, int, dict[str, float], 
         return {**base, "skipped": f"ABC-ESOP capped at n<={max_esop_n}", "error": ""}
     if method == "external_abc_xag" and bf.n > max_xag_n:
         return {**base, "skipped": f"ABC-XAG capped at n<={max_xag_n}", "error": ""}
+    if method == "external_bdd" and bf.n > max_bdd_n:
+        return {**base, "skipped": f"BDD capped at n<={max_bdd_n}", "error": ""}
     try:
         start = time.time()
         if method == "external_abc_aig":
@@ -711,6 +932,12 @@ def run_one(task: tuple[dict, str, float, int, int, int, int, dict[str, float], 
             gates = cost.gates
         elif method == "external_abc_xag":
             cost, extra = run_abc_xag(row, bf, timeout, abc_bin, abc_xag_script)
+            elapsed = time.time() - start
+            correct = extra.pop("correct")
+            n_qubits = bf.n + 1 + cost.explicit_ancilla
+            gates = cost.gates
+        elif method == "external_bdd":
+            cost, extra = run_bdd(row, bf, weights, bdd_orders)
             elapsed = time.time() - start
             correct = extra.pop("correct")
             n_qubits = bf.n + 1 + cost.explicit_ancilla
@@ -792,6 +1019,8 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser.add_argument("--max-abc-n", type=int, default=15)
     parser.add_argument("--max-esop-n", type=int, default=8)
     parser.add_argument("--max-xag-n", type=int, default=15)
+    parser.add_argument("--max-bdd-n", type=int, default=15)
+    parser.add_argument("--bdd-orders", type=int, default=8)
     parser.add_argument("--abc-bin", type=Path, default=DEFAULT_ABC_BIN)
     parser.add_argument("--abc-script", default=DEFAULT_ABC_SCRIPT)
     parser.add_argument("--abc-esop-script", default=DEFAULT_ABC_ESOP_SCRIPT)
@@ -823,6 +1052,8 @@ def main(argv: Iterable[str] | None = None) -> int:
             args.max_abc_n,
             args.max_esop_n,
             args.max_xag_n,
+            args.max_bdd_n,
+            args.bdd_orders,
             weights,
             args.abc_bin,
             args.abc_script,
@@ -889,6 +1120,11 @@ def main(argv: Iterable[str] | None = None) -> int:
         if "external_abc_xag" in methods
         else previous_manifest.get("max_xag_n", args.max_xag_n)
     )
+    report_max_bdd_n = (
+        args.max_bdd_n
+        if "external_bdd" in methods
+        else previous_manifest.get("max_bdd_n", args.max_bdd_n)
+    )
     args.run_manifest.write_text(
         json.dumps(
             {
@@ -908,6 +1144,8 @@ def main(argv: Iterable[str] | None = None) -> int:
                 "max_abc_n": report_max_abc_n,
                 "max_esop_n": report_max_esop_n,
                 "max_xag_n": report_max_xag_n,
+                "max_bdd_n": report_max_bdd_n,
+                "bdd_orders": args.bdd_orders,
                 "abc_binary": display_path(args.abc_bin),
                 "abc_script": args.abc_script,
                 "abc_esop_script": args.abc_esop_script,
