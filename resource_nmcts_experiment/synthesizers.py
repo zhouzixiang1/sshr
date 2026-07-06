@@ -225,6 +225,8 @@ def _solve_plan(method: str, terms: frozenset[int], config: SearchConfig, seed: 
         return root_child_beam_plan(terms, config=config)
     if method == "fprm_linear_pair":
         return linear_pair_beam_plan(terms, config=config)
+    if method == "fprm_linear_pair_deep":
+        return linear_pair_beam_plan(terms, config=config, recursive_depth=1)
     if method in {"mcts_factor", "fprm_mcts"}:
         solver = NeuralMCTSSolver(config, simulations=config.mcts_simulations, seed=seed)
         return solver.solve(terms)
@@ -247,7 +249,7 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
     # path uses local search in polarity space, so the prior changes which
     # fixed-polarity Reed-Muller forms are explored rather than only reordering
     # factor actions inside a fixed polarity.
-    if method in {"fprm_root_beam", "fprm_root_child_beam", "fprm_linear_pair"} and bf.n > 12 and len(anf_monomials(bf)) > 128:
+    if method in {"fprm_root_beam", "fprm_root_child_beam", "fprm_linear_pair", "fprm_linear_pair_deep"} and bf.n > 12 and len(anf_monomials(bf)) > 128:
         ranked = _direct_screened_polarities(
             bf,
             config,
@@ -295,6 +297,8 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
             plan = root_child_beam_plan(terms, config=config)
         elif method == "fprm_linear_pair":
             plan = linear_pair_beam_plan(terms, config=config)
+        elif method == "fprm_linear_pair_deep":
+            plan = linear_pair_beam_plan(terms, config=config, recursive_depth=1)
         elif method == "fprm_mcts":
             solver = NeuralMCTSSolver(config, simulations=config.mcts_simulations, seed=seed)
             plan = solver.solve(terms)
@@ -564,6 +568,8 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             # baseline and adds a CNOT-only XOR-factor candidate.
             highdim_config = replace(fast_config, candidate_top_k=config.candidate_top_k)
             child_specs.append(("fprm_linear_pair", highdim_config))
+            if bf.n >= 15:
+                child_specs.append(("fprm_linear_pair_deep", highdim_config))
         if bf.n <= 6:
             child_specs.append(("cube_beam", cube_config))
         if bf.n <= 10:
@@ -601,6 +607,8 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
                 ("direct_anf", config),
                 ("fprm_linear_pair", highdim_config),
             ]
+            if bf.n >= 15:
+                child_specs.append(("fprm_linear_pair_deep", highdim_config))
         else:
             child_specs = [("fprm_direct", config)]
         if bf.n <= 6:
@@ -636,6 +644,8 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             )
         else:
             child_specs.append(("fprm_linear_pair", highdim_config))
+            if bf.n >= 15:
+                child_specs.append(("fprm_linear_pair_deep", highdim_config))
 
         seen_specs = set()
         for child_method, child_config in child_specs:
@@ -692,7 +702,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             min(config.max_factor_ancilla, plan.cost.explicit_ancilla),
             polarity=polarity,
         )
-    elif method in {"fprm_direct", "fprm_greedy", "fprm_root_beam", "fprm_root_child_beam", "fprm_linear_pair", "fprm_mcts", "fprm_neural_mcts"}:
+    elif method in {"fprm_direct", "fprm_greedy", "fprm_root_beam", "fprm_root_child_beam", "fprm_linear_pair", "fprm_linear_pair_deep", "fprm_mcts", "fprm_neural_mcts"}:
         polarity, terms, plan, cost = _best_polarity_plan(method, bf, config, seed, neural)
         circ = emit_plan_to_circuit(
             plan,

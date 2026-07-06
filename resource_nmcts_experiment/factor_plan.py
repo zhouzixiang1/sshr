@@ -481,12 +481,15 @@ def linear_pair_beam_plan(
     live_factor_ancilla: int = 0,
     config: SearchConfig = SearchConfig(),
     action_width: int = 4,
+    recursive_depth: int = 0,
 ) -> Plan:
-    """Try one CNOT-only pairwise XOR factor above greedy subplans.
+    """Try CNOT-only pairwise XOR factors above cheap subplans.
 
     The plan is baseline-preserving against ``root_child_beam_plan``.  It adds
     a cheap linear factor candidate for high-dimensional random ANFs where
-    monomial common factors miss repeated pair structure.
+    monomial common factors miss repeated pair structure.  ``recursive_depth``
+    enables a bounded extra linear-factor layer in the selected quotient only;
+    the default keeps the historical one-layer result unchanged.
     """
     best = root_child_beam_plan(terms, prefix_len, live_factor_ancilla, config)
     best_score = best.score(config.weights)
@@ -496,14 +499,24 @@ def linear_pair_beam_plan(
     child_config = replace(config, greedy_eval_limit=1)
     memo: dict[tuple[frozenset[int], int, int], Plan] = {}
     for action in actions:
-        group = greedy_plan(
-            action.residuals,
-            prefix_len + 1,
-            live_factor_ancilla + 1,
-            child_config,
-            None,
-            memo,
-        )
+        if recursive_depth > 0 and live_factor_ancilla + 1 < config.max_factor_ancilla:
+            group = linear_pair_beam_plan(
+                action.residuals,
+                prefix_len + 1,
+                live_factor_ancilla + 1,
+                child_config,
+                action_width=max(2, action_width - 1),
+                recursive_depth=recursive_depth - 1,
+            )
+        else:
+            group = greedy_plan(
+                action.residuals,
+                prefix_len + 1,
+                live_factor_ancilla + 1,
+                child_config,
+                None,
+                memo,
+            )
         rest = greedy_plan(action.rest, prefix_len, live_factor_ancilla, child_config, None, memo)
         cost = factor_cost(action, group, rest, live_factor_ancilla, config)
         plan = Plan("linear_factor", terms, cost, factor=action.factor, group=group, rest=rest)

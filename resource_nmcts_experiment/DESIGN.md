@@ -70,7 +70,9 @@ ANF factoring:
    on small functions.  For larger random-ANF instances it switches to a cheap
    direct/FPRM guard; for `n > 12`, that guard uses a direct-cost polarity
    screen plus a bounded root-child beam baseline and a CNOT-only pairwise
-   XOR-factor candidate.
+   XOR-factor candidate.  At the `n=15` scale point, the portfolio also
+   evaluates a one-extra-layer recursive linear-pair refinement under the same
+   ancilla guard.
 
 ## Representation
 
@@ -408,12 +410,16 @@ Main `highdim_resource` evidence:
   The gain uses more workspace: mean peak ancilla rises from 2.03 to 2.94.
 
 The `highdim_scale_resource` run extends the same high-dimensional guard to
-32 random ANF functions at `n=15`.  It contains 224 method/function rows across
-seven methods, with 0 errors and 0 skips.  The guarded variants again select
-the FPRM linear-pair candidate on every function.  Compared with FPRM-greedy,
-they have 30 T-count wins, 0 losses, and 2 ties; by weighted score they also
-have 30 wins, 0 losses, and 2 ties, with a 3.52% mean score reduction.
+32 random ANF functions at `n=15`.  It contains 256 method/function rows across
+eight methods, with 0 errors and 0 skips.  The guarded variants select the
+bounded recursive linear-pair candidate wherever it improves the one-layer
+candidate.  Compared with FPRM-greedy, they have 30 T-count wins, 0 losses,
+and 2 ties; by weighted score they also have 30 wins, 0 losses, and 2 ties,
+with a 3.55% mean score reduction.
 Compared with FPRM root beam, they have 29 score wins, 0 losses, and 3 ties,
-with a 3.06% mean score reduction.  The scale check is slower but finite:
-`and_resource_nmcts` has median runtime 6.938 s and p95 102.123 s, while
-`and_profile_resource_nmcts` has median runtime 6.854 s and p95 97.086 s.
+with a 3.09% mean score reduction.  The recursive linear-pair refinement
+improves the one-layer linear-pair candidate in 9 score cases, ties in 23, and
+has 0 score losses, but raises mean peak ancilla from 2.84 to 3.00.  The scale
+check is slower but finite: `and_resource_nmcts` has median runtime 12.531 s
+and p95 203.821 s, while `and_profile_resource_nmcts` has median runtime
+12.454 s and p95 197.515 s.

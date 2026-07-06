@@ -193,7 +193,9 @@ affine search create long tails, it replaces the expensive branches by a
 bounded FPRM linear-pair candidate: many polarities are screened by direct
 cost, a root-child beam baseline is retained, and repeated term pairs
 $x_i m \oplus x_j m$ can be factored as $(x_i \oplus x_j)m$ using a temporary
-CNOT-computed linear control.  It returns the correct candidate with the smallest
+CNOT-computed linear control.  At the $n=15$ scale point it also evaluates a
+one-extra-layer recursive linear-pair variant under the same ancilla guard.
+It returns the correct candidate with the smallest
 weighted score, breaking ties by T-count, CNOT count, depth, and peak ancilla.
 SSHR is used only as an external baseline in the experiments and is not part of
 this portfolio.  This final guard converts the affine neural search into a
@@ -210,7 +212,8 @@ For $n\leq 6$, it evaluates additional T-aggressive, CNOT/depth-oriented, and
 ancilla-tight FPRM, affine-greedy, and ESOP cube-beam candidates before
 selecting by the active weighted score.  For larger random-ANF instances, the
 same method switches to a high-dimensional guard: it keeps direct and bounded
-FPRM root-child/linear-pair candidates but avoids expensive fixed-coordinate MCTS
+FPRM root-child/linear-pair candidates, including the one-extra-layer
+linear-pair variant at $n=15$, but avoids expensive fixed-coordinate MCTS
 guards.
 This design separates two roles.  On small functions it tests whether the
 resource profile can change the selected circuit; on large functions it acts as
@@ -508,14 +511,19 @@ tradeoff is workspace: mean peak ancilla increases from 2.03 for FPRM-greedy
 and root beam to 2.94.
 
 As a scale check, we also run the same high-dimensional guard on 32 random
-$n=15$ ANF functions, producing 224 method/function rows with no errors or
-skips.  The same pattern persists: relative to FPRM-greedy, \method{} and
-\profilemethod{} have 30 T-count wins, no losses, and 2 ties, with a 4.60\%
-mean T-count reduction and a 3.52\% mean score reduction.  Relative to the
-standalone FPRM root-beam candidate, they have 29 score wins, no losses, and
-3 ties, with a 3.06\% mean score reduction.  Runtime is higher but still
-finite: \method{} has p95 runtime 102.12 s and \profilemethod{} has p95
-runtime 97.09 s.
+$n=15$ ANF functions, producing 256 method/function rows with no errors or
+skips after adding the bounded recursive linear-pair candidate.  Relative to
+FPRM-greedy, \method{} and \profilemethod{} have 30 T-count wins, no losses,
+and 2 ties, with a 4.63\% mean T-count reduction and a 3.55\% mean score
+reduction.  Relative to the standalone FPRM root-beam candidate, they have 29
+score wins, no losses, and 3 ties, with a 3.09\% mean score reduction.  The
+recursive variant is a small refinement rather than a new asymptotic step: it
+improves over the one-layer linear-pair candidate in 9 score cases, ties in 23,
+and has no score losses, while increasing mean peak ancilla from 2.84 to 3.00.
+Runtime remains finite but the internal portfolio is slower because it evaluates
+both one-layer and recursive candidates: \method{} has median runtime 12.53 s
+and p95 runtime 203.82 s, while \profilemethod{} has median runtime 12.45 s and
+p95 runtime 197.51 s.
 
 \begin{table}[t]
 \centering

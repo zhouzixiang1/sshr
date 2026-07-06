@@ -46,6 +46,11 @@ Current source evidence:
 - high-dimensional stress analysis: `../results/analysis_highdim_resource.md`
 - high-dimensional stress runtime/resource analysis:
   `../results/runtime_highdim_resource.md`
+- high-dimensional scaling CSV: `../results/raw_highdim_scale_resource.csv`
+- high-dimensional scaling analysis:
+  `../results/analysis_highdim_scale_resource.md`
+- high-dimensional scaling runtime/resource analysis:
+  `../results/runtime_highdim_scale_resource.md`
 - external-tool benchmark exporter: `../export_benchmarks.py`
 - LaTeX tables: `tables/runtime_ablation_affine.tex`,
   `tables/resource_ablation_affine.tex`,
@@ -58,9 +63,12 @@ Current source evidence:
   `tables/runtime_large_resource_core.tex`,
   `tables/resource_highdim_resource.tex`,
   `tables/runtime_highdim_resource.tex`,
+  `tables/resource_highdim_scale_resource.tex`,
+  `tables/runtime_highdim_scale_resource.tex`,
   `tables/external_traditional_resource_n6.tex`
 - manifests: `../results/manifest_evidence_affine.json`,
   `../results/manifest_highdim_resource.json`,
+  `../results/manifest_highdim_scale_resource.json`,
   `../results/manifest_external_traditional_resource_n4.json`,
   `../results/manifest_external_traditional_resource_n6.json`
 

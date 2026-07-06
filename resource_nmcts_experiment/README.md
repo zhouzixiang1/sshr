@@ -72,7 +72,8 @@ Current presets:
   baseline and add a CNOT-only pairwise XOR factor candidate.
 - `highdim_scale_resource`: isolated `n=15` random-ANF scale check with direct
   ANF, logical-AND direct ANF, FPRM-greedy, bounded FPRM root-beam, FPRM
-  linear-pair factoring, Resource-NMCTS, and Profile-Resource-NMCTS.
+  linear-pair factoring, a one-extra-layer bounded linear-pair refinement,
+  Resource-NMCTS, and Profile-Resource-NMCTS.
 - `large_resource`: experimental `n=14` stress extension.  This preset exposed
   the mixed-suite runtime tail and is kept for broader engineering sweeps.
 - `main`: large-scale placeholder for broader sweeps.
@@ -258,17 +259,23 @@ and `results/runtime_highdim_resource.md`:
 Additional scale check from `results/analysis_highdim_scale_resource.md` and
 `results/runtime_highdim_scale_resource.md`:
 
-- 32 random ANF functions at `n=15`, 7 methods, 224 result rows, 0 errors, and
+- 32 random ANF functions at `n=15`, 8 methods, 256 result rows, 0 errors, and
   0 skips.
 - Compared with FPRM-greedy, the guarded variants have 30 T-count wins, 0
   losses, and 2 ties; by weighted score they also have 30 wins, 0 losses, and
-  2 ties, with a 3.52% mean score reduction.
+  2 ties, with a 3.55% mean score reduction.
 - Compared with the standalone FPRM root-beam candidate, they have 29 T-count
   wins, 0 losses, and 3 ties; by weighted score they also have 29 wins, 0
-  losses, and 3 ties, with a 3.06% mean score reduction.
+  losses, and 3 ties, with a 3.09% mean score reduction.
+- The one-extra-layer linear-pair refinement is a small but non-regressing
+  improvement at this scale: versus the one-layer linear-pair candidate, it has
+  9 weighted-score wins, 0 losses, and 23 ties, at mean peak ancilla 3.00
+  instead of 2.84.
 - Runtime remains finite at `n=15`: `and_resource_nmcts` completes 32/32 with
-  median 6.938 s and p95 102.123 s; `and_profile_resource_nmcts` completes
-  32/32 with median 6.854 s and p95 97.086 s.
+  median 12.531 s and p95 203.821 s; `and_profile_resource_nmcts` completes
+  32/32 with median 12.454 s and p95 197.515 s.  The portfolio runtime roughly
+  doubles because it now evaluates both one-layer and recursive linear-pair
+  candidates.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost
