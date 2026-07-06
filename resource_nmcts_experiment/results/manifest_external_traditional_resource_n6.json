@@ -2,20 +2,23 @@
   "abc_binary": "/Users/zhouzixiang/Desktop/tzb/src/tmp/abc/abc",
   "abc_esop_script": "strash; &get",
   "abc_script": "strash; balance; rewrite; refactor; rewrite -z; balance",
+  "abc_xag_script": "&get; &st -m -L 1",
   "count": null,
-  "elapsed_s": 0.8751471042633057,
-  "existing_rows": 708,
+  "elapsed_s": 0.8943650722503662,
+  "existing_rows": 885,
   "functions": 177,
   "last_run_methods": [
-    "external_abc_esop"
+    "external_abc_xag"
   ],
   "max_abc_n": 6,
   "max_esop_n": 6,
   "max_ilp_n": 6,
   "max_n": 6,
+  "max_xag_n": 6,
   "methods": [
     "external_abc_aig",
     "external_abc_esop",
+    "external_abc_xag",
     "external_sshr_h",
     "external_sshr_i_cnot",
     "external_sshr_i_t"
@@ -24,17 +27,10 @@
   "new_tasks": 177,
   "offset": 0,
   "raw": "results/raw_external_traditional_resource_n6.csv",
-  "raw_methods": [
-    "external_abc_aig",
-    "external_abc_esop",
-    "external_sshr_h",
-    "external_sshr_i_cnot",
-    "external_sshr_i_t"
-  ],
   "resume": true,
-  "rows": 885,
+  "rows": 1062,
   "source_manifest": "benchmark_exports/traditional_resource_external_seed42/manifest.csv",
   "summary": "results/summary_external_traditional_resource_n6.csv",
-  "timeout": 8.0,
+  "timeout": 10.0,
   "workers": 8
 }

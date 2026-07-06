@@ -45,8 +45,9 @@ exported external comparison, \method{} has 69 score wins and 3 losses against
 the exact $n\leq 4$ CNOT-optimized SSHR-I pilot, 168 score wins and 9
 losses against the time-limited $n\leq 6$ SSHR-I extension, and 177 score wins
 with no losses against an ABC-AIG baseline on the same $n\leq 6$ export.  It
-also has 147 score wins, 24 losses, and 6 ties against ABC's quantum-cost
-ESOP minimization path.  A
+also has 177 score wins with no losses against an ABC-XAG/GIA baseline and
+147 score wins, 24 losses, and 6 ties against ABC's quantum-cost ESOP
+minimization path.  A
 resource-profile stress test shows that \profilemethod{} is best or tied on
 42/47, 42/47, 41/47, and 42/47 functions under T-heavy, balanced,
 CNOT-depth-heavy, and ancilla-tight objectives.  A larger core benchmark
@@ -61,9 +62,9 @@ errors or skips; the guarded high-dimensional variants reduce mean T-count by
 ANF, with 60 score wins, no losses, and 4 ties against FPRM-greedy.  A
 follow-up $n=15$ scale check preserves this pattern with 30 score wins, no
 losses, and 2 ties against FPRM-greedy, reducing mean weighted score by
-5.73\%.  On exported high-dimensional ABC-AIG checks for the same $n=14$ and
-$n=15$ sets, the guarded method wins all 96 weighted-score comparisons with
-94.13\% and 94.59\% mean score reductions, while ABC-AIG keeps lower estimated
+5.73\%.  On exported high-dimensional ABC AIG/XAG checks for the same $n=14$
+and $n=15$ sets, the guarded method wins all 192 weighted-score comparisons
+with 94.13\%--96.33\% mean score reductions, while ABC keeps lower estimated
 depth on most functions.  The method is
 evaluated only at the logical circuit layer;
 hardware mapping and connectivity constraints are outside the present scope.
@@ -247,10 +248,11 @@ resource objective to a larger random-ANF core through $n=12$.  To support
 external reproduction, the benchmark generator can export every preset to PLA,
 BLIF \texttt{.names}, and truth-table JSON manifests.  The current draft adds
 an exported exact-SSHR-I pilot on the $n\leq 4$ subset, a time-limited
-$n\leq 6$ SSHR-I extension, and Berkeley ABC AIG and ESOP baselines covering
-the full \traditionaldataset{} slice.  The ABC-AIG export path is also run on
-the isolated $n=14$ and $n=15$ high-dimensional random-ANF suites; external
-XAG/ROS/LUT tool results are still future work.
+$n\leq 6$ SSHR-I extension, and Berkeley ABC AIG, XAG/GIA, and ESOP baselines
+covering the full \traditionaldataset{} slice.  The ABC-AIG and ABC-XAG export
+paths are also run on the isolated $n=14$ and $n=15$ high-dimensional
+random-ANF suites; reproduced ROS/LUT/mockturtle tool results are still future
+work.
 
 \subsection{Main results}
 
@@ -313,7 +315,10 @@ separate external backends over the exported manifest.  The SSHR backend gives
 CNOT-oriented heuristic and ILP baselines.  The ABC-AIG backend optimizes the
 exported BLIF with ABC rewriting, verifies the optimized BLIF truth table, and
 maps AIG AND count and level to a logic-level Bennett compute/uncompute
-resource estimate.  The ABC-ESOP backend runs ABC's quantum-cost
+resource estimate.  The ABC-XAG backend uses ABC's GIA \texttt{\&st -m -L 1}
+path, records XOR/MUX/AND statistics with \texttt{\&ps -m -x}, verifies the
+emitted BLIF truth table, and scores the network with a Bennett-style logical
+XAG estimate.  The ABC-ESOP backend runs ABC's quantum-cost
 \texttt{\&exorcism -q} flow, verifies the emitted ESOP-PLA against the exported
 truth table, and scores the resulting XOR-of-cubes oracle using the same
 logical-AND cube model as the internal ESOP baselines.  For the 72 functions
@@ -329,9 +334,10 @@ while spending more CNOTs.
 \caption{\method{} compared with exported external baselines on the
 177-function $n\leq 6$ extension.  SSHR-I rows use an 8 s per-call Gurobi
 budget.  ABC-AIG rows use verified ABC-optimized BLIF and Bennett-style
-resource estimates; ABC-ESOP rows use verified \texttt{\&exorcism -q} ESOP-PLA
-and logical-AND cube estimates.  Wins/losses/ties count common functions;
-negative mean relative values favor \method{}.}
+resource estimates; ABC-XAG rows use verified ABC GIA/XOR-aware BLIF and
+logical XAG estimates; ABC-ESOP rows use verified \texttt{\&exorcism -q}
+ESOP-PLA and logical-AND cube estimates.  Wins/losses/ties count common
+functions; negative mean relative values favor \method{}.}
 \label{tab:external-baselines}
 \input{tables/external_traditional_resource_n6}
 \end{table}
@@ -346,10 +352,10 @@ resource-constrained low-T oracle-synthesis claim, while ruling out any
 CNOT-only optimality claim.
 
 We then ran the external extension over all 177 exported functions with
-$n\leq 6$.  This produced 885 external rows with no errors or skips: 531 SSHR
-rows, 177 ABC-AIG rows, and 177 ABC-ESOP rows.  Against the CNOT-optimized
-SSHR-I extension, \method{} had 164 T-count wins, 3 losses, and 10 ties, and
-168 score wins with
+$n\leq 6$.  This produced 1062 external rows with no errors or skips: 531 SSHR
+rows, 177 ABC-AIG rows, 177 ABC-XAG rows, and 177 ABC-ESOP rows.  Against the
+CNOT-optimized SSHR-I extension, \method{} had 164 T-count wins, 3 losses, and
+10 ties, and 168 score wins with
 9 score losses; the mean score reduction was 27.92\%.  Against the T-optimized
 extension, \method{} had 166 T-count wins, 1 loss, and 10 ties, with a 26.25\%
 mean score reduction.  The CNOT disadvantage persisted, with \method{} worse on
@@ -364,34 +370,44 @@ consistent with a shallow optimized AIG followed by a wide Bennett embedding.
 This makes ABC-AIG a useful foil for the ancilla and weighted-resource
 objective, not a claim that \method{} dominates every metric.
 
+The ABC-XAG/GIA comparison adds an XOR-aware network baseline without using an
+external mapper inside the method.  \method{} had 176 T-count wins, no losses,
+and 1 tie against ABC-XAG; it won all 177 peak-ancilla and weighted-score
+comparisons, reducing mean weighted score by 63.23\% and mean peak ancilla by
+89.85\%.  It also reduced mean CNOT by 35.53\%, although ABC-XAG retained a
+lower depth estimate on 144/177 functions.  This closes part of the earlier
+XAG comparison gap while still falling short of a full ROS or mockturtle
+reversible-toolchain reproduction.
+
 The ABC-ESOP comparison is closer to the XOR-of-products synthesis family.
 \method{} had 144 T-count wins, 19 losses, and 14 ties against ABC-ESOP, and
 147 score wins, 24 losses, and 6 ties.  The mean weighted-score reduction was
 19.88\%; unlike the SSHR-I CNOT-oriented comparison, \method{} also had a small
 mean CNOT reduction of 1.19\%.  This result is not a substitute for a reproduced
-ROS or XAG mapper, but it adds a standard external XOR/ESOP minimizer to the
+ROS mapper, but it adds a standard external XOR/ESOP minimizer to the
 comparison boundary.
 
-Finally, we pushed the ABC-AIG exchange beyond the small-function slice.  The
-\highdimdataset{} and \scaledataset{} suites were exported to BLIF/truth JSON,
-optimized by ABC, and verified by a bit-parallel full truth-table checker
-before scoring.  The high-dimensional ABC-AIG rows contain 64 $n=14$ and 32
-$n=15$ functions, all correct and with no errors or skips.  Against ABC-AIG,
-\method{} and \profilemethod{} win every T-count, CNOT, peak-ancilla, and
-weighted-score comparison on these 96 functions; the mean score reductions are
-94.13\% at $n=14$ and 94.59\% at $n=15$.  The depth column remains an important
-counterweight: ABC-AIG has a lower estimated depth on 50/64 and 25/32
-high-dimensional functions, respectively.  Thus the high-dimensional external
-result supports the low-ancilla and weighted-resource claim, but not
-depth-only dominance.
+Finally, we pushed the ABC AIG/XAG exchange beyond the small-function slice.
+The \highdimdataset{} and \scaledataset{} suites were exported to BLIF/truth
+JSON, optimized by ABC, and verified by a bit-parallel full truth-table checker
+before scoring.  The high-dimensional ABC rows contain 64 $n=14$ and 32
+$n=15$ functions for each of AIG and XAG, all correct and with no errors or
+skips.  Against both ABC-AIG and ABC-XAG, \method{} and \profilemethod{} win
+every T-count, CNOT, peak-ancilla, and weighted-score comparison on these 192
+external comparisons; the mean score reductions range from 94.13\% to
+96.33\%.  The depth column remains an important counterweight: ABC-AIG has a
+lower estimated depth on 50/64 and 25/32 high-dimensional functions, and
+ABC-XAG has a lower estimated depth on 50/64 and 26/32 functions,
+respectively.  Thus the high-dimensional external result supports the
+low-ancilla and weighted-resource claim, but not depth-only dominance.
 
 \begin{table}[t]
 \centering
 \small
-\caption{\method{} compared with exported ABC-AIG on the high-dimensional
-$n=14$ and $n=15$ random-ANF suites.  Both suites use verified ABC-optimized
-BLIF and the same Bennett-style AIG resource estimate as the $n\leq 6$ ABC-AIG
-baseline.  Negative mean relative values favor \method{}.}
+\caption{\method{} compared with exported ABC-AIG and ABC-XAG on the
+high-dimensional $n=14$ and $n=15$ random-ANF suites.  Both suites use verified
+ABC-optimized BLIF, with Bennett-style AIG or logical-XAG resource estimates.
+Negative mean relative values favor \method{}.}
 \label{tab:external-highdim-aig}
 \input{tables/external_highdim_abc_aig}
 \end{table}
@@ -640,12 +656,13 @@ factored subplan.
 
 The main current limitations are the absence of hardware mapping, the fact that
 the exported SSHR-I extension beyond $n\leq 4$ is time-limited rather than an
-exact certificate, the fact that ABC-AIG and ABC-ESOP are scored through
+exact certificate, the fact that ABC AIG/XAG/ESOP rows are scored through
 logic-level estimates rather than full reversible-toolchain synthesis, and the
-lack of a reproduced external XAG/ROS toolchain in the comparison set.  The
+lack of a reproduced external ROS/mockturtle toolchain in the comparison set.
+The
 in-harness ESOP cube-beam and weighted-MILP baselines plus the exported
 SSHR-I/ABC comparisons strengthen the Boolean synthesis comparison, and the
-new high-dimensional ABC-AIG rows show that this external comparison is no
+new high-dimensional ABC AIG/XAG rows show that this external comparison is no
 longer restricted to $n\leq 6$.  More external implementations remain necessary
 before a submission-ready claim.
 The resource-profile sweep shows that profile-specific
@@ -657,7 +674,8 @@ bounded recursive FPRM linear-pair search keeps the run finite and improves
 over FPRM-greedy on most functions, and the $n=15$ scale check preserves that
 margin while keeping all runs finite.  The remaining weakness is less the
 internal high-dimensional guard than the comparison boundary: the current
-evidence still lacks reproduced XAG or ROS toolchain baselines.
+evidence still lacks reproduced ROS or mockturtle reversible-toolchain
+baselines.
 
 \section{Conclusion}
 
@@ -670,15 +688,16 @@ $n\leq 6$ traditional-baseline slice, the full \method{} method further avoids
 score regressions against internal ESOP cube-beam candidates and remains
 competitive against weighted ESOP MILP.  Resource-profile and \largedataset{}
 benchmarks show that this advantage is robust across several weighted
-objectives and larger random ANF instances.  Exported SSHR, ABC-AIG, and
-ABC-ESOP baselines add independent cross-tool evidence that the gains are not
-an artifact of the internal experiment harness, while also showing that CNOT
-and depth remain important limitations.  The new high-dimensional stress
+objectives and larger random ANF instances.  Exported SSHR, ABC-AIG, ABC-XAG,
+and ABC-ESOP baselines add independent cross-tool evidence that the gains are
+not an artifact of the internal experiment harness, while also showing that
+CNOT and depth remain important limitations.  The new high-dimensional stress
 tests show that bounded guards scale without timeouts, beat FPRM-greedy on
 60 of 64 weighted-score comparisons at $n=14$ and 30 of 32 comparisons at
-$n=15$, and beat exported ABC-AIG on all 96 high-dimensional weighted-score
-comparisons.  The next step is to reproduce XAG/ROS-style toolchain baselines
-and hardware-aware mappings so the empirical claim is submission-ready.
+$n=15$, and beat exported ABC AIG/XAG on all 192 high-dimensional
+weighted-score comparisons.  The next step is to reproduce ROS/mockturtle-style
+toolchain baselines and hardware-aware mappings so the empirical claim is
+submission-ready.
 
 \bibliographystyle{plain}
 \bibliography{references}

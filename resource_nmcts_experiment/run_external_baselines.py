@@ -43,8 +43,14 @@ DEFAULT_WEIGHTS = {"t": 1.0, "cnot": 0.04, "depth": 0.015, "gates": 0.01, "ancil
 DEFAULT_ABC_BIN = ROOT / "tmp" / "abc" / "abc"
 DEFAULT_ABC_SCRIPT = "strash; balance; rewrite; refactor; rewrite -z; balance"
 DEFAULT_ABC_ESOP_SCRIPT = "strash; &get"
+DEFAULT_ABC_XAG_SCRIPT = "&get; &st -m -L 1"
 ABC_STATS_RE = re.compile(r"and\s*=\s*(\d+)\s+lev\s*=\s*(\d+)")
 ESOP_STATS_RE = re.compile(r"Final\s+statistics:\s+Cubes\s*=\s*(\d+)\s+Literals\s*=\s*(\d+)\s+QCost\s*=\s*(\d+)")
+XAG_NODE_RE = re.compile(r"\b(?:and|nod)\s*=\s*(\d+)\s+lev\s*=\s*(\d+)")
+XAG_STATS_RE = re.compile(
+    r"XOR/MUX stats:\s*xor\s*=\s*(\d+).*?mux\s*=\s*(\d+).*?and\s*=\s*(\d+).*?obj\s*=\s*(\d+)",
+    re.DOTALL,
+)
 ANSI_RE = re.compile(r"\x1b\[[0-9;]*m")
 
 
@@ -155,6 +161,7 @@ def parse_methods(raw: str) -> list[str]:
         "external_sshr_i_t",
         "external_abc_aig",
         "external_abc_esop",
+        "external_abc_xag",
     }
     unknown = sorted(set(methods) - valid)
     if unknown:
@@ -171,6 +178,23 @@ class BlifNode:
     inputs: tuple[str, ...]
     output: str
     cover: tuple[tuple[str, int], ...]
+
+
+def blif_logical_lines(text: str) -> Iterable[str]:
+    pending = ""
+    for raw_line in text.splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.endswith("\\"):
+            pending += line[:-1].rstrip() + " "
+            continue
+        if pending:
+            line = pending + line
+            pending = ""
+        yield line.strip()
+    if pending:
+        yield pending.strip()
 
 
 def parse_blif(path: Path) -> tuple[list[str], str, list[BlifNode]]:
@@ -196,10 +220,7 @@ def parse_blif(path: Path) -> tuple[list[str], str, list[BlifNode]]:
         current_names = None
         current_cover = []
 
-    for raw_line in path.read_text(encoding="utf-8").splitlines():
-        line = raw_line.strip()
-        if not line or line.startswith("#"):
-            continue
+    for line in blif_logical_lines(path.read_text(encoding="utf-8")):
         if line.startswith("."):
             flush_current()
             parts = line.split()
@@ -231,13 +252,17 @@ def parse_blif(path: Path) -> tuple[list[str], str, list[BlifNode]]:
     return inputs, outputs[0], nodes
 
 
+def input_label_index(label: str) -> int:
+    for prefix in ("x", "pi"):
+        if label.startswith(prefix) and label[len(prefix) :].isdigit():
+            return int(label[len(prefix) :])
+    raise ValueError(f"unsupported input label: {label}")
+
+
 def eval_blif(inputs: list[str], output: str, nodes: list[BlifNode], x: int) -> int:
     values: dict[str, int] = {}
     for label in inputs:
-        if label.startswith("x") and label[1:].isdigit():
-            values[label] = (x >> int(label[1:])) & 1
-        else:
-            raise ValueError(f"unsupported input label: {label}")
+        values[label] = (x >> input_label_index(label)) & 1
     for node in nodes:
         if not node.inputs:
             value = node.cover[-1][1] if node.cover else 0
@@ -267,11 +292,8 @@ def _input_truth_masks(labels: list[str], n: int) -> dict[str, int]:
     for x in range(1 << n):
         bit = 1 << x
         for label in labels:
-            if label.startswith("x") and label[1:].isdigit():
-                if (x >> int(label[1:])) & 1:
-                    masks[label] |= bit
-            else:
-                raise ValueError(f"unsupported input label: {label}")
+            if (x >> input_label_index(label)) & 1:
+                masks[label] |= bit
     return masks
 
 
@@ -340,6 +362,28 @@ def abc_bennett_cost(and_count: int, level: int, bf: BooleanFunction) -> Cost:
         depth=10 * level + output_gate,
         explicit_ancilla=and_count,
         peak_ancilla=and_count,
+    )
+
+
+def output_toggle_cost(bf: BooleanFunction) -> tuple[int, int]:
+    all_ones = (1 << (1 << bf.n)) - 1
+    if bf.truth_table in {0, all_ones}:
+        return 0, int(bf.truth_table == all_ones)
+    return 1, 1
+
+
+def abc_xag_cost(and_count: int, xor_count: int, mux_count: int, level: int, bf: BooleanFunction) -> Cost:
+    output_cnot, output_gate = output_toggle_cost(bf)
+    # Count a MUX as one nonlinear selection plus two XOR-class linear updates.
+    nonlinear = and_count + mux_count
+    linear = xor_count + 2 * mux_count
+    return Cost(
+        T=4 * nonlinear,
+        CNOT=6 * nonlinear + 2 * linear + output_cnot,
+        gates=2 * nonlinear + 2 * linear + output_gate,
+        depth=6 * level + output_gate,
+        explicit_ancilla=nonlinear + linear,
+        peak_ancilla=nonlinear + linear,
     )
 
 
@@ -455,6 +499,17 @@ def parse_esop_stats(output: str) -> tuple[int | None, int | None, int | None]:
     return int(cubes), int(literals), int(qcost)
 
 
+def parse_xag_stats(output: str) -> tuple[int, int, int, int, int]:
+    clean = ANSI_RE.sub("", output)
+    node_matches = XAG_NODE_RE.findall(clean)
+    stat_matches = XAG_STATS_RE.findall(clean)
+    if not node_matches or not stat_matches:
+        raise RuntimeError(f"could not parse ABC-XAG stats from output: {clean[-800:]}")
+    _nodes, level = node_matches[-1]
+    xor_count, mux_count, and_count, obj_count = stat_matches[-1]
+    return int(and_count), int(xor_count), int(mux_count), int(obj_count), int(level)
+
+
 def run_abc_aig(
     row: dict,
     bf: BooleanFunction,
@@ -494,6 +549,52 @@ def run_abc_aig(
         "correct": correct,
         "abc_and": and_count,
         "abc_level": level,
+        "abc_script": abc_script,
+        "abc_binary": display_path(abc_bin),
+    }
+
+
+def run_abc_xag(
+    row: dict,
+    bf: BooleanFunction,
+    timeout: float,
+    abc_bin: Path,
+    abc_script: str,
+) -> tuple[Cost, dict]:
+    if not abc_bin.exists():
+        raise FileNotFoundError(f"ABC binary not found: {abc_bin}")
+    rel_blif = row.get("blif")
+    if not rel_blif:
+        raise ValueError("manifest row has no BLIF path")
+    blif = (Path(row["_manifest_abs_dir"]) / rel_blif).resolve()
+    if not blif.exists():
+        raise FileNotFoundError(f"BLIF file not found: {blif}")
+
+    with tempfile.TemporaryDirectory(prefix="abc_xag_") as tmp:
+        opt_blif = Path(tmp) / f"{row['name']}.abc_xag.blif"
+        command = f"read_blif {blif}; {abc_script}; &ps -m -x; &put; write_blif {opt_blif}"
+        proc = subprocess.run(
+            [str(abc_bin), "-c", command],
+            text=True,
+            capture_output=True,
+            timeout=timeout,
+            check=False,
+        )
+        combined = (proc.stdout or "") + (proc.stderr or "")
+        if proc.returncode != 0:
+            raise RuntimeError(f"ABC-XAG failed with code {proc.returncode}: {combined[-1000:]}")
+        if not opt_blif.exists():
+            raise RuntimeError(f"ABC-XAG did not write BLIF file: {combined[-1000:]}")
+        and_count, xor_count, mux_count, obj_count, level = parse_xag_stats(combined)
+        correct = verify_blif(opt_blif, bf)
+    cost = abc_xag_cost(and_count, xor_count, mux_count, level, bf)
+    return cost, {
+        "correct": correct,
+        "abc_xag_and": and_count,
+        "abc_xag_xor": xor_count,
+        "abc_xag_mux": mux_count,
+        "abc_xag_obj": obj_count,
+        "abc_xag_level": level,
         "abc_script": abc_script,
         "abc_binary": display_path(abc_bin),
     }
@@ -559,8 +660,21 @@ def synthesize_external(method: str, bf: BooleanFunction, timeout: float) -> Qua
     raise ValueError(method)
 
 
-def run_one(task: tuple[dict, str, float, int, int, int, dict[str, float], Path, str, str]) -> dict:
-    row, method, timeout, max_ilp_n, max_abc_n, max_esop_n, weights, abc_bin, abc_script, abc_esop_script = task
+def run_one(task: tuple[dict, str, float, int, int, int, int, dict[str, float], Path, str, str, str]) -> dict:
+    (
+        row,
+        method,
+        timeout,
+        max_ilp_n,
+        max_abc_n,
+        max_esop_n,
+        max_xag_n,
+        weights,
+        abc_bin,
+        abc_script,
+        abc_esop_script,
+        abc_xag_script,
+    ) = task
     bf = bool_from_row(row)
     base = {
         "index": row.get("index", ""),
@@ -579,6 +693,8 @@ def run_one(task: tuple[dict, str, float, int, int, int, dict[str, float], Path,
         return {**base, "skipped": f"ABC-AIG capped at n<={max_abc_n}", "error": ""}
     if method == "external_abc_esop" and bf.n > max_esop_n:
         return {**base, "skipped": f"ABC-ESOP capped at n<={max_esop_n}", "error": ""}
+    if method == "external_abc_xag" and bf.n > max_xag_n:
+        return {**base, "skipped": f"ABC-XAG capped at n<={max_xag_n}", "error": ""}
     try:
         start = time.time()
         if method == "external_abc_aig":
@@ -589,6 +705,12 @@ def run_one(task: tuple[dict, str, float, int, int, int, dict[str, float], Path,
             gates = cost.gates
         elif method == "external_abc_esop":
             cost, extra = run_abc_esop(row, bf, timeout, abc_bin, abc_esop_script)
+            elapsed = time.time() - start
+            correct = extra.pop("correct")
+            n_qubits = bf.n + 1 + cost.explicit_ancilla
+            gates = cost.gates
+        elif method == "external_abc_xag":
+            cost, extra = run_abc_xag(row, bf, timeout, abc_bin, abc_xag_script)
             elapsed = time.time() - start
             correct = extra.pop("correct")
             n_qubits = bf.n + 1 + cost.explicit_ancilla
@@ -669,9 +791,11 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser.add_argument("--max-ilp-n", type=int, default=4)
     parser.add_argument("--max-abc-n", type=int, default=15)
     parser.add_argument("--max-esop-n", type=int, default=8)
+    parser.add_argument("--max-xag-n", type=int, default=15)
     parser.add_argument("--abc-bin", type=Path, default=DEFAULT_ABC_BIN)
     parser.add_argument("--abc-script", default=DEFAULT_ABC_SCRIPT)
     parser.add_argument("--abc-esop-script", default=DEFAULT_ABC_ESOP_SCRIPT)
+    parser.add_argument("--abc-xag-script", default=DEFAULT_ABC_XAG_SCRIPT)
     parser.add_argument("--timeout", type=float, default=30.0, help="per SSHR-I call time limit")
     parser.add_argument("--workers", type=int, default=1)
     parser.add_argument("--resume", action="store_true")
@@ -698,10 +822,12 @@ def main(argv: Iterable[str] | None = None) -> int:
             args.max_ilp_n,
             args.max_abc_n,
             args.max_esop_n,
+            args.max_xag_n,
             weights,
             args.abc_bin,
             args.abc_script,
             args.abc_esop_script,
+            args.abc_xag_script,
         )
         for row in manifest_rows
         for method in methods
@@ -758,6 +884,11 @@ def main(argv: Iterable[str] | None = None) -> int:
         if "external_abc_esop" in methods
         else previous_manifest.get("max_esop_n", args.max_esop_n)
     )
+    report_max_xag_n = (
+        args.max_xag_n
+        if "external_abc_xag" in methods
+        else previous_manifest.get("max_xag_n", args.max_xag_n)
+    )
     args.run_manifest.write_text(
         json.dumps(
             {
@@ -776,9 +907,11 @@ def main(argv: Iterable[str] | None = None) -> int:
                 "max_ilp_n": report_max_ilp_n,
                 "max_abc_n": report_max_abc_n,
                 "max_esop_n": report_max_esop_n,
+                "max_xag_n": report_max_xag_n,
                 "abc_binary": display_path(args.abc_bin),
                 "abc_script": args.abc_script,
                 "abc_esop_script": args.abc_esop_script,
+                "abc_xag_script": args.abc_xag_script,
                 "timeout": args.timeout,
                 "workers": args.workers,
                 "elapsed_s": time.time() - start,

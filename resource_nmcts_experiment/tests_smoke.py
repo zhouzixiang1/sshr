@@ -62,8 +62,26 @@ def check_external_truth_verifiers() -> None:
             + "\n",
             encoding="utf-8",
         )
+        pi_xor_blif = out_dir / "pi_xor2.blif"
+        pi_xor_blif.write_text(
+            "\n".join(
+                [
+                    ".model pi_xor2",
+                    ".inputs pi00 \\",
+                    " pi01",
+                    ".outputs po0",
+                    ".names pi00 pi01 po0",
+                    "01 1",
+                    "10 1",
+                    ".end",
+                ]
+            )
+            + "\n",
+            encoding="utf-8",
+        )
         assert verify_blif(and_blif, BooleanFunction(2, 0b1000))
         assert verify_blif(or_blif, BooleanFunction(2, 0b1110))
+        assert verify_blif(pi_xor_blif, BooleanFunction(2, 0b0110))
 
         inputs, output, nodes = parse_blif(or_blif)
         truth = blif_truth_table(inputs, output, nodes, 2)

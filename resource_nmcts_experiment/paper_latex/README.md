@@ -32,17 +32,17 @@ Current source evidence:
   `../results/raw_external_traditional_resource_n4.csv`
 - external exact SSHR-I pilot analysis:
   `../results/analysis_external_traditional_resource_n4.md`
-- external time-limited SSHR-I plus ABC-AIG/ABC-ESOP extension CSV:
+- external time-limited SSHR-I plus ABC-AIG/ABC-XAG/ABC-ESOP extension CSV:
   `../results/raw_external_traditional_resource_n6.csv`
-- external time-limited SSHR-I plus ABC-AIG/ABC-ESOP extension analysis:
+- external time-limited SSHR-I plus ABC-AIG/ABC-XAG/ABC-ESOP extension analysis:
   `../results/analysis_external_traditional_resource_n6.md`
-- external high-dimensional ABC-AIG CSV:
+- external high-dimensional ABC-AIG/ABC-XAG CSV:
   `../results/raw_external_highdim_resource.csv`
-- external high-dimensional ABC-AIG analysis:
+- external high-dimensional ABC-AIG/ABC-XAG analysis:
   `../results/analysis_external_highdim_resource.md`
-- external high-dimensional ABC-AIG scale CSV:
+- external high-dimensional ABC-AIG/ABC-XAG scale CSV:
   `../results/raw_external_highdim_scale_resource.csv`
-- external high-dimensional ABC-AIG scale analysis:
+- external high-dimensional ABC-AIG/ABC-XAG scale analysis:
   `../results/analysis_external_highdim_scale_resource.md`
 - resource-sweep CSV: `../results/raw_resource_sweep.csv`
 - resource-sweep analysis: `../results/analysis_resource_sweep.md`
@@ -85,8 +85,8 @@ Current source evidence:
 
 Known manuscript gaps:
 
-- add reproduced non-AIG high-dimensional external baselines where runtime
-  allows; ABC-ESOP is stable on `n <= 6` but times out on complex high-dimensional
-  examples;
-- add reproduced XAG/ROS or mockturtle-style toolchain results;
+- add reproduced non-ABC high-dimensional external baselines where runtime
+  allows; ABC-ESOP is stable on `n <= 6` but times out on complex
+  high-dimensional examples;
+- add reproduced ROS or mockturtle-style reversible-toolchain results;
 - decide the target venue and required reference/section style.

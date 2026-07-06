@@ -169,12 +169,14 @@ SSHR-H, CNOT-optimized SSHR-I, and T-optimized SSHR-I from the separate
 covers the full `n <= 6` traditional slice with an 8 s Gurobi budget per
 SSHR-I call, a Berkeley ABC AIG backend optimizes the same exported BLIF files
 before bit-parallel full truth-table verification and Bennett-style resource
-estimation, and an ABC ESOP backend runs `&exorcism -q`, verifies the emitted
-ESOP-PLA, and scores the resulting XOR-of-cubes oracle with the logical-AND
-cube model.  The ABC-AIG path now also covers the isolated `n=14` and `n=15`
+estimation, a Berkeley ABC XAG/GIA backend uses `&get; &st -m -L 1` plus
+`&ps -m -x` before verified BLIF scoring with a logical XAG cost model, and an
+ABC ESOP backend runs `&exorcism -q`, verifies the emitted ESOP-PLA, and scores
+the resulting XOR-of-cubes oracle with the logical-AND cube model.  The
+ABC-AIG and ABC-XAG paths now also cover the isolated `n=14` and `n=15`
 high-dimensional random-ANF presets; ABC-ESOP remains a small-function
 external baseline because complex high-dimensional ESOP minimization times out.
-XAG/ROS/mockturtle adapters are still future work, but the benchmark exchange
+ROS/mockturtle adapters are still future work, but the benchmark exchange
 format and SSHR/ABC comparison paths are now reproducible and independent of
 the synthesis harness.
 
@@ -321,16 +323,21 @@ rows with 0 errors/skips:
   claim.
 
 The time-limited exported SSHR-I plus ABC extension covers all 177 functions
-with `n <= 6`, five external methods, and 885 external rows with 0
+with `n <= 6`, six external methods, and 1062 external rows with 0
 errors/skips.  The SSHR-I rows use an 8 s per-call Gurobi budget, the
 ABC-AIG rows use Berkeley ABC 1.01 built from
 `bcfdf592289a408cd67ec19260f8a60a37b085b6` with BLIF truth-table
-verification, and the ABC-ESOP rows use verified `&exorcism -q` ESOP-PLA:
+verification, the ABC-XAG rows use verified ABC GIA/XOR-aware BLIF, and the
+ABC-ESOP rows use verified `&exorcism -q` ESOP-PLA:
 
 - Against ABC-AIG, `and_resource_nmcts` has 170/2/5 T-count wins/losses/ties,
   wins all 177 CNOT, peak-ancilla, and weighted-score comparisons, and reduces
   mean weighted score by 54.52%.  ABC-AIG has a lower depth estimate on
   126/177 functions, so it remains a useful depth-oriented foil.
+- Against ABC-XAG, `and_resource_nmcts` has 176/0/1 T-count wins/losses/ties,
+  wins all 177 peak-ancilla and weighted-score comparisons, reduces mean
+  weighted score by 63.23%, and reduces mean CNOT by 35.53%.  ABC-XAG has a
+  lower depth estimate on 144/177 functions.
 - Against ABC-ESOP, `and_resource_nmcts` has 144/19/14 T-count
   wins/losses/ties and 147/24/6 weighted-score wins/losses/ties, reducing mean
   weighted score by 19.88%.  This adds a standard external XOR-of-products
@@ -344,19 +351,22 @@ verification, and the ABC-ESOP rows use verified `&exorcism -q` ESOP-PLA:
   worse on 168/177 CNOT comparisons against CNOT-opt SSHR-I and on 163/177
   against T-opt SSHR-I.
 
-The high-dimensional exported ABC-AIG extension covers the isolated `n=14` and
-`n=15` random-ANF stress presets:
+The high-dimensional exported ABC AIG/XAG extension covers the isolated `n=14`
+and `n=15` random-ANF stress presets:
 
 - `results/analysis_external_highdim_resource.md`: 64 exported `n=14`
-  functions, 64/64 correct ABC-AIG rows, 0 errors/skips.  `and_resource_nmcts`
-  and `and_profile_resource_nmcts` beat ABC-AIG on all T-count, CNOT,
-  peak-ancilla, and weighted-score comparisons, with mean score reduction
-  94.13%.  ABC-AIG has a lower estimated depth on 50/64 functions.
+  functions, 128/128 correct ABC-AIG/ABC-XAG rows, 0 errors/skips.
+  `and_resource_nmcts` and `and_profile_resource_nmcts` beat both ABC
+  baselines on all T-count, CNOT, peak-ancilla, and weighted-score
+  comparisons, with mean score reductions of 94.13% against AIG and 95.48%
+  against XAG.  ABC-AIG and ABC-XAG each have a lower estimated depth on 50/64
+  functions.
 - `results/analysis_external_highdim_scale_resource.md`: 32 exported `n=15`
-  functions, 32/32 correct ABC-AIG rows, 0 errors/skips.  The guarded methods
-  again win all T-count, CNOT, peak-ancilla, and weighted-score comparisons,
-  with mean score reduction 94.59%.  ABC-AIG has a lower estimated depth on
-  25/32 functions.
+  functions, 64/64 correct ABC-AIG/ABC-XAG rows, 0 errors/skips.  The guarded
+  methods again win all T-count, CNOT, peak-ancilla, and weighted-score
+  comparisons, with mean score reductions of 94.59% against AIG and 96.33%
+  against XAG.  ABC-AIG has a lower estimated depth on 25/32 functions and
+  ABC-XAG on 26/32 functions.
 
 The `resource_sweep` stress test checks whether the method remains competitive
 under different resource objectives.  It uses 47 functions with `n <= 6`, four
