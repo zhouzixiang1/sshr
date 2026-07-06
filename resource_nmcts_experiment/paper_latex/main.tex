@@ -65,17 +65,12 @@ Boolean oracles translate classical predicates into reversible quantum
 subroutines.  In fault-tolerant settings, the cost of such oracles is often
 dominated by non-Clifford resources, so synthesis methods must account for
 T-count, depth, and ancillary workspace rather than only the number of reversible
-gates.  Existing Boolean-oriented approaches include XAG-based compilation,
-resource-constrained oracle synthesis, multiplicative-complexity methods, and
-BDD-based reversible synthesis~\cite{meuli2022xag,meuli2020ros,meuli2019multiplicative,wille2009bdd}.
-
-Recent learning-guided synthesis work has shown that reinforcement learning and
-tree search can optimize quantum circuits in nontrivial spaces, including
-Clifford+T unitary synthesis, non-Clifford-count optimization, MCTS-based
-quantum circuit synthesis, and ZX-calculus rewriting~\cite{rietsch2024unitary,kremer2025nonclifford,machiya2026monteq,riu2025rlzx}.
-However, these systems do not directly solve the symbolic Boolean oracle
-problem studied here: choosing reusable Boolean intermediates under a
-multi-resource objective.
+gates.  Existing Boolean-oriented approaches provide strong representations and
+baseline synthesis methods, while recent learning-guided circuit work shows
+that neural policies and tree search can be useful in large synthesis spaces.
+The gap addressed here is the combination of these two lines: a neural search
+method whose state and actions remain symbolic Boolean oracle constructions and
+whose objective directly scores T-count, CNOT count, depth, gates, and ancilla.
 
 This paper frames quantum Boolean oracle synthesis as a resource-constrained
 search over algebraic-normal-form (ANF) and fixed-polarity Reed--Muller (FPRM)
@@ -83,6 +78,39 @@ factorizations.  The central claim is that affine changes of Boolean coordinates
 can expose low-T decompositions that fixed-coordinate ANF factoring misses, and
 that a resource-adaptive neural MCTS portfolio can retain these wins while
 guarding against degradation under different weighted objectives.
+
+\section{Related Work and Gap}
+
+Boolean-structure methods are the closest technical baselines.  XAG-based
+quantum compilation uses XOR-and-AND logic networks to reduce fault-tolerant
+resources; ROS combines LUT mapping with resource-aware oracle synthesis and
+SAT-based garbage management; multiplicative-complexity methods relate the
+number of AND nodes in a Boolean network to T-count and ancilla upper bounds;
+and BDD-based reversible synthesis scales to large Boolean functions by
+compiling decision-diagram structure~\cite{meuli2022xag,meuli2020ros,meuli2019multiplicative,wille2009bdd}.
+SSHR is also closely related because it exploits parallelotope structure in the
+Boolean hypercube and provides CNOT-oriented small-function baselines,
+including heuristic and ILP variants~\cite{zheng2025sshr}.  These methods
+motivate the resource metrics and symbolic action space used here, but they do
+not use a learned policy/value search over ANF/FPRM factorization plans.
+
+Learning-guided synthesis has developed along adjacent axes.  ShortCircuit uses
+an AlphaZero-style process for classical AIG generation from truth tables,
+showing that policy/value search can help Boolean circuit construction at the
+logic level~\cite{tsaras2024shortcircuit}.  Quantum learning-guided work has
+used Gumbel AlphaZero for Clifford+T unitary synthesis, reinforcement learning
+for non-Clifford-count optimization, MCTS for Hamiltonian-simulation Pauli-term
+ordering, and PPO/GNN policies for ZX-calculus rewriting~\cite{rietsch2024unitary,kremer2025nonclifford,machiya2026monteq,riu2025rlzx}.
+These systems validate the use of neural search in synthesis, but they do not
+directly target Boolean oracle factorization with explicit T/CNOT/depth/ancilla
+tradeoffs.
+
+The present method therefore avoids two weak directions for this problem: it is
+not a gate-by-gate unitary generator, and it is not an SSHR parallelotope
+selector.  It searches over reusable Boolean intermediates in ANF/FPRM form,
+uses affine coordinate changes as a cheap way to alter the factorization basis,
+and treats external XAG, ROS, BDD, ESOP, and SSHR-style flows as baselines or
+export targets rather than as components of the method.
 
 \section{Problem Formulation}
 

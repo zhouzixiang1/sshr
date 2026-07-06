@@ -12,11 +12,14 @@ against SSHR, but it does not use SSHR parallelotopes or SSHR's candidate space.
 
 ## Literature Position
 
-Recent AI-based quantum synthesis work shows that learning-guided search is a
-credible synthesis method, but most existing systems target generic unitary
-synthesis, routing, Pauli scheduling, or post-synthesis rewriting rather than
-Boolean oracle construction.
+Recent AI-based synthesis work shows that learning-guided search is a credible
+synthesis method, but the existing work sits next to this problem rather than
+on top of it.
 
+- ShortCircuit uses AlphaZero-style policy/value search for classical AIG
+  generation from truth tables; it covers the generic "AI for Boolean circuit
+  generation" claim, so this project must be positioned around quantum oracle
+  resources rather than only around RL+MCTS.
 - Rietsch et al. use Gumbel AlphaZero for Clifford+T unitary synthesis.
 - Kremer et al. use RL for Clifford+T / Clifford+CS non-Clifford-count
   optimization.
@@ -26,11 +29,13 @@ Boolean oracle construction.
 
 Traditional Boolean oracle synthesis instead optimizes symbolic resources:
 XAG/multiplicative-complexity methods target T-count and ancilla, LUT/ROS
-methods target resource-constrained oracle construction, and SSHR is a strong
-CNOT-oriented small Boolean-function baseline.
+methods target resource-constrained oracle construction, BDD synthesis provides
+a scalable reversible-logic baseline, and SSHR is a strong CNOT-oriented
+small-function baseline built from parallelotope structure.
 
 This project targets the open space between them: AI-guided search over
-symbolic Boolean construction plans, with explicit multi-resource objectives.
+symbolic Boolean oracle construction plans, with explicit T/CNOT/depth/gate/
+ancilla objectives and without using SSHR candidates internally.
 
 ## Current Contribution
 
