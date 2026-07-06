@@ -14,6 +14,7 @@
 \newcommand{\traditionaldataset}{traditional\_resource}
 \newcommand{\largedataset}{large\_resource\_core}
 \newcommand{\highdimdataset}{highdim\_resource}
+\newcommand{\scaledataset}{highdim\_scale\_resource}
 
 \title{Resource-NMCTS: Neural Monte Carlo Tree Search with Affine Boolean Preconditioning for Resource-Constrained Quantum Oracle Synthesis}
 \author{Zixiang Zhou}
@@ -443,6 +444,22 @@ standalone FPRM root-beam candidate, they have 29 score wins, no losses, and
 3 ties, with a 3.06\% mean score reduction.  Runtime is higher but still
 finite: \method{} has p95 runtime 102.12 s and \profilemethod{} has p95
 runtime 97.09 s.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Mean logical resources on the \scaledataset{} $n=15$ scaling check.}
+\label{tab:scale-resources}
+\input{tables/resource_highdim_scale_resource}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Runtime distribution on the \scaledataset{} $n=15$ scaling check.}
+\label{tab:scale-runtime}
+\input{tables/runtime_highdim_scale_resource}
+\end{table}
 
 \section{Discussion}
 

@@ -174,8 +174,8 @@ Datasets:
 - exhaustive small functions for `n=3`;
 - random truth-table functions for `n=4..6`;
 - random sparse/dense ANF functions for `n=6..12` in the paper-facing core
-  benchmark, with an experimental `n=14` stress preset kept as a runtime-boundary
-  target;
+  benchmark, with isolated `n=14` stress and `n=15` scaling presets kept as
+  runtime-boundary targets;
 - structured oracles such as parity, majority, threshold, mux, adders, and
   multipliers.
 
@@ -200,6 +200,9 @@ The current paper-facing run is:
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset large_resource_core --model models/action_scorer_rollout_logical_and.pt --resume --workers 6 --checkpoint-every 1 --isolate-timeouts
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset large_resource_core
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset large_resource_core
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset highdim_scale_resource --model models/action_scorer_rollout_logical_and.pt --workers 6 --checkpoint-every 8 --resume --isolate-timeouts
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset highdim_scale_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset highdim_scale_resource
 ```
 
 It covers 322 functions and 1610 method/function rows.  The main results are:
