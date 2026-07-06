@@ -43,7 +43,7 @@ cp /tmp/resource_nmcts_traditional_no_model/manifest_traditional_resource.json r
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset highdim_scale_resource --model models/action_scorer_rollout_logical_and.pt --workers 6 --checkpoint-every 8 --resume --isolate-timeouts
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset highdim_scale_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset highdim_scale_resource
-/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset ultra_highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 6 --checkpoint-every 4 --resume --isolate-timeouts
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset ultra_highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 1 --checkpoint-every 8 --resume
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset ultra_highdim_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset ultra_highdim_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset large_resource_core --formats pla,blif,truth
@@ -63,6 +63,9 @@ cp /tmp/resource_nmcts_traditional_no_model/manifest_traditional_resource.json r
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset highdim_scale_resource --formats blif,truth --out-dir benchmark_exports/highdim_scale_resource_external_seed42
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/highdim_scale_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_abc_lut,external_bdd --min-n 15 --max-n 15 --max-abc-n 15 --max-xag-n 15 --max-lut-n 15 --max-bdd-n 15 --bdd-orders 8 --timeout 30 --workers 8 --out results/raw_external_highdim_scale_resource.csv --summary results/summary_external_highdim_scale_resource.csv --run-manifest results/manifest_external_highdim_scale_resource.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_highdim_scale_resource.csv --internal-csv results/raw_highdim_scale_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_fprm_linear_pair_deep,and_fprm_linear_pair,and_fprm_linear_parity,and_fprm_greedy,direct_anf,and_direct_anf --out results/analysis_external_highdim_scale_resource.md
+/opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset ultra_highdim_resource --formats blif,truth --out-dir benchmark_exports/ultra_highdim_resource_external_seed42
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/ultra_highdim_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_abc_lut,external_bdd --min-n 16 --max-n 16 --max-abc-n 16 --max-xag-n 16 --max-lut-n 16 --max-bdd-n 16 --bdd-orders 8 --timeout 60 --workers 4 --out results/raw_external_ultra_highdim_resource.csv --summary results/summary_external_ultra_highdim_resource.csv --run-manifest results/manifest_external_ultra_highdim_resource.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_ultra_highdim_resource.csv --internal-csv results/raw_ultra_highdim_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_fprm_linear_pair,and_fprm_root_beam,direct_anf,and_direct_anf --out results/analysis_external_ultra_highdim_resource.md
 ```
 
 Current presets:
@@ -263,11 +266,13 @@ Time-limited exported SSHR-I, ABC-AIG, ABC-XAG, ABC-LUT, BDD, and ABC-ESOP exten
 
 Exported high-dimensional ABC-AIG/ABC-XAG/ABC-LUT/BDD evidence from
 `results/analysis_external_highdim_resource.md` and
-`results/analysis_external_highdim_scale_resource.md`:
+`results/analysis_external_highdim_scale_resource.md` and
+`results/analysis_external_ultra_highdim_resource.md`:
 
 - The external AIG/XAG/LUT/BDD paths now cover 64 exported `n=14` random-ANF
-  functions and 32 exported `n=15` random-ANF functions for each of ABC-AIG,
-  ABC-XAG, ABC-LUT, and BDD, with 384/384 correct rows and 0 errors/skips.
+  functions, 32 exported `n=15` random-ANF functions, and 24 exported `n=16`
+  random-ANF functions for each of ABC-AIG, ABC-XAG, ABC-LUT, and BDD, with
+  480/480 correct rows and 0 errors/skips.
 - At `n=14`, `and_resource_nmcts` and `and_profile_resource_nmcts` beat
   ABC-AIG, ABC-XAG, ABC-LUT, and BDD on all 256 T-count, CNOT, peak-ancilla, and
   weighted-score comparisons.  Mean score reductions are 94.13% against AIG,
@@ -276,10 +281,15 @@ Exported high-dimensional ABC-AIG/ABC-XAG/ABC-LUT/BDD evidence from
   on all 128 T-count, CNOT, peak-ancilla, and weighted-score comparisons.  Mean
   score reductions are 94.59% against AIG, 96.33% against XAG, 97.76% against
   LUT, and 94.75% against BDD.
+- At `n=16`, the same guarded methods beat ABC-AIG, ABC-XAG, ABC-LUT, and BDD
+  on all 96 T-count, CNOT, peak-ancilla, and weighted-score comparisons.  Mean
+  score reductions are 97.29% against AIG, 97.88% against XAG, 99.00% against
+  LUT, and 96.81% against BDD.
 - ABC-AIG and ABC-XAG remain shallower under the current level-based estimate on
-  most high-dimensional functions, while ABC-LUT and the BDD Shannon-network
-  estimate are deeper; the claim remains weighted-resource and low-ancilla
-  dominance rather than depth-only dominance against every possible toolchain.
+  most high-dimensional functions, including 22/24 `n=16` functions for each of
+  ABC-AIG and ABC-XAG, while ABC-LUT and the BDD Shannon-network estimate are
+  deeper; the claim remains weighted-resource and low-ancilla dominance rather
+  than depth-only dominance against every possible toolchain.
 
 Resource-profile stress-test evidence from
 `results/analysis_resource_sweep.md`:

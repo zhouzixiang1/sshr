@@ -194,11 +194,11 @@ scores the resulting XOR-of-cubes oracle with the logical-AND cube model.  A
 reduced ordered BDD baseline tries several deterministic variable orders,
 verifies the decision diagram, and scores a Shannon-network compute/uncompute
 estimate.  The ABC-AIG, ABC-XAG, ABC-LUT, and BDD paths now also cover the
-isolated `n=14` and `n=15` high-dimensional random-ANF presets; ABC-ESOP remains
-a small-function external baseline because complex high-dimensional ESOP
-minimization times out.  ROS/mockturtle adapters are still future work, but the
-benchmark exchange format and SSHR/ABC/LUT/BDD comparison paths are now
-reproducible and independent of the synthesis harness.
+isolated `n=14`, `n=15`, and `n=16` high-dimensional random-ANF presets;
+ABC-ESOP remains a small-function external baseline because complex
+high-dimensional ESOP minimization times out.  ROS/mockturtle adapters are
+still future work, but the benchmark exchange format and SSHR/ABC/LUT/BDD
+comparison paths are now reproducible and independent of the synthesis harness.
 
 ## Evaluation
 
@@ -218,8 +218,8 @@ Datasets:
 - exhaustive small functions for `n=3`;
 - random truth-table functions for `n=4..6`;
 - random sparse/dense ANF functions for `n=6..12` in the paper-facing core
-  benchmark, with isolated `n=14` stress and `n=15` scaling presets kept as
-  runtime-boundary targets;
+  benchmark, with isolated `n=14` stress, `n=15` scaling, and `n=16`
+  ultra-scale presets kept as runtime-boundary targets;
 - structured oracles such as parity, majority, threshold, mux, adders, and
   multipliers.
 
@@ -255,6 +255,9 @@ cp /tmp/resource_nmcts_traditional_no_model/manifest_traditional_resource.json r
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset ultra_highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 6 --checkpoint-every 4 --resume --isolate-timeouts
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset ultra_highdim_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset ultra_highdim_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset ultra_highdim_resource --formats blif,truth --out-dir benchmark_exports/ultra_highdim_resource_external_seed42
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/ultra_highdim_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_abc_lut,external_bdd --min-n 16 --max-n 16 --max-abc-n 16 --max-xag-n 16 --max-lut-n 16 --max-bdd-n 16 --bdd-orders 8 --timeout 45 --workers 8 --out results/raw_external_ultra_highdim_resource.csv --summary results/summary_external_ultra_highdim_resource.csv --run-manifest results/manifest_external_ultra_highdim_resource.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_ultra_highdim_resource.csv --internal-csv results/raw_ultra_highdim_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_fprm_linear_pair,and_fprm_root_beam,direct_anf,and_direct_anf --out results/analysis_external_ultra_highdim_resource.md
 ```
 
 It covers 322 functions and 1610 method/function rows.  The main results are:
@@ -399,7 +402,7 @@ and the ABC-ESOP rows use verified `&exorcism -q` ESOP-PLA:
   against T-opt SSHR-I.
 
 The high-dimensional exported ABC AIG/XAG/LUT plus BDD extension covers the
-isolated `n=14` and `n=15` random-ANF stress presets:
+isolated `n=14`, `n=15`, and `n=16` random-ANF stress presets:
 
 - `results/analysis_external_highdim_resource.md`: 64 exported `n=14`
   functions, 256/256 correct ABC-AIG/ABC-XAG/ABC-LUT/BDD rows, 0 errors/skips.
@@ -416,6 +419,13 @@ isolated `n=14` and `n=15` random-ANF stress presets:
   against XAG, 97.76% against LUT, and 94.75% against BDD.  ABC-AIG has a lower
   estimated depth on 25/32 functions and ABC-XAG on 26/32 functions; ABC-LUT and
   BDD are deeper under the current sequential estimates.
+- `results/analysis_external_ultra_highdim_resource.md`: 24 exported `n=16`
+  functions, 96/96 correct ABC-AIG/ABC-XAG/ABC-LUT/BDD rows, 0 errors/skips.
+  The guarded methods again win all T-count, CNOT, peak-ancilla, and
+  weighted-score comparisons, with mean score reductions of 97.29% against
+  AIG, 97.88% against XAG, 99.00% against LUT, and 96.81% against BDD.
+  ABC-AIG and ABC-XAG each have a lower estimated depth on 22/24 functions;
+  ABC-LUT and BDD are deeper under the current sequential estimates.
 
 The `resource_sweep` stress test checks whether the method remains competitive
 under different resource objectives.  It uses 47 functions with `n <= 6`, four

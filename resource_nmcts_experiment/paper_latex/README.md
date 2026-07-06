@@ -47,6 +47,10 @@ Current source evidence:
   `../results/raw_external_highdim_scale_resource.csv`
 - external high-dimensional ABC-AIG/ABC-XAG/ABC-LUT/BDD scale analysis:
   `../results/analysis_external_highdim_scale_resource.md`
+- external ultra-high-dimensional ABC-AIG/ABC-XAG/ABC-LUT/BDD CSV:
+  `../results/raw_external_ultra_highdim_resource.csv`
+- external ultra-high-dimensional ABC-AIG/ABC-XAG/ABC-LUT/BDD analysis:
+  `../results/analysis_external_ultra_highdim_resource.md`
 - resource-sweep CSV: `../results/raw_resource_sweep.csv`
 - resource-sweep analysis: `../results/analysis_resource_sweep.md`
 - large-scale core CSV: `../results/raw_large_resource_core.csv`
@@ -86,7 +90,8 @@ Current source evidence:
   `tables/resource_ultra_highdim_resource.tex`,
   `tables/runtime_ultra_highdim_resource.tex`,
   `tables/external_traditional_resource_n6.tex`,
-  `tables/external_highdim_abc_aig.tex`
+  `tables/external_highdim_abc_aig.tex`,
+  `tables/external_ultra_highdim_resource.tex`
 - manifests: `../results/manifest_evidence_affine.json`,
   `../results/manifest_traditional_resource_no_prior.json`,
   `../results/manifest_highdim_resource.json`,
@@ -95,14 +100,15 @@ Current source evidence:
   `../results/manifest_external_traditional_resource_n4.json`,
   `../results/manifest_external_traditional_resource_n6.json`,
   `../results/manifest_external_highdim_resource.json`,
-  `../results/manifest_external_highdim_scale_resource.json`
+  `../results/manifest_external_highdim_scale_resource.json`,
+  `../results/manifest_external_ultra_highdim_resource.json`
 
 Known manuscript gaps:
 
 - add reproduced non-ABC/non-LUT/non-BDD high-dimensional external baselines where
   runtime allows; ABC-ESOP is stable on `n <= 6` but times out on complex
   high-dimensional examples;
-- extend the external high-dimensional comparison to the `n=16`
-  `ultra_highdim_resource` suite if ABC/BDD runtimes remain practical;
+- extend the external high-dimensional comparison beyond `n=16` only if the
+  exported truth-table and ABC/BDD verification path remains practical;
 - add reproduced ROS or mockturtle-style reversible-toolchain results;
 - decide the target venue and required reference/section style.

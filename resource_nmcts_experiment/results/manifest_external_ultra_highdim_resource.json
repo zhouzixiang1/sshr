@@ -1,0 +1,41 @@
+{
+  "abc_binary": "/Users/zhouzixiang/Desktop/tzb/src/tmp/abc/abc",
+  "abc_esop_script": "strash; &get",
+  "abc_lut_script": "strash; if -K 4",
+  "abc_script": "strash; balance; rewrite; refactor; rewrite -z; balance",
+  "abc_xag_script": "&get; &st -m -L 1",
+  "bdd_orders": 8,
+  "count": null,
+  "elapsed_s": 22.0125470161438,
+  "existing_rows": 0,
+  "functions": 24,
+  "last_run_methods": [
+    "external_abc_aig",
+    "external_abc_xag",
+    "external_abc_lut",
+    "external_bdd"
+  ],
+  "max_abc_n": 16,
+  "max_bdd_n": 16,
+  "max_esop_n": 8,
+  "max_ilp_n": 4,
+  "max_lut_n": 16,
+  "max_n": 16,
+  "max_xag_n": 16,
+  "methods": [
+    "external_abc_aig",
+    "external_abc_lut",
+    "external_abc_xag",
+    "external_bdd"
+  ],
+  "min_n": 16,
+  "new_tasks": 96,
+  "offset": 0,
+  "raw": "results/raw_external_ultra_highdim_resource.csv",
+  "resume": false,
+  "rows": 96,
+  "source_manifest": "benchmark_exports/ultra_highdim_resource_external_seed42/manifest.csv",
+  "summary": "results/summary_external_ultra_highdim_resource.csv",
+  "timeout": 45.0,
+  "workers": 8
+}
