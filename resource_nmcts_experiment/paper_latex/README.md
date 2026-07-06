@@ -37,6 +37,7 @@ Current source evidence:
 - high-dimensional stress analysis: `../results/analysis_highdim_resource.md`
 - high-dimensional stress runtime/resource analysis:
   `../results/runtime_highdim_resource.md`
+- external-tool benchmark exporter: `../export_benchmarks.py`
 - LaTeX tables: `tables/runtime_ablation_affine.tex`,
   `tables/resource_ablation_affine.tex`,
   `tables/resource_traditional_resource.tex`,

@@ -2,7 +2,11 @@
 """Smoke tests for resource-constrained neural MCTS synthesis."""
 from __future__ import annotations
 
+from pathlib import Path
+from tempfile import TemporaryDirectory
+
 from anf_utils import anf_monomials, boolean_from_anf, majority_function, parity_function
+from export_benchmarks import export_suite, selected_formats
 from factor_plan import SearchConfig
 from resource_model import ResourceWeights
 from synthesizers import synthesize
@@ -24,6 +28,15 @@ def check_roundtrip() -> None:
 
 def main() -> int:
     check_roundtrip()
+    with TemporaryDirectory() as tmp:
+        out_dir = Path(tmp)
+        summary = export_suite("smoke", 42, out_dir, selected_formats("pla,blif,truth"), limit=2)
+        assert summary["functions"] == 2
+        for rel in ["manifest.csv", "manifest.json"]:
+            assert (out_dir / rel).exists(), rel
+        assert list((out_dir / "pla").glob("*.pla"))
+        assert list((out_dir / "blif").glob("*.blif"))
+        assert list((out_dir / "truth").glob("*.json"))
     config = SearchConfig(
         weights=ResourceWeights(t=1.0, cnot=0.04, depth=0.015, gates=0.01, ancilla=2.0),
         max_factor_ancilla=3,

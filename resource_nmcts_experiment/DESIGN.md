@@ -149,8 +149,11 @@ The first implementation compares against:
 - time-limited weighted ESOP MILP;
 - SSHR-H as a CNOT-oriented reference for small `n`.
 
-Later baselines should add XAG/ROS/LUT tooling if external binaries become
-available.
+`export_benchmarks.py` exports every preset to PLA, BLIF `.names`, and
+truth-table JSON with a manifest, so the exact same Boolean functions can be
+fed to external XAG/ROS/LUT or mockturtle-style flows.  External tool results
+are still future work, but the benchmark exchange format is now reproducible
+and independent of the Python synthesis harness.
 
 ## Evaluation
 

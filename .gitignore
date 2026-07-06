@@ -19,6 +19,7 @@ rl_mcts_experiment/paper/build/*
 *.fls
 *.fdb_latexmk
 resource_nmcts_experiment/paper_latex/*.pdf
+resource_nmcts_experiment/benchmark_exports/
 
 # Generated visualizations
 sshr/viz/*.png

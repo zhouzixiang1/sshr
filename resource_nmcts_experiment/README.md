@@ -35,6 +35,7 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 2 --checkpoint-every 5 --resume --isolate-timeouts
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset highdim_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset highdim_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset large_resource_core --formats pla,blif,truth
 ```
 
 Current presets:
@@ -65,6 +66,18 @@ Current presets:
 
 Outputs are written to `results/`.  The neural prior is saved at
 `models/action_scorer_rollout_logical_and.pt`.
+
+External-tool benchmark exchange:
+
+- `export_benchmarks.py` writes deterministic PLA, BLIF `.names`, and JSON
+  truth-table files for any experiment preset, plus `manifest.csv` and
+  `manifest.json`.
+- The default output directory is `benchmark_exports/<preset>_seed<seed>/` and
+  is intentionally git-ignored because the files are regenerable and can be
+  large for `n=12` and `n=14` suites.
+- This is the bridge for reproducing the same Boolean functions in external
+  XAG/ROS/LUT or mockturtle-style synthesis flows without depending on the
+  Python experiment harness.
 
 Current evidence from `results/analysis_evidence_affine.md`:
 

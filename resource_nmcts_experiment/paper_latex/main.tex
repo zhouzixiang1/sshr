@@ -192,7 +192,10 @@ direct ANF, logical-AND direct ANF, fixed-coordinate logical-AND MCTS,
 A separate \traditionaldataset{} slice restricts the benchmark to $n\leq 6$
 and adds \method{}, ESOP cube beam search, and a time-limited weighted ESOP
 MILP over candidate cubes.  The \largedataset{} benchmark extends the same
-resource objective to a larger random-ANF core through $n=12$.
+resource objective to a larger random-ANF core through $n=12$.  To support
+external reproduction, the benchmark generator can export every preset to PLA,
+BLIF \texttt{.names}, and truth-table JSON manifests; external XAG/ROS/LUT tool
+results are not yet included in the tables below.
 
 \subsection{Main results}
 
