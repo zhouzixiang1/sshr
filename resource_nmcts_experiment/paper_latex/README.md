@@ -28,6 +28,10 @@ Current source evidence:
 - neural-prior ablation CSV: `../results/raw_neural_prior_ablation.csv`
 - neural-prior ablation analysis:
   `../results/analysis_neural_prior_ablation.md`
+- matched learned-prior traditional-resource rerun CSV:
+  `../results/raw_traditional_resource_learned_prior.csv`
+- matched learned-prior traditional-resource rerun summary:
+  `../results/summary_traditional_resource_learned_prior.csv`
 - traditional baseline CSV: `../results/raw_traditional_resource.csv`
 - traditional baseline analysis: `../results/analysis_traditional_resource.md`
 - traditional runtime/resource analysis:
@@ -103,6 +107,7 @@ Current source evidence:
   `tables/external_ultra_highdim_resource.tex`,
   `tables/external_mega_highdim_resource.tex`
 - manifests: `../results/manifest_evidence_affine.json`,
+  `../results/manifest_traditional_resource_learned_prior.json`,
   `../results/manifest_traditional_resource_no_prior.json`,
   `../results/manifest_highdim_resource.json`,
   `../results/manifest_highdim_scale_resource.json`,
