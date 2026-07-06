@@ -364,3 +364,14 @@ Main `highdim_resource` evidence:
   median 3.638 s, p95 35.313 s, and max 47.256 s.  The standalone FPRM
   linear-pair candidate has median 2.574 s, p95 30.760 s, and max 41.593 s.
   The gain uses more workspace: mean peak ancilla rises from 2.03 to 2.94.
+
+The `highdim_scale_resource` run extends the same high-dimensional guard to
+32 random ANF functions at `n=15`.  It contains 224 method/function rows across
+seven methods, with 0 errors and 0 skips.  The guarded variants again select
+the FPRM linear-pair candidate on every function.  Compared with FPRM-greedy,
+they have 30 T-count wins, 0 losses, and 2 ties; by weighted score they also
+have 30 wins, 0 losses, and 2 ties, with a 3.52% mean score reduction.
+Compared with FPRM root beam, they have 29 score wins, 0 losses, and 3 ties,
+with a 3.06% mean score reduction.  The scale check is slower but finite:
+`and_resource_nmcts` has median runtime 6.938 s and p95 102.123 s, while
+`and_profile_resource_nmcts` has median runtime 6.854 s and p95 97.086 s.

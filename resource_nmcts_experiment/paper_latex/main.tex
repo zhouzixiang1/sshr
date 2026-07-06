@@ -51,7 +51,9 @@ rows.  An isolated
 $n=14$ stress benchmark adds 64 random ANF functions and 512 rows with no
 errors or skips; the guarded high-dimensional variants reduce mean T-count by
 55.60\% relative to direct ANF and by 30.41\% relative to logical-AND direct
-ANF, with 60 score wins, no losses, and 4 ties against FPRM-greedy.  The method is
+ANF, with 60 score wins, no losses, and 4 ties against FPRM-greedy.  A
+follow-up $n=15$ scale check preserves this pattern with 30 score wins, no
+losses, and 2 ties against FPRM-greedy.  The method is
 evaluated only at the logical circuit layer;
 hardware mapping and connectivity constraints are outside the present scope.
 \end{abstract}
@@ -432,6 +434,16 @@ standalone FPRM linear-pair candidate has p95 runtime 30.76 s.  The resource
 tradeoff is workspace: mean peak ancilla increases from 2.03 for FPRM-greedy
 and root beam to 2.94.
 
+As a scale check, we also run the same high-dimensional guard on 32 random
+$n=15$ ANF functions, producing 224 method/function rows with no errors or
+skips.  The same pattern persists: relative to FPRM-greedy, \method{} and
+\profilemethod{} have 30 T-count wins, no losses, and 2 ties, with a 4.60\%
+mean T-count reduction and a 3.52\% mean score reduction.  Relative to the
+standalone FPRM root-beam candidate, they have 29 score wins, no losses, and
+3 ties, with a 3.06\% mean score reduction.  Runtime is higher but still
+finite: \method{} has p95 runtime 102.12 s and \profilemethod{} has p95
+runtime 97.09 s.
+
 \section{Discussion}
 
 The results support the central hypothesis that affine Boolean coordinates are
@@ -486,9 +498,10 @@ $n\leq 6$ traditional-baseline slice, the full \method{} method further avoids
 score regressions against internal ESOP cube-beam candidates and remains
 competitive against weighted ESOP MILP.  Resource-profile and \largedataset{}
 benchmarks show that this advantage is robust across several weighted
-objectives and larger random ANF instances.  The new $n=14$ stress test shows
-that bounded guards scale without timeouts and now beat FPRM-greedy on 60 of
-64 weighted-score comparisons without losses.  The next step is to add
+objectives and larger random ANF instances.  The new high-dimensional stress
+tests show that bounded guards scale without timeouts and beat FPRM-greedy on
+60 of 64 weighted-score comparisons at $n=14$ and 30 of 32 comparisons at
+$n=15$, both without losses.  The next step is to add
 standardized external baselines and stronger high-dimensional candidate
 generation so the empirical claim is submission-ready.
 
