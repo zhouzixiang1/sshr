@@ -1,6 +1,6 @@
 # External Baseline Analysis
 
-External rows: 708; usable: 708.
+External rows: 885; usable: 885.
 Internal rows: 1416; usable: 1416.
 
 ## External Summary
@@ -11,6 +11,10 @@ Internal rows: 1416; usable: 1416.
 | external_abc_aig | 4 | 69 | 31.65 | 80.13 | 51.62 | 0.034 |
 | external_abc_aig | 5 | 67 | 64.78 | 162.94 | 105.19 | 0.034 |
 | external_abc_aig | 6 | 38 | 160.95 | 403.37 | 260.39 | 0.036 |
+| external_abc_esop | 3 | 3 | 8.00 | 15.00 | 8.96 | 0.035 |
+| external_abc_esop | 4 | 69 | 22.84 | 38.00 | 28.33 | 0.035 |
+| external_abc_esop | 5 | 67 | 53.61 | 86.60 | 64.26 | 0.036 |
+| external_abc_esop | 6 | 38 | 117.16 | 186.00 | 135.98 | 0.035 |
 | external_sshr_h | 3 | 3 | 5.33 | 12.67 | 6.12 | 0.000 |
 | external_sshr_h | 4 | 69 | 28.58 | 29.74 | 32.50 | 0.000 |
 | external_sshr_h | 5 | 67 | 81.13 | 71.84 | 88.79 | 0.002 |
@@ -33,6 +37,11 @@ Internal rows: 1416; usable: 1416.
 | and_resource_nmcts | external_abc_aig | depth | 177 | 49 | 126 | 2 | +58.01% |
 | and_resource_nmcts | external_abc_aig | peak_ancilla | 177 | 177 | 0 | 0 | -86.29% |
 | and_resource_nmcts | external_abc_aig | score | 177 | 177 | 0 | 0 | -54.52% |
+| and_resource_nmcts | external_abc_esop | T | 177 | 144 | 19 | 14 | -22.35% |
+| and_resource_nmcts | external_abc_esop | CNOT | 177 | 93 | 69 | 15 | -1.19% |
+| and_resource_nmcts | external_abc_esop | depth | 177 | 139 | 31 | 7 | -12.91% |
+| and_resource_nmcts | external_abc_esop | peak_ancilla | 177 | 69 | 0 | 108 | -12.66% |
+| and_resource_nmcts | external_abc_esop | score | 177 | 147 | 24 | 6 | -19.88% |
 | and_resource_nmcts | external_sshr_h | T | 177 | 171 | 1 | 5 | -44.20% |
 | and_resource_nmcts | external_sshr_h | CNOT | 177 | 40 | 132 | 5 | +28.26% |
 | and_resource_nmcts | external_sshr_h | depth | 177 | 75 | 96 | 6 | +5.57% |
@@ -53,6 +62,11 @@ Internal rows: 1416; usable: 1416.
 | and_affine_nmcts | external_abc_aig | depth | 177 | 49 | 126 | 2 | +58.59% |
 | and_affine_nmcts | external_abc_aig | peak_ancilla | 177 | 177 | 0 | 0 | -86.32% |
 | and_affine_nmcts | external_abc_aig | score | 177 | 177 | 0 | 0 | -54.46% |
+| and_affine_nmcts | external_abc_esop | T | 177 | 144 | 20 | 13 | -22.23% |
+| and_affine_nmcts | external_abc_esop | CNOT | 177 | 93 | 71 | 13 | -0.55% |
+| and_affine_nmcts | external_abc_esop | depth | 177 | 138 | 33 | 6 | -12.63% |
+| and_affine_nmcts | external_abc_esop | peak_ancilla | 177 | 71 | 0 | 106 | -12.99% |
+| and_affine_nmcts | external_abc_esop | score | 177 | 145 | 27 | 5 | -19.75% |
 | and_affine_nmcts | external_sshr_h | T | 177 | 171 | 1 | 5 | -44.13% |
 | and_affine_nmcts | external_sshr_h | CNOT | 177 | 39 | 133 | 5 | +29.17% |
 | and_affine_nmcts | external_sshr_h | depth | 177 | 75 | 96 | 6 | +5.95% |
@@ -73,6 +87,11 @@ Internal rows: 1416; usable: 1416.
 | and_cube_beam | external_abc_aig | depth | 177 | 16 | 161 | 0 | +129.60% |
 | and_cube_beam | external_abc_aig | peak_ancilla | 177 | 177 | 0 | 0 | -82.19% |
 | and_cube_beam | external_abc_aig | score | 177 | 160 | 17 | 0 | -24.17% |
+| and_cube_beam | external_abc_esop | T | 177 | 13 | 111 | 53 | +596.71% |
+| and_cube_beam | external_abc_esop | CNOT | 177 | 15 | 132 | 30 | +186.18% |
+| and_cube_beam | external_abc_esop | depth | 177 | 28 | 133 | 16 | +219.31% |
+| and_cube_beam | external_abc_esop | peak_ancilla | 177 | 1 | 40 | 136 | +18.03% |
+| and_cube_beam | external_abc_esop | score | 177 | 26 | 135 | 16 | +664.15% |
 | and_cube_beam | external_sshr_h | T | 177 | 122 | 46 | 9 | +4.87% |
 | and_cube_beam | external_sshr_h | CNOT | 177 | 15 | 162 | 0 | +68.95% |
 | and_cube_beam | external_sshr_h | depth | 177 | 19 | 155 | 3 | +59.28% |
@@ -93,6 +112,11 @@ Internal rows: 1416; usable: 1416.
 | and_esop_milp | external_abc_aig | depth | 177 | 30 | 142 | 5 | +136.60% |
 | and_esop_milp | external_abc_aig | peak_ancilla | 177 | 177 | 0 | 0 | -84.22% |
 | and_esop_milp | external_abc_aig | score | 177 | 150 | 27 | 0 | -32.43% |
+| and_esop_milp | external_abc_esop | T | 177 | 53 | 40 | 84 | +20.51% |
+| and_esop_milp | external_abc_esop | CNOT | 177 | 56 | 62 | 59 | +20.98% |
+| and_esop_milp | external_abc_esop | depth | 177 | 96 | 45 | 36 | +18.56% |
+| and_esop_milp | external_abc_esop | peak_ancilla | 177 | 7 | 12 | 158 | +1.22% |
+| and_esop_milp | external_abc_esop | score | 177 | 93 | 50 | 34 | +19.53% |
 | and_esop_milp | external_sshr_h | T | 177 | 120 | 46 | 11 | -11.42% |
 | and_esop_milp | external_sshr_h | CNOT | 177 | 33 | 140 | 4 | +60.92% |
 | and_esop_milp | external_sshr_h | depth | 177 | 47 | 127 | 3 | +46.96% |
@@ -113,6 +137,11 @@ Internal rows: 1416; usable: 1416.
 | sshr_h | external_abc_aig | depth | 177 | 47 | 126 | 4 | +48.35% |
 | sshr_h | external_abc_aig | peak_ancilla | 177 | 177 | 0 | 0 | -90.09% |
 | sshr_h | external_abc_aig | score | 177 | 148 | 29 | 0 | -24.05% |
+| sshr_h | external_abc_esop | T | 177 | 17 | 148 | 12 | +159.35% |
+| sshr_h | external_abc_esop | CNOT | 177 | 149 | 27 | 1 | +7.38% |
+| sshr_h | external_abc_esop | depth | 177 | 136 | 38 | 3 | +19.18% |
+| sshr_h | external_abc_esop | peak_ancilla | 177 | 137 | 3 | 37 | -33.71% |
+| sshr_h | external_abc_esop | score | 177 | 32 | 145 | 0 | +158.69% |
 | sshr_h | external_sshr_h | T | 177 | 0 | 0 | 177 | +0.00% |
 | sshr_h | external_sshr_h | CNOT | 177 | 0 | 0 | 177 | +0.00% |
 | sshr_h | external_sshr_h | depth | 177 | 0 | 0 | 177 | +0.00% |

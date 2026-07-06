@@ -42,7 +42,9 @@ DEFAULT_RESULTS = THIS_DIR / "results"
 DEFAULT_WEIGHTS = {"t": 1.0, "cnot": 0.04, "depth": 0.015, "gates": 0.01, "ancilla": 2.0}
 DEFAULT_ABC_BIN = ROOT / "tmp" / "abc" / "abc"
 DEFAULT_ABC_SCRIPT = "strash; balance; rewrite; refactor; rewrite -z; balance"
+DEFAULT_ABC_ESOP_SCRIPT = "strash; &get"
 ABC_STATS_RE = re.compile(r"and\s*=\s*(\d+)\s+lev\s*=\s*(\d+)")
+ESOP_STATS_RE = re.compile(r"Final\s+statistics:\s+Cubes\s*=\s*(\d+)\s+Literals\s*=\s*(\d+)\s+QCost\s*=\s*(\d+)")
 ANSI_RE = re.compile(r"\x1b\[[0-9;]*m")
 
 
@@ -147,7 +149,13 @@ def display_path(path: Path) -> str:
 
 def parse_methods(raw: str) -> list[str]:
     methods = [item.strip() for item in raw.split(",") if item.strip()]
-    valid = {"external_sshr_h", "external_sshr_i_cnot", "external_sshr_i_t", "external_abc_aig"}
+    valid = {
+        "external_sshr_h",
+        "external_sshr_i_cnot",
+        "external_sshr_i_t",
+        "external_abc_aig",
+        "external_abc_esop",
+    }
     unknown = sorted(set(methods) - valid)
     if unknown:
         raise SystemExit(f"unknown external methods: {', '.join(unknown)}")
@@ -281,6 +289,101 @@ def abc_bennett_cost(and_count: int, level: int, bf: BooleanFunction) -> Cost:
     )
 
 
+@dataclass(frozen=True)
+class EsopCube:
+    pattern: str
+
+    @property
+    def controls(self) -> int:
+        return sum(ch in {"0", "1"} for ch in self.pattern)
+
+    @property
+    def zeros(self) -> int:
+        return self.pattern.count("0")
+
+    def matches(self, x: int) -> bool:
+        for i, ch in enumerate(self.pattern):
+            if ch == "-":
+                continue
+            if ((x >> i) & 1) != int(ch):
+                return False
+        return True
+
+
+def parse_esop_pla(path: Path) -> list[EsopCube]:
+    cubes: list[EsopCube] = []
+    n_inputs: int | None = None
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.startswith(".i"):
+            parts = line.split()
+            if len(parts) >= 2:
+                n_inputs = int(parts[1])
+            continue
+        if line.startswith("."):
+            continue
+        parts = line.split()
+        if not parts:
+            continue
+        pattern = parts[0]
+        output = parts[1] if len(parts) > 1 else "1"
+        if output != "1":
+            continue
+        if n_inputs is not None and len(pattern) != n_inputs:
+            raise ValueError(f"ESOP cube width mismatch in {path}: {pattern}")
+        if any(ch not in {"0", "1", "-"} for ch in pattern):
+            raise ValueError(f"unsupported ESOP cube pattern in {path}: {pattern}")
+        cubes.append(EsopCube(pattern))
+    return cubes
+
+
+def verify_esop(cubes: list[EsopCube], bf: BooleanFunction) -> bool:
+    for x in range(1 << bf.n):
+        value = 0
+        for cube in cubes:
+            if len(cube.pattern) != bf.n:
+                return False
+            if cube.matches(x):
+                value ^= 1
+        if value != bf.evaluate(x):
+            return False
+    return True
+
+
+def _logical_and_gate_cost(controls: int) -> Cost:
+    if controls <= 0:
+        return Cost(gates=1, depth=1)
+    if controls == 1:
+        return Cost(CNOT=1, gates=1, depth=1)
+    ands = controls - 1
+    temp = max(0, controls - 2)
+    return Cost(
+        T=4 * ands,
+        CNOT=6 * ands + 1,
+        gates=2 * ands + 1,
+        depth=6 * ands + 1,
+        peak_ancilla=temp,
+    )
+
+
+def esop_logical_and_cost(cubes: list[EsopCube]) -> Cost:
+    total = Cost()
+    for cube in cubes:
+        base = _logical_and_gate_cost(cube.controls)
+        wrap = 2 * cube.zeros
+        total = Cost(
+            T=total.T + base.T,
+            CNOT=total.CNOT + base.CNOT,
+            gates=total.gates + base.gates + wrap,
+            depth=total.depth + base.depth + wrap,
+            explicit_ancilla=max(total.explicit_ancilla, base.explicit_ancilla),
+            peak_ancilla=max(total.peak_ancilla, base.peak_ancilla),
+        )
+    return total
+
+
 def parse_abc_stats(output: str) -> tuple[int, int]:
     clean = ANSI_RE.sub("", output)
     matches = ABC_STATS_RE.findall(clean)
@@ -288,6 +391,15 @@ def parse_abc_stats(output: str) -> tuple[int, int]:
         raise RuntimeError(f"could not parse ABC stats from output: {clean[-500:]}")
     and_count, level = matches[-1]
     return int(and_count), int(level)
+
+
+def parse_esop_stats(output: str) -> tuple[int | None, int | None, int | None]:
+    clean = ANSI_RE.sub("", output)
+    matches = ESOP_STATS_RE.findall(clean)
+    if not matches:
+        return None, None, None
+    cubes, literals, qcost = matches[-1]
+    return int(cubes), int(literals), int(qcost)
 
 
 def run_abc_aig(
@@ -334,6 +446,52 @@ def run_abc_aig(
     }
 
 
+def run_abc_esop(
+    row: dict,
+    bf: BooleanFunction,
+    timeout: float,
+    abc_bin: Path,
+    abc_script: str,
+) -> tuple[Cost, dict]:
+    if not abc_bin.exists():
+        raise FileNotFoundError(f"ABC binary not found: {abc_bin}")
+    rel_blif = row.get("blif")
+    if not rel_blif:
+        raise ValueError("manifest row has no BLIF path")
+    blif = (Path(row["_manifest_abs_dir"]) / rel_blif).resolve()
+    if not blif.exists():
+        raise FileNotFoundError(f"BLIF file not found: {blif}")
+
+    with tempfile.TemporaryDirectory(prefix="abc_esop_") as tmp:
+        esop_path = Path(tmp) / f"{row['name']}.esop.pla"
+        command = f"read_blif {blif}; {abc_script}; &exorcism -q {esop_path}"
+        proc = subprocess.run(
+            [str(abc_bin), "-c", command],
+            text=True,
+            capture_output=True,
+            timeout=timeout,
+            check=False,
+        )
+        combined = (proc.stdout or "") + (proc.stderr or "")
+        if proc.returncode != 0:
+            raise RuntimeError(f"ABC exorcism failed with code {proc.returncode}: {combined[-1000:]}")
+        if not esop_path.exists():
+            raise RuntimeError(f"ABC exorcism did not write ESOP file: {combined[-1000:]}")
+        cubes = parse_esop_pla(esop_path)
+        correct = verify_esop(cubes, bf)
+        final_cubes, final_literals, qcost = parse_esop_stats(esop_path.read_text(encoding="utf-8"))
+    cost = esop_logical_and_cost(cubes)
+    return cost, {
+        "correct": correct,
+        "abc_esop_cubes": len(cubes),
+        "abc_esop_reported_cubes": final_cubes if final_cubes is not None else "",
+        "abc_esop_literals": final_literals if final_literals is not None else "",
+        "abc_esop_qcost": qcost if qcost is not None else "",
+        "abc_script": abc_script,
+        "abc_binary": display_path(abc_bin),
+    }
+
+
 def synthesize_external(method: str, bf: BooleanFunction, timeout: float) -> QuantumCircuit:
     if method == "external_sshr_h":
         return sshr_h(bf)
@@ -348,8 +506,8 @@ def synthesize_external(method: str, bf: BooleanFunction, timeout: float) -> Qua
     raise ValueError(method)
 
 
-def run_one(task: tuple[dict, str, float, int, int, dict[str, float], Path, str]) -> dict:
-    row, method, timeout, max_ilp_n, max_abc_n, weights, abc_bin, abc_script = task
+def run_one(task: tuple[dict, str, float, int, int, int, dict[str, float], Path, str, str]) -> dict:
+    row, method, timeout, max_ilp_n, max_abc_n, max_esop_n, weights, abc_bin, abc_script, abc_esop_script = task
     bf = bool_from_row(row)
     base = {
         "index": row.get("index", ""),
@@ -366,10 +524,18 @@ def run_one(task: tuple[dict, str, float, int, int, dict[str, float], Path, str]
         return {**base, "skipped": f"SSHR-I capped at n<={max_ilp_n}", "error": ""}
     if method == "external_abc_aig" and bf.n > max_abc_n:
         return {**base, "skipped": f"ABC-AIG capped at n<={max_abc_n}", "error": ""}
+    if method == "external_abc_esop" and bf.n > max_esop_n:
+        return {**base, "skipped": f"ABC-ESOP capped at n<={max_esop_n}", "error": ""}
     try:
         start = time.time()
         if method == "external_abc_aig":
             cost, extra = run_abc_aig(row, bf, timeout, abc_bin, abc_script)
+            elapsed = time.time() - start
+            correct = extra.pop("correct")
+            n_qubits = bf.n + 1 + cost.explicit_ancilla
+            gates = cost.gates
+        elif method == "external_abc_esop":
+            cost, extra = run_abc_esop(row, bf, timeout, abc_bin, abc_esop_script)
             elapsed = time.time() - start
             correct = extra.pop("correct")
             n_qubits = bf.n + 1 + cost.explicit_ancilla
@@ -449,8 +615,10 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser.add_argument("--count", type=int, default=None, help="function count after n filters")
     parser.add_argument("--max-ilp-n", type=int, default=4)
     parser.add_argument("--max-abc-n", type=int, default=15)
+    parser.add_argument("--max-esop-n", type=int, default=8)
     parser.add_argument("--abc-bin", type=Path, default=DEFAULT_ABC_BIN)
     parser.add_argument("--abc-script", default=DEFAULT_ABC_SCRIPT)
+    parser.add_argument("--abc-esop-script", default=DEFAULT_ABC_ESOP_SCRIPT)
     parser.add_argument("--timeout", type=float, default=30.0, help="per SSHR-I call time limit")
     parser.add_argument("--workers", type=int, default=1)
     parser.add_argument("--resume", action="store_true")
@@ -476,9 +644,11 @@ def main(argv: Iterable[str] | None = None) -> int:
             args.timeout,
             args.max_ilp_n,
             args.max_abc_n,
+            args.max_esop_n,
             weights,
             args.abc_bin,
             args.abc_script,
+            args.abc_esop_script,
         )
         for row in manifest_rows
         for method in methods
@@ -514,11 +684,33 @@ def main(argv: Iterable[str] | None = None) -> int:
     summary = summarize(rows)
     write_csv(args.summary, summary)
     args.run_manifest.parent.mkdir(parents=True, exist_ok=True)
+    previous_manifest = {}
+    if args.resume and args.run_manifest.exists():
+        try:
+            previous_manifest = json.loads(args.run_manifest.read_text(encoding="utf-8"))
+        except Exception:
+            previous_manifest = {}
+    report_max_ilp_n = (
+        args.max_ilp_n
+        if any(method.startswith("external_sshr_i") for method in methods)
+        else previous_manifest.get("max_ilp_n", args.max_ilp_n)
+    )
+    report_max_abc_n = (
+        args.max_abc_n
+        if "external_abc_aig" in methods
+        else previous_manifest.get("max_abc_n", args.max_abc_n)
+    )
+    report_max_esop_n = (
+        args.max_esop_n
+        if "external_abc_esop" in methods
+        else previous_manifest.get("max_esop_n", args.max_esop_n)
+    )
     args.run_manifest.write_text(
         json.dumps(
             {
                 "source_manifest": display_path(resolve_manifest(args.manifest)),
-                "methods": methods,
+                "methods": sorted({str(row.get("method", "")) for row in rows if row.get("method")}),
+                "last_run_methods": methods,
                 "functions": len(manifest_rows),
                 "rows": len(rows),
                 "resume": args.resume,
@@ -528,10 +720,12 @@ def main(argv: Iterable[str] | None = None) -> int:
                 "min_n": args.min_n,
                 "offset": args.offset,
                 "count": args.count,
-                "max_ilp_n": args.max_ilp_n,
-                "max_abc_n": args.max_abc_n,
+                "max_ilp_n": report_max_ilp_n,
+                "max_abc_n": report_max_abc_n,
+                "max_esop_n": report_max_esop_n,
                 "abc_binary": display_path(args.abc_bin),
                 "abc_script": args.abc_script,
+                "abc_esop_script": args.abc_esop_script,
                 "timeout": args.timeout,
                 "workers": args.workers,
                 "elapsed_s": time.time() - start,

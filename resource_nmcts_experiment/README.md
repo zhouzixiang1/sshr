@@ -44,6 +44,7 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_traditional_resource_n4.csv --internal-csv results/raw_traditional_resource.csv --out results/analysis_external_traditional_resource_n4.md
 /opt/anaconda3/envs/sshr/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_sshr_h,external_sshr_i_cnot,external_sshr_i_t --max-n 6 --max-ilp-n 6 --timeout 8 --workers 4 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_abc_aig --max-n 6 --max-abc-n 6 --timeout 8 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_abc_esop --max-n 6 --max-esop-n 6 --timeout 8 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_traditional_resource_n6.csv --internal-csv results/raw_traditional_resource.csv --out results/analysis_external_traditional_resource_n6.md
 ```
 
@@ -99,7 +100,9 @@ External-tool benchmark exchange:
   are SSHR-H/SSHR-I from `src/sshr` and a Berkeley ABC AIG path that optimizes
   exported BLIF with `strash; balance; rewrite; refactor; rewrite -z; balance`,
   verifies the optimized BLIF truth table, and maps AIG AND/level statistics to
-  a logic-level Bennett compute/uncompute resource estimate.  XAG/ROS and
+  a logic-level Bennett compute/uncompute resource estimate.  It also includes
+  an ABC ESOP path using `&exorcism -q`, verified ESOP-PLA output, and the same
+  logical-AND cube cost model as the internal ESOP baselines.  XAG/ROS and
   mockturtle adapters are still future work.
 
 Current evidence from `results/analysis_evidence_affine.md`:
@@ -176,12 +179,12 @@ Exported exact SSHR-I pilot evidence from
   win pattern and a 26.21% mean score reduction.  CNOT count is worse on 62/72
   functions.
 
-Time-limited exported SSHR-I and ABC-AIG extension evidence from
+Time-limited exported SSHR-I, ABC-AIG, and ABC-ESOP extension evidence from
 `results/analysis_external_traditional_resource_n6.md`:
 
 - Extends the same exported manifest to all 177 functions with `n <= 6`.
-- Produces 708 external rows across SSHR-H, CNOT-optimized SSHR-I,
-  T-optimized SSHR-I, and ABC-AIG, with 0 errors/skips.
+- Produces 885 external rows across SSHR-H, CNOT-optimized SSHR-I,
+  T-optimized SSHR-I, ABC-AIG, and ABC-ESOP, with 0 errors/skips.
 - The SSHR-I rows use an 8 s per-call Gurobi budget, so this is a
   time-limited extension rather than an exact certificate.
 - The ABC-AIG rows use Berkeley ABC 1.01 built from
@@ -192,6 +195,11 @@ Time-limited exported SSHR-I and ABC-AIG extension evidence from
   with mean reductions of 50.60%, 86.29%, and 54.52%, respectively.  ABC-AIG
   has a lower depth estimate on 126/177 functions, which is the main ABC-side
   advantage under this Bennett-style resource model.
+- Against ABC-ESOP, `and_resource_nmcts` has 144 T-count wins, 19 losses, and
+  14 ties; score wins/losses/ties are 147/24/6 with a 19.88% mean score
+  reduction.  This baseline uses ABC `&exorcism -q` and verified ESOP-PLA
+  output, making it a stronger external XOR-of-products comparison than the
+  AIG-only path.
 - Against CNOT-optimized SSHR-I, `and_resource_nmcts` has 164 T-count wins, 3
   losses, and 10 ties; score wins/losses/ties are 168/9/0 with a 27.92% mean
   score reduction.  CNOT count is worse on 168/177 functions.

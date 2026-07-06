@@ -44,7 +44,9 @@ wins, 1 loss, and 14 ties against time-limited weighted ESOP MILP.  On an
 exported external comparison, \method{} has 69 score wins and 3 losses against
 the exact $n\leq 4$ CNOT-optimized SSHR-I pilot, 168 score wins and 9
 losses against the time-limited $n\leq 6$ SSHR-I extension, and 177 score wins
-with no losses against an ABC-AIG baseline on the same $n\leq 6$ export.  A
+with no losses against an ABC-AIG baseline on the same $n\leq 6$ export.  It
+also has 147 score wins, 24 losses, and 6 ties against ABC's quantum-cost
+ESOP minimization path.  A
 resource-profile stress test shows that \profilemethod{} is best or tied on
 42/47, 42/47, 41/47, and 42/47 functions under T-heavy, balanced,
 CNOT-depth-heavy, and ancilla-tight objectives.  A larger core benchmark
@@ -242,9 +244,9 @@ resource objective to a larger random-ANF core through $n=12$.  To support
 external reproduction, the benchmark generator can export every preset to PLA,
 BLIF \texttt{.names}, and truth-table JSON manifests.  The current draft adds
 an exported exact-SSHR-I pilot on the $n\leq 4$ subset, a time-limited
-$n\leq 6$ SSHR-I extension, and a Berkeley ABC AIG baseline covering the full
-\traditionaldataset{} slice; external XAG/ROS/LUT tool results are still
-future work.
+$n\leq 6$ SSHR-I extension, and Berkeley ABC AIG and ESOP baselines covering
+the full \traditionaldataset{} slice; external XAG/ROS/LUT tool results are
+still future work.
 
 \subsection{Main results}
 
@@ -307,7 +309,11 @@ separate external backends over the exported manifest.  The SSHR backend gives
 CNOT-oriented heuristic and ILP baselines.  The ABC-AIG backend optimizes the
 exported BLIF with ABC rewriting, verifies the optimized BLIF truth table, and
 maps AIG AND count and level to a logic-level Bennett compute/uncompute
-resource estimate.  For the 72 functions with $n\leq 4$, the SSHR-I runs are
+resource estimate.  The ABC-ESOP backend runs ABC's quantum-cost
+\texttt{\&exorcism -q} flow, verifies the emitted ESOP-PLA against the exported
+truth table, and scores the resulting XOR-of-cubes oracle using the same
+logical-AND cube model as the internal ESOP baselines.  For the 72 functions
+with $n\leq 4$, the SSHR-I runs are
 exact within the configured Gurobi solve.  This exact pilot produced 216
 external rows with no errors or skips and confirmed that \method{} retains a
 weighted-score advantage against both CNOT-optimized and T-optimized SSHR-I,
@@ -319,8 +325,9 @@ while spending more CNOTs.
 \caption{\method{} compared with exported external baselines on the
 177-function $n\leq 6$ extension.  SSHR-I rows use an 8 s per-call Gurobi
 budget.  ABC-AIG rows use verified ABC-optimized BLIF and Bennett-style
-resource estimates.  Wins/losses/ties count common functions; negative mean
-relative values favor \method{}.}
+resource estimates; ABC-ESOP rows use verified \texttt{\&exorcism -q} ESOP-PLA
+and logical-AND cube estimates.  Wins/losses/ties count common functions;
+negative mean relative values favor \method{}.}
 \label{tab:external-baselines}
 \input{tables/external_traditional_resource_n6}
 \end{table}
@@ -335,9 +342,10 @@ resource-constrained low-T oracle-synthesis claim, while ruling out any
 CNOT-only optimality claim.
 
 We then ran the external extension over all 177 exported functions with
-$n\leq 6$.  This produced 708 external rows with no errors or skips: 531 SSHR
-rows and 177 ABC-AIG rows.  Against the CNOT-optimized SSHR-I extension,
-\method{} had 164 T-count wins, 3 losses, and 10 ties, and 168 score wins with
+$n\leq 6$.  This produced 885 external rows with no errors or skips: 531 SSHR
+rows, 177 ABC-AIG rows, and 177 ABC-ESOP rows.  Against the CNOT-optimized
+SSHR-I extension, \method{} had 164 T-count wins, 3 losses, and 10 ties, and
+168 score wins with
 9 score losses; the mean score reduction was 27.92\%.  Against the T-optimized
 extension, \method{} had 166 T-count wins, 1 loss, and 10 ties, with a 26.25\%
 mean score reduction.  The CNOT disadvantage persisted, with \method{} worse on
@@ -351,6 +359,14 @@ comparisons, reducing mean weighted score by 54.52\% and mean peak ancilla by
 consistent with a shallow optimized AIG followed by a wide Bennett embedding.
 This makes ABC-AIG a useful foil for the ancilla and weighted-resource
 objective, not a claim that \method{} dominates every metric.
+
+The ABC-ESOP comparison is closer to the XOR-of-products synthesis family.
+\method{} had 144 T-count wins, 19 losses, and 14 ties against ABC-ESOP, and
+147 score wins, 24 losses, and 6 ties.  The mean weighted-score reduction was
+19.88\%; unlike the SSHR-I CNOT-oriented comparison, \method{} also had a small
+mean CNOT reduction of 1.19\%.  This result is not a substitute for a reproduced
+ROS or XAG mapper, but it adds a standard external XOR/ESOP minimizer to the
+comparison boundary.
 
 \subsection{Ablation}
 
@@ -596,12 +612,12 @@ factored subplan.
 
 The main current limitations are the absence of hardware mapping, the fact that
 the exported SSHR-I extension beyond $n\leq 4$ is time-limited rather than an
-exact certificate, the fact that ABC-AIG is scored through a Bennett-style
-logic-level estimate rather than a full reversible-toolchain synthesis, and the
+exact certificate, the fact that ABC-AIG and ABC-ESOP are scored through
+logic-level estimates rather than full reversible-toolchain synthesis, and the
 lack of a reproduced external XAG/ROS toolchain in the comparison set.  The
 in-harness ESOP cube-beam and weighted-MILP baselines plus the exported
-SSHR-I/ABC-AIG comparisons strengthen the Boolean synthesis comparison, but
-more external implementations remain necessary before a submission-ready claim.
+SSHR-I/ABC comparisons strengthen the Boolean synthesis comparison, but more
+external implementations remain necessary before a submission-ready claim.
 The resource-profile sweep shows that profile-specific
 candidate generation improves objective robustness on small functions, but the
 large benchmark shows the corresponding
@@ -624,10 +640,10 @@ $n\leq 6$ traditional-baseline slice, the full \method{} method further avoids
 score regressions against internal ESOP cube-beam candidates and remains
 competitive against weighted ESOP MILP.  Resource-profile and \largedataset{}
 benchmarks show that this advantage is robust across several weighted
-objectives and larger random ANF instances.  Exported SSHR and ABC-AIG
-baselines add independent cross-tool evidence that the gains are not an
-artifact of the internal experiment harness, while also showing that CNOT and
-depth remain important limitations.  The new high-dimensional stress
+objectives and larger random ANF instances.  Exported SSHR, ABC-AIG, and
+ABC-ESOP baselines add independent cross-tool evidence that the gains are not
+an artifact of the internal experiment harness, while also showing that CNOT
+and depth remain important limitations.  The new high-dimensional stress
 tests show that bounded guards scale without timeouts and beat FPRM-greedy on
 60 of 64 weighted-score comparisons at $n=14$ and 30 of 32 comparisons at
 $n=15$, both without losses.  The next step is to reproduce XAG/ROS-style

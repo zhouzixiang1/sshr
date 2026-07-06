@@ -32,9 +32,9 @@ Current source evidence:
   `../results/raw_external_traditional_resource_n4.csv`
 - external exact SSHR-I pilot analysis:
   `../results/analysis_external_traditional_resource_n4.md`
-- external time-limited SSHR-I plus ABC-AIG extension CSV:
+- external time-limited SSHR-I plus ABC-AIG/ABC-ESOP extension CSV:
   `../results/raw_external_traditional_resource_n6.csv`
-- external time-limited SSHR-I plus ABC-AIG extension analysis:
+- external time-limited SSHR-I plus ABC-AIG/ABC-ESOP extension analysis:
   `../results/analysis_external_traditional_resource_n6.md`
 - resource-sweep CSV: `../results/raw_resource_sweep.csv`
 - resource-sweep analysis: `../results/analysis_resource_sweep.md`
@@ -75,6 +75,6 @@ Current source evidence:
 Known manuscript gaps:
 
 - extend exported external baselines beyond the current `n <= 6`
-  SSHR/ABC slice where runtime allows;
+  SSHR/ABC-AIG/ABC-ESOP slice where runtime allows;
 - add reproduced XAG/ROS or mockturtle-style toolchain results;
 - decide the target venue and required reference/section style.

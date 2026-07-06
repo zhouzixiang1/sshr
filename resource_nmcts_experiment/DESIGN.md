@@ -167,8 +167,10 @@ exact pilot consumes the exported `traditional_resource` manifest and runs
 SSHR-H, CNOT-optimized SSHR-I, and T-optimized SSHR-I from the separate
 `src/sshr` implementation on the `n <= 4` subset.  A time-limited extension
 covers the full `n <= 6` traditional slice with an 8 s Gurobi budget per
-SSHR-I call, and a Berkeley ABC AIG backend optimizes the same exported BLIF
-files before truth-table verification and Bennett-style resource estimation.
+SSHR-I call, a Berkeley ABC AIG backend optimizes the same exported BLIF files
+before truth-table verification and Bennett-style resource estimation, and an
+ABC ESOP backend runs `&exorcism -q`, verifies the emitted ESOP-PLA, and scores
+the resulting XOR-of-cubes oracle with the logical-AND cube model.
 XAG/ROS/mockturtle adapters are still future work, but the benchmark exchange
 format and SSHR/ABC comparison paths are now reproducible and independent of
 the synthesis harness.
@@ -315,17 +317,21 @@ rows with 0 errors/skips:
   This validates the low-T/resource-score framing and rules out a CNOT-only
   claim.
 
-The time-limited exported SSHR-I plus ABC-AIG extension covers all 177
-functions with `n <= 6`, four external methods, and 708 external rows with 0
-errors/skips.  The SSHR-I rows use an 8 s per-call Gurobi budget, and the
+The time-limited exported SSHR-I plus ABC extension covers all 177 functions
+with `n <= 6`, five external methods, and 885 external rows with 0
+errors/skips.  The SSHR-I rows use an 8 s per-call Gurobi budget, the
 ABC-AIG rows use Berkeley ABC 1.01 built from
 `bcfdf592289a408cd67ec19260f8a60a37b085b6` with BLIF truth-table
-verification:
+verification, and the ABC-ESOP rows use verified `&exorcism -q` ESOP-PLA:
 
 - Against ABC-AIG, `and_resource_nmcts` has 170/2/5 T-count wins/losses/ties,
   wins all 177 CNOT, peak-ancilla, and weighted-score comparisons, and reduces
   mean weighted score by 54.52%.  ABC-AIG has a lower depth estimate on
   126/177 functions, so it remains a useful depth-oriented foil.
+- Against ABC-ESOP, `and_resource_nmcts` has 144/19/14 T-count
+  wins/losses/ties and 147/24/6 weighted-score wins/losses/ties, reducing mean
+  weighted score by 19.88%.  This adds a standard external XOR-of-products
+  optimizer to the comparison boundary.
 - Against CNOT-optimized SSHR-I, `and_resource_nmcts` has 164 T-count wins, 3
   losses, and 10 ties; by weighted score it has 168 wins, 9 losses, and 0 ties,
   with a 27.92% mean score reduction.
