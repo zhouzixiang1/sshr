@@ -8,21 +8,24 @@
     "and_mcts_factor",
     "and_affine_nmcts",
     "and_resource_nmcts",
+    "and_fprm_polarity_archive",
     "and_pareto_resource_nmcts",
     "and_cube_beam",
     "and_esop_milp",
     "sshr_h"
   ],
   "last_run_methods": [
+    "and_fprm_polarity_archive",
     "and_pareto_resource_nmcts"
   ],
   "resume": true,
-  "raw_rows": 1593,
+  "raw_rows": 1770,
   "raw_methods": [
     "and_affine_nmcts",
     "and_cube_beam",
     "and_direct_anf",
     "and_esop_milp",
+    "and_fprm_polarity_archive",
     "and_mcts_factor",
     "and_pareto_resource_nmcts",
     "and_resource_nmcts",
@@ -32,7 +35,7 @@
   "model": "models/action_scorer_rollout_logical_and.pt",
   "workers": 10,
   "seconds": null,
-  "seconds_current_run": 36.372389793395996,
+  "seconds_current_run": 42.870930910110474,
   "config": {
     "weights": {
       "t": 1.0,

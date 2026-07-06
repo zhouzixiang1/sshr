@@ -7,11 +7,13 @@
     "and_affine_nmcts",
     "and_resource_nmcts",
     "and_profile_resource_nmcts",
+    "and_fprm_polarity_archive",
     "and_pareto_resource_nmcts",
     "and_cube_beam",
     "sshr_h"
   ],
   "last_run_methods": [
+    "and_fprm_polarity_archive",
     "and_pareto_resource_nmcts"
   ],
   "profiles": {
@@ -62,5 +64,5 @@
   },
   "model": "models/action_scorer_rollout_logical_and.pt",
   "workers": 10,
-  "seconds": 30.90432906150818
+  "seconds": 35.567566871643066
 }

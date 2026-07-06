@@ -104,7 +104,7 @@ PRESETS = {
         "workers": 10,
     },
     "traditional_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_resource_nmcts", "and_pareto_resource_nmcts", "and_cube_beam", "and_esop_milp", "sshr_h"],
+        "methods": ["direct_anf", "and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_resource_nmcts", "and_fprm_polarity_archive", "and_pareto_resource_nmcts", "and_cube_beam", "and_esop_milp", "sshr_h"],
         "random_truth": [(4, 64), (5, 64), (6, 32)],
         "random_anf": [],
         "structured_limit": 10_000,
@@ -407,6 +407,7 @@ def main(argv: Iterable[str] | None = None) -> int:
             "and_resource_nmcts": 10,
             "and_profile_resource_nmcts": 11,
             "and_pareto_resource_nmcts": 12,
+            "and_fprm_polarity_archive": 13,
         }
         tasks.sort(key=lambda t: (method_rank.get(t[2], 99), t[1].n, t[0]))
 

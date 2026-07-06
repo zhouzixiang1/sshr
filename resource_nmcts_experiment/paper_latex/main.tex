@@ -41,7 +41,7 @@ candidates.  On the current
 all functions and reduces mean T-count by 61.83\% relative to direct ANF
 synthesis.  On a separate $n\leq 6$ traditional-baseline slice, the
 \paretomethod{} archive has the lowest mean T-count and weighted score, and
-improves on \method{} with 68 score wins, no losses, and 109 ties.  It has
+improves on \method{} with 74 score wins, no losses, and 103 ties.  It has
 174 score wins and no losses against ESOP cube beam search, and 167 score
 wins, 3 losses, and 7 ties against time-limited weighted ESOP MILP.  On an
 exported external comparison, \method{} has 69 score wins and 3 losses against
@@ -252,6 +252,10 @@ gate count, and peak ancilla, and finally selects from this non-dominated
 archive using the active resource profile.  Thus the method keeps the same
 logical verifier and cost model as \method{}, but explicitly approximates a
 local Pareto frontier before profile-specific selection.
+On $n\leq 6$ functions, the archive also includes a ranked polarity candidate:
+all $2^n$ FPRM polarities are screened under greedy, root-child-beam, and
+CNOT-only linear-pair factorizations, and the best scored plan is added to the
+non-dominated pool.
 
 \section{Experiments}
 
@@ -306,8 +310,8 @@ and random small functions.
 
 The \traditionaldataset{} slice tests whether the gain persists against
 traditional Boolean/ESOP-style synthesis rather than only direct ANF and MCTS
-variants.  It contains 177 functions with $n\leq 6$ and nine methods,
-producing 1593 method/function rows with no errors or skips.  On this slice,
+variants.  It contains 177 functions with $n\leq 6$ and ten methods,
+producing 1770 method/function rows with no errors or skips.  On this slice,
 \paretomethod{} had the lowest mean T-count and the lowest mean composite
 score among all tested methods.
 
@@ -320,11 +324,11 @@ is a time-limited weighted ESOP optimization over candidate cubes.}
 \input{tables/resource_traditional_resource}
 \end{table}
 
-Against \method{}, \paretomethod{} had 68 score wins, no score losses, and 109
-ties, with a 3.87\% mean composite-score reduction.  Against ESOP cube beam
+Against \method{}, \paretomethod{} had 74 score wins, no score losses, and 103
+ties, with a 4.59\% mean composite-score reduction.  Against ESOP cube beam
 search, \paretomethod{} had 174 score wins, no losses, and 3 ties, with a
-35.28\% mean composite-score reduction.  Against weighted ESOP MILP,
-\paretomethod{} had 167 score wins, 3 losses, and 7 ties, with a 29.20\% mean
+35.86\% mean composite-score reduction.  Against weighted ESOP MILP,
+\paretomethod{} had 167 score wins, 3 losses, and 7 ties, with a 29.61\% mean
 composite-score reduction.  Against SSHR-H, \paretomethod{} had 173 T-count
 wins, no T-count losses, 4 ties, and 173 score wins with 4 score losses.
 SSHR-H retained the lowest mean CNOT count on this small-function slice, so
@@ -497,8 +501,8 @@ scorer removed while keeping the same heuristic PUCT/action prior.  The paired
 comparison contains 1062 rows over \affinemethod{}, \method{}, and
 \paretomethod{}, with no errors or skips.  The learned prior gives modest but
 monotone score improvements: 42/0/135 score wins/losses/ties for
-\affinemethod{}, 41/0/136 for \method{}, and 34/0/143 for \paretomethod{}.
-Mean score reductions are 1.47\%, 1.34\%, and 0.82\%, respectively.  The cost
+\affinemethod{}, 41/0/136 for \method{}, and 29/0/148 for \paretomethod{}.
+Mean score reductions are 1.47\%, 1.34\%, and 0.78\%, respectively.  The cost
 is runtime: the learned-prior rows are slower on these small functions because
 many small neural action batches are evaluated on CPU.  We therefore treat the
 learned prior as a quality-improving search signal, not as the current fastest
@@ -546,7 +550,7 @@ not directly comparable to all-suite means.}
 
 To test whether the method remains competitive under different resource
 objectives, we ran a 47-function $n\leq 6$ sweep under four profiles: T-heavy,
-balanced, CNOT-depth-heavy, and ancilla-tight.  The sweep produced 1504
+balanced, CNOT-depth-heavy, and ancilla-tight.  The sweep produced 1692
 method/profile/function rows with no errors or skips.  Scores are comparable
 within a profile but not across profiles because each profile uses a different
 weighted objective.
@@ -564,13 +568,13 @@ minimum score on a function.}
 \paretomethod{} was best or tied on 44/47 functions under T-heavy weights,
 44/47 under balanced weights, 42/47 under CNOT-depth-heavy weights, and 43/47
 under ancilla-tight weights.  Relative to \profilemethod{}, it had score
-wins/losses/ties of 17/0/30, 17/0/30, 18/0/29, and 12/0/35 across the four
-profiles, with mean score reductions of 4.86\%, 4.31\%, 4.16\%, and 2.35\%.
+wins/losses/ties of 19/0/28, 19/0/28, 21/0/26, and 15/0/32 across the four
+profiles, with mean score reductions of 5.56\%, 4.93\%, 4.85\%, and 2.51\%.
 Relative to \method{}, it also had no score losses in any profile.  The mean
 \paretomethod{} resource vector changed with the active objective: mean
-T-count stayed at 36.43 for T-heavy, balanced, and CNOT-depth profiles and rose
-to 39.83 under ancilla-tight weights, while mean peak ancilla fell from
-1.83--1.85 to 1.64 in the ancilla-tight profile.  This result shows that
+T-count stayed at 35.91 for T-heavy, balanced, and CNOT-depth profiles and rose
+to 39.74 under ancilla-tight weights, while mean peak ancilla fell from
+1.87--1.94 to 1.62 in the ancilla-tight profile.  This result shows that
 objective-specific candidate generation and non-dominated archive selection
 produce a stronger profile-sensitive Pareto search than the earlier bounded
 profile portfolio.

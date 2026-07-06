@@ -80,7 +80,10 @@ methods add six ingredients to fixed-coordinate ANF factoring:
    under active, T-sparse, CNOT/depth-heavy, ancilla-tight, and gate-count-aware
    internal scoring weights, removes candidates dominated in T-count, CNOT
    count, depth, gate count, and peak ancilla, then selects the surviving
-   candidate with the active profile score.  This turns the small-function
+   candidate with the active profile score.  On `n <= 6` it also adds a ranked
+   polarity archive that exhaustively screens all FPRM polarities under greedy,
+   root-child-beam, and CNOT-only linear-pair factorizations before contributing
+   the best scored candidate to the Pareto pool.  This turns the small-function
    profile layer from a budget-only portfolio into an explicit local Pareto
    frontier approximation.
 
@@ -290,7 +293,7 @@ compares the model-backed run with a no-prior rerun on all 177
 `traditional_resource` functions for `and_affine_nmcts`, `and_resource_nmcts`,
 and `and_pareto_resource_nmcts`.  It has 1062 usable rows, 0 errors, and 0
 skips.  Learned-prior score wins/losses/ties are 42/0/135, 41/0/136, and
-34/0/143, with mean score reductions of 1.47%, 1.34%, and 0.82%.  Runtime is
+29/0/148, with mean score reductions of 1.47%, 1.34%, and 0.78%.  Runtime is
 higher for the learned-prior rows on this small-function slice, so the current
 claim is a quality improvement at nonzero inference cost.
 
@@ -316,23 +319,24 @@ optimization.
 
 The `traditional_resource` run adds a stronger small-function comparison
 against traditional Boolean/ESOP baselines and the Resource/Pareto-NMCTS
-guards.  It covers 177 functions with `n <= 6`, 9 methods, 1593 method/function
+guards.  It covers 177 functions with `n <= 6`, 10 methods, 1770 method/function
 rows, 0 errors, and 0 skips.  The added baselines are an ESOP cube-beam search
 and a time-limited weighted ESOP MILP over candidate cubes, both evaluated under
 the same logical-AND resource accounting where applicable.
 
 Main `traditional_resource` evidence:
 
-- Mean T-count / composite score: `and_pareto_resource_nmcts` 41.45 / 50.66,
+- Mean T-count / composite score: `and_pareto_resource_nmcts` 40.77 / 49.83,
+  `and_fprm_polarity_archive` 43.01 / 52.50,
   `and_resource_nmcts` 45.74 / 55.21,
   `and_affine_nmcts` 45.88 / 55.37, fixed MCTS 62.06 / 73.09, ESOP cube beam
   71.32 / 83.82, ESOP MILP 83.59 / 96.73, and SSHR-H 81.04 / 88.19.
-- `and_pareto_resource_nmcts` beats `and_resource_nmcts` in score on 68
-  functions, loses on 0, and ties on 109, reducing mean score by 3.87%.
+- `and_pareto_resource_nmcts` beats `and_resource_nmcts` in score on 74
+  functions, loses on 0, and ties on 103, reducing mean score by 4.59%.
 - `and_pareto_resource_nmcts` beats ESOP cube beam in score on 174 functions,
-  loses on 0, ties on 3, and reduces mean score by 35.28%.
+  loses on 0, ties on 3, and reduces mean score by 35.86%.
 - `and_pareto_resource_nmcts` beats ESOP MILP in score on 167 functions, loses
-  on 3, ties on 7, and reduces mean score by 29.20%.
+  on 3, ties on 7, and reduces mean score by 29.61%.
 - Against SSHR-H, `and_pareto_resource_nmcts` has 173 T-count wins, no losses,
   4 ties, and 173/4/0 score wins/losses/ties.
 - SSHR-H remains better in mean CNOT count and often depth on the small
@@ -412,9 +416,10 @@ isolated `n=14` and `n=15` random-ANF stress presets:
 
 The `resource_sweep` stress test checks whether the method remains competitive
 under different resource objectives.  It uses 47 functions with `n <= 6`, four
-profiles (T-heavy, balanced, CNOT-depth-heavy, and ancilla-tight), eight
-methods including Profile-Resource-NMCTS and Pareto-Resource-NMCTS, and 1504
-method/profile/function rows.  There are 0 errors and 0 skips.
+profiles (T-heavy, balanced, CNOT-depth-heavy, and ancilla-tight), nine
+methods including Polarity archive, Profile-Resource-NMCTS, and
+Pareto-Resource-NMCTS, and 1692 method/profile/function rows.  There are
+0 errors and 0 skips.
 
 Main `resource_sweep` evidence:
 
@@ -422,13 +427,13 @@ Main `resource_sweep` evidence:
   weights, 44/47 under balanced weights, 42/47 under CNOT-depth-heavy weights,
   and 43/47 under ancilla-tight weights.
 - Compared with `and_profile_resource_nmcts`, it has score wins/losses/ties of
-  17/0/30, 17/0/30, 18/0/29, and 12/0/35 across the four profiles.
-- Mean score reductions versus Profile-Resource-NMCTS are 4.86%, 4.31%,
-  4.16%, and 2.35%.  Versus Resource-NMCTS they are 5.54%, 4.99%, 4.96%, and
-  2.86%.
+  19/0/28, 19/0/28, 21/0/26, and 15/0/32 across the four profiles.
+- Mean score reductions versus Profile-Resource-NMCTS are 5.56%, 4.93%,
+  4.85%, and 2.51%.  Versus Resource-NMCTS they are 6.23%, 5.60%, 5.63%, and
+  3.02%.
 - The mean Pareto-Resource-NMCTS vector changes with the active profile: mean T
-  is 36.43 under T-heavy/balanced/CNOT-depth and 39.83 under ancilla-tight,
-  while mean peak ancilla drops from 1.83--1.85 to 1.64 under ancilla-tight.
+  is 35.91 under T-heavy/balanced/CNOT-depth and 39.74 under ancilla-tight,
+  while mean peak ancilla drops from 1.87--1.94 to 1.62 under ancilla-tight.
   This is direct evidence for profile-sensitive Pareto-style candidate
   generation on the small-function slice.
 

@@ -330,6 +330,33 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
     return best[1], best[2], best[3], best[4]
 
 
+def _best_ranked_polarity_archive(bf: BooleanFunction, config: SearchConfig, seed: int, neural):
+    """Evaluate a compact archive after exhaustive polarity ranking on small functions."""
+    archive_config = replace(config, max_polarities=max(config.max_polarities, 1 << bf.n))
+    methods = [
+        "fprm_greedy",
+        "fprm_root_child_beam",
+        "fprm_linear_pair",
+    ]
+    if config.max_factor_ancilla >= 2:
+        methods.append("fprm_linear_pair_deep")
+    best = None
+    for method in methods:
+        try:
+            polarity, terms, plan, cost = _best_polarity_plan(method, bf, archive_config, seed, neural)
+        except Exception:
+            continue
+        score = cost.score(config.weights)
+        item = (score, polarity, terms, plan, cost)
+        if best is None or score < best[0]:
+            best = item
+    if best is None:
+        terms = frozenset(anf_monomials(bf))
+        plan = direct_plan(terms, 0, 0, config)
+        best = (plan.cost.score(config.weights), 0, terms, plan, plan.cost)
+    return best[1], best[2], best[3], best[4]
+
+
 def _best_affine_plan(
     bf: BooleanFunction,
     config: SearchConfig,
@@ -761,6 +788,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         ]
         if bf.n <= 6:
             child_specs.append(("profile_resource_nmcts", config))
+            child_specs.append(("fprm_polarity_archive", active_config))
             for label, child_config in pareto_configs:
                 child_specs.extend(
                     [
@@ -938,6 +966,14 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         plan = _solve_plan(method, terms, config, seed, neural)
         cost = plan.cost
         polarity = 0
+        circ = emit_plan_to_circuit(
+            plan,
+            bf.n,
+            min(config.max_factor_ancilla, plan.cost.explicit_ancilla),
+            polarity=polarity,
+        )
+    elif method == "fprm_polarity_archive":
+        polarity, terms, plan, cost = _best_ranked_polarity_archive(bf, config, seed, neural)
         circ = emit_plan_to_circuit(
             plan,
             bf.n,

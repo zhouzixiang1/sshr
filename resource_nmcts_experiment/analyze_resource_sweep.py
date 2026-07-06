@@ -26,6 +26,7 @@ METHOD_ORDER = [
     "and_affine_nmcts",
     "and_resource_nmcts",
     "and_profile_resource_nmcts",
+    "and_fprm_polarity_archive",
     "and_pareto_resource_nmcts",
     "and_cube_beam",
     "sshr_h",
@@ -36,6 +37,7 @@ METHOD_LABELS = {
     "and_affine_nmcts": "Affine-NMCTS",
     "and_resource_nmcts": "Resource-NMCTS",
     "and_profile_resource_nmcts": "Profile-Resource-NMCTS",
+    "and_fprm_polarity_archive": "Polarity archive",
     "and_pareto_resource_nmcts": "Pareto-Resource-NMCTS",
     "and_cube_beam": "ESOP cube beam",
     "sshr_h": "SSHR-H",
@@ -200,6 +202,7 @@ def write_latex_winner_table(winners: dict[str, Counter[str]]) -> Path:
     columns = [
         "and_pareto_resource_nmcts",
         "and_profile_resource_nmcts",
+        "and_fprm_polarity_archive",
         "and_resource_nmcts",
         "and_affine_nmcts",
         "and_mcts_factor",
@@ -208,9 +211,9 @@ def write_latex_winner_table(winners: dict[str, Counter[str]]) -> Path:
         "and_cube_beam",
     ]
     lines = [
-        r"\begin{tabular}{@{}lrrrrrrrr@{}}",
+        r"\begin{tabular}{@{}lrrrrrrrrr@{}}",
         r"\toprule",
-        r"Profile & Pareto & Profile & Res. & Aff. & MCTS & SSHR & Direct & ESOP \\",
+        r"Profile & Pareto & Profile & Pol. & Res. & Aff. & MCTS & SSHR & Direct & ESOP \\",
         r"\midrule",
     ]
     for profile in sorted(winners, key=profile_sort):

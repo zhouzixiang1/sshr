@@ -1,7 +1,7 @@
 # External Baseline Analysis
 
 External rows: 1416; usable: 1416.
-Internal rows: 1593; usable: 1593.
+Internal rows: 1770; usable: 1770.
 
 ## External Summary
 
@@ -44,46 +44,46 @@ Internal rows: 1593; usable: 1593.
 
 | target | external baseline | metric | functions | wins | losses | ties | mean relative |
 |---|---|---|---:|---:|---:|---:|---:|
-| and_pareto_resource_nmcts | external_abc_aig | T | 177 | 174 | 0 | 3 | -43.91% |
-| and_pareto_resource_nmcts | external_abc_aig | CNOT | 177 | 177 | 0 | 0 | -53.28% |
-| and_pareto_resource_nmcts | external_abc_aig | depth | 177 | 50 | 126 | 1 | +47.26% |
-| and_pareto_resource_nmcts | external_abc_aig | peak_ancilla | 177 | 177 | 0 | 0 | -85.78% |
-| and_pareto_resource_nmcts | external_abc_aig | score | 177 | 177 | 0 | 0 | -56.67% |
-| and_pareto_resource_nmcts | external_abc_esop | T | 177 | 166 | 1 | 10 | -26.56% |
-| and_pareto_resource_nmcts | external_abc_esop | CNOT | 177 | 107 | 55 | 15 | -6.39% |
-| and_pareto_resource_nmcts | external_abc_esop | depth | 177 | 157 | 12 | 8 | -17.13% |
-| and_pareto_resource_nmcts | external_abc_esop | peak_ancilla | 177 | 60 | 10 | 107 | -8.05% |
-| and_pareto_resource_nmcts | external_abc_esop | score | 177 | 168 | 3 | 6 | -23.62% |
-| and_pareto_resource_nmcts | external_abc_lut | T | 177 | 175 | 0 | 2 | -78.06% |
-| and_pareto_resource_nmcts | external_abc_lut | CNOT | 177 | 177 | 0 | 0 | -74.29% |
-| and_pareto_resource_nmcts | external_abc_lut | depth | 177 | 177 | 0 | 0 | -72.61% |
-| and_pareto_resource_nmcts | external_abc_lut | peak_ancilla | 177 | 176 | 0 | 1 | -59.14% |
-| and_pareto_resource_nmcts | external_abc_lut | score | 177 | 177 | 0 | 0 | -77.46% |
-| and_pareto_resource_nmcts | external_abc_xag | T | 177 | 177 | 0 | 0 | -54.98% |
-| and_pareto_resource_nmcts | external_abc_xag | CNOT | 177 | 174 | 3 | 0 | -39.28% |
-| and_pareto_resource_nmcts | external_abc_xag | depth | 177 | 30 | 144 | 3 | +79.40% |
-| and_pareto_resource_nmcts | external_abc_xag | peak_ancilla | 177 | 177 | 0 | 0 | -89.45% |
-| and_pareto_resource_nmcts | external_abc_xag | score | 177 | 177 | 0 | 0 | -65.12% |
-| and_pareto_resource_nmcts | external_bdd | T | 177 | 177 | 0 | 0 | -66.88% |
-| and_pareto_resource_nmcts | external_bdd | CNOT | 177 | 177 | 0 | 0 | -62.64% |
-| and_pareto_resource_nmcts | external_bdd | depth | 177 | 177 | 0 | 0 | -66.02% |
-| and_pareto_resource_nmcts | external_bdd | peak_ancilla | 177 | 177 | 0 | 0 | -81.59% |
-| and_pareto_resource_nmcts | external_bdd | score | 177 | 177 | 0 | 0 | -68.95% |
-| and_pareto_resource_nmcts | external_sshr_h | T | 177 | 173 | 0 | 4 | -47.16% |
-| and_pareto_resource_nmcts | external_sshr_h | CNOT | 177 | 42 | 129 | 6 | +21.09% |
-| and_pareto_resource_nmcts | external_sshr_h | depth | 177 | 83 | 89 | 5 | +0.14% |
-| and_pareto_resource_nmcts | external_sshr_h | peak_ancilla | 177 | 3 | 104 | 70 | +51.69% |
-| and_pareto_resource_nmcts | external_sshr_h | score | 177 | 173 | 4 | 0 | -40.30% |
-| and_pareto_resource_nmcts | external_sshr_i_cnot | T | 177 | 168 | 1 | 8 | -38.67% |
-| and_pareto_resource_nmcts | external_sshr_i_cnot | CNOT | 177 | 0 | 168 | 9 | +64.82% |
-| and_pareto_resource_nmcts | external_sshr_i_cnot | depth | 177 | 22 | 150 | 5 | +32.89% |
-| and_pareto_resource_nmcts | external_sshr_i_cnot | peak_ancilla | 177 | 0 | 104 | 73 | +55.08% |
-| and_pareto_resource_nmcts | external_sshr_i_cnot | score | 177 | 173 | 4 | 0 | -31.07% |
-| and_pareto_resource_nmcts | external_sshr_i_t | T | 177 | 168 | 1 | 8 | -36.52% |
-| and_pareto_resource_nmcts | external_sshr_i_t | CNOT | 177 | 6 | 157 | 14 | +37.03% |
-| and_pareto_resource_nmcts | external_sshr_i_t | depth | 177 | 52 | 117 | 8 | +15.32% |
-| and_pareto_resource_nmcts | external_sshr_i_t | peak_ancilla | 177 | 0 | 104 | 73 | +55.08% |
-| and_pareto_resource_nmcts | external_sshr_i_t | score | 177 | 170 | 6 | 1 | -29.24% |
+| and_pareto_resource_nmcts | external_abc_aig | T | 177 | 174 | 0 | 3 | -44.39% |
+| and_pareto_resource_nmcts | external_abc_aig | CNOT | 177 | 177 | 0 | 0 | -53.67% |
+| and_pareto_resource_nmcts | external_abc_aig | depth | 177 | 50 | 126 | 1 | +45.32% |
+| and_pareto_resource_nmcts | external_abc_aig | peak_ancilla | 177 | 177 | 0 | 0 | -85.86% |
+| and_pareto_resource_nmcts | external_abc_aig | score | 177 | 177 | 0 | 0 | -57.03% |
+| and_pareto_resource_nmcts | external_abc_esop | T | 177 | 167 | 0 | 10 | -27.26% |
+| and_pareto_resource_nmcts | external_abc_esop | CNOT | 177 | 109 | 51 | 17 | -7.23% |
+| and_pareto_resource_nmcts | external_abc_esop | depth | 177 | 160 | 11 | 6 | -17.89% |
+| and_pareto_resource_nmcts | external_abc_esop | peak_ancilla | 177 | 64 | 7 | 106 | -9.04% |
+| and_pareto_resource_nmcts | external_abc_esop | score | 177 | 170 | 1 | 6 | -24.35% |
+| and_pareto_resource_nmcts | external_abc_lut | T | 177 | 175 | 0 | 2 | -78.23% |
+| and_pareto_resource_nmcts | external_abc_lut | CNOT | 177 | 177 | 0 | 0 | -74.49% |
+| and_pareto_resource_nmcts | external_abc_lut | depth | 177 | 177 | 0 | 0 | -72.82% |
+| and_pareto_resource_nmcts | external_abc_lut | peak_ancilla | 177 | 176 | 0 | 1 | -59.43% |
+| and_pareto_resource_nmcts | external_abc_lut | score | 177 | 177 | 0 | 0 | -77.63% |
+| and_pareto_resource_nmcts | external_abc_xag | T | 177 | 177 | 0 | 0 | -55.42% |
+| and_pareto_resource_nmcts | external_abc_xag | CNOT | 177 | 175 | 2 | 0 | -39.87% |
+| and_pareto_resource_nmcts | external_abc_xag | depth | 177 | 30 | 144 | 3 | +77.01% |
+| and_pareto_resource_nmcts | external_abc_xag | peak_ancilla | 177 | 177 | 0 | 0 | -89.52% |
+| and_pareto_resource_nmcts | external_abc_xag | score | 177 | 177 | 0 | 0 | -65.45% |
+| and_pareto_resource_nmcts | external_bdd | T | 177 | 177 | 0 | 0 | -67.20% |
+| and_pareto_resource_nmcts | external_bdd | CNOT | 177 | 177 | 0 | 0 | -62.99% |
+| and_pareto_resource_nmcts | external_bdd | depth | 177 | 177 | 0 | 0 | -66.34% |
+| and_pareto_resource_nmcts | external_bdd | peak_ancilla | 177 | 177 | 0 | 0 | -81.75% |
+| and_pareto_resource_nmcts | external_bdd | score | 177 | 177 | 0 | 0 | -69.25% |
+| and_pareto_resource_nmcts | external_sshr_h | T | 177 | 173 | 0 | 4 | -47.65% |
+| and_pareto_resource_nmcts | external_sshr_h | CNOT | 177 | 43 | 128 | 6 | +19.83% |
+| and_pareto_resource_nmcts | external_sshr_h | depth | 177 | 85 | 86 | 6 | -0.86% |
+| and_pareto_resource_nmcts | external_sshr_h | peak_ancilla | 177 | 3 | 103 | 71 | +50.00% |
+| and_pareto_resource_nmcts | external_sshr_h | score | 177 | 173 | 4 | 0 | -40.85% |
+| and_pareto_resource_nmcts | external_sshr_i_cnot | T | 177 | 168 | 1 | 8 | -39.18% |
+| and_pareto_resource_nmcts | external_sshr_i_cnot | CNOT | 177 | 0 | 168 | 9 | +63.25% |
+| and_pareto_resource_nmcts | external_sshr_i_cnot | depth | 177 | 22 | 150 | 5 | +31.65% |
+| and_pareto_resource_nmcts | external_sshr_i_cnot | peak_ancilla | 177 | 0 | 103 | 74 | +53.39% |
+| and_pareto_resource_nmcts | external_sshr_i_cnot | score | 177 | 173 | 4 | 0 | -31.65% |
+| and_pareto_resource_nmcts | external_sshr_i_t | T | 177 | 168 | 1 | 8 | -36.97% |
+| and_pareto_resource_nmcts | external_sshr_i_t | CNOT | 177 | 8 | 155 | 14 | +36.03% |
+| and_pareto_resource_nmcts | external_sshr_i_t | depth | 177 | 53 | 114 | 10 | +14.47% |
+| and_pareto_resource_nmcts | external_sshr_i_t | peak_ancilla | 177 | 0 | 103 | 74 | +53.39% |
+| and_pareto_resource_nmcts | external_sshr_i_t | score | 177 | 170 | 6 | 1 | -29.75% |
 | and_resource_nmcts | external_abc_aig | T | 177 | 170 | 2 | 5 | -40.57% |
 | and_resource_nmcts | external_abc_aig | CNOT | 177 | 177 | 0 | 0 | -50.60% |
 | and_resource_nmcts | external_abc_aig | depth | 177 | 49 | 126 | 2 | +58.01% |

@@ -1,6 +1,6 @@
 # Runtime and Resource Tradeoff: traditional_resource
 
-Rows: 1593; errors: 0; skipped: 0.
+Rows: 1770; errors: 0; skipped: 0.
 
 ## Runtime by method
 
@@ -11,7 +11,8 @@ Rows: 1593; errors: 0; skipped: 0.
 | Fixed MCTS | 177 | 0 | 0 | 0.047 | 0.667 | 1.352 | 25.8 |
 | Affine-NMCTS | 177 | 0 | 0 | 0.585 | 3.976 | 4.728 | 256.1 |
 | Resource-NMCTS | 177 | 0 | 0 | 0.974 | 4.112 | 4.875 | 283.6 |
-| Pareto-Resource-NMCTS | 177 | 0 | 0 | 2.092 | 3.992 | 4.423 | 332.6 |
+| Polarity archive | 177 | 0 | 0 | 0.060 | 0.765 | 0.946 | 30.5 |
+| Pareto-Resource-NMCTS | 177 | 0 | 0 | 2.132 | 4.630 | 5.153 | 357.3 |
 | ESOP cube beam | 177 | 0 | 0 | 0.008 | 0.063 | 0.101 | 2.9 |
 | ESOP MILP | 177 | 0 | 0 | 1.239 | 10.015 | 10.029 | 670.5 |
 | SSHR-H | 177 | 0 | 0 | 0.003 | 0.109 | 0.440 | 5.2 |
@@ -25,7 +26,8 @@ Rows: 1593; errors: 0; skipped: 0.
 | Fixed MCTS | 177 | 62.06 | 124.33 | 124.79 | 1.82 | 73.09 |
 | Affine-NMCTS | 177 | 45.88 | 94.36 | 98.92 | 1.88 | 55.37 |
 | Resource-NMCTS | 177 | 45.74 | 93.49 | 98.49 | 1.89 | 55.21 |
-| Pareto-Resource-NMCTS | 177 | 41.45 | 85.34 | 90.22 | 2.01 | 50.66 |
+| Polarity archive | 177 | 43.01 | 86.85 | 91.49 | 2.11 | 52.50 |
+| Pareto-Resource-NMCTS | 177 | 40.77 | 83.93 | 88.70 | 1.97 | 49.83 |
 | ESOP cube beam | 177 | 71.32 | 115.28 | 139.51 | 2.55 | 83.82 |
 | ESOP MILP | 177 | 83.59 | 133.51 | 159.56 | 2.32 | 96.73 |
 | SSHR-H | 177 | 81.04 | 67.56 | 88.70 | 1.36 | 88.19 |

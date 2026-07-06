@@ -51,6 +51,7 @@ METHODS = [
     "and_affine_nmcts",
     "and_resource_nmcts",
     "and_profile_resource_nmcts",
+    "and_fprm_polarity_archive",
     "and_pareto_resource_nmcts",
     "and_cube_beam",
     "sshr_h",

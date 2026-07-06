@@ -170,9 +170,9 @@ Neural-prior ablation evidence from `results/analysis_neural_prior_ablation.md`:
   learned-prior rows against a no-prior rerun for `and_affine_nmcts`,
   `and_resource_nmcts`, and `and_pareto_resource_nmcts`; 0 errors/skips.
 - Learned prior versus no-prior score wins/losses/ties are 42/0/135 for
-  `and_affine_nmcts`, 41/0/136 for `and_resource_nmcts`, and 34/0/143 for
+  `and_affine_nmcts`, 41/0/136 for `and_resource_nmcts`, and 29/0/148 for
   `and_pareto_resource_nmcts`.
-- Mean score reductions are 1.47%, 1.34%, and 0.82%, respectively.  Runtime
+- Mean score reductions are 1.47%, 1.34%, and 0.78%, respectively.  Runtime
   increases on this small-function slice, so the learned prior is a
   quality-improving search signal rather than the current fastest mode.
 
@@ -180,18 +180,19 @@ Traditional Boolean/ESOP baseline evidence from
 `results/analysis_traditional_resource.md` and
 `results/runtime_traditional_resource.md`:
 
-- 177 functions with $n \leq 6$, 9 methods, 1593 result rows, 0 errors, and 0
+- 177 functions with $n \leq 6$, 10 methods, 1770 result rows, 0 errors, and 0
   skips.
-- Mean T-count / composite score: `and_pareto_resource_nmcts` 41.45 / 50.66,
+- Mean T-count / composite score: `and_pareto_resource_nmcts` 40.77 / 49.83,
+  `and_fprm_polarity_archive` 43.01 / 52.50,
   `and_resource_nmcts` 45.74 / 55.21,
   `and_affine_nmcts` 45.88 / 55.37, fixed MCTS 62.06 / 73.09, ESOP cube beam
   71.32 / 83.82, ESOP MILP 83.59 / 96.73, and SSHR-H 81.04 / 88.19.
-- Against Resource-NMCTS, `and_pareto_resource_nmcts` has 68 score wins, 0
-  losses, and 109 ties, with a 3.87% mean score reduction.
+- Against Resource-NMCTS, `and_pareto_resource_nmcts` has 74 score wins, 0
+  losses, and 103 ties, with a 4.59% mean score reduction.
 - Against ESOP cube beam, `and_pareto_resource_nmcts` has 174 score wins, 0
-  losses, and 3 ties, with a 35.28% mean score reduction.
+  losses, and 3 ties, with a 35.86% mean score reduction.
 - Against time-limited weighted ESOP MILP, `and_pareto_resource_nmcts` has 167
-  score wins, 3 losses, and 7 ties, with a 29.20% mean score reduction.
+  score wins, 3 losses, and 7 ties, with a 29.61% mean score reduction.
 - Against SSHR-H, `and_pareto_resource_nmcts` has 173 T-count wins, 0 losses,
   and 4 ties, and 173 score wins with 4 score losses.
 - SSHR-H still has the lowest mean CNOT count on this small-function slice, so
@@ -276,17 +277,17 @@ Exported high-dimensional ABC-AIG/ABC-XAG/ABC-LUT/BDD evidence from
 Resource-profile stress-test evidence from
 `results/analysis_resource_sweep.md`:
 
-- 47 functions with $n \leq 6$, 4 resource profiles, 8 methods, 1504 result
+- 47 functions with $n \leq 6$, 4 resource profiles, 9 methods, 1692 result
   rows, 0 errors, and 0 skips.
 - `and_pareto_resource_nmcts` is best-or-tied on 44/47 functions under T-heavy
   weights, 44/47 under balanced weights, 42/47 under CNOT-depth-heavy weights,
   and 43/47 under ancilla-tight weights.
 - Against Profile-Resource-NMCTS, `and_pareto_resource_nmcts` has no score
-  losses in any profile, with score wins/ties of 17/30, 17/30, 18/29, and
-  12/35.  Mean score reductions are 4.86%, 4.31%, 4.16%, and 2.35%.
-- Its mean resource vector changes with the active profile: mean T is 36.43
-  under T-heavy/balanced/CNOT-depth weights and 39.83 under ancilla-tight
-  weights, while mean peak ancilla drops from 1.83--1.85 to 1.64 under the
+  losses in any profile, with score wins/ties of 19/28, 19/28, 21/26, and
+  15/32.  Mean score reductions are 5.56%, 4.93%, 4.85%, and 2.51%.
+- Its mean resource vector changes with the active profile: mean T is 35.91
+  under T-heavy/balanced/CNOT-depth weights and 39.74 under ancilla-tight
+  weights, while mean peak ancilla drops from 1.87--1.94 to 1.62 under the
   ancilla-tight profile.
 
 Large-scale core evidence from `results/analysis_large_resource_core.md` and
