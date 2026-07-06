@@ -33,9 +33,9 @@ Current source evidence:
 - external exact SSHR-I pilot analysis:
   `../results/analysis_external_traditional_resource_n4.md`
 - external time-limited SSHR-I extension CSV:
-  `../results/raw_external_traditional_resource_n5.csv`
+  `../results/raw_external_traditional_resource_n6.csv`
 - external time-limited SSHR-I extension analysis:
-  `../results/analysis_external_traditional_resource_n5.md`
+  `../results/analysis_external_traditional_resource_n6.md`
 - resource-sweep CSV: `../results/raw_resource_sweep.csv`
 - resource-sweep analysis: `../results/analysis_resource_sweep.md`
 - large-scale core CSV: `../results/raw_large_resource_core.csv`
@@ -58,15 +58,15 @@ Current source evidence:
   `tables/runtime_large_resource_core.tex`,
   `tables/resource_highdim_resource.tex`,
   `tables/runtime_highdim_resource.tex`,
-  `tables/external_traditional_resource_n4.tex`
+  `tables/external_traditional_resource_n6.tex`
 - manifests: `../results/manifest_evidence_affine.json`,
   `../results/manifest_highdim_resource.json`,
   `../results/manifest_external_traditional_resource_n4.json`,
-  `../results/manifest_external_traditional_resource_n5.json`
+  `../results/manifest_external_traditional_resource_n6.json`
 
 Known manuscript gaps:
 
-- extend exported external baselines beyond the current `n <= 5` SSHR-I
-  time-limited extension where runtime allows;
+- strengthen exported external baselines beyond the current `n <= 6`
+  time-limited SSHR-I extension where runtime allows;
 - add reproduced XAG/ROS or mockturtle-style toolchain results;
 - decide the target venue and required reference/section style.

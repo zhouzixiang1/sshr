@@ -1,0 +1,21 @@
+{
+  "count": null,
+  "elapsed_s": 171.8796808719635,
+  "functions": 177,
+  "max_ilp_n": 6,
+  "max_n": 6,
+  "methods": [
+    "external_sshr_h",
+    "external_sshr_i_cnot",
+    "external_sshr_i_t"
+  ],
+  "min_n": null,
+  "new_tasks": 114,
+  "offset": 0,
+  "raw": "results/raw_external_traditional_resource_n6.csv",
+  "rows": 531,
+  "source_manifest": "benchmark_exports/traditional_resource_external_seed42/manifest.csv",
+  "summary": "results/summary_external_traditional_resource_n6.csv",
+  "timeout": 8.0,
+  "workers": 4
+}
