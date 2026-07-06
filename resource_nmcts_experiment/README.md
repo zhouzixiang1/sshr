@@ -42,6 +42,8 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset traditional_resource --formats pla,blif,truth --out-dir benchmark_exports/traditional_resource_external_seed42
 /opt/anaconda3/envs/sshr/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --max-n 4 --max-ilp-n 4 --timeout 10 --workers 4 --out results/raw_external_traditional_resource_n4.csv --summary results/summary_external_traditional_resource_n4.csv --run-manifest results/manifest_external_traditional_resource_n4.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_traditional_resource_n4.csv --internal-csv results/raw_traditional_resource.csv --out results/analysis_external_traditional_resource_n4.md
+/opt/anaconda3/envs/sshr/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --max-n 5 --max-ilp-n 5 --timeout 8 --workers 4 --resume --out results/raw_external_traditional_resource_n5.csv --summary results/summary_external_traditional_resource_n5.csv --run-manifest results/manifest_external_traditional_resource_n5.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_traditional_resource_n5.csv --internal-csv results/raw_traditional_resource.csv --out results/analysis_external_traditional_resource_n5.md
 ```
 
 Current presets:
@@ -167,6 +169,20 @@ Exported exact SSHR-I pilot evidence from
 - Against T-optimized SSHR-I, `and_resource_nmcts` has the same 65/0/7 T-count
   win pattern and a 26.21% mean score reduction.  CNOT count is worse on 62/72
   functions.
+
+Time-limited exported SSHR-I extension evidence from
+`results/analysis_external_traditional_resource_n5.md`:
+
+- Extends the same exported manifest to all 139 functions with `n <= 5`.
+- Produces 417 external rows across SSHR-H, CNOT-optimized SSHR-I, and
+  T-optimized SSHR-I, with 0 errors/skips.
+- The SSHR-I rows use an 8 s per-call Gurobi budget, so this is a
+  time-limited extension rather than an exact certificate.
+- Against CNOT-optimized SSHR-I, `and_resource_nmcts` has 130 T-count wins, 1
+  loss, and 8 ties; score wins/losses/ties are 133/6/0 with a 29.92% mean
+  score reduction.  CNOT count is worse on 131/139 functions.
+- Against T-optimized SSHR-I, `and_resource_nmcts` has the same 130/1/8
+  T-count win pattern and a 26.20% mean score reduction.
 
 Resource-profile stress-test evidence from
 `results/analysis_resource_sweep.md`:

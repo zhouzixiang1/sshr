@@ -1,5 +1,4 @@
 {
-  "elapsed_s": 16.278425216674805,
   "functions": 72,
   "max_ilp_n": 4,
   "max_n": 4,
@@ -8,7 +7,7 @@
     "external_sshr_i_cnot",
     "external_sshr_i_t"
   ],
-  "new_tasks": 216,
+  "note": "n<=4 exact SSHR-I pilot split from the n<=5 run; original pilot used timeout 10s",
   "raw": "results/raw_external_traditional_resource_n4.csv",
   "rows": 216,
   "source_manifest": "benchmark_exports/traditional_resource_external_seed42/manifest.csv",

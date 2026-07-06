@@ -41,9 +41,9 @@ all functions and reduces mean T-count by 61.83\% relative to direct ANF
 synthesis.  On a separate $n\leq 6$ traditional-baseline slice, \method{} has
 172 T-count wins and no losses against ESOP cube beam search, and 162 T-count
 wins, 1 loss, and 14 ties against time-limited weighted ESOP MILP.  On an
-exported exact SSHR-I pilot covering 72 functions with $n\leq 4$, \method{}
-has 69 score wins and 3 score losses against the CNOT-optimized SSHR-I baseline,
-with a 26.45\% mean score reduction while using more CNOTs.  A
+exported SSHR-I comparison, \method{} has 69 score wins and 3 losses against
+the exact $n\leq 4$ CNOT-optimized SSHR-I pilot, and 133 score wins and 6
+losses against the time-limited $n\leq 5$ extension.  A
 resource-profile stress test shows that \profilemethod{} is best or tied on
 42/47, 42/47, 41/47, and 42/47 functions under T-heavy, balanced,
 CNOT-depth-heavy, and ancilla-tight objectives.  A larger core benchmark
@@ -231,8 +231,8 @@ MILP over candidate cubes.  The \largedataset{} benchmark extends the same
 resource objective to a larger random-ANF core through $n=12$.  To support
 external reproduction, the benchmark generator can export every preset to PLA,
 BLIF \texttt{.names}, and truth-table JSON manifests.  The current draft adds
-an exported exact-SSHR-I pilot on the $n\leq 4$ subset; external XAG/ROS/LUT
-tool results are still future work.
+an exported exact-SSHR-I pilot on the $n\leq 4$ subset plus a time-limited
+$n\leq 5$ extension; external XAG/ROS/LUT tool results are still future work.
 
 \subsection{Main results}
 
@@ -315,6 +315,15 @@ win/tie pattern and a 26.21\% mean score reduction.  In both exact comparisons,
 however, \method{} loses CNOT count on most functions.  This supports the
 resource-constrained low-T oracle-synthesis claim, while ruling out any
 CNOT-only optimality claim.
+
+We also ran a time-limited SSHR-I extension over all 139 exported functions
+with $n\leq 5$ using an 8 s per-call ILP budget.  This produced 417 external
+rows with no errors or skips.  Against the CNOT-optimized SSHR-I extension,
+\method{} had 130 T-count wins, 1 loss, and 8 ties, and 133 score wins with 6
+score losses; the mean score reduction was 29.92\%.  Against the T-optimized
+extension, \method{} again had 130 T-count wins, 1 loss, and 8 ties, with a
+26.20\% mean score reduction.  The CNOT disadvantage persisted, with
+\method{} worse on 131/139 CNOT comparisons against the CNOT-optimized run.
 
 \subsection{Ablation}
 

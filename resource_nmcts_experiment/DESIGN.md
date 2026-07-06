@@ -161,9 +161,10 @@ fed to external XAG/ROS/LUT or mockturtle-style flows.  External tool results
 are now partially covered by `run_external_baselines.py`: the first exact
 pilot consumes the exported `traditional_resource` manifest and runs SSHR-H,
 CNOT-optimized SSHR-I, and T-optimized SSHR-I from the separate `src/sshr`
-implementation on the `n <= 4` subset.  XAG/ROS/mockturtle adapters are still
-future work, but the benchmark exchange format and exact SSHR-I comparison path
-are now reproducible and independent of the synthesis harness.
+implementation on the `n <= 4` subset.  A time-limited extension covers
+`n <= 5` with an 8 s Gurobi budget per SSHR-I call.  XAG/ROS/mockturtle
+adapters are still future work, but the benchmark exchange format and SSHR-I
+comparison path are now reproducible and independent of the synthesis harness.
 
 ## Evaluation
 
@@ -306,6 +307,19 @@ rows with 0 errors/skips:
   (65/72 worse against CNOT-opt SSHR-I and 62/72 worse against T-opt SSHR-I).
   This validates the low-T/resource-score framing and rules out a CNOT-only
   claim.
+
+The time-limited exported SSHR-I extension covers all 139 functions with
+`n <= 5`, three external methods, and 417 external rows with 0 errors/skips.
+The SSHR-I rows use an 8 s per-call Gurobi budget:
+
+- Against CNOT-optimized SSHR-I, `and_resource_nmcts` has 130 T-count wins, 1
+  loss, and 8 ties; by weighted score it has 133 wins, 6 losses, and 0 ties,
+  with a 29.92% mean score reduction.
+- Against T-optimized SSHR-I, it again has 130/1/8 T-count wins/losses/ties,
+  with a 26.20% mean score reduction.
+- The CNOT disadvantage is stronger at `n <= 5`: `and_resource_nmcts` is worse
+  on 131/139 CNOT comparisons against CNOT-opt SSHR-I and on 127/139 against
+  T-opt SSHR-I.
 
 The `resource_sweep` stress test checks whether the method remains competitive
 under different resource objectives.  It uses 47 functions with `n <= 6`, four

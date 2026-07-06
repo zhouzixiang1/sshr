@@ -245,7 +245,10 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser.add_argument("--summary", type=Path, default=DEFAULT_RESULTS / "summary_external_baselines.csv")
     parser.add_argument("--run-manifest", type=Path, default=DEFAULT_RESULTS / "manifest_external_baselines.json")
     parser.add_argument("--limit", type=int, default=None)
+    parser.add_argument("--min-n", type=int, default=None)
     parser.add_argument("--max-n", type=int, default=None)
+    parser.add_argument("--offset", type=int, default=0, help="function offset after n filters")
+    parser.add_argument("--count", type=int, default=None, help="function count after n filters")
     parser.add_argument("--max-ilp-n", type=int, default=4)
     parser.add_argument("--timeout", type=float, default=30.0, help="per SSHR-I call time limit")
     parser.add_argument("--workers", type=int, default=1)
@@ -254,8 +257,14 @@ def main(argv: Iterable[str] | None = None) -> int:
 
     weights = dict(DEFAULT_WEIGHTS)
     manifest_rows = load_manifest(args.manifest)
+    if args.min_n is not None:
+        manifest_rows = [row for row in manifest_rows if int(row["n"]) >= args.min_n]
     if args.max_n is not None:
         manifest_rows = [row for row in manifest_rows if int(row["n"]) <= args.max_n]
+    if args.offset:
+        manifest_rows = manifest_rows[max(0, args.offset) :]
+    if args.count is not None:
+        manifest_rows = manifest_rows[: max(0, args.count)]
     if args.limit is not None:
         manifest_rows = manifest_rows[: max(0, args.limit)]
     methods = parse_methods(args.methods)
@@ -298,6 +307,9 @@ def main(argv: Iterable[str] | None = None) -> int:
                 "rows": len(rows),
                 "new_tasks": len(tasks),
                 "max_n": args.max_n,
+                "min_n": args.min_n,
+                "offset": args.offset,
+                "count": args.count,
                 "max_ilp_n": args.max_ilp_n,
                 "timeout": args.timeout,
                 "workers": args.workers,
