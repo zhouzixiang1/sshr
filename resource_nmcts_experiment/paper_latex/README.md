@@ -36,6 +36,14 @@ Current source evidence:
   `../results/raw_external_traditional_resource_n6.csv`
 - external time-limited SSHR-I plus ABC-AIG/ABC-ESOP extension analysis:
   `../results/analysis_external_traditional_resource_n6.md`
+- external high-dimensional ABC-AIG CSV:
+  `../results/raw_external_highdim_resource.csv`
+- external high-dimensional ABC-AIG analysis:
+  `../results/analysis_external_highdim_resource.md`
+- external high-dimensional ABC-AIG scale CSV:
+  `../results/raw_external_highdim_scale_resource.csv`
+- external high-dimensional ABC-AIG scale analysis:
+  `../results/analysis_external_highdim_scale_resource.md`
 - resource-sweep CSV: `../results/raw_resource_sweep.csv`
 - resource-sweep analysis: `../results/analysis_resource_sweep.md`
 - large-scale core CSV: `../results/raw_large_resource_core.csv`
@@ -65,16 +73,20 @@ Current source evidence:
   `tables/runtime_highdim_resource.tex`,
   `tables/resource_highdim_scale_resource.tex`,
   `tables/runtime_highdim_scale_resource.tex`,
-  `tables/external_traditional_resource_n6.tex`
+  `tables/external_traditional_resource_n6.tex`,
+  `tables/external_highdim_abc_aig.tex`
 - manifests: `../results/manifest_evidence_affine.json`,
   `../results/manifest_highdim_resource.json`,
   `../results/manifest_highdim_scale_resource.json`,
   `../results/manifest_external_traditional_resource_n4.json`,
-  `../results/manifest_external_traditional_resource_n6.json`
+  `../results/manifest_external_traditional_resource_n6.json`,
+  `../results/manifest_external_highdim_resource.json`,
+  `../results/manifest_external_highdim_scale_resource.json`
 
 Known manuscript gaps:
 
-- extend exported external baselines beyond the current `n <= 6`
-  SSHR/ABC-AIG/ABC-ESOP slice where runtime allows;
+- add reproduced non-AIG high-dimensional external baselines where runtime
+  allows; ABC-ESOP is stable on `n <= 6` but times out on complex high-dimensional
+  examples;
 - add reproduced XAG/ROS or mockturtle-style toolchain results;
 - decide the target venue and required reference/section style.

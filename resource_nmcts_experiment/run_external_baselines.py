@@ -258,14 +258,68 @@ def eval_blif(inputs: list[str], output: str, nodes: list[BlifNode], x: int) -> 
     return values[output]
 
 
+def _all_truth_bits(n: int) -> int:
+    return (1 << (1 << n)) - 1
+
+
+def _input_truth_masks(labels: list[str], n: int) -> dict[str, int]:
+    masks = {label: 0 for label in labels}
+    for x in range(1 << n):
+        bit = 1 << x
+        for label in labels:
+            if label.startswith("x") and label[1:].isdigit():
+                if (x >> int(label[1:])) & 1:
+                    masks[label] |= bit
+            else:
+                raise ValueError(f"unsupported input label: {label}")
+    return masks
+
+
+def _pattern_mask(pattern: str, input_masks: tuple[int, ...], all_bits: int) -> int:
+    mask = all_bits
+    for ch, input_mask in zip(pattern, input_masks):
+        if ch == "1":
+            mask &= input_mask
+        elif ch == "0":
+            mask &= all_bits ^ input_mask
+        elif ch == "-":
+            continue
+        else:
+            raise ValueError(f"unsupported BLIF pattern character: {ch}")
+    return mask
+
+
+def blif_truth_table(inputs: list[str], output: str, nodes: list[BlifNode], n: int) -> int:
+    values = _input_truth_masks(inputs, n)
+    all_bits = _all_truth_bits(n)
+    for node in nodes:
+        if not node.inputs:
+            values[node.output] = all_bits if node.cover and node.cover[-1][1] else 0
+            continue
+
+        values_in_cover = {out_value for _pattern, out_value in node.cover}
+        # ABC sometimes emits off-set covers; then the unlisted minterms default to 1.
+        value = all_bits if values_in_cover == {0} else 0
+        input_masks = tuple(values[name] for name in node.inputs)
+        for pattern, out_value in node.cover:
+            if len(pattern) != len(input_masks):
+                continue
+            mask = _pattern_mask(pattern, input_masks, all_bits)
+            if out_value:
+                value |= mask
+            else:
+                value &= all_bits ^ mask
+        values[node.output] = value & all_bits
+    if output not in values:
+        raise ValueError(f"BLIF output {output} was not driven")
+    return values[output]
+
+
 def verify_blif(path: Path, bf: BooleanFunction) -> bool:
     inputs, output, nodes = parse_blif(path)
     if len(inputs) != bf.n:
         return False
-    for x in range(1 << bf.n):
-        if eval_blif(inputs, output, nodes, x) != bf.evaluate(x):
-            return False
-    return True
+    return blif_truth_table(inputs, output, nodes, bf.n) == bf.truth_table
 
 
 def abc_bennett_cost(and_count: int, level: int, bf: BooleanFunction) -> Cost:
@@ -340,16 +394,15 @@ def parse_esop_pla(path: Path) -> list[EsopCube]:
 
 
 def verify_esop(cubes: list[EsopCube], bf: BooleanFunction) -> bool:
-    for x in range(1 << bf.n):
-        value = 0
-        for cube in cubes:
-            if len(cube.pattern) != bf.n:
-                return False
-            if cube.matches(x):
-                value ^= 1
-        if value != bf.evaluate(x):
+    all_bits = _all_truth_bits(bf.n)
+    input_masks = _input_truth_masks([f"x{i}" for i in range(bf.n)], bf.n)
+    masks = tuple(input_masks[f"x{i}"] for i in range(bf.n))
+    value = 0
+    for cube in cubes:
+        if len(cube.pattern) != bf.n:
             return False
-    return True
+        value ^= _pattern_mask(cube.pattern, masks, all_bits)
+    return value == bf.truth_table
 
 
 def _logical_and_gate_cost(controls: int) -> Cost:

@@ -9,6 +9,7 @@ from anf_utils import anf_monomials, boolean_from_anf, majority_function, parity
 from export_benchmarks import export_suite, selected_formats
 from factor_plan import SearchConfig
 from resource_model import ResourceWeights
+from run_external_baselines import EsopCube, blif_truth_table, eval_blif, parse_blif, verify_blif, verify_esop
 from synthesizers import synthesize
 
 
@@ -26,8 +27,56 @@ def check_roundtrip() -> None:
             assert rebuilt.truth_table == original.truth_table
 
 
+def check_external_truth_verifiers() -> None:
+    from bool_func import BooleanFunction
+
+    with TemporaryDirectory() as tmp:
+        out_dir = Path(tmp)
+        and_blif = out_dir / "and2.blif"
+        and_blif.write_text(
+            "\n".join(
+                [
+                    ".model and2",
+                    ".inputs x0 x1",
+                    ".outputs f",
+                    ".names x0 x1 f",
+                    "11 1",
+                    ".end",
+                ]
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        or_blif = out_dir / "or2.blif"
+        or_blif.write_text(
+            "\n".join(
+                [
+                    ".model or2",
+                    ".inputs x0 x1",
+                    ".outputs f",
+                    ".names x0 x1 f",
+                    "00 0",
+                    ".end",
+                ]
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        assert verify_blif(and_blif, BooleanFunction(2, 0b1000))
+        assert verify_blif(or_blif, BooleanFunction(2, 0b1110))
+
+        inputs, output, nodes = parse_blif(or_blif)
+        truth = blif_truth_table(inputs, output, nodes, 2)
+        slow_truth = sum(eval_blif(inputs, output, nodes, x) << x for x in range(4))
+        assert truth == slow_truth == 0b1110
+
+    xor_cubes = [EsopCube("1-"), EsopCube("-1")]
+    assert verify_esop(xor_cubes, BooleanFunction(2, 0b0110))
+
+
 def main() -> int:
     check_roundtrip()
+    check_external_truth_verifiers()
     with TemporaryDirectory() as tmp:
         out_dir = Path(tmp)
         summary = export_suite("smoke", 42, out_dir, selected_formats("pla,blif,truth"), limit=2)

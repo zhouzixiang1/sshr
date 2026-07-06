@@ -1,0 +1,29 @@
+{
+  "abc_binary": "/Users/zhouzixiang/Desktop/tzb/src/tmp/abc/abc",
+  "abc_esop_script": "strash; &get",
+  "abc_script": "strash; balance; rewrite; refactor; rewrite -z; balance",
+  "count": null,
+  "elapsed_s": 2.2042200565338135,
+  "existing_rows": 0,
+  "functions": 64,
+  "last_run_methods": [
+    "external_abc_aig"
+  ],
+  "max_abc_n": 14,
+  "max_esop_n": 8,
+  "max_ilp_n": 4,
+  "max_n": 14,
+  "methods": [
+    "external_abc_aig"
+  ],
+  "min_n": 14,
+  "new_tasks": 64,
+  "offset": 0,
+  "raw": "results/raw_external_highdim_resource.csv",
+  "resume": false,
+  "rows": 64,
+  "source_manifest": "benchmark_exports/highdim_resource_external_seed42/manifest.csv",
+  "summary": "results/summary_external_highdim_resource.csv",
+  "timeout": 20.0,
+  "workers": 8
+}

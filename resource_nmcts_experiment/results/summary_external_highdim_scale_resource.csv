@@ -1,0 +1,2 @@
+correct,functions,mean_depth,mean_peak_ancilla,mean_score,mean_time_s,method,n,total_CNOT,total_T
+32,32,233.8125,13177.8125,84868.6696875,0.4955233037471771,external_abc_aig,15,4216932,1686760

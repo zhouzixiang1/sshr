@@ -46,6 +46,12 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_abc_aig --max-n 6 --max-abc-n 6 --timeout 8 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_abc_esop --max-n 6 --max-esop-n 6 --timeout 8 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_traditional_resource_n6.csv --internal-csv results/raw_traditional_resource.csv --out results/analysis_external_traditional_resource_n6.md
+/opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset highdim_resource --formats blif,truth --out-dir benchmark_exports/highdim_resource_external_seed42
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/highdim_resource_external_seed42/manifest.json --methods external_abc_aig --min-n 14 --max-n 14 --max-abc-n 14 --timeout 20 --workers 8 --out results/raw_external_highdim_resource.csv --summary results/summary_external_highdim_resource.csv --run-manifest results/manifest_external_highdim_resource.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_highdim_resource.csv --internal-csv results/raw_highdim_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_fprm_linear_pair,and_fprm_root_beam,and_fprm_greedy,direct_anf,and_direct_anf --out results/analysis_external_highdim_resource.md
+/opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset highdim_scale_resource --formats blif,truth --out-dir benchmark_exports/highdim_scale_resource_external_seed42
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/highdim_scale_resource_external_seed42/manifest.json --methods external_abc_aig --min-n 15 --max-n 15 --max-abc-n 15 --timeout 30 --workers 8 --out results/raw_external_highdim_scale_resource.csv --summary results/summary_external_highdim_scale_resource.csv --run-manifest results/manifest_external_highdim_scale_resource.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_highdim_scale_resource.csv --internal-csv results/raw_highdim_scale_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_fprm_linear_pair_deep,and_fprm_linear_pair,and_fprm_linear_parity,and_fprm_greedy,direct_anf,and_direct_anf --out results/analysis_external_highdim_scale_resource.md
 ```
 
 Current presets:
@@ -99,8 +105,9 @@ External-tool benchmark exchange:
   runs cross-directory baseline backends.  The implemented external backends
   are SSHR-H/SSHR-I from `src/sshr` and a Berkeley ABC AIG path that optimizes
   exported BLIF with `strash; balance; rewrite; refactor; rewrite -z; balance`,
-  verifies the optimized BLIF truth table, and maps AIG AND/level statistics to
-  a logic-level Bennett compute/uncompute resource estimate.  It also includes
+  verifies the optimized BLIF truth table with a bit-parallel full truth-table
+  checker, and maps AIG AND/level statistics to a logic-level Bennett
+  compute/uncompute resource estimate.  It also includes
   an ABC ESOP path using `&exorcism -q`, verified ESOP-PLA output, and the same
   logical-AND cube cost model as the internal ESOP baselines.  XAG/ROS and
   mockturtle adapters are still future work.
@@ -205,6 +212,25 @@ Time-limited exported SSHR-I, ABC-AIG, and ABC-ESOP extension evidence from
   score reduction.  CNOT count is worse on 168/177 functions.
 - Against T-optimized SSHR-I, `and_resource_nmcts` has 166 T-count wins, 1
   loss, and 10 ties, with a 26.25% mean score reduction.
+
+Exported high-dimensional ABC-AIG evidence from
+`results/analysis_external_highdim_resource.md` and
+`results/analysis_external_highdim_scale_resource.md`:
+
+- The ABC-AIG external path now covers 64 exported `n=14` random-ANF functions
+  and 32 exported `n=15` random-ANF functions, with 96/96 correct rows and
+  0 errors/skips.
+- At `n=14`, `and_resource_nmcts` and `and_profile_resource_nmcts` beat
+  ABC-AIG on all 64 T-count, CNOT, peak-ancilla, and weighted-score
+  comparisons.  Mean relative reductions are 91.55% for T-count, 93.92% for
+  CNOT, 99.79% for peak ancilla, and 94.13% for weighted score.
+- At `n=15`, the same guarded methods beat ABC-AIG on all 32 T-count, CNOT,
+  peak-ancilla, and weighted-score comparisons.  Mean relative reductions are
+  92.28% for T-count, 94.40% for CNOT, 99.67% for peak ancilla, and 94.59%
+  for weighted score.
+- ABC-AIG remains shallower under the current Bennett-style level estimate on
+  50/64 `n=14` functions and 25/32 `n=15` functions, so the claim remains
+  weighted-resource and low-ancilla dominance rather than depth-only dominance.
 
 Resource-profile stress-test evidence from
 `results/analysis_resource_sweep.md`:

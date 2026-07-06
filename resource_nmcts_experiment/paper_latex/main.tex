@@ -61,7 +61,10 @@ errors or skips; the guarded high-dimensional variants reduce mean T-count by
 ANF, with 60 score wins, no losses, and 4 ties against FPRM-greedy.  A
 follow-up $n=15$ scale check preserves this pattern with 30 score wins, no
 losses, and 2 ties against FPRM-greedy, reducing mean weighted score by
-5.73\%.  The method is
+5.73\%.  On exported high-dimensional ABC-AIG checks for the same $n=14$ and
+$n=15$ sets, the guarded method wins all 96 weighted-score comparisons with
+94.13\% and 94.59\% mean score reductions, while ABC-AIG keeps lower estimated
+depth on most functions.  The method is
 evaluated only at the logical circuit layer;
 hardware mapping and connectivity constraints are outside the present scope.
 \end{abstract}
@@ -245,8 +248,9 @@ external reproduction, the benchmark generator can export every preset to PLA,
 BLIF \texttt{.names}, and truth-table JSON manifests.  The current draft adds
 an exported exact-SSHR-I pilot on the $n\leq 4$ subset, a time-limited
 $n\leq 6$ SSHR-I extension, and Berkeley ABC AIG and ESOP baselines covering
-the full \traditionaldataset{} slice; external XAG/ROS/LUT tool results are
-still future work.
+the full \traditionaldataset{} slice.  The ABC-AIG export path is also run on
+the isolated $n=14$ and $n=15$ high-dimensional random-ANF suites; external
+XAG/ROS/LUT tool results are still future work.
 
 \subsection{Main results}
 
@@ -367,6 +371,30 @@ The ABC-ESOP comparison is closer to the XOR-of-products synthesis family.
 mean CNOT reduction of 1.19\%.  This result is not a substitute for a reproduced
 ROS or XAG mapper, but it adds a standard external XOR/ESOP minimizer to the
 comparison boundary.
+
+Finally, we pushed the ABC-AIG exchange beyond the small-function slice.  The
+\highdimdataset{} and \scaledataset{} suites were exported to BLIF/truth JSON,
+optimized by ABC, and verified by a bit-parallel full truth-table checker
+before scoring.  The high-dimensional ABC-AIG rows contain 64 $n=14$ and 32
+$n=15$ functions, all correct and with no errors or skips.  Against ABC-AIG,
+\method{} and \profilemethod{} win every T-count, CNOT, peak-ancilla, and
+weighted-score comparison on these 96 functions; the mean score reductions are
+94.13\% at $n=14$ and 94.59\% at $n=15$.  The depth column remains an important
+counterweight: ABC-AIG has a lower estimated depth on 50/64 and 25/32
+high-dimensional functions, respectively.  Thus the high-dimensional external
+result supports the low-ancilla and weighted-resource claim, but not
+depth-only dominance.
+
+\begin{table}[t]
+\centering
+\small
+\caption{\method{} compared with exported ABC-AIG on the high-dimensional
+$n=14$ and $n=15$ random-ANF suites.  Both suites use verified ABC-optimized
+BLIF and the same Bennett-style AIG resource estimate as the $n\leq 6$ ABC-AIG
+baseline.  Negative mean relative values favor \method{}.}
+\label{tab:external-highdim-aig}
+\input{tables/external_highdim_abc_aig}
+\end{table}
 
 \subsection{Ablation}
 
@@ -616,8 +644,10 @@ exact certificate, the fact that ABC-AIG and ABC-ESOP are scored through
 logic-level estimates rather than full reversible-toolchain synthesis, and the
 lack of a reproduced external XAG/ROS toolchain in the comparison set.  The
 in-harness ESOP cube-beam and weighted-MILP baselines plus the exported
-SSHR-I/ABC comparisons strengthen the Boolean synthesis comparison, but more
-external implementations remain necessary before a submission-ready claim.
+SSHR-I/ABC comparisons strengthen the Boolean synthesis comparison, and the
+new high-dimensional ABC-AIG rows show that this external comparison is no
+longer restricted to $n\leq 6$.  More external implementations remain necessary
+before a submission-ready claim.
 The resource-profile sweep shows that profile-specific
 candidate generation improves objective robustness on small functions, but the
 large benchmark shows the corresponding
@@ -644,11 +674,11 @@ objectives and larger random ANF instances.  Exported SSHR, ABC-AIG, and
 ABC-ESOP baselines add independent cross-tool evidence that the gains are not
 an artifact of the internal experiment harness, while also showing that CNOT
 and depth remain important limitations.  The new high-dimensional stress
-tests show that bounded guards scale without timeouts and beat FPRM-greedy on
+tests show that bounded guards scale without timeouts, beat FPRM-greedy on
 60 of 64 weighted-score comparisons at $n=14$ and 30 of 32 comparisons at
-$n=15$, both without losses.  The next step is to reproduce XAG/ROS-style
-toolchain baselines and hardware-aware mappings so the empirical claim is
-submission-ready.
+$n=15$, and beat exported ABC-AIG on all 96 high-dimensional weighted-score
+comparisons.  The next step is to reproduce XAG/ROS-style toolchain baselines
+and hardware-aware mappings so the empirical claim is submission-ready.
 
 \bibliographystyle{plain}
 \bibliography{references}
