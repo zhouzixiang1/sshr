@@ -7,29 +7,32 @@
     "and_direct_anf",
     "and_fprm_greedy",
     "and_fprm_root_beam",
+    "and_fprm_linear_pair",
     "and_affine_greedy",
     "and_resource_nmcts",
     "and_profile_resource_nmcts"
   ],
   "last_run_methods": [
+    "and_fprm_linear_pair",
     "and_resource_nmcts",
     "and_profile_resource_nmcts"
   ],
   "resume": true,
-  "raw_rows": 448,
+  "raw_rows": 512,
   "raw_methods": [
     "and_affine_greedy",
     "and_direct_anf",
     "and_fprm_greedy",
+    "and_fprm_linear_pair",
     "and_fprm_root_beam",
     "and_profile_resource_nmcts",
     "and_resource_nmcts",
     "direct_anf"
   ],
   "model": "models/action_scorer_rollout_logical_and.pt",
-  "workers": 2,
+  "workers": 4,
   "seconds": null,
-  "seconds_current_run": 842.9956538677216,
+  "seconds_current_run": 488.05345916748047,
   "config": {
     "weights": {
       "t": 1.0,

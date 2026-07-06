@@ -42,6 +42,7 @@ class FactorAction:
     rest: frozenset[int]
     immediate_gain: float
     prior: float
+    linear: bool = False
 
 
 @dataclass
@@ -95,9 +96,18 @@ def candidate_actions(
     for factor, cnt in counts.items():
         if cnt < config.min_factor_count:
             continue
-        group = frozenset(t for t in terms if (t & factor) == factor)
-        residuals = frozenset(t ^ factor for t in group)
-        rest = frozenset(t for t in terms if (t & factor) != factor)
+        group_items = []
+        residual_items = []
+        rest_items = []
+        for term in terms:
+            if (term & factor) == factor:
+                group_items.append(term)
+                residual_items.append(term ^ factor)
+            else:
+                rest_items.append(term)
+        group = frozenset(group_items)
+        residuals = frozenset(residual_items)
+        rest = frozenset(rest_items)
         if not residuals:
             continue
 
@@ -167,6 +177,96 @@ def candidate_actions(
     return actions[: config.candidate_top_k]
 
 
+def _linear_factor_resource(factor: int, live_factor_ancilla: int) -> ResourceCost:
+    width = int(factor).bit_count()
+    live = live_factor_ancilla + 1
+    return ResourceCost(CNOT=width, gates=width, depth=width, explicit_ancilla=live, peak_ancilla=live)
+
+
+def linear_factor_actions(
+    terms: frozenset[int],
+    prefix_len: int,
+    live_factor_ancilla: int,
+    config: SearchConfig,
+    action_width: int | None = None,
+) -> List[FactorAction]:
+    """Find pairwise XOR factors ``(x_i xor x_j) * g`` inside an ANF.
+
+    The quotient terms are restricted to monomials that contain neither
+    variable in the linear factor.  This keeps the transformation simple,
+    circuit-emittable, and easy to verify while exposing a cheap CNOT-only
+    factor type that monomial factoring cannot represent.
+    """
+    if live_factor_ancilla >= config.max_factor_ancilla or len(terms) < 2 * config.min_factor_count:
+        return []
+    n_bits = max((int(t).bit_length() for t in terms), default=0)
+    if n_bits < 2:
+        return []
+
+    termset = set(terms)
+    direct_total = direct_cost_for_terms(
+        terms, prefix_len, live_factor_ancilla, config.use_relative_phase, config.gate_mode
+    ).score(config.weights)
+    actions: List[FactorAction] = []
+    for i in range(n_bits):
+        bi = 1 << i
+        for j in range(i + 1, n_bits):
+            bj = 1 << j
+            pair_mask = bi | bj
+            residuals = set()
+            group_terms = set()
+            for term in termset:
+                if (term & pair_mask) != bi:
+                    continue
+                q = term ^ bi
+                mate = q | bj
+                if mate in termset:
+                    residuals.add(q)
+                    group_terms.add(term)
+                    group_terms.add(mate)
+            if len(residuals) < config.min_factor_count:
+                continue
+            group = frozenset(group_terms)
+            residual_set = frozenset(residuals)
+            rest = frozenset(t for t in terms if t not in group_terms)
+            group_direct = direct_cost_for_terms(
+                group, prefix_len, live_factor_ancilla, config.use_relative_phase, config.gate_mode
+            ).score(config.weights)
+            residual_direct = direct_cost_for_terms(
+                residual_set,
+                prefix_len + 1,
+                live_factor_ancilla + 1,
+                config.use_relative_phase,
+                config.gate_mode,
+            ).score(config.weights)
+            compute = _linear_factor_resource(pair_mask, live_factor_ancilla)
+            uncompute = _linear_factor_resource(pair_mask, live_factor_ancilla)
+            gain = group_direct - compute.score(config.weights) - uncompute.score(config.weights) - residual_direct
+            coverage = len(group) / max(len(terms), 1)
+            density = sum(t.bit_count() for t in residual_set) / max(len(residual_set), 1)
+            heuristic_prior = (
+                gain / max(direct_total, 1.0)
+                + 0.04 * len(group)
+                + 0.08 * coverage
+                - 0.02 * density
+            )
+            actions.append(
+                FactorAction(
+                    factor=pair_mask,
+                    group=group,
+                    residuals=residual_set,
+                    rest=rest,
+                    immediate_gain=gain,
+                    prior=heuristic_prior,
+                    linear=True,
+                )
+            )
+
+    width = action_width if action_width is not None else max(2, min(config.candidate_top_k, 8))
+    actions.sort(key=lambda a: (-a.prior, -a.immediate_gain, -len(a.group), a.factor))
+    return actions[: max(1, min(width, len(actions)))]
+
+
 def action_features(
     terms: frozenset[int],
     prefix_len: int,
@@ -222,20 +322,24 @@ def factor_cost(
     live_factor_ancilla: int,
     config: SearchConfig,
 ) -> ResourceCost:
-    compute = gate_cost(
-        action.factor.bit_count(),
-        live_factor_ancilla,
-        use_relative_phase=config.use_relative_phase,
-        alloc_target_ancilla=True,
-        gate_mode=config.gate_mode,
-    )
-    uncompute = gate_uncompute_cost(
-        action.factor.bit_count(),
-        live_factor_ancilla,
-        use_relative_phase=config.use_relative_phase,
-        alloc_target_ancilla=True,
-        gate_mode=config.gate_mode,
-    )
+    if action.linear:
+        compute = _linear_factor_resource(action.factor, live_factor_ancilla)
+        uncompute = _linear_factor_resource(action.factor, live_factor_ancilla)
+    else:
+        compute = gate_cost(
+            action.factor.bit_count(),
+            live_factor_ancilla,
+            use_relative_phase=config.use_relative_phase,
+            alloc_target_ancilla=True,
+            gate_mode=config.gate_mode,
+        )
+        uncompute = gate_uncompute_cost(
+            action.factor.bit_count(),
+            live_factor_ancilla,
+            use_relative_phase=config.use_relative_phase,
+            alloc_target_ancilla=True,
+            gate_mode=config.gate_mode,
+        )
     return compute + group_plan.cost + uncompute + rest_plan.cost
 
 
@@ -371,6 +475,45 @@ def root_child_beam_plan(
     return best
 
 
+def linear_pair_beam_plan(
+    terms: frozenset[int],
+    prefix_len: int = 0,
+    live_factor_ancilla: int = 0,
+    config: SearchConfig = SearchConfig(),
+    action_width: int = 4,
+) -> Plan:
+    """Try one CNOT-only pairwise XOR factor above greedy subplans.
+
+    The plan is baseline-preserving against ``root_child_beam_plan``.  It adds
+    a cheap linear factor candidate for high-dimensional random ANFs where
+    monomial common factors miss repeated pair structure.
+    """
+    best = root_child_beam_plan(terms, prefix_len, live_factor_ancilla, config)
+    best_score = best.score(config.weights)
+    actions = linear_factor_actions(terms, prefix_len, live_factor_ancilla, config, action_width=action_width)
+    if not actions:
+        return best
+    child_config = replace(config, greedy_eval_limit=1)
+    memo: dict[tuple[frozenset[int], int, int], Plan] = {}
+    for action in actions:
+        group = greedy_plan(
+            action.residuals,
+            prefix_len + 1,
+            live_factor_ancilla + 1,
+            child_config,
+            None,
+            memo,
+        )
+        rest = greedy_plan(action.rest, prefix_len, live_factor_ancilla, child_config, None, memo)
+        cost = factor_cost(action, group, rest, live_factor_ancilla, config)
+        plan = Plan("linear_factor", terms, cost, factor=action.factor, group=group, rest=rest)
+        score = plan.score(config.weights)
+        if score < best_score:
+            best = plan
+            best_score = score
+    return best
+
+
 def _emit_direct(circ: QuantumCircuit, terms: frozenset[int], prefix_controls: List[int], n_inputs: int) -> None:
     output = n_inputs
     for term in sorted(terms, key=lambda x: (x.bit_count(), x)):
@@ -397,9 +540,17 @@ def emit_plan_to_circuit(
             raise ValueError("plan requires more factor ancilla than allocated")
         anc = free_ancilla.pop(0)
         controls = [i for i in range(n_inputs) if (node.factor >> i) & 1]
-        circ.add_mct(controls, anc)
+        if node.kind == "linear_factor":
+            for control in controls:
+                circ.add_cnot(control, anc)
+        else:
+            circ.add_mct(controls, anc)
         rec(node.group, prefix_controls + [anc])
-        circ.add_mct(controls, anc)
+        if node.kind == "linear_factor":
+            for control in reversed(controls):
+                circ.add_cnot(control, anc)
+        else:
+            circ.add_mct(controls, anc)
         free_ancilla.insert(0, anc)
         rec(node.rest, prefix_controls)
 

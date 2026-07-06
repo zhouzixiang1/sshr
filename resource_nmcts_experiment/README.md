@@ -59,9 +59,9 @@ Current presets:
   hard timeouts for long-tail tasks.
 - `highdim_resource`: isolated `n=14` random-ANF stress benchmark with direct
   ANF, logical-AND direct ANF, FPRM-greedy, bounded FPRM root-beam,
-  bounded affine-greedy, Resource-NMCTS, and Profile-Resource-NMCTS.  The
-  guarded variants add a shallow root-child refinement over the root-beam
-  candidate.
+  bounded FPRM linear-pair factoring, bounded affine-greedy, Resource-NMCTS,
+  and Profile-Resource-NMCTS.  The guarded variants keep the root-child beam
+  baseline and add a CNOT-only pairwise XOR factor candidate.
 - `large_resource`: experimental `n=14` stress extension.  This preset exposed
   the mixed-suite runtime tail and is kept for broader engineering sweeps.
 - `main`: large-scale placeholder for broader sweeps.
@@ -185,30 +185,31 @@ Large-scale core evidence from `results/analysis_large_resource_core.md` and
 High-dimensional stress evidence from `results/analysis_highdim_resource.md`
 and `results/runtime_highdim_resource.md`:
 
-- 64 random ANF functions at `n=14`, 7 methods, 448 result rows, 0 errors, and
+- 64 random ANF functions at `n=14`, 8 methods, 512 result rows, 0 errors, and
   0 skips.
 - `and_resource_nmcts` and `and_profile_resource_nmcts` complete all 64
   functions under the high-dimensional bounded guard.
-- Compared with direct ANF, both Resource-NMCTS variants have 51 T-count wins,
-  0 losses, and 13 ties, with a 52.71% mean T-count reduction and a 50.39%
+- Compared with direct ANF, both Resource-NMCTS variants have 61 T-count wins,
+  0 losses, and 3 ties, with a 55.60% mean T-count reduction and a 52.27%
   mean score reduction.
-- Compared with logical-AND direct ANF, they have 51 T-count wins, 0 losses,
-  and 13 ties, with a 26.88% mean T-count reduction and a 26.23% mean score
+- Compared with logical-AND direct ANF, they have 61 T-count wins, 0 losses,
+  and 3 ties, with a 30.41% mean T-count reduction and a 28.64% mean score
   reduction.
 - Compared with FPRM-greedy, the high-dimensional guarded variants have
-  40 T-count wins, 0 losses, and 24 ties; by weighted score they have
-  42 wins, 0 losses, and 22 ties.  The improvement comes from the bounded
-  FPRM root-beam candidate plus a shallow root-child refinement, after cheap
-  direct-cost polarity screening.
+  60 T-count wins, 0 losses, and 4 ties; by weighted score they also have
+  60 wins, 0 losses, and 4 ties, with a 3.54% mean score reduction.  The
+  improvement comes from a bounded FPRM linear-pair candidate that factors
+  repeated term pairs as `(x_i xor x_j) * g` using CNOT-only linear compute and
+  uncompute around the factored subplan.
 - Compared with the standalone FPRM root-beam candidate, the guarded variants
-  now have 1 T-count win, 0 losses, and 63 ties; by weighted score they have
-  2 wins, 0 losses, and 62 ties.  This is still a small mean gain, but it
-  confirms that the guarded high-dimensional path is no longer just forwarding
-  the root-beam result.
+  now have 60 T-count wins, 0 losses, and 4 ties; by weighted score they have
+  60 wins, 0 losses, and 4 ties, with a 3.00% mean score reduction.
 - Runtime tails remain visible but bounded: `and_resource_nmcts` completes
-  64/64 with median 5.048 s and p95 49.063 s; `and_profile_resource_nmcts`
-  completes 64/64 with median 6.076 s and p95 58.867 s.  The standalone
-  FPRM root-beam candidate has median 2.834 s and p95 37.226 s.
+  64/64 with median 3.633 s and p95 34.982 s; `and_profile_resource_nmcts`
+  completes 64/64 with median 3.638 s and p95 35.313 s.  The standalone
+  FPRM linear-pair candidate has median 2.574 s and p95 30.760 s.  The
+  tradeoff is higher mean peak ancilla: 2.94 versus 2.03 for FPRM-greedy and
+  root-beam.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost

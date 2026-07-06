@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 import sys
 
@@ -129,6 +130,7 @@ def gate_uncompute_cost(
     )
 
 
+@lru_cache(maxsize=200_000)
 def direct_cost_for_terms(
     terms: frozenset[int],
     prefix_len: int,
@@ -136,12 +138,30 @@ def direct_cost_for_terms(
     use_relative_phase: bool = True,
     gate_mode: str = "mct",
 ) -> ResourceCost:
-    out = ResourceCost(explicit_ancilla=live_factor_ancilla, peak_ancilla=live_factor_ancilla)
+    counts: dict[int, int] = {}
     for term in terms:
-        out += gate_cost(
-            prefix_len + int(term).bit_count(),
+        controls = prefix_len + int(term).bit_count()
+        counts[controls] = counts.get(controls, 0) + 1
+
+    T = CNOT = gates = depth = 0
+    peak = live_factor_ancilla
+    for controls, count in counts.items():
+        cost = gate_cost(
+            controls,
             live_factor_ancilla=live_factor_ancilla,
             use_relative_phase=use_relative_phase,
             gate_mode=gate_mode,
         )
-    return out
+        T += cost.T * count
+        CNOT += cost.CNOT * count
+        gates += cost.gates * count
+        depth += cost.depth * count
+        peak = max(peak, cost.peak_ancilla)
+    return ResourceCost(
+        T=T,
+        CNOT=CNOT,
+        gates=gates,
+        depth=depth,
+        explicit_ancilla=live_factor_ancilla,
+        peak_ancilla=peak,
+    )

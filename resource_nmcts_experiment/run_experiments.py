@@ -126,7 +126,7 @@ PRESETS = {
         "workers": 6,
     },
     "highdim_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_fprm_greedy", "and_fprm_root_beam", "and_affine_greedy", "and_resource_nmcts", "and_profile_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_fprm_greedy", "and_fprm_root_beam", "and_fprm_linear_pair", "and_affine_greedy", "and_resource_nmcts", "and_profile_resource_nmcts"],
         "random_truth": [],
         "random_anf": [(14, 64)],
         "structured_limit": 0,
@@ -391,11 +391,12 @@ def main(argv: Iterable[str] | None = None) -> int:
             "and_direct_anf": 1,
             "and_fprm_greedy": 2,
             "and_fprm_root_beam": 3,
-            "and_mcts_factor": 4,
-            "and_affine_greedy": 5,
-            "and_affine_nmcts": 6,
-            "and_resource_nmcts": 7,
-            "and_profile_resource_nmcts": 8,
+            "and_fprm_linear_pair": 4,
+            "and_mcts_factor": 5,
+            "and_affine_greedy": 6,
+            "and_affine_nmcts": 7,
+            "and_resource_nmcts": 8,
+            "and_profile_resource_nmcts": 9,
         }
         tasks.sort(key=lambda t: (method_rank.get(t[2], 99), t[1].n, t[0]))
 

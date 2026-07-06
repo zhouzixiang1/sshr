@@ -48,10 +48,10 @@ and \profilemethod{} complete all functions, and \method{} reduces mean
 T-count by 60.37\% relative to direct ANF and by 37.25\% relative to
 logical-AND direct ANF, while fixed-coordinate MCTS times out on five $n=12$
 rows.  An isolated
-$n=14$ stress benchmark adds 64 random ANF functions and 448 rows with no
+$n=14$ stress benchmark adds 64 random ANF functions and 512 rows with no
 errors or skips; the guarded high-dimensional variants reduce mean T-count by
-52.71\% relative to direct ANF and by 26.88\% relative to logical-AND direct
-ANF, with 42 score wins, no losses, and 22 ties against FPRM-greedy.  The method is
+55.60\% relative to direct ANF and by 30.41\% relative to logical-AND direct
+ANF, with 60 score wins, no losses, and 4 ties against FPRM-greedy.  The method is
 evaluated only at the logical circuit layer;
 hardware mapping and connectivity constraints are outside the present scope.
 \end{abstract}
@@ -156,10 +156,10 @@ When the configured dimension guard permits it, the portfolio also evaluates
 fixed-coordinate logical-AND MCTS; for $n\leq 6$, it additionally evaluates
 ESOP cube-beam search.  For $n>12$, where full fixed-coordinate MCTS and broad
 affine search create long tails, it replaces the expensive branches by a
-bounded FPRM root-child beam candidate: many polarities are screened by direct
-cost, the full ranked root-factor list is evaluated, and the best root actions
-receive one shallow child refinement before scoring.  It returns the correct
-candidate with the smallest
+bounded FPRM linear-pair candidate: many polarities are screened by direct
+cost, a root-child beam baseline is retained, and repeated term pairs
+$x_i m \oplus x_j m$ can be factored as $(x_i \oplus x_j)m$ using a temporary
+CNOT-computed linear control.  It returns the correct candidate with the smallest
 weighted score, breaking ties by T-count, CNOT count, depth, and peak ancilla.
 SSHR is used only as an external baseline in the experiments and is not part of
 this portfolio.  This final guard converts the affine neural search into a
@@ -176,7 +176,7 @@ For $n\leq 6$, it evaluates additional T-aggressive, CNOT/depth-oriented, and
 ancilla-tight FPRM, affine-greedy, and ESOP cube-beam candidates before
 selecting by the active weighted score.  For larger random-ANF instances, the
 same method switches to a high-dimensional guard: it keeps direct and bounded
-FPRM root-beam/root-child candidates but avoids expensive fixed-coordinate MCTS
+FPRM root-child/linear-pair candidates but avoids expensive fixed-coordinate MCTS
 guards.
 This design separates two roles.  On small functions it tests whether the
 resource profile can change the selected circuit; on large functions it acts as
@@ -389,10 +389,10 @@ tail-reducing extension, not as the large-scale score winner.
 
 The \highdimdataset{} run isolates high-dimensional random ANF instances rather
 than mixing them with small structured functions.  It contains 64 $n=14$
-functions and seven methods, for 448 method/function rows with no errors or
+functions and eight methods, for 512 method/function rows with no errors or
 skips.  This experiment uses the high-dimensional guard described above:
 fixed-coordinate MCTS and broad affine search are avoided inside the guarded
-methods, while direct ANF, bounded FPRM root-beam, and root-child refinement
+methods, while direct ANF, bounded FPRM root-child beam, and linear-pair
 candidates remain available.
 
 \begin{table}[t]
@@ -414,20 +414,23 @@ benchmark.}
 \end{table}
 
 Both \method{} and \profilemethod{} complete all 64 functions.  Relative to
-direct ANF, each has 51 T-count wins, no losses, and 13 ties, with a 52.71\%
-mean T-count reduction and a 50.39\% mean composite-score reduction.  Relative
-to logical-AND direct ANF, each again has 51 wins, no losses, and 13 ties, with
-a 26.88\% mean T-count reduction and a 26.23\% mean score reduction.  Against
-FPRM-greedy, the guarded methods have 40 T-count wins, no losses, and 24 ties;
-by weighted score they have 42 wins, no losses, and 22 ties.  The mean T-count
-falls from 2263.69 for FPRM-greedy to 2248.75 for \method{} and
-\profilemethod{}.  Compared with the standalone FPRM root-beam candidate, the
-guarded methods add 1 T-count win and 2 score wins without losses.  The
-improvement is modest in mean value but important mechanistically: a bounded
-root-child correction now improves high-dimensional quality without introducing
-timeouts.  Runtime tails remain bounded: \method{} has p95 runtime 49.06 s,
-while \profilemethod{} has p95 runtime 58.87 s; the standalone FPRM root-beam
-candidate has p95 runtime 37.23 s.
+direct ANF, each has 61 T-count wins, no losses, and 3 ties, with a 55.60\%
+mean T-count reduction and a 52.27\% mean composite-score reduction.  Relative
+to logical-AND direct ANF, each again has 61 wins, no losses, and 3 ties, with
+a 30.41\% mean T-count reduction and a 28.64\% mean score reduction.  Against
+FPRM-greedy, the guarded methods have 60 T-count wins, no losses, and 4 ties;
+by weighted score they also have 60 wins, no losses, and 4 ties.  The mean
+T-count falls from 2263.69 for FPRM-greedy and 2248.81 for root beam to
+2193.50 for \method{} and \profilemethod{}.  The mean weighted score falls
+from 2496.97 for FPRM-greedy and 2481.64 for root beam to 2422.51.  The
+improvement is mechanistically different from simply widening the root beam:
+the linear-pair candidate computes $x_i \oplus x_j$ into a temporary ancilla
+with CNOTs, factors the paired residual subplan under that control, and then
+uncomputes the linear control.  Runtime tails remain bounded: \method{} has
+p95 runtime 34.98 s, while \profilemethod{} has p95 runtime 35.31 s; the
+standalone FPRM linear-pair candidate has p95 runtime 30.76 s.  The resource
+tradeoff is workspace: mean peak ancilla increases from 2.03 for FPRM-greedy
+and root beam to 2.94.
 
 \section{Discussion}
 
@@ -453,8 +456,9 @@ five timeouts.  The guarded \profilemethod{} variant reduces the p95 runtime to
 the isolated $n=14$ stress test, both guarded variants complete all 64
 functions and improve over FPRM-greedy with no score losses.  This shows that
 the current high-dimensional guard is no longer only a scalability fallback:
-the first-factor root beam plus shallow child refinement can correct a
-measurable part of the greedy Reed--Muller search error.
+pairwise XOR factoring can correct a measurable part of the greedy
+Reed--Muller search error using only Clifford linear preprocessing around the
+factored subplan.
 
 The main current limitations are the absence of hardware mapping, the use of a
 local benchmark suite rather than standardized external oracle benchmarks, and
@@ -465,9 +469,10 @@ submission-ready claim.  The resource-profile sweep shows that profile-specific
 candidate generation improves objective robustness on small functions, but the
 large benchmark shows the corresponding high-dimensional tradeoff: conservative
 profile guards reduce runtime tails but give up some score.  The $n=14$ stress
-test narrows this limitation further: bounded FPRM root-child search keeps the
-run finite and improves over FPRM-greedy, but the mean improvement is still
-small.  Stronger high-dimensional candidate generation is needed before the
+test narrows this limitation further: bounded FPRM linear-pair search keeps the
+run finite and improves over FPRM-greedy on most functions, but it spends more
+ancilla and still lacks external toolchain baselines.  Stronger
+high-dimensional candidate generation is needed before the
 paper can claim a large margin over the best cheap Boolean baseline.
 
 \section{Conclusion}
@@ -482,7 +487,7 @@ score regressions against internal ESOP cube-beam candidates and remains
 competitive against weighted ESOP MILP.  Resource-profile and \largedataset{}
 benchmarks show that this advantage is robust across several weighted
 objectives and larger random ANF instances.  The new $n=14$ stress test shows
-that bounded guards scale without timeouts and now beat FPRM-greedy on 42 of
+that bounded guards scale without timeouts and now beat FPRM-greedy on 60 of
 64 weighted-score comparisons without losses.  The next step is to add
 standardized external baselines and stronger high-dimensional candidate
 generation so the empirical claim is submission-ready.

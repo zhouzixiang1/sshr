@@ -64,8 +64,8 @@ ANF factoring:
    T-aggressive, CNOT/depth-oriented, and ancilla-tight candidate configurations
    on small functions.  For larger random-ANF instances it switches to a cheap
    direct/FPRM guard; for `n > 12`, that guard uses a direct-cost polarity
-   screen plus a bounded root-beam correction and shallow root-child refinement
-   over the first factor choice.
+   screen plus a bounded root-child beam baseline and a CNOT-only pairwise
+   XOR-factor candidate.
 
 ## Representation
 
@@ -340,28 +340,27 @@ Main `large_resource_core` evidence:
 
 The `highdim_resource` stress test isolates the next scale point rather than
 mixing it into the structured suite.  It covers 64 random ANF functions at
-`n=14`, seven methods, and 448 method/function rows, with 0 errors and 0 skips
+`n=14`, eight methods, and 512 method/function rows, with 0 errors and 0 skips
 after the high-dimensional guard was tightened to avoid fixed-coordinate MCTS
-tails and to add a bounded FPRM root-beam candidate with root-child
-refinement.
+tails and to add a bounded FPRM linear-pair candidate.
 
 Main `highdim_resource` evidence:
 
 - `and_resource_nmcts` and `and_profile_resource_nmcts` complete all 64
   functions under the high-dimensional bounded guard.
-- Compared with direct ANF, both guarded methods have 51 T-count wins, 0
-  losses, and 13 ties, with a 52.71% mean T-count reduction and a 50.39% mean
+- Compared with direct ANF, both guarded methods have 61 T-count wins, 0
+  losses, and 3 ties, with a 55.60% mean T-count reduction and a 52.27% mean
   composite-score reduction.
-- Compared with logical-AND direct ANF, both have 51 T-count wins, 0 losses,
-  and 13 ties, with a 26.88% mean T-count reduction and a 26.23% mean score
+- Compared with logical-AND direct ANF, both have 61 T-count wins, 0 losses,
+  and 3 ties, with a 30.41% mean T-count reduction and a 28.64% mean score
   reduction.
-- Compared with FPRM-greedy, both guarded methods have 40 T-count wins, 0
-  losses, and 24 ties; by weighted score they have 42 wins, 0 losses, and 22
-  ties.  The bounded root-beam candidate corrects the first-factor choice by
-  evaluating the full ranked root-action list, then the guarded methods apply a
-  shallow root-child refinement to the best root actions while preserving the
-  same polarity-screening budget.
+- Compared with FPRM-greedy, both guarded methods have 60 T-count wins, 0
+  losses, and 4 ties; by weighted score they also have 60 wins, 0 losses, and
+  4 ties.  The bounded linear-pair candidate factors repeated pairs
+  `x_i m xor x_j m` as `(x_i xor x_j) m`, using only CNOTs to compute and
+  uncompute the temporary linear control.
 - Runtime remains bounded but nontrivial: `and_resource_nmcts` has median
-  runtime 5.048 s, p95 49.063 s, and max 64.263 s; the profile variant has
-  median 6.076 s, p95 58.867 s, and max 87.619 s.  The standalone FPRM
-  root-beam candidate has median 2.834 s, p95 37.226 s, and max 49.268 s.
+  runtime 3.633 s, p95 34.982 s, and max 47.462 s; the profile variant has
+  median 3.638 s, p95 35.313 s, and max 47.256 s.  The standalone FPRM
+  linear-pair candidate has median 2.574 s, p95 30.760 s, and max 41.593 s.
+  The gain uses more workspace: mean peak ancilla rises from 2.03 to 2.94.
