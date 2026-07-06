@@ -175,20 +175,20 @@ and `results/runtime_highdim_resource.md`:
 - `and_resource_nmcts` and `and_profile_resource_nmcts` complete all 64
   functions under the high-dimensional bounded guard.
 - Compared with direct ANF, both Resource-NMCTS variants have 51 T-count wins,
-  0 losses, and 13 ties, with a 52.67% mean T-count reduction and a 50.36%
+  0 losses, and 13 ties, with a 52.71% mean T-count reduction and a 50.39%
   mean score reduction.
 - Compared with logical-AND direct ANF, they have 51 T-count wins, 0 losses,
-  and 13 ties, with a 26.81% mean T-count reduction and a 26.17% mean score
+  and 13 ties, with a 26.88% mean T-count reduction and a 26.23% mean score
   reduction.
 - Compared with FPRM-greedy, the high-dimensional guarded variants have
-  38 T-count wins, 0 losses, and 26 ties; by weighted score they have
-  40 wins, 0 losses, and 24 ties.  The improvement comes from the bounded
-  FPRM root-beam candidate, which evaluates multiple first-factor choices
+  40 T-count wins, 0 losses, and 24 ties; by weighted score they have
+  41 wins, 0 losses, and 23 ties.  The improvement comes from the bounded
+  FPRM root-beam candidate, which evaluates the full ranked first-factor list
   after cheap direct-cost polarity screening.
 - Runtime tails remain visible but bounded: `and_resource_nmcts` completes
-  64/64 with median 3.519 s and p95 36.896 s; `and_profile_resource_nmcts`
-  completes 64/64 with median 4.027 s and p95 59.688 s.  The standalone
-  FPRM root-beam candidate has median 2.081 s and p95 25.413 s.
+  64/64 with median 4.765 s and p95 52.113 s; `and_profile_resource_nmcts`
+  completes 64/64 with median 3.734 s and p95 40.386 s.  The standalone
+  FPRM root-beam candidate has median 2.834 s and p95 37.226 s.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost

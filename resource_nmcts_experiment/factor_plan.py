@@ -286,7 +286,7 @@ def root_beam_plan(
     actions = candidate_actions(terms, prefix_len, live_factor_ancilla, config, neural_scorer)
     if not actions:
         return best
-    width = root_width if root_width is not None else max(2, min(16, config.candidate_top_k))
+    width = root_width if root_width is not None else max(2, config.candidate_top_k)
     memo: dict[tuple[frozenset[int], int, int], Plan] = {}
     child_config = replace(config, greedy_eval_limit=1)
     for action in actions[: max(1, min(width, len(actions)))]:

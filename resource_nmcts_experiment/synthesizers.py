@@ -554,7 +554,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         else:
             # At n=14+ the root-beam FPRM branch corrects the first-factor
             # choice while avoiding the fixed-MCTS and affine-transform tails.
-            child_specs.append(("fprm_root_beam", fast_config))
+            child_specs.append(("fprm_root_beam", replace(fast_config, candidate_top_k=config.candidate_top_k)))
         if bf.n <= 6:
             child_specs.append(("cube_beam", cube_config))
         if bf.n <= 10:
@@ -587,9 +587,10 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         profile_configs = _profile_candidate_configs(config)
         base_config = profile_configs[0][1]
         if bf.n > 12:
+            highdim_config = replace(base_config, candidate_top_k=config.candidate_top_k)
             child_specs: list[tuple[str, SearchConfig]] = [
                 ("direct_anf", config),
-                ("fprm_root_beam", base_config),
+                ("fprm_root_beam", highdim_config),
             ]
         else:
             child_specs = [("fprm_direct", config)]
@@ -625,7 +626,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
                 ]
             )
         else:
-            child_specs.append(("fprm_root_beam", base_config))
+            child_specs.append(("fprm_root_beam", highdim_config))
 
         seen_specs = set()
         for child_method, child_config in child_specs:

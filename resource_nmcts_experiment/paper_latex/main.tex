@@ -50,8 +50,8 @@ logical-AND direct ANF, while fixed-coordinate MCTS times out on five $n=12$
 rows.  An isolated
 $n=14$ stress benchmark adds 64 random ANF functions and 448 rows with no
 errors or skips; the guarded high-dimensional variants reduce mean T-count by
-52.67\% relative to direct ANF and by 26.81\% relative to logical-AND direct
-ANF, with 40 score wins, no losses, and 24 ties against FPRM-greedy.  The method is
+52.71\% relative to direct ANF and by 26.88\% relative to logical-AND direct
+ANF, with 41 score wins, no losses, and 23 ties against FPRM-greedy.  The method is
 evaluated only at the logical circuit layer;
 hardware mapping and connectivity constraints are outside the present scope.
 \end{abstract}
@@ -157,7 +157,7 @@ fixed-coordinate logical-AND MCTS; for $n\leq 6$, it additionally evaluates
 ESOP cube-beam search.  For $n>12$, where full fixed-coordinate MCTS and broad
 affine search create long tails, it replaces the expensive branches by a
 bounded FPRM root-beam candidate: many polarities are screened by direct cost,
-then several root factor choices are evaluated while all child subproblems
+then the full ranked root-factor list is evaluated while all child subproblems
 remain ordinary greedy plans.  It returns the correct candidate with the smallest
 weighted score, breaking ties by T-count, CNOT count, depth, and peak ancilla.
 SSHR is used only as an external baseline in the experiments and is not part of
@@ -409,18 +409,18 @@ benchmark.}
 \end{table}
 
 Both \method{} and \profilemethod{} complete all 64 functions.  Relative to
-direct ANF, each has 51 T-count wins, no losses, and 13 ties, with a 52.67\%
-mean T-count reduction and a 50.36\% mean composite-score reduction.  Relative
+direct ANF, each has 51 T-count wins, no losses, and 13 ties, with a 52.71\%
+mean T-count reduction and a 50.39\% mean composite-score reduction.  Relative
 to logical-AND direct ANF, each again has 51 wins, no losses, and 13 ties, with
-a 26.81\% mean T-count reduction and a 26.17\% mean score reduction.  Against
-FPRM-greedy, the guarded methods have 38 T-count wins, no losses, and 26 ties;
-by weighted score they have 40 wins, no losses, and 24 ties.  The mean T-count
-falls from 2263.69 for FPRM-greedy to 2250.19 for \method{} and
+a 26.88\% mean T-count reduction and a 26.23\% mean score reduction.  Against
+FPRM-greedy, the guarded methods have 40 T-count wins, no losses, and 24 ties;
+by weighted score they have 41 wins, no losses, and 23 ties.  The mean T-count
+falls from 2263.69 for FPRM-greedy to 2248.81 for \method{} and
 \profilemethod{}.  The improvement is modest in mean value but important
 mechanistically: a bounded root-beam correction now improves high-dimensional
 quality without introducing timeouts.  Runtime tails remain bounded:
-\method{} has p95 runtime 36.90 s, while \profilemethod{} has p95 runtime
-59.69 s; the standalone FPRM root-beam candidate has p95 runtime 25.41 s.
+\method{} has p95 runtime 52.11 s, while \profilemethod{} has p95 runtime
+40.39 s; the standalone FPRM root-beam candidate has p95 runtime 37.23 s.
 
 \section{Discussion}
 
@@ -475,7 +475,7 @@ score regressions against internal ESOP cube-beam candidates and remains
 competitive against weighted ESOP MILP.  Resource-profile and \largedataset{}
 benchmarks show that this advantage is robust across several weighted
 objectives and larger random ANF instances.  The new $n=14$ stress test shows
-that bounded guards scale without timeouts and now beat FPRM-greedy on 40 of
+that bounded guards scale without timeouts and now beat FPRM-greedy on 41 of
 64 weighted-score comparisons without losses.  The next step is to add
 standardized external baselines and stronger high-dimensional candidate
 generation so the empirical claim is submission-ready.

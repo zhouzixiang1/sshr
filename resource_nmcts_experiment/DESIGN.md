@@ -345,16 +345,17 @@ Main `highdim_resource` evidence:
 - `and_resource_nmcts` and `and_profile_resource_nmcts` complete all 64
   functions under the high-dimensional bounded guard.
 - Compared with direct ANF, both guarded methods have 51 T-count wins, 0
-  losses, and 13 ties, with a 52.67% mean T-count reduction and a 50.36% mean
+  losses, and 13 ties, with a 52.71% mean T-count reduction and a 50.39% mean
   composite-score reduction.
 - Compared with logical-AND direct ANF, both have 51 T-count wins, 0 losses,
-  and 13 ties, with a 26.81% mean T-count reduction and a 26.17% mean score
+  and 13 ties, with a 26.88% mean T-count reduction and a 26.23% mean score
   reduction.
-- Compared with FPRM-greedy, both guarded methods have 38 T-count wins, 0
-  losses, and 26 ties; by weighted score they have 40 wins, 0 losses, and 24
-  ties.  The bounded root-beam candidate corrects the first-factor choice while
-  preserving the same polarity-screening budget.
+- Compared with FPRM-greedy, both guarded methods have 40 T-count wins, 0
+  losses, and 24 ties; by weighted score they have 41 wins, 0 losses, and 23
+  ties.  The bounded root-beam candidate corrects the first-factor choice by
+  evaluating the full ranked root-action list while preserving the same
+  polarity-screening budget.
 - Runtime remains bounded but nontrivial: `and_resource_nmcts` has median
-  runtime 3.519 s, p95 36.896 s, and max 88.982 s; the profile variant has
-  median 4.027 s, p95 59.688 s, and max 78.236 s.  The standalone FPRM
-  root-beam candidate has median 2.081 s, p95 25.413 s, and max 33.181 s.
+  runtime 4.765 s, p95 52.113 s, and max 66.654 s; the profile variant has
+  median 3.734 s, p95 40.386 s, and max 53.344 s.  The standalone FPRM
+  root-beam candidate has median 2.834 s, p95 37.226 s, and max 49.268 s.
