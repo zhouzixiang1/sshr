@@ -71,8 +71,11 @@ ANF factoring:
    direct/FPRM guard; for `n > 12`, that guard uses a direct-cost polarity
    screen plus a bounded root-child beam baseline and a CNOT-only pairwise
    XOR-factor candidate.  At the `n=15` scale point, the portfolio also
-   evaluates a one-extra-layer recursive linear-pair refinement under the same
-   ancilla guard.
+   evaluates a one-extra-layer recursive linear-pair refinement over both
+   quotient and rest branches when the subproblem has at most 900 terms.  The
+   `n=15` preset also reports a standalone width-three linear-parity ablation,
+   but the portfolio does not use it because the recursive pair candidate
+   dominates it under the default weighted objective.
 
 ## Representation
 
@@ -410,16 +413,16 @@ Main `highdim_resource` evidence:
   The gain uses more workspace: mean peak ancilla rises from 2.03 to 2.94.
 
 The `highdim_scale_resource` run extends the same high-dimensional guard to
-32 random ANF functions at `n=15`.  It contains 256 method/function rows across
-eight methods, with 0 errors and 0 skips.  The guarded variants select the
-bounded recursive linear-pair candidate wherever it improves the one-layer
-candidate.  Compared with FPRM-greedy, they have 30 T-count wins, 0 losses,
-and 2 ties; by weighted score they also have 30 wins, 0 losses, and 2 ties,
-with a 3.55% mean score reduction.
-Compared with FPRM root beam, they have 29 score wins, 0 losses, and 3 ties,
-with a 3.09% mean score reduction.  The recursive linear-pair refinement
-improves the one-layer linear-pair candidate in 9 score cases, ties in 23, and
-has 0 score losses, but raises mean peak ancilla from 2.84 to 3.00.  The scale
-check is slower but finite: `and_resource_nmcts` has median runtime 12.531 s
-and p95 203.821 s, while `and_profile_resource_nmcts` has median runtime
-12.454 s and p95 197.515 s.
+32 random ANF functions at `n=15`.  It contains 288 method/function rows across
+nine methods, with 0 errors and 0 skips.  The guarded variants select the
+bounded recursive linear-pair candidate.  Compared with FPRM-greedy, they have
+30 T-count wins, 0 losses, and 2 ties; by weighted score they also have 30
+wins, 0 losses, and 2 ties, with a 5.73% mean score reduction.
+Compared with FPRM root beam, they have 30 score wins, 0 losses, and 2 ties,
+with a 5.28% mean score reduction.  The recursive linear-pair refinement
+improves the one-layer linear-pair candidate in 29 score cases, ties in 3, and
+has 0 score losses, while mean peak ancilla rises from 2.84 to 3.06.  The
+standalone width-three linear-parity ablation is dominated by the recursive
+pair method under the default objective.  The scale check is slower but finite:
+`and_resource_nmcts` has median runtime 16.514 s and p95 135.536 s, while
+`and_profile_resource_nmcts` has median runtime 14.684 s and p95 122.842 s.

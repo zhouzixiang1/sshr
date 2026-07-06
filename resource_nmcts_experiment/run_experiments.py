@@ -126,14 +126,14 @@ PRESETS = {
         "workers": 6,
     },
     "highdim_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_fprm_greedy", "and_fprm_root_beam", "and_fprm_linear_pair", "and_affine_greedy", "and_resource_nmcts", "and_profile_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_fprm_greedy", "and_fprm_root_beam", "and_fprm_linear_pair", "and_fprm_linear_pair_deep", "and_fprm_linear_parity", "and_affine_greedy", "and_resource_nmcts", "and_profile_resource_nmcts"],
         "random_truth": [],
         "random_anf": [(14, 64)],
         "structured_limit": 0,
         "workers": 8,
     },
     "highdim_scale_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_fprm_greedy", "and_fprm_root_beam", "and_fprm_linear_pair", "and_fprm_linear_pair_deep", "and_resource_nmcts", "and_profile_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_fprm_greedy", "and_fprm_root_beam", "and_fprm_linear_pair", "and_fprm_linear_pair_deep", "and_fprm_linear_parity", "and_resource_nmcts", "and_profile_resource_nmcts"],
         "random_truth": [],
         "random_anf": [(15, 32)],
         "structured_limit": 0,
@@ -400,11 +400,12 @@ def main(argv: Iterable[str] | None = None) -> int:
             "and_fprm_root_beam": 3,
             "and_fprm_linear_pair": 4,
             "and_fprm_linear_pair_deep": 5,
-            "and_mcts_factor": 6,
-            "and_affine_greedy": 7,
-            "and_affine_nmcts": 8,
-            "and_resource_nmcts": 9,
-            "and_profile_resource_nmcts": 10,
+            "and_fprm_linear_parity": 6,
+            "and_mcts_factor": 7,
+            "and_affine_greedy": 8,
+            "and_affine_nmcts": 9,
+            "and_resource_nmcts": 10,
+            "and_profile_resource_nmcts": 11,
         }
         tasks.sort(key=lambda t: (method_rank.get(t[2], 99), t[1].n, t[0]))
 

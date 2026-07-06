@@ -57,7 +57,8 @@ errors or skips; the guarded high-dimensional variants reduce mean T-count by
 55.60\% relative to direct ANF and by 30.41\% relative to logical-AND direct
 ANF, with 60 score wins, no losses, and 4 ties against FPRM-greedy.  A
 follow-up $n=15$ scale check preserves this pattern with 30 score wins, no
-losses, and 2 ties against FPRM-greedy.  The method is
+losses, and 2 ties against FPRM-greedy, reducing mean weighted score by
+5.73\%.  The method is
 evaluated only at the logical circuit layer;
 hardware mapping and connectivity constraints are outside the present scope.
 \end{abstract}
@@ -194,7 +195,9 @@ bounded FPRM linear-pair candidate: many polarities are screened by direct
 cost, a root-child beam baseline is retained, and repeated term pairs
 $x_i m \oplus x_j m$ can be factored as $(x_i \oplus x_j)m$ using a temporary
 CNOT-computed linear control.  At the $n=15$ scale point it also evaluates a
-one-extra-layer recursive linear-pair variant under the same ancilla guard.
+one-extra-layer recursive linear-pair variant that applies the same pair search
+to both the quotient and the remaining terms when the subproblem has at most
+900 terms.
 It returns the correct candidate with the smallest
 weighted score, breaking ties by T-count, CNOT count, depth, and peak ancilla.
 SSHR is used only as an external baseline in the experiments and is not part of
@@ -214,7 +217,10 @@ selecting by the active weighted score.  For larger random-ANF instances, the
 same method switches to a high-dimensional guard: it keeps direct and bounded
 FPRM root-child/linear-pair candidates, including the one-extra-layer
 linear-pair variant at $n=15$, but avoids expensive fixed-coordinate MCTS
-guards.
+guards.  A width-three linear-parity factor is reported as a standalone
+ablation in the $n=15$ scaling check, but the portfolio uses the recursive
+pair candidate because it dominates the parity ablation under the weighted
+objective.
 This design separates two roles.  On small functions it tests whether the
 resource profile can change the selected circuit; on large functions it acts as
 a runtime-tail guard rather than a score-dominance guarantee.
@@ -511,19 +517,18 @@ tradeoff is workspace: mean peak ancilla increases from 2.03 for FPRM-greedy
 and root beam to 2.94.
 
 As a scale check, we also run the same high-dimensional guard on 32 random
-$n=15$ ANF functions, producing 256 method/function rows with no errors or
-skips after adding the bounded recursive linear-pair candidate.  Relative to
-FPRM-greedy, \method{} and \profilemethod{} have 30 T-count wins, no losses,
-and 2 ties, with a 4.63\% mean T-count reduction and a 3.55\% mean score
-reduction.  Relative to the standalone FPRM root-beam candidate, they have 29
-score wins, no losses, and 3 ties, with a 3.09\% mean score reduction.  The
-recursive variant is a small refinement rather than a new asymptotic step: it
-improves over the one-layer linear-pair candidate in 9 score cases, ties in 23,
-and has no score losses, while increasing mean peak ancilla from 2.84 to 3.00.
-Runtime remains finite but the internal portfolio is slower because it evaluates
-both one-layer and recursive candidates: \method{} has median runtime 12.53 s
-and p95 runtime 203.82 s, while \profilemethod{} has median runtime 12.45 s and
-p95 runtime 197.51 s.
+$n=15$ ANF functions, producing 288 method/function rows with no errors or
+skips after adding the bounded recursive linear-pair candidate and a standalone
+width-three linear-parity ablation.  Relative to FPRM-greedy, \method{} and
+\profilemethod{} have 30 T-count wins, no losses, and 2 ties, with a 6.89\%
+mean T-count reduction and a 5.73\% mean score reduction.  Relative to the
+standalone FPRM root-beam candidate, they have 30 score wins, no losses, and
+2 ties, with a 5.28\% mean score reduction.  The recursive pair candidate is a
+material refinement of the one-layer linear-pair search: it improves weighted
+score in 29 cases, ties in 3, and has no score losses, while increasing mean
+peak ancilla from 2.84 to 3.06.  Runtime remains finite under the 900-term
+recursion guard: \method{} has median runtime 16.51 s and p95 runtime 135.54 s,
+while \profilemethod{} has median runtime 14.68 s and p95 runtime 122.84 s.
 
 \begin{table}[t]
 \centering
@@ -581,10 +586,10 @@ large benchmark shows the corresponding
 high-dimensional tradeoff: conservative profile guards reduce runtime tails but
 give up some score.  The $n=14$ stress test narrows this limitation further:
 bounded FPRM linear-pair search keeps the run finite and improves over
-FPRM-greedy on most functions, but it spends more ancilla and still lacks XAG
-or ROS toolchain baselines.  Stronger
-high-dimensional candidate generation is needed before the
-paper can claim a large margin over the best cheap Boolean baseline.
+FPRM-greedy on most functions, and the $n=15$ recursive-rest variant widens
+that margin while keeping all runs finite.  The remaining weakness is less the
+internal high-dimensional guard than the comparison boundary: the current
+evidence still lacks reproduced XAG or ROS toolchain baselines.
 
 \section{Conclusion}
 
@@ -601,8 +606,7 @@ objectives and larger random ANF instances.  The new high-dimensional stress
 tests show that bounded guards scale without timeouts and beat FPRM-greedy on
 60 of 64 weighted-score comparisons at $n=14$ and 30 of 32 comparisons at
 $n=15$, both without losses.  The next step is to add
-standardized external baselines and stronger high-dimensional candidate
-generation so the empirical claim is submission-ready.
+standardized external baselines so the empirical claim is submission-ready.
 
 \bibliographystyle{plain}
 \bibliography{references}

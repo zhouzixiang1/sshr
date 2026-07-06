@@ -18,6 +18,9 @@ from anf_utils import anf_monomials
 from resource_model import ResourceCost, ResourceWeights, direct_cost_for_terms, gate_cost, gate_uncompute_cost
 
 
+LINEAR_REST_RECURSE_TERM_LIMIT = 900
+
+
 @dataclass(frozen=True)
 class SearchConfig:
     weights: ResourceWeights = ResourceWeights()
@@ -183,14 +186,28 @@ def _linear_factor_resource(factor: int, live_factor_ancilla: int) -> ResourceCo
     return ResourceCost(CNOT=width, gates=width, depth=width, explicit_ancilla=live, peak_ancilla=live)
 
 
+def _subsets_of_size(mask: int, size: int) -> Iterable[int]:
+    bits = [i for i in range(mask.bit_length()) if (mask >> i) & 1]
+    if len(bits) < size:
+        return
+    from itertools import combinations
+
+    for combo in combinations(bits, size):
+        s = 0
+        for b in combo:
+            s |= 1 << b
+        yield s
+
+
 def linear_factor_actions(
     terms: frozenset[int],
     prefix_len: int,
     live_factor_ancilla: int,
     config: SearchConfig,
     action_width: int | None = None,
+    max_linear_width: int = 2,
 ) -> List[FactorAction]:
-    """Find pairwise XOR factors ``(x_i xor x_j) * g`` inside an ANF.
+    """Find linear parity factors ``(x_i xor x_j xor ...) * g`` inside an ANF.
 
     The quotient terms are restricted to monomials that contain neither
     variable in the linear factor.  This keeps the transformation simple,
@@ -204,63 +221,73 @@ def linear_factor_actions(
         return []
 
     termset = set(terms)
+    support_by_residual: dict[int, int] = {}
+    for term in termset:
+        bits = int(term)
+        while bits:
+            bit = bits & -bits
+            residual = term ^ bit
+            support_by_residual[residual] = support_by_residual.get(residual, 0) | bit
+            bits ^= bit
+
+    residuals_by_factor: dict[int, set[int]] = {}
+    max_width = max(2, min(max_linear_width, n_bits))
+    for residual, support in support_by_residual.items():
+        # Defensive masking keeps the quotient disjoint from every variable in
+        # the linear factor even if future callers supply unusual term sets.
+        available = support & ~residual
+        available_count = available.bit_count()
+        for width in range(2, max_width + 1):
+            if available_count < width:
+                continue
+            for factor in _subsets_of_size(available, width):
+                residuals_by_factor.setdefault(factor, set()).add(residual)
+
     direct_total = direct_cost_for_terms(
         terms, prefix_len, live_factor_ancilla, config.use_relative_phase, config.gate_mode
     ).score(config.weights)
     actions: List[FactorAction] = []
-    for i in range(n_bits):
-        bi = 1 << i
-        for j in range(i + 1, n_bits):
-            bj = 1 << j
-            pair_mask = bi | bj
-            residuals = set()
-            group_terms = set()
-            for term in termset:
-                if (term & pair_mask) != bi:
-                    continue
-                q = term ^ bi
-                mate = q | bj
-                if mate in termset:
-                    residuals.add(q)
-                    group_terms.add(term)
-                    group_terms.add(mate)
-            if len(residuals) < config.min_factor_count:
-                continue
-            group = frozenset(group_terms)
-            residual_set = frozenset(residuals)
-            rest = frozenset(t for t in terms if t not in group_terms)
-            group_direct = direct_cost_for_terms(
-                group, prefix_len, live_factor_ancilla, config.use_relative_phase, config.gate_mode
-            ).score(config.weights)
-            residual_direct = direct_cost_for_terms(
-                residual_set,
-                prefix_len + 1,
-                live_factor_ancilla + 1,
-                config.use_relative_phase,
-                config.gate_mode,
-            ).score(config.weights)
-            compute = _linear_factor_resource(pair_mask, live_factor_ancilla)
-            uncompute = _linear_factor_resource(pair_mask, live_factor_ancilla)
-            gain = group_direct - compute.score(config.weights) - uncompute.score(config.weights) - residual_direct
-            coverage = len(group) / max(len(terms), 1)
-            density = sum(t.bit_count() for t in residual_set) / max(len(residual_set), 1)
-            heuristic_prior = (
-                gain / max(direct_total, 1.0)
-                + 0.04 * len(group)
-                + 0.08 * coverage
-                - 0.02 * density
+    for factor, residuals in residuals_by_factor.items():
+        if len(residuals) < config.min_factor_count:
+            continue
+        factor_bits = [1 << i for i in range(factor.bit_length()) if (factor >> i) & 1]
+        group_terms = {residual | bit for residual in residuals for bit in factor_bits}
+        group = frozenset(group_terms)
+        residual_set = frozenset(residuals)
+        rest = frozenset(t for t in terms if t not in group_terms)
+        group_direct = direct_cost_for_terms(
+            group, prefix_len, live_factor_ancilla, config.use_relative_phase, config.gate_mode
+        ).score(config.weights)
+        residual_direct = direct_cost_for_terms(
+            residual_set,
+            prefix_len + 1,
+            live_factor_ancilla + 1,
+            config.use_relative_phase,
+            config.gate_mode,
+        ).score(config.weights)
+        compute = _linear_factor_resource(factor, live_factor_ancilla)
+        uncompute = _linear_factor_resource(factor, live_factor_ancilla)
+        gain = group_direct - compute.score(config.weights) - uncompute.score(config.weights) - residual_direct
+        coverage = len(group) / max(len(terms), 1)
+        density = sum(t.bit_count() for t in residual_set) / max(len(residual_set), 1)
+        heuristic_prior = (
+            gain / max(direct_total, 1.0)
+            + 0.04 * len(group)
+            + 0.08 * coverage
+            + 0.02 * factor.bit_count()
+            - 0.02 * density
+        )
+        actions.append(
+            FactorAction(
+                factor=factor,
+                group=group,
+                residuals=residual_set,
+                rest=rest,
+                immediate_gain=gain,
+                prior=heuristic_prior,
+                linear=True,
             )
-            actions.append(
-                FactorAction(
-                    factor=pair_mask,
-                    group=group,
-                    residuals=residual_set,
-                    rest=rest,
-                    immediate_gain=gain,
-                    prior=heuristic_prior,
-                    linear=True,
-                )
-            )
+        )
 
     width = action_width if action_width is not None else max(2, min(config.candidate_top_k, 8))
     actions.sort(key=lambda a: (-a.prior, -a.immediate_gain, -len(a.group), a.factor))
@@ -482,18 +509,27 @@ def linear_pair_beam_plan(
     config: SearchConfig = SearchConfig(),
     action_width: int = 4,
     recursive_depth: int = 0,
+    max_linear_width: int = 2,
 ) -> Plan:
     """Try CNOT-only pairwise XOR factors above cheap subplans.
 
     The plan is baseline-preserving against ``root_child_beam_plan``.  It adds
     a cheap linear factor candidate for high-dimensional random ANFs where
     monomial common factors miss repeated pair structure.  ``recursive_depth``
-    enables a bounded extra linear-factor layer in the selected quotient only;
-    the default keeps the historical one-layer result unchanged.
+    enables bounded extra linear-factor layers in both the selected quotient and
+    the remaining terms; the default keeps the historical one-layer result
+    unchanged.
     """
     best = root_child_beam_plan(terms, prefix_len, live_factor_ancilla, config)
     best_score = best.score(config.weights)
-    actions = linear_factor_actions(terms, prefix_len, live_factor_ancilla, config, action_width=action_width)
+    actions = linear_factor_actions(
+        terms,
+        prefix_len,
+        live_factor_ancilla,
+        config,
+        action_width=action_width,
+        max_linear_width=max_linear_width,
+    )
     if not actions:
         return best
     child_config = replace(config, greedy_eval_limit=1)
@@ -507,6 +543,7 @@ def linear_pair_beam_plan(
                 child_config,
                 action_width=max(2, action_width - 1),
                 recursive_depth=recursive_depth - 1,
+                max_linear_width=max_linear_width,
             )
         else:
             group = greedy_plan(
@@ -517,7 +554,18 @@ def linear_pair_beam_plan(
                 None,
                 memo,
             )
-        rest = greedy_plan(action.rest, prefix_len, live_factor_ancilla, child_config, None, memo)
+        if recursive_depth > 0 and len(terms) <= LINEAR_REST_RECURSE_TERM_LIMIT:
+            rest = linear_pair_beam_plan(
+                action.rest,
+                prefix_len,
+                live_factor_ancilla,
+                child_config,
+                action_width=max(2, action_width - 1),
+                recursive_depth=recursive_depth - 1,
+                max_linear_width=max_linear_width,
+            )
+        else:
+            rest = greedy_plan(action.rest, prefix_len, live_factor_ancilla, child_config, None, memo)
         cost = factor_cost(action, group, rest, live_factor_ancilla, config)
         plan = Plan("linear_factor", terms, cost, factor=action.factor, group=group, rest=rest)
         score = plan.score(config.weights)
