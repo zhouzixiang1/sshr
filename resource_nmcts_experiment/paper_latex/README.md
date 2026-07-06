@@ -8,7 +8,8 @@ This folder is the manuscript workspace for the resource-constrained quantum
 Boolean oracle synthesis project.  The draft is intentionally evidence-first:
 claims in `main.tex` are limited to the current `evidence_affine`,
 `ablation_affine`, `traditional_resource`, `resource_sweep`, and
-`large_resource_core`, and `highdim_resource` results.
+`large_resource_core`, `highdim_resource`, and exported exact SSHR-I pilot
+results.
 
 Build:
 
@@ -27,6 +28,10 @@ Current source evidence:
 - traditional baseline analysis: `../results/analysis_traditional_resource.md`
 - traditional runtime/resource analysis:
   `../results/runtime_traditional_resource.md`
+- external exact SSHR-I pilot CSV:
+  `../results/raw_external_traditional_resource_n4.csv`
+- external exact SSHR-I pilot analysis:
+  `../results/analysis_external_traditional_resource_n4.md`
 - resource-sweep CSV: `../results/raw_resource_sweep.csv`
 - resource-sweep analysis: `../results/analysis_resource_sweep.md`
 - large-scale core CSV: `../results/raw_large_resource_core.csv`
@@ -48,11 +53,15 @@ Current source evidence:
   `tables/resource_large_resource_core.tex`,
   `tables/runtime_large_resource_core.tex`,
   `tables/resource_highdim_resource.tex`,
-  `tables/runtime_highdim_resource.tex`
+  `tables/runtime_highdim_resource.tex`,
+  `tables/external_traditional_resource_n4.tex`
 - manifests: `../results/manifest_evidence_affine.json`,
-  `../results/manifest_highdim_resource.json`
+  `../results/manifest_highdim_resource.json`,
+  `../results/manifest_external_traditional_resource_n4.json`
 
 Known manuscript gaps:
 
-- verify all BibTeX metadata against publisher/arXiv records before submission;
+- extend exported external baselines beyond the `n <= 4` SSHR-I pilot where
+  runtime allows;
+- add reproduced XAG/ROS or mockturtle-style toolchain results;
 - decide the target venue and required reference/section style.

@@ -40,7 +40,10 @@ candidates.  On the current
 all functions and reduces mean T-count by 61.83\% relative to direct ANF
 synthesis.  On a separate $n\leq 6$ traditional-baseline slice, \method{} has
 172 T-count wins and no losses against ESOP cube beam search, and 162 T-count
-wins, 1 loss, and 14 ties against time-limited weighted ESOP MILP.  A
+wins, 1 loss, and 14 ties against time-limited weighted ESOP MILP.  On an
+exported exact SSHR-I pilot covering 72 functions with $n\leq 4$, \method{}
+has 69 score wins and 3 score losses against the CNOT-optimized SSHR-I baseline,
+with a 26.45\% mean score reduction while using more CNOTs.  A
 resource-profile stress test shows that \profilemethod{} is best or tied on
 42/47, 42/47, 41/47, and 42/47 functions under T-heavy, balanced,
 CNOT-depth-heavy, and ancilla-tight objectives.  A larger core benchmark
@@ -227,8 +230,9 @@ and adds \method{}, ESOP cube beam search, and a time-limited weighted ESOP
 MILP over candidate cubes.  The \largedataset{} benchmark extends the same
 resource objective to a larger random-ANF core through $n=12$.  To support
 external reproduction, the benchmark generator can export every preset to PLA,
-BLIF \texttt{.names}, and truth-table JSON manifests; external XAG/ROS/LUT tool
-results are not yet included in the tables below.
+BLIF \texttt{.names}, and truth-table JSON manifests.  The current draft adds
+an exported exact-SSHR-I pilot on the $n\leq 4$ subset; external XAG/ROS/LUT
+tool results are still future work.
 
 \subsection{Main results}
 
@@ -282,6 +286,35 @@ composite-score reduction.  Against SSHR-H, \method{} had 171 T-count wins, 1
 loss, and 5 ties, and 171 score wins with 6 score losses.  SSHR-H retained the
 lowest mean CNOT count on this small-function slice, so this result supports
 low-T and weighted-resource synthesis rather than CNOT-only optimality.
+
+\subsection{Exported exact SSHR-I pilot}
+
+To check the external-tool exchange path, we exported the
+\traditionaldataset{} benchmark to PLA, BLIF, and truth-table JSON, then ran a
+separate SSHR backend over the exported manifest for all 72 functions with
+$n\leq 4$.  This produced 216 external method/function rows: SSHR-H,
+CNOT-optimized SSHR-I, and T-optimized SSHR-I, with no errors or skips.  The
+SSHR-I results are stricter than the in-harness SSHR-H reference because they
+solve the parity set-covering ILP with Gurobi.
+
+\begin{table}[t]
+\centering
+\small
+\caption{\method{} compared with exported SSHR baselines on the 72-function
+$n\leq 4$ exact-ILP pilot.  Wins/losses/ties count common functions; negative
+mean relative values favor \method{}.}
+\label{tab:external-sshr-i}
+\input{tables/external_traditional_resource_n4}
+\end{table}
+
+The exact pilot strengthens but also sharpens the claim.  Against
+CNOT-optimized SSHR-I, \method{} has 65 T-count wins, no T-count losses, and 7
+ties; by weighted score it has 69 wins, 3 losses, and no ties, with a 26.45\%
+mean score reduction.  Against T-optimized SSHR-I it shows the same T-count
+win/tie pattern and a 26.21\% mean score reduction.  In both exact comparisons,
+however, \method{} loses CNOT count on most functions.  This supports the
+resource-constrained low-T oracle-synthesis claim, while ruling out any
+CNOT-only optimality claim.
 
 \subsection{Ablation}
 
@@ -517,18 +550,19 @@ pairwise XOR factoring can correct a measurable part of the greedy
 Reed--Muller search error using only Clifford linear preprocessing around the
 factored subplan.
 
-The main current limitations are the absence of hardware mapping, the use of a
-local benchmark suite rather than standardized external oracle benchmarks, and
-the lack of a reproduced external XAG/ROS toolchain in the comparison set.  The
-in-harness ESOP cube-beam and weighted-MILP baselines strengthen the Boolean
-synthesis comparison, but external implementations remain necessary before a
-submission-ready claim.  The resource-profile sweep shows that profile-specific
-candidate generation improves objective robustness on small functions, but the
-large benchmark shows the corresponding high-dimensional tradeoff: conservative
-profile guards reduce runtime tails but give up some score.  The $n=14$ stress
-test narrows this limitation further: bounded FPRM linear-pair search keeps the
-run finite and improves over FPRM-greedy on most functions, but it spends more
-ancilla and still lacks external toolchain baselines.  Stronger
+The main current limitations are the absence of hardware mapping, the need to
+expand the exported exact-SSHR-I pilot beyond $n\leq 4$, and the lack of a
+reproduced external XAG/ROS toolchain in the comparison set.  The in-harness
+ESOP cube-beam and weighted-MILP baselines plus the exported SSHR-I pilot
+strengthen the Boolean synthesis comparison, but more external implementations
+remain necessary before a submission-ready claim.  The resource-profile sweep
+shows that profile-specific candidate generation improves objective robustness
+on small functions, but the large benchmark shows the corresponding
+high-dimensional tradeoff: conservative profile guards reduce runtime tails but
+give up some score.  The $n=14$ stress test narrows this limitation further:
+bounded FPRM linear-pair search keeps the run finite and improves over
+FPRM-greedy on most functions, but it spends more ancilla and still lacks XAG
+or ROS toolchain baselines.  Stronger
 high-dimensional candidate generation is needed before the
 paper can claim a large margin over the best cheap Boolean baseline.
 

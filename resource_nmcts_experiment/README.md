@@ -39,6 +39,9 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset highdim_scale_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset highdim_scale_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset large_resource_core --formats pla,blif,truth
+/opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset traditional_resource --formats pla,blif,truth --out-dir benchmark_exports/traditional_resource_external_seed42
+/opt/anaconda3/envs/sshr/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --max-n 4 --max-ilp-n 4 --timeout 10 --workers 4 --out results/raw_external_traditional_resource_n4.csv --summary results/summary_external_traditional_resource_n4.csv --run-manifest results/manifest_external_traditional_resource_n4.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_traditional_resource_n4.csv --internal-csv results/raw_traditional_resource.csv --out results/analysis_external_traditional_resource_n4.md
 ```
 
 Current presets:
@@ -86,6 +89,10 @@ External-tool benchmark exchange:
 - This is the bridge for reproducing the same Boolean functions in external
   XAG/ROS/LUT or mockturtle-style synthesis flows without depending on the
   Python experiment harness.
+- `run_external_baselines.py` consumes the exported `manifest.csv`/JSON and
+  runs cross-directory baseline backends.  The current implemented external
+  backend is SSHR-H/SSHR-I from `src/sshr`, intended as the first exact-baseline
+  pilot before XAG/ROS/mockturtle command adapters are added.
 
 Current evidence from `results/analysis_evidence_affine.md`:
 
@@ -145,6 +152,21 @@ Traditional Boolean/ESOP baseline evidence from
 - SSHR-H still has the lowest mean CNOT count on this small-function slice, so
   the claim remains low-T/resource-score synthesis rather than CNOT-only
   optimality.
+
+Exported exact SSHR-I pilot evidence from
+`results/analysis_external_traditional_resource_n4.md`:
+
+- Exported the `traditional_resource` suite to PLA, BLIF, and truth-table JSON,
+  then ran external SSHR-H, CNOT-optimized SSHR-I, and T-optimized SSHR-I on all
+  72 functions with `n <= 4`.
+- The pilot produced 216 external method/function rows, 216 usable rows, and 0
+  errors/skips.
+- Against CNOT-optimized SSHR-I, `and_resource_nmcts` has 65 T-count wins, 0
+  losses, and 7 ties; score wins/losses/ties are 69/3/0 with a 26.45% mean
+  score reduction.  CNOT count is worse on 65/72 functions.
+- Against T-optimized SSHR-I, `and_resource_nmcts` has the same 65/0/7 T-count
+  win pattern and a 26.21% mean score reduction.  CNOT count is worse on 62/72
+  functions.
 
 Resource-profile stress-test evidence from
 `results/analysis_resource_sweep.md`:

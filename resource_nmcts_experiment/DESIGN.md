@@ -158,8 +158,12 @@ The first implementation compares against:
 `export_benchmarks.py` exports every preset to PLA, BLIF `.names`, and
 truth-table JSON with a manifest, so the exact same Boolean functions can be
 fed to external XAG/ROS/LUT or mockturtle-style flows.  External tool results
-are still future work, but the benchmark exchange format is now reproducible
-and independent of the Python synthesis harness.
+are now partially covered by `run_external_baselines.py`: the first exact
+pilot consumes the exported `traditional_resource` manifest and runs SSHR-H,
+CNOT-optimized SSHR-I, and T-optimized SSHR-I from the separate `src/sshr`
+implementation on the `n <= 4` subset.  XAG/ROS/mockturtle adapters are still
+future work, but the benchmark exchange format and exact SSHR-I comparison path
+are now reproducible and independent of the synthesis harness.
 
 ## Evaluation
 
@@ -287,6 +291,21 @@ Main `traditional_resource` evidence:
 - SSHR-H remains better in mean CNOT count and often depth on the small
   supported subset.  This is a useful limitation, not a contradiction of the
   low-T/resource-score claim.
+
+The exported exact SSHR-I pilot uses the same `traditional_resource` functions
+but goes through `export_benchmarks.py` and a separate baseline runner.  It
+covers all 72 functions with `n <= 4`, three external methods, and 216 external
+rows with 0 errors/skips:
+
+- Against CNOT-optimized SSHR-I, `and_resource_nmcts` has 65 T-count wins, 0
+  losses, and 7 ties; by weighted score it has 69 wins, 3 losses, and 0 ties,
+  with a 26.45% mean score reduction.
+- Against T-optimized SSHR-I, `and_resource_nmcts` again has 65/0/7 T-count
+  wins/losses/ties and a 26.21% mean score reduction.
+- In both exact comparisons, `and_resource_nmcts` usually spends more CNOTs
+  (65/72 worse against CNOT-opt SSHR-I and 62/72 worse against T-opt SSHR-I).
+  This validates the low-T/resource-score framing and rules out a CNOT-only
+  claim.
 
 The `resource_sweep` stress test checks whether the method remains competitive
 under different resource objectives.  It uses 47 functions with `n <= 6`, four

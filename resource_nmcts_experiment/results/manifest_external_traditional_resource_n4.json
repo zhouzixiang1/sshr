@@ -1,0 +1,18 @@
+{
+  "elapsed_s": 16.278425216674805,
+  "functions": 72,
+  "max_ilp_n": 4,
+  "max_n": 4,
+  "methods": [
+    "external_sshr_h",
+    "external_sshr_i_cnot",
+    "external_sshr_i_t"
+  ],
+  "new_tasks": 216,
+  "raw": "results/raw_external_traditional_resource_n4.csv",
+  "rows": 216,
+  "source_manifest": "benchmark_exports/traditional_resource_external_seed42/manifest.csv",
+  "summary": "results/summary_external_traditional_resource_n4.csv",
+  "timeout": 10.0,
+  "workers": 4
+}
