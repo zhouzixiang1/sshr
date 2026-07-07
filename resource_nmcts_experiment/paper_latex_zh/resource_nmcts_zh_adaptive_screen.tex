@@ -1,0 +1,284 @@
+\documentclass[UTF8,fontset=macnew,11pt]{ctexart}
+
+\usepackage[a4paper,margin=2.25cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!50!black
+}
+
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{2em}
+\setlength{\emergencystretch}{2em}
+
+\newcommand{\method}{Resource-NMCTS}
+\newcommand{\pareto}{Pareto-Resource-NMCTS}
+\newcommand{\score}{\ensuremath{\mathrm{score}}}
+\newcommand{\anf}{\ensuremath{\mathrm{ANF}}}
+\newcommand{\fprm}{\ensuremath{\mathrm{FPRM}}}
+\newcommand{\mcts}{\ensuremath{\mathrm{MCTS}}}
+
+\title{自适应布尔环筛选增强的资源约束量子布尔函数综合方法}
+\author{中文技术论文稿 v4}
+\date{2026年7月7日}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+量子布尔函数 oracle 综合需要把经典谓词嵌入可逆量子线路，其逻辑层 T-count、CNOT、深度和辅助比特数会直接影响后续容错资源估计。直接代数正规形（algebraic normal form, \anf{}）综合语义清晰，但会重复计算大量高次数 AND 结构；SSHR 等 CNOT-oriented 方法提供了重要小规模 baseline，却不等同于本文希望研究的资源加权搜索问题。本文将 oracle 综合建模为 \anf{}/固定极性 Reed--Muller（fixed-polarity Reed--Muller, \fprm{}）项集合上的组合优化，提出由资源感知候选分解、神经动作先验、蒙特卡洛树搜索、baseline-preserving guard、Pareto portfolio 和自适应布尔环线性因子筛选组成的逻辑层综合框架。最新实验显示，在 $n\leq6$ 的 177 个传统函数上，\pareto{} 相对 ESOP cube beam 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%；相对 weighted ESOP-MILP 获得 167/3/7，平均 score 降低 29.84\%。在 $n=18$ 的 12 个随机 \anf{} 函数上，自适应 depth-2 布尔环筛选相对单层筛选获得 11/0/1，平均 score 降低 6.45\%；完整 \method{} 相对该快速筛选仍进一步降低 23.87\%。在 $n=20$ 的 6 个边界函数上，自适应 depth-2 布尔环筛选相对单层筛选获得 5/0/1，平均 score 降低 7.41\%；集成到 \method{} 后，相对 AND-direct ANF 获得 5/0/1，平均 score 降低 11.74\%。这些结果说明，本文路线已经从复现 SSHR 转为独立的逻辑层资源搜索方法；但高维 learned prior 的独立收益仍小，外部 reversible-toolchain 对比和函数级线路案例仍需补齐。
+\end{abstract}
+
+\noindent\textbf{关键词：}量子 oracle 综合；布尔函数综合；神经蒙特卡洛树搜索；布尔环；ANF；FPRM；T-count
+
+\section{引言}
+
+给定布尔函数 $f:\{0,1\}^n\rightarrow\{0,1\}$，量子 oracle 通常实现为
+\begin{equation}
+  |x\rangle |y\rangle \mapsto |x\rangle |y\oplus f(x)\rangle .
+  \label{eq:oracle}
+\end{equation}
+这类 oracle 是 Grover 搜索、量子密码分析和多种量子算法子程序中的基本组件。由于容错量子计算中非 Clifford 门代价高，oracle 的 T-count、T-depth、CNOT、逻辑深度和辅助比特数不应被视为后端细节，而是决定算法资源估计可信度的核心指标。
+
+最直接的输入表示是 \anf{}。若
+\begin{equation}
+  f(x)=\bigoplus_{m\in\mathcal{M}}\prod_{i\in m}x_i ,
+  \label{eq:anf}
+\end{equation}
+则每个单项式都可以被翻译为可逆乘法结构，并异或到输出位。直接 \anf{} 综合的优势是简单、稳定、语义透明；缺点是不同单项式之间的公共 AND 结构、线性奇偶结构和极性重写机会很难被自动复用。对于随机高维项集合，这种重复计算会迅速推高 T-count。
+
+已有 XAG、ROS、BDD 和 SSHR 等路线从不同中间表示处理 oracle synthesis 问题\cite{meuli2022xag,meuli2020ros,wille2009bdd,zheng2025sshr}。本文并不从 SSHR 的 parallelotope cover 空间出发，也不把目标设为在 CNOT 数上全面超过 SSHR；SSHR 在本文中是 CNOT-oriented small-scale baseline。本文的核心主题是把量子布尔函数综合表述为资源加权搜索问题，并结合 AI 搜索方法在 \anf{}/\fprm{} 项集合上选择可复用因子。
+
+本文的一句话论证是：在逻辑层量子布尔函数 oracle 综合中，\anf{}/\fprm{} 项集合上的资源感知搜索，配合自适应布尔环线性因子筛选和保守 portfolio 选择，可以在传统小规模函数和 $n=18,20$ 高维随机函数上降低 T-count 与加权逻辑资源；当前边界是神经先验尚未形成足够大的独立贡献，且结论不覆盖硬件 mapping。
+
+\section{相关工作与问题定位}
+
+Xor-And-Inverter Graphs（XAG）把 XOR 与 AND 结构分离，使 AND 节点数量与非 Clifford 资源直接相关。Meuli 等人将 XAG 用于 quantum compilation\cite{meuli2022xag}，并从 multiplicative complexity 角度解释低 T-count oracle 的来源\cite{meuli2019multiplicative}。ROS 将 oracle synthesis 建模为 resource-constrained LUT mapping\cite{meuli2020ros}。BDD-based reversible synthesis 使用决策图处理较大布尔函数\cite{wille2009bdd}。这些工作说明，中间表示会决定可暴露的共享结构。
+
+强化学习和树搜索已经用于经典布尔电路、Clifford+T unitary、ZX-calculus rewrite 和量子线路 ordering 等任务\cite{tsaras2024shortcircuit,rietsch2024unitary,riu2025rlzx,machiya2026monteq}。这些工作支持 ``学习式搜索适合组合综合空间'' 这一方向，但它们的动作空间与本文不同。本文动作不是一般 unitary gate、ZX rewrite rule 或 Pauli rotation ordering，而是 Boolean oracle 中项集合的因子选择、极性重写和可逆复用。
+
+因此，本文的 AI 角色应当写得保守：神经模型是候选扩展器和排序器，\mcts{} 是受预算约束的组合搜索器，baseline-preserving guard 是防止负迁移的保护层。当前数据还不足以把 learned prior 写成唯一主贡献。
+
+\section{资源模型与搜索状态}
+
+本文输入为布尔函数的真值表或 \anf{} 表示，输出为实现式~\eqref{eq:oracle} 的逻辑层可逆线路。每条候选线路都必须通过 truth-table 级语义验证。候选选择使用统一逻辑资源分数
+\begin{equation}
+  \score = T + 0.04\,\mathrm{CNOT} + 0.015\,\mathrm{depth}
+         + 0.01\,\mathrm{gates} + 2\,\mathrm{ancilla}.
+  \label{eq:score}
+\end{equation}
+式~\eqref{eq:score} 是可复现的逻辑层比较准则，不代表具体硬件平台的真实物理成本。因此实验报告同时列出 T-count、CNOT、depth、gates 和 peak ancilla，避免单一 score 掩盖资源 trade-off。
+
+\method{} 的搜索状态是当前尚未综合的项集合 $\mathcal{M}$。动作是选择一个可计算、可反算的局部因子结构，把项集合分解为 quotient 子问题和 rest 子问题，再递归处理。候选动作包括公共单项式因子、固定极性重写后的公共因子、CNOT-only 线性因子、布尔环线性因子，以及由神经模型重排或扩展的 root action。相对于直接在真值表上训练黑盒策略，这种状态保留了布尔代数结构，也使每一步都可以翻译为线路片段。
+
+\section{方法}
+
+\subsection{资源感知分解}
+
+直接 \anf{} 综合把每个单项式单独计算到输出位。若多个单项式共享高次数因子，则可以先计算该因子，再用较低成本的 quotient 子问题复用它。FPRM 极性搜索进一步改变项集合形状，使原始 \anf{} 中不明显的公共结构变得显式。低维传统函数上的大幅收益主要来自仿射坐标搜索、FPRM 极性、MCTS 子问题选择和 portfolio 的组合，而不是单一 rollout。
+
+神经动作先验使用候选覆盖率、项数变化、平均次数、因子大小、即时资源收益和子问题规模等特征为动作排序。\mcts{} 在固定预算内探索候选组合，并用 rollout 估计后续资源代价。由于高维 learned prior 有负迁移风险，当前实现采用 baseline-preserving guard：确定性候选与神经候选并行产生，最终保留 score 更低者。
+
+\subsection{布尔环线性因子}
+
+旧 linear-pair 分支主要搜索形如
+\begin{equation}
+  (x_i\oplus x_j\oplus\cdots)\cdot h(x)
+  \label{eq:linear_factor}
+\end{equation}
+的局部结构，并要求线性因子变量与 quotient $h(x)$ 变量不相交。这个约束便于实现，但会漏掉 square-free Boolean ring 中合法的重叠变量结构。本文使用布尔环线性因子允许二者共享变量，并在展开时利用 $x_i^2=x_i$ 和 GF(2) 偶数项消去。例如
+\begin{equation}
+  (x_i\oplus x_j)x_i m = x_i m \oplus x_i x_j m .
+  \label{eq:boolean_ring}
+\end{equation}
+线路层面仍可先用 CNOT 计算线性奇偶量，再用该辅助量控制 quotient 子线路。因此，这一扩展不是单纯增加 top-$k$ 宽度，而是把 Boolean algebra 中原本被实现约束排除的候选重新纳入搜索。
+
+\subsection{自适应 depth-2 筛选}
+
+在 $n=20$ 边界切片中，FPRM root beam 和 fast linear-pair 均出现 300 s task timeout。为降低长尾，本文新增自适应布尔环筛选：先评估单层 Boolean-ring screen，再评估 depth-1 recursive screen 和 depth-2 recursive screen，最后按式~\eqref{eq:score} 选择资源分数最低的候选。该策略不做昂贵 FPRM 极性枚举，主要在原始 \anf{} 上进行快速结构筛选。
+
+自适应筛选的定位有两个层次。第一，它是一个独立快速候选，适合在超高维函数上提供不超时的 baseline-preserving 改进。第二，它可以作为 \method{} portfolio 的高维分支，使完整方法在旧 root beam 或旧 linear-pair 超时的区域仍有可验证输出。
+
+\section{实验设计}
+
+实验分为四组。第一组是 $n\leq6$ 的 177 个传统函数，用于和 direct ANF、AND-direct ANF、ESOP cube beam、ESOP-MILP、SSHR-H、ABC 和 BDD baseline 比较。第二组是高维随机 \anf{} 压力测试，重点观察 $n=16$、$n=18$ 和 $n=20$ 的扩展性。第三组是 matched comparison 消融，用函数名配对，比较相同函数上的 T-count、CNOT、depth、ancilla、score 和时间。第四组是负面结果和边界审计，用来判断哪些主张不能写过头。
+
+所有内部结果均来自已经生成的 CSV、manifest 和分析脚本。高维切片中出现 timeout 的方法保留错误行，不纳入 correct matched comparison；因此本文对 $n=20$ 的结论限定为 ``可运行边界上的资源改进''，而不是 ``完整全局搜索最优''。
+
+\section{结果}
+
+\subsection{传统函数上的主结果}
+
+表~\ref{tab:traditional} 给出 $n\leq6$ 传统函数上的平均资源。相对 direct ANF，\pareto{} 平均 T-count 降低 72.25\%，平均 score 降低 67.80\%。相对 ESOP cube beam，\pareto{} 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%。相对 weighted ESOP-MILP，获得 167/3/7，平均 score 降低 29.84\%。
+
+\begin{table}[t]
+\centering
+\small
+\caption{$n\leq6$ 传统函数切片上的平均逻辑资源。}
+\label{tab:traditional}
+\begin{tabular}{lrrrrr}
+\toprule
+方法 & 平均 T & 平均 CNOT & 平均 depth & 平均 ancilla & 平均 score \\
+\midrule
+Direct ANF & 184.1 & 134.2 & 134.6 & 1.33 & 194.3 \\
+AND-direct ANF & 101.0 & 166.5 & 166.9 & 2.18 & 115.2 \\
+\method{} & 43.9 & 89.9 & 94.5 & 1.92 & 53.2 \\
+\pareto{} & \textbf{40.4} & 83.0 & \textbf{88.0} & 2.03 & \textbf{49.6} \\
+ESOP-MILP & 83.6 & 133.5 & 159.6 & 2.32 & 96.7 \\
+SSHR-H & 81.0 & \textbf{67.6} & 88.7 & 1.36 & 88.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+SSHR-H 的平均 CNOT 最低，说明本文不能主张 CNOT-only 支配。更准确的写法是：在当前逻辑层加权资源模型下，本文方法以更多结构搜索和一定辅助比特为代价，换取更低 T-count 与更低综合 score。
+
+\subsection{\texorpdfstring{$n=18$}{n=18} 高维压力测试}
+
+表~\ref{tab:n18} 汇总 $n=18$ 的最新结果。单层布尔环筛选平均 score 为 11349.06；depth-1 筛选降至 10991.33；depth-2 与自适应筛选降至 10672.55。自适应筛选相对单层筛选获得 11/0/1，平均 T-count 降低 6.56\%，CNOT 和 depth 均降低 5.97\%，score 降低 6.45\%。
+
+\begin{table}[t]
+\centering
+\small
+\caption{$n=18$ 随机 \anf{} 函数上的布尔环筛选与完整 \method{}。}
+\label{tab:n18}
+\begin{tabular}{lrrrrr}
+\toprule
+方法 & 平均 T & 平均 CNOT & 平均 depth & 平均 score & 平均时间(s) \\
+\midrule
+单层 Boolean screen & 10389.33 & 16268.42 & 16268.50 & 11349.06 & 0.823 \\
+Depth-1 Boolean screen & 10060.67 & 15757.92 & 15758.00 & 10991.33 & 1.404 \\
+Depth-2 / adaptive screen & 9768.67 & 15303.67 & 15303.75 & 10672.55 & 2.993 \\
+\method{} & \textbf{6639.33} & \textbf{11380.92} & \textbf{11382.17} & \textbf{7315.62} & 227.402 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+这个结果有双重含义。正向来看，depth-2 自适应筛选是一个低成本、稳定改善单层筛选的结构模块。负向来看，完整 \method{} 相对自适应筛选仍获得 11/0/1，平均 score 再降低 23.87\%。因此，ANF-only screen 不能替代完整 Resource-NMCTS，只能作为高维快速候选或 portfolio 分支。
+
+\subsection{\texorpdfstring{$n=20$}{n=20} 边界测试}
+
+$n=20$ 切片更接近当前方法的边界。FPRM root beam 和 fast linear-pair 在此前运行中均出现 300 s task timeout。最新自适应筛选结果显示，depth-2/adaptive screen 的平均 score 为 21338.52，低于单层 screen 的 22695.15 和 depth-1 screen 的 21988.52。相对单层 screen，自适应筛选获得 5/0/1，平均 T-count 降低 7.58\%，CNOT 和 depth 均降低 6.59\%，score 降低 7.41\%。
+
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{$n=20$ 边界函数上的最新自适应筛选结果。}
+\label{tab:n20_summary}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}Xrrrrr}
+\toprule
+方法 & T & CNOT & depth & score & 时间(s) \\
+\midrule
+Direct ANF & 42944.00 & 19600.33 & 19600.33 & 44037.63 & 10.416 \\
+AND-direct ANF & 21516.67 & 33635.67 & 33635.67 & 23491.15 & 10.428 \\
+Single screen & 20786.00 & 32492.50 & 32492.50 & 22695.15 & 10.749 \\
+Depth-1 screen & 20138.00 & 31480.50 & 31480.50 & 21988.52 & 12.246 \\
+Depth-2 / adaptive & \textbf{19542.00} & \textbf{30553.00} & \textbf{30553.00} & \textbf{21338.52} & 16.539 \\
+\method{} adaptive & \textbf{19542.00} & \textbf{30553.00} & \textbf{30553.00} & \textbf{21338.52} & 75.836 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+表~\ref{tab:n20_pair} 给出 matched comparison。相对 AND-direct ANF，集成自适应分支的 \method{} 获得 5/0/1，平均 T-count 降低 12.18\%，CNOT 和 depth 均降低 10.97\%，score 降低 11.74\%。相对 depth-1 screen，depth-2 screen 再降低 3.07\% 的 score。该结果表明 depth-2 布尔环筛选确实带来新增量，而不是单层 screen 的重复表述。
+
+\begin{table}[t]
+\centering
+\small
+\caption{$n=20$ matched comparison。负的平均变化表示目标方法更优。}
+\label{tab:n20_pair}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}Xrrr}
+\toprule
+比较 & 函数数 & score 胜/负/平 & 平均 $\Delta$ score \\
+\midrule
+Depth-2 screen vs depth-1 screen & 6 & 5/0/1 & $-3.07\%$ \\
+Adaptive screen vs single screen & 6 & 5/0/1 & $-7.41\%$ \\
+Adaptive \method{} vs AND-direct ANF & 6 & 5/0/1 & $-11.74\%$ \\
+Adaptive \method{} vs adaptive screen & 6 & 0/0/6 & $0.00\%$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+最后一行也很关键：在这组 $n=20$ 函数上，完整 \method{} 的最终资源与 adaptive screen 相同，但运行时间更长。这说明当前 $n=20$ 收益主要来自布尔环筛选，而不是更深的 MCTS 搜索。论文中应把这组实验写成 ``可扩展候选生成的成功''，而不是 ``高维神经 MCTS 已经充分成功''。
+
+\section{负面结果与边界}
+
+当前最重要的不足有三点。第一，高维 learned prior 的独立收益仍小。已有 pairwise-wide root-action ranker 在 $n=16$ full synthesis 上相对 deterministic recursive guard 的平均 score 降幅约为 0.18\%，属于可信但不够显著的 AI 证据。第二，自适应布尔环筛选虽然在 $n=18$ 和 $n=20$ 上稳定改善单层筛选，但在 $n=18$ 仍明显弱于完整 \method{}。这说明筛选分支是低成本结构补丁，不是完整搜索替代物。第三，本文目前只处理逻辑层资源，没有做 mapping、routing、连通性约束、容错调度或真实硬件噪声模型，因此不能把结论扩展为硬件后端最优。
+
+这些边界不会推翻本文路线，但会决定写法。最稳妥的主张是：本文提出一种独立于 SSHR 的逻辑层资源搜索框架，在传统函数和高维随机 \anf{} 边界上展示可验证的资源降低；同时，AI 模块还需要从动作排序升级为结构级策略，才能成为论文的主要创新点。
+
+\section{下一步工作}
+
+若以 ``明显提升'' 为目标结束点，当前工作还不应停止。下一阶段应优先完成三项工作。
+
+第一，训练结构级策略网络。模型不应只排序已有 root action，而应预测何时使用 Boolean-ring factor、何时进入 FPRM polarity search、何时停止递归，以及是否接受更高 peak ancilla 换取更低 T-count。监督信号可以来自现有 matched comparison，也可以从 $n=14,16,18,20$ 的 root-action 诊断中构造 pairwise ranking 数据。
+
+第二，补外部 reversible-toolchain 对比。已有 ESOP、ABC、BDD 和 SSHR baseline 可以支撑第一版方法论文，但审稿人可能要求与 ROS、mockturtle、RevKit 或 back-end-aware oracle synthesis 更贴近的比较。即使最终不能完整复现，也应给出环境审计、可运行子集或不可比原因。
+
+第三，补函数级线路案例。当前表格结果足够多，但缺少一个能让读者直观看到方法机制的案例：direct ANF 如何重复计算 AND，FPRM root beam 如何改变项集合，Boolean-ring factor 如何捕获重叠变量结构，以及 guard 如何选择最终线路。该案例会显著增强论文可信度。
+
+\section{结论}
+
+本文给出一条面向资源约束量子布尔函数综合的逻辑层搜索路线：以 \anf{}/\fprm{} 项集合为状态，以资源分数为选择准则，用神经先验和 \mcts{} 生成候选，并用 baseline-preserving guard 与 Pareto portfolio 保持结果稳健。最新自适应 depth-2 布尔环筛选在 $n=18$ 相对单层筛选降低 6.45\% 的平均 score，在 $n=20$ 相对单层筛选降低 7.41\%，并使集成 \method{} 相对 AND-direct ANF 降低 11.74\%。这些结果已经能支撑一篇中文技术论文稿的主体论证；但要达到更强投稿目标，还需要结构级神经策略、外部工具链对比和函数级案例解释。
+
+\begin{thebibliography}{99}
+
+\bibitem{meuli2019multiplicative}
+G.~Meuli, M.~Soeken, E.~Campbell, M.~Roetteler, and G.~De Micheli.
+\newblock The role of multiplicative complexity in compiling low T-count oracle circuits.
+\newblock In \emph{Proceedings of ICCAD}, 2019.
+
+\bibitem{meuli2022xag}
+G.~Meuli, M.~Soeken, and G.~De Micheli.
+\newblock Xor-And-Inverter Graphs for quantum compilation.
+\newblock \emph{npj Quantum Information}, 8:7, 2022.
+
+\bibitem{meuli2020ros}
+G.~Meuli, M.~Soeken, M.~Roetteler, and G.~De Micheli.
+\newblock ROS: Resource-constrained oracle synthesis for quantum computers.
+\newblock \emph{Electronic Proceedings in Theoretical Computer Science}, 318:119--130, 2020.
+
+\bibitem{wille2009bdd}
+R.~Wille and R.~Drechsler.
+\newblock BDD-based synthesis of reversible logic for large functions.
+\newblock In \emph{Proceedings of DAC}, pp.~270--275, 2009.
+
+\bibitem{yu2025backend}
+M.~Yu, A.~Tempia Calvino, M.~Soeken, and G.~De Micheli.
+\newblock Back-end-aware fault-tolerant quantum oracle synthesis.
+\newblock In \emph{Proceedings of ASP-DAC}, pp.~930--937, 2025.
+
+\bibitem{zheng2025sshr}
+Q.~Zheng, Y.~Xu, J.~Zhang, Z.~Su, and S.~Zheng.
+\newblock CNOT oriented synthesis for small-scale Boolean functions using spatial structures of parallelotopes.
+\newblock In \emph{Proceedings of ICCAD}, 2025.
+
+\bibitem{tsaras2024shortcircuit}
+D.~Tsaras, A.~Grosnit, L.~Chen, Z.~Xie, H.~Bou-Ammar, and M.~Yuan.
+\newblock ShortCircuit: AlphaZero-driven synthesis of Boolean circuits.
+\newblock \emph{arXiv:2408.09858}, 2024.
+
+\bibitem{rietsch2024unitary}
+S.~Rietsch, A.~Y. Dubey, C.~Ufrecht, M.~Periyasamy, A.~Plinge, C.~Mutschler, and D.~D. Scherer.
+\newblock Unitary synthesis of Clifford+T circuits with reinforcement learning.
+\newblock In \emph{IEEE International Conference on Quantum Computing and Engineering}, pp.~824--835, 2024.
+
+\bibitem{riu2025rlzx}
+J.~Riu, J.~Nogu{\'e}, G.~Vilaplana, A.~Garcia-Saez, and M.~P. Estarellas.
+\newblock Reinforcement learning based quantum circuit optimization via ZX-calculus.
+\newblock \emph{Quantum}, 9:1758, 2025.
+
+\bibitem{machiya2026monteq}
+M.~Machiya, M.~Menickelly, P.~Hovland, and J.~Liu.
+\newblock MonteQ: A Monte Carlo tree search based quantum circuit synthesis framework.
+\newblock \emph{arXiv:2604.19029}, 2026.
+
+\end{thebibliography}
+
+\end{document}
