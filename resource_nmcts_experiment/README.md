@@ -16,6 +16,8 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python tests_smoke.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python train_neural_policy.py --preset rollout --gate-mode logical_and --label-mode rollout --max-depth 3 --child-branch 2 --out models/action_scorer_rollout_logical_and.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python train_neural_policy.py --preset linear_highdim --gate-mode logical_and --label-mode immediate --action-family linear --max-depth 1 --child-branch 1 --out models/linear_action_scorer_highdim.pt
+/opt/anaconda3/envs/mcts-qoracle/bin/python train_screen_depth_policy.py --train-per-n 80 --valid-per-n 24 --test-per-n 48 --epochs 140 --hidden 96
+/opt/anaconda3/envs/mcts-qoracle/bin/python train_structure_gate.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset smoke
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset evidence_affine --model models/action_scorer_rollout_logical_and.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset evidence_affine
@@ -174,6 +176,40 @@ Current presets:
 Outputs are written to `results/`.  The neural prior is saved at
 `models/action_scorer_rollout_logical_and.pt`; the high-dimensional linear-action
 diagnostic prior is saved at `models/linear_action_scorer_highdim.pt`.
+The structure-level Boolean screen-depth policy is trained with
+`train_screen_depth_policy.py` and saved at
+`models/boolean_screen_depth_policy.pt`; its held-out analysis is written to
+`results/analysis_boolean_screen_depth_policy.md`, with the paper table at
+`paper_latex/tables/boolean_screen_depth_policy.tex`.
+The high-dimensional Resource screen gate is trained with `train_structure_gate.py`
+and saved at `models/resource_structure_gate.json`; it adds
+`and_resource_nmcts_screen_gate`, a gated Resource-NMCTS variant that skips the
+expensive Resource tail when the adaptive Boolean-ring screen is predicted to be
+sufficient.
+
+Current structure-policy evidence:
+
+- Training examples: 240 generated high-dimensional ANF term sets at
+  `n=14,16,18`; validation examples: 72; held-out test examples: 48 at `n=20`.
+- Held-out depth accuracy: 79.2%.
+- Policy vs single Boolean screen: 42/0/6 score win/loss/tie, mean score
+  -6.57%.
+- Policy vs depth-1 Boolean screen: 34/0/14, mean score -2.57%.
+- Policy vs full all-depth adaptive evaluation: mean score +0.28%, mean runtime
+  -34.71%.
+- Policy vs fixed depth-2 screen: 0/5/43, mean score +0.28%, mean runtime
+  -10.85%; therefore this is useful structure-level AI evidence, but not yet a
+  final quality improvement over the strongest deterministic depth-2 screen.
+
+Current screen-gate evidence:
+
+- The decision-stump gate is trained on 18 labelled adaptive-screen vs
+  Resource rows from `n=18` and `n=20`, so it is inspectable but not yet broad
+  enough to claim robust generalization.
+- On the committed `n=20` `giga_highdim_resource` slice,
+  `and_resource_nmcts_screen_gate` matches full `and_resource_nmcts` exactly on
+  T, CNOT, depth, peak ancilla, and score (0/0/6 score W/L/T), while mean runtime
+  drops from 77.10 s to 31.18 s (-61.31%).
 
 External-tool benchmark exchange:
 

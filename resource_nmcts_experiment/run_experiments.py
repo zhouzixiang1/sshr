@@ -188,14 +188,14 @@ PRESETS = {
         "workers": 6,
     },
     "mega_highdim_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_boolean_linear_pair_screen", "and_boolean_linear_pair_screen_deep", "and_boolean_linear_pair_screen_deeper", "and_boolean_linear_pair_screen_adaptive", "and_boolean_linear_pair_screen_neural", "and_boolean_linear_pair_screen_deep_neural", "and_boolean_linear_pair_screen_ai_guard", "and_boolean_linear_pair_screen_deep_ai_guard", "and_fprm_root_beam", "and_fprm_linear_pair_fast", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_boolean_linear_pair_screen", "and_boolean_linear_pair_screen_deep", "and_boolean_linear_pair_screen_deeper", "and_boolean_linear_pair_screen_adaptive", "and_boolean_linear_pair_screen_neural", "and_boolean_linear_pair_screen_deep_neural", "and_boolean_linear_pair_screen_ai_guard", "and_boolean_linear_pair_screen_deep_ai_guard", "and_fprm_root_beam", "and_fprm_linear_pair_fast", "and_resource_nmcts", "and_resource_nmcts_screen_gate", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
         "random_truth": [],
         "random_anf": [(18, 12)],
         "structured_limit": 0,
         "workers": 4,
     },
     "giga_highdim_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_boolean_linear_pair_screen", "and_boolean_linear_pair_screen_deep", "and_boolean_linear_pair_screen_deeper", "and_boolean_linear_pair_screen_adaptive", "and_boolean_linear_pair_screen_neural", "and_boolean_linear_pair_screen_deep_neural", "and_boolean_linear_pair_screen_ai_guard", "and_boolean_linear_pair_screen_deep_ai_guard", "and_fprm_root_beam", "and_fprm_linear_pair_fast", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_boolean_linear_pair_screen", "and_boolean_linear_pair_screen_deep", "and_boolean_linear_pair_screen_deeper", "and_boolean_linear_pair_screen_adaptive", "and_boolean_linear_pair_screen_neural", "and_boolean_linear_pair_screen_deep_neural", "and_boolean_linear_pair_screen_ai_guard", "and_boolean_linear_pair_screen_deep_ai_guard", "and_fprm_root_beam", "and_fprm_linear_pair_fast", "and_resource_nmcts", "and_resource_nmcts_screen_gate", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
         "random_truth": [],
         "random_anf": [(20, 6)],
         "structured_limit": 0,
@@ -310,6 +310,7 @@ def run_one(task):
         "affine_no_guard",
         "rc_nmcts",
         "resource_nmcts",
+        "resource_nmcts_screen_gate",
         "resource_nmcts_wide",
         "profile_resource_nmcts",
         "pareto_resource_nmcts",
@@ -601,10 +602,11 @@ def main(argv: Iterable[str] | None = None) -> int:
             "and_resource_beam_only": 40,
             "and_resource_no_mcts": 41,
             "and_resource_nmcts": 42,
-            "and_resource_nmcts_wide": 43,
-            "and_profile_resource_nmcts": 44,
-            "and_pareto_resource_nmcts": 45,
-            "and_fprm_polarity_archive": 46,
+            "and_resource_nmcts_screen_gate": 43,
+            "and_resource_nmcts_wide": 44,
+            "and_profile_resource_nmcts": 45,
+            "and_pareto_resource_nmcts": 46,
+            "and_fprm_polarity_archive": 47,
         }
         tasks.sort(key=lambda t: (method_rank.get(t[2], 99), t[1].n, t[0]))
 

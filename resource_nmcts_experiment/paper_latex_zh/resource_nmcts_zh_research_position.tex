@@ -1,0 +1,289 @@
+\documentclass[UTF8,fontset=macnew,11pt]{ctexart}
+
+\usepackage[a4paper,margin=2.25cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!50!black
+}
+
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{2em}
+\setlength{\emergencystretch}{2em}
+
+\newcommand{\method}{Resource-NMCTS}
+\newcommand{\nmcts}{\ensuremath{\mathrm{NMCTS}}}
+\newcommand{\mcts}{\ensuremath{\mathrm{MCTS}}}
+\newcommand{\anf}{\ensuremath{\mathrm{ANF}}}
+\newcommand{\fprm}{\ensuremath{\mathrm{FPRM}}}
+\newcommand{\score}{\ensuremath{\mathrm{score}}}
+\newcommand{\cnot}{\ensuremath{\mathrm{CNOT}}}
+\newcommand{\tcount}{\ensuremath{\mathrm{T}}}
+
+\title{面向资源约束量子布尔函数综合的神经蒙特卡洛树搜索方法：研究定位、阶段证据与下一步目标}
+\author{中文研究定位稿}
+\date{2026年7月8日}
+
+\begin{document}
+\pagestyle{plain}
+\maketitle
+
+\begin{abstract}
+本文讨论一个独立于 SSHR 几何覆盖空间的量子布尔函数 oracle 综合问题：给定布尔函数 $f:\{0,1\}^n\rightarrow\{0,1\}$，如何在逻辑层同时控制 \tcount{}、\cnot{}、线路深度和辅助比特数。本文将该任务表述为代数正规形（algebraic normal form, \anf{}）与固定极性 Reed--Muller（fixed-polarity Reed--Muller, \fprm{}）项集合上的资源约束搜索问题，并以神经动作先验、蒙特卡洛树搜索、baseline-preserving guard、Pareto portfolio 和布尔环线性因子筛选组成 \method{} 框架。当前证据显示，小规模传统函数上该框架相对 ESOP baseline 显著降低加权逻辑资源；高维随机 \anf{} 函数上，布尔环 depth-2 screen 在 $n=20$ 边界切片中相对 AND-direct ANF 平均降低 11.80\% 的 \score{}；结构级 depth policy 能在 held-out $n=20$ 上接近全 depth adaptive oracle，并减少 34.71\% 的评估时间。与此同时，当前结果也暴露出清楚边界：高维 learned prior 的独立质量提升仍不够大，$n=20$ 的主要资源收益来自结构筛选而非深层神经搜索，外部 reversible-toolchain 对比和函数级案例仍需补齐。因此，本文更适合被定位为资源约束 oracle synthesis 的 AI 搜索方法论文，而不是 SSHR 的简单变体或 CNOT-only 优化论文。
+\end{abstract}
+
+\noindent\textbf{关键词：}量子 oracle 综合；布尔函数综合；神经蒙特卡洛树搜索；ANF；FPRM；布尔环；T-count
+
+\section*{写作目的与边界}
+
+这份稿件的目的不是替代已有技术论文稿，而是把当前研究路线重新理清：本文究竟研究什么问题、AI 在哪里起作用、现有证据能支持什么、还差什么才能形成明显提升。核心判断如下。
+
+\begin{itemize}
+  \item 本文不应从 SSHR 入手。SSHR 是 small-scale CNOT-oriented baseline，不是本文方法的结构基础。
+  \item 本文的中心问题是搜索：在 \anf{}/\fprm{} 项集合中选择可复用因子、极性、子问题分解和 portfolio 候选。
+  \item AI 的合理角色是候选排序、结构选择和运行时门控，而不是无保护地替代强确定性 guard。
+  \item 当前最可信的主张是逻辑层低 \tcount{}、低加权 \score{} 和高维可扩展性；不能主张硬件后端最优，也不能主张 \cnot{} 单指标全面支配。
+\end{itemize}
+
+\section{研究问题}
+
+量子布尔函数 oracle 的标准形式为
+\begin{equation}
+  |x\rangle |y\rangle \mapsto |x\rangle |y\oplus f(x)\rangle .
+  \label{eq:oracle}
+\end{equation}
+在容错量子计算场景中，非 Clifford 门通常是主要瓶颈，因此 oracle synthesis 不能只追求逻辑正确，还必须控制 \tcount{}、\cnot{}、深度和辅助比特。若用 \anf{} 表示
+\begin{equation}
+  f(x)=\bigoplus_{m\in\mathcal{M}}\prod_{i\in m}x_i ,
+  \label{eq:anf}
+\end{equation}
+直接综合会把每个单项式独立翻译成可逆乘法结构。该做法稳定、可验证，但会重复计算大量公共 AND 结构。
+
+本文的关键观察是：oracle synthesis 的难点不是单个单项式如何翻译，而是在项集合 $\mathcal{M}$ 中如何选择一串可复用的中间结构。这个过程天然是组合搜索问题。一个候选动作可能降低 \tcount{}，但增加辅助比特；另一个动作可能降低深度，却增加 \cnot{}。因此，搜索策略必须显式面对资源 trade-off，而不能只按某一个局部指标贪心。
+
+本文采用统一的逻辑层资源分数
+\begin{equation}
+  \score = T + 0.04\,\mathrm{CNOT} + 0.015\,\mathrm{depth}
+         + 0.01\,\mathrm{gates} + 2\,\mathrm{ancilla}.
+  \label{eq:score}
+\end{equation}
+式~\eqref{eq:score} 不是物理硬件成本模型，而是实验中的可复现比较准则。所有结论都应同时报告原始资源指标，避免把一个加权分数误解为跨平台最优性。
+
+\section{方法主线}
+
+\subsection{状态、动作与线路验证}
+
+\method{} 的搜索状态是尚未综合的 \anf{} 或 \fprm{} 项集合。每一步动作选择一个可计算、可反算的局部结构，将项集合拆分为 quotient 子问题和 rest 子问题。最终线路必须通过 truth-table 级语义验证，确保实现式~\eqref{eq:oracle}。
+
+可选动作包括三类。第一类是确定性代数动作，如公共单项式因子、线性因子、FPRM 极性变换和仿射坐标搜索。第二类是学习式动作，如 root-action ranker、neural prior 和 depth policy。第三类是安全选择机制，如 baseline-preserving guard 和 Pareto archive。三者的关系不是替代，而是分工：确定性动作提供强 baseline，学习模型扩大或重排候选，guard 防止负迁移。
+
+\subsection{为什么需要 baseline-preserving guard}
+
+高维布尔函数的结构差异很大，训练分布和测试分布之间很容易出现偏移。如果让神经模型直接决定最终动作，少量错误排序就可能导致资源劣化。本文因此采用 baseline-preserving guard：确定性候选和学习候选都生成线路，最终只接受不劣于 baseline 的结果。该设计牺牲一部分运行时间，换取质量下界。对论文写作而言，这一点非常重要，因为它把 AI 模块从 ``可能偶尔更好'' 改造成 ``在强 baseline 上做受保护的增量改进''。
+
+\subsection{布尔环线性因子}
+
+旧 linear-pair 分支倾向于要求线性因子和 quotient 的变量不相交。这个限制实现简单，但在 square-free Boolean ring 中过于保守。本文允许线性因子与 quotient 共享变量，并利用 $x_i^2=x_i$ 和 GF(2) 偶数项消去。例如
+\begin{equation}
+  (x_i\oplus x_j)x_i m = x_i m\oplus x_i x_j m .
+  \label{eq:boolean_ring}
+\end{equation}
+线路上可以先用 \cnot{} 计算线性奇偶量，再将其作为控制信号进入 quotient 子线路。这个动作不是简单放宽 top-$k$ 宽度，而是把原本被实现约束排除的合法布尔环结构重新纳入候选空间。
+
+\subsection{结构级 depth policy 与 screen-gate}
+
+高维情况下，完整 \method{} 的 FPRM 极性搜索和 MCTS tail 会产生明显长尾。为此，当前实现加入了两个结构级 AI 模块。第一个是 depth policy，它从项数、次数分布、变量共现、二元共现和 root Boolean-ring action 统计中预测 single、depth-1 或 depth-2 screen。第二个是 screen-gate，它判断在高维边界函数上是否可以跳过完整 \method{} tail，直接采用 adaptive screen 结果。
+
+这两个模块的定位不同。depth policy 试图学习资源质量和运行时间之间的结构选择；screen-gate 主要控制运行时长尾。二者都不应被写成已经解决高维 oracle synthesis 的强神经模型，而应写成向结构级 AI 搜索推进的阶段证据。
+
+\section{当前证据}
+
+\subsection{小规模传统函数}
+
+在 $n\leq6$ 的 177 个传统函数上，\method{} 及其 Pareto 版本已经显示出稳定资源收益。相对 direct ANF，Pareto 版本平均 \tcount{} 降低 72.25\%，平均 \score{} 降低 67.80\%。相对 ESOP cube beam，Pareto 版本获得 174/0/3 的 \score{} 胜/负/平，平均 \score{} 降低 36.09\%。相对 weighted ESOP-MILP，获得 167/3/7，平均 \score{} 降低 29.84\%。
+
+\begin{table}[t]
+\centering
+\small
+\caption{小规模传统函数上的可写主张。}
+\label{tab:small_claims}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}Xrr}
+\toprule
+比较对象 & \score{} 胜/负/平 & 平均 \score{} 变化 \\
+\midrule
+Pareto \method{} vs direct ANF & 177 个函数整体优势 & $-67.80\%$ \\
+Pareto \method{} vs ESOP cube beam & 174/0/3 & $-36.09\%$ \\
+Pareto \method{} vs weighted ESOP-MILP & 167/3/7 & $-29.84\%$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+该结果足以支撑 ``低 \tcount{} 与低加权资源'' 的主张，但不能支撑 ``\cnot{} 单指标全面最优''。已有 SSHR-H 在部分小规模函数上仍保持更低 \cnot{}。因此，SSHR 在本文中应作为 CNOT-oriented baseline，而不是本文需要正面击败的唯一对象。
+
+\subsection{\texorpdfstring{$n=18$}{n=18} 高维压力测试}
+
+$n=18$ 切片显示，完整 \method{} 仍明显优于单纯 screen。相对 adaptive Boolean screen，完整 \method{} 在 12 个函数上获得 11/0/1 的 \score{} 胜/负/平，平均 \score{} 降低 23.85\%；但平均运行时间从 4.39 s 增至 226.18 s。这个结果说明，在 $n=18$，完整资源搜索仍有质量价值，但也已经出现严重运行时长尾。
+
+\begin{table}[t]
+\centering
+\small
+\caption{$n=18$ 上完整 \method{} 与 adaptive screen 的 paired comparison。}
+\label{tab:n18_resource_screen}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}Xrrrr}
+\toprule
+指标 & pairs & 胜/负/平 & 目标均值 & 相对变化 \\
+\midrule
+\tcount{} & 12 & 11/0/1 & 6639.33 & $-24.91\%$ \\
+\cnot{} & 12 & 11/0/1 & 11380.92 & $-18.08\%$ \\
+depth & 12 & 10/1/1 & 11382.17 & $-16.58\%$ \\
+\score{} & 12 & 11/0/1 & 7315.62 & $-23.85\%$ \\
+time & 12 & 0/12/0 & 226.18 s & $+7526.64\%$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+因此，$n=18$ 的解释应当是：完整 \method{} 的搜索深度仍能带来资源收益，但需要结构级门控来控制成本。
+
+\subsection{\texorpdfstring{$n=20$}{n=20} 边界测试}
+
+$n=20$ 是当前最关键的边界。此前 FPRM root beam 和 fast linear-pair 在 6 个函数上均触发 300 s task timeout。新增 depth-2 Boolean-ring screen 后，adaptive screen 相对 AND-direct ANF 获得 5/0/1 的 \score{} 胜/负/平，平均 \score{} 降低 11.80\%。集成到 \method{} 后，最终资源与 adaptive screen 完全相同，但运行时间更长。这说明当前 $n=20$ 的质量收益主要来自结构筛选，而不是更深的 MCTS tail。
+
+\begin{table}[t]
+\centering
+\small
+\caption{$n=20$ 边界切片上的关键比较。}
+\label{tab:n20_key}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}Xrrr}
+\toprule
+比较 & pairs & \score{} 胜/负/平 & 平均 \score{} 变化 \\
+\midrule
+Depth-2 screen vs depth-1 screen & 6 & 5/0/1 & $-3.13\%$ \\
+Adaptive screen vs single screen & 6 & 5/0/1 & $-7.47\%$ \\
+Adaptive \method{} vs AND-direct ANF & 6 & 5/0/1 & $-11.80\%$ \\
+Adaptive \method{} vs adaptive screen & 6 & 0/0/6 & $0.00\%$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+为控制这一长尾，screen-gated \method{} 在同一 6 个 $n=20$ 函数上与完整 \method{} 的 \tcount{}、\cnot{}、depth、peak ancilla 和 \score{} 全部持平，平均运行时间从 77.10 s 降至 31.18 s，相对降低 61.31\%。由于该门控训练样本只有 18 个，它只能作为运行时控制证据，不能作为强泛化模型来写。
+
+\subsection{结构级 depth policy}
+
+depth policy 用 $n=14,16,18$ 的 240 个样本训练，在 48 个 held-out $n=20$ 样本上测试。其 oracle-depth 命中率为 79.2\%。相对 single screen，policy 获得 42/0/6，平均 \score{} 降低 6.57\%；相对 depth-1 screen，获得 34/0/14，平均 \score{} 降低 2.57\%。相对全 depth adaptive 评估，policy 的平均 \score{} 只高 0.28\%，但平均运行时间降低 34.71\%。
+
+\begin{table}[t]
+\centering
+\small
+\caption{结构级 depth policy 在 held-out $n=20$ 上的结果。}
+\label{tab:depth_policy}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}Xrrr}
+\toprule
+比较 & pairs & \score{} 胜/负/平 & 平均 \score{} / time 变化 \\
+\midrule
+Policy vs single screen & 48 & 42/0/6 & $-6.57\%$ / $+2224.00\%$ \\
+Policy vs depth-1 screen & 48 & 34/0/14 & $-2.57\%$ / $+257.27\%$ \\
+Policy vs depth-2 screen & 48 & 0/5/43 & $+0.28\%$ / $-10.85\%$ \\
+Policy vs all-depth adaptive & 48 & 0/5/43 & $+0.28\%$ / $-34.71\%$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+这组结果是正向的，但还不够强。正向之处在于，AI 已经能做结构级选择，而不仅是候选动作排序；不足之处在于，固定 depth-2 screen 在质量上仍略好。因此，下一阶段目标不是单纯提高分类准确率，而是把 depth policy 放进 guard 框架，确保不劣于 depth-2，再争取减少运行时间或触发更强搜索分支。
+
+\section{哪些结论现在可以写，哪些还不能写}
+
+\begin{table}[t]
+\centering
+\small
+\caption{当前证据支持的写作边界。}
+\label{tab:claim_boundary}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.30\linewidth}XX}
+\toprule
+主张类型 & 可以写 & 不能写 \\
+\midrule
+问题定位 & 量子布尔函数 oracle 综合可表述为资源约束组合搜索问题。 & 本文是 SSHR 的简单扩展。 \\
+资源目标 & 当前证据支持低 \tcount{} 和低加权 \score{}。 & 本文在 \cnot{} 单指标上全面最优。 \\
+高维扩展 & Boolean-ring screen 与 screen-gate 提供可运行边界改善。 & 高维完整神经 MCTS 已经解决 $n=20$ 以上搜索。 \\
+AI 作用 & AI 已进入 depth policy 和结构门控层面。 & learned prior 已经成为所有高维提升的主要来源。 \\
+实验范围 & 结论限定在逻辑层资源估计。 & 结论覆盖硬件 mapping、routing 或真实噪声。 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+这张边界表对后续写作很关键。论文不需要和 SSHR 在同一叙事里硬碰硬，因为本文真正优势在于资源加权搜索、结构筛选和 AI guard。相反，如果把论文写成 ``比 SSHR 更好''，会把审稿人注意力引到 SSHR 的 CNOT objective，而不是本文更强的 T-count 与 \score{} 结果。
+
+\section{下一步明显提升目标}
+
+当前项目还没有达到可以结束的状态。若以 ``明显提升'' 作为目标，应优先完成以下三类结果。
+
+\subsection{质量提升目标}
+
+第一目标是构造 guarded depth policy。具体要求是：在 held-out $n=20$ 或更高维样本上，相对固定 depth-2 screen 不出现 \score{} loss，同时相对 all-depth adaptive 明显节省运行时间。若能进一步让 policy 决定是否进入 FPRM polarity search 或完整 \method{} tail，就可以把 AI 贡献从 ``节省评估'' 推到 ``选择搜索深度''。
+
+第二目标是扩大测试规模。当前 $n=20$ 主结果只有 6 个边界函数，screen-gate 训练样本只有 18 个。后续至少需要把 $n=20$ held-out full synthesis 切片扩展到 24 或 48 个函数，并保留全部 timeout 与错误行，避免选择性报告。
+
+\subsection{对比提升目标}
+
+当前 ESOP、ABC、BDD 和 SSHR baseline 已经形成基础对比，但投稿时可能还需要更贴近 reversible synthesis 或 oracle synthesis 的工具链，如 ROS、RevKit、mockturtle 或 back-end-aware oracle synthesis。即便不能完整复现，也应报告可运行子集、版本、输入转换方式和不可比原因。
+
+\subsection{解释提升目标}
+
+表格结果足够多，但还缺一个函数级案例。这个案例应展示 direct ANF 的重复 AND、FPRM 极性如何改变项集合、Boolean-ring factor 如何捕获重叠变量结构、以及 guard 如何在候选之间选择。没有这个案例，读者很难理解资源降低来自哪里；有了这个案例，论文就更像方法论文而不是实验报告。
+
+\section{建议论文结构}
+
+后续正式中文稿可以采用如下结构。
+
+\begin{enumerate}
+  \item 引言：从 oracle synthesis 的资源瓶颈进入，不从 SSHR 进入。
+  \item 相关工作：按 XAG/ESOP、BDD/ROS、SSHR、学习式量子线路优化分组。
+  \item 问题定义：给出 oracle 语义、\anf{}/\fprm{} 状态、资源模型和验证标准。
+  \item 方法：写 \method{} pipeline、baseline guard、Boolean-ring screen、depth policy。
+  \item 实验设计：列 benchmark、baseline、指标、timeout、matched comparison 规则。
+  \item 结果：先给小规模主结果，再给 $n=18$、$n=20$ stress，再给 depth policy 与 screen-gate。
+  \item 讨论：解释为什么 AI 目前是结构选择和保护性增益，不夸大为端到端神经综合器。
+  \item 结论：收束到逻辑层资源搜索方法，并明确下一步提升目标。
+\end{enumerate}
+
+\section{结论}
+
+本文当前最合理的研究定位是：面向资源约束量子布尔函数 oracle 综合的 AI 辅助组合搜索方法。它不依赖 SSHR 的 parallelotope cover，而是在 \anf{}/\fprm{} 项集合上搜索可复用因子和子问题分解。已有结果足以说明该路线在小规模传统函数和高维随机 \anf{} 边界上具有实际资源收益；同时，最新 depth policy 和 screen-gate 表明 AI 模块可以进入结构选择和运行时控制层面。真正需要继续突破的是：让结构级学习策略在 strong deterministic guard 之上产生无损且可重复的质量提升，并补齐更强外部 baseline 与函数级机制案例。只有完成这些，论文主张才会从 ``阶段性可行'' 走向 ``明显提升''。
+
+\begin{thebibliography}{99}
+
+\bibitem{meuli2019multiplicative}
+G.~Meuli, M.~Soeken, E.~Campbell, M.~Roetteler, and G.~De Micheli.
+\newblock The role of multiplicative complexity in compiling low T-count oracle circuits.
+\newblock In \emph{Proceedings of ICCAD}, 2019.
+
+\bibitem{meuli2022xag}
+G.~Meuli, M.~Soeken, and G.~De Micheli.
+\newblock Xor-And-Inverter Graphs for quantum compilation.
+\newblock \emph{npj Quantum Information}, 8:7, 2022.
+
+\bibitem{meuli2020ros}
+G.~Meuli, M.~Soeken, M.~Roetteler, and G.~De Micheli.
+\newblock ROS: Resource-constrained oracle synthesis for quantum computers.
+\newblock \emph{Electronic Proceedings in Theoretical Computer Science}, 318:119--130, 2020.
+
+\bibitem{wille2009bdd}
+R.~Wille and R.~Drechsler.
+\newblock BDD-based synthesis of reversible logic for large functions.
+\newblock In \emph{Proceedings of DAC}, pp.~270--275, 2009.
+
+\bibitem{zheng2025sshr}
+Q.~Zheng, Y.~Xu, J.~Zhang, Z.~Su, and S.~Zheng.
+\newblock CNOT oriented synthesis for small-scale Boolean functions using spatial structures of parallelotopes.
+\newblock In \emph{Proceedings of ICCAD}, 2025.
+
+\end{thebibliography}
+
+\end{document}

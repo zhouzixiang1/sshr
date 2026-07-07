@@ -1,6 +1,6 @@
 # Resource-NMCTS 中文交付文档
 
-更新时间：2026-07-07
+更新时间：2026-07-08
 当前代码版本：以 `origin/main` 最新提交为准
 代码位置：`/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment`
 
@@ -230,6 +230,62 @@
 
 结论：高维 learned-prior 小切片已经完成，但它不是强正向证据。专用 linear-action 模型只带来 1 个轻微 score 胜例，且运行时间约翻倍。因此论文主贡献仍应放在 n<=6 learned-prior 正向证据、低维 neural refine、MCTS/Pareto archive、以及高维 bounded linear-pair guard；高维 neural guidance 目前只能写成边界诊断或 future work。
 
+### 2.5.1 结构级 Boolean screen depth policy
+
+本轮新增 `train_screen_depth_policy.py`，把 AI 从 root action 排序推进到结构级选择：给定高维 ANF 项集合的统计特征，预测应该使用 single、depth-1 还是 depth-2 Boolean-ring screen。标签不是人工规则，而是实际运行三种 screen 后按统一资源 score 选择 oracle depth。
+
+主要产物：
+
+- `train_screen_depth_policy.py`
+- `models/boolean_screen_depth_policy.pt`
+- `results/raw_boolean_screen_depth_policy.csv`
+- `results/summary_boolean_screen_depth_policy.csv`
+- `results/analysis_boolean_screen_depth_policy.md`
+- `paper_latex/tables/boolean_screen_depth_policy.tex`
+
+实验设置：
+
+- 训练集：240 个生成式高维 ANF 项集合，变量数 `n=14,16,18`。
+- 验证集：72 个同分布项集合。
+- 测试集：48 个 held-out `n=20` 项集合。
+- 特征：项数、次数分布、变量/二元共现密度、root Boolean-ring action 数量与 top action 覆盖率/收益等结构统计。
+
+核心结果：
+
+| 对比 | 函数数 | score 胜/负/平 | 平均 score 变化 | 平均运行时间变化 |
+|---|---:|---:|---:|---:|
+| policy vs single screen | 48 | 42/0/6 | -6.57% | +2224.00% |
+| policy vs depth-1 screen | 48 | 34/0/14 | -2.57% | +257.27% |
+| policy vs depth-2 screen | 48 | 0/5/43 | +0.28% | -10.85% |
+| policy vs all-depth adaptive | 48 | 0/5/43 | +0.28% | -34.71% |
+
+结论：这是比 action-level prior 更明确的结构级 AI 证据，说明模型可以学习何时需要更深 Boolean-ring screen；但它仍不能写成最终质量突破，因为固定 depth-2 screen 在 score 上略优。论文里应表述为“结构级 AI 已经能减少全 depth adaptive 评估开销，并优于浅层固定策略；下一步需要加 baseline-preserving guard，让 policy 在不劣于 depth-2 的前提下降低运行时间或选择更强分支”。
+
+### 2.5.2 Resource screen-gate 运行时门控
+
+本轮还出现了一个工程性改进：`train_structure_gate.py` 用 adaptive Boolean-ring screen 与完整 Resource-NMCTS 的配对结果训练一个可解释 decision stump，判断何时可以跳过昂贵的 Resource-NMCTS tail。当前模型很小，学到的规则是 `n >= 19` 时优先跳过 Resource tail；它应被视为运行时门控证据，而不是新的资源质量模型。
+
+主要产物：
+
+- `train_structure_gate.py`
+- `models/resource_structure_gate.json`
+- `results/analysis_structure_gate.md`
+- `results/raw_giga_screen_gate_resource.csv`
+- `results/summary_giga_screen_gate_resource.csv`
+- `results/analysis_giga_screen_gate_vs_resource.md`
+- `results/analysis_giga_screen_gate_vs_adaptive_screen.md`
+- `paper_latex/tables/giga_screen_gate_vs_resource.tex`
+- `paper_latex/tables/giga_screen_gate_vs_adaptive_screen.tex`
+
+核心结果：
+
+| 对比 | 函数数 | T/CNOT/depth/score | 平均运行时间变化 |
+|---|---:|---:|---:|
+| screen-gated Resource vs full Resource, n=20 | 6 | 全部 0/0/6 持平 | -61.31% |
+| screen-gated Resource vs adaptive screen, n=20 | 6 | 全部 0/0/6 持平 | +69.91% |
+
+结论：screen-gate 说明当前 n=20 上完整 Resource tail 没有带来额外资源收益，可以被结构门控跳过以减少运行时间；但因为训练样本只有 18 个，且 n=18 中 Resource 仍明显强于 screen，论文中只能写成“高维运行时尾部控制”，不能写成普适替代 Resource-NMCTS。
+
 ### 2.6 高维 root-action teacher 诊断
 
 新增 `analyze_highdim_root_action_oracle.py`，用于回答一个更具体的问题：高维 CNOT-only linear-pair 根层动作排序是否还有可学习空间。该脚本不追求全局最优，而是在 `highdim_neural_prior` 的 12 个 `n=14` random ANF 函数上，用真实 greedy child plan 对更宽的 root-action 集合做 one-step teacher 评分。
@@ -331,7 +387,7 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 | Boolean-guard Resource-NMCTS vs deterministic recursive guard | 24 个 n=16 random ANF | 18/0/6 | -0.52% | 当前最强 n=16 full synthesis 证据 |
 | Boolean-linear neural guard vs deterministic Boolean-linear | 24 个 n=16 random ANF | 4/0/20 | -0.12% | 新 boolean-linear root-teacher 模型只有小幅无 loss 收益，平均时间 +94.49%，仍不是主提升来源 |
 | Boolean-linear screen vs old Resource-NMCTS | 12 个 n=18 random ANF | 0/12/0 | +42.45% | ANF-only screen 很快但质量差，只能作为 n=18/n=20 边界诊断 |
-| Recursive Boolean screen vs single Boolean screen | 12 个 n=18 random ANF | 11/0/1 | -3.99% | 递归 screen 改善单层 screen，但仍远差于旧 Resource |
+| Adaptive depth-2 Boolean screen vs single Boolean screen | 12 个 n=18 random ANF | 11/0/1 | -6.47% | adaptive screen 改善单层 screen，但完整 Resource 仍进一步降低 23.85% |
 | Recursive-screen Resource-NMCTS vs old Resource-NMCTS | 6 个 n=20 random ANF | 5/0/1 | -4.52% | root-beam/fast pair timeout 时的超高维有效修复 |
 | Deeper-screen Resource-NMCTS vs old Resource-NMCTS | 6 个 n=20 random ANF | 5/0/1 | -7.47% | depth-2 screen 在同一 timeout 边界上进一步降低 T/CNOT/depth/score |
 
@@ -743,7 +799,7 @@ Git 状态：
 | n=16 pairwise-wide full synthesis | 24 个 n=16 random ANF | vs deterministic recursive guard 为 10/0/14，-0.18%；vs old Resource 为 10/0/14，-0.12% | 新增正向 AI 证据，但运行时间更高 |
 | n=16 Boolean-ring full synthesis | 24 个 n=16 random ANF | Boolean-guard vs pairwise-wide Resource 为 14/0/10，-0.34%；vs deterministic recursive guard 为 18/0/6，-0.52% | 当前最强高维结构改进 |
 | n=18 Boolean-linear screen | 12 个 n=18 random ANF | vs old Resource 为 0/12/0，+42.45%，但运行时间 -98.48% | 负向质量诊断，只能说明快速边界可跑 |
-| n=18 recursive Boolean screen | 12 个 n=18 random ANF | vs single screen 为 11/0/1，-3.99%；vs old Resource 为 0/11/1，+36.94% | 改善 screen 但不能替代深搜索 |
+| n=18 adaptive depth-2 Boolean screen | 12 个 n=18 random ANF | vs single screen 为 11/0/1，-6.47%；Resource vs adaptive screen 为 11/0/1，-23.85% | 改善 screen 但不能替代深搜索 |
 | n=20 depth-2 recursive Boolean screen | 6 个 n=20 random ANF | Resource vs old Resource 为 5/0/1，-7.47%；vs AND-direct 为 5/0/1，-11.80%；vs depth-1 Resource 为 5/0/1，-3.13% | 当前最明确的超高维边界改善 |
 | highdim wide-fast guard | 12 个 n=14 random ANF | wide vs Resource 为 0/0/12，运行时间 +59.80% | 已有但属负向诊断 |
 | exact FPRM-DP | n<=4 traditional | Resource vs exact FPRM-DP 51/3/18，-12.18%；Pareto vs exact FPRM-DP 51/0/21，-12.20% | 已有但模型受限 |

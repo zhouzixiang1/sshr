@@ -1,0 +1,5 @@
+comparison,pairs,score_wins,score_losses,score_ties,mean_rel_score,mean_rel_time
+policy_vs_single_screen,48,42,0,6,-0.0657227583391907,22.23998086825241
+policy_vs_depth-1_screen,48,34,0,14,-0.025670794821202964,2.5727217573211556
+policy_vs_depth-2_screen,48,0,5,43,0.0027827218233091792,-0.10847789927858739
+policy_vs_oracle_adaptive_all-depth,48,0,5,43,0.0027827218233091792,-0.3471494438950389

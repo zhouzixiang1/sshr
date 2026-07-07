@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import time
+import json
 from dataclasses import asdict, dataclass
 from dataclasses import replace
 from functools import lru_cache
@@ -27,6 +28,9 @@ from factor_plan import SearchConfig, affine_linear_pair_beam_plan, direct_plan,
 from neural_policy import NeuralScorer
 from nmcts_solver import NeuralMCTSSolver
 from resource_model import ResourceCost, ResourceWeights
+
+
+STRUCTURE_GATE_MODEL = Path(__file__).resolve().parent / "models" / "resource_structure_gate.json"
 
 
 @dataclass
@@ -1141,6 +1145,47 @@ def _resource_selection_key(result: SynthesisResult, weights) -> tuple[float, in
     return (score, result.cost.T, result.cost.CNOT, result.cost.depth, result.cost.peak_ancilla)
 
 
+@lru_cache(maxsize=1)
+def _load_structure_gate_model() -> dict:
+    if not STRUCTURE_GATE_MODEL.exists():
+        return {"kind": "fallback_scale_gate", "feature": "n", "threshold": 20.0, "skip_if_ge": True}
+    return json.loads(STRUCTURE_GATE_MODEL.read_text(encoding="utf-8"))
+
+
+def _structure_gate_features(
+    bf: BooleanFunction,
+    screen: SynthesisResult,
+    single_screen: SynthesisResult,
+    weights: ResourceWeights,
+) -> dict[str, float]:
+    def pct(target: float, baseline: float) -> float:
+        return (target - baseline) / max(baseline, 1.0) * 100.0
+
+    return {
+        "n": float(bf.n),
+        "anf_terms": float(screen.terms),
+        "terms_per_var": float(screen.terms) / max(float(bf.n), 1.0),
+        "screen_score": screen.cost.score(weights),
+        "screen_T": float(screen.cost.T),
+        "screen_CNOT": float(screen.cost.CNOT),
+        "screen_depth": float(screen.cost.depth),
+        "screen_peak_ancilla": float(screen.cost.peak_ancilla),
+        "screen_vs_single_score_pct": pct(
+            screen.cost.score(weights),
+            single_screen.cost.score(weights),
+        ),
+    }
+
+
+def _structure_gate_skip_resource(features: dict[str, float]) -> bool:
+    model = _load_structure_gate_model()
+    feature = str(model.get("feature", "n"))
+    threshold = float(model.get("threshold", 20.0))
+    skip_if_ge = bool(model.get("skip_if_ge", True))
+    value = float(features.get(feature, 0.0))
+    return value >= threshold if skip_if_ge else value < threshold
+
+
 def _portfolio_result(
     requested_method: str,
     portfolio: list[SynthesisResult],
@@ -1247,6 +1292,58 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
                 child_specs.append(("cube_beam", cube_config))
         portfolio = _run_child_portfolio(bf, child_specs, seed, model_path)
         return _portfolio_result(requested_method, portfolio, config.weights, time.time() - t0)
+    if method == "resource_nmcts_screen_gate":
+        if bf.n < 18:
+            child = synthesize("resource_nmcts", bf, config, seed=seed, model_path=model_path)
+            return SynthesisResult(
+                method=requested_method,
+                cost=child.cost,
+                time_s=time.time() - t0,
+                correct=child.correct,
+                terms=child.terms,
+                gates=child.gates,
+                n_qubits=child.n_qubits,
+            )
+        single_screen = synthesize("boolean_linear_pair_screen", bf, config, seed=seed, model_path=model_path)
+        adaptive_screen = synthesize(
+            "boolean_linear_pair_screen_adaptive",
+            bf,
+            config,
+            seed=seed,
+            model_path=model_path,
+        )
+        if adaptive_screen.correct and _structure_gate_skip_resource(
+            _structure_gate_features(bf, adaptive_screen, single_screen, config.weights)
+        ):
+            return SynthesisResult(
+                method=requested_method,
+                cost=adaptive_screen.cost,
+                time_s=time.time() - t0,
+                correct=adaptive_screen.correct,
+                terms=adaptive_screen.terms,
+                gates=adaptive_screen.gates,
+                n_qubits=adaptive_screen.n_qubits,
+            )
+        portfolio = [adaptive_screen] if adaptive_screen.correct else []
+        try:
+            resource = synthesize("resource_nmcts", bf, config, seed=seed, model_path=model_path)
+            if resource.correct:
+                portfolio.append(resource)
+        except TimeoutError:
+            if not portfolio:
+                raise
+        if not portfolio:
+            raise RuntimeError("screen-gated Resource-NMCTS produced no correct candidate")
+        best = min(portfolio, key=lambda r: _resource_selection_key(r, config.weights))
+        return SynthesisResult(
+            method=requested_method,
+            cost=best.cost,
+            time_s=time.time() - t0,
+            correct=best.correct,
+            terms=best.terms,
+            gates=best.gates,
+            n_qubits=best.n_qubits,
+        )
     if method == "rc_nmcts":
         fast_config = replace(
             config,
