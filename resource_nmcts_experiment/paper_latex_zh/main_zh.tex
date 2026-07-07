@@ -1,0 +1,394 @@
+\documentclass[UTF8,fontset=macnew,11pt]{ctexart}
+
+\usepackage[a4paper,margin=2.3cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!50!black
+}
+
+\newcommand{\method}{Resource-NMCTS}
+\newcommand{\paretomethod}{Pareto-Resource-NMCTS}
+\newcommand{\score}{\mathrm{score}}
+
+\title{面向资源约束量子布尔函数综合的神经蒙特卡洛树搜索方法}
+\author{项目中文论文草稿}
+\date{2026年7月7日}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+量子算法中的布尔 oracle 需要把经典谓词嵌入可逆量子线路。直接基于代数正规形
+（algebraic normal form, ANF）的构造简单可靠，但在 T 门数、线路深度和辅助比特
+等资源上往往代价较高。本文把量子布尔函数 oracle 综合建模为逻辑层搜索问题，
+在 ANF 与固定极性 Reed--Muller（fixed-polarity Reed--Muller, FPRM）项集合上寻找
+可复用的 compute/uncompute 因子分解。所提出的 \method{} 使用资源加权目标函数、
+神经动作先验、蒙特卡洛树搜索、仿射坐标预处理、FPRM 极性搜索和 Pareto 候选库
+共同生成候选线路；方法本身不使用 SSHR 的 parallelotope 候选结构。当前实验显示，
+在 $n\leq 6$ 的 177 个传统布尔函数切片上，\paretomethod{} 的平均 T-count 为 40.4，
+平均加权分数为 49.6，均低于 direct ANF、AND-direct ANF、固定坐标 MCTS、ESOP
+cube beam、ESOP-MILP 和 SSHR-H 等基线。相对 ESOP cube beam，\paretomethod{} 取得
+174/0/3 的 score 胜/负/平；相对加权 ESOP-MILP，取得 167/3/7；相对导出的 ABC-ESOP，
+取得 170/1/6。进一步地，在 $n=18$ 的随机 ANF 压力测试中，\method{}、Profile-Resource-NMCTS
+和 \paretomethod{} 均完成 12 个函数，平均 T-count 相对 direct ANF 降低 60.05\%，
+平均加权分数降低 56.99\%。小规模 exact FPRM-DP 切片表明，在 $n\leq 4$ 的 72 个函数上，
+\method{} 相对受限 FPRM 精确动态规划仍有 51/3/18 的 score 胜/负/平，说明资源感知
+portfolio 可以找到该受限模型之外的更优候选。本文结果限定在逻辑线路层，不包含
+硬件映射、连通性约束或真实设备噪声模型。
+\end{abstract}
+
+\noindent\textbf{关键词：}量子 oracle 综合；布尔函数；神经蒙特卡洛树搜索；ANF；FPRM；T-count；资源约束
+
+\section{引言}
+
+布尔 oracle 是许多量子算法中的基础模块。给定布尔函数
+$f:\{0,1\}^{n}\rightarrow\{0,1\}$，oracle 通常实现为
+$|x\rangle|y\rangle\mapsto |x\rangle|y\oplus f(x)\rangle$。在容错量子计算模型中，
+T 门等非 Clifford 资源通常比 Clifford 门更昂贵，因此 oracle 综合不能只追求
+函数正确性，还需要同时考虑 T-count、CNOT、深度和辅助比特等资源。直接 ANF
+构造把每个单项式翻译为一个多控门，具有透明的逻辑语义，但当单项式数量和次数
+上升时，T-count 与中间工作空间会迅速增加。
+
+已有工作从不同表示出发降低 oracle 成本。XAG 与乘法复杂度相关工作强调 XOR
+结构与 AND 节点数量对低 T-count oracle 的作用；ROS 使用 LUT 映射与资源感知
+综合处理 oracle；BDD 综合提供大函数的可扩展布尔表示；SSHR 则利用 parallelotope
+空间结构面向小规模布尔函数降低 CNOT。另一方面，强化学习和 MCTS 已被用于一般
+量子线路综合、ZX 重写选择和经典布尔电路搜索。这些工作共同说明，布尔表示、
+非 Clifford 资源和搜索策略都影响 oracle 综合质量。然而，它们并未直接给出一个
+面向 ANF/FPRM 因子分解、显式资源目标和神经树搜索相结合的逻辑层 oracle 综合框架。
+
+本文选择一个更明确的研究问题：在不依赖 SSHR parallelotope 结构、也不讨论硬件映射
+的前提下，能否把量子布尔函数 oracle 综合转化为资源约束搜索，并在相同 benchmark
+上显著降低 T-count 与加权逻辑资源？为此，本文提出 \method{}。该方法在 ANF/FPRM
+项集合上搜索可复用因子，把候选线路通过 classical simulation 做 truth-table
+验证，并使用统一资源目标函数进行选择：
+\begin{equation}
+\score = T + 0.04\,\mathrm{CNOT} + 0.015\,\mathrm{depth}
+       + 0.01\,\mathrm{gates} + 2\,\mathrm{ancilla}.
+\end{equation}
+这个目标函数不是声称某个硬件平台的真实开销，而是作为逻辑层、多资源折中下的
+可复现实验指标。
+
+本文贡献可以概括为三点。第一，提出以 ANF/FPRM 因子分解为状态空间的资源感知
+神经 MCTS oracle 综合框架，并把仿射坐标预处理、FPRM 极性搜索、线性因子和
+Pareto archive 纳入同一候选选择机制。第二，在 $n\leq 6$ 小规模传统函数、
+$n=8$ 到 $n=12$ 的大规模核心集合，以及 $n=14,15,16,18$ 的高维随机 ANF 压力测试上
+给出验证结果。第三，通过 ESOP、ABC、BDD、SSHR-H/SSHR-I、搜索消融和 exact FPRM-DP
+切片说明提升来自哪些模块，并明确指出 CNOT-only 与硬件映射不是当前主张。
+
+\section{相关工作}
+
+\subsection{布尔表示与量子 oracle 综合}
+
+Xor-And-Inverter Graphs（XAG）把 XOR 视作相对廉价的 Clifford 结构，把 AND
+节点与非 Clifford 成本联系起来，是低 T-count oracle 综合的重要布尔网络表示。
+乘法复杂度视角进一步强调，减少非线性乘法结构往往比单纯压缩门数更贴近容错量子
+计算的资源瓶颈。ROS 将 oracle 综合表述为资源约束 LUT 映射与层次化综合问题，
+并处理工作比特管理。BDD-based synthesis 则使用决策图描述可逆逻辑，适合作为
+大函数的可扩展 baseline。
+
+SSHR 与本文最接近之处在于同样关注小规模布尔函数的量子 oracle 综合，但两者的
+搜索空间不同。SSHR 以 parallelotope 空间结构作为候选覆盖，并主要面向 CNOT
+优化；本文不使用 parallelotope 候选，而在 ANF/FPRM 项集合上搜索 compute/uncompute
+因子分解，并以 T-count 与加权资源为主要指标。因此，SSHR 在本文中作为外部 baseline
+而不是内部模块。
+
+\subsection{强化学习、MCTS 与量子线路综合}
+
+强化学习和 MCTS 已经出现在多个线路综合场景中。例如，Gumbel AlphaZero 可用于
+Clifford+T unitary synthesis，PPO 与图神经网络可用于 ZX-calculus 重写规则选择，
+MCTS 也可用于量子线路模块排序或经典布尔电路设计。这些方法说明学习式搜索能够
+在离散综合空间中提供有效先验。本文与这些工作的区别在于任务对象：本文不是一般
+unitary synthesis，也不是对既有线路做后处理优化，而是直接从布尔函数出发生成
+oracle，并把 ANF/FPRM 结构、FPRM 极性和资源向量纳入搜索状态。
+
+\section{方法}
+
+\subsection{任务建模与资源目标}
+
+输入为 $n$ 变量布尔函数 $f$，输出为一个逻辑层 reversible oracle 线路。实验中所有
+候选线路都通过 classical truth-table simulation 验证，保证输出比特实现
+$y\oplus f(x)$。资源统计包括 T-count、CNOT、depth、gate count 和 peak ancilla。
+本文主要报告两类指标：单项资源指标用于解释 trade-off，加权分数用于在多候选之间
+选择。由于没有硬件映射，depth 只表示逻辑估计，不包含具体耦合图上的 SWAP 或调度成本。
+
+\subsection{ANF/FPRM 因子分解搜索}
+
+ANF 把布尔函数写成若干单项式的异或。若多个单项式共享一个公共因子，可以先计算该因子
+到辅助比特，再在子问题中复用该中间量，最后 uncompute。FPRM 极性搜索进一步允许对输入
+变量做固定极性翻转，从而改变 ANF 项集合的形状。本文还加入 CNOT-only 线性因子：
+当若干项可以表示为 $(x_i\oplus x_j\oplus\cdots)\cdot g$ 的形式时，线性部分只需
+CNOT 计算，而非多控非 Clifford 计算。
+
+\subsection{神经 MCTS 与资源感知 portfolio}
+
+基础搜索器将当前项集合视作状态，将候选因子视作动作。神经网络根据项数、平均次数、
+因子大小、覆盖率、即时收益等特征为动作提供先验；MCTS 在有限模拟预算下探索不同因子
+组合。为了避免单一搜索器在不同函数族上退化，\method{} 采用资源感知 portfolio：
+对 direct ANF、FPRM greedy、root beam、root-child beam、linear-pair、affine greedy、
+Affine-NMCTS、ESOP cube beam 等候选分别求解，再按当前资源权重选择最优正确线路。
+\paretomethod{} 在小规模函数上进一步维护非支配候选库，使不同资源 profile 下的候选
+可以复用和重新排序。
+
+\subsection{高维保护机制}
+
+对 $n>12$ 的随机 ANF 函数，完整固定坐标 MCTS 或宽 FPRM 极性搜索会出现长尾。本文为
+高维设置引入 bounded guard：限制 FPRM polarity 数量、限制 linear-pair recursion 深度，
+并在 $n=18$ 使用 fast linear-pair guard 控制运行时间。这个设计牺牲一部分搜索完备性，
+但保留了可验证性和可扩展性。高维结果因此应理解为逻辑层可扩展压力测试，而不是全局
+最优性证书。
+
+\section{实验设计}
+
+\subsection{数据集与 baseline}
+
+实验包含多个互补切片。传统 baseline 切片包含 $n\leq 6$ 的 177 个函数，用于与
+direct ANF、AND-direct ANF 和固定坐标 MCTS 对比；同时也与 ESOP cube beam、
+ESOP-MILP、SSHR-H 以及外部导出的 ABC、BDD、ESOP 和 SSHR-I 结果对比。大规模核心集合覆盖到 $n=12$。高维压力测试包含
+$n=14$ 的 64 个随机 ANF 函数、$n=15$ 的 32 个函数、$n=16$ 的 24 个函数和 $n=18$ 的
+12 个函数。外部 baseline 包括 ABC-AIG、ABC-XAG、ABC-LUT、BDD/Shannon 与 ABC-ESOP；
+SSHR-I 在 $n\leq 4$ 上给出 exact pilot，在 $n\leq 6$ 上作为 time-limited extension。
+
+\subsection{正确性与可复现性}
+
+所有内部候选线路都经过 oracle truth-table 验证。导出的 ABC、BDD、ESOP 和 SSHR
+结果也通过相同 manifest 或 truth-table 路径检查。当前关键结果文件均显示 0 error
+和 0 skipped；其中 $n=18$ stress test 为 84 行结果，external high-dimensional
+baseline 为 528 行结果，exact FPRM-DP 切片为 72 行结果。
+
+\section{结果}
+
+\subsection{传统函数切片上的资源优势}
+
+表~\ref{tab:traditional-resource-zh} 给出 $n\leq 6$ 传统函数切片上的平均资源。
+\paretomethod{} 在该切片上取得最低平均 T-count 和最低平均加权分数。相对 ESOP cube
+beam，\paretomethod{} 的 score 胜/负/平为 174/0/3，平均 score 降低 35.86\%；
+相对加权 ESOP-MILP，score 胜/负/平为 167/3/7，平均 score 降低 29.84\%。SSHR-H 的
+平均 CNOT 更低，因此这里的结论是低 T 与低加权资源优势，而不是 CNOT-only 支配。
+
+\begin{table}[t]
+\centering
+\small
+\caption{$n\leq 6$ 传统函数切片上的平均逻辑资源。}
+\label{tab:traditional-resource-zh}
+\begin{tabular}{lrrrrr}
+\toprule
+方法 & 平均 T & 平均 CNOT & 平均深度 & 平均 ancilla & 平均 score \\
+\midrule
+Direct ANF & 184.1 & 134.2 & 134.6 & 1.33 & 194.3 \\
+AND-direct ANF & 101.0 & 166.5 & 166.9 & 2.18 & 115.2 \\
+Fixed MCTS & 62.1 & 124.3 & 124.8 & 1.82 & 73.1 \\
+Affine-NMCTS & 45.9 & 94.4 & 98.9 & 1.88 & 55.4 \\
+\method{} & 43.9 & 89.9 & 94.5 & 1.92 & 53.2 \\
+Polarity archive & 43.0 & 86.9 & 91.5 & 2.11 & 52.5 \\
+\paretomethod{} & \textbf{40.4} & 83.0 & \textbf{88.0} & 2.03 & \textbf{49.6} \\
+ESOP cube beam & 71.3 & 115.3 & 139.5 & 2.55 & 83.8 \\
+ESOP-MILP & 83.6 & 133.5 & 159.6 & 2.32 & 96.7 \\
+SSHR-H & 81.0 & \textbf{67.6} & 88.7 & 1.36 & 88.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{ESOP 与 exact FPRM-DP 对比}
+
+表~\ref{tab:esop-zh} 总结了 ESOP 视角的同 benchmark 对比。对 internal ESOP-MILP，
+\paretomethod{} 在 $n=3,\ldots,6$ 每个变量数组中都降低总 T-count 和总 CNOT；
+对 ABC-ESOP export，也在每个变量数组中降低总 T-count、CNOT 和 ancilla。为了避免
+跨数据集误读，这里只使用相同函数集合和相同逻辑资源模型下的结果。
+
+\begin{table}[t]
+\centering
+\small
+\caption{同 benchmark 下的 ESOP baseline 分组对比。Ours 表示 \paretomethod{}。}
+\label{tab:esop-zh}
+\begin{tabular}{llrrrr}
+\toprule
+$n$ & ESOP baseline & 函数数 & $\Delta T$ & $\Delta$ CNOT & score 胜/负/平 \\
+\midrule
+3 & Internal ESOP-MILP & 3 & $-66.7\%$ & $-40.0\%$ & 2/0/1 \\
+4 & Internal ESOP-MILP & 69 & $-29.4\%$ & $-10.1\%$ & 64/1/4 \\
+5 & Internal ESOP-MILP & 67 & $-23.9\%$ & $-1.7\%$ & 65/1/1 \\
+6 & Internal ESOP-MILP & 38 & $-64.3\%$ & $-55.1\%$ & 36/1/1 \\
+3 & ABC-ESOP export & 3 & $-66.7\%$ & $-40.0\%$ & 2/0/1 \\
+4 & ABC-ESOP export & 69 & $-34.8\%$ & $-15.4\%$ & 66/0/3 \\
+5 & ABC-ESOP export & 67 & $-28.2\%$ & $-5.9\%$ & 66/0/1 \\
+6 & ABC-ESOP export & 38 & $-20.5\%$ & $-1.1\%$ & 36/1/1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+小规模 exact FPRM-DP 切片进一步检查了内部搜索空间的公平性。该动态规划枚举 bounded
+fixed-polarity FPRM factor model 中的所有单项式因子和 CNOT-only linear-pair 因子；
+它在该模型内是 exact，但不是全局 reversible circuit optimum。表~\ref{tab:exact-zh}
+显示，\method{} 和 \paretomethod{} 均能在部分函数上超过该受限 exact optimum，
+说明 portfolio 的候选空间已经超出 exact FPRM-DP 的模型边界。
+
+\begin{table}[t]
+\centering
+\small
+\caption{$n\leq 4$ 的 exact bounded FPRM-DP 切片。负的平均变化表示左侧方法更优。}
+\label{tab:exact-zh}
+\begin{tabular}{lrrr}
+\toprule
+对比 & 配对数 & score 胜/负/平 & 平均 $\Delta$ score \\
+\midrule
+\method{} vs Exact FPRM-DP & 72 & 51/3/18 & $-12.18\%$ \\
+\paretomethod{} vs Exact FPRM-DP & 72 & 51/0/21 & $-12.20\%$ \\
+Exact FPRM-DP vs ESOP-MILP & 72 & 57/12/3 & $-13.30\%$ \\
+Exact FPRM-DP vs SSHR-I CNOT & 72 & 60/12/0 & $-13.73\%$ \\
+Exact FPRM-DP vs SSHR-I T & 72 & 59/12/1 & $-13.38\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{搜索贡献分解}
+
+表~\ref{tab:contribution-zh} 给出主要模块的消融证据。仿射坐标搜索是最大前置收益，
+但不是单调 guard；神经 refine 在 322-function ablation 上带来 65/0/257 的
+无 score-loss 增益；小规模 learned prior 对 \method{} 有 39/0/138 的 score 胜/负/平；
+Pareto archive 相对 \method{} 有 68/0/109 的 score 胜/负/平。高维方面，主要收益来自
+bounded linear-pair guard，而不是完整高维 MCTS。
+
+\begin{table}[t]
+\centering
+\small
+\caption{搜索贡献分解。}
+\label{tab:contribution-zh}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}Xlrr}
+\toprule
+贡献环节 & 数据集 & score 胜/负/平 & 平均 $\Delta$ score \\
+\midrule
+Affine greedy vs fixed-coordinate MCTS & ablation & 165/88/68 & $-12.12\%$ \\
+Neural refine over affine greedy & ablation & 65/0/257 & $-1.08\%$ \\
+Guarded Affine-NMCTS over no-guard & ablation & 88/0/234 & $-1.74\%$ \\
+Learned prior for \method{} & traditional & 39/0/138 & $-1.10\%$ \\
+Pareto archive over \method{} & traditional & 68/0/109 & $-3.26\%$ \\
+\method{} over no-MCTS portfolio & traditional & 54/0/123 & $-1.44\%$ \\
+Pareto over no-MCTS portfolio & traditional & 106/0/71 & $-4.69\%$ \\
+Highdim no-MCTS over root beam & $n=14$ & 14/0/2 & $-6.25\%$ \\
+Linear-pair guard vs root beam & $n=14$ & 60/0/4 & $-3.00\%$ \\
+Recursive linear-pair guard vs root beam & $n=15$ & 30/0/2 & $-5.28\%$ \\
+Fast linear-pair guard vs root beam & $n=18$ & 6/0/6 & $-1.91\%$ \\
+\method{} vs fast linear-pair & $n=18$ & 12/0/0 & $-3.55\%$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{高维压力测试}
+
+表~\ref{tab:mega-zh} 展示 $n=18$ stress test 的平均资源。与 direct ANF 相比，
+\method{}、Profile-Resource-NMCTS 和 \paretomethod{} 的平均 T-count 从 21460.7
+降至 6641.7，平均 score 从 22008.9 降至 7317.9。与 FPRM root beam 相比，fast
+linear-pair guard 有 6/0/6 的 score 胜/负/平；\method{} 相对 fast linear-pair
+进一步取得 12/0/0 的 score 胜/负/平。这个结果说明高维 guard 已经不是单纯保底策略，
+但也应注意其代价：相对 direct ANF，CNOT、depth 和 peak ancilla 会增加。
+
+\begin{table}[t]
+\centering
+\small
+\caption{$n=18$ 随机 ANF stress test 的平均逻辑资源。}
+\label{tab:mega-zh}
+\begin{tabular}{lrrrrr}
+\toprule
+方法 & 平均 T & 平均 CNOT & 平均深度 & 平均 ancilla & 平均 score \\
+\midrule
+Direct ANF & 21460.7 & 9794.7 & 9794.8 & 1.25 & 22008.9 \\
+AND-direct ANF & 10756.0 & 16840.5 & 16840.6 & 2.17 & 11747.4 \\
+FPRM root beam & 6765.3 & 11585.2 & 11585.2 & 2.17 & 7451.3 \\
+FPRM linear-pair fast & 6754.0 & 11566.8 & 11568.4 & 2.67 & 7439.9 \\
+\method{} & \textbf{6641.7} & \textbf{11382.4} & \textbf{11383.7} & 3.25 & \textbf{7317.9} \\
+Profile-Resource-NMCTS & \textbf{6641.7} & \textbf{11382.4} & \textbf{11383.7} & 3.25 & \textbf{7317.9} \\
+\paretomethod{} & \textbf{6641.7} & \textbf{11382.4} & \textbf{11383.7} & 3.25 & \textbf{7317.9} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{讨论}
+
+当前结果支持一个相对清晰但有边界的结论：在逻辑层 oracle 综合中，ANF/FPRM 因子搜索、
+神经先验、MCTS、仿射坐标预处理和资源感知 portfolio 可以显著降低 T-count 与加权
+资源。该结论最强的证据来自相同 benchmark 下的 ESOP/ABC/BDD/SSHR 对比、搜索贡献分解、
+高维 stress test 和 exact FPRM-DP 切片。
+
+本文也暴露了三个限制。第一，CNOT 并非全面优于 SSHR-H/SSHR-I。SSHR 是 CNOT-oriented
+方法，在小规模函数上仍有明显 CNOT 优势；本文更适合定位为低 T-count 和低加权资源
+方法。第二，当前没有硬件 mapping，因此不能声称真实设备深度、连通性或噪声鲁棒性更优。
+第三，高维 learned-prior 诊断仍然较弱：在 12 个 $n=14$ random ANF 函数上，learned prior
+相对 no-prior 只有 1/0/11 的 score 胜/负/平，平均 score 仅降低 0.01\%，且运行时间约翻倍。
+因此，高维部分目前应强调 bounded linear-pair guard 和 portfolio 选择，而不是夸大学习先验。
+
+后续工作应优先补强两类证据。一类是更接近全局 reversible synthesis 的小规模 exact
+或 SAT/SMT 证书，用于补足 exact FPRM-DP 模型受限的问题。另一类是 ROS、mockturtle
+或其他 reversible-toolchain 的外部对比，用于降低 ABC/BDD 估算式 baseline 带来的审稿风险。
+如果继续强化 AI 贡献，则需要针对高维 linear-pair action 设计更有效的监督标签或策略梯度
+目标，而不是只在现有启发式排序上叠加弱 neural prior。
+
+\section{结论}
+
+本文提出了一种面向资源约束量子布尔函数 oracle 综合的神经蒙特卡洛树搜索方法。方法把
+布尔函数综合表示为 ANF/FPRM 项集合上的因子分解搜索，并通过资源感知 portfolio 在多个
+候选生成器之间选择正确且低成本的线路。实验表明，该方法在 $n\leq 6$ 的传统函数切片、
+ESOP/ABC/BDD/SSHR 对比、小规模 exact FPRM-DP 切片和 $n=18$ 高维 stress test 上均表现出
+低 T-count 与低加权资源优势。当前证据尚不足以支持 CNOT-only 最优或硬件映射优势，但已经
+形成一条比单纯复现 SSHR 更适合发展的投稿主线：以资源约束搜索、神经先验和 bounded
+高维 guard 为核心的逻辑层量子布尔 oracle 综合。
+
+\begin{thebibliography}{9}
+
+\bibitem{meuli2022xag}
+Giulia Meuli, Mathias Soeken, and Giovanni De Micheli.
+Xor-And-Inverter Graphs for Quantum Compilation.
+\emph{npj Quantum Information}, 8:7, 2022.
+
+\bibitem{meuli2020ros}
+Giulia Meuli, Mathias Soeken, Martin Roetteler, and Giovanni De Micheli.
+ROS: Resource-constrained Oracle Synthesis for Quantum Computers.
+\emph{Electronic Proceedings in Theoretical Computer Science}, 318:119--130, 2020.
+
+\bibitem{meuli2019multiplicative}
+Giulia Meuli, Mathias Soeken, Earl Campbell, Martin Roetteler, and Giovanni De Micheli.
+The Role of Multiplicative Complexity in Compiling Low T-count Oracle Circuits.
+\emph{ICCAD}, 2019.
+
+\bibitem{wille2009bdd}
+Robert Wille and Rolf Drechsler.
+BDD-based Synthesis of Reversible Logic for Large Functions.
+\emph{DAC}, 2009.
+
+\bibitem{zheng2025sshr}
+Qiang Zheng, Yongzhen Xu, Jiaxi Zhang, Zhaofeng Su, and Shenggen Zheng.
+CNOT Oriented Synthesis for Small-Scale Boolean Functions Using Spatial Structures of Parallelotopes.
+\emph{ICCAD}, 2025.
+
+\bibitem{rietsch2024unitary}
+Sebastian Rietsch et al.
+Unitary Synthesis of Clifford+T Circuits with Reinforcement Learning.
+\emph{IEEE QCE}, 2024.
+
+\bibitem{riu2025rlzx}
+Jordi Riu et al.
+Reinforcement Learning Based Quantum Circuit Optimization via ZX-Calculus.
+\emph{Quantum}, 9:1758, 2025.
+
+\bibitem{tsaras2024shortcircuit}
+Dimitrios Tsaras et al.
+ShortCircuit: AlphaZero-Driven Circuit Design.
+arXiv:2408.09858, 2024.
+
+\bibitem{machiya2026monteq}
+Mulundano Machiya et al.
+MonteQ: A Monte Carlo Tree Search Based Quantum Circuit Synthesis Framework.
+arXiv:2604.19029, 2026.
+
+\end{thebibliography}
+
+\end{document}
