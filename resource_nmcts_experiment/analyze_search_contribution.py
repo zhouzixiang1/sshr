@@ -222,6 +222,22 @@ METHOD_COMPARISONS = [
         "Recursive linear-pair guard vs root beam at n=16",
     ),
     MethodComparison(
+        "n16 neural diagnostic",
+        "ultra_highdim_resource",
+        "raw_ultra_highdim_resource.csv",
+        "and_fprm_linear_pair_deep_root_neural",
+        "and_fprm_linear_pair_deep",
+        "Root-neural recursive guard vs deterministic recursive guard at n=16",
+    ),
+    MethodComparison(
+        "n16 AI guard",
+        "ultra_highdim_resource",
+        "raw_ultra_highdim_resource.csv",
+        "and_fprm_linear_pair_deep_ai_guard",
+        "and_fprm_linear_pair_deep",
+        "Baseline-preserving AI guard vs deterministic recursive guard at n=16",
+    ),
+    MethodComparison(
         "n18 guard",
         "mega_highdim_resource",
         "raw_mega_highdim_resource.csv",
@@ -490,6 +506,7 @@ def write_latex(rows: list[dict[str, str]], out: Path) -> None:
         "Recursive linear-pair guard vs root beam at n=15",
         "Recursive linear-pair guard vs shallow linear-pair at n=16",
         "Recursive linear-pair guard vs root beam at n=16",
+        "Baseline-preserving AI guard vs deterministic recursive guard at n=16",
         "Fast linear-pair guard vs root beam at n=18",
         "Resource-NMCTS vs fast linear-pair at n=18",
     ]

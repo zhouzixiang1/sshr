@@ -31,6 +31,8 @@ function-level comparison; negative relative values favor the target method.
 | n16 shallow guard | Shallow linear-pair guard vs root beam at n=16 | ultra_highdim_resource | 24 | 22/0/2 | -1.88% | -2.18% |
 | n16 recursive guard | Recursive linear-pair guard vs shallow linear-pair at n=16 | ultra_highdim_resource | 24 | 23/0/1 | -2.54% | -2.62% |
 | n16 recursive guard | Recursive linear-pair guard vs root beam at n=16 | ultra_highdim_resource | 24 | 23/0/1 | -4.31% | -4.64% |
+| n16 neural diagnostic | Root-neural recursive guard vs deterministic recursive guard at n=16 | ultra_highdim_resource | 24 | 6/7/11 | +0.08% | +0.07% |
+| n16 AI guard | Baseline-preserving AI guard vs deterministic recursive guard at n=16 | ultra_highdim_resource | 24 | 6/0/18 | -0.05% | -0.06% |
 | n18 guard | Fast linear-pair guard vs root beam at n=18 | mega_highdim_resource | 12 | 6/0/6 | -1.91% | -2.72% |
 | n18 portfolio | Resource-NMCTS vs fast linear-pair at n=18 | mega_highdim_resource | 12 | 12/0/0 | -3.55% | -3.75% |
 | learned prior | Learned prior for Affine-NMCTS | traditional_resource | 177 | 42/0/135 | -1.47% | -1.62% |
@@ -157,6 +159,16 @@ function-level comparison; negative relative values favor the target method.
 | Recursive linear-pair guard vs root beam at n=16 | depth | 23/0/1 | 6404.62 | 6613.62 | -4.42% |
 | Recursive linear-pair guard vs root beam at n=16 | peak_ancilla | 0/23/1 | 3.38 | 2.29 | +54.86% |
 | Recursive linear-pair guard vs root beam at n=16 | score | 23/0/1 | 4084.05 | 4216.21 | -4.31% |
+| Root-neural recursive guard vs deterministic recursive guard at n=16 | T | 6/6/12 | 3705.33 | 3700.33 | +0.07% |
+| Root-neural recursive guard vs deterministic recursive guard at n=16 | CNOT | 3/9/12 | 6415.25 | 6404.50 | +0.12% |
+| Root-neural recursive guard vs deterministic recursive guard at n=16 | depth | 3/9/12 | 6415.38 | 6404.62 | +0.12% |
+| Root-neural recursive guard vs deterministic recursive guard at n=16 | peak_ancilla | 1/2/21 | 3.42 | 3.38 | +1.25% |
+| Root-neural recursive guard vs deterministic recursive guard at n=16 | score | 6/7/11 | 4089.77 | 4084.05 | +0.08% |
+| Baseline-preserving AI guard vs deterministic recursive guard at n=16 | T | 6/0/18 | 3699.17 | 3700.33 | -0.06% |
+| Baseline-preserving AI guard vs deterministic recursive guard at n=16 | CNOT | 3/3/18 | 6404.42 | 6404.50 | +0.01% |
+| Baseline-preserving AI guard vs deterministic recursive guard at n=16 | depth | 3/3/18 | 6404.54 | 6404.62 | +0.01% |
+| Baseline-preserving AI guard vs deterministic recursive guard at n=16 | peak_ancilla | 0/1/23 | 3.42 | 3.38 | +1.04% |
+| Baseline-preserving AI guard vs deterministic recursive guard at n=16 | score | 6/0/18 | 4082.97 | 4084.05 | -0.05% |
 | Fast linear-pair guard vs root beam at n=18 | T | 6/0/6 | 6754.00 | 6765.33 | -2.72% |
 | Fast linear-pair guard vs root beam at n=18 | CNOT | 5/0/7 | 11566.83 | 11585.17 | -1.79% |
 | Fast linear-pair guard vs root beam at n=18 | depth | 5/1/6 | 11568.42 | 11585.25 | +0.14% |

@@ -8,6 +8,7 @@
 
 - `main_zh.tex` / `main_zh.pdf`：现有中文主稿。
 - `resource_nmcts_zh_draft.tex` / `resource_nmcts_zh_draft.pdf`：独立中文技术论文草稿，包含更新后的 $n=16$ recursive linear-pair guard 结果。
+- `resource_nmcts_zh_full.tex` / `resource_nmcts_zh_full.pdf`：当前更完整的中文论文草稿，整合 $n=16$ baseline-preserving AI guard、$n=18$ stress test、搜索贡献分解和 exact 小规模参照。
 
 编译命令：
 
@@ -15,6 +16,7 @@
 cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/paper_latex_zh
 latexmk -xelatex -g main_zh.tex
 latexmk -xelatex -g resource_nmcts_zh_draft.tex
+latexmk -xelatex -g resource_nmcts_zh_full.tex
 ```
 
 主要证据来源：

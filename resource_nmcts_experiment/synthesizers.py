@@ -245,6 +245,16 @@ def _solve_plan(method: str, terms: frozenset[int], config: SearchConfig, seed: 
         )
     if method == "fprm_linear_pair_deep":
         return linear_pair_beam_plan(terms, config=config, recursive_depth=1)
+    if method == "fprm_linear_pair_deep_ai_guard":
+        baseline = linear_pair_beam_plan(terms, config=config, recursive_depth=1)
+        neural_plan = linear_pair_beam_plan(
+            terms,
+            config=config,
+            recursive_depth=1,
+            neural_scorer=neural,
+            root_neural_only=True,
+        )
+        return min([baseline, neural_plan], key=lambda p: p.score(config.weights))
     if method == "fprm_linear_pair_deep_wide":
         return linear_pair_beam_plan(terms, config=config, action_width=12, recursive_depth=1)
     if method == "fprm_linear_parity":
@@ -287,6 +297,7 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
         "fprm_linear_pair_fast_neural",
         "fprm_linear_pair_fast_root_neural",
         "fprm_linear_pair_deep",
+        "fprm_linear_pair_deep_ai_guard",
         "fprm_linear_pair_deep_wide",
         "fprm_linear_pair_deep_neural",
         "fprm_linear_pair_deep_root_neural",
@@ -390,6 +401,19 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
             )
         elif method == "fprm_linear_pair_deep":
             plan = linear_pair_beam_plan(terms, config=config, recursive_depth=1)
+        elif method == "fprm_linear_pair_deep_ai_guard":
+            baseline_plan = linear_pair_beam_plan(terms, config=config, recursive_depth=1)
+            neural_plan = linear_pair_beam_plan(
+                terms,
+                config=config,
+                recursive_depth=1,
+                neural_scorer=neural,
+                root_neural_only=True,
+            )
+            plan = min(
+                [baseline_plan, neural_plan],
+                key=lambda p: (p.cost + _wrap_cost(polarity)).score(config.weights),
+            )
         elif method == "fprm_linear_pair_deep_wide":
             plan = linear_pair_beam_plan(terms, config=config, action_width=12, recursive_depth=1)
         elif method == "fprm_linear_pair_deep_neural":
@@ -1047,11 +1071,12 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             highdim_config = replace(fast_config, candidate_top_k=config.candidate_top_k)
             linear_method = "fprm_linear_pair_deep"
             child_specs.append((linear_method, highdim_config))
-            if method == "resource_nmcts_wide" and bf.n < 18:
-                child_specs.append(("fprm_linear_pair_wide_fast", highdim_config))
             if model_path:
-                neural_linear = "fprm_linear_pair_root_neural" if bf.n == 16 else "fprm_linear_pair_deep_root_neural"
+                neural_linear = "fprm_linear_pair_deep_ai_guard" if bf.n == 16 else "fprm_linear_pair_deep_root_neural"
                 child_specs.append((neural_linear, highdim_config))
+            if method == "resource_nmcts_wide" and bf.n < 18:
+                child_specs.append(("fprm_linear_pair_deep_wide", highdim_config))
+                child_specs.append(("fprm_linear_pair_wide_fast", highdim_config))
         if bf.n <= 6:
             child_specs.append(("cube_beam", cube_config))
         if bf.n <= 10:
@@ -1083,7 +1108,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         portfolio: list[SynthesisResult] = []
         pareto_configs = _highdim_pareto_candidate_configs(config, bf.n) if bf.n > 12 else _pareto_candidate_configs(config)
         active_config = pareto_configs[0][1]
-        if bf.n >= 18:
+        if bf.n >= 16:
             child_specs: list[tuple[str, SearchConfig]] = [
                 ("resource_nmcts", config),
             ]
@@ -1323,6 +1348,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         "fprm_linear_pair_fast_neural",
         "fprm_linear_pair_fast_root_neural",
         "fprm_linear_pair_deep",
+        "fprm_linear_pair_deep_ai_guard",
         "fprm_linear_pair_deep_wide",
         "fprm_linear_pair_deep_neural",
         "fprm_linear_pair_deep_root_neural",

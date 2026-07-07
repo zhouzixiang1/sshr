@@ -144,10 +144,11 @@ Current presets:
   Profile-Resource-NMCTS, and Pareto-Resource-NMCTS.
 - `ultra_highdim_resource`: isolated `n=16` random-ANF scale check with direct
   ANF, logical-AND direct ANF, bounded FPRM root-beam, one-layer FPRM
-  linear-pair factoring, recursive FPRM linear-pair factoring, Resource-NMCTS,
-  Profile-Resource-NMCTS, and Pareto-Resource-NMCTS.  Resource/Profile/Pareto
-  now select the recursive guard at `n=16`, so this preset is mainly evidence
-  for the high-dimensional guard rather than independent Pareto separation.
+  linear-pair factoring, recursive FPRM linear-pair factoring, a root-neural
+  recursive guard, a baseline-preserving AI guard, Resource-NMCTS,
+  Profile-Resource-NMCTS, and Pareto-Resource-NMCTS.  Resource/Profile match
+  the AI guard at `n=16`; the Pareto row is close but not used as independent
+  high-dimensional Pareto separation evidence.
 - `mega_highdim_resource`: isolated `n=18` random-ANF stress check with direct
   ANF, logical-AND direct ANF, bounded FPRM root-beam, fast FPRM linear-pair,
   Resource-NMCTS, Profile-Resource-NMCTS, and Pareto-Resource-NMCTS.  It uses a
@@ -296,8 +297,11 @@ Search-contribution decomposition evidence from
 - The high-dimensional scale contribution is mainly the bounded linear-pair
   guard: score improvements over root beam are 60/0/4 at n=14, 30/0/2 at
   n=15, 23/0/1 at n=16 with the recursive guard, and 6/0/6 at n=18.
-  Resource/Pareto selection adds further separation in some suites but should
-  not be overstated when it ties its guarded child.
+  At n=16, the baseline-preserving AI guard further improves over the
+  deterministic recursive guard by 6/0/18 with no score losses. Resource and
+  Profile match that guarded candidate in the rerun; Pareto selection adds
+  further separation in some smaller suites but should not be overstated at
+  this high-dimensional scale.
 
 Traditional Boolean/ESOP baseline evidence from
 `results/analysis_traditional_resource.md` and
@@ -558,25 +562,31 @@ Ultra-high-dimensional scale check from
 `results/analysis_ultra_highdim_resource.md` and
 `results/runtime_ultra_highdim_resource.md`:
 
-- 24 random ANF functions at `n=16`, 8 methods, 192 result rows, 0 errors, and
+- 24 random ANF functions at `n=16`, 10 methods, 240 result rows, 0 errors, and
   0 skips.
-- The ultra guard now uses the recursive FPRM linear-pair candidate at `n=16`.
-  Resource-NMCTS, Profile-Resource-NMCTS, and Pareto-Resource-NMCTS match that
-  recursive guard on all 24 functions.
+- The ultra guard now uses a baseline-preserving AI guard at `n=16`: it compares
+  deterministic recursive FPRM linear-pair factoring with a root-neural
+  recursive guard, then keeps the lower-score candidate.  Resource-NMCTS and
+  Profile-Resource-NMCTS match that AI guard on all 24 functions; the Pareto
+  row is close but not treated as a separate high-dimensional Pareto gain.
 - Recursive linear-pair guard improves over the shallow linear-pair guard by
   23/0/1 weighted-score W/L/T with a 2.54% mean score reduction, and over FPRM
   root beam by 23/0/1 with a 4.31% mean score reduction.
-- Compared with direct ANF, Pareto-Resource-NMCTS has 23 T-count wins, 0
-  losses, and 1 tie, with a 63.34% mean T-count reduction and a 60.81% mean
-  score reduction.
+- The root-neural recursive guard alone is not stable enough: it scores 6/7/11
+  against deterministic recursive guard with a 0.08% mean score increase.  The
+  baseline-preserving AI guard converts the useful cases into a safe 6/0/18
+  score W/L/T and a 0.05% mean score reduction.
+- Compared with direct ANF, Resource-NMCTS has 23 T-count wins, 0 losses, and
+  1 tie, with a 63.36% mean T-count reduction and a 60.83% mean score
+  reduction.
 - Compared with logical-AND direct ANF, it has 23 weighted-score wins, 0
   losses, and 1 tie, with a 33.53% mean score reduction.
 - Compared with FPRM root beam, it has 23 weighted-score wins, 0 losses, and 1
-  tie, with a 4.31% mean score reduction.
+  tie, with a 4.36% mean score reduction.
 - Runtime remains finite at `n=16`: `and_resource_nmcts` completes 24/24 with
-  median 30.488 s and p95 86.782 s; `and_profile_resource_nmcts` completes
-  24/24 with median 30.290 s and p95 86.407 s; `and_pareto_resource_nmcts`
-  completes 24/24 with median 195.080 s and p95 300.957 s.
+  median 80.633 s and p95 227.312 s; `and_profile_resource_nmcts` completes
+  24/24 with median 71.084 s and p95 195.863 s; `and_pareto_resource_nmcts`
+  completes 24/24 with median 146.767 s and p95 300.829 s.
 
 `results/analysis_mega_highdim_resource.md` and
 `results/runtime_mega_highdim_resource.md`:
