@@ -11,7 +11,15 @@ import torch
 from torch import nn
 
 from anf_utils import anf_monomials, random_anf_function, random_truth_function, structured_suite
-from factor_plan import SearchConfig, action_features, candidate_actions, direct_plan, factor_cost, greedy_plan
+from factor_plan import (
+    SearchConfig,
+    action_features,
+    candidate_actions,
+    direct_plan,
+    factor_cost,
+    greedy_plan,
+    linear_factor_actions,
+)
 from neural_policy import ActionNet, default_device, save_model
 
 
@@ -21,6 +29,7 @@ THIS_DIR = Path(__file__).resolve().parent
 PRESETS = {
     "smoke": {"samples": 80, "epochs": 30, "n_min": 3, "n_max": 7},
     "rollout": {"samples": 520, "epochs": 60, "n_min": 3, "n_max": 9},
+    "linear_highdim": {"samples": 260, "epochs": 50, "n_min": 8, "n_max": 14},
     "main": {"samples": 2200, "epochs": 80, "n_min": 3, "n_max": 10},
 }
 
@@ -36,11 +45,21 @@ def collect_from_terms(
     max_depth: int = 4,
     child_branch: int = 3,
     label_mode: str = "immediate",
+    action_family: str = "factor",
     greedy_memo: dict | None = None,
 ) -> None:
     greedy_memo = {} if greedy_memo is None else greedy_memo
     direct_score = direct_plan(terms, prefix_len, live_factor_ancilla, config).score(config.weights)
-    actions = candidate_actions(terms, prefix_len, live_factor_ancilla, config)
+    if action_family == "linear":
+        actions = linear_factor_actions(
+            terms,
+            prefix_len,
+            live_factor_ancilla,
+            config,
+            action_width=max(2, min(config.candidate_top_k, 24)),
+        )
+    else:
+        actions = candidate_actions(terms, prefix_len, live_factor_ancilla, config)
     for action in actions:
         rows.append(
             action_features(
@@ -90,6 +109,7 @@ def collect_from_terms(
             max_depth,
             child_branch,
             label_mode,
+            action_family,
             greedy_memo,
         )
         collect_from_terms(
@@ -103,6 +123,7 @@ def collect_from_terms(
             max_depth,
             child_branch,
             label_mode,
+            action_family,
             greedy_memo,
         )
 
@@ -114,6 +135,7 @@ def build_dataset(
     label_mode: str,
     max_depth: int,
     child_branch: int,
+    action_family: str,
 ) -> Tuple[torch.Tensor, torch.Tensor]:
     cfg = PRESETS[preset]
     rng = random.Random(seed)
@@ -130,6 +152,7 @@ def build_dataset(
                 max_depth=max_depth,
                 child_branch=child_branch,
                 label_mode=label_mode,
+                action_family=action_family,
             )
 
     for _ in range(cfg["samples"]):
@@ -148,6 +171,7 @@ def build_dataset(
             max_depth=max_depth,
             child_branch=child_branch,
             label_mode=label_mode,
+            action_family=action_family,
         )
 
     if not rows:
@@ -161,6 +185,7 @@ def main() -> int:
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--gate-mode", choices=["mct", "logical_and"], default="mct")
     ap.add_argument("--label-mode", choices=["immediate", "rollout"], default="immediate")
+    ap.add_argument("--action-family", choices=["factor", "linear"], default="factor")
     ap.add_argument("--max-depth", type=int, default=4)
     ap.add_argument("--child-branch", type=int, default=3)
     ap.add_argument("--hidden", type=int, default=96)
@@ -168,7 +193,15 @@ def main() -> int:
     args = ap.parse_args()
 
     config = SearchConfig(max_factor_ancilla=4, max_factor_size=5, candidate_top_k=24, gate_mode=args.gate_mode)
-    x, y = build_dataset(args.preset, args.seed, config, args.label_mode, args.max_depth, args.child_branch)
+    x, y = build_dataset(
+        args.preset,
+        args.seed,
+        config,
+        args.label_mode,
+        args.max_depth,
+        args.child_branch,
+        args.action_family,
+    )
     mean = x.mean(dim=0)
     std = x.std(dim=0).clamp_min(1e-6)
     x = (x - mean) / std

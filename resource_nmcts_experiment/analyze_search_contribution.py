@@ -260,6 +260,15 @@ VARIANT_COMPARISONS = [
         "no_prior",
         "Learned prior for Pareto Resource-NMCTS",
     ),
+    VariantComparison(
+        "highdim learned prior",
+        "highdim_neural_prior",
+        "raw_neural_prior_highdim_ablation.csv",
+        "and_resource_nmcts",
+        "learned_prior",
+        "no_prior",
+        "Highdim learned prior for Resource-NMCTS",
+    ),
 ]
 
 
@@ -449,6 +458,7 @@ def dataset_label(dataset: str) -> str:
     labels = {
         "search_ablation_traditional": "trad. ablation",
         "search_ablation_highdim": "n14 ablation",
+        "highdim_neural_prior": "n14 prior",
         "highdim_scale_resource": "n15 scale",
         "ultra_highdim_resource": "n16 scale",
         "mega_highdim_resource": "n18 stress",
@@ -565,6 +575,7 @@ def write_markdown(rows: list[dict[str, str]], out: Path) -> None:
             "- The affine-coordinate search is the largest algorithmic jump before the full portfolio: affine greedy already improves over fixed-coordinate MCTS in score on the matched completed rows.",
             "- Neural refinement and the fixed-coordinate guard are smaller but monotone in score on this benchmark: both add score wins without score losses in the matched ablation rows.",
             "- The learned action prior is a positive but modest quality signal on the n<=6 rerun; it improves score with no losses, while earlier runtime evidence shows it is not yet the fastest configuration.",
+            "- The n=14 learned-prior diagnostic is intentionally kept out of the compact paper table: a dedicated linear-action scorer gives only one score win and eleven ties, so high-dimensional neural guidance remains a boundary result rather than a strong contribution claim.",
             "- The Pareto archive gives the clearest small-function portfolio gain over single-score Resource-NMCTS, again with no score losses.",
             "- In the high-dimensional suites, the measurable scale contribution is mostly the bounded linear-pair guard.  Resource/Profile/Pareto sometimes reduce to the same guarded candidate, so these rows should be written as scalability/guard evidence rather than as independent Pareto superiority evidence.",
         ]

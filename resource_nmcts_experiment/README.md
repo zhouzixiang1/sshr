@@ -15,6 +15,7 @@ Core commands:
 cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python tests_smoke.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python train_neural_policy.py --preset rollout --gate-mode logical_and --label-mode rollout --max-depth 3 --child-branch 2 --out models/action_scorer_rollout_logical_and.pt
+/opt/anaconda3/envs/mcts-qoracle/bin/python train_neural_policy.py --preset linear_highdim --gate-mode logical_and --label-mode immediate --action-family linear --max-depth 1 --child-branch 1 --out models/linear_action_scorer_highdim.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset smoke
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset evidence_affine --model models/action_scorer_rollout_logical_and.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset evidence_affine
@@ -42,6 +43,15 @@ cp /tmp/resource_nmcts_traditional_no_prior/raw_traditional_resource.csv results
 cp /tmp/resource_nmcts_traditional_no_prior/summary_traditional_resource.csv results/summary_traditional_resource_no_prior.csv
 cp /tmp/resource_nmcts_traditional_no_prior/manifest_traditional_resource.json results/manifest_traditional_resource_no_prior.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_neural_prior_ablation.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset highdim_neural_prior --model models/linear_action_scorer_highdim.pt --out-dir /tmp/resource_nmcts_highdim_learned_prior --workers 6 --checkpoint-every 6 --isolate-timeouts
+cp /tmp/resource_nmcts_highdim_learned_prior/raw_highdim_neural_prior.csv results/raw_highdim_neural_prior_learned_prior.csv
+cp /tmp/resource_nmcts_highdim_learned_prior/summary_highdim_neural_prior.csv results/summary_highdim_neural_prior_learned_prior.csv
+cp /tmp/resource_nmcts_highdim_learned_prior/manifest_highdim_neural_prior.json results/manifest_highdim_neural_prior_learned_prior.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset highdim_neural_prior --model /tmp/nonexistent_model.pt --out-dir /tmp/resource_nmcts_highdim_no_prior --workers 6 --checkpoint-every 6 --isolate-timeouts
+cp /tmp/resource_nmcts_highdim_no_prior/raw_highdim_neural_prior.csv results/raw_highdim_neural_prior_no_prior.csv
+cp /tmp/resource_nmcts_highdim_no_prior/summary_highdim_neural_prior.csv results/summary_highdim_neural_prior_no_prior.csv
+cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json results/manifest_highdim_neural_prior_no_prior.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_neural_prior_ablation.py --learned-csv results/raw_highdim_neural_prior_learned_prior.csv --no-prior-csv results/raw_highdim_neural_prior_no_prior.csv --methods and_resource_nmcts --out-raw results/raw_neural_prior_highdim_ablation.csv --summary results/summary_neural_prior_highdim_ablation.csv --out results/analysis_neural_prior_highdim_ablation.md --latex-out paper_latex/tables/neural_prior_highdim_ablation.tex --dataset-label highdim_neural_prior --model-label models/linear_action_scorer_highdim.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_search_contribution.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_resource_sweep.py --model models/action_scorer_rollout_logical_and.pt --workers 10
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_resource_sweep.py
@@ -107,6 +117,10 @@ Current presets:
 - `search_ablation_highdim`: lightweight $n=14$ random-ANF guard rerun that
   compares heuristic-only, beam-only, root-beam, linear-pair, and no-MCTS
   portfolios without the expensive high-dimensional Pareto tail.
+- `highdim_neural_prior`: diagnostic $n=14$ random-ANF learned-prior slice for
+  Resource-NMCTS.  It uses a dedicated linear-action scorer and a root-only
+  neural linear-pair child, so the learned model can perturb the high-dimensional
+  guard without recursively scoring every child subproblem.
 - `large_resource_core`: 330-function large logical benchmark through `n=12`,
   now including the profile-aware Resource-NMCTS variant and process-isolated
   hard timeouts for long-tail tasks.
@@ -136,7 +150,8 @@ Current presets:
 - `main`: large-scale placeholder for broader sweeps.
 
 Outputs are written to `results/`.  The neural prior is saved at
-`models/action_scorer_rollout_logical_and.pt`.
+`models/action_scorer_rollout_logical_and.pt`; the high-dimensional linear-action
+diagnostic prior is saved at `models/linear_action_scorer_highdim.pt`.
 
 External-tool benchmark exchange:
 
@@ -216,6 +231,19 @@ Neural-prior ablation evidence from `results/analysis_neural_prior_ablation.md`:
   mean relative runtime increases are 91.22%, 55.11%, and 18.77% on this
   small-function slice, so the learned prior is a quality-improving search
   signal rather than the current fastest mode.
+
+High-dimensional neural-prior diagnostic evidence from
+`results/analysis_neural_prior_highdim_ablation.md`:
+
+- A first full-recursive neural linear-pair child was too expensive at n=14, so
+  the implemented high-dimensional path now uses root-only neural screening and
+  deterministic child subplans.
+- The dedicated `models/linear_action_scorer_highdim.pt` model was trained on
+  6086 high-dimensional linear-action samples with immediate-gain labels.
+- On 12 matched n=14 random ANF functions, learned Resource-NMCTS has 1/0/11
+  score wins/losses/ties versus no-prior Resource-NMCTS and a -0.01% mean score
+  change, with mean runtime rising from 23.26 s to 48.55 s.  This is a boundary
+  diagnostic, not a strong high-dimensional AI contribution claim.
 
 Search-contribution decomposition evidence from
 `results/analysis_search_contribution.md`:

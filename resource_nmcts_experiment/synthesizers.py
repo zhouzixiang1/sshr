@@ -263,7 +263,22 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
     # path uses local search in polarity space, so the prior changes which
     # fixed-polarity Reed-Muller forms are explored rather than only reordering
     # factor actions inside a fixed polarity.
-    if method in {"fprm_root_beam", "fprm_root_child_beam", "fprm_linear_pair", "fprm_linear_pair_fast", "fprm_linear_pair_deep", "fprm_linear_parity", "fprm_affine_linear_pair", "fprm_affine_linear_pair_deep"} and bf.n > 12 and len(anf_monomials(bf)) > 128:
+    if method in {
+        "fprm_root_beam",
+        "fprm_root_child_beam",
+        "fprm_linear_pair",
+        "fprm_linear_pair_neural",
+        "fprm_linear_pair_root_neural",
+        "fprm_linear_pair_fast",
+        "fprm_linear_pair_fast_neural",
+        "fprm_linear_pair_fast_root_neural",
+        "fprm_linear_pair_deep",
+        "fprm_linear_pair_deep_neural",
+        "fprm_linear_pair_deep_root_neural",
+        "fprm_linear_parity",
+        "fprm_affine_linear_pair",
+        "fprm_affine_linear_pair_deep",
+    } and bf.n > 12 and len(anf_monomials(bf)) > 128:
         if bf.n >= 16:
             screen_budget = max(8, min(16, 2 * max(1, config.max_polarities)))
             screen_top_k = 1
@@ -317,6 +332,10 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
             plan = root_child_beam_plan(terms, config=config)
         elif method == "fprm_linear_pair":
             plan = linear_pair_beam_plan(terms, config=config)
+        elif method == "fprm_linear_pair_neural":
+            plan = linear_pair_beam_plan(terms, config=config, neural_scorer=neural)
+        elif method == "fprm_linear_pair_root_neural":
+            plan = linear_pair_beam_plan(terms, config=config, neural_scorer=neural, root_neural_only=True)
         elif method == "fprm_linear_pair_fast":
             plan = linear_pair_beam_plan(
                 terms,
@@ -325,8 +344,37 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
                 rest_greedy_term_limit=450,
                 use_root_child_baseline=False,
             )
+        elif method == "fprm_linear_pair_fast_neural":
+            plan = linear_pair_beam_plan(
+                terms,
+                config=config,
+                action_width=2,
+                neural_scorer=neural,
+                rest_greedy_term_limit=450,
+                use_root_child_baseline=False,
+            )
+        elif method == "fprm_linear_pair_fast_root_neural":
+            plan = linear_pair_beam_plan(
+                terms,
+                config=config,
+                action_width=2,
+                neural_scorer=neural,
+                rest_greedy_term_limit=450,
+                use_root_child_baseline=False,
+                root_neural_only=True,
+            )
         elif method == "fprm_linear_pair_deep":
             plan = linear_pair_beam_plan(terms, config=config, recursive_depth=1)
+        elif method == "fprm_linear_pair_deep_neural":
+            plan = linear_pair_beam_plan(terms, config=config, recursive_depth=1, neural_scorer=neural)
+        elif method == "fprm_linear_pair_deep_root_neural":
+            plan = linear_pair_beam_plan(
+                terms,
+                config=config,
+                recursive_depth=1,
+                neural_scorer=neural,
+                root_neural_only=True,
+            )
         elif method == "fprm_linear_parity":
             plan = linear_pair_beam_plan(terms, config=config, max_linear_width=3)
         elif method == "fprm_affine_linear_pair":
@@ -970,7 +1018,11 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             # clearest search-quality separation over root beam while still
             # staying within the per-row timeout on the current stress set.
             highdim_config = replace(fast_config, candidate_top_k=config.candidate_top_k)
-            child_specs.append(("fprm_linear_pair" if bf.n == 16 else "fprm_linear_pair_deep", highdim_config))
+            linear_method = "fprm_linear_pair" if bf.n == 16 else "fprm_linear_pair_deep"
+            child_specs.append((linear_method, highdim_config))
+            if model_path:
+                neural_linear = "fprm_linear_pair_root_neural" if bf.n == 16 else "fprm_linear_pair_deep_root_neural"
+                child_specs.append((neural_linear, highdim_config))
         if bf.n <= 6:
             child_specs.append(("cube_beam", cube_config))
         if bf.n <= 10:
@@ -1019,9 +1071,13 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
                 child_specs.append(("fprm_root_beam", child_config))
                 if bf.n < 18:
                     child_specs.append(("fprm_linear_pair", child_config))
+                    if model_path:
+                        child_specs.append(("fprm_linear_pair_root_neural", child_config))
                     child_specs.append(("fprm_linear_parity", child_config))
                     if bf.n <= 15 and child_config.max_factor_ancilla >= 2:
                         child_specs.append(("fprm_linear_pair_deep", child_config))
+                        if model_path:
+                            child_specs.append(("fprm_linear_pair_deep_root_neural", child_config))
                 elif label == "cnot_depth":
                     # Keep n=18 bounded: no linear-pair screen, but do include
                     # a depth-weighted root-beam candidate that can trade T for
@@ -1224,7 +1280,26 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             min(config.max_factor_ancilla, plan.cost.explicit_ancilla),
             polarity=polarity,
         )
-    elif method in {"fprm_direct", "fprm_greedy", "fprm_root_beam", "fprm_root_child_beam", "fprm_linear_pair", "fprm_linear_pair_fast", "fprm_linear_pair_deep", "fprm_linear_parity", "fprm_affine_linear_pair", "fprm_affine_linear_pair_deep", "fprm_mcts", "fprm_neural_mcts"}:
+    elif method in {
+        "fprm_direct",
+        "fprm_greedy",
+        "fprm_root_beam",
+        "fprm_root_child_beam",
+        "fprm_linear_pair",
+        "fprm_linear_pair_neural",
+        "fprm_linear_pair_root_neural",
+        "fprm_linear_pair_fast",
+        "fprm_linear_pair_fast_neural",
+        "fprm_linear_pair_fast_root_neural",
+        "fprm_linear_pair_deep",
+        "fprm_linear_pair_deep_neural",
+        "fprm_linear_pair_deep_root_neural",
+        "fprm_linear_parity",
+        "fprm_affine_linear_pair",
+        "fprm_affine_linear_pair_deep",
+        "fprm_mcts",
+        "fprm_neural_mcts",
+    }:
         polarity, terms, plan, cost = _best_polarity_plan(method, bf, config, seed, neural)
         circ = emit_plan_to_circuit(
             plan,

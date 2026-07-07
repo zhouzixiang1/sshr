@@ -584,6 +584,11 @@ is runtime: the paired mean relative runtime increases are 91.22\%, 55.11\%,
 and 18.77\%, because many small neural action batches are evaluated on CPU.
 We therefore treat the learned prior as a quality-improving search signal, not
 as the current fastest mode.
+For the high-dimensional Resource-NMCTS path, we also tested a dedicated
+linear-action scorer with root-only neural screening on 12 $n=14$ random ANF
+functions.  This diagnostic produced only one score win and eleven ties
+($-0.01\%$ mean score change) while roughly doubling mean runtime, so we do not
+claim a strong high-dimensional learned-prior effect in the current version.
 
 \begin{table}[t]
 \centering
@@ -602,7 +607,8 @@ already reduces the composite score by 12.12\% relative to completed
 fixed-coordinate MCTS pairs, albeit with score losses on some functions.  The
 neural refinement and final guard are smaller but monotone in score on this
 suite, and the learned prior gives a positive no-loss quality signal on the
-$n\leq 6$ rerun.  A dedicated small-function rerun further separates
+$n\leq 6$ rerun; the separate $n=14$ learned-prior diagnostic is kept as a
+boundary result rather than a main contribution.  A dedicated small-function rerun further separates
 heuristic-only, beam-only, no-MCTS, Resource-NMCTS, and Pareto-Resource-NMCTS
 portfolios on the same 177 functions.  The table also clarifies the
 high-dimensional claim.  At $n=14$--$n=18$, most of the measurable scale gain

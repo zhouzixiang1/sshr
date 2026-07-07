@@ -128,7 +128,14 @@ def format_num(value: float, metric: str) -> str:
     return f"{value:.2f}"
 
 
-def write_markdown(path: Path, rows: list[dict], summary: list[dict], paired: list[dict]) -> None:
+def write_markdown(
+    path: Path,
+    rows: list[dict],
+    summary: list[dict],
+    paired: list[dict],
+    dataset_label: str,
+    model_label: str,
+) -> None:
     errors = [row for row in rows if row.get("error")]
     skipped = [row for row in rows if row.get("skipped")]
     lines = [
@@ -136,8 +143,8 @@ def write_markdown(path: Path, rows: list[dict], summary: list[dict], paired: li
         "",
         f"Rows: {len(rows)}; usable: {sum(1 for row in rows if usable(row))}; errors: {len(errors)}; skipped: {len(skipped)}.",
         "",
-        "The learned-prior rows come from a matched `traditional_resource` rerun",
-        "with `models/action_scorer_rollout_logical_and.pt`.  The no-prior rows",
+        f"The learned-prior rows come from a matched `{dataset_label}` rerun",
+        f"with `{model_label}`.  The no-prior rows",
         "rerun the same functions and methods with an absent model path, so the",
         "search keeps the heuristic PUCT/action prior but removes the learned",
         "action scorer.",
@@ -173,6 +180,9 @@ def write_markdown(path: Path, rows: list[dict], summary: list[dict], paired: li
 def write_latex(path: Path, paired: list[dict]) -> None:
     labels = {
         "and_affine_nmcts": r"\affinemethod{}",
+        "and_fprm_linear_pair_neural": r"neural linear-pair",
+        "and_fprm_linear_pair_deep_neural": r"neural recursive linear-pair",
+        "and_fprm_linear_pair_fast_neural": r"neural fast linear-pair",
         "and_resource_nmcts": r"\method{}",
         "and_pareto_resource_nmcts": r"\paretomethod{}",
     }
@@ -209,6 +219,8 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser.add_argument("--summary", type=Path, default=RESULTS / "summary_neural_prior_ablation.csv")
     parser.add_argument("--out", type=Path, default=RESULTS / "analysis_neural_prior_ablation.md")
     parser.add_argument("--latex-out", type=Path, default=PAPER_TABLES / "neural_prior_ablation.tex")
+    parser.add_argument("--dataset-label", default="traditional_resource")
+    parser.add_argument("--model-label", default="models/action_scorer_rollout_logical_and.pt")
     args = parser.parse_args(list(argv) if argv is not None else None)
 
     methods = parse_methods(args.methods)
@@ -219,7 +231,7 @@ def main(argv: Iterable[str] | None = None) -> int:
     paired = paired_rows(rows, methods)
     write_csv(args.out_raw, rows)
     write_csv(args.summary, summary)
-    write_markdown(args.out, rows, summary, paired)
+    write_markdown(args.out, rows, summary, paired, args.dataset_label, args.model_label)
     write_latex(args.latex_out, paired)
     print(f"wrote {args.out_raw}")
     print(f"wrote {args.summary}")

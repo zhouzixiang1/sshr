@@ -1,0 +1,40 @@
+{
+  "preset": "highdim_neural_prior",
+  "seed": 42,
+  "functions": 12,
+  "methods": [
+    "and_resource_nmcts"
+  ],
+  "last_run_methods": [
+    "and_resource_nmcts"
+  ],
+  "resume": false,
+  "raw_rows": 12,
+  "raw_methods": [
+    "and_resource_nmcts"
+  ],
+  "model": "",
+  "workers": 6,
+  "seconds": 74.86001110076904,
+  "seconds_current_run": 74.86001110076904,
+  "config": {
+    "weights": {
+      "t": 1.0,
+      "cnot": 0.04,
+      "depth": 0.015,
+      "gates": 0.01,
+      "ancilla": 2.0
+    },
+    "max_factor_ancilla": 4,
+    "max_factor_size": 5,
+    "candidate_top_k": 24,
+    "min_factor_count": 2,
+    "use_relative_phase": true,
+    "mcts_simulations": 24,
+    "neural_mcts_simulations": 32,
+    "max_polarities": 12,
+    "gate_mode": "mct",
+    "neural_prior_weight": 10.0,
+    "task_timeout_s": 300
+  }
+}

@@ -138,6 +138,30 @@
 
 这个结果把论文主张进一步收窄为：仿射坐标搜索、神经 refine、guard/Pareto archive 和高维 linear-pair guard 共同构成方法贡献；其中高维大规模证据不能夸大为完整 Pareto archive 的强独立优势，因为部分高维设置中 Resource/Profile/Pareto 会退化为同一稳定 guard。
 
+### 2.5 高维 learned-prior 诊断
+
+本轮补了 `highdim_neural_prior` 小切片，目标是回答“学习先验在高维 Resource-NMCTS 中是否仍有贡献”。直接使用全递归 neural linear-pair child 会在 n=14 上产生明显长尾，因此代码改成了 root-only neural screening：神经模型只影响高维 linear-pair 的根层候选排序，后续子问题仍使用确定性 greedy/beam。
+
+新增训练产物：
+
+- `models/linear_action_scorer_highdim.pt`
+
+新增结果产物：
+
+- `results/raw_highdim_neural_prior_learned_prior.csv`
+- `results/raw_highdim_neural_prior_no_prior.csv`
+- `results/raw_neural_prior_highdim_ablation.csv`
+- `results/analysis_neural_prior_highdim_ablation.md`
+- `paper_latex/tables/neural_prior_highdim_ablation.tex`
+
+核心结果：
+
+| 对比 | 函数集 | score 胜/负/平 | 平均 score 变化 | 平均运行时间变化 |
+|---|---|---:|---:|---:|
+| learned Resource-NMCTS vs no-prior Resource-NMCTS | 12 个 n=14 random ANF | 1/0/11 | -0.01% | +104.07% |
+
+结论：高维 learned-prior 小切片已经完成，但它不是强正向证据。专用 linear-action 模型只带来 1 个轻微 score 胜例，且运行时间约翻倍。因此论文主贡献仍应放在 n<=6 learned-prior 正向证据、低维 neural refine、MCTS/Pareto archive、以及高维 bounded linear-pair guard；高维 neural guidance 目前只能写成边界诊断或 future work。
+
 ## 3. 当前文件交付清单
 
 ### 3.1 核心代码
@@ -145,6 +169,7 @@
 - `factor_plan.py`：FPRM/线性因子/beam/greedy 计划生成。
 - `synthesizers.py`：方法组合、Resource/Profile/Pareto 候选选择。
 - `run_experiments.py`：实验运行、隔离超时、resume/replace 逻辑。
+- `train_neural_policy.py`：普通 factor-action 与高维 linear-action 神经先验训练。
 - `analyze_results.py`：内部实验分析。
 - `analyze_runtime.py`：运行时间和资源表生成。
 - `analyze_external_baselines.py`：外部 baseline 对比分析。
@@ -163,6 +188,8 @@
 - `results/analysis_external_mega_highdim_resource.md`
 - `results/analysis_search_contribution.md`
 - `results/summary_search_contribution.csv`
+- `results/analysis_neural_prior_highdim_ablation.md`
+- `results/raw_neural_prior_highdim_ablation.csv`
 
 ### 3.3 论文文件
 
@@ -171,6 +198,7 @@
 - `paper_latex/tables/esop_baseline_by_n.tex`
 - `paper_latex/tables/neural_prior_ablation.tex`
 - `paper_latex/tables/search_contribution_decomposition.tex`
+- `paper_latex/tables/neural_prior_highdim_ablation.tex`
 - `paper_latex/tables/resource_search_ablation_highdim.tex`
 - `paper_latex/tables/runtime_search_ablation_highdim.tex`
 - `paper_latex/tables/external_traditional_resource_n6.tex`
@@ -210,6 +238,22 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_search_contribution.py
 ```
 
+重新生成高维 learned-prior 诊断：
+
+```bash
+cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
+/opt/anaconda3/envs/mcts-qoracle/bin/python train_neural_policy.py --preset linear_highdim --gate-mode logical_and --label-mode immediate --action-family linear --max-depth 1 --child-branch 1 --out models/linear_action_scorer_highdim.pt
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset highdim_neural_prior --model models/linear_action_scorer_highdim.pt --out-dir /tmp/resource_nmcts_highdim_learned_prior --workers 6 --checkpoint-every 6 --isolate-timeouts
+cp /tmp/resource_nmcts_highdim_learned_prior/raw_highdim_neural_prior.csv results/raw_highdim_neural_prior_learned_prior.csv
+cp /tmp/resource_nmcts_highdim_learned_prior/summary_highdim_neural_prior.csv results/summary_highdim_neural_prior_learned_prior.csv
+cp /tmp/resource_nmcts_highdim_learned_prior/manifest_highdim_neural_prior.json results/manifest_highdim_neural_prior_learned_prior.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset highdim_neural_prior --model /tmp/nonexistent_model.pt --out-dir /tmp/resource_nmcts_highdim_no_prior --workers 6 --checkpoint-every 6 --isolate-timeouts
+cp /tmp/resource_nmcts_highdim_no_prior/raw_highdim_neural_prior.csv results/raw_highdim_neural_prior_no_prior.csv
+cp /tmp/resource_nmcts_highdim_no_prior/summary_highdim_neural_prior.csv results/summary_highdim_neural_prior_no_prior.csv
+cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json results/manifest_highdim_neural_prior_no_prior.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_neural_prior_ablation.py --learned-csv results/raw_highdim_neural_prior_learned_prior.csv --no-prior-csv results/raw_highdim_neural_prior_no_prior.csv --methods and_resource_nmcts --out-raw results/raw_neural_prior_highdim_ablation.csv --summary results/summary_neural_prior_highdim_ablation.csv --out results/analysis_neural_prior_highdim_ablation.md --latex-out paper_latex/tables/neural_prior_highdim_ablation.tex --dataset-label highdim_neural_prior --model-label models/linear_action_scorer_highdim.pt
+```
+
 重新生成 n=18 内部分析：
 
 ```bash
@@ -247,6 +291,7 @@ latexmk -pdf -g main.tex
 - `raw_mega_highdim_resource.csv` 审计：84 行、0 error、0 skipped、0 incorrect。
 - `analysis_search_contribution.md` 审计：无 NaN/空配对。
 - `raw_search_ablation_highdim.csv` 审计：128 行、0 error、0 skipped、0 incorrect。
+- `raw_neural_prior_highdim_ablation.csv` 审计：24 行、0 error、0 skipped、0 incorrect。
 
 Git 状态：
 
@@ -274,9 +319,9 @@ Git 状态：
 
 ## 7. 下一步建议
 
-当前已经完成第一版“搜索贡献分解”，并新增了 `search_ablation_traditional` 与 `search_ablation_highdim` 两个 dedicated ablation。投稿前仍建议继续补强：
+当前已经完成第一版“搜索贡献分解”，并新增了 `search_ablation_traditional`、`search_ablation_highdim` 和 `highdim_neural_prior` 三个 dedicated ablation/diagnostic。投稿前仍建议继续补强：
 
-1. 做 `no-neural-prior` 的高维小切片，验证 learned prior 在大规模下是否仍有正贡献。
+1. 高维 neural guidance 需要继续改进；当前 highdim prior 只有 1/0/11、-0.01% 的弱正向结果，不足以作为强 AI 贡献。
 2. 如果时间允许，补一个小规模 exact/exhaustive oracle slice，强化公平性。
 3. 继续补 ROS/mockturtle 或其他外部 reversible-toolchain 对比，减少“估算式 ABC/BDD baseline”的审稿风险。
 
@@ -290,7 +335,7 @@ Git 状态：
 | highdim no-MCTS guard | n=14 random ANF | no-MCTS vs root-beam 14/0/2，-6.25%；no-MCTS vs linear-pair 14/0/2，-3.08% | 已有 |
 | Pareto archive | n<=6 traditional | Pareto vs Resource 68/0/109，-3.26% | 已有 |
 | highdim guard | n=14/15/16/18 | linear-pair guard 相对 root-beam 均无 score loss | 已有 |
-| highdim no-neural-prior | 高维小切片 | 需要新增 rerun | 待补 |
+| highdim no-neural-prior | 12 个 n=14 random ANF | learned prior 1/0/11，-0.01%，运行时间 +104.07% | 已有但弱 |
 
 ## 8. 当前结论
 
@@ -300,4 +345,4 @@ Git 状态：
 
 但是投稿前还需要继续补强“AI 搜索本身带来的贡献”这一点。否则文章容易被评价为一组 FPRM/ESOP 工程启发的组合，而不是强化学习与 MCTS 方法论文。
 
-本轮新增贡献分解、`search_ablation_traditional` 和 `search_ablation_highdim` 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive 和高维 guard/no-MCTS 组合都有可测贡献。不过高维 no-prior 小切片和更强外部 reversible-toolchain 对比仍然缺失，所以目标还不能判定完成。
+本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim` 和 `highdim_neural_prior` 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive 和高维 guard/no-MCTS 组合都有可测贡献。不过高维 neural guidance 仍然很弱，更强外部 reversible-toolchain 对比也仍然缺失，所以目标还不能判定完成。

@@ -653,6 +653,7 @@ def linear_pair_beam_plan(
     neural_scorer=None,
     rest_greedy_term_limit: int | None = None,
     use_root_child_baseline: bool = True,
+    root_neural_only: bool = False,
 ) -> Plan:
     """Try CNOT-only pairwise XOR factors above cheap subplans.
 
@@ -663,10 +664,12 @@ def linear_pair_beam_plan(
     the remaining terms; the default keeps the historical one-layer result
     unchanged.
     """
+    baseline_scorer = None if root_neural_only else neural_scorer
+    child_scorer = None if root_neural_only else neural_scorer
     if use_root_child_baseline:
-        best = root_child_beam_plan(terms, prefix_len, live_factor_ancilla, config, neural_scorer=neural_scorer)
+        best = root_child_beam_plan(terms, prefix_len, live_factor_ancilla, config, neural_scorer=baseline_scorer)
     else:
-        best = root_beam_plan(terms, prefix_len, live_factor_ancilla, config, neural_scorer=neural_scorer)
+        best = root_beam_plan(terms, prefix_len, live_factor_ancilla, config, neural_scorer=baseline_scorer)
     best_score = best.score(config.weights)
     actions = linear_factor_actions(
         terms,
@@ -691,7 +694,7 @@ def linear_pair_beam_plan(
                 action_width=max(2, action_width - 1),
                 recursive_depth=recursive_depth - 1,
                 max_linear_width=max_linear_width,
-                neural_scorer=neural_scorer,
+                neural_scorer=child_scorer,
                 rest_greedy_term_limit=rest_greedy_term_limit,
                 use_root_child_baseline=use_root_child_baseline,
             )
@@ -701,7 +704,7 @@ def linear_pair_beam_plan(
                 prefix_len + 1,
                 live_factor_ancilla + 1,
                 child_config,
-                neural_scorer,
+                child_scorer,
                 memo,
             )
         if recursive_depth > 0 and len(terms) <= LINEAR_REST_RECURSE_TERM_LIMIT:
@@ -713,14 +716,14 @@ def linear_pair_beam_plan(
                 action_width=max(2, action_width - 1),
                 recursive_depth=recursive_depth - 1,
                 max_linear_width=max_linear_width,
-                neural_scorer=neural_scorer,
+                neural_scorer=child_scorer,
                 rest_greedy_term_limit=rest_greedy_term_limit,
                 use_root_child_baseline=use_root_child_baseline,
             )
         elif rest_greedy_term_limit is not None and len(action.rest) > rest_greedy_term_limit:
             rest = direct_plan(action.rest, prefix_len, live_factor_ancilla, child_config)
         else:
-            rest = greedy_plan(action.rest, prefix_len, live_factor_ancilla, child_config, neural_scorer, memo)
+            rest = greedy_plan(action.rest, prefix_len, live_factor_ancilla, child_config, child_scorer, memo)
         cost = factor_cost(action, group, rest, live_factor_ancilla, config)
         plan = Plan(
             "linear_factor",

@@ -35,6 +35,7 @@ function-level comparison; negative relative values favor the target method.
 | learned prior | Learned prior for Affine-NMCTS | traditional_resource | 177 | 42/0/135 | -1.47% | -1.62% |
 | learned prior | Learned prior for Resource-NMCTS | traditional_resource | 177 | 39/0/138 | -1.10% | -1.16% |
 | learned prior | Learned prior for Pareto Resource-NMCTS | traditional_resource | 177 | 29/0/148 | -0.78% | -0.77% |
+| highdim learned prior | Highdim learned prior for Resource-NMCTS | highdim_neural_prior | 12 | 1/0/11 | -0.01% | -0.01% |
 
 ## Detailed metric view
 
@@ -175,11 +176,17 @@ function-level comparison; negative relative values favor the target method.
 | Learned prior for Pareto Resource-NMCTS | depth | 21/5/151 | 88.00 | 88.49 | -0.81% |
 | Learned prior for Pareto Resource-NMCTS | peak_ancilla | 5/0/172 | 2.03 | 2.06 | -0.94% |
 | Learned prior for Pareto Resource-NMCTS | score | 29/0/148 | 49.56 | 49.86 | -0.78% |
+| Highdim learned prior for Resource-NMCTS | T | 1/0/11 | 3325.67 | 3326.67 | -0.01% |
+| Highdim learned prior for Resource-NMCTS | CNOT | 0/1/11 | 5737.83 | 5736.50 | +0.01% |
+| Highdim learned prior for Resource-NMCTS | depth | 0/1/11 | 5739.67 | 5738.33 | +0.01% |
+| Highdim learned prior for Resource-NMCTS | peak_ancilla | 0/1/11 | 3.58 | 3.50 | +1.67% |
+| Highdim learned prior for Resource-NMCTS | score | 1/0/11 | 3670.55 | 3671.30 | -0.01% |
 
 ## Interpretation
 
 - The affine-coordinate search is the largest algorithmic jump before the full portfolio: affine greedy already improves over fixed-coordinate MCTS in score on the matched completed rows.
 - Neural refinement and the fixed-coordinate guard are smaller but monotone in score on this benchmark: both add score wins without score losses in the matched ablation rows.
 - The learned action prior is a positive but modest quality signal on the n<=6 rerun; it improves score with no losses, while earlier runtime evidence shows it is not yet the fastest configuration.
+- The n=14 learned-prior diagnostic is intentionally kept out of the compact paper table: a dedicated linear-action scorer gives only one score win and eleven ties, so high-dimensional neural guidance remains a boundary result rather than a strong contribution claim.
 - The Pareto archive gives the clearest small-function portfolio gain over single-score Resource-NMCTS, again with no score losses.
 - In the high-dimensional suites, the measurable scale contribution is mostly the bounded linear-pair guard.  Resource/Profile/Pareto sometimes reduce to the same guarded candidate, so these rows should be written as scalability/guard evidence rather than as independent Pareto superiority evidence.
