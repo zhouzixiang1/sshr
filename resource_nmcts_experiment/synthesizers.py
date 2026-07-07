@@ -1045,7 +1045,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             # clearest search-quality separation over root beam while still
             # staying within the per-row timeout on the current stress set.
             highdim_config = replace(fast_config, candidate_top_k=config.candidate_top_k)
-            linear_method = "fprm_linear_pair" if bf.n == 16 else "fprm_linear_pair_deep"
+            linear_method = "fprm_linear_pair_deep"
             child_specs.append((linear_method, highdim_config))
             if method == "resource_nmcts_wide" and bf.n < 18:
                 child_specs.append(("fprm_linear_pair_wide_fast", highdim_config))

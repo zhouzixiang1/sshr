@@ -144,9 +144,10 @@ Current presets:
   Profile-Resource-NMCTS, and Pareto-Resource-NMCTS.
 - `ultra_highdim_resource`: isolated `n=16` random-ANF scale check with direct
   ANF, logical-AND direct ANF, bounded FPRM root-beam, one-layer FPRM
-  linear-pair factoring, Resource-NMCTS, Profile-Resource-NMCTS, and
-  Pareto-Resource-NMCTS.  It uses the ultra-scale guard rather than the
-  recursive n=15 linear-pair branch.
+  linear-pair factoring, recursive FPRM linear-pair factoring, Resource-NMCTS,
+  Profile-Resource-NMCTS, and Pareto-Resource-NMCTS.  Resource/Profile/Pareto
+  now select the recursive guard at `n=16`, so this preset is mainly evidence
+  for the high-dimensional guard rather than independent Pareto separation.
 - `mega_highdim_resource`: isolated `n=18` random-ANF stress check with direct
   ANF, logical-AND direct ANF, bounded FPRM root-beam, fast FPRM linear-pair,
   Resource-NMCTS, Profile-Resource-NMCTS, and Pareto-Resource-NMCTS.  It uses a
@@ -294,9 +295,9 @@ Search-contribution decomposition evidence from
   not a full high-dimensional Pareto rerun.
 - The high-dimensional scale contribution is mainly the bounded linear-pair
   guard: score improvements over root beam are 60/0/4 at n=14, 30/0/2 at
-  n=15, 22/0/2 at n=16, and 6/0/6 at n=18.  Resource/Pareto selection adds
-  further separation in some suites but should not be overstated when it ties
-  its guarded child.
+  n=15, 23/0/1 at n=16 with the recursive guard, and 6/0/6 at n=18.
+  Resource/Pareto selection adds further separation in some suites but should
+  not be overstated when it ties its guarded child.
 
 Traditional Boolean/ESOP baseline evidence from
 `results/analysis_traditional_resource.md` and
@@ -557,24 +558,25 @@ Ultra-high-dimensional scale check from
 `results/analysis_ultra_highdim_resource.md` and
 `results/runtime_ultra_highdim_resource.md`:
 
-- 24 random ANF functions at `n=16`, 7 methods, 168 result rows, 0 errors, and
+- 24 random ANF functions at `n=16`, 8 methods, 192 result rows, 0 errors, and
   0 skips.
-- The ultra guard switches Resource/Profile to the one-layer FPRM linear-pair
-  candidate.  Both guarded variants match that candidate on all 24 functions.
-- Pareto-Resource-NMCTS adds bounded profile variants around the same
-  high-dimensional candidate set.  Against Resource/Profile it has 9 weighted
-  score wins, 0 losses, and 15 ties, with a 0.09% mean score reduction.
+- The ultra guard now uses the recursive FPRM linear-pair candidate at `n=16`.
+  Resource-NMCTS, Profile-Resource-NMCTS, and Pareto-Resource-NMCTS match that
+  recursive guard on all 24 functions.
+- Recursive linear-pair guard improves over the shallow linear-pair guard by
+  23/0/1 weighted-score W/L/T with a 2.54% mean score reduction, and over FPRM
+  root beam by 23/0/1 with a 4.31% mean score reduction.
 - Compared with direct ANF, Pareto-Resource-NMCTS has 23 T-count wins, 0
-  losses, and 1 tie, with a 62.12% mean T-count reduction and a 59.56% mean
+  losses, and 1 tie, with a 63.34% mean T-count reduction and a 60.81% mean
   score reduction.
 - Compared with logical-AND direct ANF, it has 23 weighted-score wins, 0
-  losses, and 1 tie, with a 31.75% mean score reduction.
-- Compared with FPRM root beam, it has 22 weighted-score wins, 0 losses, and 2
-  ties, with a 1.97% mean score reduction.
+  losses, and 1 tie, with a 33.53% mean score reduction.
+- Compared with FPRM root beam, it has 23 weighted-score wins, 0 losses, and 1
+  tie, with a 4.31% mean score reduction.
 - Runtime remains finite at `n=16`: `and_resource_nmcts` completes 24/24 with
-  median 7.880 s and p95 27.830 s; `and_profile_resource_nmcts` completes
-  24/24 with median 8.426 s and p95 29.765 s; `and_pareto_resource_nmcts`
-  completes 24/24 with median 130.923 s and p95 301.097 s.
+  median 30.488 s and p95 86.782 s; `and_profile_resource_nmcts` completes
+  24/24 with median 30.290 s and p95 86.407 s; `and_pareto_resource_nmcts`
+  completes 24/24 with median 195.080 s and p95 300.957 s.
 
 `results/analysis_mega_highdim_resource.md` and
 `results/runtime_mega_highdim_resource.md`:

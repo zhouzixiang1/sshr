@@ -4,11 +4,17 @@
 
 > 面向资源约束量子布尔函数综合的神经蒙特卡洛树搜索方法
 
+文件：
+
+- `main_zh.tex` / `main_zh.pdf`：现有中文主稿。
+- `resource_nmcts_zh_draft.tex` / `resource_nmcts_zh_draft.pdf`：独立中文技术论文草稿，包含更新后的 $n=16$ recursive linear-pair guard 结果。
+
 编译命令：
 
 ```bash
 cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/paper_latex_zh
 latexmk -xelatex -g main_zh.tex
+latexmk -xelatex -g resource_nmcts_zh_draft.tex
 ```
 
 主要证据来源：

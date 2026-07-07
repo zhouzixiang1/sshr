@@ -132,11 +132,13 @@
 | highdim no-MCTS portfolio over linear-pair | `search_ablation_highdim` | 14/0/2 | -3.08% | 说明 no-MCTS portfolio 在高维下仍能改善单一 linear-pair child |
 | linear-pair guard vs root beam, n=14 | `highdim_resource` | 60/0/4 | -3.00% | 高维主要增益来自 bounded linear-pair guard |
 | recursive linear-pair guard vs root beam, n=15 | `highdim_scale_resource` | 30/0/2 | -5.28% | 递归 pair guard 是 n=15 的主要规模贡献 |
-| linear-pair guard vs root beam, n=16 | `ultra_highdim_resource` | 22/0/2 | -1.88% | n=16 仍有可测增益，但幅度变小 |
+| shallow linear-pair guard vs root beam, n=16 | `ultra_highdim_resource` | 22/0/2 | -1.88% | 旧浅层 guard 仍有可测增益 |
+| recursive linear-pair guard vs shallow linear-pair, n=16 | `ultra_highdim_resource` | 23/0/1 | -2.54% | 新增递归 guard 明确优于浅层 guard |
+| recursive linear-pair guard vs root beam, n=16 | `ultra_highdim_resource` | 23/0/1 | -4.31% | n=16 的主要规模贡献已更新为 recursive linear-pair guard |
 | fast linear-pair guard vs root beam, n=18 | `mega_highdim_resource` | 6/0/6 | -1.91% | n=18 是可验证的压力边界证据 |
 | Resource-NMCTS vs fast linear-pair, n=18 | `mega_highdim_resource` | 12/0/0 | -3.55% | n=18 Resource guard 对 fast child 仍有进一步选择收益 |
 
-这个结果把论文主张进一步收窄为：仿射坐标搜索、神经 refine、guard/Pareto archive 和高维 linear-pair guard 共同构成方法贡献；其中高维大规模证据不能夸大为完整 Pareto archive 的强独立优势，因为部分高维设置中 Resource/Profile/Pareto 会退化为同一稳定 guard。
+这个结果把论文主张进一步收窄为：仿射坐标搜索、神经 refine、guard/Pareto archive 和高维 linear-pair guard 共同构成方法贡献；其中高维大规模证据不能夸大为完整 Pareto archive 的强独立优势，因为部分高维设置中 Resource/Profile/Pareto 会退化为同一稳定 guard。最新 `n=16` rerun 后，`Resource/Profile/Pareto` 在 `ultra_highdim_resource` 中与 recursive linear-pair guard 完全持平，因此该切片应写成 recursive guard 证据，而不是 Pareto archive 证据。
 
 ### 2.5 高维 learned-prior 诊断
 

@@ -198,20 +198,28 @@ METHOD_COMPARISONS = [
         "Pareto Resource-NMCTS vs recursive linear-pair at n=15",
     ),
     MethodComparison(
-        "n16 guard",
+        "n16 shallow guard",
         "ultra_highdim_resource",
         "raw_ultra_highdim_resource.csv",
         "and_fprm_linear_pair",
         "and_fprm_root_beam",
-        "Linear-pair guard vs root beam at n=16",
+        "Shallow linear-pair guard vs root beam at n=16",
     ),
     MethodComparison(
-        "n16 portfolio",
+        "n16 recursive guard",
         "ultra_highdim_resource",
         "raw_ultra_highdim_resource.csv",
-        "and_pareto_resource_nmcts",
+        "and_fprm_linear_pair_deep",
         "and_fprm_linear_pair",
-        "Pareto Resource-NMCTS vs linear-pair at n=16",
+        "Recursive linear-pair guard vs shallow linear-pair at n=16",
+    ),
+    MethodComparison(
+        "n16 recursive guard",
+        "ultra_highdim_resource",
+        "raw_ultra_highdim_resource.csv",
+        "and_fprm_linear_pair_deep",
+        "and_fprm_root_beam",
+        "Recursive linear-pair guard vs root beam at n=16",
     ),
     MethodComparison(
         "n18 guard",
@@ -480,7 +488,8 @@ def write_latex(rows: list[dict[str, str]], out: Path) -> None:
         "Highdim no-MCTS portfolio over linear-pair",
         "Linear-pair guard vs root beam at n=14",
         "Recursive linear-pair guard vs root beam at n=15",
-        "Linear-pair guard vs root beam at n=16",
+        "Recursive linear-pair guard vs shallow linear-pair at n=16",
+        "Recursive linear-pair guard vs root beam at n=16",
         "Fast linear-pair guard vs root beam at n=18",
         "Resource-NMCTS vs fast linear-pair at n=18",
     ]
@@ -577,7 +586,7 @@ def write_markdown(rows: list[dict[str, str]], out: Path) -> None:
             "- The learned action prior is a positive but modest quality signal on the n<=6 rerun; it improves score with no losses, while earlier runtime evidence shows it is not yet the fastest configuration.",
             "- The n=14 learned-prior diagnostic is intentionally kept out of the compact paper table: a dedicated linear-action scorer gives only one score win and eleven ties, so high-dimensional neural guidance remains a boundary result rather than a strong contribution claim.",
             "- The Pareto archive gives the clearest small-function portfolio gain over single-score Resource-NMCTS, again with no score losses.",
-            "- In the high-dimensional suites, the measurable scale contribution is mostly the bounded linear-pair guard.  Resource/Profile/Pareto sometimes reduce to the same guarded candidate, so these rows should be written as scalability/guard evidence rather than as independent Pareto superiority evidence.",
+            "- In the high-dimensional suites, the measurable scale contribution is mostly the bounded linear-pair guard.  The n=16 rerun shows that recursive linear-pair guard improves both the shallow guard and root beam, while Resource/Profile/Pareto reduce to the same guarded candidate.  These rows should therefore be written as scalability/guard evidence rather than as independent Pareto superiority evidence.",
         ]
     )
     out.write_text("\n".join(lines) + "\n", encoding="utf-8")

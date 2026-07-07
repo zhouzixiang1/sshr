@@ -28,8 +28,9 @@ function-level comparison; negative relative values favor the target method.
 | n14 portfolio | Pareto Resource-NMCTS vs linear-pair at n=14 | highdim_resource | 64 | 59/0/5 | -3.49% | -3.83% |
 | n15 guard | Recursive linear-pair guard vs root beam at n=15 | highdim_scale_resource | 32 | 30/0/2 | -5.28% | -6.43% |
 | n15 portfolio | Pareto Resource-NMCTS vs recursive linear-pair at n=15 | highdim_scale_resource | 32 | 5/0/27 | -0.03% | -0.03% |
-| n16 guard | Linear-pair guard vs root beam at n=16 | ultra_highdim_resource | 24 | 22/0/2 | -1.88% | -2.18% |
-| n16 portfolio | Pareto Resource-NMCTS vs linear-pair at n=16 | ultra_highdim_resource | 24 | 9/0/15 | -0.09% | -0.11% |
+| n16 shallow guard | Shallow linear-pair guard vs root beam at n=16 | ultra_highdim_resource | 24 | 22/0/2 | -1.88% | -2.18% |
+| n16 recursive guard | Recursive linear-pair guard vs shallow linear-pair at n=16 | ultra_highdim_resource | 24 | 23/0/1 | -2.54% | -2.62% |
+| n16 recursive guard | Recursive linear-pair guard vs root beam at n=16 | ultra_highdim_resource | 24 | 23/0/1 | -4.31% | -4.64% |
 | n18 guard | Fast linear-pair guard vs root beam at n=18 | mega_highdim_resource | 12 | 6/0/6 | -1.91% | -2.72% |
 | n18 portfolio | Resource-NMCTS vs fast linear-pair at n=18 | mega_highdim_resource | 12 | 12/0/0 | -3.55% | -3.75% |
 | learned prior | Learned prior for Affine-NMCTS | traditional_resource | 177 | 42/0/135 | -1.47% | -1.62% |
@@ -141,16 +142,21 @@ function-level comparison; negative relative values favor the target method.
 | Pareto Resource-NMCTS vs recursive linear-pair at n=15 | depth | 1/4/27 | 5493.97 | 5493.59 | +0.02% |
 | Pareto Resource-NMCTS vs recursive linear-pair at n=15 | peak_ancilla | 0/0/32 | 3.06 | 3.06 | +0.00% |
 | Pareto Resource-NMCTS vs recursive linear-pair at n=15 | score | 5/0/27 | 3529.02 | 3529.63 | -0.03% |
-| Linear-pair guard vs root beam at n=16 | T | 22/0/2 | 3759.67 | 3822.33 | -2.18% |
-| Linear-pair guard vs root beam at n=16 | CNOT | 22/0/2 | 6501.33 | 6613.50 | -2.10% |
-| Linear-pair guard vs root beam at n=16 | depth | 22/0/2 | 6501.46 | 6613.62 | -2.10% |
-| Linear-pair guard vs root beam at n=16 | peak_ancilla | 0/22/2 | 3.21 | 2.29 | +47.22% |
-| Linear-pair guard vs root beam at n=16 | score | 22/0/2 | 4148.75 | 4216.21 | -1.88% |
-| Pareto Resource-NMCTS vs linear-pair at n=16 | T | 8/0/16 | 3756.33 | 3759.67 | -0.11% |
-| Pareto Resource-NMCTS vs linear-pair at n=16 | CNOT | 2/6/16 | 6504.17 | 6501.33 | +0.03% |
-| Pareto Resource-NMCTS vs linear-pair at n=16 | depth | 2/6/16 | 6504.29 | 6501.46 | +0.03% |
-| Pareto Resource-NMCTS vs linear-pair at n=16 | peak_ancilla | 0/0/24 | 3.21 | 3.21 | +0.00% |
-| Pareto Resource-NMCTS vs linear-pair at n=16 | score | 9/0/15 | 4145.59 | 4148.75 | -0.09% |
+| Shallow linear-pair guard vs root beam at n=16 | T | 22/0/2 | 3759.67 | 3822.33 | -2.18% |
+| Shallow linear-pair guard vs root beam at n=16 | CNOT | 22/0/2 | 6501.33 | 6613.50 | -2.10% |
+| Shallow linear-pair guard vs root beam at n=16 | depth | 22/0/2 | 6501.46 | 6613.62 | -2.10% |
+| Shallow linear-pair guard vs root beam at n=16 | peak_ancilla | 0/22/2 | 3.21 | 2.29 | +47.22% |
+| Shallow linear-pair guard vs root beam at n=16 | score | 22/0/2 | 4148.75 | 4216.21 | -1.88% |
+| Recursive linear-pair guard vs shallow linear-pair at n=16 | T | 23/0/1 | 3700.33 | 3759.67 | -2.62% |
+| Recursive linear-pair guard vs shallow linear-pair at n=16 | CNOT | 22/1/1 | 6404.50 | 6501.33 | -2.42% |
+| Recursive linear-pair guard vs shallow linear-pair at n=16 | depth | 22/1/1 | 6404.62 | 6501.46 | -2.42% |
+| Recursive linear-pair guard vs shallow linear-pair at n=16 | peak_ancilla | 0/4/20 | 3.38 | 3.21 | +5.90% |
+| Recursive linear-pair guard vs shallow linear-pair at n=16 | score | 23/0/1 | 4084.05 | 4148.75 | -2.54% |
+| Recursive linear-pair guard vs root beam at n=16 | T | 23/0/1 | 3700.33 | 3822.33 | -4.64% |
+| Recursive linear-pair guard vs root beam at n=16 | CNOT | 23/0/1 | 6404.50 | 6613.50 | -4.42% |
+| Recursive linear-pair guard vs root beam at n=16 | depth | 23/0/1 | 6404.62 | 6613.62 | -4.42% |
+| Recursive linear-pair guard vs root beam at n=16 | peak_ancilla | 0/23/1 | 3.38 | 2.29 | +54.86% |
+| Recursive linear-pair guard vs root beam at n=16 | score | 23/0/1 | 4084.05 | 4216.21 | -4.31% |
 | Fast linear-pair guard vs root beam at n=18 | T | 6/0/6 | 6754.00 | 6765.33 | -2.72% |
 | Fast linear-pair guard vs root beam at n=18 | CNOT | 5/0/7 | 11566.83 | 11585.17 | -1.79% |
 | Fast linear-pair guard vs root beam at n=18 | depth | 5/1/6 | 11568.42 | 11585.25 | +0.14% |
@@ -189,4 +195,4 @@ function-level comparison; negative relative values favor the target method.
 - The learned action prior is a positive but modest quality signal on the n<=6 rerun; it improves score with no losses, while earlier runtime evidence shows it is not yet the fastest configuration.
 - The n=14 learned-prior diagnostic is intentionally kept out of the compact paper table: a dedicated linear-action scorer gives only one score win and eleven ties, so high-dimensional neural guidance remains a boundary result rather than a strong contribution claim.
 - The Pareto archive gives the clearest small-function portfolio gain over single-score Resource-NMCTS, again with no score losses.
-- In the high-dimensional suites, the measurable scale contribution is mostly the bounded linear-pair guard.  Resource/Profile/Pareto sometimes reduce to the same guarded candidate, so these rows should be written as scalability/guard evidence rather than as independent Pareto superiority evidence.
+- In the high-dimensional suites, the measurable scale contribution is mostly the bounded linear-pair guard.  The n=16 rerun shows that recursive linear-pair guard improves both the shallow guard and root beam, while Resource/Profile/Pareto reduce to the same guarded candidate.  These rows should therefore be written as scalability/guard evidence rather than as independent Pareto superiority evidence.
