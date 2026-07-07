@@ -12,6 +12,7 @@
 - `resource_nmcts_zh_report.tex` / `resource_nmcts_zh_report.pdf`：中文论文报告版，按“主张与边界、相关工作、方法、实验、结果、讨论”组织。
 - `resource_nmcts_zh_robustness.tex` / `resource_nmcts_zh_robustness.pdf`：中文投稿论证稿，突出独立于 SSHR 的 Resource-NMCTS 主线、n=16 清洗后的 240 行结果和多资源权重鲁棒性分析。
 - `resource_nmcts_zh_neural_plan.tex` / `resource_nmcts_zh_neural_plan.pdf`：中文方案与阶段性证据稿，聚焦神经 MCTS 论文主线、pairwise root-action ranker 诊断、当前不足和下一步实验目标。
+- `resource_nmcts_zh_manuscript_v2.tex` / `resource_nmcts_zh_manuscript_v2.pdf`：中文正式论文初稿 v2，按“引言、相关工作、问题定义、方法、实验、结果、讨论、结论”组织，弱化阶段汇报口吻。
 
 编译命令：
 
@@ -23,6 +24,7 @@ latexmk -xelatex -g resource_nmcts_zh_full.tex
 latexmk -xelatex -g resource_nmcts_zh_report.tex
 latexmk -xelatex -g resource_nmcts_zh_robustness.tex
 latexmk -xelatex -g resource_nmcts_zh_neural_plan.tex
+latexmk -xelatex -g resource_nmcts_zh_manuscript_v2.tex
 ```
 
 主要证据来源：
