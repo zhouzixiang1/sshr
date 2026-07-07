@@ -231,6 +231,14 @@ def _solve_plan(method: str, terms: frozenset[int], config: SearchConfig, seed: 
             recursive_depth=1,
             boolean_ring=True,
         )
+    if method == "boolean_linear_pair_screen_deeper":
+        return linear_pair_screen_plan(
+            terms,
+            config=config,
+            action_width=6,
+            recursive_depth=2,
+            boolean_ring=True,
+        )
     if method == "boolean_linear_pair_screen_neural":
         return linear_pair_screen_plan(
             terms,
@@ -1287,6 +1295,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             if bf.n >= 20:
                 child_specs.append(("boolean_linear_pair_screen", highdim_config))
                 child_specs.append(("boolean_linear_pair_screen_deep", highdim_config))
+                child_specs.append(("boolean_linear_pair_screen_deeper", highdim_config))
                 if model_path:
                     child_specs.append(("boolean_linear_pair_screen_ai_guard", highdim_config))
                     child_specs.append(("boolean_linear_pair_screen_deep_ai_guard", highdim_config))
@@ -1551,6 +1560,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         "direct_anf",
         "boolean_linear_pair_screen",
         "boolean_linear_pair_screen_deep",
+        "boolean_linear_pair_screen_deeper",
         "boolean_linear_pair_screen_neural",
         "boolean_linear_pair_screen_deep_neural",
         "boolean_linear_pair_screen_ai_guard",

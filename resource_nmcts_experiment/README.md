@@ -641,14 +641,23 @@ Ultra-high-dimensional scale check from
   screen.  It completes all six functions and improves over the single screen
   on 5/6 functions, tying on one: mean T-count is 4.62% lower and mean weighted
   score is 4.52% lower than the single Boolean screen.
-- Relative to AND-direct ANF, the updated Resource-NMCTS has 5/0/1 score
-  wins/losses/ties, with mean T-count 9.43% lower and mean weighted score
-  9.04% lower.  Relative to direct ANF, it has 5/1/0 score wins/losses/ties
-  and mean weighted score 37.10% lower.
+- A targeted depth-2 recursive Boolean-ring screen rerun in
+  `results/analysis_giga_screen_deeper_vs_deep.md` further improves over the
+  depth-1 screen on 5/6 functions, tying on one: mean T-count is 3.22% lower
+  and mean weighted score is 3.13% lower, with standalone mean runtime 20.152 s.
+- With the depth-2 screen in the Resource portfolio, updated Resource-NMCTS has
+  5/0/1 score wins/losses/ties versus the previous depth-1 Resource run and
+  mean weighted score 3.13% lower.  Relative to old Resource-NMCTS it has
+  5/0/1 score wins/losses/ties and mean weighted score 7.47% lower.
+- Relative to AND-direct ANF, the depth-2 Resource-NMCTS has 5/0/1 score
+  wins/losses/ties, with mean T-count 12.24% lower and mean weighted score
+  11.80% lower.  Relative to direct ANF, it has 5/1/0 score wins/losses/ties
+  and mean weighted score 38.86% lower.
 - The n=20 run is therefore a useful pressure boundary with a stronger bounded
-  repair: recursive ANF-only Boolean-ring screening verifies correctness and
-  separates from AND-direct ANF, but the stronger FPRM/root-beam searches remain
-  outside the current 300 s timeout.
+  repair: depth-2 recursive ANF-only Boolean-ring screening verifies
+  correctness and separates from AND-direct ANF, but the stronger
+  FPRM/root-beam searches remain outside the current 300 s timeout.  The trade
+  off is higher runtime and a small peak-ancilla increase.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost

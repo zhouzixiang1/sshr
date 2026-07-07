@@ -15,6 +15,7 @@
 - `resource_nmcts_zh_manuscript_v2.tex` / `resource_nmcts_zh_manuscript_v2.pdf`：中文正式论文初稿 v2，按“引言、相关工作、问题定义、方法、实验、结果、讨论、结论”组织，弱化阶段汇报口吻。
 - `resource_nmcts_zh_boolean_ring_v3.tex` / `resource_nmcts_zh_boolean_ring_v3.pdf`：中文短论文稿 v3，聚焦布尔环线性因子、n=16 matched improvement、n=20 边界测试和当前仍未完成的高维 AI 缺口。
 - `resource_nmcts_zh_stage_delivery.tex` / `resource_nmcts_zh_stage_delivery.pdf`：中文阶段交付稿，面向导师/合作者快速阅读，压缩说明项目定位、方法主线、已达成提升、负面结果和下一步“明显提升”目标。
+- `resource_nmcts_zh_adaptive_screen.tex` / `resource_nmcts_zh_adaptive_screen.pdf`：中文技术论文稿 v4，聚焦自适应 depth-2 布尔环筛选、n=18/n=20 最新 matched comparison，以及“筛选有效但高维神经先验仍弱”的边界。
 
 编译命令：
 
@@ -29,6 +30,7 @@ latexmk -xelatex -g resource_nmcts_zh_neural_plan.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v2.tex
 latexmk -xelatex -g resource_nmcts_zh_boolean_ring_v3.tex
 latexmk -xelatex -g resource_nmcts_zh_stage_delivery.tex
+latexmk -xelatex -g resource_nmcts_zh_adaptive_screen.tex
 ```
 
 主要证据来源：
@@ -56,10 +58,18 @@ latexmk -xelatex -g resource_nmcts_zh_stage_delivery.tex
 - `../results/analysis_mega_screen_deep_vs_screen.md`
 - `../results/analysis_mega_screen_deep_vs_old_resource.md`
 - `../results/analysis_giga_screen_deep_vs_screen.md`
+- `../results/analysis_giga_screen_deeper_vs_deep.md`
+- `../results/analysis_giga_screen_adaptive_vs_screen.md`
+- `../results/analysis_giga_adaptive_resource_vs_and_direct.md`
+- `../results/analysis_mega_screen_adaptive_vs_screen.md`
+- `../results/analysis_mega_resource_vs_screen_adaptive.md`
 - `../results/analysis_giga_resource_vs_boolean_screen.md`
 - `../results/analysis_giga_resource_vs_and_direct.md`
 - `../results/analysis_giga_resource_recursive_screen_vs_old.md`
 - `../results/analysis_giga_resource_recursive_screen_vs_and_direct.md`
+- `../results/analysis_giga_resource_deeper_vs_depth1_resource.md`
+- `../results/analysis_giga_resource_deeper_vs_old_resource.md`
+- `../results/analysis_giga_resource_deeper_vs_and_direct.md`
 - `../results/analysis_exact_fprm_dp.md`
 - `../results/analysis_exact_xag_mc.md`
 - `../results/analysis_mega_highdim_resource.md`
