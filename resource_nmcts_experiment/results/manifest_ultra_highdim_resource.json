@@ -43,7 +43,7 @@
   "model": "models/linear_action_scorer_root_teacher.pt",
   "workers": 1,
   "seconds": null,
-  "seconds_current_run": 0.041275978088378906,
+  "seconds_current_run": 0.03742384910583496,
   "config": {
     "weights": {
       "t": 1.0,

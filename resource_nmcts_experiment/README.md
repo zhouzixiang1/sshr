@@ -57,6 +57,7 @@ cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json resul
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_highdim_root_action_oracle.py --model models/linear_action_scorer_root_teacher.pt --raw results/raw_highdim_root_action_teacher.csv --summary results/summary_highdim_root_action_teacher.csv --analysis results/analysis_highdim_root_action_teacher.md --latex-out paper_latex/tables/highdim_root_action_teacher.tex
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset highdim_guard_upgrade --model /tmp/nonexistent_model.pt --workers 6 --checkpoint-every 6 --isolate-timeouts
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_search_contribution.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_weight_robustness.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_resource_sweep.py --model models/action_scorer_rollout_logical_and.pt --workers 10
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_resource_sweep.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset large_resource_core --model models/action_scorer_rollout_logical_and.pt --resume --workers 6 --checkpoint-every 1 --isolate-timeouts

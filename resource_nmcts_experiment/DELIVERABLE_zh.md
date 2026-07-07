@@ -109,6 +109,8 @@
 
 - `results/analysis_search_contribution.md`
 - `results/summary_search_contribution.csv`
+- `results/analysis_weight_robustness.md`
+- `results/summary_weight_robustness.csv`
 - `results/raw_search_ablation_traditional.csv`
 - `results/analysis_search_ablation_traditional.md`
 - `results/raw_search_ablation_highdim.csv`
@@ -280,7 +282,36 @@
 - `and_resource_nmcts_wide` 在 12 个 `n=14` random ANF 函数上相对 `and_resource_nmcts` 为 0/0/12，资源完全持平，但平均运行时间增加 59.80%。
 - 因此，本轮不能把高维 root-teacher 或 wide-fast 写成主贡献；它们应作为负向诊断，说明当前高维 AI 排序仍未突破，后续需要更强的策略梯度、pairwise ranking 或更丰富特征。
 
-### 2.10 外部工具链 readiness 与文献边界审计
+### 2.10 多资源权重鲁棒性与中文 PDF 交付
+
+本轮新增 `analyze_weight_robustness.py`，用于回答一个直接的审稿风险：当前 score 结论是否只是某一组权重系数制造出来的。该脚本不重新综合线路，而是对已经通过验证的 raw CSV 行做 post-hoc rescoring，比较 Paper score、T-only、T-heavy、CNOT-depth 和 Ancilla-tight 五种逻辑资源权重。
+
+主要产物：
+
+- `results/summary_weight_robustness.csv`
+- `results/analysis_weight_robustness.md`
+- `paper_latex/tables/weight_robustness_compact.tex`
+- `paper_latex_zh/resource_nmcts_zh_robustness.tex`
+- `paper_latex_zh/resource_nmcts_zh_robustness.pdf`
+
+核心结果：
+
+| 对比 | Paper score | T-only | CNOT-depth | Ancilla-tight |
+|---|---:|---:|---:|---:|
+| Pareto vs ESOP cube beam, n<=6 | 174/0/3，-36.09% | 174/0/3，-38.95% | 174/0/3，-32.08% | 174/0/3，-32.75% |
+| Pareto vs ESOP-MILP, n<=6 | 167/3/7，-29.84% | 166/0/11，-32.77% | 165/4/8，-25.44% | 167/3/7，-26.68% |
+| Pareto vs SSHR-H, n<=6 | 173/4/0，-41.06% | 173/0/4，-47.93% | 168/9/0，-27.87% | 172/5/0，-31.95% |
+| Resource vs root beam, n=16 | 23/0/1，-4.36% | 23/0/1，-4.70% | 23/0/1，-4.28% | 23/0/1，-3.43% |
+| Resource vs root beam, n=18 | 12/0/0，-5.29% | 12/0/0，-6.19% | 12/0/0，-4.54% | 11/1/0，-3.33% |
+| Resource vs fast linear-pair, n=18 | 12/0/0，-3.55% | 12/0/0，-3.75% | 12/0/0，-3.23% | 12/0/0，-3.33% |
+
+解释：
+
+- 主要结论在 T-only、CNOT-depth 和 Ancilla-tight 等替代权重下仍成立，说明当前结果不是单一 score 权重偶然造成的。
+- CNOT-depth profile 下相对 SSHR-H 的优势收窄到 -27.87%，这反而强化了论文边界：SSHR 的 CNOT-oriented 优势必须如实承认，本文只主张低 T 和低加权资源。
+- 新中文 PDF `resource_nmcts_zh_robustness.pdf` 是独立投稿论证稿，重点写清楚“方法不依赖 SSHR、AI/MCTS 贡献如何被消融支持、权重鲁棒性如何降低审稿风险”。
+
+### 2.11 外部工具链 readiness 与文献边界审计
 
 本轮新增 `analyze_toolchain_readiness.py`，把“还缺 ROS/mockturtle/RevKit 复现实验”从文字判断变成可复现环境审计。
 
@@ -316,6 +347,7 @@
 - `analyze_external_baselines.py`：外部 baseline 对比分析。
 - `analyze_esop_baseline.py`：新增 ESOP 专项分析。
 - `analyze_search_contribution.py`：新增搜索贡献分解分析。
+- `analyze_weight_robustness.py`：新增多资源 score 权重鲁棒性分析。
 - `analyze_exact_fprm_dp.py`：新增小规模 bounded FPRM-DP 精确切片。
 - `analyze_exact_xag_mc.py`：新增小规模 exact XAG 乘法复杂度 T 下界。
 - `analyze_highdim_root_action_oracle.py`：新增高维 root-action teacher 诊断。
@@ -355,6 +387,7 @@
 - `paper_latex/tables/esop_baseline_by_n.tex`
 - `paper_latex/tables/neural_prior_ablation.tex`
 - `paper_latex/tables/search_contribution_decomposition.tex`
+- `paper_latex/tables/weight_robustness_compact.tex`
 - `paper_latex/tables/neural_prior_highdim_ablation.tex`
 - `paper_latex/tables/exact_fprm_dp.tex`
 - `paper_latex/tables/exact_xag_mc.tex`
@@ -364,6 +397,10 @@
 - `paper_latex/tables/external_traditional_resource_n6.tex`
 - `paper_latex/tables/resource_mega_highdim_resource.tex`
 - `paper_latex/tables/runtime_mega_highdim_resource.tex`
+- `paper_latex_zh/resource_nmcts_zh_report.tex`
+- `paper_latex_zh/resource_nmcts_zh_report.pdf`
+- `paper_latex_zh/resource_nmcts_zh_robustness.tex`
+- `paper_latex_zh/resource_nmcts_zh_robustness.pdf`
 
 ## 4. 复现命令
 
@@ -399,6 +436,15 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 ```bash
 cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_exact_xag_mc.py --max-n 4
+```
+
+重新生成多资源权重鲁棒性分析和中文 PDF：
+
+```bash
+cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_weight_robustness.py
+cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/paper_latex_zh
+latexmk -xelatex -g resource_nmcts_zh_robustness.tex
 ```
 
 重新生成外部工具链 readiness 审计：

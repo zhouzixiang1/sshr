@@ -1,0 +1,240 @@
+\documentclass[UTF8,fontset=macnew,11pt]{ctexart}
+
+\usepackage[a4paper,margin=2.3cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!50!black
+}
+
+\setlength{\emergencystretch}{2em}
+
+\newcommand{\method}{Resource-NMCTS}
+\newcommand{\pareto}{Pareto-Resource-NMCTS}
+\newcommand{\score}{\ensuremath{\mathrm{score}}}
+\newcommand{\anf}{\ensuremath{\mathrm{ANF}}}
+\newcommand{\fprm}{\ensuremath{\mathrm{FPRM}}}
+
+\title{面向资源约束量子布尔函数综合的神经蒙特卡洛树搜索方法：中文论证稿}
+\author{中文 LaTeX 交付稿}
+\date{2026年7月7日}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+量子布尔函数 oracle 综合把经典谓词嵌入可逆量子线路，是 Grover 搜索、量子密码分析和多类量子算法原语中的基础步骤。直接基于代数正规形的构造语义透明，但在高次数项和稠密项集合上会产生较高 T-count、较长逻辑深度和较大的中间计算空间。本文将该问题重新表述为 \anf{}/\fprm{} 项集合上的资源约束搜索问题，提出 \method{}：方法结合仿射坐标预处理、固定极性 Reed--Muller 极性搜索、linear-pair 因子、神经动作先验、蒙特卡洛树搜索、baseline-preserving AI guard 和 Pareto 候选库，在统一逻辑资源模型下选择正确线路。该方法不依赖 SSHR 的 parallelotope 候选结构；SSHR 在本文中只作为 CNOT-oriented baseline 参与比较。当前实验覆盖 $n\leq6$ 的 177 个传统函数、$n=14,15,16,18$ 的高维随机 \anf{} 压力测试、ESOP、ABC、BDD、SSHR 外部基线、搜索贡献消融，以及 exact FPRM-DP 和 exact XAG 小规模参照。在传统函数切片上，\pareto{} 相对 ESOP cube beam 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%；相对 weighted ESOP-MILP 获得 167/3/7，平均 score 降低 29.84\%。在 $n=16$ 的 24 个函数上，\method{} 相对 FPRM root beam 获得 23/0/1，平均 score 降低 4.36\%；baseline-preserving AI guard 相对 deterministic recursive guard 获得 6/0/18，平均 score 降低 0.05\%。在 $n=18$ 的 12 个函数上，\method{} 相对 direct ANF 平均 T-count 降低 60.05\%，平均 score 降低 56.99\%。新增多资源权重鲁棒性分析显示，上述主要结论在 T-only、T-heavy、CNOT-depth 和 ancilla-tight 等替代权重下仍成立。本文主张限定为逻辑层低 T-count 和低加权资源优势，不声称 CNOT-only 全局最优、硬件映射最优或任意规模下的完备最优性。
+\end{abstract}
+
+\noindent\textbf{关键词：}量子 oracle 综合；布尔函数综合；神经蒙特卡洛树搜索；ANF；FPRM；T-count；资源约束
+
+\section{核心定位}
+
+本文的研究对象是布尔函数
+\[
+  f:\{0,1\}^{n}\rightarrow\{0,1\}
+\]
+对应的量子 oracle
+\[
+  |x\rangle|y\rangle\mapsto |x\rangle|y\oplus f(x)\rangle .
+\]
+问题的关键不只是实现语义正确的 reversible circuit，而是在逻辑层降低 T-count、CNOT、深度、总门数和 peak ancilla 等资源。由于容错量子计算中非 Clifford 资源通常更昂贵，T-count 是最重要的单项指标；但只看 T-count 也会掩盖 CNOT、depth 和辅助比特的代价。因此本文采用多资源分数
+\begin{equation}
+  \score = T + 0.04\,\mathrm{CNOT} + 0.015\,\mathrm{depth}
+         + 0.01\,\mathrm{gates} + 2\,\mathrm{ancilla}.
+  \label{eq:score}
+\end{equation}
+该分数是逻辑层可复现实验指标，而不是某个具体硬件平台的真实物理开销。
+
+本文最重要的定位是：方法主线不从 SSHR 入手。SSHR 使用 parallelotope 空间结构并主要面向 CNOT-oriented small-scale Boolean synthesis。本文则在 \anf{}/\fprm{} 项集合上搜索 compute/uncompute 因子分解，主目标是低 T-count 与低加权资源。这样写的好处是，论文不需要与 SSHR 在其最强的 CNOT-only 方向正面硬碰硬，而是把 SSHR 放到合理 baseline 位置：它可以在 CNOT 上更强，但本文可以在 T-count 和 score 上展示独立优势。
+
+\section{研究问题与贡献}
+
+本文的一句话论证是：在逻辑层布尔 oracle 综合中，通过在 \anf{}/\fprm{} 项集合上进行资源感知因子搜索，并用神经先验、MCTS 和 portfolio/Pareto archive 选择候选线路，可以在同一 benchmark 上稳定降低 T-count 与加权逻辑资源，同时保持可验证的 oracle 语义。
+
+围绕这个论证，当前贡献可分为四部分。
+
+第一，提出一个不依赖 SSHR parallelotope 的搜索空间。ANF 把函数写成单项式异或；FPRM 极性搜索通过固定变量极性改变项集合形状；linear-pair 因子把局部线性结构用 CNOT-only 方式抽出。这些结构共同构成本文的动作空间。
+
+第二，提出资源感知的神经 MCTS/portfolio 机制。神经动作先验用于排序候选因子，MCTS 在有限预算内探索不同因子组合，baseline-preserving AI guard 用确定性 guard 兜底，避免神经排序单独使用时造成 score regression。小规模函数上，Pareto archive 保留多资源非支配候选；高维函数上，候选集有意收窄为稳定 guard，以换取可验证性和运行时间边界。
+
+第三，给出覆盖多个证据层次的实验。传统函数切片检验小规模质量，ESOP、ABC、BDD、SSHR 外部基线检验工具链公平性，高维随机 ANF 压力测试检验可扩展性，搜索消融解释收益来源，exact FPRM-DP 与 exact XAG 切片提供小规模精确参照。
+
+第四，新增多权重鲁棒性分析。原始 score 的权重选择可能被审稿人质疑，因此本文对已验证 raw CSV 做 post-hoc rescoring，检查 Paper score、T-only、T-heavy、CNOT-depth 和 Ancilla-tight 等 profile 下的胜负关系。结果显示主要结论不是单一权重偶然造成的。
+
+\section{方法概述}
+
+\subsection{ANF/FPRM 因子搜索}
+
+ANF 表示为
+\begin{equation}
+  f(x)=\bigoplus_{m\in\mathcal{M}}\prod_{i\in m}x_i .
+\end{equation}
+如果多个单项式共享公共因子 $g(x)$，可以先把 $g$ 计算到辅助比特，再在剩余子项中复用该中间量，最后 uncompute。该过程用有限辅助比特换取 T-count 降低。FPRM 极性搜索允许变量取固定极性，从而改变项集合并暴露新的公共因子。
+
+linear-pair 因子是高维结果中的关键机制。若项集合局部可写为
+\[
+  (x_i\oplus x_j\oplus\cdots)\cdot h(x),
+\]
+线性部分只需 CNOT 计算，而不引入额外 T 门。$n=14$ 到 $n=18$ 的压力测试显示，linear-pair guard 是高维主要规模机制。
+
+\subsection{神经 MCTS 与 baseline-preserving guard}
+
+搜索状态为当前尚未综合的项集合，动作为选择一个候选因子并递归处理剩余项。动作特征包括项数、平均次数、候选覆盖率、因子大小、即时资源收益等。神经网络提供动作先验，MCTS 根据该先验分配 rollout 预算。
+
+高维实验暴露了一个重要边界：root-neural recursive guard 单独使用并不稳定。在 $n=16$ 的 24 个函数上，它相对 deterministic recursive guard 的 score 胜/负/平为 6/7/11，平均 score 增加 0.08\%。因此本文采用 baseline-preserving AI guard：同时计算 deterministic recursive guard 和 root-neural recursive guard，并保留 score 更低者。这样得到 6/0/18 的无 score-loss 小增益，平均 score 降低 0.05\%。这比单纯强调“AI 更强”更可信，因为它承认学习模型当前仍弱，但把可用的正向样本安全地转化为 portfolio 增益。
+
+\section{实验设计}
+
+实验包含五类证据。第一类是 $n\leq6$ 的 177 个传统函数，与 direct ANF、AND-direct ANF、fixed MCTS、ESOP cube beam、ESOP-MILP、SSHR-H 以及外部 ABC/BDD/SSHR 结果比较。第二类是 $n=14,15,16,18$ 的高维随机 ANF 压力测试，检验 bounded guard 是否能在更大变量数下完成验证并改善资源。第三类是搜索贡献分解，分别测量 affine search、neural refine、guard、MCTS/Pareto archive 和 high-dimensional linear-pair guard 的作用。第四类是 exact FPRM-DP 和 exact XAG 参照，用于说明结果不是单纯依赖 time-limited heuristic baseline。第五类是本稿新增的多资源权重鲁棒性分析。
+
+所有内部候选线路均通过 exhaustive truth-table simulation 验证 oracle 语义。外部 ABC、BDD、ESOP 和 SSHR 结果也通过导出 manifest 或 truth-table 验证后纳入分析。当前 $n=16$ ultra-high-dimensional 切片已清理为 24 个函数、10 个方法、240 行结果，不再包含旧的 wide 历史方法行。
+
+\section{主要结果}
+
+\subsection{传统函数切片}
+
+表~\ref{tab:traditional} 给出 $n\leq6$ 传统函数切片的平均资源。\pareto{} 在该切片上取得最低平均 T-count 和最低平均 score。相对 ESOP cube beam，\pareto{} 的 score 胜/负/平为 174/0/3，平均 score 降低 36.09\%；相对 ESOP-MILP 为 167/3/7，平均 score 降低 29.84\%。SSHR-H 的平均 CNOT 为 67.6，低于 \pareto{} 的 83.0，因此本文不能写成 CNOT-only 支配；但 \pareto{} 的平均 T-count 从 SSHR-H 的 81.0 降至 40.4，平均 score 从 88.2 降至 49.6。
+
+\begin{table}[t]
+\centering
+\small
+\caption{$n\leq6$ 传统函数切片上的平均逻辑资源。}
+\label{tab:traditional}
+\begin{tabular}{lrrrrr}
+\toprule
+方法 & 平均 T & 平均 CNOT & 平均 depth & 平均 ancilla & 平均 score \\
+\midrule
+Direct ANF & 184.1 & 134.2 & 134.6 & 1.33 & 194.3 \\
+AND-direct ANF & 101.0 & 166.5 & 166.9 & 2.18 & 115.2 \\
+Fixed MCTS & 62.1 & 124.3 & 124.8 & 1.82 & 73.1 \\
+Affine-NMCTS & 45.9 & 94.4 & 98.9 & 1.88 & 55.4 \\
+\method{} & 43.9 & 89.9 & 94.5 & 1.92 & 53.2 \\
+\pareto{} & \textbf{40.4} & 83.0 & \textbf{88.0} & 2.03 & \textbf{49.6} \\
+ESOP-MILP & 83.6 & 133.5 & 159.6 & 2.32 & 96.7 \\
+SSHR-H & 81.0 & \textbf{67.6} & 88.7 & 1.36 & 88.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{高维压力测试}
+
+高维压力测试的核心不是证明全局最优，而是证明 bounded search guard 能在更大变量数下完成验证并带来资源收益。表~\ref{tab:highdim} 汇总主要比较。$n=16$ 当前权威结果为 24 个函数、10 个方法、240 行，无旧 wide 方法残留。相对 FPRM root beam，\method{} 获得 23/0/1 的 score 胜/负/平，平均 score 降低 4.36\%。$n=18$ 上，\method{} 相对 FPRM root beam 获得 12/0/0，平均 score 降低 5.29\%；相对 fast linear-pair guard 获得 12/0/0，平均 score 降低 3.55\%。
+
+\begin{table}[t]
+\centering
+\small
+\caption{高维随机 ANF 压力测试中的主要比较。}
+\label{tab:highdim}
+\begin{tabularx}{\linewidth}{llrrr}
+\toprule
+规模 & 对比 & 函数数 & score 胜/负/平 & 平均 $\Delta$ score \\
+\midrule
+$n=14$ & linear-pair guard vs root beam & 64 & 60/0/4 & $-3.00\%$ \\
+$n=15$ & recursive guard vs root beam & 32 & 30/0/2 & $-5.28\%$ \\
+$n=16$ & \method{} vs root beam & 24 & 23/0/1 & $-4.36\%$ \\
+$n=16$ & AI guard vs recursive guard & 24 & 6/0/18 & $-0.05\%$ \\
+$n=18$ & fast guard vs root beam & 12 & 6/0/6 & $-1.91\%$ \\
+$n=18$ & \method{} vs fast guard & 12 & 12/0/0 & $-3.55\%$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+从 direct ANF 角度看，降幅更明显。$n=16$ 上 \method{} 相对 direct ANF 平均 T-count 降低 63.36\%，平均 score 降低 60.83\%。$n=18$ 上 \method{} 相对 direct ANF 平均 T-count 降低 60.05\%，平均 score 降低 56.99\%。这些收益的代价是 CNOT、depth 和 peak ancilla 相对 direct ANF 往往上升，因此必须写成低 T 与低 score，而不能写成所有资源同时下降。
+
+\subsection{搜索贡献}
+
+搜索贡献分解说明提升不是单一启发式造成的。Affine greedy 相对 fixed-coordinate MCTS 的平均 score 降低 12.12\%，是最大前置收益。Neural refine over affine greedy 的 score 胜/负/平为 65/0/257，平均 score 降低 1.08\%。Guarded Affine-NMCTS over no-guard 为 88/0/234，平均 score 降低 1.74\%。\pareto{} over \method{} 为 68/0/109，平均 score 降低 3.26\%。在高维切片中，主要贡献来自 bounded linear-pair guard，而不是完整 Pareto archive；这一点需要在论文中写清楚。
+
+\subsection{多资源权重鲁棒性}
+
+权重鲁棒性是本稿新增证据。表~\ref{tab:weight-robustness} 使用已经验证的 raw CSV 行重新计算候选分数，不重跑综合。Paper score 是式~\eqref{eq:score}；T-only 只看 T-count；CNOT-depth 提高 CNOT 和 depth 权重；Ancilla-tight 把辅助比特权重从 2 提高到 8。主要结论在这些权重下仍成立：传统函数上 \pareto{} 对 ESOP cube beam、ESOP-MILP 和 SSHR-H 保持优势；高维 $n=14,16,18$ 对 root beam 保持优势；$n=18$ 对 fast linear-pair guard 也保持 12/0/0。
+
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{多资源权重鲁棒性分析。单元格为 score 胜/负/平与平均相对变化。}
+\label{tab:weight-robustness}
+\input{../paper_latex/tables/weight_robustness_compact.tex}
+\end{table}
+
+该分析不能证明任意权重下都优于 baseline，但能排除一个主要风险：当前结论不是由式~\eqref{eq:score} 的某一组系数偶然制造出来的。CNOT-depth profile 下相对 SSHR-H 的幅度收窄到 -27.87\%，也再次说明 SSHR 的 CNOT-oriented 优势仍需如实承认。
+
+\section{讨论}
+
+当前最有说服力的论文主线不是“AI 全面打败 SSHR”，而是“ANF/FPRM 项集合上的资源感知神经搜索，可以在逻辑层 Boolean oracle synthesis 中形成低 T-count 与低加权资源优势”。这个表述有三个优点。第一，它把 SSHR 放在合适位置，避免在 CNOT-only 指标上硬碰硬。第二，它把 AI 的作用写得可验证：神经 refine、MCTS/Pareto candidate selection 和 baseline-preserving guard 都有对应消融，而不是泛泛声称使用 AI。第三，它把高维结果写成 bounded search pressure test，承认完整最优性没有被证明。
+
+当前稿件仍有四个主要短板。第一，高维 learned prior 还弱；$n=14$ 诊断只有 1/0/11 的 score 胜/负/平，平均 score 变化约为 -0.01\%，且运行时间增加。第二，外部 reversible-toolchain 对比还不完整；ABC、BDD、ESOP 和 SSHR 已覆盖，但 ROS、RevKit、mockturtle 风格流程仍待补齐。第三，缺少代表性函数族上的线路结构案例，导致读者可能只看到表格而看不到为什么因子搜索有效。第四，资源模型仍停留在逻辑层，后续若投更偏量子编译的 venue，需要补硬件 mapping、routing 或至少 back-end-aware 的后处理分析。
+
+\section{结论}
+
+本文提出 \method{}，把量子布尔函数 oracle 综合建模为 \anf{}/\fprm{} 项集合上的资源约束搜索问题，并结合神经先验、MCTS、linear-pair guard、baseline-preserving AI guard 和 Pareto archive 生成逻辑层候选线路。当前证据显示，该方法在传统函数、ESOP、ABC、BDD、SSHR baseline、高维随机 ANF 压力测试、搜索贡献消融和 exact 小规模参照上均表现出低 T-count 与低加权资源优势。新增多权重鲁棒性分析进一步支持这些结论不是单一 score 权重的偶然结果。本文的边界同样明确：不声称 CNOT-only 支配、不声称硬件映射最优、不声称全局 reversible synthesis 最优。按当前证据，最稳妥的投稿定位是逻辑层、资源约束、神经搜索式 Boolean oracle synthesis。
+
+\begin{thebibliography}{99}
+
+\bibitem{meuli2022xag}
+G.~Meuli, M.~Soeken, and G.~De Micheli.
+\newblock Xor-And-Inverter Graphs for quantum compilation.
+\newblock \emph{npj Quantum Information}, 8:7, 2022.
+\newblock \url{https://doi.org/10.1038/s41534-021-00514-y}.
+
+\bibitem{meuli2019multiplicative}
+G.~Meuli, M.~Soeken, E.~Campbell, M.~Roetteler, and G.~De Micheli.
+\newblock The role of multiplicative complexity in compiling low T-count oracle circuits.
+\newblock In \emph{Proceedings of ICCAD}, 2019.
+\newblock \url{https://arxiv.org/abs/1908.01609}.
+
+\bibitem{meuli2020ros}
+G.~Meuli, M.~Soeken, M.~Roetteler, and G.~De Micheli.
+\newblock ROS: Resource-constrained oracle synthesis for quantum computers.
+\newblock \emph{Electronic Proceedings in Theoretical Computer Science}, 318:119--130, 2020.
+\newblock \url{https://doi.org/10.4204/EPTCS.318.8}.
+
+\bibitem{wille2009bdd}
+R.~Wille and R.~Drechsler.
+\newblock BDD-based synthesis of reversible logic for large functions.
+\newblock In \emph{Proceedings of DAC}, pp.~270--275, 2009.
+\newblock \url{https://doi.org/10.1145/1629911.1629984}.
+
+\bibitem{zheng2025sshr}
+Q.~Zheng, Y.~Xu, J.~Zhang, Z.~Su, and S.~Zheng.
+\newblock CNOT oriented synthesis for small-scale Boolean functions using spatial structures of parallelotopes.
+\newblock \emph{arXiv:2509.01912}, 2025.
+\newblock \url{https://arxiv.org/abs/2509.01912}.
+
+\bibitem{tsaras2024shortcircuit}
+D.~Tsaras, A.~Grosnit, L.~Chen, Z.~Xie, H.~Bou-Ammar, and M.~Yuan.
+\newblock ShortCircuit: AlphaZero-driven synthesis of Boolean circuits.
+\newblock \emph{arXiv:2408.09858}, 2024.
+\newblock \url{https://arxiv.org/abs/2408.09858}.
+
+\bibitem{rietsch2024unitary}
+S.~Rietsch, A.~Y. Dubey, C.~Ufrecht, M.~Periyasamy, A.~Plinge, C.~Mutschler, and D.~D. Scherer.
+\newblock Unitary synthesis of Clifford+T circuits with reinforcement learning.
+\newblock In \emph{IEEE International Conference on Quantum Computing and Engineering}, pp.~824--835, 2024.
+\newblock \url{https://arxiv.org/abs/2404.14865}.
+
+\bibitem{riu2025zx}
+J.~Riu, J.~Nogue, G.~Vilaplana, A.~Garcia-Saez, and M.~P. Estarellas.
+\newblock Reinforcement learning based quantum circuit optimization via ZX-calculus.
+\newblock \emph{Quantum}, 9:1758, 2025.
+\newblock \url{https://doi.org/10.22331/q-2025-05-28-1758}.
+
+\bibitem{machiya2026monteq}
+M.~Machiya, M.~Menickelly, P.~Hovland, and J.~Liu.
+\newblock MonteQ: A Monte Carlo Tree Search based quantum circuit synthesis framework.
+\newblock \emph{arXiv:2604.19029}, 2026.
+\newblock \url{https://arxiv.org/abs/2604.19029}.
+
+\end{thebibliography}
+
+\end{document}
