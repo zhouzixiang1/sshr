@@ -496,6 +496,11 @@ def main(argv: Iterable[str] | None = None) -> int:
     ap.add_argument("--guard-model", type=Path, default=THIS_DIR / "models" / "boolean_screen_depth_guard.pt")
     ap.add_argument("--results-dir", type=Path, default=RESULTS)
     ap.add_argument("--tables-dir", type=Path, default=TABLES)
+    ap.add_argument(
+        "--tag",
+        default="",
+        help="Optional output tag. For example, --tag extended writes raw_screen_scale_extended_terms.csv.",
+    )
     args = ap.parse_args(list(argv) if argv is not None else None)
 
     profiles = ["shallow", "mixed", "deep"]
@@ -522,10 +527,11 @@ def main(argv: Iterable[str] | None = None) -> int:
     examples.sort(key=lambda ex: (ex.n, ex.name))
     examples = add_learned_methods(examples, args.policy_model, args.guard_model)
 
-    raw_path = args.results_dir / "raw_screen_scale_terms.csv"
-    summary_path = args.results_dir / "summary_screen_scale_terms.csv"
-    analysis_path = args.results_dir / "analysis_screen_scale_terms.md"
-    table_path = args.tables_dir / "screen_scale_terms.tex"
+    tag = f"_{args.tag.strip().replace('-', '_')}" if args.tag.strip() else ""
+    raw_path = args.results_dir / f"raw_screen_scale{tag}_terms.csv"
+    summary_path = args.results_dir / f"summary_screen_scale{tag}_terms.csv"
+    analysis_path = args.results_dir / f"analysis_screen_scale{tag}_terms.md"
+    table_path = args.tables_dir / f"screen_scale{tag}_terms.tex"
     write_raw(raw_path, examples)
     write_summary(summary_path, analysis_path, table_path, examples)
     print(f"elapsed {time.time() - started:.2f}s")

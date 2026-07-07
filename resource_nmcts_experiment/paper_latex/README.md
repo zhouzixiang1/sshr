@@ -95,6 +95,10 @@ Current source evidence:
   `../results/analysis_mega_highdim_resource.md`
 - mega-scale high-dimensional runtime/resource analysis:
   `../results/runtime_mega_highdim_resource.md`
+- extended screen-scale term-set CSV:
+  `../results/raw_screen_scale_extended_terms.csv`
+- extended screen-scale term-set analysis:
+  `../results/analysis_screen_scale_extended_terms.md`
 - external-tool benchmark exporter: `../export_benchmarks.py`
 - LaTeX tables: `tables/runtime_ablation_affine.tex`,
   `tables/resource_ablation_affine.tex`,
@@ -120,7 +124,8 @@ Current source evidence:
   `tables/exact_xag_mc.tex`,
   `tables/external_highdim_abc_aig.tex`,
   `tables/external_ultra_highdim_resource.tex`,
-  `tables/external_mega_highdim_resource.tex`
+  `tables/external_mega_highdim_resource.tex`,
+  `tables/screen_scale_extended_terms.tex`
 - manifests: `../results/manifest_evidence_affine.json`,
   `../results/manifest_traditional_resource_learned_prior.json`,
   `../results/manifest_traditional_resource_no_prior.json`,

@@ -239,6 +239,15 @@ Current structure-policy evidence:
   X/CNOT/MCT circuit simulation both verify 1344/1344 generated method rows
   with zero mismatches.  This is large-scale emitted-circuit equivalence
   evidence, but still not full truth-table simulation for `n>20`.
+- Extended term-set scale evidence now also covers 144 generated ANF term sets
+  at `n=32,36,40`, written separately as
+  `results/analysis_screen_scale_extended_terms.md`.  The learned depth policy
+  ties all-depth adaptive on all 144 term sets while saving -33.14% mean
+  runtime, and improves over single screen by 110/0/34 with a -5.55% mean
+  score change.  The emitted X/CNOT/MCT symbolic simulator verifies 1008/1008
+  method rows with zero mismatches, with maximum wire-polynomial size 288.
+  This strengthens the large-scale structural generalization claim, while
+  preserving the same boundary: it is not full truth-table simulation.
 
 Current screen-gate evidence:
 
