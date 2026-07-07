@@ -238,7 +238,7 @@ FPRM root beam / fast linear-pair & 6 & 全部 timeout & 300 s task timeout \\
 
 负面结果同样重要。$n=18$ 的 ANF-only Boolean-linear screen 虽然平均只需 0.843 s，但相对旧 \method{} 为 0/12/0，平均 score 反而上升 42.45\%。recursive screen 相对单层 screen 获得 11/0/1，平均 score 降低 3.99\%，但相对旧 \method{} 仍为 0/11/1，平均 score 上升 36.94\%。这说明 screen 版本可以作为快速边界候选，不能替代 recursive Resource-NMCTS。
 
-高维 learned prior 仍未达到理想强度。pairwise-wide root-action ranker 在 $n=16$ full synthesis 上相对 recursive guard 获得 10/0/14，平均 score 降低 0.18\%，属于可信小幅正向，但还不是“明显提升”。因此，下一阶段的 AI 贡献必须从动作重排转向结构选择：让模型预测何时使用 Boolean-ring factor、何时进入 FPRM 极性搜索、何时停止递归，以及如何在 CNOT/depth/ancilla trade-off 中选择候选。
+高维 learned prior 仍未达到理想强度。pairwise-wide root-action ranker 在 $n=16$ full synthesis 上相对 recursive guard 获得 10/0/14，平均 score 降低 0.18\%，属于可信小幅正向，但还不是“明显提升”。本轮 Boolean-linear root-teacher 模型接入 baseline-preserving guard 后，相对 deterministic Boolean-linear-deep 为 4/0/20，平均 score 降低 0.12\%，但平均运行时间增加 94.49\%。因此，下一阶段的 AI 贡献必须从动作重排转向结构选择：让模型预测何时使用 Boolean-ring factor、何时进入 FPRM 极性搜索、何时停止递归，以及如何在 CNOT/depth/ancilla trade-off 中选择候选。
 
 \section{讨论}
 
