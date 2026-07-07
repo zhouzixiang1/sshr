@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import argparse
 import random
+import statistics
+from dataclasses import replace
 from pathlib import Path
 from typing import List, Tuple
 
@@ -30,6 +32,7 @@ PRESETS = {
     "smoke": {"samples": 80, "epochs": 30, "n_min": 3, "n_max": 7},
     "rollout": {"samples": 520, "epochs": 60, "n_min": 3, "n_max": 9},
     "linear_highdim": {"samples": 260, "epochs": 50, "n_min": 8, "n_max": 14},
+    "linear_root_teacher": {"samples": 140, "epochs": 70, "n_min": 10, "n_max": 14},
     "main": {"samples": 2200, "epochs": 80, "n_min": 3, "n_max": 10},
 }
 
@@ -47,6 +50,8 @@ def collect_from_terms(
     label_mode: str = "immediate",
     action_family: str = "factor",
     greedy_memo: dict | None = None,
+    root_teacher_width: int = 24,
+    rest_direct_limit: int = 450,
 ) -> None:
     greedy_memo = {} if greedy_memo is None else greedy_memo
     direct_score = direct_plan(terms, prefix_len, live_factor_ancilla, config).score(config.weights)
@@ -60,40 +65,87 @@ def collect_from_terms(
         )
     else:
         actions = candidate_actions(terms, prefix_len, live_factor_ancilla, config)
-    for action in actions:
-        rows.append(
-            action_features(
-                terms,
-                prefix_len,
-                live_factor_ancilla,
-                action.factor,
-                action.group,
-                action.residuals,
-                action.rest,
-                action.immediate_gain,
-                direct_score,
-            )
-        )
-        if label_mode == "rollout":
+    if not actions:
+        return
+    if label_mode == "root_teacher":
+        teacher_actions = actions[: max(1, min(root_teacher_width, len(actions)))]
+        child_config = replace(config, greedy_eval_limit=1)
+        action_scores = []
+        for action in teacher_actions:
             group = greedy_plan(
                 action.residuals,
                 prefix_len + 1,
                 live_factor_ancilla + 1,
-                config,
+                child_config,
                 memo=greedy_memo,
             )
-            rest = greedy_plan(
-                action.rest,
-                prefix_len,
-                live_factor_ancilla,
-                config,
-                memo=greedy_memo,
+            if len(action.rest) > rest_direct_limit:
+                rest = direct_plan(action.rest, prefix_len, live_factor_ancilla, child_config)
+            else:
+                rest = greedy_plan(
+                    action.rest,
+                    prefix_len,
+                    live_factor_ancilla,
+                    child_config,
+                    memo=greedy_memo,
+                )
+            action_scores.append(factor_cost(action, group, rest, live_factor_ancilla, config).score(config.weights))
+        mean_score = statistics.mean(action_scores)
+        spread = statistics.pstdev(action_scores)
+        for action, action_score in zip(teacher_actions, action_scores):
+            rows.append(
+                action_features(
+                    terms,
+                    prefix_len,
+                    live_factor_ancilla,
+                    action.factor,
+                    action.group,
+                    action.residuals,
+                    action.rest,
+                    action.immediate_gain,
+                    direct_score,
+                )
             )
-            action_score = factor_cost(action, group, rest, live_factor_ancilla, config).score(config.weights)
-            improvement = direct_score - action_score
-        else:
-            improvement = action.immediate_gain
-        labels.append(max(-2.0, min(2.0, 8.0 * improvement / max(direct_score, 1.0))))
+            if spread <= 1e-9:
+                label = 0.0
+            else:
+                label = (mean_score - action_score) / spread
+            labels.append(max(-2.0, min(2.0, label)))
+    else:
+        for action in actions:
+            rows.append(
+                action_features(
+                    terms,
+                    prefix_len,
+                    live_factor_ancilla,
+                    action.factor,
+                    action.group,
+                    action.residuals,
+                    action.rest,
+                    action.immediate_gain,
+                    direct_score,
+                )
+            )
+            if label_mode == "rollout":
+                group = greedy_plan(
+                    action.residuals,
+                    prefix_len + 1,
+                    live_factor_ancilla + 1,
+                    config,
+                    memo=greedy_memo,
+                )
+                rest = greedy_plan(
+                    action.rest,
+                    prefix_len,
+                    live_factor_ancilla,
+                    config,
+                    memo=greedy_memo,
+                )
+                action_score = factor_cost(action, group, rest, live_factor_ancilla, config).score(config.weights)
+                improvement = direct_score - action_score
+            else:
+                improvement = action.immediate_gain
+            labels.append(max(-2.0, min(2.0, 8.0 * improvement / max(direct_score, 1.0))))
     if depth >= max_depth or not actions:
         return
     # Follow a few strong actions to collect child-state contexts.
@@ -111,6 +163,8 @@ def collect_from_terms(
             label_mode,
             action_family,
             greedy_memo,
+            root_teacher_width,
+            rest_direct_limit,
         )
         collect_from_terms(
             action.rest,
@@ -125,6 +179,8 @@ def collect_from_terms(
             label_mode,
             action_family,
             greedy_memo,
+            root_teacher_width,
+            rest_direct_limit,
         )
 
 
@@ -136,6 +192,8 @@ def build_dataset(
     max_depth: int,
     child_branch: int,
     action_family: str,
+    root_teacher_width: int,
+    rest_direct_limit: int,
 ) -> Tuple[torch.Tensor, torch.Tensor]:
     cfg = PRESETS[preset]
     rng = random.Random(seed)
@@ -153,6 +211,8 @@ def build_dataset(
                 child_branch=child_branch,
                 label_mode=label_mode,
                 action_family=action_family,
+                root_teacher_width=root_teacher_width,
+                rest_direct_limit=rest_direct_limit,
             )
 
     for _ in range(cfg["samples"]):
@@ -172,6 +232,8 @@ def build_dataset(
             child_branch=child_branch,
             label_mode=label_mode,
             action_family=action_family,
+            root_teacher_width=root_teacher_width,
+            rest_direct_limit=rest_direct_limit,
         )
 
     if not rows:
@@ -184,10 +246,12 @@ def main() -> int:
     ap.add_argument("--preset", choices=sorted(PRESETS), default="smoke")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--gate-mode", choices=["mct", "logical_and"], default="mct")
-    ap.add_argument("--label-mode", choices=["immediate", "rollout"], default="immediate")
+    ap.add_argument("--label-mode", choices=["immediate", "rollout", "root_teacher"], default="immediate")
     ap.add_argument("--action-family", choices=["factor", "linear"], default="factor")
     ap.add_argument("--max-depth", type=int, default=4)
     ap.add_argument("--child-branch", type=int, default=3)
+    ap.add_argument("--root-teacher-width", type=int, default=24)
+    ap.add_argument("--rest-direct-limit", type=int, default=450)
     ap.add_argument("--hidden", type=int, default=96)
     ap.add_argument("--out", default=str(THIS_DIR / "models" / "action_scorer.pt"))
     args = ap.parse_args()
@@ -201,6 +265,8 @@ def main() -> int:
         args.max_depth,
         args.child_branch,
         args.action_family,
+        args.root_teacher_width,
+        args.rest_direct_limit,
     )
     mean = x.mean(dim=0)
     std = x.std(dim=0).clamp_min(1e-6)

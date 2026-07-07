@@ -1,0 +1,9 @@
+above_lower,below_lower,mean_relative_to_lower,metric,on_lower,pairs,target
+60,0,53.00925925925926,T,12,72,and_resource_nmcts
+72,0,101.41753472222223,score,0,72,and_resource_nmcts
+60,0,53.00925925925926,T,12,72,and_pareto_resource_nmcts
+72,0,101.37702546296296,score,0,72,and_pareto_resource_nmcts
+69,0,120.13888888888889,T,3,72,and_esop_milp
+72,0,172.36863425925927,score,0,72,and_esop_milp
+67,0,143.05555555555557,T,5,72,external_sshr_i_t
+72,0,179.21354166666666,score,0,72,external_sshr_i_t

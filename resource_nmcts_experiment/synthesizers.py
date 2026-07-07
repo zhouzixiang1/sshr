@@ -225,6 +225,16 @@ def _solve_plan(method: str, terms: frozenset[int], config: SearchConfig, seed: 
         return root_child_beam_plan(terms, config=config)
     if method == "fprm_linear_pair":
         return linear_pair_beam_plan(terms, config=config)
+    if method == "fprm_linear_pair_wide":
+        return linear_pair_beam_plan(terms, config=config, action_width=12)
+    if method == "fprm_linear_pair_wide_fast":
+        return linear_pair_beam_plan(
+            terms,
+            config=config,
+            action_width=12,
+            rest_greedy_term_limit=450,
+            use_root_child_baseline=False,
+        )
     if method == "fprm_linear_pair_fast":
         return linear_pair_beam_plan(
             terms,
@@ -235,6 +245,8 @@ def _solve_plan(method: str, terms: frozenset[int], config: SearchConfig, seed: 
         )
     if method == "fprm_linear_pair_deep":
         return linear_pair_beam_plan(terms, config=config, recursive_depth=1)
+    if method == "fprm_linear_pair_deep_wide":
+        return linear_pair_beam_plan(terms, config=config, action_width=12, recursive_depth=1)
     if method == "fprm_linear_parity":
         return linear_pair_beam_plan(terms, config=config, max_linear_width=3)
     if method == "fprm_affine_linear_pair":
@@ -267,12 +279,15 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
         "fprm_root_beam",
         "fprm_root_child_beam",
         "fprm_linear_pair",
+        "fprm_linear_pair_wide",
+        "fprm_linear_pair_wide_fast",
         "fprm_linear_pair_neural",
         "fprm_linear_pair_root_neural",
         "fprm_linear_pair_fast",
         "fprm_linear_pair_fast_neural",
         "fprm_linear_pair_fast_root_neural",
         "fprm_linear_pair_deep",
+        "fprm_linear_pair_deep_wide",
         "fprm_linear_pair_deep_neural",
         "fprm_linear_pair_deep_root_neural",
         "fprm_linear_parity",
@@ -332,6 +347,16 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
             plan = root_child_beam_plan(terms, config=config)
         elif method == "fprm_linear_pair":
             plan = linear_pair_beam_plan(terms, config=config)
+        elif method == "fprm_linear_pair_wide":
+            plan = linear_pair_beam_plan(terms, config=config, action_width=12)
+        elif method == "fprm_linear_pair_wide_fast":
+            plan = linear_pair_beam_plan(
+                terms,
+                config=config,
+                action_width=12,
+                rest_greedy_term_limit=450,
+                use_root_child_baseline=False,
+            )
         elif method == "fprm_linear_pair_neural":
             plan = linear_pair_beam_plan(terms, config=config, neural_scorer=neural)
         elif method == "fprm_linear_pair_root_neural":
@@ -365,6 +390,8 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
             )
         elif method == "fprm_linear_pair_deep":
             plan = linear_pair_beam_plan(terms, config=config, recursive_depth=1)
+        elif method == "fprm_linear_pair_deep_wide":
+            plan = linear_pair_beam_plan(terms, config=config, action_width=12, recursive_depth=1)
         elif method == "fprm_linear_pair_deep_neural":
             plan = linear_pair_beam_plan(terms, config=config, recursive_depth=1, neural_scorer=neural)
         elif method == "fprm_linear_pair_deep_root_neural":
@@ -989,7 +1016,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             gates=best.gates,
             n_qubits=best.n_qubits,
         )
-    if method == "resource_nmcts":
+    if method in {"resource_nmcts", "resource_nmcts_wide"}:
         fast_config = replace(
             config,
             candidate_top_k=min(config.candidate_top_k, 18),
@@ -1020,6 +1047,8 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             highdim_config = replace(fast_config, candidate_top_k=config.candidate_top_k)
             linear_method = "fprm_linear_pair" if bf.n == 16 else "fprm_linear_pair_deep"
             child_specs.append((linear_method, highdim_config))
+            if method == "resource_nmcts_wide" and bf.n < 18:
+                child_specs.append(("fprm_linear_pair_wide_fast", highdim_config))
             if model_path:
                 neural_linear = "fprm_linear_pair_root_neural" if bf.n == 16 else "fprm_linear_pair_deep_root_neural"
                 child_specs.append((neural_linear, highdim_config))
@@ -1286,12 +1315,15 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         "fprm_root_beam",
         "fprm_root_child_beam",
         "fprm_linear_pair",
+        "fprm_linear_pair_wide",
+        "fprm_linear_pair_wide_fast",
         "fprm_linear_pair_neural",
         "fprm_linear_pair_root_neural",
         "fprm_linear_pair_fast",
         "fprm_linear_pair_fast_neural",
         "fprm_linear_pair_fast_root_neural",
         "fprm_linear_pair_deep",
+        "fprm_linear_pair_deep_wide",
         "fprm_linear_pair_deep_neural",
         "fprm_linear_pair_deep_root_neural",
         "fprm_linear_parity",

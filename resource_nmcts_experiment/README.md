@@ -53,6 +53,9 @@ cp /tmp/resource_nmcts_highdim_no_prior/summary_highdim_neural_prior.csv results
 cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json results/manifest_highdim_neural_prior_no_prior.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_neural_prior_ablation.py --learned-csv results/raw_highdim_neural_prior_learned_prior.csv --no-prior-csv results/raw_highdim_neural_prior_no_prior.csv --methods and_resource_nmcts --out-raw results/raw_neural_prior_highdim_ablation.csv --summary results/summary_neural_prior_highdim_ablation.csv --out results/analysis_neural_prior_highdim_ablation.md --latex-out paper_latex/tables/neural_prior_highdim_ablation.tex --dataset-label highdim_neural_prior --model-label models/linear_action_scorer_highdim.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_highdim_root_action_oracle.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python train_neural_policy.py --preset linear_root_teacher --seed 31415 --gate-mode logical_and --label-mode root_teacher --action-family linear --max-depth 0 --child-branch 1 --root-teacher-width 24 --rest-direct-limit 450 --hidden 128 --out models/linear_action_scorer_root_teacher.pt
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_highdim_root_action_oracle.py --model models/linear_action_scorer_root_teacher.pt --raw results/raw_highdim_root_action_teacher.csv --summary results/summary_highdim_root_action_teacher.csv --analysis results/analysis_highdim_root_action_teacher.md --latex-out paper_latex/tables/highdim_root_action_teacher.tex
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset highdim_guard_upgrade --model /tmp/nonexistent_model.pt --workers 6 --checkpoint-every 6 --isolate-timeouts
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_search_contribution.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_resource_sweep.py --model models/action_scorer_rollout_logical_and.pt --workers 10
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_resource_sweep.py
@@ -76,6 +79,7 @@ cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json resul
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --max-n 4 --max-ilp-n 4 --timeout 10 --workers 4 --out results/raw_external_traditional_resource_n4.csv --summary results/summary_external_traditional_resource_n4.csv --run-manifest results/manifest_external_traditional_resource_n4.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_traditional_resource_n4.csv --internal-csv results/raw_traditional_resource.csv --out results/analysis_external_traditional_resource_n4.md
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_exact_fprm_dp.py --max-n 4
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_exact_xag_mc.py --max-n 4
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_sshr_h,external_sshr_i_cnot,external_sshr_i_t --max-n 6 --max-ilp-n 6 --timeout 8 --workers 4 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_abc_aig --max-n 6 --max-abc-n 6 --timeout 8 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_abc_esop --max-n 6 --max-esop-n 6 --timeout 8 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
@@ -341,6 +345,21 @@ Exact bounded FPRM-DP evidence from `results/analysis_exact_fprm_dp.md`:
   exact SSHR-I by 60/12/0 against CNOT-optimized SSHR-I and 59/12/1 against
   T-optimized SSHR-I.  Its CNOT count is often higher than SSHR-I, so the claim
   remains resource-score/low-T rather than CNOT-only optimality.
+
+Exact XAG multiplicative-complexity evidence from
+`results/analysis_exact_xag_mc.md`:
+
+- Computes the exact minimum number of AND nodes in an XOR-AND graph for all 72
+  `traditional_resource` functions with `n <= 4`; 72/72 solved, 0 unknown.
+  This is a global lower bound on logical-AND T-count (`4 * min AND`), not a
+  full CNOT/depth optimum.
+- `and_resource_nmcts` and `and_pareto_resource_nmcts` both reach this global
+  T lower bound on 12/72 functions, with no row below the bound and a +53.01%
+  mean T gap to the lower bound.
+- ESOP-MILP reaches the lower bound on 3/72 functions with a +120.14% mean T
+  gap; T-optimized SSHR-I reaches it on 5/72 functions with a +143.06% mean T
+  gap.  This gives a stronger exact small-scale T-count reference than the
+  bounded FPRM-DP model.
 
 Time-limited exported SSHR-I, ABC-AIG, ABC-XAG, ABC-LUT, BDD, and ABC-ESOP extension evidence from
 `results/analysis_external_traditional_resource_n6.md`:

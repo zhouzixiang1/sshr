@@ -61,7 +61,10 @@ BDD/Shannon baselines, and 147 score wins, 24 losses, and 6 ties against ABC's
 quantum-cost ESOP minimization path.  On a separate exact bounded FPRM-DP slice
 over the same $n\leq 4$ functions, \method{} has 51 score wins, 3 losses, and
 18 ties, while \paretomethod{} has 51 wins, no losses, and 21 ties against the
-restricted exact optimum.  A
+restricted exact optimum.  An exact XAG multiplicative-complexity slice further
+shows that \method{} reaches the global logical-AND T-count lower bound on
+12/72 functions, with a +53.01\% mean T gap versus +120.14\% for ESOP-MILP and
++143.06\% for T-optimized SSHR-I.  A
 resource-profile stress test shows that \paretomethod{} is best or tied on
 44/47, 44/47, 42/47, and 43/47 functions under T-heavy, balanced,
 CNOT-depth-heavy, and ancilla-tight objectives, improving on
@@ -458,6 +461,27 @@ Because the DP is exact only inside this bounded FPRM factor family, these wins
 mean the portfolio found candidates outside that restricted model.  The exact
 DP baseline itself also improves weighted score over ESOP-MILP and exact
 SSHR-I, but it usually spends more CNOTs than SSHR-I.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Exact XAG multiplicative-complexity lower-bound comparison on the
+same 72-function $n\leq 4$ subset.  The exact search minimizes the number of
+AND nodes in an XOR-AND graph; $4\times$AND is a global lower bound on
+logical-AND T-count, but not a CNOT or depth optimum.}
+\label{tab:exact-xag-mc}
+\input{tables/exact_xag_mc}
+\end{table}
+
+To obtain a model-independent T-count reference, we also computed exact XAG
+multiplicative complexity for the same $n\leq 4$ subset.  All 72 functions were
+solved with no unknown rows.  \method{} and \paretomethod{} reach the global
+logical-AND T lower bound on 12 functions and have a +53.01\% mean T gap to the
+bound, whereas ESOP-MILP reaches it on 3 functions with a +120.14\% gap and the
+T-optimized SSHR-I rows reach it on 5 functions with a +143.06\% gap.  This is
+not a full reversible-circuit optimum, but it strengthens the claim that the
+portfolio is substantially closer to the multiplicative-complexity T limit than
+the ESOP and SSHR-I references on this exact small slice.
 
 We then ran the external extension over all 177 exported functions with
 $n\leq 6$.  This produced 1416 external rows with no errors or skips: 531 SSHR

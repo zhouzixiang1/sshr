@@ -364,6 +364,7 @@ def main() -> int:
     parser.add_argument("--rest-direct-limit", type=int, default=450)
     parser.add_argument("--screen-budget", type=int, default=48)
     parser.add_argument("--screen-top-k", type=int, default=1)
+    parser.add_argument("--neural-prior-weight", type=float, default=10.0)
     parser.add_argument("--model", default=str(THIS_DIR / "models" / "linear_action_scorer_highdim.pt"))
     parser.add_argument("--raw", type=Path, default=RESULTS / "raw_highdim_root_action_oracle.csv")
     parser.add_argument("--summary", type=Path, default=RESULTS / "summary_highdim_root_action_oracle.csv")
@@ -383,7 +384,7 @@ def main() -> int:
         neural_mcts_simulations=32,
         max_polarities=12,
         gate_mode="logical_and",
-        neural_prior_weight=10.0,
+        neural_prior_weight=args.neural_prior_weight,
     )
     scorer = NeuralScorer(args.model) if args.model and Path(args.model).exists() else None
     model_label = args.model if scorer is not None else ""

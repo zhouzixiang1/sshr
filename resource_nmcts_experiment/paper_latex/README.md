@@ -48,6 +48,10 @@ Current source evidence:
   `../results/raw_exact_fprm_dp.csv`
 - exact bounded FPRM-DP analysis:
   `../results/analysis_exact_fprm_dp.md`
+- exact XAG multiplicative-complexity lower-bound CSV:
+  `../results/raw_exact_xag_mc.csv`
+- exact XAG multiplicative-complexity lower-bound analysis:
+  `../results/analysis_exact_xag_mc.md`
 - external time-limited SSHR-I plus ABC-AIG/ABC-XAG/ABC-LUT/BDD/ABC-ESOP extension CSV:
   `../results/raw_external_traditional_resource_n6.csv`
 - external time-limited SSHR-I plus ABC-AIG/ABC-XAG/ABC-LUT/BDD/ABC-ESOP extension analysis:
@@ -113,6 +117,7 @@ Current source evidence:
   `tables/runtime_mega_highdim_resource.tex`,
   `tables/external_traditional_resource_n6.tex`,
   `tables/exact_fprm_dp.tex`,
+  `tables/exact_xag_mc.tex`,
   `tables/external_highdim_abc_aig.tex`,
   `tables/external_ultra_highdim_resource.tex`,
   `tables/external_mega_highdim_resource.tex`

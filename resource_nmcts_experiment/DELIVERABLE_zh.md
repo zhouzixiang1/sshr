@@ -223,6 +223,59 @@
 - Exact FPRM-DP 自身比 ESOP-MILP 和 exact SSHR-I 的加权 score 更好，但相对 SSHR-I 的 CNOT 通常更高；因此它进一步支持低 T / 低加权资源主张，不支持 CNOT-only 最优主张。
 - 这一切片把“公平性”从 time-limited external baseline 往前推进了一步：至少在 `n<=4` 的 bounded FPRM factor family 内，可以给出 exact optimum 参照。
 
+### 2.8 小规模 exact XAG 乘法复杂度下界
+
+本轮新增 `analyze_exact_xag_mc.py`，用于补上比 bounded FPRM-DP 更硬的 T-count 参照。该脚本在 XOR-AND graph 模型中对 `n<=4` 的目标布尔函数做 exact breadth-first search，求最少 AND 节点数。由于 logical-AND 资源模型中每个 AND 至少需要 4 个 T gate，因此 `4 * min AND` 是全局逻辑层 T-count 下界。它不是 CNOT、depth 或完整可逆线路最优。
+
+主要产物：
+
+- `results/raw_exact_xag_mc.csv`
+- `results/summary_exact_xag_mc.csv`
+- `results/analysis_exact_xag_mc.md`
+- `paper_latex/tables/exact_xag_mc.tex`
+
+数据范围与审计：
+
+- 覆盖 `traditional_resource` 中全部 `n<=4` 的 72 个函数。
+- solved：72/72
+- unknown/error：0
+- 最重函数访问 66541 个 exact BFS 状态，说明该切片当前是可复现的全局小规模下界，而不是采样估计。
+
+核心结果：
+
+| 方法 | 配对数 | 达到 T 下界 | 高于下界 | 平均 T gap |
+|---|---:|---:|---:|---:|
+| Resource-NMCTS | 72 | 12 | 60 | +53.01% |
+| Pareto-Resource-NMCTS | 72 | 12 | 60 | +53.01% |
+| ESOP-MILP | 72 | 3 | 69 | +120.14% |
+| SSHR-I-T | 72 | 5 | 67 | +143.06% |
+
+解释：
+
+- 没有任何方法低于 exact XAG T 下界，说明当前 T-count 口径与下界一致。
+- Resource/Pareto 在 12/72 个函数上达到全局 XAG 乘法复杂度 T 下界，且平均 T gap 明显低于 ESOP-MILP 和 T-optimized SSHR-I。
+- 这个证据只能支撑低 T-count 接近全局乘法复杂度下界，不能支撑 CNOT/depth 全局最优。
+
+### 2.9 高维 root teacher 与 wide guard 负向诊断
+
+本轮进一步把 2.6 的 teacher signal 实际用于训练 `models/linear_action_scorer_root_teacher.pt`，并新增 `highdim_guard_upgrade` preset 测试宽根层 deterministic guard。
+
+主要产物：
+
+- `models/linear_action_scorer_root_teacher.pt`
+- `results/raw_highdim_root_action_teacher.csv`
+- `results/summary_highdim_root_action_teacher.csv`
+- `results/analysis_highdim_root_action_teacher.md`
+- `results/raw_highdim_guard_upgrade.csv`
+- `results/summary_highdim_guard_upgrade.csv`
+- `results/analysis_highdim_guard_upgrade.md`
+
+核心结论：
+
+- root-teacher 模型训练 2287 个样本，valid loss 为 0.2778；但在同一 root-action 诊断上，`root_neural_top4` 相对 heuristic top-4 为 2/3/5，平均 score 变化 +0.16%，没有形成可用提升。
+- `and_resource_nmcts_wide` 在 12 个 `n=14` random ANF 函数上相对 `and_resource_nmcts` 为 0/0/12，资源完全持平，但平均运行时间增加 59.80%。
+- 因此，本轮不能把高维 root-teacher 或 wide-fast 写成主贡献；它们应作为负向诊断，说明当前高维 AI 排序仍未突破，后续需要更强的策略梯度、pairwise ranking 或更丰富特征。
+
 ## 3. 当前文件交付清单
 
 ### 3.1 核心代码
@@ -237,6 +290,7 @@
 - `analyze_esop_baseline.py`：新增 ESOP 专项分析。
 - `analyze_search_contribution.py`：新增搜索贡献分解分析。
 - `analyze_exact_fprm_dp.py`：新增小规模 bounded FPRM-DP 精确切片。
+- `analyze_exact_xag_mc.py`：新增小规模 exact XAG 乘法复杂度 T 下界。
 - `analyze_highdim_root_action_oracle.py`：新增高维 root-action teacher 诊断。
 
 ### 3.2 结果文件
@@ -256,9 +310,14 @@
 - `results/raw_exact_fprm_dp.csv`
 - `results/summary_exact_fprm_dp.csv`
 - `results/analysis_exact_fprm_dp.md`
+- `results/raw_exact_xag_mc.csv`
+- `results/summary_exact_xag_mc.csv`
+- `results/analysis_exact_xag_mc.md`
 - `results/raw_highdim_root_action_oracle.csv`
 - `results/summary_highdim_root_action_oracle.csv`
 - `results/analysis_highdim_root_action_oracle.md`
+- `results/analysis_highdim_root_action_teacher.md`
+- `results/analysis_highdim_guard_upgrade.md`
 
 ### 3.3 论文文件
 
@@ -269,6 +328,7 @@
 - `paper_latex/tables/search_contribution_decomposition.tex`
 - `paper_latex/tables/neural_prior_highdim_ablation.tex`
 - `paper_latex/tables/exact_fprm_dp.tex`
+- `paper_latex/tables/exact_xag_mc.tex`
 - `paper_latex/tables/highdim_root_action_oracle.tex`
 - `paper_latex/tables/resource_search_ablation_highdim.tex`
 - `paper_latex/tables/runtime_search_ablation_highdim.tex`
@@ -305,6 +365,13 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_exact_fprm_dp.py --max-n 4
 ```
 
+重新生成 exact XAG 乘法复杂度下界：
+
+```bash
+cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_exact_xag_mc.py --max-n 4
+```
+
 重新生成搜索贡献分解：
 
 ```bash
@@ -331,6 +398,9 @@ cp /tmp/resource_nmcts_highdim_no_prior/summary_highdim_neural_prior.csv results
 cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json results/manifest_highdim_neural_prior_no_prior.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_neural_prior_ablation.py --learned-csv results/raw_highdim_neural_prior_learned_prior.csv --no-prior-csv results/raw_highdim_neural_prior_no_prior.csv --methods and_resource_nmcts --out-raw results/raw_neural_prior_highdim_ablation.csv --summary results/summary_neural_prior_highdim_ablation.csv --out results/analysis_neural_prior_highdim_ablation.md --latex-out paper_latex/tables/neural_prior_highdim_ablation.tex --dataset-label highdim_neural_prior --model-label models/linear_action_scorer_highdim.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_highdim_root_action_oracle.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python train_neural_policy.py --preset linear_root_teacher --seed 31415 --gate-mode logical_and --label-mode root_teacher --action-family linear --max-depth 0 --child-branch 1 --root-teacher-width 24 --rest-direct-limit 450 --hidden 128 --out models/linear_action_scorer_root_teacher.pt
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_highdim_root_action_oracle.py --model models/linear_action_scorer_root_teacher.pt --raw results/raw_highdim_root_action_teacher.csv --summary results/summary_highdim_root_action_teacher.csv --analysis results/analysis_highdim_root_action_teacher.md --latex-out paper_latex/tables/highdim_root_action_teacher.tex
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset highdim_guard_upgrade --model /tmp/nonexistent_model.pt --workers 6 --checkpoint-every 6 --isolate-timeouts
 ```
 
 重新生成 n=18 内部分析：
@@ -372,7 +442,10 @@ latexmk -pdf -g main.tex
 - `raw_search_ablation_highdim.csv` 审计：128 行、0 error、0 skipped、0 incorrect。
 - `raw_neural_prior_highdim_ablation.csv` 审计：24 行、0 error、0 skipped、0 incorrect。
 - `raw_exact_fprm_dp.csv` 审计：72 行、0 error、0 skipped、0 incorrect。
+- `raw_exact_xag_mc.csv` 审计：72 行、72 solved、0 unknown/error。
 - `raw_highdim_root_action_oracle.csv` 审计：62 行、0 error、0 incorrect。
+- `raw_highdim_root_action_teacher.csv` 审计：62 行、0 error、0 incorrect。
+- `raw_highdim_guard_upgrade.csv` 审计：24 行、0 error、0 skipped、0 incorrect。
 
 Git 状态：
 
@@ -391,7 +464,8 @@ Git 状态：
 5. 外部 ABC/BDD 结果支持低加权资源和低 ancilla 优势，但 depth 仍是 ABC-AIG/ABC-XAG 的优势指标。
 6. 贡献分解显示：仿射坐标搜索是最大前置收益，神经 refine 和 final guard 提供无 score loss 的小幅增益，Pareto archive 在小规模传统切片上贡献明确，高维主要由 bounded linear-pair guard 支撑。
 7. `n<=4` exact FPRM-DP 精确切片显示：Resource/Pareto portfolio 可以在受限 FPRM exact 模型之外继续降低 score；Exact FPRM-DP 本身也优于 ESOP-MILP 和 exact SSHR-I 的加权 score。
-8. 高维 root-action teacher 诊断显示：oracle top-24 相对启发式 top-4 有 3/0/7、-0.18% 的小幅 headroom，但现有 neural top-4 为 1/1/8、+0.06%，因此高维 AI 贡献仍应写成待改进方向。
+8. `n<=4` exact XAG 乘法复杂度切片显示：Resource/Pareto 在 12/72 个函数上达到全局 T 下界，平均 T gap 为 +53.01%，明显低于 ESOP-MILP 的 +120.14% 和 SSHR-I-T 的 +143.06%。
+9. 高维 root-action teacher 诊断显示：oracle top-24 相对启发式 top-4 有 3/0/7、-0.18% 的小幅 headroom；但 root-teacher 模型和 wide-fast guard 暂未形成可用提升，因此高维 AI 贡献仍应写成待改进方向。
 
 不应写的主张：
 
@@ -400,13 +474,14 @@ Git 状态：
 3. 不应写“Pareto 在 n=18 有额外独立收益”，因为 n=18 的 Pareto 当前故意收窄为稳定 guard。
 4. 不应直接拿 SSHR 论文表格里的 ESOP 总量横比，除非函数集和成本模型一致。
 5. 不应把 Exact FPRM-DP 写成全局可逆线路最优；它只是在 bounded fixed-polarity FPRM factor model 内 exact。
+6. 不应把 Exact XAG 乘法复杂度写成 CNOT/depth/ancilla 最优；它只给出 logical-AND T-count 的全局下界。
 
 ## 7. 下一步建议
 
-当前已经完成第一版“搜索贡献分解”，并新增了 `search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle` 和 `exact_fprm_dp` 五个 dedicated ablation/diagnostic。投稿前仍建议继续补强：
+当前已经完成第一版“搜索贡献分解”，并新增了 `search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、`highdim_root_action_teacher` 和 `highdim_guard_upgrade` 等 dedicated ablation/diagnostic。投稿前仍建议继续补强：
 
-1. 高维 neural guidance 需要继续改进；当前 highdim prior 只有 1/0/11、-0.01% 的弱正向结果。root-action teacher 诊断显示有 3/0/7、-0.18% 的小幅可学习 headroom，但现有 neural top-4 没有利用它。
-2. 小规模 exact/exhaustive oracle slice 已完成 bounded FPRM-DP 版本；如果继续加强，可以再补一个更接近全局 reversible circuit 的 exact/SMT/SAT 小规模证书。
+1. 高维 neural guidance 需要继续改进；当前 highdim prior 只有 1/0/11、-0.01% 的弱正向结果。root-action teacher 诊断显示有 3/0/7、-0.18% 的小幅可学习 headroom，但 root-teacher 模型没有利用它，wide-fast guard 也只有 0/0/12 且更慢。
+2. 小规模 exact/exhaustive oracle slice 已完成 bounded FPRM-DP 和 exact XAG 乘法复杂度版本；如果继续加强，可以再补一个更接近全局 reversible circuit 的 exact/SMT/SAT 小规模证书。
 3. 继续补 ROS/mockturtle 或其他外部 reversible-toolchain 对比，减少“估算式 ABC/BDD baseline”的审稿风险。
 
 已完成/待补强状态：
@@ -420,8 +495,10 @@ Git 状态：
 | Pareto archive | n<=6 traditional | Pareto vs Resource 68/0/109，-3.26% | 已有 |
 | highdim guard | n=14/15/16/18 | linear-pair guard 相对 root-beam 均无 score loss | 已有 |
 | highdim no-neural-prior | 12 个 n=14 random ANF | learned prior 1/0/11，-0.01%，运行时间 +104.07% | 已有但弱 |
-| highdim root-action teacher | 10 个有 linear action 的 n=14 random ANF | oracle top-24 vs heuristic top-4 为 3/0/7，-0.18%；neural top-4 vs heuristic top-4 为 1/1/8，+0.06% | 已有但属诊断 |
+| highdim root-action teacher | 10 个有 linear action 的 n=14 random ANF | oracle top-24 vs heuristic top-4 为 3/0/7，-0.18%；root-teacher neural top-4 为 2/3/5，+0.16% | 已有但属负向诊断 |
+| highdim wide-fast guard | 12 个 n=14 random ANF | wide vs Resource 为 0/0/12，运行时间 +59.80% | 已有但属负向诊断 |
 | exact FPRM-DP | n<=4 traditional | Resource vs exact FPRM-DP 51/3/18，-12.18%；Pareto vs exact FPRM-DP 51/0/21，-12.20% | 已有但模型受限 |
+| exact XAG MC | n<=4 traditional | Resource/Pareto 达到 T 下界 12/72，平均 T gap +53.01%；ESOP 为 +120.14%，SSHR-I-T 为 +143.06% | 已有全局 T 下界 |
 
 ## 8. 当前结论
 
@@ -431,4 +508,4 @@ Git 状态：
 
 但是投稿前还需要继续补强“AI 搜索本身带来的贡献”这一点。否则文章容易被评价为一组 FPRM/ESOP 工程启发的组合，而不是强化学习与 MCTS 方法论文。
 
-本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle` 和 `exact_fprm_dp` 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照，以及高维 root-action teacher headroom 都有可测证据。不过高维 neural guidance 仍然很弱，更强外部 reversible-toolchain 对比也仍然缺失，所以目标还不能判定完成。
+本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp` 和 `exact_xag_mc` 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照，以及高维 root-action teacher headroom 都有可测证据。不过高维 neural guidance 仍然很弱，root-teacher/wide-fast 两个补强尝试还没有形成正向贡献，更强外部 reversible-toolchain 对比也仍然缺失，所以目标还不能判定完成。

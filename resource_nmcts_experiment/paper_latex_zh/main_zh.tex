@@ -20,7 +20,7 @@
 \newcommand{\score}{\mathrm{score}}
 
 \title{面向资源约束量子布尔函数综合的神经蒙特卡洛树搜索方法}
-\author{项目中文论文草稿}
+\author{阶段性中文论文草稿}
 \date{2026年7月7日}
 
 \begin{document}
@@ -42,11 +42,18 @@ cube beam、ESOP-MILP 和 SSHR-H 等基线。相对 ESOP cube beam，\paretometh
 和 \paretomethod{} 均完成 12 个函数，平均 T-count 相对 direct ANF 降低 60.05\%，
 平均加权分数降低 56.99\%。小规模 exact FPRM-DP 切片表明，在 $n\leq 4$ 的 72 个函数上，
 \method{} 相对受限 FPRM 精确动态规划仍有 51/3/18 的 score 胜/负/平，说明资源感知
-portfolio 可以找到该受限模型之外的更优候选。本文结果限定在逻辑线路层，不包含
+portfolio 可以找到该受限模型之外的更优候选；exact XAG 乘法复杂度切片进一步显示，
+\method{} 在 12/72 个函数上达到全局 logical-AND T-count 下界，平均 T gap 为 +53.01\%。
+本文结果限定在逻辑线路层，不包含
 硬件映射、连通性约束或真实设备噪声模型。
 \end{abstract}
 
 \noindent\textbf{关键词：}量子 oracle 综合；布尔函数；神经蒙特卡洛树搜索；ANF；FPRM；T-count；资源约束
+
+\vspace{0.5em}
+\noindent\textbf{版本说明：}本文是当前阶段的中文论文稿，用于固定研究主线、实验口径和投稿前缺口。
+文中只主张逻辑层 oracle 综合的低 T-count 与低加权资源优势；高维神经排序、硬件映射和更强
+reversible-toolchain 对比仍属于后续必须补强的部分。
 
 \section{引言}
 
@@ -163,7 +170,8 @@ SSHR-I 在 $n\leq 4$ 上给出 exact pilot，在 $n\leq 6$ 上作为 time-limite
 所有内部候选线路都经过 oracle truth-table 验证。导出的 ABC、BDD、ESOP 和 SSHR
 结果也通过相同 manifest 或 truth-table 路径检查。当前关键结果文件均显示 0 error
 和 0 skipped；其中 $n=18$ stress test 为 84 行结果，external high-dimensional
-baseline 为 528 行结果，exact FPRM-DP 切片为 72 行结果。
+baseline 为 528 行结果，exact FPRM-DP 与 exact XAG 切片各为 72 行结果，高维
+root-action teacher 诊断为 62 行结果。
 
 \section{结果}
 
@@ -250,6 +258,29 @@ Exact FPRM-DP vs SSHR-I T & 72 & 59/12/1 & $-13.38\%$ \\
 \end{tabular}
 \end{table}
 
+为得到更少依赖本文搜索模型的 T-count 参照，本文还对同一 $n\leq 4$ 切片计算 exact
+XAG 乘法复杂度。该搜索在 XOR-AND graph 模型中求最少 AND 节点数；在 logical-AND
+资源模型下，$4\times$AND 是全局 T-count 下界，但不是 CNOT、depth 或辅助比特最优。
+表~\ref{tab:xag-mc-zh} 显示，\method{} 与 \paretomethod{} 在 12/72 个函数上达到该
+T 下界，平均 T gap 为 +53.01\%，明显低于 ESOP-MILP 和 SSHR-I-T。
+
+\begin{table}[t]
+\centering
+\small
+\caption{$n\leq 4$ 的 exact XAG 乘法复杂度 T-count 下界。}
+\label{tab:xag-mc-zh}
+\begin{tabular}{lrrrr}
+\toprule
+方法 & 配对数 & 达到下界 & 高于下界 & 平均 T gap \\
+\midrule
+\method{} & 72 & 12 & 60 & $+53.01\%$ \\
+\paretomethod{} & 72 & 12 & 60 & $+53.01\%$ \\
+ESOP-MILP & 72 & 3 & 69 & $+120.14\%$ \\
+SSHR-I-T & 72 & 5 & 67 & $+143.06\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{搜索贡献分解}
 
 表~\ref{tab:contribution-zh} 给出主要模块的消融证据。仿射坐标搜索是最大前置收益，
@@ -257,8 +288,8 @@ Exact FPRM-DP vs SSHR-I T & 72 & 59/12/1 & $-13.38\%$ \\
 无 score-loss 增益；小规模 learned prior 对 \method{} 有 39/0/138 的 score 胜/负/平；
 Pareto archive 相对 \method{} 有 68/0/109 的 score 胜/负/平。高维方面，主要收益来自
 bounded linear-pair guard，而不是完整高维 MCTS。进一步的 root-action teacher 诊断显示，
-更宽的 CNOT-only linear-pair 根层动作集合存在小幅可学习空间，但当前 high-dimensional
-neural scorer 尚未利用该信号。
+更宽的 CNOT-only linear-pair 根层动作集合存在小幅可学习空间，但 root-teacher 模型尚未
+把该信号转化为资源提升；额外的 wide-fast guard 也只增加运行时间，没有改善资源指标。
 
 \begin{table}[t]
 \centering
@@ -297,7 +328,7 @@ Fast linear-pair guard vs root beam & $n=18$ & 6/0/6 & $-1.91\%$ \\
 oracle top-12 & heuristic top-4 & 3/0/7 & $-0.18\%$ \\
 oracle top-24 & heuristic top-4 & 3/0/7 & $-0.18\%$ \\
 oracle top-24 & heuristic top-1 & 7/0/3 & $-0.43\%$ \\
-neural top-4 & heuristic top-4 & 1/1/8 & $+0.06\%$ \\
+root-teacher neural top-4 & heuristic top-4 & 2/3/5 & $+0.16\%$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -336,14 +367,16 @@ Profile-Resource-NMCTS & \textbf{6641.7} & \textbf{11382.4} & \textbf{11383.7} &
 当前结果支持一个相对清晰但有边界的结论：在逻辑层 oracle 综合中，ANF/FPRM 因子搜索、
 神经先验、MCTS、仿射坐标预处理和资源感知 portfolio 可以显著降低 T-count 与加权
 资源。该结论最强的证据来自相同 benchmark 下的 ESOP/ABC/BDD/SSHR 对比、搜索贡献分解、
-高维 stress test 和 exact FPRM-DP 切片。
+高维 stress test、exact FPRM-DP 切片和 exact XAG 乘法复杂度下界。
 
 本文也暴露了三个限制。第一，CNOT 并非全面优于 SSHR-H/SSHR-I。SSHR 是 CNOT-oriented
 方法，在小规模函数上仍有明显 CNOT 优势；本文更适合定位为低 T-count 和低加权资源
 方法。第二，当前没有硬件 mapping，因此不能声称真实设备深度、连通性或噪声鲁棒性更优。
 第三，高维 learned-prior 诊断仍然较弱：在 12 个 $n=14$ random ANF 函数上，learned prior
-相对 no-prior 只有 1/0/11 的 score 胜/负/平，平均 score 仅降低 0.01\%，且运行时间约翻倍。
-因此，高维部分目前应强调 bounded linear-pair guard 和 portfolio 选择，而不是夸大学习先验。
+相对 no-prior 只有 1/0/11 的 score 胜/负/平，平均 score 仅降低 0.01\%，且运行时间约翻倍；
+root-teacher 模型相对启发式 top-4 为 2/3/5，平均 score 反而上升 0.16\%；wide-fast guard
+相对原 \method{} 为 0/0/12，资源持平但运行时间增加 59.80\%。因此，高维部分目前应强调
+bounded linear-pair guard 和 portfolio 选择，而不是夸大学习先验。
 
 后续工作应优先补强两类证据。一类是更接近全局 reversible synthesis 的小规模 exact
 或 SAT/SMT 证书，用于补足 exact FPRM-DP 模型受限的问题。另一类是 ROS、mockturtle
@@ -356,10 +389,10 @@ Profile-Resource-NMCTS & \textbf{6641.7} & \textbf{11382.4} & \textbf{11383.7} &
 本文提出了一种面向资源约束量子布尔函数 oracle 综合的神经蒙特卡洛树搜索方法。方法把
 布尔函数综合表示为 ANF/FPRM 项集合上的因子分解搜索，并通过资源感知 portfolio 在多个
 候选生成器之间选择正确且低成本的线路。实验表明，该方法在 $n\leq 6$ 的传统函数切片、
-ESOP/ABC/BDD/SSHR 对比、小规模 exact FPRM-DP 切片和 $n=18$ 高维 stress test 上均表现出
-低 T-count 与低加权资源优势。当前证据尚不足以支持 CNOT-only 最优或硬件映射优势，但已经
-形成一条比单纯复现 SSHR 更适合发展的投稿主线：以资源约束搜索、神经先验和 bounded
-高维 guard 为核心的逻辑层量子布尔 oracle 综合。
+ESOP/ABC/BDD/SSHR 对比、小规模 exact FPRM-DP / exact XAG 切片和 $n=18$ 高维 stress test 上均表现出
+低 T-count 与低加权资源优势。当前证据尚不足以支持 CNOT-only 最优、硬件映射优势或强高维
+neural guidance，但已经形成一条比单纯复现 SSHR 更适合发展的投稿主线：以资源约束搜索、
+小规模神经先验、Pareto 候选选择和 bounded 高维 guard 为核心的逻辑层量子布尔 oracle 综合。
 
 \begin{thebibliography}{9}
 
