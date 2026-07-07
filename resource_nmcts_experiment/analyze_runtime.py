@@ -18,9 +18,11 @@ PAPER_TABLES = THIS_DIR / "paper_latex" / "tables"
 METHOD_ORDER = [
     "direct_anf",
     "and_direct_anf",
+    "and_boolean_linear_pair_screen",
     "and_fprm_greedy",
     "and_fprm_root_beam",
     "and_fprm_linear_pair_fast",
+    "and_fprm_boolean_linear_pair_screen",
     "and_fprm_linear_pair",
     "and_fprm_linear_pair_deep",
     "and_fprm_linear_pair_deep_root_neural",
@@ -45,9 +47,11 @@ METHOD_ORDER = [
 METHOD_LABELS = {
     "direct_anf": "Direct ANF",
     "and_direct_anf": "AND-direct ANF",
+    "and_boolean_linear_pair_screen": "ANF Boolean linear screen",
     "and_fprm_greedy": "FPRM-greedy",
     "and_fprm_root_beam": "FPRM root beam",
     "and_fprm_linear_pair_fast": "FPRM linear-pair fast",
+    "and_fprm_boolean_linear_pair_screen": "Boolean-ring linear screen",
     "and_fprm_linear_pair": "FPRM linear pair",
     "and_fprm_linear_pair_deep": "FPRM linear pair deep",
     "and_fprm_linear_pair_deep_root_neural": "FPRM deep root-neural",

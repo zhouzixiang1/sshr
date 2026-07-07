@@ -159,12 +159,14 @@ Current presets:
   fast high-dimensional linear-pair guard that limits expensive rest-branch
   greedy solves and keeps a root-beam baseline.
 - `giga_highdim_resource`: isolated `n=20` random-ANF pressure-boundary check
-  with direct ANF, logical-AND direct ANF, bounded FPRM root-beam, fast FPRM
-  linear-pair, Resource-NMCTS, Profile-Resource-NMCTS, and
-  Pareto-Resource-NMCTS.  In the current run, root-beam and fast linear-pair
-  hit the 300 s task timeout on all six functions; Resource/Profile/Pareto
-  complete but reduce to the AND-direct candidate.  Treat this as a scale
-  boundary, not a new positive high-dimensional search contribution.
+  with direct ANF, logical-AND direct ANF, ANF Boolean-ring linear screen,
+  bounded FPRM root-beam, fast FPRM linear-pair, Resource-NMCTS,
+  Profile-Resource-NMCTS, and Pareto-Resource-NMCTS.  In the current run,
+  root-beam and fast linear-pair hit the 300 s task timeout on all six
+  functions, while the ANF-only Boolean-ring screen completes and gives
+  Resource/Profile/Pareto a bounded improvement over AND-direct ANF.  Treat
+  this as a scale-boundary improvement, not as strong evidence that deep
+  high-dimensional neural/FPRM tree search is solved.
 - `large_resource`: experimental `n=14` stress extension.  This preset exposed
   the mixed-suite runtime tail and is kept for broader engineering sweeps.
 - `main`: large-scale placeholder for broader sweeps.
@@ -625,18 +627,22 @@ Ultra-high-dimensional scale check from
 `results/analysis_giga_highdim_resource.md` and
 `results/runtime_giga_highdim_resource.md`:
 
-- 6 random ANF functions at `n=20`, 7 methods, 42 result rows, 12 timeout
+- 6 random ANF functions at `n=20`, 8 methods, 48 result rows, 12 timeout
   rows, and 0 skipped rows.
 - `and_fprm_root_beam` and `and_fprm_linear_pair_fast` timed out on all six
   functions under the 300 s isolated task budget.
-- Resource/Profile/Pareto completed all six functions, but matched
-  logical-AND direct ANF exactly.  Compared with direct ANF they have 4
-  weighted-score wins, 2 losses, and 0 ties, with a 32.93% mean T-count
-  reduction and a 30.34% mean score reduction.
-- The n=20 run is therefore a useful pressure boundary: the current guarded
-  high-dimensional search still verifies correctness, but the stronger
-  FPRM/root-beam structure searches are no longer completing inside the current
-  timeout and the portfolio no longer separates from AND-direct ANF.
+- `and_boolean_linear_pair_screen` completed all six functions with median
+  runtime 10.659 s, improving over AND-direct ANF on 5/6 functions and tying on
+  one.  It reduces mean T-count by 5.24% and mean weighted score by 4.89%
+  relative to AND-direct ANF.
+- Resource/Profile/Pareto now complete all six functions and select the
+  Boolean-ring screen candidate, giving 5/0/1 score wins/losses/ties relative
+  to AND-direct ANF and 5/1/0 relative to direct ANF.  Mean score is 34.00%
+  lower than direct ANF.
+- The n=20 run is therefore a useful pressure boundary with a bounded positive
+  repair: the scalable ANF-only screen still verifies correctness and separates
+  from AND-direct ANF, but the stronger FPRM/root-beam searches remain outside
+  the current 300 s timeout.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost

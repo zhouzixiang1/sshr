@@ -910,6 +910,58 @@ def linear_pair_beam_plan(
     return best
 
 
+def linear_pair_screen_plan(
+    terms: frozenset[int],
+    prefix_len: int = 0,
+    live_factor_ancilla: int = 0,
+    config: SearchConfig = SearchConfig(),
+    action_width: int = 4,
+    max_linear_width: int = 2,
+    neural_scorer=None,
+    boolean_ring: bool = False,
+) -> Plan:
+    """Single-layer screened linear-factor plan with a direct baseline.
+
+    This variant is intended for high-dimensional pressure tests where the
+    root-beam baseline and recursive greedy children dominate runtime.  It is
+    baseline-preserving against direct synthesis only: each candidate is scored
+    with direct quotient and rest subplans, so the method can add a cheap
+    Boolean-ring linear factor without opening a long recursive search tail.
+    Broader portfolios still compare the returned candidate against stronger
+    root-beam/linear-pair plans when those are affordable.
+    """
+    best = direct_plan(terms, prefix_len, live_factor_ancilla, config)
+    best_score = best.score(config.weights)
+    action_fn = boolean_linear_factor_actions if boolean_ring else linear_factor_actions
+    actions = action_fn(
+        terms,
+        prefix_len,
+        live_factor_ancilla,
+        config,
+        action_width=action_width,
+        max_linear_width=max_linear_width,
+        neural_scorer=neural_scorer,
+    )
+    for action in actions:
+        group = direct_plan(action.residuals, prefix_len + 1, live_factor_ancilla + 1, config)
+        rest = direct_plan(action.rest, prefix_len, live_factor_ancilla, config)
+        cost = factor_cost(action, group, rest, live_factor_ancilla, config)
+        plan = Plan(
+            "linear_factor",
+            terms,
+            cost,
+            factor=action.factor,
+            group=group,
+            rest=rest,
+            affine_const=action.affine_const,
+        )
+        score = plan.score(config.weights)
+        if score < best_score:
+            best = plan
+            best_score = score
+    return best
+
+
 def affine_linear_pair_beam_plan(
     terms: frozenset[int],
     prefix_len: int = 0,

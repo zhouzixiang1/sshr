@@ -10,6 +10,7 @@ import queue
 import random
 import signal
 import statistics
+import sys
 import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
@@ -33,6 +34,16 @@ DEFAULT_MODEL = THIS_DIR / "models" / "action_scorer.pt"
 
 class TaskTimeout(TimeoutError):
     pass
+
+
+def raise_csv_field_limit() -> None:
+    limit = sys.maxsize
+    while True:
+        try:
+            csv.field_size_limit(limit)
+            return
+        except OverflowError:
+            limit //= 10
 
 
 def _timeout_handler(signum, frame):
@@ -170,21 +181,21 @@ PRESETS = {
         "workers": 6,
     },
     "ultra_highdim_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_fprm_root_beam", "and_fprm_linear_pair", "and_fprm_linear_pair_deep", "and_fprm_boolean_linear_pair_deep", "and_fprm_linear_pair_deep_root_neural", "and_fprm_linear_pair_deep_ai_guard", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_fprm_root_beam", "and_fprm_linear_pair", "and_fprm_linear_pair_deep", "and_fprm_boolean_linear_pair_deep", "and_fprm_boolean_linear_pair_screen", "and_fprm_linear_pair_deep_root_neural", "and_fprm_linear_pair_deep_ai_guard", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
         "random_truth": [],
         "random_anf": [(16, 24)],
         "structured_limit": 0,
         "workers": 6,
     },
     "mega_highdim_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_fprm_root_beam", "and_fprm_linear_pair_fast", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_boolean_linear_pair_screen", "and_fprm_root_beam", "and_fprm_linear_pair_fast", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
         "random_truth": [],
         "random_anf": [(18, 12)],
         "structured_limit": 0,
         "workers": 4,
     },
     "giga_highdim_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_fprm_root_beam", "and_fprm_linear_pair_fast", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_boolean_linear_pair_screen", "and_fprm_root_beam", "and_fprm_linear_pair_fast", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
         "random_truth": [],
         "random_anf": [(20, 6)],
         "structured_limit": 0,
@@ -473,6 +484,8 @@ def summarize(rows: List[dict]) -> List[dict]:
 
 
 def main(argv: Iterable[str] | None = None) -> int:
+    raise_csv_field_limit()
+
     ap = argparse.ArgumentParser()
     ap.add_argument("--preset", choices=sorted(PRESETS), default="smoke")
     ap.add_argument("--seed", type=int, default=42)
@@ -537,20 +550,22 @@ def main(argv: Iterable[str] | None = None) -> int:
             "and_fprm_linear_pair_deep_ai_guard_wide": 16,
             "and_fprm_linear_pair_deep_wide": 17,
             "and_fprm_linear_pair_deep_neural": 18,
-            "and_fprm_boolean_linear_pair": 19,
-            "and_fprm_boolean_linear_pair_deep": 20,
-            "and_fprm_linear_parity": 21,
-            "and_mcts_factor": 22,
-            "and_affine_greedy": 23,
-            "and_affine_nmcts": 24,
-            "and_resource_heuristic": 25,
-            "and_resource_beam_only": 26,
-            "and_resource_no_mcts": 27,
-            "and_resource_nmcts": 28,
-            "and_resource_nmcts_wide": 29,
-            "and_profile_resource_nmcts": 30,
-            "and_pareto_resource_nmcts": 31,
-            "and_fprm_polarity_archive": 32,
+            "and_boolean_linear_pair_screen": 19,
+            "and_fprm_boolean_linear_pair": 20,
+            "and_fprm_boolean_linear_pair_deep": 21,
+            "and_fprm_boolean_linear_pair_screen": 22,
+            "and_fprm_linear_parity": 23,
+            "and_mcts_factor": 24,
+            "and_affine_greedy": 25,
+            "and_affine_nmcts": 26,
+            "and_resource_heuristic": 27,
+            "and_resource_beam_only": 28,
+            "and_resource_no_mcts": 29,
+            "and_resource_nmcts": 30,
+            "and_resource_nmcts_wide": 31,
+            "and_profile_resource_nmcts": 32,
+            "and_pareto_resource_nmcts": 33,
+            "and_fprm_polarity_archive": 34,
         }
         tasks.sort(key=lambda t: (method_rank.get(t[2], 99), t[1].n, t[0]))
 

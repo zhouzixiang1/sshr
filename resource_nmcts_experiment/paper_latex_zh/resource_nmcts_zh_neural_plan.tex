@@ -34,7 +34,7 @@
 \maketitle
 
 \begin{abstract}
-本文整理一个可继续发展为正式投稿的中文方案：将量子布尔函数 oracle 综合建模为 \anf{}/\fprm{} 项集合上的资源约束搜索问题，并以神经动作先验、蒙特卡洛树搜索、linear-pair 因子、baseline-preserving guard 和 Pareto 候选库共同生成逻辑层低资源线路。该方案不依赖 SSHR 的 parallelotope 候选空间；SSHR 只作为 CNOT-oriented small-scale baseline 参与比较。当前最强证据来自三条线：第一，$n\leq6$ 的 177 个传统函数上，\pareto{} 相对 ESOP cube beam 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%；第二，$n=16$ 的 24 个随机 ANF 函数上，pairwise-wide \method{} 相对 deterministic recursive guard 获得 10/0/14，平均 score 降低 0.18\%，相对旧 root-teacher \method{} 获得 10/0/14，平均 score 降低 0.12\%，说明神经排序在保留启发式 top-4 并加入 neural top-8 的候选扩展后可以转化为 full synthesis 层面的无 score-loss 增益；第三，$n=18$ 的 12 个函数上，\method{} 相对 direct ANF 平均 T-count 降低 60.05\%，平均 score 降低 56.99\%。新增 pairwise-wide root-action ranker 将 $n=14$ 高维 learned prior 结果从 1/0/11、平均 score 降低 0.01\% 改进到 2/0/10、平均 score 降低 0.05\%，并在 $n=16$ 根动作诊断中把旧 neural top-4 的负迁移修正为 5/0/18、平均 score 降低 0.06\%。当前 AI 证据已经从负向诊断推进到小幅正向证据，但幅度仍不足以作为目标结束点。本文建议把论文主张限定为逻辑层低 T-count 与低加权资源优势，并把下一阶段重点放在更强的高维神经排序、外部 reversible-toolchain 复现和代表性线路案例上。
+本文整理一个可继续发展为正式投稿的中文方案：将量子布尔函数 oracle 综合建模为 \anf{}/\fprm{} 项集合上的资源约束搜索问题，并以神经动作先验、蒙特卡洛树搜索、linear-pair/Boolean-ring 因子、baseline-preserving guard 和 Pareto 候选库共同生成逻辑层低资源线路。该方案不依赖 SSHR 的 parallelotope 候选空间；SSHR 只作为 CNOT-oriented small-scale baseline 参与比较。当前最强证据来自三条线：第一，$n\leq6$ 的 177 个传统函数上，\pareto{} 相对 ESOP cube beam 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%；第二，$n=16$ 的 24 个随机 ANF 函数上，Boolean-ring \method{} 相对上一轮 pairwise-wide \method{} 获得 14/0/10，平均 score 降低 0.34\%，相对 deterministic recursive guard 获得 18/0/6，平均 score 降低 0.52\%，说明放宽 quotient 与 linear factor 的变量不相交限制后可以获得比单纯扩大神经 root action 更稳定的结构性收益；第三，$n=18$ 的 12 个函数上，\method{} 相对 direct ANF 平均 T-count 降低 60.05\%，平均 score 降低 56.99\%。pairwise-wide root-action ranker 仍提供 AI 模块的小幅正向证据：$n=16$ full synthesis 相对 recursive guard 为 10/0/14、平均 score 降低 0.18\%。当前方法已有可写入论文的结构搜索贡献，但高维神经 guidance 的幅度仍弱于手工 Boolean-ring 结构扩展，外部 reversible-toolchain 复现也仍缺失，因此尚不能判定为目标结束点。
 \end{abstract}
 
 \noindent\textbf{关键词：}量子 oracle 综合；布尔函数综合；神经蒙特卡洛树搜索；ANF；FPRM；T-count；资源约束
@@ -63,6 +63,7 @@
 SSHR & parallelotope 空间上的 CNOT-oriented baseline & 作为比较对象，不作为本文内部搜索空间 \\
 AI guard & deterministic guard 与 neural guard 并行运行后取更低 score 的保守策略 & 写成无 score-loss 小增益，而非神经模型单独胜出 \\
 Pairwise-wide root-action ranker & 用同一根状态内动作对训练排序，并把 heuristic top-4 与 neural top-8 合并为候选扩展 & 当前是小幅正向证据，不是最终突破 \\
+Boolean-ring linear factor & 允许 quotient monomial 与 linear factor 共享变量，并按 $x_i^2=x_i$ 展开、GF(2) 消去偶数项 & 当前最强高维结构改进 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -96,6 +97,12 @@ Pairwise-wide root-action ranker & 用同一根状态内动作对训练排序，
   (x_i\oplus x_j\oplus\cdots)\cdot h(x),
 \]
 线性部分可以用 CNOT-only 方式计算，通常不增加 T-count。高维 $n=14$ 到 $n=18$ 的压力测试表明，linear-pair guard 是当前最重要的规模机制。
+
+本轮进一步加入 Boolean-ring linear factor。旧 linear-pair 要求 quotient $h(x)$ 与 linear factor 的变量不相交；新分支允许二者共享变量，并在展开时使用 Boolean 环关系 $x_i^2=x_i$。例如
+\[
+  (x_i\oplus x_j)\cdot x_i m = x_i m \oplus x_i x_j m .
+\]
+这类重叠变量结构在 square-free ANF 乘法中会被漏掉，但对应线路仍只需要先用 CNOT 计算线性奇偶量，再用该辅助位控制 quotient 子线路。
 
 \subsection{神经先验与 MCTS}
 
@@ -140,7 +147,7 @@ SSHR-H & 81.0 & \textbf{67.6} & 88.7 & 1.36 & 88.2 \\
 \small
 \caption{高维随机 ANF 压力测试中的主要比较。}
 \label{tab:highdim}
-\begin{tabularx}{\linewidth}{llrrr}
+\begin{tabularx}{\linewidth}{l>{\raggedright\arraybackslash}Xrrr}
 \toprule
 规模 & 对比 & 函数数 & score 胜/负/平 & 平均 $\Delta$ score \\
 \midrule
@@ -149,6 +156,8 @@ $n=15$ & recursive guard vs root beam & 32 & 30/0/2 & $-5.28\%$ \\
 $n=16$ & \method{} vs root beam & 24 & 23/0/1 & $-4.36\%$ \\
 $n=16$ & old AI guard vs recursive guard & 24 & 6/0/18 & $-0.05\%$ \\
 $n=16$ & pairwise-wide \method{} vs recursive guard & 24 & 10/0/14 & $-0.18\%$ \\
+$n=16$ & Boolean-linear-deep vs recursive guard & 24 & 17/3/4 & $-0.39\%$ \\
+$n=16$ & Boolean-guard \method{} vs pairwise-wide \method{} & 24 & 14/0/10 & $-0.34\%$ \\
 $n=18$ & fast guard vs root beam & 12 & 6/0/6 & $-1.91\%$ \\
 $n=18$ & \method{} vs fast guard & 12 & 12/0/0 & $-3.55\%$ \\
 \bottomrule
@@ -183,6 +192,12 @@ PW-wide \method{} vs old \method{}, $n=16$ & 24 & 10/0/14 & $-0.12\%$ \\
 \end{tabularx}
 \end{table}
 
+\subsection{Boolean-ring linear factor 的新增结果}
+
+Boolean-ring linear factor 是当前比 pairwise-wide 更明显的高维结构改进。单独的 Boolean-linear-deep 分支在 24 个 $n=16$ random ANF 函数上相对 deterministic recursive linear-pair guard 获得 17/3/4，平均 score 降低 0.39\%；相对上一轮 pairwise-wide \method{} 获得 14/6/4，平均 score 降低 0.22\%，并且平均运行时间降低 72.31\%。把该分支放入 Resource-NMCTS portfolio 后，Boolean-guard \method{} 相对 pairwise-wide \method{} 获得 14/0/10，平均 score 降低 0.34\%，相对 deterministic recursive guard 获得 18/0/6，平均 score 降低 0.52\%。这说明本轮提升不是神经排序噪声，而是搜索空间扩展带来的稳定收益。
+
+需要同时记录一个负面诊断：为 $n=18$ 和 $n=20$ 边界压力测试设计的 ANF-only Boolean-linear screen 虽然非常快，但质量明显不足。在 12 个 $n=18$ random ANF 函数上，它相对旧 \method{} 为 0/12/0，平均 score 反而上升 42.45\%。因此 screen 版本只能写成快速边界诊断，不能写成高质量 synthesis 方法。
+
 \section{与相关工作的关系}
 
 XAG oracle synthesis 把 XOR 与 AND 结构分开，使 AND 节点数量与 T-count 密切相关\cite{meuli2022xag,meuli2019multiplicative}。ROS 将 oracle synthesis 建模为 resource-constrained LUT mapping\cite{meuli2020ros}。BDD-based reversible synthesis 则以决策图方式处理较大布尔函数\cite{wille2009bdd}。这些方法都说明中间表示决定 oracle 资源结构。本文的差异是把 ANF/FPRM 项集合本身作为搜索对象，并把因子选择交给资源感知神经 MCTS/portfolio。
@@ -193,7 +208,7 @@ XAG oracle synthesis 把 XOR 与 AND 结构分开，使 AND 节点数量与 T-co
 
 当前结果已经能形成一篇逻辑层方法论文的雏形，但还没有达到 ``明显提升后结束'' 的目标。投稿前最需要补齐三件事。
 
-第一，高维神经排序必须从小幅正向变成可见增益。pairwise-wide root-action ranker 已经在 $n=16$ full synthesis 上形成 10/0/14、-0.18\% 的无 score-loss 增益，但幅度仍不足以支撑强 AI 主张。下一步应训练更强的 root-action/value ranker，例如扩大 teacher width、加入 top-k distillation、使用 pairwise/listwise 混合损失，并在 $n=14,16,18$ 上报告 matched no-prior、heuristic-prior 和 learned-prior 三组对比。
+第一，高维神经排序必须从小幅正向变成可见增益。pairwise-wide root-action ranker 已经在 $n=16$ full synthesis 上形成 10/0/14、-0.18\% 的无 score-loss 增益，但真正更明显的新收益来自 Boolean-ring linear factor。下一步应训练能选择 Boolean-ring factor、recursive depth 和 FPRM polarity 的策略网络，而不是只重排旧 pair action。
 
 第二，外部 reversible-toolchain baseline 需要继续增强。当前已有 ABC、BDD、ESOP、SSHR 和 exact 小规模参照，但 ROS、mockturtle/RevKit 风格流程仍是审稿人可能追问的空白。若能在导出的 benchmark 上复现至少一个更接近 reversible oracle synthesis 的工具链，论文可信度会明显提高。
 
@@ -205,7 +220,7 @@ XAG oracle synthesis 把 XOR 与 AND 结构分开，使 AND 节点数量与 T-co
 
 \section{结论}
 
-本文当前最稳的主线是：\method{} 将量子布尔函数 oracle 综合转化为 ANF/FPRM 项集合上的资源约束搜索，并通过神经先验、MCTS、linear-pair guard 和 portfolio selection 获得逻辑层低 T-count 与低加权 score 优势。传统函数和高维随机 ANF 已经给出可写入论文的结果，pairwise-wide root-action ranker 也把高维 AI 模块从负向诊断推进到 full synthesis 层面的小幅正向证据。与此同时，高维 learned prior 的实际收益仍小，外部 reversible-toolchain 对比和线路案例仍需补强。因此，这份文档应作为下一轮实验和正式英文稿的路线图，而不是最终定稿。
+本文当前最稳的主线是：\method{} 将量子布尔函数 oracle 综合转化为 ANF/FPRM 项集合上的资源约束搜索，并通过神经先验、MCTS、linear-pair/Boolean-ring guard 和 portfolio selection 获得逻辑层低 T-count 与低加权 score 优势。传统函数和高维随机 ANF 已经给出可写入论文的结果，pairwise-wide root-action ranker 也把高维 AI 模块从负向诊断推进到 full synthesis 层面的小幅正向证据；Boolean-ring linear factor 则提供了更明显的结构性提升。与此同时，高维 learned prior 的实际收益仍小，外部 reversible-toolchain 对比和线路案例仍需补强。因此，这份文档应作为下一轮实验和正式英文稿的路线图，而不是最终定稿。
 
 \begin{thebibliography}{99}
 

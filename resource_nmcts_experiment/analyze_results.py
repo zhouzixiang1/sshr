@@ -137,6 +137,7 @@ def main() -> int:
         ("and_affine_nmcts", "sshr_h"),
         ("and_resource_nmcts", "direct_anf"),
         ("and_resource_nmcts", "and_direct_anf"),
+        ("and_resource_nmcts", "and_boolean_linear_pair_screen"),
         ("and_resource_nmcts", "and_fprm_greedy"),
         ("and_resource_nmcts", "and_fprm_root_beam"),
         ("and_resource_nmcts", "and_affine_greedy"),
@@ -153,6 +154,7 @@ def main() -> int:
         ("and_resource_nmcts_wide", "direct_anf"),
         ("and_profile_resource_nmcts", "direct_anf"),
         ("and_profile_resource_nmcts", "and_direct_anf"),
+        ("and_profile_resource_nmcts", "and_boolean_linear_pair_screen"),
         ("and_profile_resource_nmcts", "and_fprm_greedy"),
         ("and_profile_resource_nmcts", "and_fprm_root_beam"),
         ("and_profile_resource_nmcts", "and_affine_greedy"),
@@ -164,6 +166,11 @@ def main() -> int:
         ("and_profile_resource_nmcts", "sshr_h"),
         ("and_fprm_linear_pair_fast", "and_fprm_root_beam"),
         ("and_fprm_linear_pair_fast", "and_fprm_greedy"),
+        ("and_boolean_linear_pair_screen", "and_direct_anf"),
+        ("and_fprm_boolean_linear_pair_screen", "and_direct_anf"),
+        ("and_fprm_boolean_linear_pair_screen", "and_boolean_linear_pair_screen"),
+        ("and_fprm_boolean_linear_pair_screen", "and_fprm_root_beam"),
+        ("and_fprm_boolean_linear_pair_screen", "and_fprm_linear_pair_fast"),
         ("and_fprm_linear_pair", "and_fprm_root_beam"),
         ("and_fprm_linear_pair", "and_fprm_greedy"),
         ("and_fprm_linear_pair_deep", "and_fprm_linear_pair"),
@@ -188,19 +195,23 @@ def main() -> int:
         ("and_fprm_polarity_archive", "and_fprm_greedy"),
         ("and_pareto_resource_nmcts", "and_fprm_polarity_archive"),
         ("and_resource_nmcts", "and_fprm_linear_pair_fast"),
+        ("and_resource_nmcts", "and_fprm_boolean_linear_pair_screen"),
         ("and_resource_nmcts", "and_fprm_linear_pair"),
         ("and_resource_nmcts", "and_fprm_linear_pair_deep"),
         ("and_resource_nmcts", "and_fprm_linear_parity"),
         ("and_profile_resource_nmcts", "and_fprm_linear_pair_fast"),
+        ("and_profile_resource_nmcts", "and_fprm_boolean_linear_pair_screen"),
         ("and_profile_resource_nmcts", "and_fprm_linear_pair"),
         ("and_profile_resource_nmcts", "and_fprm_linear_pair_deep"),
         ("and_profile_resource_nmcts", "and_fprm_linear_parity"),
         ("and_pareto_resource_nmcts", "direct_anf"),
         ("and_pareto_resource_nmcts", "and_direct_anf"),
+        ("and_pareto_resource_nmcts", "and_boolean_linear_pair_screen"),
         ("and_pareto_resource_nmcts", "and_resource_nmcts"),
         ("and_pareto_resource_nmcts", "and_profile_resource_nmcts"),
         ("and_pareto_resource_nmcts", "and_fprm_linear_pair"),
         ("and_pareto_resource_nmcts", "and_fprm_linear_pair_fast"),
+        ("and_pareto_resource_nmcts", "and_fprm_boolean_linear_pair_screen"),
         ("and_pareto_resource_nmcts", "and_fprm_linear_pair_deep"),
         ("and_pareto_resource_nmcts", "and_fprm_root_beam"),
         ("and_pareto_resource_nmcts", "and_affine_nmcts"),
@@ -230,7 +241,7 @@ def main() -> int:
             wins, losses, ties, mean = comparison_rows(by_name, target, base, metric)
             lines.append(f"| {target} | {base} | {metric} | {wins} | {losses} | {ties} | {mean:+.2f}% |")
 
-    for focus in ["and_rc_nmcts", "and_affine_nmcts", "and_resource_nmcts", "and_resource_nmcts_wide", "and_profile_resource_nmcts", "and_pareto_resource_nmcts", "and_affine_no_guard", "and_affine_greedy", "and_fprm_greedy", "and_fprm_root_beam", "and_fprm_linear_pair_fast", "and_fprm_linear_pair", "and_fprm_linear_pair_deep", "and_fprm_linear_pair_deep_root_neural", "and_fprm_linear_pair_deep_ai_guard", "and_fprm_linear_pair_deep_wide", "and_fprm_linear_parity", "and_fprm_polarity_archive", "and_cube_beam", "and_esop_milp", "and_fprm_neural_mcts", "and_fprm_mcts", "fprm_mcts"]:
+    for focus in ["and_rc_nmcts", "and_affine_nmcts", "and_resource_nmcts", "and_resource_nmcts_wide", "and_profile_resource_nmcts", "and_pareto_resource_nmcts", "and_affine_no_guard", "and_affine_greedy", "and_fprm_greedy", "and_fprm_root_beam", "and_boolean_linear_pair_screen", "and_fprm_linear_pair_fast", "and_fprm_boolean_linear_pair_screen", "and_fprm_linear_pair", "and_fprm_linear_pair_deep", "and_fprm_linear_pair_deep_root_neural", "and_fprm_linear_pair_deep_ai_guard", "and_fprm_linear_pair_deep_wide", "and_fprm_linear_parity", "and_fprm_polarity_archive", "and_cube_beam", "and_esop_milp", "and_fprm_neural_mcts", "and_fprm_mcts", "fprm_mcts"]:
         if not any(focus in table for table in by_name.values()):
             continue
         label = focus.replace("_", "-")

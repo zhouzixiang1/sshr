@@ -23,7 +23,7 @@ from affine_search import affine_wrap_cost, candidate_transforms, emit_affine_wr
 from anf_utils import anf_monomials, shifted_function
 from cube_search import cube_beam_plan, cube_greedy_plan, emit_cube_plan
 from esop_milp import synthesize_esop_milp_circuit
-from factor_plan import SearchConfig, affine_linear_pair_beam_plan, direct_plan, emit_plan_to_circuit, greedy_plan, linear_pair_beam_plan, root_beam_plan, root_child_beam_plan, verify_oracle
+from factor_plan import SearchConfig, affine_linear_pair_beam_plan, direct_plan, emit_plan_to_circuit, greedy_plan, linear_pair_beam_plan, linear_pair_screen_plan, root_beam_plan, root_child_beam_plan, verify_oracle
 from neural_policy import NeuralScorer
 from nmcts_solver import NeuralMCTSSolver
 from resource_model import ResourceCost, ResourceWeights
@@ -221,6 +221,8 @@ def _solve_plan(method: str, terms: frozenset[int], config: SearchConfig, seed: 
         return greedy_plan(terms, config=config, neural_scorer=neural if method == "neural_greedy" else None)
     if method in {"root_beam_factor", "fprm_root_beam"}:
         return root_beam_plan(terms, config=config, neural_scorer=neural if method == "root_beam_factor" else None)
+    if method == "boolean_linear_pair_screen":
+        return linear_pair_screen_plan(terms, config=config, action_width=6, boolean_ring=True)
     if method == "fprm_root_child_beam":
         return root_child_beam_plan(terms, config=config)
     if method == "fprm_linear_pair":
@@ -281,6 +283,8 @@ def _solve_plan(method: str, terms: frozenset[int], config: SearchConfig, seed: 
         return linear_pair_beam_plan(terms, config=config, boolean_ring=True)
     if method == "fprm_boolean_linear_pair_deep":
         return linear_pair_beam_plan(terms, config=config, recursive_depth=1, boolean_ring=True)
+    if method == "fprm_boolean_linear_pair_screen":
+        return linear_pair_screen_plan(terms, config=config, action_width=6, boolean_ring=True)
     if method == "fprm_linear_parity":
         return linear_pair_beam_plan(terms, config=config, max_linear_width=3)
     if method == "fprm_affine_linear_pair":
@@ -329,6 +333,7 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
         "fprm_linear_pair_deep_root_neural_wide",
         "fprm_boolean_linear_pair",
         "fprm_boolean_linear_pair_deep",
+        "fprm_boolean_linear_pair_screen",
         "fprm_linear_parity",
         "fprm_affine_linear_pair",
         "fprm_affine_linear_pair_deep",
@@ -481,6 +486,8 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
             plan = linear_pair_beam_plan(terms, config=config, boolean_ring=True)
         elif method == "fprm_boolean_linear_pair_deep":
             plan = linear_pair_beam_plan(terms, config=config, recursive_depth=1, boolean_ring=True)
+        elif method == "fprm_boolean_linear_pair_screen":
+            plan = linear_pair_screen_plan(terms, config=config, action_width=6, boolean_ring=True)
         elif method == "fprm_linear_parity":
             plan = linear_pair_beam_plan(terms, config=config, max_linear_width=3)
         elif method == "fprm_affine_linear_pair":
@@ -1119,16 +1126,20 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             child_specs.append(("affine_nmcts", fast_config))
         else:
             # At n=14+ the deep linear branch subsumes the shallow linear-pair
-            # candidate.  At n=16 the one-layer guard is the bounded default;
-            # at n>=18 the ordinary recursive linear-pair branch gives the
-            # clearest search-quality separation over root beam while still
-            # staying within the per-row timeout on the current stress set.
+            # candidate.  At n>=18 the cheap ANF-only Boolean-ring screen runs
+            # first, then the stronger FPRM branches are attempted opportunistically.
             highdim_config = replace(fast_config, candidate_top_k=config.candidate_top_k)
-            linear_method = "fprm_linear_pair_deep"
-            child_specs.append((linear_method, highdim_config))
-            if bf.n <= 16:
+            if bf.n >= 20:
+                child_specs.append(("boolean_linear_pair_screen", highdim_config))
+            elif bf.n >= 18:
+                # The ANF-only Boolean-ring screen is cheap enough for n=18
+                # and runs before FPRM branches that can hit the timeout.
+                child_specs.append(("boolean_linear_pair_screen", highdim_config))
+                child_specs.append(("fprm_linear_pair_deep", highdim_config))
+            else:
+                child_specs.append(("fprm_linear_pair_deep", highdim_config))
                 child_specs.append(("fprm_boolean_linear_pair_deep", highdim_config))
-            if model_path:
+            if model_path and bf.n < 20:
                 neural_linear = (
                     "fprm_linear_pair_deep_ai_guard_wide"
                     if bf.n == 16
@@ -1373,6 +1384,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
 
     if method in {
         "direct_anf",
+        "boolean_linear_pair_screen",
         "greedy_factor",
         "neural_greedy",
         "root_beam_factor",
@@ -1418,6 +1430,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         "fprm_linear_pair_deep_root_neural_wide",
         "fprm_boolean_linear_pair",
         "fprm_boolean_linear_pair_deep",
+        "fprm_boolean_linear_pair_screen",
         "fprm_linear_parity",
         "fprm_affine_linear_pair",
         "fprm_affine_linear_pair_deep",
