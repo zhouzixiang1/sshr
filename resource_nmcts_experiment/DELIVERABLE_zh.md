@@ -162,7 +162,33 @@
 
 结论：高维 learned-prior 小切片已经完成，但它不是强正向证据。专用 linear-action 模型只带来 1 个轻微 score 胜例，且运行时间约翻倍。因此论文主贡献仍应放在 n<=6 learned-prior 正向证据、低维 neural refine、MCTS/Pareto archive、以及高维 bounded linear-pair guard；高维 neural guidance 目前只能写成边界诊断或 future work。
 
-### 2.6 小规模 exact FPRM-DP 精确切片
+### 2.6 高维 root-action teacher 诊断
+
+新增 `analyze_highdim_root_action_oracle.py`，用于回答一个更具体的问题：高维 CNOT-only linear-pair 根层动作排序是否还有可学习空间。该脚本不追求全局最优，而是在 `highdim_neural_prior` 的 12 个 `n=14` random ANF 函数上，用真实 greedy child plan 对更宽的 root-action 集合做 one-step teacher 评分。
+
+主要产物：
+
+- `results/raw_highdim_root_action_oracle.csv`
+- `results/summary_highdim_root_action_oracle.csv`
+- `results/analysis_highdim_root_action_oracle.md`
+- `paper_latex/tables/highdim_root_action_oracle.tex`
+
+核心结果：
+
+| 对比 | score 胜/负/平 | 平均 score 变化 | 解释 |
+|---|---:|---:|---|
+| oracle top-12 vs heuristic top-4 | 3/0/7 | -0.18% | 更宽动作集合有小幅 headroom |
+| oracle top-24 vs heuristic top-4 | 3/0/7 | -0.18% | top-12 已覆盖该切片的额外收益 |
+| oracle top-24 vs heuristic top-1 | 7/0/3 | -0.43% | 单一启发式 top-1 会丢失多个更好 root action |
+| neural top-4 vs heuristic top-4 | 1/1/8 | +0.06% | 现有 immediate-label 高维模型没有利用 teacher signal |
+
+解释：
+
+- 这个结果不是新的最终综合最优结果，而是给高维 neural guidance 提供监督目标。
+- 它说明高维 root-action 排序有真实但幅度较小的可学习空间；当前 immediate-gain 训练的 `linear_action_scorer_highdim.pt` 还没有学到这个 one-step teacher。
+- 后续如果继续补强 AI 贡献，应优先训练 root-action ranker 去逼近 oracle top-12/top-24，而不是继续简单叠加现有 neural prior。
+
+### 2.7 小规模 exact FPRM-DP 精确切片
 
 本轮新增 `analyze_exact_fprm_dp.py`，用于补上一个小规模、同模型内部精确证据链。它对 bounded fixed-polarity FPRM factor model 做动态规划，枚举所有单项式 factor action 和 CNOT-only linear-pair factor action，并对所有 FPRM polarity 求最优。这个 exact 只限定在该受限 FPRM 因子模型内，不是全局 reversible circuit optimum。
 
@@ -211,6 +237,7 @@
 - `analyze_esop_baseline.py`：新增 ESOP 专项分析。
 - `analyze_search_contribution.py`：新增搜索贡献分解分析。
 - `analyze_exact_fprm_dp.py`：新增小规模 bounded FPRM-DP 精确切片。
+- `analyze_highdim_root_action_oracle.py`：新增高维 root-action teacher 诊断。
 
 ### 3.2 结果文件
 
@@ -229,6 +256,9 @@
 - `results/raw_exact_fprm_dp.csv`
 - `results/summary_exact_fprm_dp.csv`
 - `results/analysis_exact_fprm_dp.md`
+- `results/raw_highdim_root_action_oracle.csv`
+- `results/summary_highdim_root_action_oracle.csv`
+- `results/analysis_highdim_root_action_oracle.md`
 
 ### 3.3 论文文件
 
@@ -239,6 +269,7 @@
 - `paper_latex/tables/search_contribution_decomposition.tex`
 - `paper_latex/tables/neural_prior_highdim_ablation.tex`
 - `paper_latex/tables/exact_fprm_dp.tex`
+- `paper_latex/tables/highdim_root_action_oracle.tex`
 - `paper_latex/tables/resource_search_ablation_highdim.tex`
 - `paper_latex/tables/runtime_search_ablation_highdim.tex`
 - `paper_latex/tables/external_traditional_resource_n6.tex`
@@ -299,6 +330,7 @@ cp /tmp/resource_nmcts_highdim_no_prior/raw_highdim_neural_prior.csv results/raw
 cp /tmp/resource_nmcts_highdim_no_prior/summary_highdim_neural_prior.csv results/summary_highdim_neural_prior_no_prior.csv
 cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json results/manifest_highdim_neural_prior_no_prior.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_neural_prior_ablation.py --learned-csv results/raw_highdim_neural_prior_learned_prior.csv --no-prior-csv results/raw_highdim_neural_prior_no_prior.csv --methods and_resource_nmcts --out-raw results/raw_neural_prior_highdim_ablation.csv --summary results/summary_neural_prior_highdim_ablation.csv --out results/analysis_neural_prior_highdim_ablation.md --latex-out paper_latex/tables/neural_prior_highdim_ablation.tex --dataset-label highdim_neural_prior --model-label models/linear_action_scorer_highdim.pt
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_highdim_root_action_oracle.py
 ```
 
 重新生成 n=18 内部分析：
@@ -340,6 +372,7 @@ latexmk -pdf -g main.tex
 - `raw_search_ablation_highdim.csv` 审计：128 行、0 error、0 skipped、0 incorrect。
 - `raw_neural_prior_highdim_ablation.csv` 审计：24 行、0 error、0 skipped、0 incorrect。
 - `raw_exact_fprm_dp.csv` 审计：72 行、0 error、0 skipped、0 incorrect。
+- `raw_highdim_root_action_oracle.csv` 审计：62 行、0 error、0 incorrect。
 
 Git 状态：
 
@@ -358,6 +391,7 @@ Git 状态：
 5. 外部 ABC/BDD 结果支持低加权资源和低 ancilla 优势，但 depth 仍是 ABC-AIG/ABC-XAG 的优势指标。
 6. 贡献分解显示：仿射坐标搜索是最大前置收益，神经 refine 和 final guard 提供无 score loss 的小幅增益，Pareto archive 在小规模传统切片上贡献明确，高维主要由 bounded linear-pair guard 支撑。
 7. `n<=4` exact FPRM-DP 精确切片显示：Resource/Pareto portfolio 可以在受限 FPRM exact 模型之外继续降低 score；Exact FPRM-DP 本身也优于 ESOP-MILP 和 exact SSHR-I 的加权 score。
+8. 高维 root-action teacher 诊断显示：oracle top-24 相对启发式 top-4 有 3/0/7、-0.18% 的小幅 headroom，但现有 neural top-4 为 1/1/8、+0.06%，因此高维 AI 贡献仍应写成待改进方向。
 
 不应写的主张：
 
@@ -369,9 +403,9 @@ Git 状态：
 
 ## 7. 下一步建议
 
-当前已经完成第一版“搜索贡献分解”，并新增了 `search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior` 和 `exact_fprm_dp` 四个 dedicated ablation/diagnostic。投稿前仍建议继续补强：
+当前已经完成第一版“搜索贡献分解”，并新增了 `search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle` 和 `exact_fprm_dp` 五个 dedicated ablation/diagnostic。投稿前仍建议继续补强：
 
-1. 高维 neural guidance 需要继续改进；当前 highdim prior 只有 1/0/11、-0.01% 的弱正向结果，不足以作为强 AI 贡献。
+1. 高维 neural guidance 需要继续改进；当前 highdim prior 只有 1/0/11、-0.01% 的弱正向结果。root-action teacher 诊断显示有 3/0/7、-0.18% 的小幅可学习 headroom，但现有 neural top-4 没有利用它。
 2. 小规模 exact/exhaustive oracle slice 已完成 bounded FPRM-DP 版本；如果继续加强，可以再补一个更接近全局 reversible circuit 的 exact/SMT/SAT 小规模证书。
 3. 继续补 ROS/mockturtle 或其他外部 reversible-toolchain 对比，减少“估算式 ABC/BDD baseline”的审稿风险。
 
@@ -386,6 +420,7 @@ Git 状态：
 | Pareto archive | n<=6 traditional | Pareto vs Resource 68/0/109，-3.26% | 已有 |
 | highdim guard | n=14/15/16/18 | linear-pair guard 相对 root-beam 均无 score loss | 已有 |
 | highdim no-neural-prior | 12 个 n=14 random ANF | learned prior 1/0/11，-0.01%，运行时间 +104.07% | 已有但弱 |
+| highdim root-action teacher | 10 个有 linear action 的 n=14 random ANF | oracle top-24 vs heuristic top-4 为 3/0/7，-0.18%；neural top-4 vs heuristic top-4 为 1/1/8，+0.06% | 已有但属诊断 |
 | exact FPRM-DP | n<=4 traditional | Resource vs exact FPRM-DP 51/3/18，-12.18%；Pareto vs exact FPRM-DP 51/0/21，-12.20% | 已有但模型受限 |
 
 ## 8. 当前结论
@@ -396,4 +431,4 @@ Git 状态：
 
 但是投稿前还需要继续补强“AI 搜索本身带来的贡献”这一点。否则文章容易被评价为一组 FPRM/ESOP 工程启发的组合，而不是强化学习与 MCTS 方法论文。
 
-本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior` 和 `exact_fprm_dp` 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合以及小规模 exact bounded FPRM 对照都有可测贡献。不过高维 neural guidance 仍然很弱，更强外部 reversible-toolchain 对比也仍然缺失，所以目标还不能判定完成。
+本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle` 和 `exact_fprm_dp` 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照，以及高维 root-action teacher headroom 都有可测证据。不过高维 neural guidance 仍然很弱，更强外部 reversible-toolchain 对比也仍然缺失，所以目标还不能判定完成。

@@ -52,6 +52,7 @@ cp /tmp/resource_nmcts_highdim_no_prior/raw_highdim_neural_prior.csv results/raw
 cp /tmp/resource_nmcts_highdim_no_prior/summary_highdim_neural_prior.csv results/summary_highdim_neural_prior_no_prior.csv
 cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json results/manifest_highdim_neural_prior_no_prior.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_neural_prior_ablation.py --learned-csv results/raw_highdim_neural_prior_learned_prior.csv --no-prior-csv results/raw_highdim_neural_prior_no_prior.csv --methods and_resource_nmcts --out-raw results/raw_neural_prior_highdim_ablation.csv --summary results/summary_neural_prior_highdim_ablation.csv --out results/analysis_neural_prior_highdim_ablation.md --latex-out paper_latex/tables/neural_prior_highdim_ablation.tex --dataset-label highdim_neural_prior --model-label models/linear_action_scorer_highdim.pt
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_highdim_root_action_oracle.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_search_contribution.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_resource_sweep.py --model models/action_scorer_rollout_logical_and.pt --workers 10
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_resource_sweep.py
@@ -245,6 +246,15 @@ High-dimensional neural-prior diagnostic evidence from
   score wins/losses/ties versus no-prior Resource-NMCTS and a -0.01% mean score
   change, with mean runtime rising from 23.26 s to 48.55 s.  This is a boundary
   diagnostic, not a strong high-dimensional AI contribution claim.
+- The root-action teacher diagnostic in
+  `results/analysis_highdim_root_action_oracle.md` evaluates the same n=14
+  slice with actual greedy child plans for a wider CNOT-only linear-pair root
+  action set.  Oracle top-24 has 3/0/7 score wins/losses/ties over the current
+  heuristic top-4 window with a -0.18% mean score change, and 7/0/3 over
+  heuristic top-1 with a -0.43% mean score change.  The existing neural top-4
+  ordering is 1/1/8 versus heuristic top-4 with +0.06% mean score change, so
+  the current high-dimensional model does not yet exploit this small teacher
+  signal.
 
 Search-contribution decomposition evidence from
 `results/analysis_search_contribution.md`:

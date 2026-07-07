@@ -616,6 +616,16 @@ linear-action scorer with root-only neural screening on 12 $n=14$ random ANF
 functions.  This diagnostic produced only one score win and eleven ties
 ($-0.01\%$ mean score change) while roughly doubling mean runtime, so we do not
 claim a strong high-dimensional learned-prior effect in the current version.
+To separate ``no headroom'' from ``weak labels'', we additionally evaluated a
+bounded root-action teacher for the same high-dimensional slice.  The teacher
+scores a wider CNOT-only linear-pair root-action set by building actual greedy
+child plans.  As Table~\ref{tab:root-action-oracle} shows, oracle top-24
+selection has 3/0/7 score wins/losses/ties over the current heuristic top-4
+window and 7/0/3 over heuristic top-1.  The effect is small, but positive.  The
+current neural top-4 ordering does not exploit it, scoring 1/1/8 against the
+heuristic top-4 window.  We therefore treat this as a supervised target for a
+future high-dimensional root-action ranker rather than as a present headline
+improvement.
 
 \begin{table}[t]
 \centering
@@ -627,6 +637,17 @@ heuristic action prior.  Negative mean score change favors the learned prior.}
 \input{tables/neural_prior_ablation}
 \end{table}
 
+\begin{table}[t]
+\centering
+\small
+\caption{High-dimensional root-action teacher diagnostic on 10 $n=14$ functions
+with available linear-pair actions.  Oracle rows score wider root-action sets by
+building actual greedy child plans.  Negative mean score change favors the
+target.}
+\label{tab:root-action-oracle}
+\input{tables/highdim_root_action_oracle}
+\end{table}
+
 Table~\ref{tab:contribution-decomposition} consolidates the scattered
 ablation evidence into one matched-pair contribution account.  The strongest
 pre-portfolio algorithmic step is affine coordinate search: affine-greedy
@@ -635,7 +656,10 @@ fixed-coordinate MCTS pairs, albeit with score losses on some functions.  The
 neural refinement and final guard are smaller but monotone in score on this
 suite, and the learned prior gives a positive no-loss quality signal on the
 $n\leq 6$ rerun; the separate $n=14$ learned-prior diagnostic is kept as a
-boundary result rather than a main contribution.  A dedicated small-function rerun further separates
+boundary result rather than a main contribution.  The root-action teacher
+diagnostic shows a small learnable high-dimensional ranking signal, but the
+current immediate-label scorer does not yet capture it.  A dedicated
+small-function rerun further separates
 heuristic-only, beam-only, no-MCTS, Resource-NMCTS, and Pareto-Resource-NMCTS
 portfolios on the same 177 functions.  The table also clarifies the
 high-dimensional claim.  At $n=14$--$n=18$, most of the measurable scale gain

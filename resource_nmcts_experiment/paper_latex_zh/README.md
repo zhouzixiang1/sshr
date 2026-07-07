@@ -17,6 +17,7 @@ latexmk -xelatex -g main_zh.tex
 - `../results/analysis_traditional_resource.md`
 - `../results/analysis_esop_baseline.md`
 - `../results/analysis_search_contribution.md`
+- `../results/analysis_highdim_root_action_oracle.md`
 - `../results/analysis_exact_fprm_dp.md`
 - `../results/analysis_mega_highdim_resource.md`
 - `../literature_notes.md`

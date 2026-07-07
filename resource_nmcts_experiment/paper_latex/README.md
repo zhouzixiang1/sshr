@@ -28,6 +28,10 @@ Current source evidence:
 - neural-prior ablation CSV: `../results/raw_neural_prior_ablation.csv`
 - neural-prior ablation analysis:
   `../results/analysis_neural_prior_ablation.md`
+- high-dimensional root-action teacher diagnostic CSV:
+  `../results/raw_highdim_root_action_oracle.csv`
+- high-dimensional root-action teacher diagnostic analysis:
+  `../results/analysis_highdim_root_action_oracle.md`
 - matched learned-prior traditional-resource rerun CSV:
   `../results/raw_traditional_resource_learned_prior.csv`
 - matched learned-prior traditional-resource rerun summary:
@@ -91,6 +95,7 @@ Current source evidence:
 - LaTeX tables: `tables/runtime_ablation_affine.tex`,
   `tables/resource_ablation_affine.tex`,
   `tables/neural_prior_ablation.tex`,
+  `tables/highdim_root_action_oracle.tex`,
   `tables/resource_traditional_resource.tex`,
   `tables/runtime_traditional_resource.tex`,
   `tables/resource_sweep_affine.tex`,
