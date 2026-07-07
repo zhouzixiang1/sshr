@@ -13,6 +13,7 @@
 - `resource_nmcts_zh_robustness.tex` / `resource_nmcts_zh_robustness.pdf`：中文投稿论证稿，突出独立于 SSHR 的 Resource-NMCTS 主线、n=16 清洗后的 240 行结果和多资源权重鲁棒性分析。
 - `resource_nmcts_zh_neural_plan.tex` / `resource_nmcts_zh_neural_plan.pdf`：中文方案与阶段性证据稿，聚焦神经 MCTS 论文主线、pairwise-wide root-action ranker、n=16 full synthesis 小幅正向结果、当前不足和下一步实验目标。
 - `resource_nmcts_zh_manuscript_v2.tex` / `resource_nmcts_zh_manuscript_v2.pdf`：中文正式论文初稿 v2，按“引言、相关工作、问题定义、方法、实验、结果、讨论、结论”组织，弱化阶段汇报口吻。
+- `resource_nmcts_zh_boolean_ring_v3.tex` / `resource_nmcts_zh_boolean_ring_v3.pdf`：中文短论文稿 v3，聚焦布尔环线性因子、n=16 matched improvement、n=20 边界测试和当前仍未完成的高维 AI 缺口。
 
 编译命令：
 
@@ -25,6 +26,7 @@ latexmk -xelatex -g resource_nmcts_zh_report.tex
 latexmk -xelatex -g resource_nmcts_zh_robustness.tex
 latexmk -xelatex -g resource_nmcts_zh_neural_plan.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v2.tex
+latexmk -xelatex -g resource_nmcts_zh_boolean_ring_v3.tex
 ```
 
 主要证据来源：
@@ -42,6 +44,12 @@ latexmk -xelatex -g resource_nmcts_zh_manuscript_v2.tex
 - `../results/analysis_neural_prior_highdim_pairwise_wide_ablation.md`
 - `../results/analysis_ultra_pairwise_wide_vs_recursive.md`
 - `../results/analysis_ultra_pairwise_wide_vs_old_resource.md`
+- `../results/analysis_ultra_boolean_linear_vs_deep.md`
+- `../results/analysis_ultra_boolean_linear_vs_pairwise_resource.md`
+- `../results/analysis_ultra_boolean_guard_vs_pairwise_wide.md`
+- `../results/analysis_ultra_boolean_guard_vs_old_deep.md`
+- `../results/analysis_mega_boolean_screen_vs_resource.md`
+- `../results/analysis_giga_highdim_resource.md`
 - `../results/analysis_exact_fprm_dp.md`
 - `../results/analysis_exact_xag_mc.md`
 - `../results/analysis_mega_highdim_resource.md`
