@@ -377,6 +377,30 @@
 
 结论：extended scale 的价值在于验证结构策略的高维泛化边界。Depth policy 的训练维度仍是 n=14/16/18，但在 n=32/36/40 上与 all-depth adaptive 全部 score 持平，并节省约三分之一 all-depth 评估时间；相对 single screen 仍保持 110/0/34、平均 score -5.55% 的质量优势。这比 n=20--28 结果更能支撑“大规模项集合上结构级策略可扩展”的主张。边界也必须保留：该实验仍是项集级 symbolic verification，不是完整 truth-table simulation，也没有证明 policy 超过 fixed depth-2 质量基线。
 
+### 2.5.6 depth-3/4 Boolean-ring screen 质量-时间前沿
+
+前两组 scale 结果说明 fixed depth-2 是很强的默认质量基线，但这也带来一个审稿风险：结构级 AI 只是学习何时复制 depth-2，并没有继续提升质量。本轮新增 `--max-screen-depth` 参数，把同一项集级协议扩展到 depth-3 和 depth-4 Boolean-ring screen。该实验定位为高预算质量前沿，不替代默认快速策略。
+
+主要产物：
+
+- `results/raw_screen_scale_depth_frontier_terms.csv`
+- `results/summary_screen_scale_depth_frontier_terms.csv`
+- `results/analysis_screen_scale_depth_frontier_terms.md`
+- `paper_latex/tables/screen_scale_depth_frontier_terms.tex`
+
+核心结果：
+
+| 对比 | 项集数 | score 胜/负/平 | 平均 score 变化 | 平均运行时间变化 |
+|---|---:|---:|---:|---:|
+| screen depth-3 vs fixed depth-2, n=20/28/40 | 72 | 49/0/23 | -1.93% | +193.71% |
+| screen depth-4 vs fixed depth-2, n=20/28/40 | 72 | 49/0/23 | -3.10% | +682.97% |
+| screen depth-4 vs depth-3, n=20/28/40 | 72 | 44/0/28 | -1.21% | +127.55% |
+| all-depth adaptive depth<=4 vs fixed depth-2 | 72 | 49/0/23 | -3.10% | +1129.85% |
+| ANF plan 符号验证 | 648 方法行 | 648/0 通过/失败 | 0 mismatch | - |
+| emitted-circuit ANF 符号验证 | 648 方法行 | 648/0 通过/失败 | 0 mismatch | max wire terms 244 |
+
+结论：这是本轮最重要的质量增益证据。Depth-3/4 不再只是省时门控，而是稳定打破 fixed depth-2 的 score 上限：在 n=20/28/40 上均无 score loss，depth-4 平均 score 进一步降低 3.10%。代价也很明确，depth-4 平均运行时间比 depth-2 增加约 6.8 倍，all-depth<=4 因需要同时跑多种深度，时间开销更高。因此论文中应把它写成“可调预算的质量-时间前沿”：快速默认模式仍是 depth policy/guard，投稿级质量模式可以加入 depth-3/4 作为高预算候选。
+
 ### 2.6 高维 root-action teacher 诊断
 
 新增 `analyze_highdim_root_action_oracle.py`，用于回答一个更具体的问题：高维 CNOT-only linear-pair 根层动作排序是否还有可学习空间。该脚本不追求全局最优，而是在 `highdim_neural_prior` 的 12 个 `n=14` random ANF 函数上，用真实 greedy child plan 对更宽的 root-action 集合做 one-step teacher 评分。
@@ -613,6 +637,9 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 - `results/raw_screen_scale_extended_terms.csv`
 - `results/summary_screen_scale_extended_terms.csv`
 - `results/analysis_screen_scale_extended_terms.md`
+- `results/raw_screen_scale_depth_frontier_terms.csv`
+- `results/summary_screen_scale_depth_frontier_terms.csv`
+- `results/analysis_screen_scale_depth_frontier_terms.md`
 - `literature_notes.md` 中新增 back-end-aware oracle synthesis、mockturtle、RevKit 定位说明。
 
 当前环境审计结果：
@@ -777,6 +804,13 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --ns 32,36,40 --per-n 48 --workers 6 --tag extended
 ```
 
+重新生成 depth-3/4 quality-frontier screen-scale：
+
+```bash
+cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --ns 20,28,40 --per-n 24 --workers 6 --max-screen-depth 4 --tag depth_frontier
+```
+
 重新生成高维 learned-prior 诊断：
 
 ```bash
@@ -843,6 +877,7 @@ latexmk -pdf -g main.tex
 - `raw_highdim_guard_upgrade.csv` 审计：24 行、0 error、0 skipped、0 incorrect。
 - `analysis_toolchain_readiness.md` 审计：ABC 可用；mockturtle 和 RevKit 在当前环境缺失。
 - `raw_screen_scale_extended_terms.csv` 审计：1008 行、1008/1008 plan 符号验证通过、1008/1008 emitted-circuit 符号验证通过、0 mismatch。
+- `raw_screen_scale_depth_frontier_terms.csv` 审计：648 行、648/648 plan 符号验证通过、648/648 emitted-circuit 符号验证通过、0 mismatch。
 
 Git 状态：
 
@@ -867,6 +902,7 @@ Git 状态：
 11. 外部工具链 readiness 审计显示：ABC 已可用并支撑当前 AIG/XAG/LUT/ESOP baseline；mockturtle/RevKit 当前缺失，因此不能声称已完成这类 reversible-toolchain 复现。
 12. `n=20` giga stress 已从纯边界失败推进为边界改善：root-beam 与 fast linear-pair 仍全部 timeout，但 depth-2 recursive Boolean screen 让 Resource-NMCTS 相对旧 Resource-NMCTS 获得 5/0/1、平均 score -7.47%；相对 AND-direct ANF 获得 5/0/1、平均 score -11.80%；相对 direct ANF 获得 5/1/0、平均 score -38.86%。
 13. `n=32,36,40` extended screen-scale 显示：depth policy 相对 single screen 获得 110/0/34、平均 score -5.55%；相对 all-depth adaptive 在 144 个项集上全部 score 持平，并节省 33.14% 平均运行时间；1008/1008 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。
+14. `n=20,28,40` depth-frontier 显示：depth-3 Boolean-ring screen 相对 fixed depth-2 为 49/0/23、平均 score -1.93%；depth-4 相对 fixed depth-2 为 49/0/23、平均 score -3.10%；648/648 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。这是新的高预算质量前沿证据，但运行时间显著增加。
 
 不应写的主张：
 
@@ -905,6 +941,7 @@ Git 状态：
 | n=18 adaptive depth-2 Boolean screen | 12 个 n=18 random ANF | vs single screen 为 11/0/1，-6.47%；Resource vs adaptive screen 为 11/0/1，-23.85% | 改善 screen 但不能替代深搜索 |
 | n=20 depth-2 recursive Boolean screen | 6 个 n=20 random ANF | Resource vs old Resource 为 5/0/1，-7.47%；vs AND-direct 为 5/0/1，-11.80%；vs depth-1 Resource 为 5/0/1，-3.13% | 当前最明确的超高维边界改善 |
 | n=32/36/40 extended screen-scale | 144 个高维 ANF 项集 | depth policy vs single 为 110/0/34，-5.55%；vs all-depth adaptive 为 0/0/144，省时 -33.14%；1008/1008 emitted-circuit 符号验证通过 | 新增大规模泛化证据 |
+| n=20/28/40 depth-frontier | 72 个高维 ANF 项集 | depth-3 vs depth-2 为 49/0/23，-1.93%；depth-4 vs depth-2 为 49/0/23，-3.10%；648/648 emitted-circuit 符号验证通过 | 新增高预算质量前沿 |
 | highdim wide-fast guard | 12 个 n=14 random ANF | wide vs Resource 为 0/0/12，运行时间 +59.80% | 已有但属负向诊断 |
 | exact FPRM-DP | n<=4 traditional | Resource vs exact FPRM-DP 51/3/18，-12.18%；Pareto vs exact FPRM-DP 51/0/21，-12.20% | 已有但模型受限 |
 | exact XAG MC | n<=4 traditional | Resource/Pareto 达到 T 下界 12/72，平均 T gap +53.01%；ESOP 为 +120.14%，SSHR-I-T 为 +143.06% | 已有全局 T 下界 |

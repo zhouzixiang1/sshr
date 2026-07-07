@@ -248,6 +248,15 @@ Current structure-policy evidence:
   method rows with zero mismatches, with maximum wire-polynomial size 288.
   This strengthens the large-scale structural generalization claim, while
   preserving the same boundary: it is not full truth-table simulation.
+- A separate depth-frontier run, `results/analysis_screen_scale_depth_frontier_terms.md`,
+  quantifies the high-budget quality mode on 72 generated term sets at
+  `n=20,28,40`.  Deeper Boolean-ring screening breaks the fixed-depth-2 quality
+  ceiling: depth-3 vs depth-2 gives 49/0/23 score W/L/T with a -1.93% mean
+  score change, and depth-4 vs depth-2 gives 49/0/23 with a -3.10% mean score
+  change.  The cost is substantial: mean runtime increases by +193.71% and
+  +682.97%, respectively.  All 648 method rows pass both symbolic plan
+  expansion and emitted-circuit ANF verification with zero mismatches.  This is
+  quality-frontier evidence, not the default fast policy.
 
 Current screen-gate evidence:
 

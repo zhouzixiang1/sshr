@@ -115,8 +115,8 @@ def eval_plan(method: str, plan, elapsed: float, config: SearchConfig, n_inputs:
     )
 
 
-def evaluate_one(task: tuple[int, int, int, str, int]) -> TermExample:
-    n, index, seed, profile, action_width = task
+def evaluate_one(task: tuple[int, int, int, str, int, int]) -> TermExample:
+    n, index, seed, profile, action_width, max_screen_depth = task
     rng = random.Random(seed)
     config = make_config()
     terms = generate_terms(n, rng, profile)
@@ -127,12 +127,9 @@ def evaluate_one(task: tuple[int, int, int, str, int]) -> TermExample:
     direct = direct_plan(terms, 0, 0, config)
     evals["direct_logical_and"] = eval_plan("direct_logical_and", direct, time.perf_counter() - started, config, n)
 
-    screen_methods = {
-        "screen_single": 0,
-        "screen_depth1": 1,
-        "screen_depth2": 2,
-    }
-    for method, recursive_depth in screen_methods.items():
+    screen_methods = [("screen_single", 0)]
+    screen_methods.extend((f"screen_depth{depth}", depth) for depth in range(1, max_screen_depth + 1))
+    for method, recursive_depth in screen_methods:
         started = time.perf_counter()
         plan = linear_pair_screen_plan(
             terms,
@@ -143,13 +140,9 @@ def evaluate_one(task: tuple[int, int, int, str, int]) -> TermExample:
         )
         evals[method] = eval_plan(method, plan, time.perf_counter() - started, config, n)
 
-    best_screen = min(
-        [evals["screen_single"], evals["screen_depth1"], evals["screen_depth2"]],
-        key=lambda ev: (ev.score, ev.time_s),
-    )
-    all_depth_time = (
-        evals["screen_single"].time_s + evals["screen_depth1"].time_s + evals["screen_depth2"].time_s
-    )
+    screen_evals = [evals[method] for method, _depth in screen_methods]
+    best_screen = min(screen_evals, key=lambda ev: (ev.score, ev.time_s))
+    all_depth_time = sum(ev.time_s for ev in screen_evals)
     evals["adaptive_all_depth"] = MethodEval(
         method="adaptive_all_depth",
         score=best_screen.score,
@@ -425,6 +418,18 @@ def write_summary(summary_path: Path, analysis_path: Path, table_path: Path, exa
         ("depth_policy", "adaptive_all_depth"),
         ("depth2_guard_direct", "screen_depth2"),
     ]
+    max_screen_depth = max(
+        [0]
+        + [
+            int(method.removeprefix("screen_depth"))
+            for method in methods
+            if method.startswith("screen_depth") and method.removeprefix("screen_depth").isdigit()
+        ]
+    )
+    for depth in range(3, max_screen_depth + 1):
+        comparisons.append((f"screen_depth{depth}", "screen_depth2"))
+        if depth > 3:
+            comparisons.append((f"screen_depth{depth}", f"screen_depth{depth - 1}"))
     lines = [
         "# Term-Set Boolean Screen Scale",
         "",
@@ -468,12 +473,15 @@ def write_summary(summary_path: Path, analysis_path: Path, table_path: Path, exa
         f.write("n & Method & Baseline & Score W/L/T & Mean $\\Delta$ score & Mean $\\Delta$ time \\\\\n")
         f.write("\\midrule\n")
         for n_label, subset in grouped_examples:
-            for method, baseline in [
+            table_comparisons = [
                 ("adaptive_all_depth", "screen_single"),
                 ("adaptive_all_depth", "screen_depth2"),
                 ("depth_policy", "screen_single"),
                 ("depth2_guard_direct", "screen_depth2"),
-            ]:
+            ]
+            for depth in range(3, max_screen_depth + 1):
+                table_comparisons.append((f"screen_depth{depth}", "screen_depth2"))
+            for method, baseline in table_comparisons:
                 if not all(method in ex.evals and baseline in ex.evals for ex in subset):
                     continue
                 wins, losses, ties, rel_score, rel_time = _comparison(subset, method, baseline)
@@ -492,6 +500,7 @@ def main(argv: Iterable[str] | None = None) -> int:
     ap.add_argument("--per-n", type=int, default=48)
     ap.add_argument("--workers", type=int, default=6)
     ap.add_argument("--action-width", type=int, default=6)
+    ap.add_argument("--max-screen-depth", type=int, default=2)
     ap.add_argument("--policy-model", type=Path, default=THIS_DIR / "models" / "boolean_screen_depth_policy.pt")
     ap.add_argument("--guard-model", type=Path, default=THIS_DIR / "models" / "boolean_screen_depth_guard.pt")
     ap.add_argument("--results-dir", type=Path, default=RESULTS)
@@ -508,7 +517,7 @@ def main(argv: Iterable[str] | None = None) -> int:
     for n in split_arg(args.ns):
         for i in range(args.per_n):
             profile = profiles[(i + n) % len(profiles)]
-            tasks.append((n, i, args.seed + n * 10_000 + i, profile, args.action_width))
+            tasks.append((n, i, args.seed + n * 10_000 + i, profile, args.action_width, args.max_screen_depth))
 
     examples: list[TermExample] = []
     started = time.time()
