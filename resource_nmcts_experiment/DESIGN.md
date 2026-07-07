@@ -69,13 +69,16 @@ methods add six ingredients to fixed-coordinate ANF factoring:
 5. **Profile-aware candidate generation.** The profile variant adds
    T-aggressive, CNOT/depth-oriented, and ancilla-tight candidate configurations
    on small functions.  For larger random-ANF instances it switches to a cheap
-   direct/FPRM guard; for `n > 12`, that guard uses a direct-cost polarity
-   screen plus a bounded root-child beam baseline and a one-extra-layer
+   direct/FPRM guard.  For `13 <= n < 18`, that guard uses a direct-cost
+   polarity screen plus a bounded root-child beam baseline and a one-extra-layer
    recursive CNOT-only pairwise XOR-factor candidate over both quotient and
-   rest branches when the subproblem has at most 900 terms.  The `n=15` preset
-   also reports a standalone width-three linear-parity ablation, but the
-   portfolio does not use it because the recursive pair candidate dominates it
-   under the default weighted objective.
+   rest branches when the subproblem has at most 900 terms.  At `n=18`, it uses
+   a fast linear-pair variant that keeps a bounded root-beam baseline and falls
+   back to direct synthesis for large rest branches instead of running an
+   expensive greedy solve.  The `n=15` preset also reports a standalone
+   width-three linear-parity ablation, but the portfolio does not use it because
+   the recursive pair candidate dominates it under the default weighted
+   objective.
    The implementation also exposes an experimental affine-linear factor action
    `(1 xor x_i xor ...) g`, which computes the temporary affine control with
    Clifford gates and keeps the ordinary linear-pair plan as a baseline guard.
@@ -445,8 +448,8 @@ isolated `n=14`, `n=15`, `n=16`, and `n=18` random-ANF stress presets:
 - `results/analysis_external_mega_highdim_resource.md`: 12 exported `n=18`
   functions, 48/48 correct ABC-AIG/ABC-XAG/ABC-LUT/BDD rows, 0 errors/skips.
   The guarded methods again win all T-count, CNOT, peak-ancilla, and
-  weighted-score comparisons, with mean score reductions of 98.76% against
-  AIG, 98.98% against XAG, 99.66% against LUT, and 98.19% against BDD.
+  weighted-score comparisons, with mean score reductions of 98.85% against
+  AIG, 99.05% against XAG, 99.69% against LUT, and 98.30% against BDD.
   ABC-AIG has a lower estimated depth on 10/12 functions and ABC-XAG on 11/12
   functions; ABC-LUT and BDD are deeper under the current sequential estimates.
 
@@ -586,20 +589,20 @@ implementation in `anf_utils.py` removes the avoidable per-assignment monomial
 scan and makes larger ANF-derived truth tables practical to generate.
 
 The `mega_highdim_resource` run is the current runtime-boundary check at
-`n=18`.  It contains 12 random ANF functions, five methods, and 60
-method/function rows with 0 errors/skips.  At this scale the high-dimensional
-guard switches Resource/Profile to bounded FPRM root-beam rather than
-linear-pair screening, because the pairwise-linear screen develops a
-multi-minute long tail without improving the sampled costs.  The guarded
-variants match `and_fprm_root_beam` on all 12 functions.  Compared with direct
-ANF, they have 10 T-count wins, 0 losses, and 2 ties, with a 55.40% mean
-T-count reduction and a 53.08% mean score reduction.  Compared with
-logical-AND direct ANF, they have 10 score wins, 0 losses, and 2 ties, with a
-27.43% mean score reduction.  Runtime is finite but much slower than direct
-construction: `and_resource_nmcts` has median runtime 65.995 s and p95
-143.671 s, while `and_profile_resource_nmcts` has median runtime 66.841 s and
-p95 149.190 s.  This result should be framed as scale and verification evidence,
-not as a new neural-portfolio separation.  A follow-up isolated
-`and_pareto_resource_nmcts` probe on all 12 `n=18` functions hit the 330 s hard
-timeout on every task, so `n=18` Pareto rows remain excluded until the archive is
-narrowed further.
+`n=18`.  It contains 12 random ANF functions, seven methods, and 84
+method/function rows with 0 errors/skips.  The standalone fast FPRM linear-pair
+guard has 6 weighted-score wins, no losses, and 6 ties against bounded FPRM
+root-beam, reducing mean score by 1.91%.  Resource/Profile/Pareto then improve
+that fast child on all 12 functions, reducing mean score by another 3.55%; they
+also have 12 score wins, no losses, and no ties against bounded FPRM root-beam,
+with a 5.29% mean score reduction.  Compared with direct ANF, the guarded
+variants have 12 T-count wins, no losses, and no ties, reducing mean T-count by
+60.05% and mean score by 56.99%.  Compared with logical-AND direct ANF, they
+have 12 score wins, no losses, and no ties, reducing mean score by 32.01%.
+Runtime is finite but much slower than direct construction:
+`and_resource_nmcts` has median runtime 83.313 s and p95 173.181 s,
+`and_profile_resource_nmcts` has median runtime 83.339 s and p95 173.780 s,
+and `and_pareto_resource_nmcts` has median runtime 83.500 s and p95 172.934 s.
+At this scale Pareto-Resource-NMCTS is intentionally narrowed to the same stable
+high-dimensional guard as Resource/Profile, so it is scale and verification
+evidence rather than a claim of additional Pareto separation.

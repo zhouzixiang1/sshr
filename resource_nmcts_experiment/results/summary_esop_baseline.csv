@@ -1,0 +1,9 @@
+n,baseline,functions,baseline_T,target_T,delta_T_pct,baseline_CNOT,target_CNOT,delta_CNOT_pct,baseline_peak_ancilla,target_peak_ancilla,delta_peak_ancilla_pct,baseline_score,target_score,delta_score_pct,score_wins,score_losses,score_ties
+3,Internal ESOP-MILP,3,24,8,-66.67,45,27,-40.00,0,0,+0.00,26.6850,9.6750,-63.74,2,0,1
+4,Internal ESOP-MILP,69,1456,1028,-29.40,2466,2217,-10.10,102,100,-1.96,1818.4050,1367.5500,-24.79,64,1,4
+5,Internal ESOP-MILP,67,3392,2604,-23.23,5558,5515,-0.77,169,136,-19.53,4085.1500,3213.6000,-21.33,65,1,1
+6,Internal ESOP-MILP,38,9924,3576,-63.97,15562,7097,-54.40,140,113,-19.29,11191.0900,4229.1750,-62.21,36,1,1
+3,ABC-ESOP export,3,24,8,-66.67,45,27,-40.00,0,0,+0.00,26.8850,9.6750,-64.01,2,0,1
+4,ABC-ESOP export,69,1576,1028,-34.77,2622,2217,-15.45,104,100,-3.85,1954.6950,1367.5500,-30.04,66,0,3
+5,ABC-ESOP export,67,3592,2604,-27.51,5802,5515,-4.95,170,136,-20.00,4305.1100,3213.6000,-25.35,66,0,1
+6,ABC-ESOP export,38,4452,3576,-19.68,7068,7097,+0.41,132,113,-14.39,5167.2750,4229.1750,-18.15,36,1,1

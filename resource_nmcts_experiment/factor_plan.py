@@ -651,6 +651,8 @@ def linear_pair_beam_plan(
     recursive_depth: int = 0,
     max_linear_width: int = 2,
     neural_scorer=None,
+    rest_greedy_term_limit: int | None = None,
+    use_root_child_baseline: bool = True,
 ) -> Plan:
     """Try CNOT-only pairwise XOR factors above cheap subplans.
 
@@ -661,7 +663,10 @@ def linear_pair_beam_plan(
     the remaining terms; the default keeps the historical one-layer result
     unchanged.
     """
-    best = root_child_beam_plan(terms, prefix_len, live_factor_ancilla, config, neural_scorer=neural_scorer)
+    if use_root_child_baseline:
+        best = root_child_beam_plan(terms, prefix_len, live_factor_ancilla, config, neural_scorer=neural_scorer)
+    else:
+        best = root_beam_plan(terms, prefix_len, live_factor_ancilla, config, neural_scorer=neural_scorer)
     best_score = best.score(config.weights)
     actions = linear_factor_actions(
         terms,
@@ -687,6 +692,8 @@ def linear_pair_beam_plan(
                 recursive_depth=recursive_depth - 1,
                 max_linear_width=max_linear_width,
                 neural_scorer=neural_scorer,
+                rest_greedy_term_limit=rest_greedy_term_limit,
+                use_root_child_baseline=use_root_child_baseline,
             )
         else:
             group = greedy_plan(
@@ -707,7 +714,11 @@ def linear_pair_beam_plan(
                 recursive_depth=recursive_depth - 1,
                 max_linear_width=max_linear_width,
                 neural_scorer=neural_scorer,
+                rest_greedy_term_limit=rest_greedy_term_limit,
+                use_root_child_baseline=use_root_child_baseline,
             )
+        elif rest_greedy_term_limit is not None and len(action.rest) > rest_greedy_term_limit:
+            rest = direct_plan(action.rest, prefix_len, live_factor_ancilla, child_config)
         else:
             rest = greedy_plan(action.rest, prefix_len, live_factor_ancilla, child_config, neural_scorer, memo)
         cost = factor_cost(action, group, rest, live_factor_ancilla, config)

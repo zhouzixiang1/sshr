@@ -147,6 +147,7 @@ def main() -> int:
         and_fprm = synthesize("and_fprm_mcts", bf, config, seed=7)
         and_fprm_neural = synthesize("and_fprm_neural_mcts", bf, config, seed=7)
         and_fprm_linear = synthesize("and_fprm_linear_pair", bf, config, seed=7)
+        and_fprm_linear_fast = synthesize("and_fprm_linear_pair_fast", bf, config, seed=7)
         and_fprm_linear_deep = synthesize("and_fprm_linear_pair_deep", bf, config, seed=7)
         and_fprm_linear_parity = synthesize("and_fprm_linear_parity", bf, config, seed=7)
         and_fprm_affine_linear = synthesize("and_fprm_affine_linear_pair", bf, config, seed=7)
@@ -156,7 +157,7 @@ def main() -> int:
         rc_nmcts = synthesize("and_rc_nmcts", bf, config, seed=7)
         resource_nmcts = synthesize("and_resource_nmcts", bf, config, seed=7)
         pareto_resource_nmcts = synthesize("and_pareto_resource_nmcts", bf, config, seed=7)
-        for result in [direct, greedy, mcts, fprm, cube_greedy, cube_beam, and_fprm, and_fprm_neural, and_fprm_linear, and_fprm_linear_deep, and_fprm_linear_parity, and_fprm_affine_linear, and_fprm_affine_linear_deep, and_fprm_polarity_archive, and_affine, rc_nmcts, resource_nmcts, pareto_resource_nmcts]:
+        for result in [direct, greedy, mcts, fprm, cube_greedy, cube_beam, and_fprm, and_fprm_neural, and_fprm_linear, and_fprm_linear_fast, and_fprm_linear_deep, and_fprm_linear_parity, and_fprm_affine_linear, and_fprm_affine_linear_deep, and_fprm_polarity_archive, and_affine, rc_nmcts, resource_nmcts, pareto_resource_nmcts]:
             assert result.correct, (result.method, bf.n, bf.truth_table)
         assert greedy.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
         assert mcts.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
@@ -164,6 +165,7 @@ def main() -> int:
         assert and_fprm.cost.T <= direct.cost.T
         assert and_fprm_neural.cost.T <= direct.cost.T
         assert and_fprm_linear.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
+        assert and_fprm_linear_fast.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
         assert and_fprm_linear_deep.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
         assert and_fprm_linear_parity.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
         assert and_fprm_affine_linear.cost.score(config.weights) <= and_fprm_linear.cost.score(config.weights) + 1e-9

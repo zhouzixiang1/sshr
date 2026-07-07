@@ -75,7 +75,7 @@ cp /tmp/resource_nmcts_traditional_no_prior/manifest_traditional_resource.json r
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_ultra_highdim_resource.csv --internal-csv results/raw_ultra_highdim_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_fprm_linear_pair,and_fprm_root_beam,direct_anf,and_direct_anf --out results/analysis_external_ultra_highdim_resource.md
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset mega_highdim_resource --formats blif,truth --out-dir benchmark_exports/mega_highdim_resource_external_seed42
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/mega_highdim_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_abc_lut,external_bdd --min-n 18 --max-n 18 --max-abc-n 18 --max-xag-n 18 --max-lut-n 18 --max-bdd-n 18 --bdd-orders 8 --timeout 90 --workers 8 --out results/raw_external_mega_highdim_resource.csv --summary results/summary_external_mega_highdim_resource.csv --run-manifest results/manifest_external_mega_highdim_resource.json
-/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_mega_highdim_resource.csv --internal-csv results/raw_mega_highdim_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_fprm_root_beam,direct_anf,and_direct_anf --out results/analysis_external_mega_highdim_resource.md
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_mega_highdim_resource.csv --internal-csv results/raw_mega_highdim_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_pareto_resource_nmcts,and_fprm_linear_pair_fast,and_fprm_root_beam,direct_anf,and_direct_anf --out results/analysis_external_mega_highdim_resource.md
 ```
 
 Current presets:
@@ -114,9 +114,10 @@ Current presets:
   Pareto-Resource-NMCTS.  It uses the ultra-scale guard rather than the
   recursive n=15 linear-pair branch.
 - `mega_highdim_resource`: isolated `n=18` random-ANF stress check with direct
-  ANF, logical-AND direct ANF, bounded FPRM root-beam, Resource-NMCTS, and
-  Profile-Resource-NMCTS.  It uses the root-beam high-dimensional guard because
-  the linear-pair screen has a multi-minute long tail at this scale.
+  ANF, logical-AND direct ANF, bounded FPRM root-beam, fast FPRM linear-pair,
+  Resource-NMCTS, Profile-Resource-NMCTS, and Pareto-Resource-NMCTS.  It uses a
+  fast high-dimensional linear-pair guard that limits expensive rest-branch
+  greedy solves and keeps a root-beam baseline.
 - `large_resource`: experimental `n=14` stress extension.  This preset exposed
   the mixed-suite runtime tail and is kept for broader engineering sweeps.
 - `main`: large-scale placeholder for broader sweeps.
@@ -306,8 +307,8 @@ Exported high-dimensional ABC-AIG/ABC-XAG/ABC-LUT/BDD evidence from
   LUT, and 96.81% against BDD.
 - At `n=18`, the same guarded methods beat ABC-AIG, ABC-XAG, ABC-LUT, and BDD
   on all 48 T-count, CNOT, peak-ancilla, and weighted-score comparisons.  Mean
-  score reductions are 98.76% against AIG, 98.98% against XAG, 99.66% against
-  LUT, and 98.19% against BDD.
+  score reductions are 98.85% against AIG, 99.05% against XAG, 99.69% against
+  LUT, and 98.30% against BDD.
 - ABC-AIG and ABC-XAG remain shallower under the current level-based estimate on
   most high-dimensional functions, including 22/24 `n=16` functions for each of
   ABC-AIG and ABC-XAG and 10/12 and 11/12 `n=18` functions, respectively,
@@ -445,20 +446,25 @@ Ultra-high-dimensional scale check from
 `results/analysis_mega_highdim_resource.md` and
 `results/runtime_mega_highdim_resource.md`:
 
-- 12 random ANF functions at `n=18`, 5 methods, 60 result rows, 0 errors, and
+- 12 random ANF functions at `n=18`, 7 methods, 84 result rows, 0 errors, and
   0 skips.
-- The mega guard switches Resource/Profile to the bounded FPRM root-beam child.
-  Both guarded variants match that child on all 12 functions; this is scale and
-  verification evidence rather than a new portfolio-separation claim.
-- Compared with direct ANF, the guarded variants have 10 T-count wins, 0
-  losses, and 2 ties, with a 55.40% mean T-count reduction and a 53.08% mean
+- The standalone fast FPRM linear-pair guard has 6 weighted-score wins, 0
+  losses, and 6 ties against bounded FPRM root-beam, reducing mean score by
+  1.91%.  Resource/Profile/Pareto then improve that fast child on all 12
+  functions, reducing mean score by another 3.55%.
+- Compared with direct ANF, Resource/Profile/Pareto have 12 T-count wins, 0
+  losses, and 0 ties, with a 60.05% mean T-count reduction and a 56.99% mean
   score reduction.
-- Compared with logical-AND direct ANF, they have 10 weighted-score wins, 0
-  losses, and 2 ties, with a 27.43% mean score reduction.
+- Compared with bounded FPRM root-beam, Resource/Profile/Pareto have 12
+  weighted-score wins, 0 losses, and 0 ties, with a 5.29% mean score reduction.
+- At `n=18`, Pareto-Resource-NMCTS is deliberately narrowed to the same stable
+  high-dimensional guard as Resource/Profile, so it ties them on all 12
+  functions rather than claiming an additional Pareto gain at this scale.
 - Runtime remains finite but has a minute-scale tail: `and_resource_nmcts`
-  completes 12/12 with median 65.995 s and p95 143.671 s;
-  `and_profile_resource_nmcts` completes 12/12 with median 66.841 s and p95
-  149.190 s.
+  completes 12/12 with median 83.313 s and p95 173.181 s;
+  `and_profile_resource_nmcts` completes 12/12 with median 83.339 s and p95
+  173.780 s; `and_pareto_resource_nmcts` completes 12/12 with median 83.500 s
+  and p95 172.934 s.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost

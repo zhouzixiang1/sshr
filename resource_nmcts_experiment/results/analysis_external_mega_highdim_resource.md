@@ -1,7 +1,7 @@
 # External Baseline Analysis
 
 External rows: 48; usable: 48.
-Internal rows: 60; usable: 60.
+Internal rows: 84; usable: 84.
 
 ## External Summary
 
@@ -16,46 +16,86 @@ Internal rows: 60; usable: 60.
 
 | target | external baseline | metric | functions | wins | losses | ties | mean relative |
 |---|---|---|---:|---:|---:|---:|---:|
-| and_resource_nmcts | external_abc_aig | T | 12 | 12 | 0 | 0 | -98.19% |
-| and_resource_nmcts | external_abc_aig | CNOT | 12 | 12 | 0 | 0 | -98.74% |
-| and_resource_nmcts | external_abc_aig | depth | 12 | 2 | 10 | 0 | +3429.31% |
-| and_resource_nmcts | external_abc_aig | peak_ancilla | 12 | 12 | 0 | 0 | -100.00% |
-| and_resource_nmcts | external_abc_aig | score | 12 | 12 | 0 | 0 | -98.76% |
-| and_resource_nmcts | external_abc_lut | T | 12 | 12 | 0 | 0 | -99.65% |
-| and_resource_nmcts | external_abc_lut | CNOT | 12 | 12 | 0 | 0 | -99.64% |
-| and_resource_nmcts | external_abc_lut | depth | 12 | 12 | 0 | 0 | -99.64% |
-| and_resource_nmcts | external_abc_lut | peak_ancilla | 12 | 12 | 0 | 0 | -100.00% |
-| and_resource_nmcts | external_abc_lut | score | 12 | 12 | 0 | 0 | -99.66% |
-| and_resource_nmcts | external_abc_xag | T | 12 | 12 | 0 | 0 | -98.55% |
-| and_resource_nmcts | external_abc_xag | CNOT | 12 | 12 | 0 | 0 | -98.33% |
-| and_resource_nmcts | external_abc_xag | depth | 12 | 1 | 11 | 0 | +1586.42% |
-| and_resource_nmcts | external_abc_xag | peak_ancilla | 12 | 12 | 0 | 0 | -100.00% |
-| and_resource_nmcts | external_abc_xag | score | 12 | 12 | 0 | 0 | -98.98% |
-| and_resource_nmcts | external_bdd | T | 12 | 12 | 0 | 0 | -97.97% |
-| and_resource_nmcts | external_bdd | CNOT | 12 | 12 | 0 | 0 | -97.99% |
-| and_resource_nmcts | external_bdd | depth | 12 | 12 | 0 | 0 | -98.24% |
-| and_resource_nmcts | external_bdd | peak_ancilla | 12 | 12 | 0 | 0 | -99.99% |
-| and_resource_nmcts | external_bdd | score | 12 | 12 | 0 | 0 | -98.19% |
-| and_profile_resource_nmcts | external_abc_aig | T | 12 | 12 | 0 | 0 | -98.19% |
-| and_profile_resource_nmcts | external_abc_aig | CNOT | 12 | 12 | 0 | 0 | -98.74% |
-| and_profile_resource_nmcts | external_abc_aig | depth | 12 | 2 | 10 | 0 | +3429.31% |
-| and_profile_resource_nmcts | external_abc_aig | peak_ancilla | 12 | 12 | 0 | 0 | -100.00% |
-| and_profile_resource_nmcts | external_abc_aig | score | 12 | 12 | 0 | 0 | -98.76% |
-| and_profile_resource_nmcts | external_abc_lut | T | 12 | 12 | 0 | 0 | -99.65% |
-| and_profile_resource_nmcts | external_abc_lut | CNOT | 12 | 12 | 0 | 0 | -99.64% |
-| and_profile_resource_nmcts | external_abc_lut | depth | 12 | 12 | 0 | 0 | -99.64% |
-| and_profile_resource_nmcts | external_abc_lut | peak_ancilla | 12 | 12 | 0 | 0 | -100.00% |
-| and_profile_resource_nmcts | external_abc_lut | score | 12 | 12 | 0 | 0 | -99.66% |
-| and_profile_resource_nmcts | external_abc_xag | T | 12 | 12 | 0 | 0 | -98.55% |
-| and_profile_resource_nmcts | external_abc_xag | CNOT | 12 | 12 | 0 | 0 | -98.33% |
-| and_profile_resource_nmcts | external_abc_xag | depth | 12 | 1 | 11 | 0 | +1586.42% |
-| and_profile_resource_nmcts | external_abc_xag | peak_ancilla | 12 | 12 | 0 | 0 | -100.00% |
-| and_profile_resource_nmcts | external_abc_xag | score | 12 | 12 | 0 | 0 | -98.98% |
-| and_profile_resource_nmcts | external_bdd | T | 12 | 12 | 0 | 0 | -97.97% |
-| and_profile_resource_nmcts | external_bdd | CNOT | 12 | 12 | 0 | 0 | -97.99% |
-| and_profile_resource_nmcts | external_bdd | depth | 12 | 12 | 0 | 0 | -98.24% |
-| and_profile_resource_nmcts | external_bdd | peak_ancilla | 12 | 12 | 0 | 0 | -99.99% |
-| and_profile_resource_nmcts | external_bdd | score | 12 | 12 | 0 | 0 | -98.19% |
+| and_resource_nmcts | external_abc_aig | T | 12 | 12 | 0 | 0 | -98.34% |
+| and_resource_nmcts | external_abc_aig | CNOT | 12 | 12 | 0 | 0 | -98.81% |
+| and_resource_nmcts | external_abc_aig | depth | 12 | 2 | 10 | 0 | +3367.66% |
+| and_resource_nmcts | external_abc_aig | peak_ancilla | 12 | 12 | 0 | 0 | -99.96% |
+| and_resource_nmcts | external_abc_aig | score | 12 | 12 | 0 | 0 | -98.85% |
+| and_resource_nmcts | external_abc_lut | T | 12 | 12 | 0 | 0 | -99.68% |
+| and_resource_nmcts | external_abc_lut | CNOT | 12 | 12 | 0 | 0 | -99.66% |
+| and_resource_nmcts | external_abc_lut | depth | 12 | 12 | 0 | 0 | -99.65% |
+| and_resource_nmcts | external_abc_lut | peak_ancilla | 12 | 12 | 0 | 0 | -99.89% |
+| and_resource_nmcts | external_abc_lut | score | 12 | 12 | 0 | 0 | -99.69% |
+| and_resource_nmcts | external_abc_xag | T | 12 | 12 | 0 | 0 | -98.67% |
+| and_resource_nmcts | external_abc_xag | CNOT | 12 | 12 | 0 | 0 | -98.42% |
+| and_resource_nmcts | external_abc_xag | depth | 12 | 2 | 10 | 0 | +1555.41% |
+| and_resource_nmcts | external_abc_xag | peak_ancilla | 12 | 12 | 0 | 0 | -99.97% |
+| and_resource_nmcts | external_abc_xag | score | 12 | 12 | 0 | 0 | -99.05% |
+| and_resource_nmcts | external_bdd | T | 12 | 12 | 0 | 0 | -98.12% |
+| and_resource_nmcts | external_bdd | CNOT | 12 | 12 | 0 | 0 | -98.08% |
+| and_resource_nmcts | external_bdd | depth | 12 | 12 | 0 | 0 | -98.27% |
+| and_resource_nmcts | external_bdd | peak_ancilla | 12 | 12 | 0 | 0 | -99.83% |
+| and_resource_nmcts | external_bdd | score | 12 | 12 | 0 | 0 | -98.30% |
+| and_profile_resource_nmcts | external_abc_aig | T | 12 | 12 | 0 | 0 | -98.34% |
+| and_profile_resource_nmcts | external_abc_aig | CNOT | 12 | 12 | 0 | 0 | -98.81% |
+| and_profile_resource_nmcts | external_abc_aig | depth | 12 | 2 | 10 | 0 | +3367.66% |
+| and_profile_resource_nmcts | external_abc_aig | peak_ancilla | 12 | 12 | 0 | 0 | -99.96% |
+| and_profile_resource_nmcts | external_abc_aig | score | 12 | 12 | 0 | 0 | -98.85% |
+| and_profile_resource_nmcts | external_abc_lut | T | 12 | 12 | 0 | 0 | -99.68% |
+| and_profile_resource_nmcts | external_abc_lut | CNOT | 12 | 12 | 0 | 0 | -99.66% |
+| and_profile_resource_nmcts | external_abc_lut | depth | 12 | 12 | 0 | 0 | -99.65% |
+| and_profile_resource_nmcts | external_abc_lut | peak_ancilla | 12 | 12 | 0 | 0 | -99.89% |
+| and_profile_resource_nmcts | external_abc_lut | score | 12 | 12 | 0 | 0 | -99.69% |
+| and_profile_resource_nmcts | external_abc_xag | T | 12 | 12 | 0 | 0 | -98.67% |
+| and_profile_resource_nmcts | external_abc_xag | CNOT | 12 | 12 | 0 | 0 | -98.42% |
+| and_profile_resource_nmcts | external_abc_xag | depth | 12 | 2 | 10 | 0 | +1555.41% |
+| and_profile_resource_nmcts | external_abc_xag | peak_ancilla | 12 | 12 | 0 | 0 | -99.97% |
+| and_profile_resource_nmcts | external_abc_xag | score | 12 | 12 | 0 | 0 | -99.05% |
+| and_profile_resource_nmcts | external_bdd | T | 12 | 12 | 0 | 0 | -98.12% |
+| and_profile_resource_nmcts | external_bdd | CNOT | 12 | 12 | 0 | 0 | -98.08% |
+| and_profile_resource_nmcts | external_bdd | depth | 12 | 12 | 0 | 0 | -98.27% |
+| and_profile_resource_nmcts | external_bdd | peak_ancilla | 12 | 12 | 0 | 0 | -99.83% |
+| and_profile_resource_nmcts | external_bdd | score | 12 | 12 | 0 | 0 | -98.30% |
+| and_pareto_resource_nmcts | external_abc_aig | T | 12 | 12 | 0 | 0 | -98.34% |
+| and_pareto_resource_nmcts | external_abc_aig | CNOT | 12 | 12 | 0 | 0 | -98.81% |
+| and_pareto_resource_nmcts | external_abc_aig | depth | 12 | 2 | 10 | 0 | +3367.66% |
+| and_pareto_resource_nmcts | external_abc_aig | peak_ancilla | 12 | 12 | 0 | 0 | -99.96% |
+| and_pareto_resource_nmcts | external_abc_aig | score | 12 | 12 | 0 | 0 | -98.85% |
+| and_pareto_resource_nmcts | external_abc_lut | T | 12 | 12 | 0 | 0 | -99.68% |
+| and_pareto_resource_nmcts | external_abc_lut | CNOT | 12 | 12 | 0 | 0 | -99.66% |
+| and_pareto_resource_nmcts | external_abc_lut | depth | 12 | 12 | 0 | 0 | -99.65% |
+| and_pareto_resource_nmcts | external_abc_lut | peak_ancilla | 12 | 12 | 0 | 0 | -99.89% |
+| and_pareto_resource_nmcts | external_abc_lut | score | 12 | 12 | 0 | 0 | -99.69% |
+| and_pareto_resource_nmcts | external_abc_xag | T | 12 | 12 | 0 | 0 | -98.67% |
+| and_pareto_resource_nmcts | external_abc_xag | CNOT | 12 | 12 | 0 | 0 | -98.42% |
+| and_pareto_resource_nmcts | external_abc_xag | depth | 12 | 2 | 10 | 0 | +1555.41% |
+| and_pareto_resource_nmcts | external_abc_xag | peak_ancilla | 12 | 12 | 0 | 0 | -99.97% |
+| and_pareto_resource_nmcts | external_abc_xag | score | 12 | 12 | 0 | 0 | -99.05% |
+| and_pareto_resource_nmcts | external_bdd | T | 12 | 12 | 0 | 0 | -98.12% |
+| and_pareto_resource_nmcts | external_bdd | CNOT | 12 | 12 | 0 | 0 | -98.08% |
+| and_pareto_resource_nmcts | external_bdd | depth | 12 | 12 | 0 | 0 | -98.27% |
+| and_pareto_resource_nmcts | external_bdd | peak_ancilla | 12 | 12 | 0 | 0 | -99.83% |
+| and_pareto_resource_nmcts | external_bdd | score | 12 | 12 | 0 | 0 | -98.30% |
+| and_fprm_linear_pair_fast | external_abc_aig | T | 12 | 12 | 0 | 0 | -98.27% |
+| and_fprm_linear_pair_fast | external_abc_aig | CNOT | 12 | 12 | 0 | 0 | -98.77% |
+| and_fprm_linear_pair_fast | external_abc_aig | depth | 12 | 2 | 10 | 0 | +3424.28% |
+| and_fprm_linear_pair_fast | external_abc_aig | peak_ancilla | 12 | 12 | 0 | 0 | -99.96% |
+| and_fprm_linear_pair_fast | external_abc_aig | score | 12 | 12 | 0 | 0 | -98.80% |
+| and_fprm_linear_pair_fast | external_abc_lut | T | 12 | 12 | 0 | 0 | -99.66% |
+| and_fprm_linear_pair_fast | external_abc_lut | CNOT | 12 | 12 | 0 | 0 | -99.65% |
+| and_fprm_linear_pair_fast | external_abc_lut | depth | 12 | 12 | 0 | 0 | -99.64% |
+| and_fprm_linear_pair_fast | external_abc_lut | peak_ancilla | 12 | 12 | 0 | 0 | -99.89% |
+| and_fprm_linear_pair_fast | external_abc_lut | score | 12 | 12 | 0 | 0 | -99.67% |
+| and_fprm_linear_pair_fast | external_abc_xag | T | 12 | 12 | 0 | 0 | -98.61% |
+| and_fprm_linear_pair_fast | external_abc_xag | CNOT | 12 | 12 | 0 | 0 | -98.37% |
+| and_fprm_linear_pair_fast | external_abc_xag | depth | 12 | 2 | 10 | 0 | +1583.18% |
+| and_fprm_linear_pair_fast | external_abc_xag | peak_ancilla | 12 | 12 | 0 | 0 | -99.97% |
+| and_fprm_linear_pair_fast | external_abc_xag | score | 12 | 12 | 0 | 0 | -99.01% |
+| and_fprm_linear_pair_fast | external_bdd | T | 12 | 12 | 0 | 0 | -98.04% |
+| and_fprm_linear_pair_fast | external_bdd | CNOT | 12 | 12 | 0 | 0 | -98.03% |
+| and_fprm_linear_pair_fast | external_bdd | depth | 12 | 12 | 0 | 0 | -98.21% |
+| and_fprm_linear_pair_fast | external_bdd | peak_ancilla | 12 | 12 | 0 | 0 | -99.83% |
+| and_fprm_linear_pair_fast | external_bdd | score | 12 | 12 | 0 | 0 | -98.23% |
 | and_fprm_root_beam | external_abc_aig | T | 12 | 12 | 0 | 0 | -98.19% |
 | and_fprm_root_beam | external_abc_aig | CNOT | 12 | 12 | 0 | 0 | -98.74% |
 | and_fprm_root_beam | external_abc_aig | depth | 12 | 2 | 10 | 0 | +3429.31% |

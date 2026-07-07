@@ -45,7 +45,13 @@ synthesis.  On a separate $n\leq 6$ traditional-baseline slice, the
 \paretomethod{} archive has the lowest mean T-count and weighted score, and
 improves on \method{} with 74 score wins, no losses, and 103 ties.  It has
 174 score wins and no losses against ESOP cube beam search, and 167 score
-wins, 3 losses, and 7 ties against time-limited weighted ESOP MILP.  On an
+wins, 3 losses, and 7 ties against time-limited weighted ESOP MILP; aggregated
+by variable count, it reduces total T-count and CNOT count versus ESOP-MILP in
+every $n=3,\ldots,6$ group and lowers aggregate peak ancilla for all groups
+except the tied $n=3$ case.  Against the exported ABC-ESOP baseline on the
+same 177 functions, it reduces aggregate T-count by 25.18\%, CNOT count by
+4.38\%, peak ancilla by 14.04\%, and weighted score by 23.00\%, with 170 score
+wins, 1 loss, and 6 ties.  On an
 exported external comparison, \method{} has 69 score wins and 3 losses against
 the exact $n\leq 4$ CNOT-optimized SSHR-I pilot, 168 score wins and 9
 losses against the time-limited $n\leq 6$ SSHR-I extension, and 177 score wins
@@ -72,16 +78,17 @@ losses, and 2 ties against FPRM-greedy, reducing mean weighted score by
 and 168 rows with no errors or skips; the Pareto archive reduces mean T-count
 by 62.12\% relative to direct ANF and has 22 score wins, no losses, and 2 ties
 against bounded FPRM root-beam.  On
-a final $n=18$ stress check, 12 random ANF functions produce 60 verified rows
-with no errors or skips; the mega-scale guard switches to bounded FPRM
-root-beam, and \method{} and \profilemethod{} match that child while reducing
-mean T-count by 55.40\% and mean weighted score by 53.08\% relative to direct
-ANF.  On
+a final $n=18$ stress check, 12 random ANF functions produce 84 verified rows
+with no errors or skips; a fast linear-pair guard improves bounded FPRM
+root-beam by 1.91\% in mean weighted score, and the guarded
+Resource/Profile/Pareto variants reduce mean T-count by 60.05\% and mean
+weighted score by 56.99\% relative to direct ANF, with 12 score wins and no
+losses against root-beam.  On
 exported high-dimensional ABC AIG/XAG/LUT and BDD checks for the same $n=14$,
-$n=15$, $n=16$, and $n=18$ sets, the guarded method wins all 528
-weighted-score comparisons with 93.24\%--99.66\% mean score reductions.  At
-$n=18$ the mean score reductions are 98.76\% against ABC-AIG, 98.98\% against
-ABC-XAG, 99.66\% against ABC-LUT, and 98.19\% against BDD.  ABC-AIG and ABC-XAG
+$n=15$, $n=16$, and $n=18$ sets, the guarded variants win all 528
+weighted-score comparisons with 93.24\%--99.69\% mean score reductions.  At
+$n=18$ the mean score reductions are 98.85\% against ABC-AIG, 99.05\% against
+ABC-XAG, 99.69\% against ABC-LUT, and 98.30\% against BDD.  ABC-AIG and ABC-XAG
 keep lower estimated depth on most functions, while ABC-LUT and BDD are deeper
 under our sequential network estimates.  The method is
 evaluated only at the logical circuit layer;
@@ -337,6 +344,23 @@ is a time-limited weighted ESOP optimization over candidate cubes.}
 \input{tables/resource_traditional_resource}
 \end{table}
 
+The ESOP-focused aggregate in Table~\ref{tab:esop-by-n} is the same-benchmark
+comparison corresponding most closely to the ESOP column used in prior
+small-function studies.  It should not be read as a direct numerical
+comparison to published ESOP totals from a different function set or cost
+model.
+
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{ESOP-centered aggregate comparison by variable count on the matched
+$n\leq 6$ benchmark.  T/C/A denotes total T-count, total CNOT count, and summed
+peak-ancilla count across functions in the group.  Negative changes favor
+\paretomethod{}.}
+\label{tab:esop-by-n}
+\input{tables/esop_baseline_by_n}
+\end{table}
+
 Against \method{}, \paretomethod{} had 74 score wins, no score losses, and 103
 ties, with a 4.59\% mean composite-score reduction.  Against ESOP cube beam
 search, \paretomethod{} had 174 score wins, no losses, and 3 ties, with a
@@ -347,6 +371,14 @@ wins, no T-count losses, 4 ties, and 173 score wins with 4 score losses.
 SSHR-H retained the lowest mean CNOT count on this small-function slice, so
 this result supports low-T and weighted-resource synthesis rather than
 CNOT-only optimality.
+The aggregate ESOP comparison is stronger than the per-function win/loss
+counts alone: against internal ESOP-MILP, \paretomethod{} lowers total T-count
+by 51.23\%, CNOT count by 37.13\%, and summed peak ancilla by 15.09\%.  Against
+external ABC-ESOP, it lowers total T-count by 25.18\%, CNOT count by 4.38\%,
+and summed peak ancilla by 14.04\%.  The only aggregate CNOT counterexample is
+the $n=6$ ABC-ESOP group, where \paretomethod{} uses 7097 CNOTs versus 7068 for
+ABC-ESOP, a 0.41\% increase, while still reducing T-count, peak ancilla, and
+weighted score.
 
 \subsection{Exported external baselines}
 
@@ -450,6 +482,11 @@ The ABC-ESOP comparison is closer to the XOR-of-products synthesis family.
 mean CNOT reduction of 1.19\%.  This result is not a substitute for a reproduced
 ROS mapper, but it adds a standard external XOR/ESOP minimizer to the
 comparison boundary.
+The stronger small-function \paretomethod{} setting improves this ESOP boundary:
+on the same ABC-ESOP rows it has 170 score wins, 1 score loss, and 6 ties, with
+a 23.00\% aggregate score reduction.  Its aggregate T-count and peak-ancilla
+sums are lower in every $n=3,\ldots,6$ group; aggregate CNOT is lower through
+$n=5$ and nearly tied at $n=6$.
 
 Finally, we pushed the ABC AIG/XAG/LUT and BDD exchange beyond the small-function
 slice.  The \highdimdataset{}, \scaledataset{}, \ultradataset{}, and
@@ -458,13 +495,13 @@ exported to BLIF/truth JSON, optimized or represented by the external-style
 baselines, and verified by a bit-parallel full truth-table checker before
 scoring.  The high-dimensional rows contain 64 $n=14$, 32 $n=15$, 24 $n=16$,
 and 12 $n=18$ functions for each of ABC-AIG, ABC-XAG, ABC-LUT, and BDD, all
-correct and with no errors or skips.  Against all four baselines, \method{} and
-\profilemethod{} win every T-count, CNOT, peak-ancilla, and weighted-score
-comparison for each guarded method across these 528 external rows; the mean
-score reductions range from 93.24\% to 99.66\%.  At $n=18$, the weighted-score
+correct and with no errors or skips.  Against all four baselines, \method{},
+\profilemethod{}, and \paretomethod{} win every T-count, CNOT, peak-ancilla,
+and weighted-score comparison across these 528 external rows; the mean
+score reductions range from 93.24\% to 99.69\%.  At $n=18$, the weighted-score
 reductions are
-98.76\% against ABC-AIG, 98.98\% against ABC-XAG, 99.66\% against ABC-LUT, and
-98.19\% against BDD.  The depth column remains an important counterweight for
+98.85\% against ABC-AIG, 99.05\% against ABC-XAG, 99.69\% against ABC-LUT, and
+98.30\% against BDD.  The depth column remains an important counterweight for
 ABC: ABC-AIG has a lower estimated depth on 50/64, 25/32, 22/24, and 10/12
 functions across the four high-dimensional suites, and ABC-XAG has a lower
 estimated depth on 50/64, 26/32, 22/24, and 11/12 functions, respectively.
@@ -790,17 +827,18 @@ median runtime to 130.92 s.
 \end{table}
 
 The \megadataset{} run pushes the same harness two more variables beyond the
-ultra check.  It contains 12 random $n=18$ ANF functions and five methods,
-for 60 method/function rows with no errors or skips.  This is not presented as
-a new neural-search separation: at this dimension the guard switches to the
-bounded FPRM root-beam child because the pairwise-linear screen develops a
-multi-minute long tail without improving the sampled costs.  Consequently
-\method{} and \profilemethod{} match the standalone root-beam child on all 12
-functions.  Relative to direct ANF, the guarded variants have 10 T-count wins,
-no losses, and 2 ties, reducing mean T-count by 55.40\% and mean weighted score
-by 53.08\%.  Relative to logical-AND direct ANF, they have 10 score wins, no
-losses, and 2 ties, with a 27.43\% mean score reduction.  The price is runtime:
-median guarded runtime is about 66 s and p95 runtime is about 144--149 s.
+ultra check.  It contains 12 random $n=18$ ANF functions and seven methods,
+for 84 method/function rows with no errors or skips.  This is presented as a
+runtime-boundary stress test rather than a new Pareto-archive separation.  The
+standalone fast FPRM linear-pair guard has 6 score wins, no losses, and 6 ties
+against bounded FPRM root-beam, reducing mean weighted score by 1.91\%.  The
+guarded Resource/Profile/Pareto variants then improve that fast child on all
+12 functions, reducing mean weighted score by another 3.55\%.  Relative to
+direct ANF, these guarded variants have 12 T-count wins, no losses, and no
+ties, reducing mean T-count by 60.05\% and mean weighted score by 56.99\%.
+Relative to bounded FPRM root-beam, they have 12 score wins, no losses, and no
+ties, with a 5.29\% mean score reduction.  The price is runtime: median
+guarded runtime is about 83.3--83.5 s and p95 runtime is about 172.9--173.8 s.
 
 \begin{table}[t]
 \centering
@@ -843,9 +881,10 @@ the isolated $n=14$ stress test, the Resource/Profile/Pareto guarded variants
 complete all 64 functions and improve over FPRM-greedy with no score losses;
 the $n=16$ scale check also completes without errors after switching to the
 ultra-scale one-layer linear-pair guard and adding a bounded Pareto archive.
-The $n=18$ stress check completes all 60 rows after Resource/Profile switch to
-a root-beam high-dimensional guard, but those guarded variants tie that child
-and have minute-scale runtime tails.  This shows that
+The $n=18$ stress check completes all 84 rows after switching to a fast
+linear-pair high-dimensional guard, and the guarded Resource/Profile/Pareto
+variants improve bounded root-beam on all 12 functions while keeping
+minute-scale runtime tails.  This shows that
 the current high-dimensional guard is no longer only a scalability fallback:
 pairwise XOR factoring can correct a measurable part of the greedy
 Reed--Muller search error using only Clifford linear preprocessing around the
@@ -891,8 +930,9 @@ component substantially reduces T-count versus direct ANF, logical-AND direct
 ANF, fixed-coordinate MCTS, and SSHR-H on supported functions.  On the
 $n\leq 6$ traditional-baseline slice, \paretomethod{} further improves the
 balanced weighted score over \method{}, dominates internal ESOP cube-beam
-candidates by weighted score, and remains competitive against weighted ESOP
-MILP.  Resource-profile and \largedataset{} benchmarks show that this
+candidates by weighted score, and gives a clear same-benchmark improvement over
+both internal ESOP-MILP and exported ABC-ESOP baselines.  Resource-profile and
+\largedataset{} benchmarks show that this
 advantage is robust across several weighted objectives and larger random ANF
 instances.  Exported SSHR, ABC-AIG, ABC-XAG, ABC-LUT, BDD, and ABC-ESOP
 baselines add independent cross-tool evidence that the gains
@@ -901,8 +941,8 @@ CNOT and depth remain important limitations.  The new high-dimensional stress
 tests show that bounded guards scale without timeouts, beat FPRM-greedy on
 60 of 64 weighted-score comparisons at $n=14$ and 30 of 32 comparisons at
 $n=15$, complete all 168 $n=16$ ultra-scale rows while retaining score wins
-against FPRM root-beam, complete all 60 $n=18$
-mega-scale rows under the root-beam guard, and beat exported ABC AIG/XAG/LUT
+against FPRM root-beam, complete all 84 $n=18$
+mega-scale rows under the fast linear-pair guard, and beat exported ABC AIG/XAG/LUT
 and BDD on all 528 high-dimensional weighted-score comparisons.
 The next step is to reproduce ROS/mockturtle-style
 toolchain baselines and hardware-aware mappings so the empirical claim is

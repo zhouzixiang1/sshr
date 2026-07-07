@@ -6,29 +6,29 @@
     "direct_anf",
     "and_direct_anf",
     "and_fprm_root_beam",
+    "and_fprm_linear_pair_fast",
     "and_resource_nmcts",
-    "and_profile_resource_nmcts"
+    "and_profile_resource_nmcts",
+    "and_pareto_resource_nmcts"
   ],
   "last_run_methods": [
-    "direct_anf",
-    "and_direct_anf",
-    "and_fprm_root_beam",
-    "and_resource_nmcts",
-    "and_profile_resource_nmcts"
+    "and_pareto_resource_nmcts"
   ],
-  "resume": false,
-  "raw_rows": 60,
+  "resume": true,
+  "raw_rows": 84,
   "raw_methods": [
     "and_direct_anf",
+    "and_fprm_linear_pair_fast",
     "and_fprm_root_beam",
+    "and_pareto_resource_nmcts",
     "and_profile_resource_nmcts",
     "and_resource_nmcts",
     "direct_anf"
   ],
   "model": "models/action_scorer_rollout_logical_and.pt",
   "workers": 4,
-  "seconds": 705.5050129890442,
-  "seconds_current_run": 705.5050129890442,
+  "seconds": null,
+  "seconds_current_run": 294.9239981174469,
   "config": {
     "weights": {
       "t": 1.0,

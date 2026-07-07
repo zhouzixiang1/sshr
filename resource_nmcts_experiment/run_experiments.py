@@ -6,6 +6,7 @@ import argparse
 import csv
 import json
 import multiprocessing as mp
+import queue
 import random
 import signal
 import statistics
@@ -147,7 +148,7 @@ PRESETS = {
         "workers": 6,
     },
     "mega_highdim_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_fprm_root_beam", "and_resource_nmcts", "and_profile_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_fprm_root_beam", "and_fprm_linear_pair_fast", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
         "random_truth": [],
         "random_anf": [(18, 12)],
         "structured_limit": 0,
@@ -301,10 +302,24 @@ def run_one_isolated(task):
     if hard_timeout <= 0:
         return run_one(task)
     ctx = mp.get_context("spawn")
-    queue = ctx.Queue(maxsize=1)
-    proc = ctx.Process(target=_isolated_worker, args=(task, queue))
+    result_queue = ctx.Queue(maxsize=1)
+    proc = ctx.Process(target=_isolated_worker, args=(task, result_queue))
     proc.start()
-    proc.join(hard_timeout)
+    result = None
+    deadline = time.time() + hard_timeout
+    while proc.is_alive() and time.time() < deadline:
+        try:
+            result = result_queue.get(timeout=0.25)
+            break
+        except queue.Empty:
+            pass
+    if result is not None:
+        proc.join(5)
+        if proc.is_alive():
+            proc.terminate()
+            proc.join(5)
+        return result
+    proc.join(max(0.0, deadline - time.time()))
     if proc.is_alive():
         proc.terminate()
         proc.join(5)
@@ -321,8 +336,10 @@ def run_one_isolated(task):
             "error": f"ProcessTimeout({hard_timeout}s)",
             "skipped": "",
         }
-    if not queue.empty():
-        return queue.get()
+    try:
+        return result_queue.get_nowait()
+    except queue.Empty:
+        pass
     return {
         "name": name,
         "n": bf.n,
@@ -423,15 +440,16 @@ def main(argv: Iterable[str] | None = None) -> int:
             "and_fprm_greedy": 2,
             "and_fprm_root_beam": 3,
             "and_fprm_linear_pair": 4,
-            "and_fprm_linear_pair_deep": 5,
-            "and_fprm_linear_parity": 6,
-            "and_mcts_factor": 7,
-            "and_affine_greedy": 8,
-            "and_affine_nmcts": 9,
-            "and_resource_nmcts": 10,
-            "and_profile_resource_nmcts": 11,
-            "and_pareto_resource_nmcts": 12,
-            "and_fprm_polarity_archive": 13,
+            "and_fprm_linear_pair_fast": 5,
+            "and_fprm_linear_pair_deep": 6,
+            "and_fprm_linear_parity": 7,
+            "and_mcts_factor": 8,
+            "and_affine_greedy": 9,
+            "and_affine_nmcts": 10,
+            "and_resource_nmcts": 11,
+            "and_profile_resource_nmcts": 12,
+            "and_pareto_resource_nmcts": 13,
+            "and_fprm_polarity_archive": 14,
         }
         tasks.sort(key=lambda t: (method_rank.get(t[2], 99), t[1].n, t[0]))
 
