@@ -287,10 +287,11 @@ def main() -> int:
             ),
             (
                 "Against external ABC-ESOP, Pareto-Resource-NMCTS has lower "
-                "aggregate T-count and peak ancilla for every n=3..6 group.  "
-                "Aggregate CNOT is lower for n=3..5 and is 0.41% higher at n=6, "
-                "so the correct claim is weighted-resource/low-T superiority, "
-                "not strict CNOT dominance over every ESOP export group."
+                "aggregate T-count, CNOT count, and peak ancilla for every "
+                "n=3..6 group after the Resource-NMCTS portfolio adds the "
+                "cheap no-MCTS linear/root-beam candidates.  This supports a "
+                "matched-benchmark ESOP superiority claim, while still not "
+                "implying CNOT dominance over SSHR or hardware-mapped flows."
             ),
         ]
     )

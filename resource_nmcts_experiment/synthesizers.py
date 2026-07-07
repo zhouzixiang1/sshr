@@ -798,12 +798,112 @@ def _resource_selection_key(result: SynthesisResult, weights) -> tuple[float, in
     return (score, result.cost.T, result.cost.CNOT, result.cost.depth, result.cost.peak_ancilla)
 
 
+def _portfolio_result(
+    requested_method: str,
+    portfolio: list[SynthesisResult],
+    weights: ResourceWeights,
+    elapsed_s: float,
+) -> SynthesisResult:
+    if not portfolio:
+        raise RuntimeError(f"{requested_method} portfolio produced no correct candidate")
+    best = min(portfolio, key=lambda r: _resource_selection_key(r, weights))
+    return SynthesisResult(
+        method=requested_method,
+        cost=best.cost,
+        time_s=elapsed_s,
+        correct=best.correct,
+        terms=best.terms,
+        gates=best.gates,
+        n_qubits=best.n_qubits,
+    )
+
+
+def _run_child_portfolio(
+    bf: BooleanFunction,
+    child_specs: list[tuple[str, SearchConfig]],
+    seed: int,
+    model_path: str | None,
+) -> list[SynthesisResult]:
+    portfolio: list[SynthesisResult] = []
+    seen_specs = set()
+    for child_method, child_config in child_specs:
+        key = (child_method, _config_key(child_config))
+        if key in seen_specs:
+            continue
+        seen_specs.add(key)
+        try:
+            child = synthesize(child_method, bf, child_config, seed=seed, model_path=model_path)
+        except TimeoutError:
+            if portfolio:
+                break
+            raise
+        except Exception:
+            continue
+        if child.correct:
+            portfolio.append(child)
+    return portfolio
+
+
 def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int = 0, model_path: str | None = None) -> SynthesisResult:
     t0 = time.time()
     requested_method = method
     if method.startswith("and_"):
         config = replace(config, gate_mode="logical_and")
         method = method[len("and_") :]
+    if method in {"resource_heuristic", "resource_no_mcts", "resource_beam_only"}:
+        fast_config = replace(
+            config,
+            candidate_top_k=min(config.candidate_top_k, 18),
+            mcts_simulations=min(config.mcts_simulations, 32),
+            neural_mcts_simulations=min(config.neural_mcts_simulations, 40),
+            max_polarities=min(config.max_polarities, 16),
+        )
+        cube_config = replace(
+            config,
+            candidate_top_k=min(config.candidate_top_k, 18),
+            max_polarities=min(config.max_polarities, 8),
+        )
+        highdim_config = replace(fast_config, candidate_top_k=config.candidate_top_k)
+        if method == "resource_heuristic":
+            child_specs: list[tuple[str, SearchConfig]] = [
+                ("direct_anf", config),
+                ("fprm_greedy", fast_config),
+            ]
+            if bf.n <= 12:
+                child_specs.append(("affine_greedy", fast_config))
+        elif method == "resource_beam_only":
+            child_specs = [
+                ("direct_anf", config),
+                ("fprm_root_beam", fast_config),
+            ]
+            if bf.n <= 15:
+                child_specs.append(("fprm_linear_pair", highdim_config))
+            if bf.n <= 6:
+                child_specs.append(("cube_beam", cube_config))
+        else:
+            child_specs = [
+                ("direct_anf", config),
+                ("fprm_greedy", fast_config),
+                ("fprm_root_beam", fast_config),
+            ]
+            if bf.n <= 12:
+                child_specs.extend(
+                    [
+                        ("fprm_root_child_beam", fast_config),
+                        ("fprm_linear_pair", fast_config),
+                        ("affine_greedy", fast_config),
+                    ]
+                )
+            elif bf.n == 16:
+                child_specs.append(("fprm_linear_pair", highdim_config))
+            elif bf.n >= 18:
+                child_specs.append(("fprm_linear_pair_fast", highdim_config))
+            else:
+                child_specs.append(("fprm_linear_pair_deep", highdim_config))
+            if bf.n <= 6:
+                child_specs.append(("cube_beam", cube_config))
+        portfolio = _run_child_portfolio(bf, child_specs, seed, model_path)
+        return _portfolio_result(requested_method, portfolio, config.weights, time.time() - t0)
     if method == "rc_nmcts":
         fast_config = replace(
             config,
@@ -858,6 +958,10 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         child_specs = [("direct_anf", config)]
         if bf.n <= 12:
             child_specs.append(("fprm_greedy", fast_config))
+            child_specs.append(("fprm_root_beam", fast_config))
+            child_specs.append(("fprm_root_child_beam", fast_config))
+            child_specs.append(("fprm_linear_pair", fast_config))
+            child_specs.append(("affine_greedy", fast_config))
             child_specs.append(("affine_nmcts", fast_config))
         else:
             # At n=14+ the deep linear branch subsumes the shallow linear-pair

@@ -5,12 +5,15 @@ Component & Dataset & Pairs & Score W/L/T & Mean $\Delta$ score \\
 Affine greedy vs fixed-coordinate MCTS & ablation\_affine & 321 & 165/88/68 & $-12.12\%$ \\
 Neural refine over affine greedy & ablation\_affine & 322 & 65/0/257 & $-1.08\%$ \\
 Guarded Affine-NMCTS over no-guard & ablation\_affine & 322 & 88/0/234 & $-1.74\%$ \\
-Learned prior for Resource-NMCTS & traditional\_resource & 177 & 41/0/136 & $-1.34\%$ \\
-Pareto archive over Resource-NMCTS & traditional\_resource & 177 & 74/0/103 & $-4.59\%$ \\
+Learned prior for Resource-NMCTS & traditional\_resource & 177 & 39/0/138 & $-1.10\%$ \\
+Pareto archive over Resource-NMCTS & traditional\_resource & 177 & 68/0/109 & $-3.26\%$ \\
+No-MCTS portfolio over heuristic-only & trad. ablation & 177 & 54/0/123 & $-2.51\%$ \\
+Resource-NMCTS over no-MCTS portfolio & trad. ablation & 177 & 54/0/123 & $-1.44\%$ \\
+Pareto Resource-NMCTS over no-MCTS portfolio & trad. ablation & 177 & 106/0/71 & $-4.69\%$ \\
 Linear-pair guard vs root beam at n=14 & highdim\_resource & 64 & 60/0/4 & $-3.00\%$ \\
-Recursive linear-pair guard vs root beam at n=15 & highdim\_scale\_resource & 32 & 30/0/2 & $-5.28\%$ \\
-Linear-pair guard vs root beam at n=16 & ultra\_highdim\_resource & 24 & 22/0/2 & $-1.88\%$ \\
-Fast linear-pair guard vs root beam at n=18 & mega\_highdim\_resource & 12 & 6/0/6 & $-1.91\%$ \\
-Resource-NMCTS vs fast linear-pair at n=18 & mega\_highdim\_resource & 12 & 12/0/0 & $-3.55\%$ \\
+Recursive linear-pair guard vs root beam at n=15 & n15 scale & 32 & 30/0/2 & $-5.28\%$ \\
+Linear-pair guard vs root beam at n=16 & n16 scale & 24 & 22/0/2 & $-1.88\%$ \\
+Fast linear-pair guard vs root beam at n=18 & n18 stress & 12 & 6/0/6 & $-1.91\%$ \\
+Resource-NMCTS vs fast linear-pair at n=18 & n18 stress & 12 & 12/0/0 & $-3.55\%$ \\
 \bottomrule
 \end{tabular}

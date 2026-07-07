@@ -86,6 +86,46 @@ METHOD_COMPARISONS = [
         "Pareto archive over Resource-NMCTS",
     ),
     MethodComparison(
+        "dedicated ablation",
+        "search_ablation_traditional",
+        "raw_search_ablation_traditional.csv",
+        "and_resource_no_mcts",
+        "and_resource_heuristic",
+        "No-MCTS portfolio over heuristic-only",
+    ),
+    MethodComparison(
+        "dedicated ablation",
+        "search_ablation_traditional",
+        "raw_search_ablation_traditional.csv",
+        "and_resource_no_mcts",
+        "and_resource_beam_only",
+        "No-MCTS portfolio over beam-only",
+    ),
+    MethodComparison(
+        "dedicated ablation",
+        "search_ablation_traditional",
+        "raw_search_ablation_traditional.csv",
+        "and_resource_nmcts",
+        "and_resource_heuristic",
+        "Resource-NMCTS over heuristic-only",
+    ),
+    MethodComparison(
+        "dedicated ablation",
+        "search_ablation_traditional",
+        "raw_search_ablation_traditional.csv",
+        "and_resource_nmcts",
+        "and_resource_no_mcts",
+        "Resource-NMCTS over no-MCTS portfolio",
+    ),
+    MethodComparison(
+        "dedicated ablation",
+        "search_ablation_traditional",
+        "raw_search_ablation_traditional.csv",
+        "and_pareto_resource_nmcts",
+        "and_resource_no_mcts",
+        "Pareto Resource-NMCTS over no-MCTS portfolio",
+    ),
+    MethodComparison(
         "esop boundary",
         "traditional_resource",
         "raw_traditional_resource.csv",
@@ -373,6 +413,16 @@ def pct_cell(value: str) -> str:
     return f"${float(value):+.2f}\\%$"
 
 
+def dataset_label(dataset: str) -> str:
+    labels = {
+        "search_ablation_traditional": "trad. ablation",
+        "highdim_scale_resource": "n15 scale",
+        "ultra_highdim_resource": "n16 scale",
+        "mega_highdim_resource": "n18 stress",
+    }
+    return labels.get(dataset, dataset)
+
+
 def write_latex(rows: list[dict[str, str]], out: Path) -> None:
     selected = [
         "Affine greedy vs fixed-coordinate MCTS",
@@ -380,6 +430,9 @@ def write_latex(rows: list[dict[str, str]], out: Path) -> None:
         "Guarded Affine-NMCTS over no-guard",
         "Learned prior for Resource-NMCTS",
         "Pareto archive over Resource-NMCTS",
+        "No-MCTS portfolio over heuristic-only",
+        "Resource-NMCTS over no-MCTS portfolio",
+        "Pareto Resource-NMCTS over no-MCTS portfolio",
         "Linear-pair guard vs root beam at n=14",
         "Recursive linear-pair guard vs root beam at n=15",
         "Linear-pair guard vs root beam at n=16",
@@ -399,7 +452,7 @@ def write_latex(rows: list[dict[str, str]], out: Path) -> None:
             " & ".join(
                 [
                     latex_escape(label),
-                    latex_escape(row["dataset"]),
+                    latex_escape(dataset_label(row["dataset"])),
                     row["pairs"],
                     row["score_wlt"],
                     pct_cell(row["score_relative_pct"]),

@@ -27,6 +27,8 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_resource --model models/action_scorer_rollout_logical_and.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset traditional_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset traditional_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset search_ablation_traditional --model models/action_scorer_rollout_logical_and.pt --workers 10 --checkpoint-every 100 --isolate-timeouts
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset search_ablation_traditional
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_resource --only-methods and_affine_nmcts,and_resource_nmcts,and_pareto_resource_nmcts --model models/action_scorer_rollout_logical_and.pt --out-dir /tmp/resource_nmcts_traditional_learned_prior --workers 10 --checkpoint-every 50
 cp /tmp/resource_nmcts_traditional_learned_prior/raw_traditional_resource.csv results/raw_traditional_resource_learned_prior.csv
 cp /tmp/resource_nmcts_traditional_learned_prior/summary_traditional_resource.csv results/summary_traditional_resource_learned_prior.csv
@@ -64,7 +66,7 @@ cp /tmp/resource_nmcts_traditional_no_prior/manifest_traditional_resource.json r
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_abc_xag --max-n 6 --max-xag-n 6 --timeout 10 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_abc_lut --max-n 6 --max-lut-n 6 --timeout 10 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_bdd --max-n 6 --max-bdd-n 6 --bdd-orders 8 --timeout 10 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
-/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_traditional_resource_n6.csv --internal-csv results/raw_traditional_resource.csv --out results/analysis_external_traditional_resource_n6.md
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_traditional_resource_n6.csv --internal-csv results/raw_traditional_resource.csv --out results/analysis_external_traditional_resource_n6.md --latex-out paper_latex/tables/external_traditional_resource_n6.tex
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset highdim_resource --formats blif,truth --out-dir benchmark_exports/highdim_resource_external_seed42
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/highdim_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_abc_lut,external_bdd --min-n 14 --max-n 14 --max-abc-n 14 --max-xag-n 14 --max-lut-n 14 --max-bdd-n 14 --bdd-orders 8 --timeout 20 --workers 8 --out results/raw_external_highdim_resource.csv --summary results/summary_external_highdim_resource.csv --run-manifest results/manifest_external_highdim_resource.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_highdim_resource.csv --internal-csv results/raw_highdim_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_fprm_linear_pair,and_fprm_root_beam,and_fprm_greedy,direct_anf,and_direct_anf --out results/analysis_external_highdim_resource.md
@@ -198,10 +200,10 @@ Neural-prior ablation evidence from `results/analysis_neural_prior_ablation.md`:
   learned-prior rows against a no-prior rerun for `and_affine_nmcts`,
   `and_resource_nmcts`, and `and_pareto_resource_nmcts`; 0 errors/skips.
 - Learned prior versus no-prior score wins/losses/ties are 42/0/135 for
-  `and_affine_nmcts`, 41/0/136 for `and_resource_nmcts`, and 29/0/148 for
+  `and_affine_nmcts`, 39/0/138 for `and_resource_nmcts`, and 29/0/148 for
   `and_pareto_resource_nmcts`.
-- Mean score reductions are 1.47%, 1.34%, and 0.78%, respectively.  Paired
-  mean relative runtime increases are 91.22%, 87.31%, and 67.44% on this
+- Mean score reductions are 1.47%, 1.10%, and 0.78%, respectively.  Paired
+  mean relative runtime increases are 91.22%, 55.11%, and 18.77% on this
   small-function slice, so the learned prior is a quality-improving search
   signal rather than the current fastest mode.
 
@@ -217,9 +219,14 @@ Search-contribution decomposition evidence from
   the largest pre-portfolio algorithmic jump, but not a monotone guard.
 - Neural refine over affine-greedy has 65 score wins, 0 losses, and 257 ties;
   guarded Affine-NMCTS over no-guard has 88 score wins, 0 losses, and 234 ties.
-- The Pareto archive improves over Resource-NMCTS on the 177-function
-  `traditional_resource` slice with 74 score wins, 0 losses, 103 ties, and a
-  4.59% mean score reduction.
+- The Pareto archive improves over the strengthened Resource-NMCTS on the
+  177-function `traditional_resource` slice with 68 score wins, 0 losses,
+  109 ties, and a 3.26% mean score reduction.
+- A dedicated `search_ablation_traditional` rerun adds explicit heuristic-only,
+  beam-only, and no-MCTS portfolios.  Resource-NMCTS improves over the no-MCTS
+  portfolio with 54 score wins, 0 losses, 123 ties, and a 1.44% mean score
+  reduction; Pareto-Resource-NMCTS improves over the same no-MCTS portfolio
+  with 106 score wins, 0 losses, 71 ties, and a 4.69% mean score reduction.
 - The high-dimensional scale contribution is mainly the bounded linear-pair
   guard: score improvements over root beam are 60/0/4 at n=14, 30/0/2 at
   n=15, 22/0/2 at n=16, and 6/0/6 at n=18.  Resource/Pareto selection adds
@@ -232,17 +239,17 @@ Traditional Boolean/ESOP baseline evidence from
 
 - 177 functions with $n \leq 6$, 10 methods, 1770 result rows, 0 errors, and 0
   skips.
-- Mean T-count / composite score: `and_pareto_resource_nmcts` 40.77 / 49.83,
+- Mean T-count / composite score: `and_pareto_resource_nmcts` 40.43 / 49.56,
   `and_fprm_polarity_archive` 43.01 / 52.50,
-  `and_resource_nmcts` 45.74 / 55.21,
+  `and_resource_nmcts` 43.91 / 53.22,
   `and_affine_nmcts` 45.88 / 55.37, fixed MCTS 62.06 / 73.09, ESOP cube beam
   71.32 / 83.82, ESOP MILP 83.59 / 96.73, and SSHR-H 81.04 / 88.19.
-- Against Resource-NMCTS, `and_pareto_resource_nmcts` has 74 score wins, 0
-  losses, and 103 ties, with a 4.59% mean score reduction.
+- Against Resource-NMCTS, `and_pareto_resource_nmcts` has 68 score wins, 0
+  losses, and 109 ties, with a 3.26% mean score reduction.
 - Against ESOP cube beam, `and_pareto_resource_nmcts` has 174 score wins, 0
   losses, and 3 ties, with a 35.86% mean score reduction.
 - Against time-limited weighted ESOP MILP, `and_pareto_resource_nmcts` has 167
-  score wins, 3 losses, and 7 ties, with a 29.61% mean score reduction.
+  score wins, 3 losses, and 7 ties, with a 29.84% mean score reduction.
 - Against SSHR-H, `and_pareto_resource_nmcts` has 173 T-count wins, 0 losses,
   and 4 ties, and 173 score wins with 4 score losses.
 - SSHR-H still has the lowest mean CNOT count on this small-function slice, so

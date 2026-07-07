@@ -112,6 +112,21 @@ PRESETS = {
         "max_n": 6,
         "workers": 10,
     },
+    "search_ablation_traditional": {
+        "methods": ["direct_anf", "and_direct_anf", "and_fprm_greedy", "and_fprm_root_beam", "and_fprm_linear_pair", "and_affine_greedy", "and_mcts_factor", "and_affine_nmcts", "and_resource_heuristic", "and_resource_beam_only", "and_resource_no_mcts", "and_resource_nmcts", "and_pareto_resource_nmcts"],
+        "random_truth": [(4, 64), (5, 64), (6, 32)],
+        "random_anf": [],
+        "structured_limit": 10_000,
+        "max_n": 6,
+        "workers": 10,
+    },
+    "search_ablation_highdim": {
+        "methods": ["direct_anf", "and_direct_anf", "and_fprm_greedy", "and_fprm_root_beam", "and_fprm_linear_pair", "and_resource_heuristic", "and_resource_beam_only", "and_resource_no_mcts", "and_resource_nmcts", "and_pareto_resource_nmcts"],
+        "random_truth": [],
+        "random_anf": [(14, 16)],
+        "structured_limit": 0,
+        "workers": 6,
+    },
     "large_resource": {
         "methods": ["direct_anf", "and_direct_anf", "and_mcts_factor", "and_affine_nmcts", "and_resource_nmcts", "and_profile_resource_nmcts"],
         "random_truth": [(4, 48), (5, 48), (6, 32)],
@@ -414,12 +429,12 @@ def main(argv: Iterable[str] | None = None) -> int:
         "candidate_top_k": 24,
         "min_factor_count": 2,
         "use_relative_phase": True,
-        "mcts_simulations": 24 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core", "highdim_resource", "highdim_scale_resource", "ultra_highdim_resource", "mega_highdim_resource"} else (48 if args.preset == "pilot" else (32 if args.preset == "large" else 96)),
-        "neural_mcts_simulations": 32 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core", "highdim_resource", "highdim_scale_resource", "ultra_highdim_resource", "mega_highdim_resource"} else (64 if args.preset == "pilot" else (32 if args.preset == "large" else 128)),
-        "max_polarities": 32 if args.preset in {"smoke", "pilot"} else (12 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core", "highdim_resource", "highdim_scale_resource", "ultra_highdim_resource", "mega_highdim_resource"} else (16 if args.preset == "large_fast" else (48 if args.preset == "large" else 384))),
+        "mcts_simulations": 24 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "search_ablation_traditional", "large_resource", "large_resource_core", "highdim_resource", "search_ablation_highdim", "highdim_scale_resource", "ultra_highdim_resource", "mega_highdim_resource"} else (48 if args.preset == "pilot" else (32 if args.preset == "large" else 96)),
+        "neural_mcts_simulations": 32 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "search_ablation_traditional", "large_resource", "large_resource_core", "highdim_resource", "search_ablation_highdim", "highdim_scale_resource", "ultra_highdim_resource", "mega_highdim_resource"} else (64 if args.preset == "pilot" else (32 if args.preset == "large" else 128)),
+        "max_polarities": 32 if args.preset in {"smoke", "pilot"} else (12 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "search_ablation_traditional", "large_resource", "large_resource_core", "highdim_resource", "search_ablation_highdim", "highdim_scale_resource", "ultra_highdim_resource", "mega_highdim_resource"} else (16 if args.preset == "large_fast" else (48 if args.preset == "large" else 384))),
         "gate_mode": "mct",
         "neural_prior_weight": 2.5,
-        "task_timeout_s": 300 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "large_resource", "large_resource_core", "highdim_resource", "highdim_scale_resource", "ultra_highdim_resource", "mega_highdim_resource"} else (120 if args.preset == "pilot" else (180 if args.preset in {"large", "large_fast"} else (300 if args.preset == "main" else 0))),
+        "task_timeout_s": 300 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "search_ablation_traditional", "large_resource", "large_resource_core", "highdim_resource", "search_ablation_highdim", "highdim_scale_resource", "ultra_highdim_resource", "mega_highdim_resource"} else (120 if args.preset == "pilot" else (180 if args.preset in {"large", "large_fast"} else (300 if args.preset == "main" else 0))),
     }
     methods = cfg["methods"]
     if args.only_methods:
@@ -433,7 +448,7 @@ def main(argv: Iterable[str] | None = None) -> int:
         for i, (name, bf) in enumerate(suite)
         for method in methods
     ]
-    if args.preset in {"large_resource", "large_resource_core", "highdim_resource", "highdim_scale_resource", "ultra_highdim_resource", "mega_highdim_resource"}:
+    if args.preset in {"large_resource", "large_resource_core", "highdim_resource", "search_ablation_highdim", "highdim_scale_resource", "ultra_highdim_resource", "mega_highdim_resource"}:
         method_rank = {
             "direct_anf": 0,
             "and_direct_anf": 1,
@@ -446,10 +461,13 @@ def main(argv: Iterable[str] | None = None) -> int:
             "and_mcts_factor": 8,
             "and_affine_greedy": 9,
             "and_affine_nmcts": 10,
-            "and_resource_nmcts": 11,
-            "and_profile_resource_nmcts": 12,
-            "and_pareto_resource_nmcts": 13,
-            "and_fprm_polarity_archive": 14,
+            "and_resource_heuristic": 11,
+            "and_resource_beam_only": 12,
+            "and_resource_no_mcts": 13,
+            "and_resource_nmcts": 14,
+            "and_profile_resource_nmcts": 15,
+            "and_pareto_resource_nmcts": 16,
+            "and_fprm_polarity_archive": 17,
         }
         tasks.sort(key=lambda t: (method_rank.get(t[2], 99), t[1].n, t[0]))
 

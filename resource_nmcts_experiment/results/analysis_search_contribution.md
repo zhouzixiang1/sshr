@@ -12,9 +12,14 @@ function-level comparison; negative relative values favor the target method.
 | neural refine | Neural refine over affine greedy | ablation_affine | 322 | 65/0/257 | -1.08% | -1.00% |
 | guarded MCTS | Guarded Affine-NMCTS over no-guard | ablation_affine | 322 | 88/0/234 | -1.74% | -1.81% |
 | full affine | Full Affine-NMCTS vs fixed-coordinate MCTS | ablation_affine | 321 | 165/0/156 | -14.82% | -16.18% |
-| portfolio | Resource-NMCTS over Affine-NMCTS | traditional_resource | 177 | 8/0/169 | -0.12% | -0.11% |
-| pareto archive | Pareto archive over Resource-NMCTS | traditional_resource | 177 | 74/0/103 | -4.59% | -5.10% |
-| esop boundary | Pareto Resource-NMCTS vs ESOP-MILP | traditional_resource | 177 | 167/3/7 | -29.61% | -32.44% |
+| portfolio | Resource-NMCTS over Affine-NMCTS | traditional_resource | 177 | 44/0/133 | -1.91% | -2.12% |
+| pareto archive | Pareto archive over Resource-NMCTS | traditional_resource | 177 | 68/0/109 | -3.26% | -3.72% |
+| dedicated ablation | No-MCTS portfolio over heuristic-only | search_ablation_traditional | 177 | 54/0/123 | -2.51% | -2.68% |
+| dedicated ablation | No-MCTS portfolio over beam-only | search_ablation_traditional | 177 | 106/1/70 | -8.36% | -8.99% |
+| dedicated ablation | Resource-NMCTS over heuristic-only | search_ablation_traditional | 177 | 98/0/79 | -3.93% | -4.03% |
+| dedicated ablation | Resource-NMCTS over no-MCTS portfolio | search_ablation_traditional | 177 | 54/0/123 | -1.44% | -1.36% |
+| dedicated ablation | Pareto Resource-NMCTS over no-MCTS portfolio | search_ablation_traditional | 177 | 106/0/71 | -4.69% | -5.07% |
+| esop boundary | Pareto Resource-NMCTS vs ESOP-MILP | traditional_resource | 177 | 167/3/7 | -29.84% | -32.77% |
 | n14 guard | Linear-pair guard vs root beam at n=14 | highdim_resource | 64 | 60/0/4 | -3.00% | -4.19% |
 | n14 portfolio | Pareto Resource-NMCTS vs linear-pair at n=14 | highdim_resource | 64 | 59/0/5 | -3.49% | -3.83% |
 | n15 guard | Recursive linear-pair guard vs root beam at n=15 | highdim_scale_resource | 32 | 30/0/2 | -5.28% | -6.43% |
@@ -24,7 +29,7 @@ function-level comparison; negative relative values favor the target method.
 | n18 guard | Fast linear-pair guard vs root beam at n=18 | mega_highdim_resource | 12 | 6/0/6 | -1.91% | -2.72% |
 | n18 portfolio | Resource-NMCTS vs fast linear-pair at n=18 | mega_highdim_resource | 12 | 12/0/0 | -3.55% | -3.75% |
 | learned prior | Learned prior for Affine-NMCTS | traditional_resource | 177 | 42/0/135 | -1.47% | -1.62% |
-| learned prior | Learned prior for Resource-NMCTS | traditional_resource | 177 | 41/0/136 | -1.34% | -1.46% |
+| learned prior | Learned prior for Resource-NMCTS | traditional_resource | 177 | 39/0/138 | -1.10% | -1.16% |
 | learned prior | Learned prior for Pareto Resource-NMCTS | traditional_resource | 177 | 29/0/148 | -0.78% | -0.77% |
 
 ## Detailed metric view
@@ -51,21 +56,46 @@ function-level comparison; negative relative values favor the target method.
 | Full Affine-NMCTS vs fixed-coordinate MCTS | depth | 161/3/157 | 274.67 | 291.71 | -12.52% |
 | Full Affine-NMCTS vs fixed-coordinate MCTS | peak_ancilla | 1/13/307 | 1.89 | 1.85 | +1.72% |
 | Full Affine-NMCTS vs fixed-coordinate MCTS | score | 165/0/156 | 164.95 | 176.09 | -14.82% |
-| Resource-NMCTS over Affine-NMCTS | T | 5/0/172 | 45.74 | 45.88 | -0.11% |
-| Resource-NMCTS over Affine-NMCTS | CNOT | 8/0/169 | 93.49 | 94.36 | -0.48% |
-| Resource-NMCTS over Affine-NMCTS | depth | 7/1/169 | 98.49 | 98.92 | -0.25% |
-| Resource-NMCTS over Affine-NMCTS | peak_ancilla | 0/2/175 | 1.89 | 1.88 | +0.47% |
-| Resource-NMCTS over Affine-NMCTS | score | 8/0/169 | 55.21 | 55.37 | -0.12% |
-| Pareto archive over Resource-NMCTS | T | 55/0/122 | 40.77 | 45.74 | -5.10% |
-| Pareto archive over Resource-NMCTS | CNOT | 70/1/106 | 83.93 | 93.49 | -5.18% |
-| Pareto archive over Resource-NMCTS | depth | 69/4/104 | 88.70 | 98.49 | -4.92% |
-| Pareto archive over Resource-NMCTS | peak_ancilla | 4/16/157 | 1.97 | 1.89 | +4.61% |
-| Pareto archive over Resource-NMCTS | score | 74/0/103 | 49.83 | 55.21 | -4.59% |
-| Pareto Resource-NMCTS vs ESOP-MILP | T | 166/0/11 | 40.77 | 83.59 | -32.44% |
-| Pareto Resource-NMCTS vs ESOP-MILP | CNOT | 121/43/13 | 83.93 | 133.51 | -14.48% |
-| Pareto Resource-NMCTS vs ESOP-MILP | depth | 156/12/9 | 88.70 | 159.56 | -22.26% |
-| Pareto Resource-NMCTS vs ESOP-MILP | peak_ancilla | 66/5/106 | 1.97 | 2.32 | -9.75% |
-| Pareto Resource-NMCTS vs ESOP-MILP | score | 167/3/7 | 49.83 | 96.73 | -29.61% |
+| Resource-NMCTS over Affine-NMCTS | T | 33/0/144 | 43.91 | 45.88 | -2.12% |
+| Resource-NMCTS over Affine-NMCTS | CNOT | 42/0/135 | 89.85 | 94.36 | -2.46% |
+| Resource-NMCTS over Affine-NMCTS | depth | 42/2/133 | 94.51 | 98.92 | -2.24% |
+| Resource-NMCTS over Affine-NMCTS | peak_ancilla | 1/8/168 | 1.92 | 1.88 | +2.31% |
+| Resource-NMCTS over Affine-NMCTS | score | 44/0/133 | 53.22 | 55.37 | -1.91% |
+| Pareto archive over Resource-NMCTS | T | 53/0/124 | 40.43 | 43.91 | -3.72% |
+| Pareto archive over Resource-NMCTS | CNOT | 66/0/111 | 83.04 | 89.85 | -3.90% |
+| Pareto archive over Resource-NMCTS | depth | 65/2/110 | 88.00 | 94.51 | -3.48% |
+| Pareto archive over Resource-NMCTS | peak_ancilla | 2/20/155 | 2.03 | 1.92 | +4.80% |
+| Pareto archive over Resource-NMCTS | score | 68/0/109 | 49.56 | 53.22 | -3.26% |
+| No-MCTS portfolio over heuristic-only | T | 40/0/137 | 44.41 | 46.69 | -2.68% |
+| No-MCTS portfolio over heuristic-only | CNOT | 52/0/125 | 90.38 | 95.28 | -2.96% |
+| No-MCTS portfolio over heuristic-only | depth | 52/2/123 | 95.34 | 100.30 | -2.69% |
+| No-MCTS portfolio over heuristic-only | peak_ancilla | 5/6/166 | 1.99 | 1.99 | +0.99% |
+| No-MCTS portfolio over heuristic-only | score | 54/0/123 | 53.90 | 56.46 | -2.51% |
+| No-MCTS portfolio over beam-only | T | 81/0/96 | 44.41 | 47.41 | -8.99% |
+| No-MCTS portfolio over beam-only | CNOT | 86/15/76 | 90.38 | 94.04 | -5.88% |
+| No-MCTS portfolio over beam-only | depth | 86/16/75 | 95.34 | 99.00 | -5.62% |
+| No-MCTS portfolio over beam-only | peak_ancilla | 23/10/144 | 1.99 | 2.07 | -2.92% |
+| No-MCTS portfolio over beam-only | score | 106/1/70 | 53.90 | 57.26 | -8.36% |
+| Resource-NMCTS over heuristic-only | T | 59/0/118 | 43.91 | 46.69 | -4.03% |
+| Resource-NMCTS over heuristic-only | CNOT | 76/12/89 | 89.85 | 95.28 | -3.84% |
+| Resource-NMCTS over heuristic-only | depth | 82/12/83 | 94.51 | 100.30 | -3.93% |
+| Resource-NMCTS over heuristic-only | peak_ancilla | 18/6/153 | 1.92 | 1.99 | -1.46% |
+| Resource-NMCTS over heuristic-only | score | 98/0/79 | 53.22 | 56.46 | -3.93% |
+| Resource-NMCTS over no-MCTS portfolio | T | 21/0/156 | 43.91 | 44.41 | -1.36% |
+| Resource-NMCTS over no-MCTS portfolio | CNOT | 30/16/131 | 89.85 | 90.38 | -0.87% |
+| Resource-NMCTS over no-MCTS portfolio | depth | 38/12/127 | 94.51 | 95.34 | -1.25% |
+| Resource-NMCTS over no-MCTS portfolio | peak_ancilla | 13/0/164 | 1.92 | 1.99 | -2.45% |
+| Resource-NMCTS over no-MCTS portfolio | score | 54/0/123 | 53.22 | 53.90 | -1.44% |
+| Pareto Resource-NMCTS over no-MCTS portfolio | T | 73/0/104 | 40.43 | 44.41 | -5.07% |
+| Pareto Resource-NMCTS over no-MCTS portfolio | CNOT | 88/9/80 | 83.04 | 90.38 | -4.77% |
+| Pareto Resource-NMCTS over no-MCTS portfolio | depth | 93/9/75 | 88.00 | 95.34 | -4.73% |
+| Pareto Resource-NMCTS over no-MCTS portfolio | peak_ancilla | 14/19/144 | 2.03 | 1.99 | +2.26% |
+| Pareto Resource-NMCTS over no-MCTS portfolio | score | 106/0/71 | 49.56 | 53.90 | -4.69% |
+| Pareto Resource-NMCTS vs ESOP-MILP | T | 166/0/11 | 40.43 | 83.59 | -32.77% |
+| Pareto Resource-NMCTS vs ESOP-MILP | CNOT | 123/41/13 | 83.04 | 133.51 | -14.97% |
+| Pareto Resource-NMCTS vs ESOP-MILP | depth | 156/12/9 | 88.00 | 159.56 | -22.54% |
+| Pareto Resource-NMCTS vs ESOP-MILP | peak_ancilla | 58/7/112 | 2.03 | 2.32 | -8.00% |
+| Pareto Resource-NMCTS vs ESOP-MILP | score | 167/3/7 | 49.56 | 96.73 | -29.84% |
 | Linear-pair guard vs root beam at n=14 | T | 60/0/4 | 2193.50 | 2248.81 | -4.19% |
 | Linear-pair guard vs root beam at n=14 | CNOT | 57/1/6 | 3790.83 | 3886.62 | -3.03% |
 | Linear-pair guard vs root beam at n=14 | depth | 54/6/4 | 3791.78 | 3886.77 | -1.51% |
@@ -111,16 +141,16 @@ function-level comparison; negative relative values favor the target method.
 | Learned prior for Affine-NMCTS | depth | 33/5/139 | 98.92 | 100.13 | -1.64% |
 | Learned prior for Affine-NMCTS | peak_ancilla | 1/0/176 | 1.88 | 1.89 | -0.19% |
 | Learned prior for Affine-NMCTS | score | 42/0/135 | 55.37 | 55.99 | -1.47% |
-| Learned prior for Resource-NMCTS | T | 21/0/156 | 45.74 | 46.24 | -1.46% |
-| Learned prior for Resource-NMCTS | CNOT | 31/3/143 | 93.49 | 94.35 | -1.28% |
-| Learned prior for Resource-NMCTS | depth | 32/5/140 | 98.49 | 99.48 | -1.39% |
-| Learned prior for Resource-NMCTS | peak_ancilla | 2/0/175 | 1.89 | 1.90 | -0.38% |
-| Learned prior for Resource-NMCTS | score | 41/0/136 | 55.21 | 55.79 | -1.34% |
-| Learned prior for Pareto Resource-NMCTS | T | 9/0/168 | 40.77 | 40.99 | -0.77% |
-| Learned prior for Pareto Resource-NMCTS | CNOT | 19/3/155 | 83.93 | 84.23 | -0.53% |
-| Learned prior for Pareto Resource-NMCTS | depth | 21/5/151 | 88.70 | 89.21 | -0.83% |
-| Learned prior for Pareto Resource-NMCTS | peak_ancilla | 5/0/172 | 1.97 | 2.00 | -0.94% |
-| Learned prior for Pareto Resource-NMCTS | score | 29/0/148 | 49.83 | 50.14 | -0.78% |
+| Learned prior for Resource-NMCTS | T | 17/0/160 | 43.91 | 44.32 | -1.16% |
+| Learned prior for Resource-NMCTS | CNOT | 27/5/145 | 89.85 | 90.46 | -0.95% |
+| Learned prior for Resource-NMCTS | depth | 31/4/142 | 94.51 | 95.32 | -1.21% |
+| Learned prior for Resource-NMCTS | peak_ancilla | 3/0/174 | 1.92 | 1.94 | -0.56% |
+| Learned prior for Resource-NMCTS | score | 39/0/138 | 53.22 | 53.70 | -1.10% |
+| Learned prior for Pareto Resource-NMCTS | T | 9/0/168 | 40.43 | 40.66 | -0.77% |
+| Learned prior for Pareto Resource-NMCTS | CNOT | 19/3/155 | 83.04 | 83.29 | -0.47% |
+| Learned prior for Pareto Resource-NMCTS | depth | 21/5/151 | 88.00 | 88.49 | -0.81% |
+| Learned prior for Pareto Resource-NMCTS | peak_ancilla | 5/0/172 | 2.03 | 2.06 | -0.94% |
+| Learned prior for Pareto Resource-NMCTS | score | 29/0/148 | 49.56 | 49.86 | -0.78% |
 
 ## Interpretation
 

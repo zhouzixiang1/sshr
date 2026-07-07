@@ -10,6 +10,7 @@ from typing import Iterable
 
 THIS_DIR = Path(__file__).resolve().parent
 RESULTS = THIS_DIR / "results"
+PAPER_TABLES = THIS_DIR / "paper_latex" / "tables"
 
 
 def load_usable(path: Path) -> list[dict]:
@@ -54,11 +55,91 @@ def compare(
     return wins, losses, ties, mean, len(vals)
 
 
+def latex_pct(value: float) -> str:
+    return f"${value:+.2f}\\%$"
+
+
+def method_label(method: str) -> str:
+    labels = {
+        "external_abc_aig": "ABC-AIG export",
+        "external_abc_xag": "ABC-XAG export",
+        "external_abc_lut": "ABC-LUT export",
+        "external_bdd": "BDD export",
+        "external_abc_esop": "ABC-ESOP export",
+        "external_sshr_h": "SSHR-H export",
+        "external_sshr_i_cnot": "SSHR-I CNOT-opt",
+        "external_sshr_i_t": "SSHR-I T-opt",
+    }
+    return labels.get(method, method.replace("_", r"\_"))
+
+
+def metric_label(metric: str) -> str:
+    labels = {
+        "T": "T-count",
+        "CNOT": "CNOT",
+        "depth": "Depth",
+        "peak_ancilla": "Peak ancilla",
+        "score": "Score",
+    }
+    return labels[metric]
+
+
+def write_latex_table(
+    joined: dict[str, dict[str, dict]],
+    target: str,
+    external_methods: list[str],
+    out: Path,
+) -> None:
+    selected = [
+        "external_abc_aig",
+        "external_abc_xag",
+        "external_abc_lut",
+        "external_bdd",
+        "external_abc_esop",
+    ]
+    selected.extend(method for method in ["external_sshr_h", "external_sshr_i_cnot", "external_sshr_i_t"] if method in external_methods)
+    metrics_by_method = {
+        "external_sshr_h": ["T", "CNOT", "score"],
+        "external_sshr_i_cnot": ["T", "CNOT", "score"],
+        "external_sshr_i_t": ["T", "CNOT", "score"],
+    }
+    lines = [
+        r"\begin{tabular}{llrrrr}",
+        r"\toprule",
+        r"External baseline & Metric & Wins & Losses & Ties & Mean relative \\",
+        r"\midrule",
+    ]
+    for baseline in selected:
+        if baseline not in external_methods:
+            continue
+        for metric in metrics_by_method.get(baseline, ["T", "CNOT", "depth", "peak_ancilla", "score"]):
+            wins, losses, ties, mean, count = compare(joined, target, baseline, metric)
+            if not count:
+                continue
+            lines.append(
+                " & ".join(
+                    [
+                        method_label(baseline),
+                        metric_label(metric),
+                        str(wins),
+                        str(losses),
+                        str(ties),
+                        latex_pct(mean),
+                    ]
+                )
+                + r" \\"
+            )
+    lines.extend([r"\bottomrule", r"\end{tabular}"])
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def main(argv: Iterable[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--external-csv", type=Path, default=RESULTS / "raw_external_baselines.csv")
     parser.add_argument("--internal-csv", type=Path, default=RESULTS / "raw_traditional_resource.csv")
     parser.add_argument("--out", type=Path, default=RESULTS / "analysis_external_baselines.md")
+    parser.add_argument("--latex-out", type=Path, default=None)
     parser.add_argument(
         "--targets",
         default="and_resource_nmcts,and_profile_resource_nmcts,and_affine_nmcts,and_cube_beam,and_esop_milp,sshr_h",
@@ -134,6 +215,9 @@ def main(argv: Iterable[str] | None = None) -> int:
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    if args.latex_out:
+        write_latex_table(joined, targets[0], external_methods, args.latex_out)
+        print(f"wrote {args.latex_out}")
     print(f"wrote {args.out}")
     return 0
 

@@ -12,8 +12,8 @@ Rows: 1770; usable: 1770; errors: 0; skipped: 0.
 | and_esop_milp | 177 | -56.79% | -85.19% | +0.00% |
 | and_fprm_polarity_archive | 177 | -69.54% | -88.89% | +0.00% |
 | and_mcts_factor | 177 | -58.65% | -72.79% | +0.00% |
-| and_pareto_resource_nmcts | 177 | -72.14% | -88.89% | +0.00% |
-| and_resource_nmcts | 177 | -70.72% | -88.89% | +0.00% |
+| and_pareto_resource_nmcts | 177 | -72.25% | -88.89% | +0.00% |
+| and_resource_nmcts | 177 | -71.33% | -88.89% | +0.00% |
 | sshr_h | 177 | +70.71% | -82.46% | +9600.00% |
 
 ## T-count wins/losses vs SSHR-H
@@ -26,8 +26,8 @@ Rows: 1770; usable: 1770; errors: 0; skipped: 0.
 | and_esop_milp | 120 | 57 | -11.42% |
 | and_fprm_polarity_archive | 167 | 10 | -41.58% |
 | and_mcts_factor | 132 | 45 | -16.30% |
-| and_pareto_resource_nmcts | 173 | 4 | -47.65% |
-| and_resource_nmcts | 171 | 6 | -44.20% |
+| and_pareto_resource_nmcts | 173 | 4 | -47.93% |
+| and_resource_nmcts | 173 | 4 | -45.61% |
 | sshr_h | 0 | 177 | +0.00% |
 
 ## Focused method comparisons
@@ -64,86 +64,86 @@ Rows: 1770; usable: 1770; errors: 0; skipped: 0.
 | and_affine_nmcts | sshr_h | depth | 75 | 96 | 6 | +5.95% |
 | and_affine_nmcts | sshr_h | peak_ancilla | 3 | 95 | 79 | +43.79% |
 | and_affine_nmcts | sshr_h | score | 171 | 6 | 0 | -37.42% |
-| and_resource_nmcts | direct_anf | T | 172 | 0 | 5 | -70.72% |
-| and_resource_nmcts | direct_anf | CNOT | 163 | 10 | 4 | -29.75% |
-| and_resource_nmcts | direct_anf | depth | 160 | 12 | 5 | -25.46% |
-| and_resource_nmcts | direct_anf | peak_ancilla | 0 | 98 | 79 | +47.18% |
-| and_resource_nmcts | direct_anf | score | 172 | 1 | 4 | -66.30% |
-| and_resource_nmcts | and_direct_anf | T | 172 | 0 | 5 | -52.01% |
-| and_resource_nmcts | and_direct_anf | CNOT | 172 | 0 | 5 | -40.84% |
-| and_resource_nmcts | and_direct_anf | depth | 172 | 0 | 5 | -37.08% |
-| and_resource_nmcts | and_direct_anf | peak_ancilla | 50 | 0 | 127 | -8.66% |
-| and_resource_nmcts | and_direct_anf | score | 172 | 0 | 5 | -48.62% |
-| and_resource_nmcts | and_affine_nmcts | T | 5 | 0 | 172 | -0.11% |
-| and_resource_nmcts | and_affine_nmcts | CNOT | 8 | 0 | 169 | -0.48% |
-| and_resource_nmcts | and_affine_nmcts | depth | 7 | 1 | 169 | -0.25% |
-| and_resource_nmcts | and_affine_nmcts | peak_ancilla | 0 | 2 | 175 | +0.47% |
-| and_resource_nmcts | and_affine_nmcts | score | 8 | 0 | 169 | -0.12% |
-| and_resource_nmcts | and_mcts_factor | T | 158 | 0 | 19 | -29.32% |
-| and_resource_nmcts | and_mcts_factor | CNOT | 159 | 1 | 17 | -26.94% |
-| and_resource_nmcts | and_mcts_factor | depth | 158 | 2 | 17 | -22.44% |
-| and_resource_nmcts | and_mcts_factor | peak_ancilla | 1 | 13 | 163 | +3.30% |
-| and_resource_nmcts | and_mcts_factor | score | 160 | 0 | 17 | -26.80% |
-| and_resource_nmcts | and_cube_beam | T | 172 | 0 | 5 | -34.72% |
-| and_resource_nmcts | and_cube_beam | CNOT | 138 | 26 | 13 | -16.80% |
-| and_resource_nmcts | and_cube_beam | depth | 170 | 2 | 5 | -26.40% |
-| and_resource_nmcts | and_cube_beam | peak_ancilla | 105 | 0 | 72 | -22.65% |
-| and_resource_nmcts | and_cube_beam | score | 172 | 0 | 5 | -32.28% |
-| and_resource_nmcts | and_esop_milp | T | 162 | 1 | 14 | -29.50% |
-| and_resource_nmcts | and_esop_milp | CNOT | 111 | 52 | 14 | -10.63% |
-| and_resource_nmcts | and_esop_milp | depth | 151 | 17 | 9 | -19.12% |
-| and_resource_nmcts | and_esop_milp | peak_ancilla | 71 | 0 | 106 | -12.95% |
-| and_resource_nmcts | and_esop_milp | score | 164 | 6 | 7 | -26.95% |
-| and_resource_nmcts | sshr_h | T | 171 | 1 | 5 | -44.20% |
-| and_resource_nmcts | sshr_h | CNOT | 40 | 132 | 5 | +28.26% |
-| and_resource_nmcts | sshr_h | depth | 75 | 96 | 6 | +5.57% |
-| and_resource_nmcts | sshr_h | peak_ancilla | 3 | 96 | 78 | +44.35% |
-| and_resource_nmcts | sshr_h | score | 171 | 6 | 0 | -37.51% |
-| and_pareto_resource_nmcts | and_fprm_polarity_archive | T | 64 | 0 | 113 | -7.65% |
-| and_pareto_resource_nmcts | and_fprm_polarity_archive | CNOT | 79 | 13 | 85 | -5.49% |
-| and_pareto_resource_nmcts | and_fprm_polarity_archive | depth | 73 | 18 | 86 | -4.89% |
-| and_pareto_resource_nmcts | and_fprm_polarity_archive | peak_ancilla | 25 | 2 | 150 | -5.93% |
-| and_pareto_resource_nmcts | and_fprm_polarity_archive | score | 94 | 0 | 83 | -7.44% |
-| and_pareto_resource_nmcts | direct_anf | T | 172 | 0 | 5 | -72.14% |
-| and_pareto_resource_nmcts | direct_anf | CNOT | 164 | 9 | 4 | -33.78% |
-| and_pareto_resource_nmcts | direct_anf | depth | 163 | 9 | 5 | -29.43% |
-| and_pareto_resource_nmcts | direct_anf | peak_ancilla | 0 | 103 | 74 | +53.39% |
-| and_pareto_resource_nmcts | direct_anf | score | 172 | 1 | 4 | -67.71% |
-| and_pareto_resource_nmcts | and_direct_anf | T | 172 | 0 | 5 | -54.63% |
-| and_pareto_resource_nmcts | and_direct_anf | CNOT | 172 | 0 | 5 | -43.97% |
-| and_pareto_resource_nmcts | and_direct_anf | depth | 172 | 0 | 5 | -40.13% |
-| and_pareto_resource_nmcts | and_direct_anf | peak_ancilla | 49 | 12 | 116 | -4.61% |
-| and_pareto_resource_nmcts | and_direct_anf | score | 172 | 0 | 5 | -51.03% |
-| and_pareto_resource_nmcts | and_resource_nmcts | T | 55 | 0 | 122 | -5.10% |
-| and_pareto_resource_nmcts | and_resource_nmcts | CNOT | 70 | 1 | 106 | -5.18% |
-| and_pareto_resource_nmcts | and_resource_nmcts | depth | 69 | 4 | 104 | -4.92% |
-| and_pareto_resource_nmcts | and_resource_nmcts | peak_ancilla | 4 | 16 | 157 | +4.61% |
-| and_pareto_resource_nmcts | and_resource_nmcts | score | 74 | 0 | 103 | -4.59% |
-| and_pareto_resource_nmcts | and_affine_nmcts | T | 55 | 0 | 122 | -5.18% |
-| and_pareto_resource_nmcts | and_affine_nmcts | CNOT | 72 | 1 | 104 | -5.59% |
-| and_pareto_resource_nmcts | and_affine_nmcts | depth | 71 | 4 | 102 | -5.13% |
-| and_pareto_resource_nmcts | and_affine_nmcts | peak_ancilla | 3 | 16 | 158 | +5.13% |
-| and_pareto_resource_nmcts | and_affine_nmcts | score | 76 | 0 | 101 | -4.68% |
-| and_pareto_resource_nmcts | and_mcts_factor | T | 168 | 0 | 9 | -33.58% |
-| and_pareto_resource_nmcts | and_mcts_factor | CNOT | 169 | 0 | 8 | -31.18% |
-| and_pareto_resource_nmcts | and_mcts_factor | depth | 166 | 4 | 7 | -26.60% |
-| and_pareto_resource_nmcts | and_mcts_factor | peak_ancilla | 1 | 23 | 153 | +7.82% |
-| and_pareto_resource_nmcts | and_mcts_factor | score | 170 | 0 | 7 | -30.67% |
-| and_pareto_resource_nmcts | and_cube_beam | T | 174 | 0 | 3 | -38.62% |
-| and_pareto_resource_nmcts | and_cube_beam | CNOT | 163 | 5 | 9 | -21.65% |
-| and_pareto_resource_nmcts | and_cube_beam | depth | 174 | 0 | 3 | -30.45% |
-| and_pareto_resource_nmcts | and_cube_beam | peak_ancilla | 98 | 2 | 77 | -19.92% |
-| and_pareto_resource_nmcts | and_cube_beam | score | 174 | 0 | 3 | -35.86% |
-| and_pareto_resource_nmcts | and_esop_milp | T | 166 | 0 | 11 | -32.44% |
-| and_pareto_resource_nmcts | and_esop_milp | CNOT | 121 | 43 | 13 | -14.48% |
-| and_pareto_resource_nmcts | and_esop_milp | depth | 156 | 12 | 9 | -22.26% |
-| and_pareto_resource_nmcts | and_esop_milp | peak_ancilla | 66 | 5 | 106 | -9.75% |
-| and_pareto_resource_nmcts | and_esop_milp | score | 167 | 3 | 7 | -29.61% |
-| and_pareto_resource_nmcts | sshr_h | T | 173 | 0 | 4 | -47.65% |
-| and_pareto_resource_nmcts | sshr_h | CNOT | 43 | 128 | 6 | +19.83% |
-| and_pareto_resource_nmcts | sshr_h | depth | 85 | 86 | 6 | -0.86% |
-| and_pareto_resource_nmcts | sshr_h | peak_ancilla | 3 | 103 | 71 | +50.00% |
-| and_pareto_resource_nmcts | sshr_h | score | 173 | 4 | 0 | -40.85% |
+| and_resource_nmcts | direct_anf | T | 172 | 0 | 5 | -71.33% |
+| and_resource_nmcts | direct_anf | CNOT | 164 | 9 | 4 | -31.46% |
+| and_resource_nmcts | direct_anf | depth | 162 | 10 | 5 | -27.21% |
+| and_resource_nmcts | direct_anf | peak_ancilla | 0 | 101 | 76 | +49.72% |
+| and_resource_nmcts | direct_anf | score | 172 | 1 | 4 | -66.90% |
+| and_resource_nmcts | and_direct_anf | T | 172 | 0 | 5 | -53.13% |
+| and_resource_nmcts | and_direct_anf | CNOT | 172 | 0 | 5 | -42.14% |
+| and_resource_nmcts | and_direct_anf | depth | 172 | 0 | 5 | -38.37% |
+| and_resource_nmcts | and_direct_anf | peak_ancilla | 49 | 4 | 124 | -7.02% |
+| and_resource_nmcts | and_direct_anf | score | 172 | 0 | 5 | -49.63% |
+| and_resource_nmcts | and_affine_nmcts | T | 33 | 0 | 144 | -2.12% |
+| and_resource_nmcts | and_affine_nmcts | CNOT | 42 | 0 | 135 | -2.46% |
+| and_resource_nmcts | and_affine_nmcts | depth | 42 | 2 | 133 | -2.24% |
+| and_resource_nmcts | and_affine_nmcts | peak_ancilla | 1 | 8 | 168 | +2.31% |
+| and_resource_nmcts | and_affine_nmcts | score | 44 | 0 | 133 | -1.91% |
+| and_resource_nmcts | and_mcts_factor | T | 167 | 0 | 10 | -31.07% |
+| and_resource_nmcts | and_mcts_factor | CNOT | 169 | 0 | 8 | -28.66% |
+| and_resource_nmcts | and_mcts_factor | depth | 165 | 4 | 8 | -24.17% |
+| and_resource_nmcts | and_mcts_factor | peak_ancilla | 1 | 18 | 158 | +5.08% |
+| and_resource_nmcts | and_mcts_factor | score | 169 | 0 | 8 | -28.36% |
+| and_resource_nmcts | and_cube_beam | T | 174 | 0 | 3 | -36.22% |
+| and_resource_nmcts | and_cube_beam | CNOT | 146 | 20 | 11 | -18.55% |
+| and_resource_nmcts | and_cube_beam | depth | 173 | 1 | 3 | -27.95% |
+| and_resource_nmcts | and_cube_beam | peak_ancilla | 106 | 1 | 70 | -21.52% |
+| and_resource_nmcts | and_cube_beam | score | 174 | 0 | 3 | -33.64% |
+| and_resource_nmcts | and_esop_milp | T | 163 | 0 | 14 | -30.71% |
+| and_resource_nmcts | and_esop_milp | CNOT | 113 | 51 | 13 | -12.09% |
+| and_resource_nmcts | and_esop_milp | depth | 153 | 15 | 9 | -20.36% |
+| and_resource_nmcts | and_esop_milp | peak_ancilla | 71 | 1 | 105 | -11.77% |
+| and_resource_nmcts | and_esop_milp | score | 165 | 5 | 7 | -28.03% |
+| and_resource_nmcts | sshr_h | T | 173 | 1 | 3 | -45.61% |
+| and_resource_nmcts | sshr_h | CNOT | 41 | 131 | 5 | +25.03% |
+| and_resource_nmcts | sshr_h | depth | 77 | 94 | 6 | +2.90% |
+| and_resource_nmcts | sshr_h | peak_ancilla | 3 | 101 | 73 | +46.33% |
+| and_resource_nmcts | sshr_h | score | 173 | 4 | 0 | -38.87% |
+| and_pareto_resource_nmcts | and_fprm_polarity_archive | T | 79 | 0 | 98 | -8.13% |
+| and_pareto_resource_nmcts | and_fprm_polarity_archive | CNOT | 98 | 13 | 66 | -6.11% |
+| and_pareto_resource_nmcts | and_fprm_polarity_archive | depth | 90 | 19 | 68 | -5.33% |
+| and_pareto_resource_nmcts | and_fprm_polarity_archive | peak_ancilla | 25 | 12 | 140 | -3.77% |
+| and_pareto_resource_nmcts | and_fprm_polarity_archive | score | 115 | 0 | 62 | -7.77% |
+| and_pareto_resource_nmcts | direct_anf | T | 172 | 0 | 5 | -72.25% |
+| and_pareto_resource_nmcts | direct_anf | CNOT | 164 | 9 | 4 | -34.20% |
+| and_pareto_resource_nmcts | direct_anf | depth | 163 | 9 | 5 | -29.74% |
+| and_pareto_resource_nmcts | direct_anf | peak_ancilla | 0 | 103 | 74 | +57.06% |
+| and_pareto_resource_nmcts | direct_anf | score | 172 | 1 | 4 | -67.80% |
+| and_pareto_resource_nmcts | and_direct_anf | T | 172 | 0 | 5 | -54.84% |
+| and_pareto_resource_nmcts | and_direct_anf | CNOT | 172 | 0 | 5 | -44.31% |
+| and_pareto_resource_nmcts | and_direct_anf | depth | 172 | 0 | 5 | -40.37% |
+| and_pareto_resource_nmcts | and_direct_anf | peak_ancilla | 45 | 18 | 114 | -2.64% |
+| and_pareto_resource_nmcts | and_direct_anf | score | 172 | 0 | 5 | -51.19% |
+| and_pareto_resource_nmcts | and_resource_nmcts | T | 53 | 0 | 124 | -3.72% |
+| and_pareto_resource_nmcts | and_resource_nmcts | CNOT | 66 | 0 | 111 | -3.90% |
+| and_pareto_resource_nmcts | and_resource_nmcts | depth | 65 | 2 | 110 | -3.48% |
+| and_pareto_resource_nmcts | and_resource_nmcts | peak_ancilla | 2 | 20 | 155 | +4.80% |
+| and_pareto_resource_nmcts | and_resource_nmcts | score | 68 | 0 | 109 | -3.26% |
+| and_pareto_resource_nmcts | and_affine_nmcts | T | 59 | 0 | 118 | -5.63% |
+| and_pareto_resource_nmcts | and_affine_nmcts | CNOT | 76 | 0 | 101 | -6.15% |
+| and_pareto_resource_nmcts | and_affine_nmcts | depth | 74 | 4 | 99 | -5.53% |
+| and_pareto_resource_nmcts | and_affine_nmcts | peak_ancilla | 3 | 26 | 148 | +7.30% |
+| and_pareto_resource_nmcts | and_affine_nmcts | score | 79 | 0 | 98 | -4.99% |
+| and_pareto_resource_nmcts | and_mcts_factor | T | 168 | 0 | 9 | -33.93% |
+| and_pareto_resource_nmcts | and_mcts_factor | CNOT | 169 | 0 | 8 | -31.64% |
+| and_pareto_resource_nmcts | and_mcts_factor | depth | 166 | 4 | 7 | -26.93% |
+| and_pareto_resource_nmcts | and_mcts_factor | peak_ancilla | 1 | 30 | 146 | +10.26% |
+| and_pareto_resource_nmcts | and_mcts_factor | score | 170 | 0 | 7 | -30.91% |
+| and_pareto_resource_nmcts | and_cube_beam | T | 174 | 0 | 3 | -38.95% |
+| and_pareto_resource_nmcts | and_cube_beam | CNOT | 163 | 5 | 9 | -22.17% |
+| and_pareto_resource_nmcts | and_cube_beam | depth | 174 | 0 | 3 | -30.76% |
+| and_pareto_resource_nmcts | and_cube_beam | peak_ancilla | 90 | 4 | 83 | -18.22% |
+| and_pareto_resource_nmcts | and_cube_beam | score | 174 | 0 | 3 | -36.09% |
+| and_pareto_resource_nmcts | and_esop_milp | T | 166 | 0 | 11 | -32.77% |
+| and_pareto_resource_nmcts | and_esop_milp | CNOT | 123 | 41 | 13 | -14.97% |
+| and_pareto_resource_nmcts | and_esop_milp | depth | 156 | 12 | 9 | -22.54% |
+| and_pareto_resource_nmcts | and_esop_milp | peak_ancilla | 58 | 7 | 112 | -8.00% |
+| and_pareto_resource_nmcts | and_esop_milp | score | 167 | 3 | 7 | -29.84% |
+| and_pareto_resource_nmcts | sshr_h | T | 173 | 0 | 4 | -47.93% |
+| and_pareto_resource_nmcts | sshr_h | CNOT | 43 | 128 | 6 | +18.99% |
+| and_pareto_resource_nmcts | sshr_h | depth | 87 | 84 | 6 | -1.35% |
+| and_pareto_resource_nmcts | sshr_h | peak_ancilla | 3 | 103 | 71 | +53.67% |
+| and_pareto_resource_nmcts | sshr_h | score | 173 | 4 | 0 | -41.06% |
 | and_cube_beam | and_esop_milp | T | 35 | 101 | 41 | +589.39% |
 | and_cube_beam | and_esop_milp | CNOT | 40 | 109 | 28 | +177.48% |
 | and_cube_beam | and_esop_milp | depth | 37 | 118 | 22 | +213.37% |
@@ -187,12 +187,12 @@ Rows: 1770; usable: 1770; errors: 0; skipped: 0.
 | truth_n5_44 | 5 | 228 | 32 | -85.96% |
 | truth_n5_30 | 5 | 220 | 32 | -85.45% |
 | truth_n5_13 | 5 | 192 | 28 | -85.42% |
+| threshold3_n6 | 6 | 680 | 104 | -84.71% |
 | truth_n4_44 | 4 | 76 | 12 | -84.21% |
 | truth_n4_24 | 4 | 100 | 16 | -84.00% |
 | truth_n4_37 | 4 | 100 | 16 | -84.00% |
 | truth_n5_35 | 5 | 236 | 40 | -83.05% |
 | truth_n5_39 | 5 | 232 | 40 | -82.76% |
-| truth_n6_6 | 6 | 548 | 96 | -82.48% |
 
 ## Largest and-pareto-resource-nmcts gains vs direct ANF
 
@@ -462,6 +462,7 @@ Rows: 1770; usable: 1770; errors: 0; skipped: 0.
 | truth_n5_5 | 5 | 124 | 40 | -67.74% | 2 |
 | truth_n5_37 | 5 | 56 | 20 | -64.29% | 1 |
 | truth_n4_14 | 4 | 44 | 16 | -63.64% | 2 |
+| truth_n4_46 | 4 | 44 | 16 | -63.64% | 2 |
 | truth_n5_13 | 5 | 76 | 28 | -63.16% | 2 |
 | truth_n5_62 | 5 | 96 | 36 | -62.50% | 2 |
 | truth_n5_19 | 5 | 84 | 32 | -61.90% | 2 |
@@ -488,7 +489,6 @@ Rows: 1770; usable: 1770; errors: 0; skipped: 0.
 | truth_n5_36 | 5 | 108 | 48 | -55.56% | 2 |
 | truth_n5_17 | 5 | 80 | 36 | -55.00% | 2 |
 | truth_n4_13 | 4 | 44 | 20 | -54.55% | 2 |
-| truth_n4_46 | 4 | 44 | 20 | -54.55% | 2 |
 | truth_n4_54 | 4 | 44 | 20 | -54.55% | 2 |
 | truth_n4_59 | 4 | 44 | 20 | -54.55% | 2 |
 | truth_n5_12 | 5 | 88 | 40 | -54.55% | 2 |
@@ -497,10 +497,14 @@ Rows: 1770; usable: 1770; errors: 0; skipped: 0.
 | truth_n5_50 | 5 | 96 | 44 | -54.17% | 2 |
 | truth_n5_26 | 5 | 104 | 48 | -53.85% | 2 |
 | truth_n5_48 | 5 | 104 | 48 | -53.85% | 2 |
+| truth_n5_10 | 5 | 76 | 36 | -52.63% | 2 |
 | truth_n5_16 | 5 | 76 | 36 | -52.63% | 3 |
 | truth_n5_29 | 5 | 84 | 40 | -52.38% | 2 |
 | truth_n5_51 | 5 | 100 | 48 | -52.00% | 2 |
+| truth_n6_4 | 6 | 244 | 120 | -50.82% | 3 |
+| adder_carry_w2 | 4 | 24 | 12 | -50.00% | 2 |
 | truth_n4_11 | 4 | 24 | 12 | -50.00% | 1 |
+| truth_n4_2 | 4 | 40 | 20 | -50.00% | 2 |
 | truth_n4_26 | 4 | 32 | 16 | -50.00% | 2 |
 | truth_n4_27 | 4 | 24 | 12 | -50.00% | 1 |
 | truth_n4_28 | 4 | 32 | 16 | -50.00% | 2 |
@@ -527,45 +531,49 @@ Rows: 1770; usable: 1770; errors: 0; skipped: 0.
 | truth_n5_61 | 5 | 64 | 32 | -50.00% | 2 |
 | truth_n5_8 | 5 | 88 | 44 | -50.00% | 2 |
 | truth_n6_7 | 6 | 212 | 108 | -49.06% | 3 |
+| truth_n6_10 | 6 | 240 | 124 | -48.33% | 3 |
+| truth_n5_23 | 5 | 92 | 48 | -47.83% | 2 |
 | truth_n5_11 | 5 | 84 | 44 | -47.62% | 2 |
 | truth_n5_43 | 5 | 84 | 44 | -47.62% | 2 |
 | truth_n5_57 | 5 | 84 | 44 | -47.62% | 2 |
-| truth_n5_10 | 5 | 76 | 40 | -47.37% | 2 |
+| truth_n6_23 | 6 | 212 | 112 | -47.17% | 3 |
+| truth_n6_25 | 6 | 204 | 108 | -47.06% | 3 |
+| mux_2_4 | 6 | 60 | 32 | -46.67% | 1 |
 | truth_n5_30 | 5 | 60 | 32 | -46.67% | 2 |
-| truth_n6_10 | 6 | 240 | 128 | -46.67% | 3 |
 | truth_n5_2 | 5 | 104 | 56 | -46.15% | 2 |
 | majority_n4 | 4 | 44 | 24 | -45.45% | 2 |
 | truth_n5_46 | 5 | 88 | 48 | -45.45% | 2 |
+| truth_n6_3 | 6 | 212 | 116 | -45.28% | 3 |
 | truth_n5_20 | 5 | 80 | 44 | -45.00% | 2 |
 | truth_n5_28 | 5 | 80 | 44 | -45.00% | 2 |
+| truth_n6_17 | 6 | 188 | 104 | -44.68% | 3 |
 | truth_n5_39 | 5 | 72 | 40 | -44.44% | 2 |
-| truth_n6_4 | 6 | 244 | 136 | -44.26% | 3 |
 | truth_n6_19 | 6 | 200 | 112 | -44.00% | 3 |
 | truth_n5_31 | 5 | 64 | 36 | -43.75% | 2 |
 | truth_n5_6 | 5 | 64 | 36 | -43.75% | 2 |
-| truth_n5_23 | 5 | 92 | 52 | -43.48% | 2 |
+| truth_n6_30 | 6 | 192 | 108 | -43.75% | 4 |
+| majority_n6 | 6 | 184 | 104 | -43.48% | 3 |
+| threshold3_n6 | 6 | 184 | 104 | -43.48% | 3 |
+| truth_n6_26 | 6 | 212 | 120 | -43.40% | 3 |
 | truth_n4_17 | 4 | 28 | 16 | -42.86% | 2 |
 | truth_n5_47 | 5 | 84 | 48 | -42.86% | 2 |
 | truth_n5_56 | 5 | 76 | 44 | -42.11% | 2 |
-| majority_n6 | 6 | 184 | 108 | -41.30% | 2 |
-| truth_n6_17 | 6 | 188 | 112 | -40.43% | 3 |
-| mux_2_4 | 6 | 60 | 36 | -40.00% | 1 |
+| truth_n6_24 | 6 | 228 | 132 | -42.11% | 3 |
+| truth_n6_11 | 6 | 232 | 136 | -41.38% | 3 |
+| truth_n6_14 | 6 | 168 | 100 | -40.48% | 3 |
 | truth_n4_15 | 4 | 20 | 12 | -40.00% | 1 |
 | truth_n4_16 | 4 | 20 | 12 | -40.00% | 1 |
 | truth_n4_19 | 4 | 20 | 12 | -40.00% | 1 |
-| truth_n4_2 | 4 | 40 | 24 | -40.00% | 2 |
 | truth_n4_23 | 4 | 20 | 12 | -40.00% | 1 |
 | truth_n4_33 | 4 | 20 | 12 | -40.00% | 1 |
 | truth_n4_44 | 4 | 20 | 12 | -40.00% | 1 |
 | truth_n4_50 | 4 | 20 | 12 | -40.00% | 1 |
 | truth_n5_3 | 5 | 80 | 48 | -40.00% | 2 |
 | truth_n5_63 | 5 | 80 | 48 | -40.00% | 2 |
-| truth_n6_23 | 6 | 212 | 128 | -39.62% | 3 |
-| truth_n6_26 | 6 | 212 | 128 | -39.62% | 3 |
-| truth_n6_30 | 6 | 192 | 116 | -39.58% | 3 |
-| truth_n6_25 | 6 | 204 | 124 | -39.22% | 3 |
 | truth_n6_5 | 6 | 204 | 124 | -39.22% | 3 |
+| truth_n6_12 | 6 | 184 | 112 | -39.13% | 3 |
 | truth_n5_55 | 5 | 72 | 44 | -38.89% | 2 |
+| truth_n6_16 | 6 | 196 | 120 | -38.78% | 3 |
 | truth_n5_9 | 5 | 52 | 32 | -38.46% | 2 |
 | threshold2_n5 | 5 | 64 | 40 | -37.50% | 2 |
 | truth_n4_35 | 4 | 32 | 20 | -37.50% | 2 |
@@ -573,18 +581,15 @@ Rows: 1770; usable: 1770; errors: 0; skipped: 0.
 | truth_n5_0 | 5 | 64 | 40 | -37.50% | 2 |
 | truth_n5_34 | 5 | 64 | 40 | -37.50% | 2 |
 | truth_n5_49 | 5 | 64 | 40 | -37.50% | 2 |
+| truth_n6_15 | 6 | 192 | 120 | -37.50% | 3 |
+| truth_n6_22 | 6 | 224 | 140 | -37.50% | 3 |
 | truth_n5_14 | 5 | 76 | 48 | -36.84% | 2 |
-| truth_n6_24 | 6 | 228 | 144 | -36.84% | 3 |
-| truth_n6_11 | 6 | 232 | 148 | -36.21% | 3 |
+| truth_n6_31 | 6 | 196 | 124 | -36.73% | 3 |
+| truth_n6_0 | 6 | 188 | 120 | -36.17% | 3 |
 | truth_n6_1 | 6 | 200 | 128 | -36.00% | 2 |
 | truth_n6_9 | 6 | 200 | 128 | -36.00% | 3 |
-| truth_n6_12 | 6 | 184 | 120 | -34.78% | 2 |
-| truth_n6_16 | 6 | 196 | 128 | -34.69% | 3 |
-| truth_n6_31 | 6 | 196 | 128 | -34.69% | 2 |
-| truth_n6_0 | 6 | 188 | 124 | -34.04% | 3 |
-| truth_n6_3 | 6 | 212 | 140 | -33.96% | 3 |
-| truth_n6_22 | 6 | 224 | 148 | -33.93% | 4 |
-| adder_carry_w2 | 4 | 24 | 16 | -33.33% | 1 |
+| truth_n6_13 | 6 | 188 | 124 | -34.04% | 3 |
+| adder_carry_w3 | 6 | 48 | 32 | -33.33% | 3 |
 | threshold2_n4 | 4 | 36 | 24 | -33.33% | 2 |
 | truth_n4_20 | 4 | 24 | 16 | -33.33% | 1 |
 | truth_n4_3 | 4 | 36 | 24 | -33.33% | 2 |
@@ -592,23 +597,20 @@ Rows: 1770; usable: 1770; errors: 0; skipped: 0.
 | truth_n4_43 | 4 | 24 | 16 | -33.33% | 1 |
 | truth_n4_6 | 4 | 24 | 16 | -33.33% | 1 |
 | truth_n5_27 | 5 | 72 | 48 | -33.33% | 2 |
-| truth_n6_15 | 6 | 192 | 128 | -33.33% | 3 |
+| truth_n6_20 | 6 | 184 | 124 | -32.61% | 3 |
 | truth_n6_2 | 6 | 172 | 116 | -32.56% | 3 |
+| truth_n6_21 | 6 | 200 | 136 | -32.00% | 3 |
 | truth_n5_18 | 5 | 52 | 36 | -30.77% | 2 |
+| truth_n6_18 | 6 | 156 | 108 | -30.77% | 3 |
 | truth_n6_28 | 6 | 156 | 108 | -30.77% | 3 |
-| truth_n6_20 | 6 | 184 | 128 | -30.43% | 3 |
+| truth_n6_29 | 6 | 156 | 108 | -30.77% | 3 |
 | truth_n6_8 | 6 | 176 | 124 | -29.55% | 3 |
 | truth_n5_45 | 5 | 68 | 48 | -29.41% | 2 |
-| truth_n6_14 | 6 | 168 | 120 | -28.57% | 3 |
-| threshold3_n6 | 6 | 184 | 132 | -28.26% | 2 |
-| truth_n6_29 | 6 | 156 | 112 | -28.21% | 3 |
 | truth_n5_52 | 5 | 60 | 44 | -26.67% | 2 |
+| truth_n6_27 | 6 | 156 | 116 | -25.64% | 3 |
 | truth_n4_61 | 4 | 16 | 12 | -25.00% | 1 |
-| truth_n6_21 | 6 | 200 | 152 | -24.00% | 3 |
-| truth_n6_13 | 6 | 188 | 144 | -23.40% | 3 |
-| truth_n6_18 | 6 | 156 | 120 | -23.08% | 3 |
-| truth_n6_27 | 6 | 156 | 124 | -20.51% | 4 |
 | truth_n4_0 | 4 | 20 | 16 | -20.00% | 1 |
+| truth_n4_1 | 4 | 20 | 16 | -20.00% | 1 |
 | truth_n4_12 | 4 | 20 | 16 | -20.00% | 1 |
 | truth_n4_21 | 4 | 20 | 16 | -20.00% | 1 |
 | truth_n4_25 | 4 | 20 | 16 | -20.00% | 1 |
@@ -619,10 +621,8 @@ Rows: 1770; usable: 1770; errors: 0; skipped: 0.
 | truth_n4_8 | 4 | 20 | 16 | -20.00% | 1 |
 | truth_n5_44 | 5 | 40 | 32 | -20.00% | 2 |
 | truth_n5_4 | 5 | 64 | 52 | -18.75% | 2 |
-| adder_carry_w3 | 6 | 48 | 48 | +0.00% | 2 |
 | majority_n3 | 3 | 4 | 4 | +0.00% | 0 |
 | threshold2_n3 | 3 | 4 | 4 | +0.00% | 0 |
-| truth_n4_1 | 4 | 20 | 20 | +0.00% | 1 |
 | truth_n4_9 | 4 | 20 | 20 | +0.00% | 1 |
 | truth_n5_58 | 5 | 24 | 28 | +16.67% | 1 |
 
@@ -673,11 +673,13 @@ Rows: 1770; usable: 1770; errors: 0; skipped: 0.
 | truth_n5_39 | 5 | 72 | 32 | -55.56% | 3 |
 | truth_n5_17 | 5 | 80 | 36 | -55.00% | 2 |
 | truth_n6_10 | 6 | 240 | 108 | -55.00% | 3 |
+| truth_n6_7 | 6 | 212 | 96 | -54.72% | 4 |
 | truth_n4_13 | 4 | 44 | 20 | -54.55% | 2 |
 | truth_n4_54 | 4 | 44 | 20 | -54.55% | 2 |
 | truth_n4_59 | 4 | 44 | 20 | -54.55% | 2 |
 | truth_n5_12 | 5 | 88 | 40 | -54.55% | 2 |
 | truth_n5_32 | 5 | 88 | 40 | -54.55% | 2 |
+| truth_n5_42 | 5 | 88 | 40 | -54.55% | 3 |
 | truth_n5_7 | 5 | 88 | 40 | -54.55% | 2 |
 | truth_n5_50 | 5 | 96 | 44 | -54.17% | 2 |
 | truth_n6_4 | 6 | 244 | 112 | -54.10% | 3 |
@@ -685,13 +687,16 @@ Rows: 1770; usable: 1770; errors: 0; skipped: 0.
 | truth_n5_26 | 5 | 104 | 48 | -53.85% | 2 |
 | truth_n5_48 | 5 | 104 | 48 | -53.85% | 2 |
 | truth_n6_23 | 6 | 212 | 100 | -52.83% | 3 |
-| truth_n6_7 | 6 | 212 | 100 | -52.83% | 3 |
 | truth_n5_10 | 5 | 76 | 36 | -52.63% | 2 |
 | truth_n5_16 | 5 | 76 | 36 | -52.63% | 3 |
+| truth_n5_11 | 5 | 84 | 40 | -52.38% | 2 |
 | truth_n5_29 | 5 | 84 | 40 | -52.38% | 2 |
 | truth_n6_14 | 6 | 168 | 80 | -52.38% | 4 |
+| truth_n5_23 | 5 | 92 | 44 | -52.17% | 2 |
 | truth_n5_51 | 5 | 100 | 48 | -52.00% | 2 |
+| truth_n6_11 | 6 | 232 | 112 | -51.72% | 4 |
 | truth_n6_27 | 6 | 156 | 76 | -51.28% | 3 |
+| truth_n6_17 | 6 | 188 | 92 | -51.06% | 4 |
 | truth_n6_16 | 6 | 196 | 96 | -51.02% | 4 |
 | adder_carry_w2 | 4 | 24 | 12 | -50.00% | 2 |
 | majority_n6 | 6 | 184 | 92 | -50.00% | 3 |
@@ -720,45 +725,42 @@ Rows: 1770; usable: 1770; errors: 0; skipped: 0.
 | truth_n5_20 | 5 | 80 | 40 | -50.00% | 2 |
 | truth_n5_33 | 5 | 88 | 44 | -50.00% | 2 |
 | truth_n5_35 | 5 | 80 | 40 | -50.00% | 2 |
-| truth_n5_42 | 5 | 88 | 44 | -50.00% | 2 |
 | truth_n5_54 | 5 | 72 | 36 | -50.00% | 2 |
 | truth_n5_61 | 5 | 64 | 32 | -50.00% | 2 |
 | truth_n5_8 | 5 | 88 | 44 | -50.00% | 2 |
-| truth_n6_11 | 6 | 232 | 116 | -50.00% | 3 |
 | truth_n6_12 | 6 | 184 | 92 | -50.00% | 3 |
 | truth_n6_24 | 6 | 228 | 116 | -49.12% | 3 |
 | truth_n6_26 | 6 | 212 | 108 | -49.06% | 3 |
 | truth_n6_3 | 6 | 212 | 108 | -49.06% | 3 |
-| truth_n6_17 | 6 | 188 | 96 | -48.94% | 3 |
 | truth_n6_22 | 6 | 224 | 116 | -48.21% | 3 |
 | truth_n6_19 | 6 | 200 | 104 | -48.00% | 3 |
-| truth_n5_23 | 5 | 92 | 48 | -47.83% | 2 |
-| truth_n5_11 | 5 | 84 | 44 | -47.62% | 2 |
+| truth_n6_30 | 6 | 192 | 100 | -47.92% | 4 |
 | truth_n5_43 | 5 | 84 | 44 | -47.62% | 2 |
 | truth_n5_57 | 5 | 84 | 44 | -47.62% | 2 |
 | truth_n6_5 | 6 | 204 | 108 | -47.06% | 3 |
+| truth_n6_31 | 6 | 196 | 104 | -46.94% | 3 |
+| truth_n6_0 | 6 | 188 | 100 | -46.81% | 4 |
 | mux_2_4 | 6 | 60 | 32 | -46.67% | 1 |
 | truth_n5_30 | 5 | 60 | 32 | -46.67% | 2 |
 | truth_n6_18 | 6 | 156 | 84 | -46.15% | 3 |
-| truth_n6_30 | 6 | 192 | 104 | -45.83% | 3 |
 | majority_n4 | 4 | 44 | 24 | -45.45% | 2 |
 | truth_n5_46 | 5 | 88 | 48 | -45.45% | 2 |
 | truth_n5_28 | 5 | 80 | 44 | -45.00% | 2 |
 | truth_n5_3 | 5 | 80 | 44 | -45.00% | 3 |
-| truth_n6_31 | 6 | 196 | 108 | -44.90% | 3 |
-| truth_n6_0 | 6 | 188 | 104 | -44.68% | 3 |
 | truth_n5_55 | 5 | 72 | 40 | -44.44% | 3 |
 | truth_n6_9 | 6 | 200 | 112 | -44.00% | 2 |
 | truth_n5_31 | 5 | 64 | 36 | -43.75% | 2 |
 | truth_n5_6 | 5 | 64 | 36 | -43.75% | 2 |
 | truth_n6_15 | 6 | 192 | 108 | -43.75% | 3 |
 | truth_n6_28 | 6 | 156 | 88 | -43.59% | 3 |
+| truth_n6_20 | 6 | 184 | 104 | -43.48% | 4 |
 | truth_n4_17 | 4 | 28 | 16 | -42.86% | 2 |
 | truth_n5_47 | 5 | 84 | 48 | -42.86% | 2 |
+| truth_n5_14 | 5 | 76 | 44 | -42.11% | 3 |
 | truth_n5_56 | 5 | 76 | 44 | -42.11% | 2 |
 | truth_n6_21 | 6 | 200 | 116 | -42.00% | 3 |
 | adder_carry_w3 | 6 | 48 | 28 | -41.67% | 4 |
-| truth_n6_20 | 6 | 184 | 108 | -41.30% | 3 |
+| truth_n6_13 | 6 | 188 | 112 | -40.43% | 3 |
 | truth_n4_15 | 4 | 20 | 12 | -40.00% | 1 |
 | truth_n4_16 | 4 | 20 | 12 | -40.00% | 1 |
 | truth_n4_19 | 4 | 20 | 12 | -40.00% | 1 |
@@ -772,27 +774,25 @@ Rows: 1770; usable: 1770; errors: 0; skipped: 0.
 | truth_n5_18 | 5 | 52 | 32 | -38.46% | 2 |
 | truth_n5_9 | 5 | 52 | 32 | -38.46% | 2 |
 | truth_n6_29 | 6 | 156 | 96 | -38.46% | 3 |
-| truth_n6_13 | 6 | 188 | 116 | -38.30% | 3 |
 | threshold2_n5 | 5 | 64 | 40 | -37.50% | 2 |
 | truth_n4_35 | 4 | 32 | 20 | -37.50% | 2 |
 | truth_n4_53 | 4 | 32 | 20 | -37.50% | 2 |
 | truth_n5_0 | 5 | 64 | 40 | -37.50% | 2 |
 | truth_n5_34 | 5 | 64 | 40 | -37.50% | 2 |
 | truth_n5_49 | 5 | 64 | 40 | -37.50% | 2 |
-| truth_n5_14 | 5 | 76 | 48 | -36.84% | 2 |
+| truth_n6_8 | 6 | 176 | 112 | -36.36% | 4 |
+| truth_n5_45 | 5 | 68 | 44 | -35.29% | 2 |
 | truth_n6_2 | 6 | 172 | 112 | -34.88% | 4 |
-| truth_n6_8 | 6 | 176 | 116 | -34.09% | 3 |
 | threshold2_n4 | 4 | 36 | 24 | -33.33% | 2 |
 | truth_n4_20 | 4 | 24 | 16 | -33.33% | 1 |
 | truth_n4_3 | 4 | 36 | 24 | -33.33% | 2 |
 | truth_n4_4 | 4 | 24 | 16 | -33.33% | 1 |
 | truth_n4_43 | 4 | 24 | 16 | -33.33% | 1 |
 | truth_n4_6 | 4 | 24 | 16 | -33.33% | 1 |
+| truth_n5_4 | 5 | 64 | 44 | -31.25% | 3 |
 | truth_n5_44 | 5 | 40 | 28 | -30.00% | 2 |
-| truth_n5_45 | 5 | 68 | 48 | -29.41% | 2 |
 | truth_n5_52 | 5 | 60 | 44 | -26.67% | 2 |
 | truth_n4_61 | 4 | 16 | 12 | -25.00% | 1 |
-| truth_n5_4 | 5 | 64 | 48 | -25.00% | 2 |
 | truth_n4_0 | 4 | 20 | 16 | -20.00% | 1 |
 | truth_n4_1 | 4 | 20 | 16 | -20.00% | 1 |
 | truth_n4_12 | 4 | 20 | 16 | -20.00% | 1 |

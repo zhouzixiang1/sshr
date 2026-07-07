@@ -43,14 +43,14 @@ candidates.  On the current
 all functions and reduces mean T-count by 61.83\% relative to direct ANF
 synthesis.  On a separate $n\leq 6$ traditional-baseline slice, the
 \paretomethod{} archive has the lowest mean T-count and weighted score, and
-improves on \method{} with 74 score wins, no losses, and 103 ties.  It has
+improves on the strengthened \method{} portfolio with 68 score wins, no losses, and 109 ties.  It has
 174 score wins and no losses against ESOP cube beam search, and 167 score
 wins, 3 losses, and 7 ties against time-limited weighted ESOP MILP; aggregated
 by variable count, it reduces total T-count and CNOT count versus ESOP-MILP in
 every $n=3,\ldots,6$ group and lowers aggregate peak ancilla for all groups
 except the tied $n=3$ case.  Against the exported ABC-ESOP baseline on the
-same 177 functions, it reduces aggregate T-count by 25.18\%, CNOT count by
-4.38\%, peak ancilla by 14.04\%, and weighted score by 23.00\%, with 170 score
+same 177 functions, it reduces aggregate T-count by 25.80\%, CNOT count by
+5.40\%, peak ancilla by 11.58\%, and weighted score by 23.42\%, with 170 score
 wins, 1 loss, and 6 ties.  On an
 exported external comparison, \method{} has 69 score wins and 3 losses against
 the exact $n\leq 4$ CNOT-optimized SSHR-I pilot, 168 score wins and 9
@@ -361,11 +361,11 @@ peak-ancilla count across functions in the group.  Negative changes favor
 \input{tables/esop_baseline_by_n}
 \end{table}
 
-Against \method{}, \paretomethod{} had 74 score wins, no score losses, and 103
-ties, with a 4.59\% mean composite-score reduction.  Against ESOP cube beam
+Against the strengthened \method{}, \paretomethod{} had 68 score wins, no score losses, and 109
+ties, with a 3.26\% mean composite-score reduction.  Against ESOP cube beam
 search, \paretomethod{} had 174 score wins, no losses, and 3 ties, with a
 35.86\% mean composite-score reduction.  Against weighted ESOP MILP,
-\paretomethod{} had 167 score wins, 3 losses, and 7 ties, with a 29.61\% mean
+\paretomethod{} had 167 score wins, 3 losses, and 7 ties, with a 29.84\% mean
 composite-score reduction.  Against SSHR-H, \paretomethod{} had 173 T-count
 wins, no T-count losses, 4 ties, and 173 score wins with 4 score losses.
 SSHR-H retained the lowest mean CNOT count on this small-function slice, so
@@ -373,12 +373,12 @@ this result supports low-T and weighted-resource synthesis rather than
 CNOT-only optimality.
 The aggregate ESOP comparison is stronger than the per-function win/loss
 counts alone: against internal ESOP-MILP, \paretomethod{} lowers total T-count
-by 51.23\%, CNOT count by 37.13\%, and summed peak ancilla by 15.09\%.  Against
-external ABC-ESOP, it lowers total T-count by 25.18\%, CNOT count by 4.38\%,
-and summed peak ancilla by 14.04\%.  The only aggregate CNOT counterexample is
-the $n=6$ ABC-ESOP group, where \paretomethod{} uses 7097 CNOTs versus 7068 for
-ABC-ESOP, a 0.41\% increase, while still reducing T-count, peak ancilla, and
-weighted score.
+by 51.64\%, CNOT count by 37.80\%, and summed peak ancilla by 12.65\%.  Against
+external ABC-ESOP, it lowers total T-count by 25.80\%, CNOT count by 5.40\%,
+and summed peak ancilla by 11.58\%.  After adding the cheap no-MCTS
+linear/root-beam candidates to the Resource portfolio, \paretomethod{} has
+lower aggregate T-count, CNOT count, peak ancilla, and weighted score in every
+$n=3,\ldots,6$ ABC-ESOP group.
 
 \subsection{Exported external baselines}
 
@@ -484,7 +484,7 @@ ROS mapper, but it adds a standard external XOR/ESOP minimizer to the
 comparison boundary.
 The stronger small-function \paretomethod{} setting improves this ESOP boundary:
 on the same ABC-ESOP rows it has 170 score wins, 1 score loss, and 6 ties, with
-a 23.00\% aggregate score reduction.  Its aggregate T-count and peak-ancilla
+a 23.42\% aggregate score reduction.  Its aggregate T-count and peak-ancilla
 sums are lower in every $n=3,\ldots,6$ group; aggregate CNOT is lower through
 $n=5$ and nearly tied at $n=6$.
 
@@ -578,10 +578,10 @@ scorer removed while keeping the same heuristic PUCT/action prior.  The paired
 comparison contains 1062 rows over \affinemethod{}, \method{}, and
 \paretomethod{}, with no errors or skips.  The learned prior gives modest but
 monotone score improvements: 42/0/135 score wins/losses/ties for
-\affinemethod{}, 41/0/136 for \method{}, and 29/0/148 for \paretomethod{}.
-Mean score reductions are 1.47\%, 1.34\%, and 0.78\%, respectively.  The cost
-is runtime: the paired mean relative runtime increases are 91.22\%, 87.31\%,
-and 67.44\%, because many small neural action batches are evaluated on CPU.
+\affinemethod{}, 39/0/138 for \method{}, and 29/0/148 for \paretomethod{}.
+Mean score reductions are 1.47\%, 1.10\%, and 0.78\%, respectively.  The cost
+is runtime: the paired mean relative runtime increases are 91.22\%, 55.11\%,
+and 18.77\%, because many small neural action batches are evaluated on CPU.
 We therefore treat the learned prior as a quality-improving search signal, not
 as the current fastest mode.
 

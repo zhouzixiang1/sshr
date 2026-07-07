@@ -11,6 +11,7 @@ from typing import Iterable
 
 THIS_DIR = Path(__file__).resolve().parent
 RESULTS = THIS_DIR / "results"
+PAPER_TABLES = THIS_DIR / "paper_latex" / "tables"
 DEFAULT_METHODS = [
     "and_affine_nmcts",
     "and_resource_nmcts",
@@ -169,6 +170,30 @@ def write_markdown(path: Path, rows: list[dict], summary: list[dict], paired: li
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def write_latex(path: Path, paired: list[dict]) -> None:
+    labels = {
+        "and_affine_nmcts": r"\affinemethod{}",
+        "and_resource_nmcts": r"\method{}",
+        "and_pareto_resource_nmcts": r"\paretomethod{}",
+    }
+    score_rows = [row for row in paired if row["metric"] == "score"]
+    lines = [
+        r"\begin{tabular}{lrrrr}",
+        r"\toprule",
+        r"Method & Score wins & Score losses & Score ties & Mean score change \\",
+        r"\midrule",
+    ]
+    for row in score_rows:
+        label = labels.get(row["method"], row["method"].replace("_", r"\_"))
+        lines.append(
+            f"{label} & {row['learned_wins']} & {row['learned_losses']} & "
+            f"{row['ties']} & ${row['mean_relative']:+.2f}\\%$ \\\\"
+        )
+    lines.extend([r"\bottomrule", r"\end{tabular}"])
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def parse_methods(raw: str) -> list[str]:
     if not raw:
         return list(DEFAULT_METHODS)
@@ -183,6 +208,7 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser.add_argument("--out-raw", type=Path, default=RESULTS / "raw_neural_prior_ablation.csv")
     parser.add_argument("--summary", type=Path, default=RESULTS / "summary_neural_prior_ablation.csv")
     parser.add_argument("--out", type=Path, default=RESULTS / "analysis_neural_prior_ablation.md")
+    parser.add_argument("--latex-out", type=Path, default=PAPER_TABLES / "neural_prior_ablation.tex")
     args = parser.parse_args(list(argv) if argv is not None else None)
 
     methods = parse_methods(args.methods)
@@ -194,9 +220,11 @@ def main(argv: Iterable[str] | None = None) -> int:
     write_csv(args.out_raw, rows)
     write_csv(args.summary, summary)
     write_markdown(args.out, rows, summary, paired)
+    write_latex(args.latex_out, paired)
     print(f"wrote {args.out_raw}")
     print(f"wrote {args.summary}")
     print(f"wrote {args.out}")
+    print(f"wrote {args.latex_out}")
     return 0
 
 
