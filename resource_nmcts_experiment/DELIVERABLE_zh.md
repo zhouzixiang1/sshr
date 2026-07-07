@@ -1,7 +1,7 @@
 # Resource-NMCTS 中文交付文档
 
-更新时间：2026-07-07  
-当前提交：`e08e67f Add ESOP baseline evidence and finish mega run`  
+更新时间：2026-07-07
+当前提交：`52197b6 Add Chinese delivery document`
 代码位置：`/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment`
 
 ## 1. 项目定位
