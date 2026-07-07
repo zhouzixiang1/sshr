@@ -80,11 +80,12 @@
 
 ### 2.2.1 n=20 giga stress 边界测试
 
-本轮新增 `giga_highdim_resource` 压力边界切片，覆盖 6 个随机 `n=20` ANF 函数、8 个方法、48 行结果：
+本轮新增 `giga_highdim_resource` 压力边界切片，覆盖 6 个随机 `n=20` ANF 函数、8 个方法、48 行结果；随后又补了 recursive Boolean-ring screen 的 targeted rerun：
 
 - `direct_anf`
 - `and_direct_anf`
 - `and_boolean_linear_pair_screen`
+- `and_boolean_linear_pair_screen_deep`（targeted rerun）
 - `and_fprm_root_beam`
 - `and_fprm_linear_pair_fast`
 - `and_resource_nmcts`
@@ -100,6 +101,11 @@
 - `results/runtime_giga_highdim_resource.md`
 - `paper_latex/tables/resource_giga_highdim_resource.tex`
 - `paper_latex/tables/runtime_giga_highdim_resource.tex`
+- `results/raw_giga_boolean_screen_deep.csv`
+- `results/analysis_giga_screen_deep_vs_screen.md`
+- `results/analysis_giga_resource_recursive_screen_vs_old.md`
+- `paper_latex/tables/giga_screen_deep_vs_screen.tex`
+- `paper_latex/tables/giga_resource_recursive_screen_vs_old.tex`
 
 核心结果：
 
@@ -108,13 +114,16 @@
 | Resource/Profile/Pareto vs direct ANF | 5/0/1 | 5/1/0 | -36.80% | -34.00% |
 | Resource/Profile/Pareto vs AND-direct ANF | 5/0/1 | 5/0/1 | -5.24% | -4.89% |
 | ANF Boolean linear screen vs AND-direct ANF | 5/0/1 | 5/0/1 | -5.24% | -4.89% |
+| Recursive Boolean screen vs single Boolean screen | 5/0/1 | 5/0/1 | -4.62% | -4.52% |
+| Recursive-screen Resource-NMCTS vs old Resource-NMCTS | 5/0/1 | 5/0/1 | -4.62% | -4.52% |
 
 运行边界：
 
 - `and_fprm_root_beam` 和 `and_fprm_linear_pair_fast` 在 6 个函数上全部触发 300 s task timeout。
 - `and_boolean_linear_pair_screen` 是新增的可扩展修复分支：它不做 FPRM 极性筛选，只在原始 ANF 上用 Boolean-ring 规则筛选单层 linear factor，因此 6/6 完成，median runtime 为 10.659 s。
-- Resource/Profile/Pareto 均完成 6/6，并选择 Boolean linear screen 候选；它们现在不再退化到 AND-direct ANF，而是在 5/6 个函数上进一步降低 T-count、CNOT、depth 和 score。
-- 因此，n=20 可以写成“边界改善”：当前实现仍无法让 FPRM root-beam/fast linear-pair 在 300 s 内完成，但 ANF-only Boolean-ring screen 能在超高维上提供可验证的 baseline-preserving 增益。不能把它写成深层神经搜索已经解决 n=20。
+- `and_boolean_linear_pair_screen_deep` 在单层 screen 的 quotient/rest 子问题上再做一层同类 Boolean-ring screen，仍不做 FPRM 极性筛选。它 6/6 完成，相对单层 screen 为 5/0/1、平均 score -4.52%，standalone mean runtime 12.73 s，仅比单层 screen 慢约 16.92%。
+- 集成后的 `and_resource_nmcts` 也完成 6/6，相对旧 Resource-NMCTS 为 5/0/1、平均 score -4.52%；相对 AND-direct ANF 为 5/0/1、平均 score -9.04%；相对 direct ANF 为 5/1/0、平均 score -37.10%。
+- 因此，n=20 可以写成“边界改善进一步扩大”：当前实现仍无法让 FPRM root-beam/fast linear-pair 在 300 s 内完成，但 ANF-only recursive Boolean-ring screen 能在超高维上提供可验证、低长尾的 baseline-preserving 增益。不能把它写成深层神经/FPRM 搜索已经解决 n=20。
 
 ### 2.3 外部 ABC/BDD 高维对比
 
@@ -282,6 +291,18 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 - `results/analysis_ultra_boolean_guard_vs_old_deep.md`
 - `results/raw_mega_boolean_linear_screen.csv`
 - `results/analysis_mega_boolean_screen_vs_resource.md`
+- `models/boolean_linear_action_scorer_root_teacher.pt`
+- `results/raw_boolean_neural_highdim.csv`
+- `results/analysis_boolean_neural_guard_vs_deterministic.md`
+- `results/raw_giga_boolean_neural_resource.csv`
+- `results/analysis_giga_resource_vs_boolean_screen.md`
+- `results/analysis_giga_resource_vs_and_direct.md`
+- `results/raw_mega_boolean_screen_deep.csv`
+- `results/analysis_mega_screen_deep_vs_screen.md`
+- `results/raw_giga_boolean_screen_deep.csv`
+- `results/analysis_giga_screen_deep_vs_screen.md`
+- `results/raw_giga_recursive_screen_resource.csv`
+- `results/analysis_giga_resource_recursive_screen_vs_old.md`
 
 关键结果：
 
@@ -293,9 +314,12 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 | Boolean-linear-deep vs pairwise-wide Resource-NMCTS | 24 个 n=16 random ANF | 14/6/4 | -0.22% | 单分支质量优于上一轮完整 Resource，且平均时间低 72.31% |
 | Boolean-guard Resource-NMCTS vs pairwise-wide Resource-NMCTS | 24 个 n=16 random ANF | 14/0/10 | -0.34% | 组合主方法无 score-loss 改善，T/CNOT/depth 同时下降 |
 | Boolean-guard Resource-NMCTS vs deterministic recursive guard | 24 个 n=16 random ANF | 18/0/6 | -0.52% | 当前最强 n=16 full synthesis 证据 |
+| Boolean-linear neural guard vs deterministic Boolean-linear | 24 个 n=16 random ANF | 4/0/20 | -0.12% | 新 boolean-linear root-teacher 模型只有小幅无 loss 收益，仍不是主提升来源 |
 | Boolean-linear screen vs old Resource-NMCTS | 12 个 n=18 random ANF | 0/12/0 | +42.45% | ANF-only screen 很快但质量差，只能作为 n=18/n=20 边界诊断 |
+| Recursive Boolean screen vs single Boolean screen | 12 个 n=18 random ANF | 11/0/1 | -3.99% | 递归 screen 改善单层 screen，但仍远差于旧 Resource |
+| Recursive-screen Resource-NMCTS vs old Resource-NMCTS | 6 个 n=20 random ANF | 5/0/1 | -4.52% | root-beam/fast pair timeout 时的超高维有效修复 |
 
-解释：Boolean-ring linear-deep 是本轮最重要的实际提升。它不是单纯扩大 beam 或神经 top-k，而是扩大了可表示的代数因子类型；因此相对 pairwise-wide neural guard 更像“方法创新”。但必须区分 deep 版本和 screen 版本：deep 版本在 n=14/n=16 有稳定质量收益，screen 版本虽然在 n=18 很快，却远差于旧 Resource，不应作为主方法质量证据。
+解释：Boolean-ring linear-deep 是 n=16 上最重要的实际提升。它不是单纯扩大 beam 或神经 top-k，而是扩大了可表示的代数因子类型；因此相对 pairwise-wide neural guard 更像“方法创新”。但必须区分 deep 版本和 screen 版本：deep 版本在 n=14/n=16 有稳定质量收益；recursive screen 在 n=20 这种 FPRM 分支全部 timeout 的边界上有效，但在 n=18 仍远差于旧 Resource，不应作为中高维主质量方法。
 
 ### 2.7 小规模 exact FPRM-DP 精确切片
 
@@ -396,6 +420,8 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 - `paper_latex/tables/weight_robustness_compact.tex`
 - `paper_latex_zh/resource_nmcts_zh_robustness.tex`
 - `paper_latex_zh/resource_nmcts_zh_robustness.pdf`
+- `paper_latex_zh/resource_nmcts_zh_stage_delivery.tex`
+- `paper_latex_zh/resource_nmcts_zh_stage_delivery.pdf`
 
 核心结果：
 
@@ -510,6 +536,10 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 - `paper_latex_zh/resource_nmcts_zh_report.pdf`
 - `paper_latex_zh/resource_nmcts_zh_robustness.tex`
 - `paper_latex_zh/resource_nmcts_zh_robustness.pdf`
+- `paper_latex_zh/resource_nmcts_zh_boolean_ring_v3.tex`
+- `paper_latex_zh/resource_nmcts_zh_boolean_ring_v3.pdf`
+- `paper_latex_zh/resource_nmcts_zh_stage_delivery.tex`
+- `paper_latex_zh/resource_nmcts_zh_stage_delivery.pdf`
 
 ## 4. 复现命令
 
@@ -661,7 +691,7 @@ Git 状态：
 9. 高维 root-action teacher 诊断显示：oracle top-24 相对启发式 top-4 有 3/0/7、-0.18% 的小幅 headroom；pairwise-wide root-action ranker 进一步在 n=16 full synthesis 中相对 deterministic recursive guard 获得 10/0/14、-0.18%，因此高维 AI 贡献已从负向诊断推进到小幅正向证据。
 10. Boolean-ring linear factor 将 quotient 与 linear factor 的变量不相交限制放宽到 Boolean 环 `x_i^2=x_i` 展开；在 n=16 上，Boolean-guard Resource-NMCTS 相对 pairwise-wide Resource-NMCTS 获得 14/0/10、平均 score 降低 0.34%，相对 deterministic recursive guard 获得 18/0/6、平均 score 降低 0.52%。这是当前高维结构搜索中比 pairwise-wide 更明显的正向提升。
 11. 外部工具链 readiness 审计显示：ABC 已可用并支撑当前 AIG/XAG/LUT/ESOP baseline；mockturtle/RevKit 当前缺失，因此不能声称已完成这类 reversible-toolchain 复现。
-12. `n=20` giga stress 已从纯边界失败推进为边界改善：root-beam 与 fast linear-pair 仍全部 timeout，但 ANF Boolean linear screen 让 Resource/Profile/Pareto 相对 AND-direct ANF 获得 5/0/1、平均 score -4.89%，相对 direct ANF 获得 5/1/0、平均 score -34.00%。
+12. `n=20` giga stress 已从纯边界失败推进为边界改善：root-beam 与 fast linear-pair 仍全部 timeout，但 recursive Boolean screen 让 Resource-NMCTS 相对旧 Resource-NMCTS 获得 5/0/1、平均 score -4.52%；相对 AND-direct ANF 获得 5/0/1、平均 score -9.04%；相对 direct ANF 获得 5/1/0、平均 score -37.10%。
 
 不应写的主张：
 
@@ -671,8 +701,8 @@ Git 状态：
 4. 不应直接拿 SSHR 论文表格里的 ESOP 总量横比，除非函数集和成本模型一致。
 5. 不应把 Exact FPRM-DP 写成全局可逆线路最优；它只是在 bounded fixed-polarity FPRM factor model 内 exact。
 6. 不应把 Exact XAG 乘法复杂度写成 CNOT/depth/ancilla 最优；它只给出 logical-AND T-count 的全局下界。
-7. 不应把 n=20 giga stress 写成深层神经/FPRM 搜索的新突破；当前正向增益来自 ANF-only Boolean-ring linear screen，root-beam/fast linear-pair 仍在 300 s 预算下失效。
-8. 不应把 Boolean-linear screen 泛化成所有高维上的高质量方法；它在 n=20 是有效的可扩展修复，但 n=18 结果仍显示 deep Resource 分支明显更强，因此 screen 应写成超高维边界候选。
+7. 不应把 n=20 giga stress 写成深层神经/FPRM 搜索的新突破；当前正向增益来自 ANF-only recursive Boolean-ring screen，root-beam/fast linear-pair 仍在 300 s 预算下失效。
+8. 不应把 Boolean-linear screen 泛化成所有高维上的高质量方法；recursive screen 在 n=20 是有效的可扩展修复，在 n=18 也优于单层 screen，但 n=18 结果仍显示 deep Resource 分支明显更强，因此 screen 应写成超高维边界候选。
 
 ## 7. 下一步建议
 
@@ -697,6 +727,8 @@ Git 状态：
 | n=16 pairwise-wide full synthesis | 24 个 n=16 random ANF | vs deterministic recursive guard 为 10/0/14，-0.18%；vs old Resource 为 10/0/14，-0.12% | 新增正向 AI 证据，但运行时间更高 |
 | n=16 Boolean-ring full synthesis | 24 个 n=16 random ANF | Boolean-guard vs pairwise-wide Resource 为 14/0/10，-0.34%；vs deterministic recursive guard 为 18/0/6，-0.52% | 当前最强高维结构改进 |
 | n=18 Boolean-linear screen | 12 个 n=18 random ANF | vs old Resource 为 0/12/0，+42.45%，但运行时间 -98.48% | 负向质量诊断，只能说明快速边界可跑 |
+| n=18 recursive Boolean screen | 12 个 n=18 random ANF | vs single screen 为 11/0/1，-3.99%；vs old Resource 为 0/11/1，+36.94% | 改善 screen 但不能替代深搜索 |
+| n=20 recursive Boolean screen | 6 个 n=20 random ANF | Resource vs old Resource 为 5/0/1，-4.52%；vs AND-direct 为 5/0/1，-9.04% | 当前最明确的超高维边界改善 |
 | highdim wide-fast guard | 12 个 n=14 random ANF | wide vs Resource 为 0/0/12，运行时间 +59.80% | 已有但属负向诊断 |
 | exact FPRM-DP | n<=4 traditional | Resource vs exact FPRM-DP 51/3/18，-12.18%；Pareto vs exact FPRM-DP 51/0/21，-12.20% | 已有但模型受限 |
 | exact XAG MC | n<=4 traditional | Resource/Pareto 达到 T 下界 12/72，平均 T gap +53.01%；ESOP 为 +120.14%，SSHR-I-T 为 +143.06% | 已有全局 T 下界 |

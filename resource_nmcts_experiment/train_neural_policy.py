@@ -20,6 +20,7 @@ from factor_plan import (
     direct_plan,
     factor_cost,
     greedy_plan,
+    boolean_linear_factor_actions,
     linear_factor_actions,
 )
 from neural_policy import ActionNet, default_device, save_model
@@ -34,6 +35,7 @@ PRESETS = {
     "linear_highdim": {"samples": 260, "epochs": 50, "n_min": 8, "n_max": 14},
     "linear_root_teacher": {"samples": 140, "epochs": 70, "n_min": 10, "n_max": 14},
     "linear_root_pairwise": {"samples": 360, "epochs": 90, "n_min": 10, "n_max": 14},
+    "boolean_linear_root_pairwise": {"samples": 260, "epochs": 90, "n_min": 10, "n_max": 14},
     "main": {"samples": 2200, "epochs": 80, "n_min": 3, "n_max": 10},
 }
 
@@ -53,6 +55,7 @@ def collect_from_terms(
     greedy_memo: dict | None = None,
     root_teacher_width: int = 24,
     rest_direct_limit: int = 450,
+    teacher_eval_mode: str = "greedy",
     groups: List[int] | None = None,
     group_counter: List[int] | None = None,
 ) -> None:
@@ -60,6 +63,14 @@ def collect_from_terms(
     direct_score = direct_plan(terms, prefix_len, live_factor_ancilla, config).score(config.weights)
     if action_family == "linear":
         actions = linear_factor_actions(
+            terms,
+            prefix_len,
+            live_factor_ancilla,
+            config,
+            action_width=max(2, min(config.candidate_top_k, 24)),
+        )
+    elif action_family == "boolean_linear":
+        actions = boolean_linear_factor_actions(
             terms,
             prefix_len,
             live_factor_ancilla,
@@ -81,23 +92,27 @@ def collect_from_terms(
         child_config = replace(config, greedy_eval_limit=1)
         action_scores = []
         for action in teacher_actions:
-            group = greedy_plan(
-                action.residuals,
-                prefix_len + 1,
-                live_factor_ancilla + 1,
-                child_config,
-                memo=greedy_memo,
-            )
-            if len(action.rest) > rest_direct_limit:
+            if teacher_eval_mode == "direct":
+                group = direct_plan(action.residuals, prefix_len + 1, live_factor_ancilla + 1, child_config)
                 rest = direct_plan(action.rest, prefix_len, live_factor_ancilla, child_config)
             else:
-                rest = greedy_plan(
-                    action.rest,
-                    prefix_len,
-                    live_factor_ancilla,
+                group = greedy_plan(
+                    action.residuals,
+                    prefix_len + 1,
+                    live_factor_ancilla + 1,
                     child_config,
                     memo=greedy_memo,
                 )
+                if len(action.rest) > rest_direct_limit:
+                    rest = direct_plan(action.rest, prefix_len, live_factor_ancilla, child_config)
+                else:
+                    rest = greedy_plan(
+                        action.rest,
+                        prefix_len,
+                        live_factor_ancilla,
+                        child_config,
+                        memo=greedy_memo,
+                    )
             action_scores.append(factor_cost(action, group, rest, live_factor_ancilla, config).score(config.weights))
         mean_score = statistics.mean(action_scores)
         spread = statistics.pstdev(action_scores)
@@ -178,6 +193,7 @@ def collect_from_terms(
             greedy_memo,
             root_teacher_width,
             rest_direct_limit,
+            teacher_eval_mode,
             groups,
             group_counter,
         )
@@ -196,6 +212,7 @@ def collect_from_terms(
             greedy_memo,
             root_teacher_width,
             rest_direct_limit,
+            teacher_eval_mode,
             groups,
             group_counter,
         )
@@ -211,6 +228,8 @@ def build_dataset(
     action_family: str,
     root_teacher_width: int,
     rest_direct_limit: int,
+    teacher_eval_mode: str,
+    sample_override: int | None = None,
 ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     cfg = PRESETS[preset]
     rng = random.Random(seed)
@@ -232,11 +251,13 @@ def build_dataset(
                 action_family=action_family,
                 root_teacher_width=root_teacher_width,
                 rest_direct_limit=rest_direct_limit,
+                teacher_eval_mode=teacher_eval_mode,
                 groups=groups,
                 group_counter=group_counter,
             )
 
-    for _ in range(cfg["samples"]):
+    sample_count = cfg["samples"] if sample_override is None else max(0, int(sample_override))
+    for _ in range(sample_count):
         n = rng.randint(cfg["n_min"], cfg["n_max"])
         if n <= 6 and rng.random() < 0.25:
             bf = random_truth_function(n, rng)
@@ -255,6 +276,7 @@ def build_dataset(
             action_family=action_family,
             root_teacher_width=root_teacher_width,
             rest_direct_limit=rest_direct_limit,
+            teacher_eval_mode=teacher_eval_mode,
             groups=groups,
             group_counter=group_counter,
         )
@@ -315,11 +337,14 @@ def main() -> int:
     ap.add_argument("--gate-mode", choices=["mct", "logical_and"], default="mct")
     ap.add_argument("--label-mode", choices=["immediate", "rollout", "root_teacher"], default="immediate")
     ap.add_argument("--loss-mode", choices=["regression", "pairwise"], default="regression")
-    ap.add_argument("--action-family", choices=["factor", "linear"], default="factor")
+    ap.add_argument("--action-family", choices=["factor", "linear", "boolean_linear"], default="factor")
     ap.add_argument("--max-depth", type=int, default=4)
     ap.add_argument("--child-branch", type=int, default=3)
     ap.add_argument("--root-teacher-width", type=int, default=24)
     ap.add_argument("--rest-direct-limit", type=int, default=450)
+    ap.add_argument("--teacher-eval-mode", choices=["greedy", "direct"], default="greedy")
+    ap.add_argument("--samples", type=int, default=None, help="override random sample count for the preset")
+    ap.add_argument("--epochs", type=int, default=None, help="override epoch count for the preset")
     ap.add_argument("--hidden", type=int, default=96)
     ap.add_argument("--out", default=str(THIS_DIR / "models" / "action_scorer.pt"))
     args = ap.parse_args()
@@ -335,6 +360,8 @@ def main() -> int:
         args.action_family,
         args.root_teacher_width,
         args.rest_direct_limit,
+        args.teacher_eval_mode,
+        args.samples,
     )
     mean = x.mean(dim=0)
     std = x.std(dim=0).clamp_min(1e-6)
@@ -364,7 +391,9 @@ def main() -> int:
     model = ActionNet(hidden=args.hidden).to(device)
     opt = torch.optim.AdamW(model.parameters(), lr=2e-3, weight_decay=1e-4)
     loss_fn = nn.SmoothL1Loss()
-    cfg = PRESETS[args.preset]
+    cfg = dict(PRESETS[args.preset])
+    if args.epochs is not None:
+        cfg["epochs"] = max(1, int(args.epochs))
 
     x_train, y_train = x[train_idx].to(device), y[train_idx].to(device)
     x_valid, y_valid = x[valid_idx].to(device), y[valid_idx].to(device)

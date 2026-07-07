@@ -52,7 +52,7 @@ def _timeout_handler(signum, frame):
 
 PRESETS = {
     "smoke": {
-        "methods": ["direct_anf", "and_direct_anf", "and_rc_nmcts", "and_affine_nmcts", "greedy_factor", "mcts_factor", "fprm_mcts", "and_fprm_mcts", "and_fprm_neural_mcts", "cube_greedy", "cube_beam", "neural_mcts", "sshr_h"],
+        "methods": ["direct_anf", "and_direct_anf", "and_boolean_linear_pair_screen_ai_guard", "and_fprm_boolean_linear_pair_deep_ai_guard", "and_rc_nmcts", "and_affine_nmcts", "greedy_factor", "mcts_factor", "fprm_mcts", "and_fprm_mcts", "and_fprm_neural_mcts", "cube_greedy", "cube_beam", "neural_mcts", "sshr_h"],
         "random_truth": [(3, 4)],
         "random_anf": [(5, 4)],
         "structured_limit": 4,
@@ -181,25 +181,39 @@ PRESETS = {
         "workers": 6,
     },
     "ultra_highdim_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_fprm_root_beam", "and_fprm_linear_pair", "and_fprm_linear_pair_deep", "and_fprm_boolean_linear_pair_deep", "and_fprm_boolean_linear_pair_screen", "and_fprm_linear_pair_deep_root_neural", "and_fprm_linear_pair_deep_ai_guard", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_fprm_root_beam", "and_fprm_linear_pair", "and_fprm_linear_pair_deep", "and_fprm_boolean_linear_pair_deep", "and_fprm_boolean_linear_pair_deep_root_neural", "and_fprm_boolean_linear_pair_deep_ai_guard", "and_fprm_boolean_linear_pair_screen", "and_fprm_linear_pair_deep_root_neural", "and_fprm_linear_pair_deep_ai_guard", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
         "random_truth": [],
         "random_anf": [(16, 24)],
         "structured_limit": 0,
         "workers": 6,
     },
     "mega_highdim_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_boolean_linear_pair_screen", "and_fprm_root_beam", "and_fprm_linear_pair_fast", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_boolean_linear_pair_screen", "and_boolean_linear_pair_screen_deep", "and_boolean_linear_pair_screen_neural", "and_boolean_linear_pair_screen_deep_neural", "and_boolean_linear_pair_screen_ai_guard", "and_boolean_linear_pair_screen_deep_ai_guard", "and_fprm_root_beam", "and_fprm_linear_pair_fast", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
         "random_truth": [],
         "random_anf": [(18, 12)],
         "structured_limit": 0,
         "workers": 4,
     },
     "giga_highdim_resource": {
-        "methods": ["direct_anf", "and_direct_anf", "and_boolean_linear_pair_screen", "and_fprm_root_beam", "and_fprm_linear_pair_fast", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_boolean_linear_pair_screen", "and_boolean_linear_pair_screen_deep", "and_boolean_linear_pair_screen_neural", "and_boolean_linear_pair_screen_deep_neural", "and_boolean_linear_pair_screen_ai_guard", "and_boolean_linear_pair_screen_deep_ai_guard", "and_fprm_root_beam", "and_fprm_linear_pair_fast", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
         "random_truth": [],
         "random_anf": [(20, 6)],
         "structured_limit": 0,
         "workers": 3,
+    },
+    "boolean_neural_highdim": {
+        "methods": ["and_fprm_boolean_linear_pair_deep", "and_fprm_boolean_linear_pair_deep_root_neural", "and_fprm_boolean_linear_pair_deep_ai_guard", "and_resource_nmcts", "and_pareto_resource_nmcts"],
+        "random_truth": [],
+        "random_anf": [(16, 24)],
+        "structured_limit": 0,
+        "workers": 6,
+    },
+    "boolean_neural_mega": {
+        "methods": ["and_fprm_boolean_linear_pair_deep", "and_fprm_boolean_linear_pair_deep_root_neural", "and_fprm_boolean_linear_pair_deep_ai_guard", "and_resource_nmcts", "and_pareto_resource_nmcts"],
+        "random_truth": [],
+        "random_anf": [(18, 12)],
+        "structured_limit": 0,
+        "workers": 4,
     },
 }
 
@@ -222,6 +236,8 @@ BOUNDED_RESOURCE_PRESETS = {
     "ultra_highdim_resource",
     "mega_highdim_resource",
     "giga_highdim_resource",
+    "boolean_neural_highdim",
+    "boolean_neural_mega",
 }
 
 HIGH_RESOURCE_PRESETS = {
@@ -235,6 +251,8 @@ HIGH_RESOURCE_PRESETS = {
     "ultra_highdim_resource",
     "mega_highdim_resource",
     "giga_highdim_resource",
+    "boolean_neural_highdim",
+    "boolean_neural_mega",
 }
 
 
@@ -307,6 +325,15 @@ def run_one(task):
         "fprm_linear_pair_deep_wide",
         "fprm_linear_pair_deep_root_neural",
         "fprm_linear_pair_deep_root_neural_wide",
+        "boolean_linear_pair_screen_neural",
+        "boolean_linear_pair_screen_deep_neural",
+        "boolean_linear_pair_screen_ai_guard",
+        "boolean_linear_pair_screen_deep_ai_guard",
+        "fprm_boolean_linear_pair_deep_neural",
+        "fprm_boolean_linear_pair_deep_root_neural",
+        "fprm_boolean_linear_pair_deep_ai_guard",
+        "fprm_boolean_linear_pair_screen_neural",
+        "fprm_boolean_linear_pair_screen_ai_guard",
     }
     use_model = model_path if base_method in neural_methods and model_path else None
     if method == "esop_greedy" and bf.n > 4:
@@ -551,21 +578,31 @@ def main(argv: Iterable[str] | None = None) -> int:
             "and_fprm_linear_pair_deep_wide": 17,
             "and_fprm_linear_pair_deep_neural": 18,
             "and_boolean_linear_pair_screen": 19,
-            "and_fprm_boolean_linear_pair": 20,
-            "and_fprm_boolean_linear_pair_deep": 21,
-            "and_fprm_boolean_linear_pair_screen": 22,
-            "and_fprm_linear_parity": 23,
-            "and_mcts_factor": 24,
-            "and_affine_greedy": 25,
-            "and_affine_nmcts": 26,
-            "and_resource_heuristic": 27,
-            "and_resource_beam_only": 28,
-            "and_resource_no_mcts": 29,
-            "and_resource_nmcts": 30,
-            "and_resource_nmcts_wide": 31,
-            "and_profile_resource_nmcts": 32,
-            "and_pareto_resource_nmcts": 33,
-            "and_fprm_polarity_archive": 34,
+            "and_boolean_linear_pair_screen_deep": 20,
+            "and_boolean_linear_pair_screen_neural": 21,
+            "and_boolean_linear_pair_screen_deep_neural": 22,
+            "and_boolean_linear_pair_screen_ai_guard": 23,
+            "and_boolean_linear_pair_screen_deep_ai_guard": 24,
+            "and_fprm_boolean_linear_pair": 25,
+            "and_fprm_boolean_linear_pair_deep": 26,
+            "and_fprm_boolean_linear_pair_deep_neural": 27,
+            "and_fprm_boolean_linear_pair_deep_root_neural": 28,
+            "and_fprm_boolean_linear_pair_deep_ai_guard": 29,
+            "and_fprm_boolean_linear_pair_screen": 30,
+            "and_fprm_boolean_linear_pair_screen_neural": 31,
+            "and_fprm_boolean_linear_pair_screen_ai_guard": 32,
+            "and_fprm_linear_parity": 33,
+            "and_mcts_factor": 34,
+            "and_affine_greedy": 35,
+            "and_affine_nmcts": 36,
+            "and_resource_heuristic": 37,
+            "and_resource_beam_only": 38,
+            "and_resource_no_mcts": 39,
+            "and_resource_nmcts": 40,
+            "and_resource_nmcts_wide": 41,
+            "and_profile_resource_nmcts": 42,
+            "and_pareto_resource_nmcts": 43,
+            "and_fprm_polarity_archive": 44,
         }
         tasks.sort(key=lambda t: (method_rank.get(t[2], 99), t[1].n, t[0]))
 

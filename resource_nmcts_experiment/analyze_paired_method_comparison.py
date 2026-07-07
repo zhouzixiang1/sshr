@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import csv
 import statistics
+import sys
 from pathlib import Path
 from typing import Iterable
 
@@ -13,6 +14,16 @@ THIS_DIR = Path(__file__).resolve().parent
 RESULTS = THIS_DIR / "results"
 PAPER_TABLES = THIS_DIR / "paper_latex" / "tables"
 METRICS = ["T", "CNOT", "depth", "peak_ancilla", "score", "time_s"]
+
+
+def raise_csv_field_limit() -> None:
+    limit = sys.maxsize
+    while True:
+        try:
+            csv.field_size_limit(limit)
+            return
+        except OverflowError:
+            limit //= 10
 
 
 def usable(row: dict[str, str]) -> bool:
@@ -145,6 +156,7 @@ def write_latex(path: Path, summary: list[dict[str, object]], target_label: str,
 
 
 def main(argv: Iterable[str] | None = None) -> int:
+    raise_csv_field_limit()
     parser = argparse.ArgumentParser()
     parser.add_argument("--target-csv", type=Path, required=True)
     parser.add_argument("--target-method", required=True)

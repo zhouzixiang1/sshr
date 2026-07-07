@@ -223,6 +223,58 @@ def _solve_plan(method: str, terms: frozenset[int], config: SearchConfig, seed: 
         return root_beam_plan(terms, config=config, neural_scorer=neural if method == "root_beam_factor" else None)
     if method == "boolean_linear_pair_screen":
         return linear_pair_screen_plan(terms, config=config, action_width=6, boolean_ring=True)
+    if method == "boolean_linear_pair_screen_deep":
+        return linear_pair_screen_plan(
+            terms,
+            config=config,
+            action_width=6,
+            recursive_depth=1,
+            boolean_ring=True,
+        )
+    if method == "boolean_linear_pair_screen_neural":
+        return linear_pair_screen_plan(
+            terms,
+            config=config,
+            action_width=6,
+            boolean_ring=True,
+            neural_scorer=neural,
+        )
+    if method == "boolean_linear_pair_screen_deep_neural":
+        return linear_pair_screen_plan(
+            terms,
+            config=config,
+            action_width=6,
+            recursive_depth=1,
+            boolean_ring=True,
+            neural_scorer=neural,
+        )
+    if method == "boolean_linear_pair_screen_ai_guard":
+        baseline = linear_pair_screen_plan(terms, config=config, action_width=6, boolean_ring=True)
+        neural_plan = linear_pair_screen_plan(
+            terms,
+            config=config,
+            action_width=6,
+            boolean_ring=True,
+            neural_scorer=neural,
+        )
+        return min([baseline, neural_plan], key=lambda p: p.score(config.weights))
+    if method == "boolean_linear_pair_screen_deep_ai_guard":
+        baseline = linear_pair_screen_plan(
+            terms,
+            config=config,
+            action_width=6,
+            recursive_depth=1,
+            boolean_ring=True,
+        )
+        neural_plan = linear_pair_screen_plan(
+            terms,
+            config=config,
+            action_width=6,
+            recursive_depth=1,
+            boolean_ring=True,
+            neural_scorer=neural,
+        )
+        return min([baseline, neural_plan], key=lambda p: p.score(config.weights))
     if method == "fprm_root_child_beam":
         return root_child_beam_plan(terms, config=config)
     if method == "fprm_linear_pair":
@@ -283,8 +335,54 @@ def _solve_plan(method: str, terms: frozenset[int], config: SearchConfig, seed: 
         return linear_pair_beam_plan(terms, config=config, boolean_ring=True)
     if method == "fprm_boolean_linear_pair_deep":
         return linear_pair_beam_plan(terms, config=config, recursive_depth=1, boolean_ring=True)
+    if method == "fprm_boolean_linear_pair_deep_neural":
+        return linear_pair_beam_plan(
+            terms,
+            config=config,
+            recursive_depth=1,
+            boolean_ring=True,
+            neural_scorer=neural,
+        )
+    if method == "fprm_boolean_linear_pair_deep_root_neural":
+        return linear_pair_beam_plan(
+            terms,
+            config=config,
+            recursive_depth=1,
+            boolean_ring=True,
+            neural_scorer=neural,
+            root_neural_only=True,
+        )
+    if method == "fprm_boolean_linear_pair_deep_ai_guard":
+        baseline = linear_pair_beam_plan(terms, config=config, recursive_depth=1, boolean_ring=True)
+        neural_plan = linear_pair_beam_plan(
+            terms,
+            config=config,
+            recursive_depth=1,
+            boolean_ring=True,
+            neural_scorer=neural,
+            root_neural_only=True,
+        )
+        return min([baseline, neural_plan], key=lambda p: p.score(config.weights))
     if method == "fprm_boolean_linear_pair_screen":
         return linear_pair_screen_plan(terms, config=config, action_width=6, boolean_ring=True)
+    if method == "fprm_boolean_linear_pair_screen_neural":
+        return linear_pair_screen_plan(
+            terms,
+            config=config,
+            action_width=6,
+            boolean_ring=True,
+            neural_scorer=neural,
+        )
+    if method == "fprm_boolean_linear_pair_screen_ai_guard":
+        baseline = linear_pair_screen_plan(terms, config=config, action_width=6, boolean_ring=True)
+        neural_plan = linear_pair_screen_plan(
+            terms,
+            config=config,
+            action_width=6,
+            boolean_ring=True,
+            neural_scorer=neural,
+        )
+        return min([baseline, neural_plan], key=lambda p: p.score(config.weights))
     if method == "fprm_linear_parity":
         return linear_pair_beam_plan(terms, config=config, max_linear_width=3)
     if method == "fprm_affine_linear_pair":
@@ -333,7 +431,12 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
         "fprm_linear_pair_deep_root_neural_wide",
         "fprm_boolean_linear_pair",
         "fprm_boolean_linear_pair_deep",
+        "fprm_boolean_linear_pair_deep_neural",
+        "fprm_boolean_linear_pair_deep_root_neural",
+        "fprm_boolean_linear_pair_deep_ai_guard",
         "fprm_boolean_linear_pair_screen",
+        "fprm_boolean_linear_pair_screen_neural",
+        "fprm_boolean_linear_pair_screen_ai_guard",
         "fprm_linear_parity",
         "fprm_affine_linear_pair",
         "fprm_affine_linear_pair_deep",
@@ -486,8 +589,60 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
             plan = linear_pair_beam_plan(terms, config=config, boolean_ring=True)
         elif method == "fprm_boolean_linear_pair_deep":
             plan = linear_pair_beam_plan(terms, config=config, recursive_depth=1, boolean_ring=True)
+        elif method == "fprm_boolean_linear_pair_deep_neural":
+            plan = linear_pair_beam_plan(
+                terms,
+                config=config,
+                recursive_depth=1,
+                boolean_ring=True,
+                neural_scorer=neural,
+            )
+        elif method == "fprm_boolean_linear_pair_deep_root_neural":
+            plan = linear_pair_beam_plan(
+                terms,
+                config=config,
+                recursive_depth=1,
+                boolean_ring=True,
+                neural_scorer=neural,
+                root_neural_only=True,
+            )
+        elif method == "fprm_boolean_linear_pair_deep_ai_guard":
+            baseline_plan = linear_pair_beam_plan(terms, config=config, recursive_depth=1, boolean_ring=True)
+            neural_plan = linear_pair_beam_plan(
+                terms,
+                config=config,
+                recursive_depth=1,
+                boolean_ring=True,
+                neural_scorer=neural,
+                root_neural_only=True,
+            )
+            plan = min(
+                [baseline_plan, neural_plan],
+                key=lambda p: (p.cost + _wrap_cost(polarity)).score(config.weights),
+            )
         elif method == "fprm_boolean_linear_pair_screen":
             plan = linear_pair_screen_plan(terms, config=config, action_width=6, boolean_ring=True)
+        elif method == "fprm_boolean_linear_pair_screen_neural":
+            plan = linear_pair_screen_plan(
+                terms,
+                config=config,
+                action_width=6,
+                boolean_ring=True,
+                neural_scorer=neural,
+            )
+        elif method == "fprm_boolean_linear_pair_screen_ai_guard":
+            baseline_plan = linear_pair_screen_plan(terms, config=config, action_width=6, boolean_ring=True)
+            neural_plan = linear_pair_screen_plan(
+                terms,
+                config=config,
+                action_width=6,
+                boolean_ring=True,
+                neural_scorer=neural,
+            )
+            plan = min(
+                [baseline_plan, neural_plan],
+                key=lambda p: (p.cost + _wrap_cost(polarity)).score(config.weights),
+            )
         elif method == "fprm_linear_parity":
             plan = linear_pair_beam_plan(terms, config=config, max_linear_width=3)
         elif method == "fprm_affine_linear_pair":
@@ -1131,10 +1286,18 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             highdim_config = replace(fast_config, candidate_top_k=config.candidate_top_k)
             if bf.n >= 20:
                 child_specs.append(("boolean_linear_pair_screen", highdim_config))
+                child_specs.append(("boolean_linear_pair_screen_deep", highdim_config))
+                if model_path:
+                    child_specs.append(("boolean_linear_pair_screen_ai_guard", highdim_config))
+                    child_specs.append(("boolean_linear_pair_screen_deep_ai_guard", highdim_config))
             elif bf.n >= 18:
                 # The ANF-only Boolean-ring screen is cheap enough for n=18
                 # and runs before FPRM branches that can hit the timeout.
                 child_specs.append(("boolean_linear_pair_screen", highdim_config))
+                child_specs.append(("boolean_linear_pair_screen_deep", highdim_config))
+                if model_path:
+                    child_specs.append(("boolean_linear_pair_screen_ai_guard", highdim_config))
+                    child_specs.append(("boolean_linear_pair_screen_deep_ai_guard", highdim_config))
                 child_specs.append(("fprm_linear_pair_deep", highdim_config))
             else:
                 child_specs.append(("fprm_linear_pair_deep", highdim_config))
@@ -1146,6 +1309,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
                     else "fprm_linear_pair_deep_root_neural_wide"
                 )
                 child_specs.append((neural_linear, highdim_config))
+                child_specs.append(("fprm_boolean_linear_pair_deep_ai_guard", highdim_config))
             if method == "resource_nmcts_wide" and bf.n < 18:
                 child_specs.append(("fprm_linear_pair_deep_wide", highdim_config))
                 child_specs.append(("fprm_linear_pair_wide_fast", highdim_config))
@@ -1205,6 +1369,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
                         child_specs.append(("fprm_boolean_linear_pair_deep", child_config))
                         if model_path:
                             child_specs.append(("fprm_linear_pair_deep_root_neural_wide", child_config))
+                            child_specs.append(("fprm_boolean_linear_pair_deep_ai_guard", child_config))
                 elif label == "cnot_depth":
                     # Keep n=18 bounded: no linear-pair screen, but do include
                     # a depth-weighted root-beam candidate that can trade T for
@@ -1385,6 +1550,11 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
     if method in {
         "direct_anf",
         "boolean_linear_pair_screen",
+        "boolean_linear_pair_screen_deep",
+        "boolean_linear_pair_screen_neural",
+        "boolean_linear_pair_screen_deep_neural",
+        "boolean_linear_pair_screen_ai_guard",
+        "boolean_linear_pair_screen_deep_ai_guard",
         "greedy_factor",
         "neural_greedy",
         "root_beam_factor",
@@ -1430,7 +1600,12 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         "fprm_linear_pair_deep_root_neural_wide",
         "fprm_boolean_linear_pair",
         "fprm_boolean_linear_pair_deep",
+        "fprm_boolean_linear_pair_deep_neural",
+        "fprm_boolean_linear_pair_deep_root_neural",
+        "fprm_boolean_linear_pair_deep_ai_guard",
         "fprm_boolean_linear_pair_screen",
+        "fprm_boolean_linear_pair_screen_neural",
+        "fprm_boolean_linear_pair_screen_ai_guard",
         "fprm_linear_parity",
         "fprm_affine_linear_pair",
         "fprm_affine_linear_pair_deep",

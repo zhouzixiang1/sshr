@@ -1,0 +1,213 @@
+\documentclass[UTF8,fontset=macnew,11pt]{ctexart}
+
+\usepackage[a4paper,margin=2.25cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!50!black
+}
+
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{2em}
+\setlength{\emergencystretch}{2em}
+
+\newcommand{\method}{Resource-NMCTS}
+\newcommand{\pareto}{Pareto-Resource-NMCTS}
+\newcommand{\score}{\ensuremath{\mathrm{score}}}
+\newcommand{\anf}{\ensuremath{\mathrm{ANF}}}
+\newcommand{\fprm}{\ensuremath{\mathrm{FPRM}}}
+\newcommand{\mcts}{\ensuremath{\mathrm{MCTS}}}
+
+\title{面向资源约束量子布尔函数综合的神经蒙特卡洛树搜索方法：中文阶段交付稿}
+\author{阶段性交付版}
+\date{2026年7月7日}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+本文整理当前项目中可复现的阶段性结果。研究对象是量子布尔函数 oracle 的逻辑层综合，目标是在不依赖 SSHR parallelotope 搜索空间的前提下，通过 \anf{}/\fprm{} 项集合上的资源感知搜索降低 T-count、CNOT、深度和辅助比特等资源。当前实现包含仿射坐标搜索、固定极性 Reed--Muller 重写、线性因子分解、神经动作先验、\mcts{}、baseline-preserving guard、Pareto archive 和布尔环线性因子。已完成结果显示，\pareto{} 在 $n\leq6$ 的 177 个传统函数上相对 ESOP cube beam 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%；相对 weighted ESOP-MILP 获得 167/3/7，平均 score 降低 29.84\%。在 $n=16$ 的 24 个随机 \anf{} 函数上，Boolean-guard \method{} 相对 pairwise-wide \method{} 获得 14/0/10，平均 score 降低 0.34\%；相对旧 deterministic recursive guard 获得 18/0/6，平均 score 降低 0.52\%。在 $n=20$ 的 6 个边界函数上，recursive Boolean-ring screen 集成到 \method{} 后，相对旧 \method{} 获得 5/0/1，平均 score 降低 4.52\%；相对 AND-direct ANF 获得 5/0/1，平均 score 降低 9.04\%。这些结果已经形成一条可写作的逻辑层方法路线，但高维神经先验仍未产生足够大的独立收益，外部 reversible-toolchain 对比和线路案例仍需补齐。
+\end{abstract}
+
+\noindent\textbf{关键词：}量子 oracle 综合；布尔函数综合；神经蒙特卡洛树搜索；布尔环；ANF；FPRM；T-count
+
+\section{研究定位}
+
+本项目的核心问题是给定布尔函数 $f:\{0,1\}^n\rightarrow\{0,1\}$，构造实现
+\begin{equation}
+  |x\rangle |y\rangle \mapsto |x\rangle |y\oplus f(x)\rangle
+  \label{eq:oracle}
+\end{equation}
+的逻辑层量子 oracle 线路。评价目标不是单一 CNOT 数，也不是硬件映射后物理代价，而是综合考虑 T-count、CNOT、逻辑深度、总门数和 peak ancilla 的可复现加权分数：
+\begin{equation}
+  \score = T + 0.04\,\mathrm{CNOT} + 0.015\,\mathrm{depth}
+         + 0.01\,\mathrm{gates} + 2\,\mathrm{ancilla}.
+  \label{eq:score}
+\end{equation}
+所有主结果同时报告原始资源维度，避免把资源 trade-off 隐藏在单个分数里。
+
+本文路线与 SSHR 的关系需要写清楚。SSHR 是 CNOT-oriented small-scale Boolean synthesis 方法\cite{zheng2025sshr}，其优势集中在 parallelotope cover 对 CNOT 结构的控制。当前项目不从 SSHR 候选空间出发，也不把目标设为复现 SSHR 的 CNOT 最优；SSHR 在本文中是必要 baseline，用于暴露本文在 CNOT/depth 上的边界。本文真正的搜索空间是 \anf{}/\fprm{} 项集合，即把 oracle synthesis 看成布尔代数项集合的组合优化问题。
+
+\section{方法主线}
+
+\subsection{项集合状态与候选动作}
+
+\anf{} 表示把布尔函数写成
+\begin{equation}
+  f(x)=\bigoplus_{m\in\mathcal{M}}\prod_{i\in m}x_i .
+  \label{eq:anf}
+\end{equation}
+直接 ANF 综合会逐项计算单项式，再异或到输出位。该方法语义透明，但无法复用不同单项式之间的公共结构。本文把当前未综合的项集合 $\mathcal{M}$ 作为搜索状态，动作是选择一个可计算、可反算的因子结构，将局部项集合分解为 quotient 子问题和 rest 子问题。候选动作包括普通公共因子、FPRM 极性重写后的公共因子、CNOT-only 线性因子、布尔环线性因子，以及由神经模型重排或扩展的 root action。
+
+这种建模使每一步搜索都能落到可验证线路片段，而不是只在抽象符号层优化。实验中每条候选线路都通过 truth-table 级 oracle 语义验证。
+
+\subsection{神经 MCTS 与保守 portfolio}
+
+\method{} 使用动作特征训练神经先验，对候选因子进行排序，再由 \mcts{} 或 bounded beam/greedy child plan 估计后续资源。由于高维神经先验存在负迁移风险，当前实现采用 baseline-preserving guard：确定性候选与神经候选并行产生，最终保留资源分数更优者。这样可以把神经模型写成候选扩展器，而不是让它替代已可靠的确定性 guard。
+
+portfolio 层合并 direct ANF、AND-direct ANF、FPRM root beam、linear-pair guard、Boolean-ring branch、\method{} 和 \pareto{} 等候选。该层的意义是工程上避免明显差候选进入最终结果；论文中应把它解释为资源受限综合中的保守选择机制，而不是单个黑盒模型。
+
+\subsection{布尔环线性因子}
+
+旧 linear-pair 分支要求线性因子与 quotient 的变量不相交，因此会漏掉 Boolean ring 中合法的重叠变量结构。新增 Boolean-ring linear factor 允许 quotient monomial 与 linear factor 共享变量，并在展开时使用 $x_i^2=x_i$ 和 GF(2) 偶数项消去。例如
+\begin{equation}
+  (x_i\oplus x_j)x_i m = x_i m \oplus x_i x_j m .
+  \label{eq:boolean_ring}
+\end{equation}
+线路上仍可先用 CNOT 计算线性奇偶量，再用该辅助量控制 quotient 子线路。这个扩展不是简单扩大 top-$k$，而是改变了可表达的代数候选类型，因此比单纯 root-action 重排更接近方法创新。
+
+在 $n=20$ 边界切片中，FPRM root beam 和 fast linear-pair 均出现 300 s task timeout。为降低长尾，当前实现使用 recursive Boolean-ring screen：不做昂贵 FPRM 极性枚举，只在原始 ANF 上筛选 Boolean-ring 线性因子，并在 quotient/rest 子问题上重复一层。该策略牺牲了部分深搜索能力，但在超高维边界上给出了稳定、可验证的提升。
+
+\section{已完成实验结果}
+
+\subsection{传统函数与外部 baseline}
+
+在 $n\leq6$ 的 177 个传统函数上，\pareto{} 相对 direct ANF、AND-direct ANF、ESOP cube beam、ESOP-MILP、SSHR-H 等 baseline 均给出低 T-count 与低 \score{} 的优势。表~\ref{tab:traditional} 列出核心对比。需要注意，SSHR-H 的平均 CNOT 最低，说明本文不能写成 CNOT-only 支配；本文优势应限定为低 T-count 与低加权逻辑资源。
+
+\begin{table}[t]
+\centering
+\small
+\caption{$n\leq6$ 传统函数上的平均逻辑资源。}
+\label{tab:traditional}
+\begin{tabular}{lrrrrr}
+\toprule
+方法 & 平均 T & 平均 CNOT & 平均 depth & 平均 ancilla & 平均 score \\
+\midrule
+Direct ANF & 184.1 & 134.2 & 134.6 & 1.33 & 194.3 \\
+AND-direct ANF & 101.0 & 166.5 & 166.9 & 2.18 & 115.2 \\
+\method{} & 43.9 & 89.9 & 94.5 & 1.92 & 53.2 \\
+\pareto{} & \textbf{40.4} & 83.0 & \textbf{88.0} & 2.03 & \textbf{49.6} \\
+ESOP-MILP & 83.6 & 133.5 & 159.6 & 2.32 & 96.7 \\
+SSHR-H & 81.0 & \textbf{67.6} & 88.7 & 1.36 & 88.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+相对 ESOP cube beam，\pareto{} 的 score 胜/负/平为 174/0/3，平均 score 降低 36.09\%；相对 weighted ESOP-MILP 为 167/3/7，平均 score 降低 29.84\%。权重鲁棒性分析表明，在 T-only、T-heavy、CNOT-depth 和 ancilla-tight 等替代权重下，主要结论仍保持正向。
+
+\subsection{搜索贡献分解}
+
+表~\ref{tab:contribution} 显示当前方法不是单一模块带来的偶然收益。仿射坐标搜索提供最大前置收益；neural refine 和 guarded \mcts{} 在低维切片中提供无 score-loss 小增益；Pareto archive 进一步降低加权资源；高维分支的主要贡献来自 bounded linear-pair guard 与 Boolean-ring factor。
+
+\begin{table}[t]
+\centering
+\small
+\caption{搜索贡献分解。负的平均变化表示目标方法更优。}
+\label{tab:contribution}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}Xrr}
+\toprule
+对比 & score 胜/负/平 & 平均 $\Delta$ score \\
+\midrule
+Affine greedy vs fixed-coordinate MCTS & 165/88/68 & $-12.12\%$ \\
+Neural refine over affine greedy & 65/0/257 & $-1.08\%$ \\
+Guarded Affine-NMCTS over no-guard & 88/0/234 & $-1.74\%$ \\
+\method{} over Affine-NMCTS & 44/0/133 & $-1.91\%$ \\
+Pareto archive over \method{} & 68/0/109 & $-3.26\%$ \\
+\pareto{} over no-MCTS portfolio & 106/0/71 & $-4.69\%$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{高维结构性收益}
+
+表~\ref{tab:highdim} 是当前最重要的新增证据链。Boolean-ring linear-deep 在 $n=16$ 上相对旧 deterministic recursive guard 获得 17/3/4，平均 score 降低 0.39\%；集成到 \method{} 后，相对 pairwise-wide \method{} 获得 14/0/10，平均 score 降低 0.34\%。这表明布尔环结构扩展已经在 full synthesis 层面形成无 score-loss 的正向结果。
+
+\begin{table}[t]
+\centering
+\small
+\caption{高维 Boolean-ring 分支的 matched comparison。}
+\label{tab:highdim}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}Xrrr}
+\toprule
+目标方法与 baseline & 函数数 & score 胜/负/平 & 平均 $\Delta$ score \\
+\midrule
+Boolean-linear-deep vs old recursive guard, $n=16$ & 24 & 17/3/4 & $-0.39\%$ \\
+Boolean-guard \method{} vs pairwise-wide \method{}, $n=16$ & 24 & 14/0/10 & $-0.34\%$ \\
+Boolean-guard \method{} vs old recursive guard, $n=16$ & 24 & 18/0/6 & $-0.52\%$ \\
+Recursive Boolean screen vs single screen, $n=20$ & 6 & 5/0/1 & $-4.52\%$ \\
+Recursive-screen \method{} vs old \method{}, $n=20$ & 6 & 5/0/1 & $-4.52\%$ \\
+Recursive-screen \method{} vs AND-direct ANF, $n=20$ & 6 & 5/0/1 & $-9.04\%$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+$n=20$ 结果尤其有用，因为它不是在旧方法已稳定工作的区域继续微调，而是在 root beam 和 fast linear-pair 全部 timeout 的边界上给出可运行修复。standalone recursive Boolean screen 平均运行时间为 12.73 s，相对单层 screen 只增加 16.92\%，但平均 score 进一步降低 4.52\%。集成到 \method{} 后，平均运行时间高于旧 \method{}，但质量相对旧 \method{} 继续下降 4.52\%。
+
+\section{负面结果与边界}
+
+当前最需要诚实写出的不足有三点。第一，高维 learned prior 的独立贡献仍小。$n=16$ pairwise-wide root-action ranker 相对 deterministic recursive guard 的平均 score 降幅只有 0.18\%，属于可信但不够显著的 AI 证据。第二，ANF-only Boolean screen 不能替代完整高维 Resource 分支。在 $n=18$ 上，recursive screen 虽然相对单层 screen 获得 11/0/1、平均 score 降低 3.99\%，但相对旧 \method{} 仍为 0/11/1，平均 score 上升 36.94\%。第三，本文目前没有做硬件 mapping，也没有复现 ROS/mockturtle/RevKit 风格 reversible-toolchain baseline，因此不能借用后端感知 oracle synthesis 的结论\cite{meuli2020ros,yu2025backend}。
+
+这些负面结果不会推翻当前路线，但会决定论文写法。最稳妥的主张是：本文提出一种独立于 SSHR 的逻辑层资源搜索框架，在低维传统 benchmark、$n=16$ 高维随机 ANF 和 $n=20$ timeout 边界上均有可验证资源改进；但高维 AI 模块还需要从动作排序升级到结构选择。
+
+\section{下一步目标}
+
+若以“明显提升”为结束标准，当前还不应停止。后续最值得投入的方向有三类。
+
+第一，训练结构级策略网络。现有模型主要学习 root action 排序，收益上限较低。下一步应让模型预测何时使用 Boolean-ring factor、何时进入 FPRM polarity search、何时停止递归，以及是否接受更高 ancilla 换取低 T-count。监督信号可以来自现有 matched comparison，也可以从 n=14/n=16/n=18 的 oracle root-action 诊断中构造 pairwise ranking 数据。
+
+第二，补外部 reversible-toolchain 对比。已有 ABC、BDD、ESOP 和 SSHR baseline 足以支撑第一版方法论文，但审稿人可能要求与 ROS、mockturtle、RevKit 或 back-end-aware oracle synthesis 更贴近的工具链比较。即使最终不能完整复现，也需要给出环境审计、可运行子集或不可比原因。
+
+第三，补代表性线路案例。当前表格结果足够多，但缺少一到两个函数级解释：direct ANF 如何产生重复 AND，FPRM root beam 如何改写项集合，Boolean-ring factor 如何捕获重叠变量结构，以及 \method{} 如何通过 guard 选择最终线路。这个案例会显著提高论文可读性。
+
+\section{结论}
+
+当前项目已经从“围绕 SSHR 做小改动”转向“\anf{}/\fprm{} 项集合上的资源感知搜索方法”。传统函数上，\pareto{} 相对 ESOP 与 SSHR baseline 展示低 T-count 和低 \score{} 优势；$n=16$ 上，Boolean-ring factor 给出结构性 full synthesis 改善；$n=20$ 上，recursive Boolean-ring screen 在 root beam 和 fast linear-pair 全部 timeout 的边界继续降低旧 \method{} 的 score。该证据已经可以支撑中文论文草稿和后续英文稿框架，但还不足以宣布目标完成。下一阶段应集中在结构级神经策略、外部 reversible-toolchain baseline 和函数级案例解释上。
+
+\begin{thebibliography}{99}
+
+\bibitem{meuli2022xag}
+G.~Meuli, M.~Soeken, and G.~De Micheli.
+\newblock Xor-And-Inverter Graphs for quantum compilation.
+\newblock \emph{npj Quantum Information}, 8:7, 2022.
+
+\bibitem{meuli2020ros}
+G.~Meuli, M.~Soeken, M.~Roetteler, and G.~De Micheli.
+\newblock ROS: Resource-constrained oracle synthesis for quantum computers.
+\newblock \emph{Electronic Proceedings in Theoretical Computer Science}, 318:119--130, 2020.
+
+\bibitem{wille2009bdd}
+R.~Wille and R.~Drechsler.
+\newblock BDD-based synthesis of reversible logic for large functions.
+\newblock In \emph{Proceedings of DAC}, pp.~270--275, 2009.
+
+\bibitem{yu2025backend}
+M.~Yu, A.~Tempia Calvino, M.~Soeken, and G.~De Micheli.
+\newblock Back-end-aware fault-tolerant quantum oracle synthesis.
+\newblock In \emph{Proceedings of ASP-DAC}, pp.~930--937, 2025.
+
+\bibitem{zheng2025sshr}
+Q.~Zheng, Y.~Xu, J.~Zhang, Z.~Su, and S.~Zheng.
+\newblock CNOT oriented synthesis for small-scale Boolean functions using spatial structures of parallelotopes.
+\newblock In \emph{Proceedings of ICCAD}, 2025.
+
+\end{thebibliography}
+
+\end{document}

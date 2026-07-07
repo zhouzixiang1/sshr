@@ -917,16 +917,17 @@ def linear_pair_screen_plan(
     config: SearchConfig = SearchConfig(),
     action_width: int = 4,
     max_linear_width: int = 2,
+    recursive_depth: int = 0,
     neural_scorer=None,
     boolean_ring: bool = False,
 ) -> Plan:
-    """Single-layer screened linear-factor plan with a direct baseline.
+    """Screened linear-factor plan with a direct baseline.
 
     This variant is intended for high-dimensional pressure tests where the
     root-beam baseline and recursive greedy children dominate runtime.  It is
     baseline-preserving against direct synthesis only: each candidate is scored
-    with direct quotient and rest subplans, so the method can add a cheap
-    Boolean-ring linear factor without opening a long recursive search tail.
+    against a direct plan.  ``recursive_depth`` enables bounded repeated
+    screening on quotient/rest subproblems without opening an FPRM beam tail.
     Broader portfolios still compare the returned candidate against stronger
     root-beam/linear-pair plans when those are affordable.
     """
@@ -943,8 +944,35 @@ def linear_pair_screen_plan(
         neural_scorer=neural_scorer,
     )
     for action in actions:
-        group = direct_plan(action.residuals, prefix_len + 1, live_factor_ancilla + 1, config)
-        rest = direct_plan(action.rest, prefix_len, live_factor_ancilla, config)
+        next_width = max(2, action_width - 1)
+        if recursive_depth > 0 and live_factor_ancilla + 1 < config.max_factor_ancilla:
+            group = linear_pair_screen_plan(
+                action.residuals,
+                prefix_len + 1,
+                live_factor_ancilla + 1,
+                config,
+                action_width=next_width,
+                max_linear_width=max_linear_width,
+                recursive_depth=recursive_depth - 1,
+                neural_scorer=neural_scorer,
+                boolean_ring=boolean_ring,
+            )
+        else:
+            group = direct_plan(action.residuals, prefix_len + 1, live_factor_ancilla + 1, config)
+        if recursive_depth > 0 and action.rest and len(action.rest) < len(terms):
+            rest = linear_pair_screen_plan(
+                action.rest,
+                prefix_len,
+                live_factor_ancilla,
+                config,
+                action_width=next_width,
+                max_linear_width=max_linear_width,
+                recursive_depth=recursive_depth - 1,
+                neural_scorer=neural_scorer,
+                boolean_ring=boolean_ring,
+            )
+        else:
+            rest = direct_plan(action.rest, prefix_len, live_factor_ancilla, config)
         cost = factor_cost(action, group, rest, live_factor_ancilla, config)
         plan = Plan(
             "linear_factor",
