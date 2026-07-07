@@ -21,7 +21,7 @@ from typing import Iterable
 
 import torch
 
-from factor_plan import SearchConfig, direct_plan, linear_pair_screen_plan
+from factor_plan import SearchConfig, direct_plan, linear_pair_screen_plan, verify_plan_anf
 from resource_model import ResourceWeights
 from train_screen_depth_guard import Depth2GuardNet
 from train_screen_depth_policy import (
@@ -48,6 +48,9 @@ class MethodEval:
     gates: int
     peak_ancilla: int
     time_s: float
+    anf_verified: bool
+    plan_nodes: int
+    plan_mismatches: int
 
 
 @dataclass(frozen=True)
@@ -75,6 +78,7 @@ def make_config() -> SearchConfig:
 
 
 def eval_plan(method: str, plan, elapsed: float, config: SearchConfig) -> MethodEval:
+    verification = verify_plan_anf(plan)
     return MethodEval(
         method=method,
         score=plan.score(config.weights),
@@ -84,6 +88,9 @@ def eval_plan(method: str, plan, elapsed: float, config: SearchConfig) -> Method
         gates=plan.cost.gates,
         peak_ancilla=plan.cost.peak_ancilla,
         time_s=elapsed,
+        anf_verified=verification.ok,
+        plan_nodes=verification.nodes,
+        plan_mismatches=verification.mismatches,
     )
 
 
@@ -131,6 +138,9 @@ def evaluate_one(task: tuple[int, int, int, str, int]) -> TermExample:
         gates=best_screen.gates,
         peak_ancilla=best_screen.peak_ancilla,
         time_s=all_depth_time,
+        anf_verified=best_screen.anf_verified,
+        plan_nodes=best_screen.plan_nodes,
+        plan_mismatches=best_screen.plan_mismatches,
     )
     return TermExample(
         name=f"terms_n{n}_{index:04d}_{profile}",
@@ -209,6 +219,9 @@ def add_learned_methods(
                 gates=chosen.gates,
                 peak_ancilla=chosen.peak_ancilla,
                 time_s=chosen.time_s,
+                anf_verified=chosen.anf_verified,
+                plan_nodes=chosen.plan_nodes,
+                plan_mismatches=chosen.plan_mismatches,
             )
         if guard_depths is not None:
             chosen = evals[{1: "screen_depth1", 2: "screen_depth2"}[guard_depths[idx]]]
@@ -221,6 +234,9 @@ def add_learned_methods(
                 gates=chosen.gates,
                 peak_ancilla=chosen.peak_ancilla,
                 time_s=chosen.time_s,
+                anf_verified=chosen.anf_verified,
+                plan_nodes=chosen.plan_nodes,
+                plan_mismatches=chosen.plan_mismatches,
             )
         updated.append(
             TermExample(
@@ -250,6 +266,9 @@ def write_raw(path: Path, examples: list[TermExample]) -> None:
         "gates",
         "peak_ancilla",
         "time_s",
+        "anf_verified",
+        "plan_nodes",
+        "plan_mismatches",
     ]
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
@@ -270,6 +289,9 @@ def write_raw(path: Path, examples: list[TermExample]) -> None:
                         "gates": ev.gates,
                         "peak_ancilla": ev.peak_ancilla,
                         "time_s": ev.time_s,
+                        "anf_verified": ev.anf_verified,
+                        "plan_nodes": ev.plan_nodes,
+                        "plan_mismatches": ev.plan_mismatches,
                     }
                 )
 
@@ -318,6 +340,8 @@ def write_summary(summary_path: Path, analysis_path: Path, table_path: Path, exa
                 "mean_peak_ancilla",
                 "mean_score",
                 "mean_time_s",
+                "verified_rows",
+                "mean_plan_nodes",
             ],
             lineterminator="\n",
         )
@@ -340,6 +364,8 @@ def write_summary(summary_path: Path, analysis_path: Path, table_path: Path, exa
                         "mean_peak_ancilla": statistics.mean(v.peak_ancilla for v in vals),
                         "mean_score": statistics.mean(v.score for v in vals),
                         "mean_time_s": statistics.mean(v.time_s for v in vals),
+                        "verified_rows": sum(1 for v in vals if v.anf_verified),
+                        "mean_plan_nodes": statistics.mean(v.plan_nodes for v in vals),
                     }
                 )
 
@@ -357,6 +383,12 @@ def write_summary(summary_path: Path, analysis_path: Path, table_path: Path, exa
         "",
         "Large-scale logic-level ANF term-set evaluation. These rows do not build",
         "full truth tables; they evaluate the synthesis search state directly.",
+        "Each method row is also checked by symbolic ANF plan expansion: direct",
+        "nodes return their monomial set, monomial factors multiply quotient",
+        "terms by the factor, and linear Boolean-ring factors expand over GF(2).",
+        "",
+        f"ANF plan verification: {sum(1 for ex in examples for ev in ex.evals.values() if ev.anf_verified)}/"
+        f"{sum(1 for ex in examples for _ in ex.evals.values())} method rows passed.",
         "",
         "## Paired comparisons",
         "",
@@ -378,6 +410,7 @@ def write_summary(summary_path: Path, analysis_path: Path, table_path: Path, exa
             )
     analysis_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
+    table_path.parent.mkdir(parents=True, exist_ok=True)
     with table_path.open("w", encoding="utf-8") as f:
         f.write("\\begin{tabular}{rllrrr}\n")
         f.write("\\toprule\n")

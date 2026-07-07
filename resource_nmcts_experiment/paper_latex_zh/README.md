@@ -20,6 +20,7 @@
 - `resource_nmcts_zh_manuscript_v6.tex` / `resource_nmcts_zh_manuscript_v6.pdf`：中文论文稿 v6，以“面向资源约束量子布尔函数综合的神经蒙特卡洛树搜索方法”为主线，重新组织相关工作、方法、实验和局限，明确本文不从 SSHR 入手而是做 ANF/FPRM 项集合搜索。
 - `resource_nmcts_zh_manuscript_v7.tex` / `resource_nmcts_zh_manuscript_v7.pdf`：中文论文稿 v7，在 v6 主线上进一步正式化讨论与局限，补充 direct depth-2 skip guard 相对 fixed depth-2 与 all-depth adaptive 的双时间口径。
 - `resource_nmcts_zh_manuscript_v8.tex` / `resource_nmcts_zh_manuscript_v8.pdf`：中文论文稿 v8，补充 n=19/20 screen-gate holdout 和 n=20/22/24/28 项集级 screen-scale 证据，明确 n>20 为项集级逻辑资源评估而非完整 truth-table verification。
+- `resource_nmcts_zh_manuscript_v9.tex` / `resource_nmcts_zh_manuscript_v9.pdf`：中文论文稿 v9，补充 n=20/22/24/28 screen-scale 的 ANF plan 符号展开验证，1344/1344 方法行通过，进一步区分 plan 级等价验证与完整 truth-table/emitted-circuit verification。
 - `resource_nmcts_zh_research_position.tex` / `resource_nmcts_zh_research_position.pdf`：中文研究定位稿，重新梳理“不从 SSHR 入手”的论文主线、AI 在搜索问题中的角色、当前证据边界和下一步明显提升目标。
 - 最新 v4 稿已补充 `train_screen_depth_policy.py` 的结构级 depth policy 结果：n=14/16/18 训练、held-out n=20 测试，说明 AI 已能学习 screen 深度选择，但尚未超过固定 depth-2 的 score。
 - 最新 v8 稿补充 `train_structure_gate.py` 的 screen-gated Resource-NMCTS 边界验证：原 n=20 切片资源持平且平均运行时间降低 75.58%，held-out n=19/20 合计 16/16 score 持平并平均节省 36.83%，但仍只作为运行时门控证据。
@@ -42,6 +43,7 @@ latexmk -xelatex -g resource_nmcts_zh_structure_policy_v5.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v6.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v7.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v8.tex
+latexmk -xelatex -g resource_nmcts_zh_manuscript_v9.tex
 latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 ```
 

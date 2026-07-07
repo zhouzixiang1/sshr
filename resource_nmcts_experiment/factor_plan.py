@@ -64,6 +64,109 @@ class Plan:
         return self.cost.score(weights)
 
 
+@dataclass(frozen=True)
+class PlanAnfVerification:
+    ok: bool
+    nodes: int
+    max_expanded_terms: int
+    mismatches: int
+
+
+def _xor_term_sets(*items: frozenset[int]) -> frozenset[int]:
+    out: set[int] = set()
+    for terms in items:
+        for term in terms:
+            if term in out:
+                out.remove(term)
+            else:
+                out.add(term)
+    return frozenset(out)
+
+
+def _xor_term_values(values: Iterable[int]) -> frozenset[int]:
+    out: set[int] = set()
+    for raw in values:
+        term = int(raw)
+        if term in out:
+            out.remove(term)
+        else:
+            out.add(term)
+    return frozenset(out)
+
+
+def _multiply_monomial_terms(terms: frozenset[int], factor: int) -> frozenset[int]:
+    return _xor_term_values(int(term) | int(factor) for term in terms)
+
+
+def _multiply_linear_terms(terms: frozenset[int], factor: int, affine_const: bool = False) -> frozenset[int]:
+    out: set[int] = set()
+
+    def toggle(term: int) -> None:
+        if term in out:
+            out.remove(term)
+        else:
+            out.add(term)
+
+    if affine_const:
+        for term in terms:
+            toggle(int(term))
+    bits = int(factor)
+    while bits:
+        bit = bits & -bits
+        for term in terms:
+            toggle(int(term) | bit)
+        bits ^= bit
+    return frozenset(out)
+
+
+def expand_plan_anf_terms(plan: Plan) -> frozenset[int]:
+    """Expand a factor plan back to the ANF terms it implements.
+
+    This is a symbolic checker over GF(2) monomial sets.  It does not build a
+    truth table, so it remains cheap for high-dimensional sparse ANF states.
+    """
+    if plan.kind == "direct":
+        return frozenset(plan.terms)
+    if plan.group is None or plan.rest is None:
+        raise ValueError("malformed factor plan")
+    group_terms = expand_plan_anf_terms(plan.group)
+    rest_terms = expand_plan_anf_terms(plan.rest)
+    if plan.kind == "factor":
+        factored = _multiply_monomial_terms(group_terms, plan.factor)
+    elif plan.kind == "linear_factor":
+        factored = _multiply_linear_terms(group_terms, plan.factor, plan.affine_const)
+    else:
+        raise ValueError(f"unknown plan kind: {plan.kind}")
+    return _xor_term_sets(factored, rest_terms)
+
+
+def verify_plan_anf(plan: Plan) -> PlanAnfVerification:
+    nodes = 0
+    mismatches = 0
+    max_expanded_terms = 0
+
+    def rec(node: Plan) -> frozenset[int]:
+        nonlocal nodes, mismatches, max_expanded_terms
+        nodes += 1
+        expanded = expand_plan_anf_terms(node)
+        max_expanded_terms = max(max_expanded_terms, len(expanded))
+        if expanded != node.terms:
+            mismatches += 1
+        if node.group is not None:
+            rec(node.group)
+        if node.rest is not None:
+            rec(node.rest)
+        return expanded
+
+    rec(plan)
+    return PlanAnfVerification(
+        ok=mismatches == 0,
+        nodes=nodes,
+        max_expanded_terms=max_expanded_terms,
+        mismatches=mismatches,
+    )
+
+
 def _subsets(mask: int, max_size: int) -> Iterable[int]:
     bits = [i for i in range(mask.bit_length()) if (mask >> i) & 1]
     lim = min(max_size, len(bits))

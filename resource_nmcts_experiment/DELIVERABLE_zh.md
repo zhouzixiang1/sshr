@@ -327,7 +327,7 @@
 
 ### 2.5.4 n=20--28 项集级大规模 screen-scale
 
-完整 truth table 在 n>20 后构造和验证成本迅速上升，因此本轮新增 `run_screen_scale_terms.py`：它直接在 ANF 项集合这一搜索状态上评估 direct logical-AND、single/depth-1/depth-2 Boolean-ring screen、all-depth adaptive、已训练 depth policy 和保守 depth-2 guard。该实验不替代 truth-table verified 结果，而是证明结构策略可以在更高维项集合上快速运行。
+完整 truth table 在 n>20 后构造和验证成本迅速上升，因此本轮新增并升级 `run_screen_scale_terms.py`：它直接在 ANF 项集合这一搜索状态上评估 direct logical-AND、single/depth-1/depth-2 Boolean-ring screen、all-depth adaptive、已训练 depth policy 和保守 depth-2 guard。同时，脚本对每个返回的 factor plan 做 ANF 符号展开验证：direct 节点返回自身项集，普通 factor 将 quotient 项乘回 monomial factor，Boolean-ring linear factor 在 GF(2) 上展开线性因子，再与 rest 项集合异或合并。该实验不替代完整 truth-table/emitted-circuit verification，但已经从“只看资源估计”提升到“项集级资源评估 + plan 级符号等价验证”。
 
 主要产物：
 
@@ -341,14 +341,15 @@
 
 | 对比 | 项集数 | score 胜/负/平 | 平均 score 变化 | 平均运行时间变化 |
 |---|---:|---:|---:|---:|
-| adaptive all-depth vs single screen, n=20/22/24/28 | 192 | 169/0/23 | -6.63% | +3092.45% |
-| adaptive all-depth vs fixed depth-2, n=20/22/24/28 | 192 | 0/0/192 | +0.00% | +47.90% |
-| depth policy vs single screen, n=20/22/24/28 | 192 | 169/0/23 | -6.56% | +2340.13% |
+| adaptive all-depth vs single screen, n=20/22/24/28 | 192 | 169/0/23 | -6.63% | +3086.05% |
+| adaptive all-depth vs fixed depth-2, n=20/22/24/28 | 192 | 0/0/192 | +0.00% | +47.78% |
+| depth policy vs single screen, n=20/22/24/28 | 192 | 169/0/23 | -6.56% | +2335.91% |
 | depth policy vs all-depth adaptive, n=20/22/24/28 | 192 | 0/6/186 | +0.08% | -31.04% |
-| depth policy vs all-depth adaptive, n=28 | 48 | 0/0/48 | +0.00% | -32.07% |
-| direct depth-2 guard vs fixed depth-2, n=20/22/24/28 | 192 | 0/0/192 | +0.00% | -0.15% |
+| depth policy vs all-depth adaptive, n=28 | 48 | 0/0/48 | +0.00% | -32.17% |
+| direct depth-2 guard vs fixed depth-2, n=20/22/24/28 | 192 | 0/0/192 | +0.00% | -0.17% |
+| ANF plan 符号验证 | 1344 方法行 | 1344/0 通过/失败 | 0 mismatch | - |
 
-结论：这是目前最清楚的大规模结构级 AI 证据。All-depth adaptive 说明 depth-2 screen 是强质量基线；depth policy 在 n=20--28 上几乎复制 all-depth 的质量收益，并节省约三成 all-depth 评估时间，尤其 n=28 上全部持平。它仍不是完整线路级验证，也不能替代 n<=20 的 truth-table correctness 结果，但可以支撑“结构级策略可扩展到更高维项集合”的论文主张。
+结论：这是目前最清楚的大规模结构级 AI 证据。All-depth adaptive 说明 depth-2 screen 是强质量基线；depth policy 在 n=20--28 上几乎复制 all-depth 的质量收益，并节省约三成 all-depth 评估时间，尤其 n=28 上全部持平。新增 ANF plan 符号验证后，n>20 结果不再只是资源估算表，而是每个候选分解都能在项集合代数层面展开回原始 ANF。它仍不是完整线路级验证，也不能替代 n<=20 的 truth-table correctness 结果，但可以更有力地支撑“结构级策略可扩展到更高维项集合”的论文主张。
 
 ### 2.6 高维 root-action teacher 诊断
 

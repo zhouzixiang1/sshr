@@ -7,7 +7,7 @@ from tempfile import TemporaryDirectory
 
 from anf_utils import anf_monomials, boolean_from_anf, majority_function, parity_function
 from export_benchmarks import export_suite, selected_formats
-from factor_plan import SearchConfig
+from factor_plan import SearchConfig, direct_plan, expand_plan_anf_terms, linear_pair_screen_plan, verify_plan_anf
 from resource_model import ResourceWeights
 from run_external_baselines import (
     EsopCube,
@@ -113,9 +113,30 @@ def check_external_truth_verifiers() -> None:
     assert candidate_bdd_orders(BooleanFunction(1, 0b10), seed=1, max_orders=8) == [(0,)]
 
 
+def check_plan_anf_verifier() -> None:
+    terms = frozenset([0b0011, 0b0101, 0b1001, 0b0111, 0b1011])
+    config = SearchConfig(
+        weights=ResourceWeights(t=1.0, cnot=0.04, depth=0.015, gates=0.01, ancilla=2.0),
+        max_factor_ancilla=3,
+        max_factor_size=4,
+        candidate_top_k=12,
+        gate_mode="logical_and",
+    )
+    plans = [
+        direct_plan(terms, 0, 0, config),
+        linear_pair_screen_plan(terms, config=config, action_width=4, recursive_depth=2, boolean_ring=True),
+    ]
+    for plan in plans:
+        verification = verify_plan_anf(plan)
+        assert verification.ok
+        assert verification.mismatches == 0
+        assert expand_plan_anf_terms(plan) == terms
+
+
 def main() -> int:
     check_roundtrip()
     check_external_truth_verifiers()
+    check_plan_anf_verifier()
     with TemporaryDirectory() as tmp:
         out_dir = Path(tmp)
         summary = export_suite("smoke", 42, out_dir, selected_formats("pla,blif,truth"), limit=2)
