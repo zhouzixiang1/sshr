@@ -18,6 +18,7 @@
 - `resource_nmcts_zh_adaptive_screen.tex` / `resource_nmcts_zh_adaptive_screen.pdf`：中文技术论文稿 v4，聚焦自适应 depth-2 布尔环筛选、n=18/n=20 最新 matched comparison，以及“筛选有效但高维神经先验仍弱”的边界。
 - `resource_nmcts_zh_structure_policy_v5.tex` / `resource_nmcts_zh_structure_policy_v5.pdf`：中文技术论文稿 v5，聚焦结构级 depth policy、保守 depth-2 skip guard 与 screen-gate，把 AI 贡献从动作排序推进到结构选择，同时保留“guard 覆盖率仍小”的边界。
 - `resource_nmcts_zh_manuscript_v6.tex` / `resource_nmcts_zh_manuscript_v6.pdf`：中文论文稿 v6，以“面向资源约束量子布尔函数综合的神经蒙特卡洛树搜索方法”为主线，重新组织相关工作、方法、实验和局限，明确本文不从 SSHR 入手而是做 ANF/FPRM 项集合搜索。
+- `resource_nmcts_zh_manuscript_v7.tex` / `resource_nmcts_zh_manuscript_v7.pdf`：中文论文稿 v7，在 v6 主线上进一步正式化讨论与局限，补充 direct depth-2 skip guard 相对 fixed depth-2 与 all-depth adaptive 的双时间口径。
 - `resource_nmcts_zh_research_position.tex` / `resource_nmcts_zh_research_position.pdf`：中文研究定位稿，重新梳理“不从 SSHR 入手”的论文主线、AI 在搜索问题中的角色、当前证据边界和下一步明显提升目标。
 - 最新 v4 稿已补充 `train_screen_depth_policy.py` 的结构级 depth policy 结果：n=14/16/18 训练、held-out n=20 测试，说明 AI 已能学习 screen 深度选择，但尚未超过固定 depth-2 的 score。
 - 最新 v4 稿同时补充 `train_structure_gate.py` 的 screen-gated Resource-NMCTS 结果：n=20 上资源与完整 Resource-NMCTS 持平，平均运行时间降低 61.31%，但只作为运行时门控证据。
@@ -38,6 +39,7 @@ latexmk -xelatex -g resource_nmcts_zh_stage_delivery.tex
 latexmk -xelatex -g resource_nmcts_zh_adaptive_screen.tex
 latexmk -xelatex -g resource_nmcts_zh_structure_policy_v5.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v6.tex
+latexmk -xelatex -g resource_nmcts_zh_manuscript_v7.tex
 latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 ```
 
