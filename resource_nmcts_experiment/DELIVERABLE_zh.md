@@ -276,6 +276,29 @@
 - `and_resource_nmcts_wide` 在 12 个 `n=14` random ANF 函数上相对 `and_resource_nmcts` 为 0/0/12，资源完全持平，但平均运行时间增加 59.80%。
 - 因此，本轮不能把高维 root-teacher 或 wide-fast 写成主贡献；它们应作为负向诊断，说明当前高维 AI 排序仍未突破，后续需要更强的策略梯度、pairwise ranking 或更丰富特征。
 
+### 2.10 外部工具链 readiness 与文献边界审计
+
+本轮新增 `analyze_toolchain_readiness.py`，把“还缺 ROS/mockturtle/RevKit 复现实验”从文字判断变成可复现环境审计。
+
+主要产物：
+
+- `results/analysis_toolchain_readiness.md`
+- `literature_notes.md` 中新增 back-end-aware oracle synthesis、mockturtle、RevKit 定位说明。
+
+当前环境审计结果：
+
+| 工具 | 当前状态 | 作用 |
+|---|---|---|
+| ABC | 可用，位于 `tmp/abc/abc` | 已支撑 AIG/XAG/LUT/ESOP 外部估算 baseline |
+| mockturtle | 未在 PATH 或 Python 环境中发现 | 后续 logic-network / reversible-toolchain baseline 候选 |
+| RevKit | 未在 PATH 或 Python 环境中发现 | 后续 reversible-synthesis baseline 候选 |
+
+解释：
+
+- 这不是新的资源提升结果，但它降低了投稿准备中的不确定性：当前能诚实声称的是 ABC/BDD/ESOP/SSHR 复现路径，不能声称已经完成 mockturtle/RevKit/ROS 复现。
+- 文献上，back-end-aware fault-tolerant oracle synthesis 已经把 XAG oracle synthesis 扩展到后端感知指标；本文目前只做逻辑层，因此不能借用其 mapping/back-end 结论。
+- 本轮还临时探测了两个潜在算法升级方向：高维 affine-linear factor 和局部 polarity 下降。前者在前几个 `n=14` 函数上更慢且 score 更差，后者在高项数函数上选回 polarity 0 且 fast linear-pair 结果更差；因此暂不纳入方法贡献。
+
 ## 3. 当前文件交付清单
 
 ### 3.1 核心代码
@@ -292,6 +315,7 @@
 - `analyze_exact_fprm_dp.py`：新增小规模 bounded FPRM-DP 精确切片。
 - `analyze_exact_xag_mc.py`：新增小规模 exact XAG 乘法复杂度 T 下界。
 - `analyze_highdim_root_action_oracle.py`：新增高维 root-action teacher 诊断。
+- `analyze_toolchain_readiness.py`：新增外部工具链 readiness 审计。
 
 ### 3.2 结果文件
 
@@ -318,6 +342,7 @@
 - `results/analysis_highdim_root_action_oracle.md`
 - `results/analysis_highdim_root_action_teacher.md`
 - `results/analysis_highdim_guard_upgrade.md`
+- `results/analysis_toolchain_readiness.md`
 
 ### 3.3 论文文件
 
@@ -370,6 +395,13 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 ```bash
 cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_exact_xag_mc.py --max-n 4
+```
+
+重新生成外部工具链 readiness 审计：
+
+```bash
+cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_toolchain_readiness.py
 ```
 
 重新生成搜索贡献分解：
@@ -446,6 +478,7 @@ latexmk -pdf -g main.tex
 - `raw_highdim_root_action_oracle.csv` 审计：62 行、0 error、0 incorrect。
 - `raw_highdim_root_action_teacher.csv` 审计：62 行、0 error、0 incorrect。
 - `raw_highdim_guard_upgrade.csv` 审计：24 行、0 error、0 skipped、0 incorrect。
+- `analysis_toolchain_readiness.md` 审计：ABC 可用；mockturtle 和 RevKit 在当前环境缺失。
 
 Git 状态：
 
@@ -466,6 +499,7 @@ Git 状态：
 7. `n<=4` exact FPRM-DP 精确切片显示：Resource/Pareto portfolio 可以在受限 FPRM exact 模型之外继续降低 score；Exact FPRM-DP 本身也优于 ESOP-MILP 和 exact SSHR-I 的加权 score。
 8. `n<=4` exact XAG 乘法复杂度切片显示：Resource/Pareto 在 12/72 个函数上达到全局 T 下界，平均 T gap 为 +53.01%，明显低于 ESOP-MILP 的 +120.14% 和 SSHR-I-T 的 +143.06%。
 9. 高维 root-action teacher 诊断显示：oracle top-24 相对启发式 top-4 有 3/0/7、-0.18% 的小幅 headroom；但 root-teacher 模型和 wide-fast guard 暂未形成可用提升，因此高维 AI 贡献仍应写成待改进方向。
+10. 外部工具链 readiness 审计显示：ABC 已可用并支撑当前 AIG/XAG/LUT/ESOP baseline；mockturtle/RevKit 当前缺失，因此不能声称已完成这类 reversible-toolchain 复现。
 
 不应写的主张：
 
@@ -482,7 +516,7 @@ Git 状态：
 
 1. 高维 neural guidance 需要继续改进；当前 highdim prior 只有 1/0/11、-0.01% 的弱正向结果。root-action teacher 诊断显示有 3/0/7、-0.18% 的小幅可学习 headroom，但 root-teacher 模型没有利用它，wide-fast guard 也只有 0/0/12 且更慢。
 2. 小规模 exact/exhaustive oracle slice 已完成 bounded FPRM-DP 和 exact XAG 乘法复杂度版本；如果继续加强，可以再补一个更接近全局 reversible circuit 的 exact/SMT/SAT 小规模证书。
-3. 继续补 ROS/mockturtle 或其他外部 reversible-toolchain 对比，减少“估算式 ABC/BDD baseline”的审稿风险。
+3. 继续补 ROS/mockturtle 或其他外部 reversible-toolchain 对比，减少“估算式 ABC/BDD baseline”的审稿风险；当前 readiness 审计显示 mockturtle/RevKit 尚未安装。
 
 已完成/待补强状态：
 
@@ -499,6 +533,7 @@ Git 状态：
 | highdim wide-fast guard | 12 个 n=14 random ANF | wide vs Resource 为 0/0/12，运行时间 +59.80% | 已有但属负向诊断 |
 | exact FPRM-DP | n<=4 traditional | Resource vs exact FPRM-DP 51/3/18，-12.18%；Pareto vs exact FPRM-DP 51/0/21，-12.20% | 已有但模型受限 |
 | exact XAG MC | n<=4 traditional | Resource/Pareto 达到 T 下界 12/72，平均 T gap +53.01%；ESOP 为 +120.14%，SSHR-I-T 为 +143.06% | 已有全局 T 下界 |
+| toolchain readiness | 当前工作站 | ABC 可用；mockturtle/RevKit 缺失 | 已有环境审计，仍需安装后复现 |
 
 ## 8. 当前结论
 

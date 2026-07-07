@@ -128,10 +128,12 @@ quantum compilation uses XOR-and-AND logic networks to reduce fault-tolerant
 resources; ROS combines LUT mapping with resource-aware oracle synthesis and
 SAT-based garbage management; multiplicative-complexity methods relate the
 number of AND nodes in a Boolean network to T-count and ancilla upper bounds;
+back-end-aware oracle synthesis extends XAG-oriented optimization toward
+backend-sensitive T-count, logical-time-step, and helper-qubit objectives;
 ABC provides a mature AIG rewriting and verification baseline for Boolean logic;
 and BDD-based reversible synthesis scales to large Boolean functions by
 compiling decision-diagram
-structure~\cite{meuli2022xag,meuli2020ros,meuli2019multiplicative,brayton2010abc,wille2009bdd}.
+structure~\cite{meuli2022xag,meuli2020ros,meuli2019multiplicative,yu2025backend,brayton2010abc,wille2009bdd}.
 SSHR is also closely related because it exploits parallelotope structure in the
 Boolean hypercube and provides CNOT-oriented small-function baselines,
 including heuristic and ILP variants~\cite{zheng2025sshr}.  These methods
@@ -1005,6 +1007,8 @@ the exported SSHR-I extension beyond $n\leq 4$ is time-limited rather than an
 exact certificate, the fact that ABC/BDD/ESOP/LUT rows are scored through
 logic-level estimates rather than full reversible-toolchain synthesis, and the
 lack of a reproduced external ROS/mockturtle toolchain in the comparison set.
+Accordingly, the results should not be read as a back-end-aware or
+mapping-level claim.
 The exact FPRM-DP slice reduces this concern for a small same-model subset, but
 it is exact only within the bounded fixed-polarity FPRM factor model, not over
 all reversible circuits.

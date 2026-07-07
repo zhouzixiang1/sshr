@@ -41,6 +41,29 @@
   representation differ from ANF/FPRM factorization.
   <https://dblp.org/rec/conf/dac/WilleD09>
 
+- Yu, Tempia Calvino, Soeken, and De Micheli, "Back-end-aware Fault-tolerant
+  Quantum Oracle Synthesis", ASP-DAC 2025, doi:10.1145/3658617.3697776.
+  This work extends XAG-based oracle synthesis toward back-end-aware quality
+  measures, reporting average improvements in T count, logical time steps, and
+  helper qubits after XAG optimization.  It is important boundary literature:
+  our current paper is deliberately logic-layer only and must not claim these
+  back-end-aware or mapping-level results.
+  <https://dl.acm.org/doi/10.1145/3658617.3697776>
+
+## External toolchain sources
+
+- mockturtle is a C++17 logic-network library with AIG, MIG, k-LUT, and generic
+  synthesis/optimization support.  It is a plausible source for a future
+  reproduced logic-network baseline beyond the current ABC estimates, but it is
+  not currently installed in this workstation environment.
+  <https://github.com/lsils/mockturtle>
+
+- RevKit is an open-source reversible-logic synthesis framework built around
+  tweedledum and mockturtle.  It is the natural candidate for a future
+  reversible-toolchain comparison, but it is not currently available as a local
+  binary or Python module.
+  <https://github.com/msoeken/revkit>
+
 ## AI-guided synthesis references
 
 - Tsaras et al., "ShortCircuit: AlphaZero-Driven Circuit Design",
@@ -91,3 +114,9 @@ against direct ANF, logical-AND direct ANF, root-beam, FPRM-greedy, ABC
 AIG/XAG, and a verified BDD/Shannon baseline, but a submission-ready paper
 still needs reproduced ROS or mockturtle-style reversible-toolchain results on
 the exported benchmarks.
+
+The current local readiness audit is stored in
+`results/analysis_toolchain_readiness.md`: ABC is available through the bundled
+`tmp/abc/abc` binary, while mockturtle and RevKit are absent from PATH and the
+Python environment.  This should be treated as an environment fact, not as a
+field-wide statement.

@@ -87,6 +87,7 @@ cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json resul
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_abc_lut --max-n 6 --max-lut-n 6 --timeout 10 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_bdd --max-n 6 --max-bdd-n 6 --bdd-orders 8 --timeout 10 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_traditional_resource_n6.csv --internal-csv results/raw_traditional_resource.csv --out results/analysis_external_traditional_resource_n6.md --latex-out paper_latex/tables/external_traditional_resource_n6.tex
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_toolchain_readiness.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset highdim_resource --formats blif,truth --out-dir benchmark_exports/highdim_resource_external_seed42
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/highdim_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_abc_lut,external_bdd --min-n 14 --max-n 14 --max-abc-n 14 --max-xag-n 14 --max-lut-n 14 --max-bdd-n 14 --bdd-orders 8 --timeout 20 --workers 8 --out results/raw_external_highdim_resource.csv --summary results/summary_external_highdim_resource.csv --run-manifest results/manifest_external_highdim_resource.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_highdim_resource.csv --internal-csv results/raw_highdim_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_fprm_linear_pair,and_fprm_root_beam,and_fprm_greedy,direct_anf,and_direct_anf --out results/analysis_external_highdim_resource.md
@@ -186,6 +187,10 @@ External-tool benchmark exchange:
   baseline with multiple variable orders, truth-table verification, and a
   Shannon-network resource estimate.  ROS and mockturtle adapters are still
   future work.
+- `analyze_toolchain_readiness.py` records external-tool availability for the
+  current workstation.  The current audit finds the bundled ABC binary but no
+  mockturtle or RevKit binary/Python module; see
+  `results/analysis_toolchain_readiness.md`.
 
 Current evidence from `results/analysis_evidence_affine.md`:
 
@@ -395,6 +400,15 @@ Time-limited exported SSHR-I, ABC-AIG, ABC-XAG, ABC-LUT, BDD, and ABC-ESOP exten
   reduction.  This baseline uses ABC `&exorcism -q` and verified ESOP-PLA
   output, making it a stronger external XOR-of-products comparison than the
   AIG-only path.
+
+External toolchain readiness from `results/analysis_toolchain_readiness.md`:
+
+- ABC is available through `tmp/abc/abc` and is already used for AIG/XAG/LUT/ESOP
+  exported-baseline paths.
+- mockturtle and RevKit are currently missing from both PATH and the Python
+  environment, so reproduced ROS/mockturtle/RevKit-style reversible-toolchain
+  comparisons remain future work until those dependencies are installed or
+  vendored.
 - Against CNOT-optimized SSHR-I, `and_resource_nmcts` has 164 T-count wins, 3
   losses, and 10 ties; score wins/losses/ties are 168/9/0 with a 27.92% mean
   score reduction.  CNOT count is worse on 168/177 functions.

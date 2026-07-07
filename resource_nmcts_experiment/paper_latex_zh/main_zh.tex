@@ -100,8 +100,10 @@ Xor-And-Inverter Graphs（XAG）把 XOR 视作相对廉价的 Clifford 结构，
 节点与非 Clifford 成本联系起来，是低 T-count oracle 综合的重要布尔网络表示。
 乘法复杂度视角进一步强调，减少非线性乘法结构往往比单纯压缩门数更贴近容错量子
 计算的资源瓶颈。ROS 将 oracle 综合表述为资源约束 LUT 映射与层次化综合问题，
-并处理工作比特管理。BDD-based synthesis 则使用决策图描述可逆逻辑，适合作为
-大函数的可扩展 baseline。
+并处理工作比特管理。近期 back-end-aware oracle synthesis 进一步把 XAG oracle
+优化扩展到后端感知的 T-count、逻辑时间步和辅助比特指标；本文只处理逻辑层综合，
+因此不声称硬件后端或映射后的优势。BDD-based synthesis 则使用决策图描述可逆逻辑，
+适合作为大函数的可扩展 baseline。
 
 SSHR 与本文最接近之处在于同样关注小规模布尔函数的量子 oracle 综合，但两者的
 搜索空间不同。SSHR 以 parallelotope 空间结构作为候选覆盖，并主要面向 CNOT
@@ -410,6 +412,11 @@ ROS: Resource-constrained Oracle Synthesis for Quantum Computers.
 Giulia Meuli, Mathias Soeken, Earl Campbell, Martin Roetteler, and Giovanni De Micheli.
 The Role of Multiplicative Complexity in Compiling Low T-count Oracle Circuits.
 \emph{ICCAD}, 2019.
+
+\bibitem{yu2025backend}
+Mingfei Yu, Alessandro Tempia Calvino, Mathias Soeken, and Giovanni De Micheli.
+Back-end-aware Fault-tolerant Quantum Oracle Synthesis.
+\emph{ASP-DAC}, 2025.
 
 \bibitem{wille2009bdd}
 Robert Wille and Rolf Drechsler.
