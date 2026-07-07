@@ -72,6 +72,17 @@ class PlanAnfVerification:
     mismatches: int
 
 
+@dataclass(frozen=True)
+class CircuitAnfVerification:
+    ok: bool
+    gates: int
+    max_wire_terms: int
+    output_terms: int
+    input_mismatches: int
+    output_mismatch: int
+    ancilla_mismatches: int
+
+
 def _xor_term_sets(*items: frozenset[int]) -> frozenset[int]:
     out: set[int] = set()
     for terms in items:
@@ -96,6 +107,12 @@ def _xor_term_values(values: Iterable[int]) -> frozenset[int]:
 
 def _multiply_monomial_terms(terms: frozenset[int], factor: int) -> frozenset[int]:
     return _xor_term_values(int(term) | int(factor) for term in terms)
+
+
+def _multiply_polynomial_terms(lhs: frozenset[int], rhs: frozenset[int]) -> frozenset[int]:
+    if not lhs or not rhs:
+        return frozenset()
+    return _xor_term_values(int(left) | int(right) for left in lhs for right in rhs)
 
 
 def _multiply_linear_terms(terms: frozenset[int], factor: int, affine_const: bool = False) -> frozenset[int]:
@@ -164,6 +181,85 @@ def verify_plan_anf(plan: Plan) -> PlanAnfVerification:
         nodes=nodes,
         max_expanded_terms=max_expanded_terms,
         mismatches=mismatches,
+    )
+
+
+def _failed_circuit_verification(
+    circ: QuantumCircuit,
+    max_wire_terms: int = 0,
+    input_mismatches: int = 0,
+    output_mismatch: int = 1,
+    ancilla_mismatches: int = 0,
+) -> CircuitAnfVerification:
+    return CircuitAnfVerification(
+        ok=False,
+        gates=len(circ.gates),
+        max_wire_terms=max_wire_terms,
+        output_terms=0,
+        input_mismatches=input_mismatches,
+        output_mismatch=output_mismatch,
+        ancilla_mismatches=ancilla_mismatches,
+    )
+
+
+def verify_circuit_anf(circ: QuantumCircuit, n_inputs: int, expected_terms: frozenset[int]) -> CircuitAnfVerification:
+    """Verify an emitted oracle circuit symbolically over ANF polynomials.
+
+    Unlike ``verify_oracle``, this does not enumerate a truth table.  Each wire
+    is represented as a GF(2) set of monomial masks over the original inputs.
+    ``MCT`` gates multiply control polynomials in the Boolean ring where
+    variables are idempotent, so monomial products are represented by bitwise
+    OR and duplicate terms cancel.
+    """
+    if circ.n_qubits <= n_inputs:
+        return _failed_circuit_verification(circ)
+
+    wires: list[frozenset[int]] = [frozenset({1 << i}) for i in range(n_inputs)]
+    wires.extend(frozenset() for _ in range(circ.n_qubits - n_inputs))
+    max_wire_terms = max((len(poly) for poly in wires), default=0)
+
+    def valid_index(index: int) -> bool:
+        return 0 <= index < circ.n_qubits
+
+    for gate in circ.gates:
+        target = int(gate.target)
+        if not valid_index(target):
+            return _failed_circuit_verification(circ, max_wire_terms=max_wire_terms)
+        if gate.type == "X":
+            wires[target] = _xor_term_sets(wires[target], frozenset({0}))
+        elif gate.type == "CNOT":
+            if len(gate.controls) != 1:
+                return _failed_circuit_verification(circ, max_wire_terms=max_wire_terms)
+            control = int(gate.controls[0])
+            if not valid_index(control):
+                return _failed_circuit_verification(circ, max_wire_terms=max_wire_terms)
+            wires[target] = _xor_term_sets(wires[target], wires[control])
+        elif gate.type == "MCT":
+            controls = [int(control) for control in gate.controls]
+            if any(not valid_index(control) for control in controls):
+                return _failed_circuit_verification(circ, max_wire_terms=max_wire_terms)
+            product = frozenset({0})
+            for control in controls:
+                product = _multiply_polynomial_terms(product, wires[control])
+                if not product:
+                    break
+            wires[target] = _xor_term_sets(wires[target], product)
+        else:
+            return _failed_circuit_verification(circ, max_wire_terms=max_wire_terms)
+        max_wire_terms = max(max_wire_terms, len(wires[target]))
+
+    input_mismatches = sum(1 for i in range(n_inputs) if wires[i] != frozenset({1 << i}))
+    output_terms = len(wires[n_inputs])
+    output_mismatch = int(wires[n_inputs] != frozenset(expected_terms))
+    ancilla_mismatches = sum(1 for poly in wires[n_inputs + 1 :] if poly)
+    return CircuitAnfVerification(
+        ok=input_mismatches == 0 and output_mismatch == 0 and ancilla_mismatches == 0,
+        gates=len(circ.gates),
+        max_wire_terms=max_wire_terms,
+        output_terms=output_terms,
+        input_mismatches=input_mismatches,
+        output_mismatch=output_mismatch,
+        ancilla_mismatches=ancilla_mismatches,
     )
 
 

@@ -200,8 +200,9 @@ Term-set scale tests beyond truth-table-feasible sizes are run with
 `results/analysis_screen_scale_terms.md`, `results/raw_screen_scale_terms.csv`,
 and `paper_latex/tables/screen_scale_terms.tex`.  Each returned factor plan is
 also expanded symbolically back to its ANF monomial set, so these runs now
-include plan-level ANF equivalence checks without constructing full truth
-tables.
+include plan-level ANF equivalence checks.  The emitted X/CNOT/MCT oracle
+circuit is then simulated symbolically over GF(2) polynomials, which gives
+emitted-circuit equivalence evidence without constructing full truth tables.
 
 Current structure-policy evidence:
 
@@ -228,16 +229,16 @@ Current structure-policy evidence:
 - Term-set scale evidence now covers 192 generated high-dimensional ANF term
   sets at `n=20,22,24,28`.  All-depth adaptive Boolean-ring screening improves
   over single screen by 169/0/23 score W/L/T with a -6.63% mean score change,
-  but ties fixed depth-2 in score and costs +47.78% runtime.  The learned depth
+  but ties fixed depth-2 in score and costs +47.89% runtime.  The learned depth
   policy preserves nearly all of that quality signal: 169/0/23 vs single screen
   with -6.56% mean score, and 0/6/186 vs all-depth adaptive with only +0.08%
-  mean score while saving -31.04% runtime.  At `n=28`, the policy ties
-  all-depth adaptive on all 48 term sets and saves -32.17% runtime.  The
+  mean score while saving -31.02% runtime.  At `n=28`, the policy ties
+  all-depth adaptive on all 48 term sets and saves -32.15% runtime.  The
   conservative direct depth-2 guard ties fixed depth-2 on all 192 term sets and
-  has -0.17% mean runtime change.  Symbolic ANF plan expansion verifies
-  1344/1344 generated method rows with zero mismatches.  This is large-scale
-  plan-level equivalence evidence, but still not full truth-table or emitted
-  circuit simulation for `n>20`.
+  has -0.15% mean runtime change.  Symbolic ANF plan expansion and emitted
+  X/CNOT/MCT circuit simulation both verify 1344/1344 generated method rows
+  with zero mismatches.  This is large-scale emitted-circuit equivalence
+  evidence, but still not full truth-table simulation for `n>20`.
 
 Current screen-gate evidence:
 

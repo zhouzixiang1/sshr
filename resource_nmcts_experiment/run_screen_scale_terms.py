@@ -21,7 +21,14 @@ from typing import Iterable
 
 import torch
 
-from factor_plan import SearchConfig, direct_plan, linear_pair_screen_plan, verify_plan_anf
+from factor_plan import (
+    SearchConfig,
+    direct_plan,
+    emit_plan_to_circuit,
+    linear_pair_screen_plan,
+    verify_circuit_anf,
+    verify_plan_anf,
+)
 from resource_model import ResourceWeights
 from train_screen_depth_guard import Depth2GuardNet
 from train_screen_depth_policy import (
@@ -51,6 +58,10 @@ class MethodEval:
     anf_verified: bool
     plan_nodes: int
     plan_mismatches: int
+    circuit_anf_verified: bool
+    circuit_gates: int
+    circuit_max_wire_terms: int
+    circuit_mismatches: int
 
 
 @dataclass(frozen=True)
@@ -77,8 +88,10 @@ def make_config() -> SearchConfig:
     )
 
 
-def eval_plan(method: str, plan, elapsed: float, config: SearchConfig) -> MethodEval:
-    verification = verify_plan_anf(plan)
+def eval_plan(method: str, plan, elapsed: float, config: SearchConfig, n_inputs: int) -> MethodEval:
+    plan_verification = verify_plan_anf(plan)
+    circuit = emit_plan_to_circuit(plan, n_inputs, config.max_factor_ancilla)
+    circuit_verification = verify_circuit_anf(circuit, n_inputs, plan.terms)
     return MethodEval(
         method=method,
         score=plan.score(config.weights),
@@ -88,9 +101,17 @@ def eval_plan(method: str, plan, elapsed: float, config: SearchConfig) -> Method
         gates=plan.cost.gates,
         peak_ancilla=plan.cost.peak_ancilla,
         time_s=elapsed,
-        anf_verified=verification.ok,
-        plan_nodes=verification.nodes,
-        plan_mismatches=verification.mismatches,
+        anf_verified=plan_verification.ok,
+        plan_nodes=plan_verification.nodes,
+        plan_mismatches=plan_verification.mismatches,
+        circuit_anf_verified=circuit_verification.ok,
+        circuit_gates=circuit_verification.gates,
+        circuit_max_wire_terms=circuit_verification.max_wire_terms,
+        circuit_mismatches=(
+            circuit_verification.input_mismatches
+            + circuit_verification.output_mismatch
+            + circuit_verification.ancilla_mismatches
+        ),
     )
 
 
@@ -104,7 +125,7 @@ def evaluate_one(task: tuple[int, int, int, str, int]) -> TermExample:
     evals: dict[str, MethodEval] = {}
     started = time.perf_counter()
     direct = direct_plan(terms, 0, 0, config)
-    evals["direct_logical_and"] = eval_plan("direct_logical_and", direct, time.perf_counter() - started, config)
+    evals["direct_logical_and"] = eval_plan("direct_logical_and", direct, time.perf_counter() - started, config, n)
 
     screen_methods = {
         "screen_single": 0,
@@ -120,7 +141,7 @@ def evaluate_one(task: tuple[int, int, int, str, int]) -> TermExample:
             recursive_depth=recursive_depth,
             boolean_ring=True,
         )
-        evals[method] = eval_plan(method, plan, time.perf_counter() - started, config)
+        evals[method] = eval_plan(method, plan, time.perf_counter() - started, config, n)
 
     best_screen = min(
         [evals["screen_single"], evals["screen_depth1"], evals["screen_depth2"]],
@@ -141,6 +162,10 @@ def evaluate_one(task: tuple[int, int, int, str, int]) -> TermExample:
         anf_verified=best_screen.anf_verified,
         plan_nodes=best_screen.plan_nodes,
         plan_mismatches=best_screen.plan_mismatches,
+        circuit_anf_verified=best_screen.circuit_anf_verified,
+        circuit_gates=best_screen.circuit_gates,
+        circuit_max_wire_terms=best_screen.circuit_max_wire_terms,
+        circuit_mismatches=best_screen.circuit_mismatches,
     )
     return TermExample(
         name=f"terms_n{n}_{index:04d}_{profile}",
@@ -222,6 +247,10 @@ def add_learned_methods(
                 anf_verified=chosen.anf_verified,
                 plan_nodes=chosen.plan_nodes,
                 plan_mismatches=chosen.plan_mismatches,
+                circuit_anf_verified=chosen.circuit_anf_verified,
+                circuit_gates=chosen.circuit_gates,
+                circuit_max_wire_terms=chosen.circuit_max_wire_terms,
+                circuit_mismatches=chosen.circuit_mismatches,
             )
         if guard_depths is not None:
             chosen = evals[{1: "screen_depth1", 2: "screen_depth2"}[guard_depths[idx]]]
@@ -237,6 +266,10 @@ def add_learned_methods(
                 anf_verified=chosen.anf_verified,
                 plan_nodes=chosen.plan_nodes,
                 plan_mismatches=chosen.plan_mismatches,
+                circuit_anf_verified=chosen.circuit_anf_verified,
+                circuit_gates=chosen.circuit_gates,
+                circuit_max_wire_terms=chosen.circuit_max_wire_terms,
+                circuit_mismatches=chosen.circuit_mismatches,
             )
         updated.append(
             TermExample(
@@ -269,6 +302,10 @@ def write_raw(path: Path, examples: list[TermExample]) -> None:
         "anf_verified",
         "plan_nodes",
         "plan_mismatches",
+        "circuit_anf_verified",
+        "circuit_gates",
+        "circuit_max_wire_terms",
+        "circuit_mismatches",
     ]
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
@@ -292,6 +329,10 @@ def write_raw(path: Path, examples: list[TermExample]) -> None:
                         "anf_verified": ev.anf_verified,
                         "plan_nodes": ev.plan_nodes,
                         "plan_mismatches": ev.plan_mismatches,
+                        "circuit_anf_verified": ev.circuit_anf_verified,
+                        "circuit_gates": ev.circuit_gates,
+                        "circuit_max_wire_terms": ev.circuit_max_wire_terms,
+                        "circuit_mismatches": ev.circuit_mismatches,
                     }
                 )
 
@@ -342,6 +383,9 @@ def write_summary(summary_path: Path, analysis_path: Path, table_path: Path, exa
                 "mean_time_s",
                 "verified_rows",
                 "mean_plan_nodes",
+                "circuit_verified_rows",
+                "mean_circuit_gates",
+                "mean_circuit_max_wire_terms",
             ],
             lineterminator="\n",
         )
@@ -366,6 +410,9 @@ def write_summary(summary_path: Path, analysis_path: Path, table_path: Path, exa
                         "mean_time_s": statistics.mean(v.time_s for v in vals),
                         "verified_rows": sum(1 for v in vals if v.anf_verified),
                         "mean_plan_nodes": statistics.mean(v.plan_nodes for v in vals),
+                        "circuit_verified_rows": sum(1 for v in vals if v.circuit_anf_verified),
+                        "mean_circuit_gates": statistics.mean(v.circuit_gates for v in vals),
+                        "mean_circuit_max_wire_terms": statistics.mean(v.circuit_max_wire_terms for v in vals),
                     }
                 )
 
@@ -383,12 +430,16 @@ def write_summary(summary_path: Path, analysis_path: Path, table_path: Path, exa
         "",
         "Large-scale logic-level ANF term-set evaluation. These rows do not build",
         "full truth tables; they evaluate the synthesis search state directly.",
-        "Each method row is also checked by symbolic ANF plan expansion: direct",
-        "nodes return their monomial set, monomial factors multiply quotient",
-        "terms by the factor, and linear Boolean-ring factors expand over GF(2).",
+        "Each method row is also checked twice: first by symbolic ANF plan",
+        "expansion, then by symbolic simulation of the emitted X/CNOT/MCT",
+        "oracle circuit over GF(2) polynomials.",
         "",
         f"ANF plan verification: {sum(1 for ex in examples for ev in ex.evals.values() if ev.anf_verified)}/"
         f"{sum(1 for ex in examples for _ in ex.evals.values())} method rows passed.",
+        f"Emitted-circuit ANF verification: "
+        f"{sum(1 for ex in examples for ev in ex.evals.values() if ev.circuit_anf_verified)}/"
+        f"{sum(1 for ex in examples for _ in ex.evals.values())} method rows passed; "
+        f"mismatches={sum(ev.circuit_mismatches for ex in examples for ev in ex.evals.values())}.",
         "",
         "## Paired comparisons",
         "",

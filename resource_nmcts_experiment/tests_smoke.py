@@ -7,7 +7,15 @@ from tempfile import TemporaryDirectory
 
 from anf_utils import anf_monomials, boolean_from_anf, majority_function, parity_function
 from export_benchmarks import export_suite, selected_formats
-from factor_plan import SearchConfig, direct_plan, expand_plan_anf_terms, linear_pair_screen_plan, verify_plan_anf
+from factor_plan import (
+    SearchConfig,
+    direct_plan,
+    emit_plan_to_circuit,
+    expand_plan_anf_terms,
+    linear_pair_screen_plan,
+    verify_circuit_anf,
+    verify_plan_anf,
+)
 from resource_model import ResourceWeights
 from run_external_baselines import (
     EsopCube,
@@ -131,6 +139,11 @@ def check_plan_anf_verifier() -> None:
         assert verification.ok
         assert verification.mismatches == 0
         assert expand_plan_anf_terms(plan) == terms
+        circuit = emit_plan_to_circuit(plan, 5, config.max_factor_ancilla)
+        circuit_verification = verify_circuit_anf(circuit, 5, terms)
+        assert circuit_verification.ok
+        assert circuit_verification.output_mismatch == 0
+        assert circuit_verification.ancilla_mismatches == 0
 
 
 def main() -> int:
