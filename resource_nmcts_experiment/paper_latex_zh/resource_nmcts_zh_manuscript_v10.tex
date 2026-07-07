@@ -37,7 +37,7 @@
 \maketitle
 
 \begin{abstract}
-量子布尔函数 oracle 综合把经典谓词嵌入可逆量子线路，是 Grover 搜索、密码分析和若干量子算法子程序中的基础步骤。由于容错量子计算中非 Clifford 门代价高，逻辑层 T-count、CNOT、线路深度和辅助比特数会直接影响资源估计。本文将 oracle 综合建模为代数正规形（algebraic normal form, \anf{}）和固定极性 Reed--Muller（fixed-polarity Reed--Muller, \fprm{}）项集合上的资源加权搜索问题，提出结合神经动作先验、蒙特卡洛树搜索、布尔环线性因子筛选、结构级 depth policy 和保守 skip guard 的 \method{} 框架。该框架不依赖 SSHR 的 parallelotope cover 空间；SSHR 在本文中仅作为 CNOT-oriented small-scale baseline。实验显示，在 $n\leq6$ 的 177 个传统函数上，\pareto{} 相对 ESOP cube beam 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%；相对 weighted ESOP-MILP 获得 167/3/7，平均 score 降低 29.84\%。在 $n=18$ 的 12 个随机 \anf{} 函数上，adaptive depth-2 \screen{} 相对单层筛选平均 score 降低 6.47\%，完整 \method{} 相对 adaptive screen 进一步降低 23.85\%。在 $n=20$ 的 6 个边界函数上，adaptive depth-2 screen 相对单层筛选平均 score 降低 7.47\%，screen-gated \method{} 在保持资源不变的同时把平均运行时间从 77.10 s 降至 20.71 s；在独立 $n=19,20$ gate holdout 中，screen-gated \method{} 与完整 \method{} 在 16 个函数上全部 score 持平并平均节省 36.83\% 运行时间，其中 $n=20$ 子集省时 73.66\%，$n=19$ 子集因 adaptive screen 有 4/8 个 score loss 被正确保留 Resource tail。在 $n=20,22,24,28$ 的 192 个项集级 scale 测试中，depth policy 相对 single screen 获得 169/0/23 的 score 胜/负/平，平均 score 降低 6.56\%，并相对 all-depth adaptive 只损失 0.08\% 平均 score 而节省 31.02\% 运行时间；同时，1344/1344 个生成方法行通过 ANF plan 符号展开验证和 emitted X/CNOT/MCT circuit 的 GF(2) 多项式符号模拟验证，mismatch 总数为 0。结果支持一条独立于 SSHR 的资源搜索论文主线，同时也给出边界：$n>20$ scale 结果具有 emitted-circuit 级 ANF 等价证据，但仍不是完整 truth-table simulation；当前 learned prior 的高维独立质量收益仍弱，结构级 AI 仍需从安全门控推进到更大幅度的质量收益。
+量子布尔函数 oracle 综合把经典谓词嵌入可逆量子线路，是 Grover 搜索、密码分析和若干量子算法子程序中的基础步骤。由于容错量子计算中非 Clifford 门代价高，逻辑层 T-count、CNOT、线路深度和辅助比特数会直接影响资源估计。本文将 oracle 综合建模为代数正规形（algebraic normal form, \anf{}）和固定极性 Reed--Muller（fixed-polarity Reed--Muller, \fprm{}）项集合上的资源加权搜索问题，提出结合神经动作先验、蒙特卡洛树搜索、布尔环线性因子筛选、结构级 depth policy 和保守 skip guard 的 \method{} 框架。该框架不依赖 SSHR 的 parallelotope cover 空间；SSHR 在本文中仅作为 CNOT-oriented small-scale baseline。实验显示，在 $n\leq6$ 的 177 个传统函数上，\pareto{} 相对 ESOP cube beam 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%；相对 weighted ESOP-MILP 获得 167/3/7，平均 score 降低 29.84\%。在 $n=18$ 的 12 个随机 \anf{} 函数上，adaptive depth-2 \screen{} 相对单层筛选平均 score 降低 6.47\%，完整 \method{} 相对 adaptive screen 进一步降低 23.85\%。在 $n=20$ 的 6 个边界函数上，adaptive depth-2 screen 相对单层筛选平均 score 降低 7.47\%，screen-gated \method{} 在保持资源不变的同时把平均运行时间从 77.10 s 降至 20.71 s；在独立 $n=19,20$ gate holdout 中，screen-gated \method{} 与完整 \method{} 在 16 个函数上全部 score 持平并平均节省 36.83\% 运行时间，其中 $n=20$ 子集省时 73.66\%，$n=19$ 子集因 adaptive screen 有 4/8 个 score loss 被正确保留 Resource tail。在 $n=20,22,24,28$ 的 192 个项集级 scale 测试中，depth policy 相对 single screen 获得 169/0/23 的 score 胜/负/平，平均 score 降低 6.56\%，并相对 all-depth adaptive 只损失 0.08\% 平均 score 而节省 31.01\% 运行时间；同时，1344/1344 个生成方法行通过 ANF plan 符号展开验证和 emitted X/CNOT/MCT circuit 的 GF(2) 多项式符号模拟验证，mismatch 总数为 0。结果支持一条独立于 SSHR 的资源搜索论文主线，同时也给出边界：$n>20$ scale 结果具有 emitted-circuit 级 ANF 等价证据，但仍不是完整 truth-table simulation；当前 learned prior 的高维独立质量收益仍弱，结构级 AI 仍需从安全门控推进到更大幅度的质量收益。
 \end{abstract}
 
 \noindent\textbf{关键词：}量子 oracle 综合；布尔函数综合；神经蒙特卡洛树搜索；布尔环；ANF；FPRM；资源约束综合
@@ -269,9 +269,9 @@ Shallow-staged & staged & 48 & 8 & 0 & 0/0/48 & $+29.10\%$ & $-7.81\%$ \\
 
 \subsection{项集级大规模结构测试}
 
-为避免 $n>20$ 完整 truth table 构造和语义验证主导运行时间，本文进一步在 \anf{} 项集合这一搜索状态上测试结构级策略。该测试覆盖 $n=20,22,24,28$，每个维度 48 个生成式高维项集，共 192 个样本。表~\ref{tab:scale} 显示，all-depth adaptive screen 相对 single screen 获得 169/0/23 的 score 胜/负/平，平均 score 降低 6.63\%；但它与固定 depth-2 screen 在 score 上全部持平，平均运行时间增加 47.89\%。这说明固定 depth-2 是当前 screen 家族中的强质量基线。
+为避免 $n>20$ 完整 truth table 构造和语义验证主导运行时间，本文进一步在 \anf{} 项集合这一搜索状态上测试结构级策略。该测试覆盖 $n=20,22,24,28$，每个维度 48 个生成式高维项集，共 192 个样本。表~\ref{tab:scale} 显示，all-depth adaptive screen 相对 single screen 获得 169/0/23 的 score 胜/负/平，平均 score 降低 6.63\%；但它与固定 depth-2 screen 在 score 上全部持平，平均运行时间增加 47.92\%。这说明固定 depth-2 是当前 screen 家族中的强质量基线。
 
-结构级 depth policy 在同一 192 个项集上相对 single screen 获得 169/0/23，平均 score 降低 6.56\%。相对 all-depth adaptive，它只有 0/6/186 的 score 胜/负/平，平均 score 增加 0.08\%，但平均运行时间降低 31.02\%。在最大维度 $n=28$ 上，depth policy 与 all-depth adaptive 在 48 个项集上全部 score 持平，并节省 32.15\% 运行时间。保守 direct depth-2 guard 在 192 个项集上与 fixed depth-2 全部 score 持平，平均运行时间变化为 -0.15\%。这些结果不替代完整 truth-table simulation，但说明结构级 AI 策略至少可以扩展到更高维项集合，并保持可控的资源损失。
+结构级 depth policy 在同一 192 个项集上相对 single screen 获得 169/0/23，平均 score 降低 6.56\%。相对 all-depth adaptive，它只有 0/6/186 的 score 胜/负/平，平均 score 增加 0.08\%，但平均运行时间降低 31.01\%。在最大维度 $n=28$ 上，depth policy 与 all-depth adaptive 在 48 个项集上全部 score 持平，并节省 32.15\% 运行时间。保守 direct depth-2 guard 在 192 个项集上与 fixed depth-2 全部 score 持平，平均运行时间变化为 -0.14\%。这些结果不替代完整 truth-table simulation，但说明结构级 AI 策略至少可以扩展到更高维项集合，并保持可控的资源损失。
 
 为防止项集级实验退化为单纯资源估计，本文对所有返回 plan 做两层符号验证。第一层展开 factor plan：direct 节点展开为自身 monomial set；普通 factor 节点将 quotient plan 展开项逐项乘回 monomial factor；Boolean-ring linear factor 节点则在 GF(2) 上展开线性因子，并与 rest plan 展开项做异或合并。第二层模拟 emitted X/CNOT/MCT circuit：每根线保存一个 ANF 多项式，CNOT 对目标线异或控制多项式，MCT 将控制多项式逐项相乘后异或到目标线。该检查在不构造 $2^n$ truth table 的情况下验证输入线复原、输出项集合等价和辅助线清零。完整 scale 实验中，1344/1344 个方法行通过 plan 和 circuit 两层验证，mismatch 总数均为 0。
 
@@ -284,12 +284,12 @@ Shallow-staged & staged & 48 & 8 & 0 & 0/0/48 & $+29.10\%$ & $-7.81\%$ \\
 \toprule
 $n$ & 方法 & baseline & score 胜/负/平 & 平均 $\Delta$ score & 平均 $\Delta$ time \\
 \midrule
-all & adaptive all-depth & single screen & 169/0/23 & $-6.63\%$ & $+3083.53\%$ \\
-all & adaptive all-depth & fixed depth-2 & 0/0/192 & $+0.00\%$ & $+47.89\%$ \\
-all & depth policy & single screen & 169/0/23 & $-6.56\%$ & $+2333.28\%$ \\
-all & depth policy & all-depth adaptive & 0/6/186 & $+0.08\%$ & $-31.02\%$ \\
+all & adaptive all-depth & single screen & 169/0/23 & $-6.63\%$ & $+3077.71\%$ \\
+all & adaptive all-depth & fixed depth-2 & 0/0/192 & $+0.00\%$ & $+47.92\%$ \\
+all & depth policy & single screen & 169/0/23 & $-6.56\%$ & $+2328.66\%$ \\
+all & depth policy & all-depth adaptive & 0/6/186 & $+0.08\%$ & $-31.01\%$ \\
 28 & depth policy & all-depth adaptive & 0/0/48 & $+0.00\%$ & $-32.15\%$ \\
-all & direct depth-2 guard & fixed depth-2 & 0/0/192 & $+0.00\%$ & $-0.15\%$ \\
+all & direct depth-2 guard & fixed depth-2 & 0/0/192 & $+0.00\%$ & $-0.14\%$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -304,7 +304,7 @@ all & direct depth-2 guard & fixed depth-2 & 0/0/192 & $+0.00\%$ & $-0.15\%$ \\
 
 \section{结论}
 
-本文提出一种面向资源约束量子布尔函数综合的神经蒙特卡洛树搜索方法。该方法以 \anf{}/\fprm{} 项集合为状态，以逻辑资源 score 为选择准则，用布尔环线性因子、神经先验、\mcts{}、baseline guard、depth policy 和 screen-gate 共同生成候选线路。实验表明，\pareto{} 在 $n\leq6$ 传统函数上显著降低 T-count 与 score；adaptive depth-2 screen 在 $n=18,20$ 高维随机函数上稳定改善单层 screen；screen-gate 在 held-out $n=19,20$ 上与完整 \method{} 资源持平并减少运行时间；保守 skip guard 在 held-out $n=20$ 上实现不劣于 fixed depth-2 的结构级 direct dispatch；depth policy 在 $n=20,22,24,28$ 项集级测试中相对 single screen 保持明确质量优势，并相对 all-depth adaptive 减少 31.02\% 平均时间；ANF plan 展开和 emitted-circuit 符号模拟进一步验证了 1344/1344 个高维项集级方法行的代数等价性。当前结果已经形成一条独立于 SSHR 的论文主线，但要达到更强投稿标准，还需要把结构级 AI 从小幅安全门控推进到更大覆盖率的质量收益，并继续补充完整 truth-table 可验证切片和更多外部 reversible-toolchain 对比。
+本文提出一种面向资源约束量子布尔函数综合的神经蒙特卡洛树搜索方法。该方法以 \anf{}/\fprm{} 项集合为状态，以逻辑资源 score 为选择准则，用布尔环线性因子、神经先验、\mcts{}、baseline guard、depth policy 和 screen-gate 共同生成候选线路。实验表明，\pareto{} 在 $n\leq6$ 传统函数上显著降低 T-count 与 score；adaptive depth-2 screen 在 $n=18,20$ 高维随机函数上稳定改善单层 screen；screen-gate 在 held-out $n=19,20$ 上与完整 \method{} 资源持平并减少运行时间；保守 skip guard 在 held-out $n=20$ 上实现不劣于 fixed depth-2 的结构级 direct dispatch；depth policy 在 $n=20,22,24,28$ 项集级测试中相对 single screen 保持明确质量优势，并相对 all-depth adaptive 减少 31.01\% 平均时间；ANF plan 展开和 emitted-circuit 符号模拟进一步验证了 1344/1344 个高维项集级方法行的代数等价性。当前结果已经形成一条独立于 SSHR 的论文主线，但要达到更强投稿标准，还需要把结构级 AI 从小幅安全门控推进到更大覆盖率的质量收益，并继续补充完整 truth-table 可验证切片和更多外部 reversible-toolchain 对比。
 
 \begin{thebibliography}{99}
 

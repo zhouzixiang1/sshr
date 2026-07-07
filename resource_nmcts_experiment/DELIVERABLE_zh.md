@@ -341,12 +341,12 @@
 
 | 对比 | 项集数 | score 胜/负/平 | 平均 score 变化 | 平均运行时间变化 |
 |---|---:|---:|---:|---:|
-| adaptive all-depth vs single screen, n=20/22/24/28 | 192 | 169/0/23 | -6.63% | +3083.53% |
-| adaptive all-depth vs fixed depth-2, n=20/22/24/28 | 192 | 0/0/192 | +0.00% | +47.89% |
-| depth policy vs single screen, n=20/22/24/28 | 192 | 169/0/23 | -6.56% | +2333.28% |
-| depth policy vs all-depth adaptive, n=20/22/24/28 | 192 | 0/6/186 | +0.08% | -31.02% |
+| adaptive all-depth vs single screen, n=20/22/24/28 | 192 | 169/0/23 | -6.63% | +3077.71% |
+| adaptive all-depth vs fixed depth-2, n=20/22/24/28 | 192 | 0/0/192 | +0.00% | +47.92% |
+| depth policy vs single screen, n=20/22/24/28 | 192 | 169/0/23 | -6.56% | +2328.66% |
+| depth policy vs all-depth adaptive, n=20/22/24/28 | 192 | 0/6/186 | +0.08% | -31.01% |
 | depth policy vs all-depth adaptive, n=28 | 48 | 0/0/48 | +0.00% | -32.15% |
-| direct depth-2 guard vs fixed depth-2, n=20/22/24/28 | 192 | 0/0/192 | +0.00% | -0.15% |
+| direct depth-2 guard vs fixed depth-2, n=20/22/24/28 | 192 | 0/0/192 | +0.00% | -0.14% |
 | ANF plan 符号验证 | 1344 方法行 | 1344/0 通过/失败 | 0 mismatch | - |
 | emitted-circuit ANF 符号验证 | 1344 方法行 | 1344/0 通过/失败 | 0 mismatch | max wire terms 272 |
 

@@ -229,13 +229,13 @@ Current structure-policy evidence:
 - Term-set scale evidence now covers 192 generated high-dimensional ANF term
   sets at `n=20,22,24,28`.  All-depth adaptive Boolean-ring screening improves
   over single screen by 169/0/23 score W/L/T with a -6.63% mean score change,
-  but ties fixed depth-2 in score and costs +47.89% runtime.  The learned depth
+  but ties fixed depth-2 in score and costs +47.92% runtime.  The learned depth
   policy preserves nearly all of that quality signal: 169/0/23 vs single screen
   with -6.56% mean score, and 0/6/186 vs all-depth adaptive with only +0.08%
-  mean score while saving -31.02% runtime.  At `n=28`, the policy ties
+  mean score while saving -31.01% runtime.  At `n=28`, the policy ties
   all-depth adaptive on all 48 term sets and saves -32.15% runtime.  The
   conservative direct depth-2 guard ties fixed depth-2 on all 192 term sets and
-  has -0.15% mean runtime change.  Symbolic ANF plan expansion and emitted
+  has -0.14% mean runtime change.  Symbolic ANF plan expansion and emitted
   X/CNOT/MCT circuit simulation both verify 1344/1344 generated method rows
   with zero mismatches.  This is large-scale emitted-circuit equivalence
   evidence, but still not full truth-table simulation for `n>20`.
