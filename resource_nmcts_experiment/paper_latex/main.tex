@@ -58,7 +58,10 @@ losses against the time-limited $n\leq 6$ SSHR-I extension, and 177 score wins
 with no losses against an ABC-AIG baseline on the same $n\leq 6$ export.  It
 also has 177 score wins with no losses against ABC-XAG/GIA, ABC-LUT, and
 BDD/Shannon baselines, and 147 score wins, 24 losses, and 6 ties against ABC's
-quantum-cost ESOP minimization path.  A
+quantum-cost ESOP minimization path.  On a separate exact bounded FPRM-DP slice
+over the same $n\leq 4$ functions, \method{} has 51 score wins, 3 losses, and
+18 ties, while \paretomethod{} has 51 wins, no losses, and 21 ties against the
+restricted exact optimum.  A
 resource-profile stress test shows that \paretomethod{} is best or tied on
 44/47, 44/47, 42/47, and 43/47 functions under T-heavy, balanced,
 CNOT-depth-heavy, and ancilla-tight objectives, improving on
@@ -431,6 +434,30 @@ win/tie pattern and a 26.21\% mean score reduction.  In both exact comparisons,
 however, \method{} loses CNOT count on most functions.  This supports the
 resource-constrained low-T oracle-synthesis claim, while ruling out any
 CNOT-only optimality claim.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Exact bounded FPRM-DP comparison on the 72-function $n\leq 4$
+traditional subset.  The dynamic program is exact over the configured
+fixed-polarity FPRM factor model with monomial factors and CNOT-only
+linear-pair factors; it is not a global reversible-circuit optimum.  Negative
+mean score changes favor the left-hand method in each comparison.}
+\label{tab:exact-fprm-dp}
+\input{tables/exact_fprm_dp}
+\end{table}
+
+Table~\ref{tab:exact-fprm-dp} adds an internal exact slice for the Boolean
+factorization model.  The Exact FPRM-DP solver enumerates all polarities and
+uses dynamic programming over all monomial factors and CNOT-only linear-pair
+factors under the same logical-AND resource model.  It completed all 72
+$n\leq 4$ functions with no errors or skips.  \method{} improves on this
+restricted exact optimum by 51/3/18 score wins/losses/ties and a 12.18\% mean
+score reduction, while \paretomethod{} improves it by 51/0/21 and 12.20\%.
+Because the DP is exact only inside this bounded FPRM factor family, these wins
+mean the portfolio found candidates outside that restricted model.  The exact
+DP baseline itself also improves weighted score over ESOP-MILP and exact
+SSHR-I, but it usually spends more CNOTs than SSHR-I.
 
 We then ran the external extension over all 177 exported functions with
 $n\leq 6$.  This produced 1416 external rows with no errors or skips: 531 SSHR
@@ -930,6 +957,9 @@ the exported SSHR-I extension beyond $n\leq 4$ is time-limited rather than an
 exact certificate, the fact that ABC/BDD/ESOP/LUT rows are scored through
 logic-level estimates rather than full reversible-toolchain synthesis, and the
 lack of a reproduced external ROS/mockturtle toolchain in the comparison set.
+The exact FPRM-DP slice reduces this concern for a small same-model subset, but
+it is exact only within the bounded fixed-polarity FPRM factor model, not over
+all reversible circuits.
 At $n=16$, the guarded Resource/Profile variants tie their own one-layer
 linear-pair child, and the Pareto archive improves that child only modestly, so
 the ultra result is bounded scalability evidence plus a residual archive gain

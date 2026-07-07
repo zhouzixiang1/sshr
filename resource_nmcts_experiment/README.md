@@ -74,6 +74,7 @@ cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json resul
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset traditional_resource --formats pla,blif,truth --out-dir benchmark_exports/traditional_resource_external_seed42
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --max-n 4 --max-ilp-n 4 --timeout 10 --workers 4 --out results/raw_external_traditional_resource_n4.csv --summary results/summary_external_traditional_resource_n4.csv --run-manifest results/manifest_external_traditional_resource_n4.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_traditional_resource_n4.csv --internal-csv results/raw_traditional_resource.csv --out results/analysis_external_traditional_resource_n4.md
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_exact_fprm_dp.py --max-n 4
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_sshr_h,external_sshr_i_cnot,external_sshr_i_t --max-n 6 --max-ilp-n 6 --timeout 8 --workers 4 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_abc_aig --max-n 6 --max-abc-n 6 --timeout 8 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --methods external_abc_esop --max-n 6 --max-esop-n 6 --timeout 8 --workers 8 --resume --out results/raw_external_traditional_resource_n6.csv --summary results/summary_external_traditional_resource_n6.csv --run-manifest results/manifest_external_traditional_resource_n6.json
@@ -315,6 +316,21 @@ Exported exact SSHR-I pilot evidence from
 - Against T-optimized SSHR-I, `and_resource_nmcts` has the same 65/0/7 T-count
   win pattern and a 26.21% mean score reduction.  CNOT count is worse on 62/72
   functions.
+
+Exact bounded FPRM-DP evidence from `results/analysis_exact_fprm_dp.md`:
+
+- Solves an exact dynamic program over the bounded fixed-polarity FPRM factor
+  model with all monomial factors and CNOT-only linear-pair factors.  This is a
+  same-model optimum, not a global reversible-circuit optimum.
+- Covers all 72 `traditional_resource` functions with `n <= 4`, with 0
+  errors/skips and successful oracle verification for every emitted circuit.
+- `and_resource_nmcts` versus Exact FPRM-DP: 51/3/18 score W/L/T, with a
+  12.18% mean score reduction; `and_pareto_resource_nmcts` versus Exact
+  FPRM-DP: 51/0/21, with a 12.20% mean score reduction.
+- Exact FPRM-DP itself beats weighted ESOP-MILP by 57/12/3 score W/L/T and
+  exact SSHR-I by 60/12/0 against CNOT-optimized SSHR-I and 59/12/1 against
+  T-optimized SSHR-I.  Its CNOT count is often higher than SSHR-I, so the claim
+  remains resource-score/low-T rather than CNOT-only optimality.
 
 Time-limited exported SSHR-I, ABC-AIG, ABC-XAG, ABC-LUT, BDD, and ABC-ESOP extension evidence from
 `results/analysis_external_traditional_resource_n6.md`:

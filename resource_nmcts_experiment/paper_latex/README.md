@@ -9,8 +9,8 @@ Boolean oracle synthesis project.  The draft is intentionally evidence-first:
 claims in `main.tex` are limited to the current `evidence_affine`,
 `ablation_affine`, `traditional_resource`, `resource_sweep`,
 `large_resource_core`, `highdim_resource`, `highdim_scale_resource`,
-`ultra_highdim_resource`, `mega_highdim_resource`, and exported
-SSHR/ABC/BDD/LUT/ESOP baseline results.
+`ultra_highdim_resource`, `mega_highdim_resource`, the exact bounded FPRM-DP
+slice, and exported SSHR/ABC/BDD/LUT/ESOP baseline results.
 
 Build:
 
@@ -40,6 +40,10 @@ Current source evidence:
   `../results/raw_external_traditional_resource_n4.csv`
 - external exact SSHR-I pilot analysis:
   `../results/analysis_external_traditional_resource_n4.md`
+- exact bounded FPRM-DP CSV:
+  `../results/raw_exact_fprm_dp.csv`
+- exact bounded FPRM-DP analysis:
+  `../results/analysis_exact_fprm_dp.md`
 - external time-limited SSHR-I plus ABC-AIG/ABC-XAG/ABC-LUT/BDD/ABC-ESOP extension CSV:
   `../results/raw_external_traditional_resource_n6.csv`
 - external time-limited SSHR-I plus ABC-AIG/ABC-XAG/ABC-LUT/BDD/ABC-ESOP extension analysis:
@@ -103,6 +107,7 @@ Current source evidence:
   `tables/resource_mega_highdim_resource.tex`,
   `tables/runtime_mega_highdim_resource.tex`,
   `tables/external_traditional_resource_n6.tex`,
+  `tables/exact_fprm_dp.tex`,
   `tables/external_highdim_abc_aig.tex`,
   `tables/external_ultra_highdim_resource.tex`,
   `tables/external_mega_highdim_resource.tex`

@@ -162,6 +162,41 @@
 
 结论：高维 learned-prior 小切片已经完成，但它不是强正向证据。专用 linear-action 模型只带来 1 个轻微 score 胜例，且运行时间约翻倍。因此论文主贡献仍应放在 n<=6 learned-prior 正向证据、低维 neural refine、MCTS/Pareto archive、以及高维 bounded linear-pair guard；高维 neural guidance 目前只能写成边界诊断或 future work。
 
+### 2.6 小规模 exact FPRM-DP 精确切片
+
+本轮新增 `analyze_exact_fprm_dp.py`，用于补上一个小规模、同模型内部精确证据链。它对 bounded fixed-polarity FPRM factor model 做动态规划，枚举所有单项式 factor action 和 CNOT-only linear-pair factor action，并对所有 FPRM polarity 求最优。这个 exact 只限定在该受限 FPRM 因子模型内，不是全局 reversible circuit optimum。
+
+主要产物：
+
+- `results/raw_exact_fprm_dp.csv`
+- `results/summary_exact_fprm_dp.csv`
+- `results/analysis_exact_fprm_dp.md`
+- `paper_latex/tables/exact_fprm_dp.tex`
+
+数据范围与审计：
+
+- 覆盖 `traditional_resource` 中全部 `n<=4` 的 72 个函数。
+- error：0
+- skipped：0
+- incorrect：0
+- 每条 exact DP 线路均通过 oracle truth-table 验证。
+
+核心结果：
+
+| 对比 | 配对数 | score 胜/负/平 | 平均 score 变化 |
+|---|---:|---:|---:|
+| Resource-NMCTS vs Exact FPRM-DP | 72 | 51/3/18 | -12.18% |
+| Pareto-Resource-NMCTS vs Exact FPRM-DP | 72 | 51/0/21 | -12.20% |
+| Exact FPRM-DP vs ESOP-MILP | 72 | 57/12/3 | -13.30% |
+| Exact FPRM-DP vs SSHR-I CNOT | 72 | 60/12/0 | -13.73% |
+| Exact FPRM-DP vs SSHR-I T | 72 | 59/12/1 | -13.38% |
+
+解释：
+
+- 如果 Resource/Pareto 能击败 Exact FPRM-DP，说明 portfolio 找到了这个受限 FPRM-DP 模型之外的候选线路，而不是 exact solver 失败。
+- Exact FPRM-DP 自身比 ESOP-MILP 和 exact SSHR-I 的加权 score 更好，但相对 SSHR-I 的 CNOT 通常更高；因此它进一步支持低 T / 低加权资源主张，不支持 CNOT-only 最优主张。
+- 这一切片把“公平性”从 time-limited external baseline 往前推进了一步：至少在 `n<=4` 的 bounded FPRM factor family 内，可以给出 exact optimum 参照。
+
 ## 3. 当前文件交付清单
 
 ### 3.1 核心代码
@@ -175,6 +210,7 @@
 - `analyze_external_baselines.py`：外部 baseline 对比分析。
 - `analyze_esop_baseline.py`：新增 ESOP 专项分析。
 - `analyze_search_contribution.py`：新增搜索贡献分解分析。
+- `analyze_exact_fprm_dp.py`：新增小规模 bounded FPRM-DP 精确切片。
 
 ### 3.2 结果文件
 
@@ -190,6 +226,9 @@
 - `results/summary_search_contribution.csv`
 - `results/analysis_neural_prior_highdim_ablation.md`
 - `results/raw_neural_prior_highdim_ablation.csv`
+- `results/raw_exact_fprm_dp.csv`
+- `results/summary_exact_fprm_dp.csv`
+- `results/analysis_exact_fprm_dp.md`
 
 ### 3.3 论文文件
 
@@ -199,6 +238,7 @@
 - `paper_latex/tables/neural_prior_ablation.tex`
 - `paper_latex/tables/search_contribution_decomposition.tex`
 - `paper_latex/tables/neural_prior_highdim_ablation.tex`
+- `paper_latex/tables/exact_fprm_dp.tex`
 - `paper_latex/tables/resource_search_ablation_highdim.tex`
 - `paper_latex/tables/runtime_search_ablation_highdim.tex`
 - `paper_latex/tables/external_traditional_resource_n6.tex`
@@ -225,6 +265,13 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 ```bash
 cd /Users/zhouzixiang/Desktop/tzb/src
 /opt/anaconda3/envs/mcts-qoracle/bin/python resource_nmcts_experiment/analyze_esop_baseline.py
+```
+
+重新生成 exact FPRM-DP 精确切片：
+
+```bash
+cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_exact_fprm_dp.py --max-n 4
 ```
 
 重新生成搜索贡献分解：
@@ -292,6 +339,7 @@ latexmk -pdf -g main.tex
 - `analysis_search_contribution.md` 审计：无 NaN/空配对。
 - `raw_search_ablation_highdim.csv` 审计：128 行、0 error、0 skipped、0 incorrect。
 - `raw_neural_prior_highdim_ablation.csv` 审计：24 行、0 error、0 skipped、0 incorrect。
+- `raw_exact_fprm_dp.csv` 审计：72 行、0 error、0 skipped、0 incorrect。
 
 Git 状态：
 
@@ -309,6 +357,7 @@ Git 状态：
 4. 在 `n=18` 高维随机 ANF stress test 上，fast linear-pair guard 与 Resource/Profile/Pareto 可稳定改善 root-beam，说明高维 guard 不再只是保底策略。
 5. 外部 ABC/BDD 结果支持低加权资源和低 ancilla 优势，但 depth 仍是 ABC-AIG/ABC-XAG 的优势指标。
 6. 贡献分解显示：仿射坐标搜索是最大前置收益，神经 refine 和 final guard 提供无 score loss 的小幅增益，Pareto archive 在小规模传统切片上贡献明确，高维主要由 bounded linear-pair guard 支撑。
+7. `n<=4` exact FPRM-DP 精确切片显示：Resource/Pareto portfolio 可以在受限 FPRM exact 模型之外继续降低 score；Exact FPRM-DP 本身也优于 ESOP-MILP 和 exact SSHR-I 的加权 score。
 
 不应写的主张：
 
@@ -316,13 +365,14 @@ Git 状态：
 2. 不应写“硬件映射后仍然更优”，因为当前没有 mapping。
 3. 不应写“Pareto 在 n=18 有额外独立收益”，因为 n=18 的 Pareto 当前故意收窄为稳定 guard。
 4. 不应直接拿 SSHR 论文表格里的 ESOP 总量横比，除非函数集和成本模型一致。
+5. 不应把 Exact FPRM-DP 写成全局可逆线路最优；它只是在 bounded fixed-polarity FPRM factor model 内 exact。
 
 ## 7. 下一步建议
 
-当前已经完成第一版“搜索贡献分解”，并新增了 `search_ablation_traditional`、`search_ablation_highdim` 和 `highdim_neural_prior` 三个 dedicated ablation/diagnostic。投稿前仍建议继续补强：
+当前已经完成第一版“搜索贡献分解”，并新增了 `search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior` 和 `exact_fprm_dp` 四个 dedicated ablation/diagnostic。投稿前仍建议继续补强：
 
 1. 高维 neural guidance 需要继续改进；当前 highdim prior 只有 1/0/11、-0.01% 的弱正向结果，不足以作为强 AI 贡献。
-2. 如果时间允许，补一个小规模 exact/exhaustive oracle slice，强化公平性。
+2. 小规模 exact/exhaustive oracle slice 已完成 bounded FPRM-DP 版本；如果继续加强，可以再补一个更接近全局 reversible circuit 的 exact/SMT/SAT 小规模证书。
 3. 继续补 ROS/mockturtle 或其他外部 reversible-toolchain 对比，减少“估算式 ABC/BDD baseline”的审稿风险。
 
 已完成/待补强状态：
@@ -336,6 +386,7 @@ Git 状态：
 | Pareto archive | n<=6 traditional | Pareto vs Resource 68/0/109，-3.26% | 已有 |
 | highdim guard | n=14/15/16/18 | linear-pair guard 相对 root-beam 均无 score loss | 已有 |
 | highdim no-neural-prior | 12 个 n=14 random ANF | learned prior 1/0/11，-0.01%，运行时间 +104.07% | 已有但弱 |
+| exact FPRM-DP | n<=4 traditional | Resource vs exact FPRM-DP 51/3/18，-12.18%；Pareto vs exact FPRM-DP 51/0/21，-12.20% | 已有但模型受限 |
 
 ## 8. 当前结论
 
@@ -345,4 +396,4 @@ Git 状态：
 
 但是投稿前还需要继续补强“AI 搜索本身带来的贡献”这一点。否则文章容易被评价为一组 FPRM/ESOP 工程启发的组合，而不是强化学习与 MCTS 方法论文。
 
-本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim` 和 `highdim_neural_prior` 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive 和高维 guard/no-MCTS 组合都有可测贡献。不过高维 neural guidance 仍然很弱，更强外部 reversible-toolchain 对比也仍然缺失，所以目标还不能判定完成。
+本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior` 和 `exact_fprm_dp` 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合以及小规模 exact bounded FPRM 对照都有可测贡献。不过高维 neural guidance 仍然很弱，更强外部 reversible-toolchain 对比也仍然缺失，所以目标还不能判定完成。
