@@ -14,6 +14,6 @@ The guard runs shallow screening and uses depth-1 only when the model predicts t
 
 | split | pairs | skips | false skips | score W/L/T vs depth-2 | mean score vs depth-2 | mean time vs depth-2 | mean time vs all-depth |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| train | 240 | 22 | 0 | 0/0/240 | +0.00% | +25.90% | -4.48% |
-| valid | 72 | 3 | 0 | 0/0/72 | +0.00% | +26.53% | -1.61% |
-| test | 48 | 3 | 0 | 0/0/48 | +0.00% | +39.40% | -2.87% |
+| train | 240 | 22 | 0 | 0/0/240 | +0.00% | +25.96% | -4.48% |
+| valid | 72 | 3 | 0 | 0/0/72 | +0.00% | +26.50% | -1.61% |
+| test | 48 | 3 | 0 | 0/0/48 | +0.00% | +39.43% | -2.88% |

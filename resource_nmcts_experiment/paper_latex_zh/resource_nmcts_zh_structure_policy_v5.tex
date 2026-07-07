@@ -35,7 +35,7 @@
 \maketitle
 
 \begin{abstract}
-量子布尔函数 oracle 综合需要把经典谓词嵌入可逆量子线路，其逻辑层 T-count、CNOT、深度和辅助比特数会直接影响容错资源估计。直接代数正规形（algebraic normal form, \anf{}）综合稳定但容易重复计算高次数 AND 结构；SSHR 等 CNOT-oriented 方法提供了重要小规模参照，却不等同于本文研究的资源加权搜索问题。本文将 oracle 综合建模为 \anf{}/固定极性 Reed--Muller（fixed-polarity Reed--Muller, \fprm{}）项集合上的组合优化，提出由资源感知分解、布尔环线性因子筛选、神经动作先验、蒙特卡洛树搜索、结构级 depth policy 与 screen-gate 组成的逻辑层综合框架。实验显示，在 $n\leq6$ 的 177 个传统函数上，\pareto{} 相对 ESOP cube beam 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%；相对 weighted ESOP-MILP 获得 167/3/7，平均 score 降低 29.84\%。在 $n=18$ 的 12 个随机 \anf{} 函数上，adaptive depth-2 布尔环筛选相对单层筛选获得 11/0/1，平均 score 降低 6.47\%；完整 \method{} 相对 adaptive screen 进一步降低 23.85\%，说明中等高维仍需要深搜索。在 $n=20$ 的 6 个边界函数上，adaptive depth-2 screen 相对单层筛选降低 7.47\% 的平均 score，并使 \method{} 相对 AND-direct ANF 降低 11.80\%；screen-gated \method{} 在保持全部资源持平的同时，将平均运行时间从 77.10 s 降至 31.18 s。进一步的结构级 depth policy 在 held-out $n=20$ 项集上相对单层和 depth-1 screen 分别降低 6.57\% 和 2.57\% 的平均 score，并比全 depth adaptive 评估节省 34.71\% 时间；保守 depth-2 skip guard 则在另一组 held-out $n=20$ 项集上与固定 depth-2 screen 全部持平，并相对全 depth adaptive 节省 2.87\% 时间。上述结果说明 AI 模块已经从动作排序推进到结构选择，但固定 depth-2 screen 仍是很强的确定性基线，因此本文把当前贡献界定为资源搜索框架与结构级门控证据，而非高维神经先验已经独立主导质量提升。
+量子布尔函数 oracle 综合需要把经典谓词嵌入可逆量子线路，其逻辑层 T-count、CNOT、深度和辅助比特数会直接影响容错资源估计。直接代数正规形（algebraic normal form, \anf{}）综合稳定但容易重复计算高次数 AND 结构；SSHR 等 CNOT-oriented 方法提供了重要小规模参照，却不等同于本文研究的资源加权搜索问题。本文将 oracle 综合建模为 \anf{}/固定极性 Reed--Muller（fixed-polarity Reed--Muller, \fprm{}）项集合上的组合优化，提出由资源感知分解、布尔环线性因子筛选、神经动作先验、蒙特卡洛树搜索、结构级 depth policy 与 screen-gate 组成的逻辑层综合框架。实验显示，在 $n\leq6$ 的 177 个传统函数上，\pareto{} 相对 ESOP cube beam 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%；相对 weighted ESOP-MILP 获得 167/3/7，平均 score 降低 29.84\%。在 $n=18$ 的 12 个随机 \anf{} 函数上，adaptive depth-2 布尔环筛选相对单层筛选获得 11/0/1，平均 score 降低 6.47\%；完整 \method{} 相对 adaptive screen 进一步降低 23.85\%，说明中等高维仍需要深搜索。在 $n=20$ 的 6 个边界函数上，adaptive depth-2 screen 相对单层筛选降低 7.47\% 的平均 score，并使 \method{} 相对 AND-direct ANF 降低 11.80\%；screen-gated \method{} 在保持全部资源持平的同时，将平均运行时间从 77.10 s 降至 31.18 s。进一步的结构级 depth policy 在 held-out $n=20$ 项集上相对单层和 depth-1 screen 分别降低 6.57\% 和 2.57\% 的平均 score，并比全 depth adaptive 评估节省 34.71\% 时间；保守 depth-2 skip guard 则在另一组 held-out $n=20$ 项集上与固定 depth-2 screen 全部持平，并相对全 depth adaptive 节省 2.88\% 时间。上述结果说明 AI 模块已经从动作排序推进到结构选择，但固定 depth-2 screen 仍是很强的确定性基线，因此本文把当前贡献界定为资源搜索框架与结构级门控证据，而非高维神经先验已经独立主导质量提升。
 \end{abstract}
 
 \noindent\textbf{关键词：}量子 oracle 综合；布尔函数综合；神经蒙特卡洛树搜索；结构级策略；布尔环；ANF；FPRM
@@ -204,7 +204,7 @@ Policy vs all-depth adaptive & 48 & 0/5/43 & $+0.28\%$ & $-34.71\%$ \\
 \end{tabular}
 \end{table}
 
-这组结果的正向意义在于，AI 模块不再只是对 root action 排序，而是开始学习结构选择。它的限制也很清楚：固定 depth-2 screen 在 score 上仍略优。为去掉这一质量缺口，本文进一步训练了保守 depth-2 skip guard。表~\ref{tab:depth_guard} 显示，该 guard 在 train、validation 和另一组 held-out $n=20$ test 中均没有 false skip；测试集上 48 个样本全部与固定 depth-2 screen score 持平，相对全 depth adaptive 评估节省 2.87\% 时间。
+这组结果的正向意义在于，AI 模块不再只是对 root action 排序，而是开始学习结构选择。它的限制也很清楚：固定 depth-2 screen 在 score 上仍略优。为去掉这一质量缺口，本文进一步训练了保守 depth-2 skip guard。表~\ref{tab:depth_guard} 显示，该 guard 在 train、validation 和另一组 held-out $n=20$ test 中均没有 false skip；测试集上 48 个样本全部与固定 depth-2 screen score 持平，相对全 depth adaptive 评估节省 2.88\% 时间。
 
 \begin{table}[t]
 \centering
@@ -217,12 +217,12 @@ Policy vs all-depth adaptive & 48 & 0/5/43 & $+0.28\%$ & $-34.71\%$ \\
 \midrule
 Train & 240 & 22 & 0 & 0/0/240 & $-4.48\%$ \\
 Validation & 72 & 3 & 0 & 0/0/72 & $-1.61\%$ \\
-Held-out test & 48 & 3 & 0 & 0/0/48 & $-2.87\%$ \\
+Held-out test & 48 & 3 & 0 & 0/0/48 & $-2.88\%$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-这个 guard 的意义是把结构级 policy 相对固定 depth-2 的 score 缺口从 $+0.28\%$ 降为 $0$，但其收益仍然小。由于它需要先评估浅层 screen，再决定是否回退到 depth-2，测试集上相对单独固定 depth-2 screen 反而慢 39.40\%。因此它应被解释为 ``质量安全门控方向已打通''，而不是最终运行时优化已经完成。
+这个 guard 的意义是把结构级 policy 相对固定 depth-2 的 score 缺口从 $+0.28\%$ 降为 $0$，但其收益仍然小。由于它需要先评估浅层 screen，再决定是否回退到 depth-2，测试集上相对单独固定 depth-2 screen 反而慢 39.43\%。因此它应被解释为 ``质量安全门控方向已打通''，而不是最终运行时优化已经完成。
 
 \section{讨论}
 
@@ -232,7 +232,7 @@ Held-out test & 48 & 3 & 0 & 0/0/48 & $-2.87\%$ \\
 
 \section{下一步明显提升目标}
 
-若以明显提升作为阶段结束点，下一步应集中在三项可量化目标上。第一，扩大 guard-aware depth policy 的跳过覆盖率：目标是在 held-out $n=20$ 上继续保持不劣于固定 depth-2 screen 的 score，同时把相对 all-depth adaptive 的时间优势从 2.87\% 提高到至少 15\%。第二，把结构级策略扩展为分支选择器：不仅选择 screen 深度，还预测是否进入 \fprm{} polarity search、完整 \method{} 或 screen-gated tail。第三，补充函数级线路案例和外部 reversible-toolchain 对比，使论文从表格结果走向可解释的综合机制。
+若以明显提升作为阶段结束点，下一步应集中在三项可量化目标上。第一，扩大 guard-aware depth policy 的跳过覆盖率：目标是在 held-out $n=20$ 上继续保持不劣于固定 depth-2 screen 的 score，同时把相对 all-depth adaptive 的时间优势从 2.88\% 提高到至少 15\%。第二，把结构级策略扩展为分支选择器：不仅选择 screen 深度，还预测是否进入 \fprm{} polarity search、完整 \method{} 或 screen-gated tail。第三，补充函数级线路案例和外部 reversible-toolchain 对比，使论文从表格结果走向可解释的综合机制。
 
 \section{结论}
 

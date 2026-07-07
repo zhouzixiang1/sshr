@@ -35,8 +35,8 @@
     "test": {
       "false_skips": 0,
       "mean_rel_score_vs_depth2": 0.0,
-      "mean_rel_time_vs_all_depth": -0.028686908048700513,
-      "mean_rel_time_vs_depth2": 0.39401904563948825,
+      "mean_rel_time_vs_all_depth": -0.02875541744752786,
+      "mean_rel_time_vs_depth2": 0.3943383164054471,
       "pairs": 48,
       "score_losses": 0,
       "score_ties": 48,
@@ -48,8 +48,8 @@
     "train": {
       "false_skips": 0,
       "mean_rel_score_vs_depth2": 0.0,
-      "mean_rel_time_vs_all_depth": -0.044828703294249074,
-      "mean_rel_time_vs_depth2": 0.2590093376332613,
+      "mean_rel_time_vs_all_depth": -0.044759738576955165,
+      "mean_rel_time_vs_depth2": 0.2595902930902642,
       "pairs": 240,
       "score_losses": 0,
       "score_ties": 240,
@@ -61,8 +61,8 @@
     "valid": {
       "false_skips": 0,
       "mean_rel_score_vs_depth2": 0.0,
-      "mean_rel_time_vs_all_depth": -0.016101691234502526,
-      "mean_rel_time_vs_depth2": 0.26531761137292165,
+      "mean_rel_time_vs_all_depth": -0.01612657074293471,
+      "mean_rel_time_vs_depth2": 0.2650257233112276,
       "pairs": 72,
       "score_losses": 0,
       "score_ties": 72,
