@@ -17,12 +17,13 @@
   "screen_method": "and_boolean_linear_pair_screen_adaptive",
   "single_method": "and_boolean_linear_pair_screen",
   "skip_if_ge": true,
-  "threshold": 19.0,
+  "threshold": 20.0,
   "training_errors": 1,
   "training_examples": 18,
+  "training_false_skips": 0,
   "training_inputs": [
-    "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_mega_adaptive_screen_resource.csv",
-    "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_giga_adaptive_screen_resource.csv"
+    "results/raw_mega_adaptive_screen_resource.csv",
+    "results/raw_giga_adaptive_screen_resource.csv"
   ],
   "training_saved_time_s": 338.5891318321228
 }

@@ -294,7 +294,7 @@
 
 ### 2.5.3 Resource screen-gate 运行时门控
 
-本轮还出现了一个工程性改进：`train_structure_gate.py` 用 adaptive Boolean-ring screen 与完整 Resource-NMCTS 的配对结果训练一个可解释 decision stump，判断何时可以跳过昂贵的 Resource-NMCTS tail。当前模型很小，学到的规则是 `n >= 19` 时优先跳过 Resource tail；它应被视为运行时门控证据，而不是新的资源质量模型。
+本轮还出现了一个工程性改进：`train_structure_gate.py` 用 adaptive Boolean-ring screen 与完整 Resource-NMCTS 的配对结果训练一个可解释 decision stump，判断何时可以跳过昂贵的 Resource-NMCTS tail。当前模型很小，经过 safety-first 阈值选择后学到的规则是 `n >= 20` 时优先跳过 Resource tail；`synthesizers.py` 也同步改为 direct branch gate：当模型只依赖 `n` 且判定不跳过时，直接运行 Resource-NMCTS，不再预先支付 screen 开销；当判定跳过时，只运行 adaptive screen 作为输出候选。它应被视为运行时门控证据，而不是新的资源质量模型。
 
 主要产物：
 
@@ -305,17 +305,50 @@
 - `results/summary_giga_screen_gate_resource.csv`
 - `results/analysis_giga_screen_gate_vs_resource.md`
 - `results/analysis_giga_screen_gate_vs_adaptive_screen.md`
+- `results/raw_gate_holdout_resource.csv`
+- `results/analysis_gate_holdout_by_n.md`
+- `results/analysis_gate_holdout_screen_gate_vs_resource.md`
+- `results/analysis_gate_holdout_adaptive_vs_resource.md`
 - `paper_latex/tables/giga_screen_gate_vs_resource.tex`
 - `paper_latex/tables/giga_screen_gate_vs_adaptive_screen.tex`
+- `paper_latex/tables/gate_holdout_by_n.tex`
 
 核心结果：
 
 | 对比 | 函数数 | T/CNOT/depth/score | 平均运行时间变化 |
 |---|---:|---:|---:|
-| screen-gated Resource vs full Resource, n=20 | 6 | 全部 0/0/6 持平 | -61.31% |
-| screen-gated Resource vs adaptive screen, n=20 | 6 | 全部 0/0/6 持平 | +69.91% |
+| screen-gated Resource vs full Resource, n=20 | 6 | 全部 0/0/6 持平 | -75.58% |
+| screen-gated Resource vs adaptive screen, n=20 | 6 | 全部 0/0/6 持平 | -0.04% |
+| held-out gate vs full Resource, n=19+20 | 16 | score 全部 0/0/16 持平 | -36.83% |
+| held-out adaptive screen vs full Resource, n=19 | 8 | score 0/4/4，平均 +14.14% | -94.42% |
+| held-out gate vs full Resource, n=20 | 8 | score 全部 0/0/8 持平 | -73.66% |
 
-结论：screen-gate 说明当前 n=20 上完整 Resource tail 没有带来额外资源收益，可以被结构门控跳过以减少运行时间；但因为训练样本只有 18 个，且 n=18 中 Resource 仍明显强于 screen，论文中只能写成“高维运行时尾部控制”，不能写成普适替代 Resource-NMCTS。
+结论：screen-gate 说明当前 n=20 上完整 Resource tail 没有带来额外资源收益，可以被结构门控跳过以减少运行时间；新增 held-out n=19/20 切片更关键：n=19 上 adaptive screen 仍会输给 full Resource，因此 gate 不跳过且通过 direct branch 避免额外 screen 开销；n=20 上 adaptive screen 与 full Resource 全部持平，因此 gate 跳过并节省时间。这使门控证据比单一 n=20 切片更可信，但因为训练样本仍只有 18 个，论文中仍只能写成“高维运行时尾部控制”，不能写成普适替代 Resource-NMCTS。
+
+### 2.5.4 n=20--28 项集级大规模 screen-scale
+
+完整 truth table 在 n>20 后构造和验证成本迅速上升，因此本轮新增 `run_screen_scale_terms.py`：它直接在 ANF 项集合这一搜索状态上评估 direct logical-AND、single/depth-1/depth-2 Boolean-ring screen、all-depth adaptive、已训练 depth policy 和保守 depth-2 guard。该实验不替代 truth-table verified 结果，而是证明结构策略可以在更高维项集合上快速运行。
+
+主要产物：
+
+- `run_screen_scale_terms.py`
+- `results/raw_screen_scale_terms.csv`
+- `results/summary_screen_scale_terms.csv`
+- `results/analysis_screen_scale_terms.md`
+- `paper_latex/tables/screen_scale_terms.tex`
+
+核心结果：
+
+| 对比 | 项集数 | score 胜/负/平 | 平均 score 变化 | 平均运行时间变化 |
+|---|---:|---:|---:|---:|
+| adaptive all-depth vs single screen, n=20/22/24/28 | 192 | 169/0/23 | -6.63% | +3092.45% |
+| adaptive all-depth vs fixed depth-2, n=20/22/24/28 | 192 | 0/0/192 | +0.00% | +47.90% |
+| depth policy vs single screen, n=20/22/24/28 | 192 | 169/0/23 | -6.56% | +2340.13% |
+| depth policy vs all-depth adaptive, n=20/22/24/28 | 192 | 0/6/186 | +0.08% | -31.04% |
+| depth policy vs all-depth adaptive, n=28 | 48 | 0/0/48 | +0.00% | -32.07% |
+| direct depth-2 guard vs fixed depth-2, n=20/22/24/28 | 192 | 0/0/192 | +0.00% | -0.15% |
+
+结论：这是目前最清楚的大规模结构级 AI 证据。All-depth adaptive 说明 depth-2 screen 是强质量基线；depth policy 在 n=20--28 上几乎复制 all-depth 的质量收益，并节省约三成 all-depth 评估时间，尤其 n=28 上全部持平。它仍不是完整线路级验证，也不能替代 n<=20 的 truth-table correctness 结果，但可以支撑“结构级策略可扩展到更高维项集合”的论文主张。
 
 ### 2.6 高维 root-action teacher 诊断
 

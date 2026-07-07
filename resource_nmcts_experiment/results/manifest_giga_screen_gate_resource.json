@@ -28,10 +28,10 @@
   "raw_methods": [
     "and_resource_nmcts_screen_gate"
   ],
-  "model": "models/boolean_linear_action_scorer_root_teacher.pt",
+  "model": "models/action_scorer.pt",
   "workers": 3,
-  "seconds": 97.24463510513306,
-  "seconds_current_run": 97.24463510513306,
+  "seconds": 68.64566969871521,
+  "seconds_current_run": 68.64566969871521,
   "config": {
     "weights": {
       "t": 1.0,

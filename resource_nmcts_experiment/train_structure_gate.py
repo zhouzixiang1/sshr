@@ -117,8 +117,9 @@ def candidate_thresholds(values: list[float]) -> list[float]:
     if not unique:
         return []
     thresholds = [unique[0] - 1e-9, unique[-1] + 1e-9]
+    thresholds.extend(unique)
     thresholds.extend((a + b) / 2.0 for a, b in zip(unique, unique[1:]))
-    return thresholds
+    return sorted(set(thresholds))
 
 
 def predict(feature_value: float, threshold: float, skip_if_ge: bool) -> bool:
@@ -128,36 +129,45 @@ def predict(feature_value: float, threshold: float, skip_if_ge: bool) -> bool:
 def train_stump(examples: list[dict[str, float | str | bool]]) -> dict[str, object]:
     if not examples:
         raise SystemExit("no training examples")
-    best: tuple[float, float, str, float, bool] | None = None
+    best: tuple[tuple[int, int, float, int, float, float], str, float, bool] | None = None
     for feature in FEATURES:
         values = [float(ex[feature]) for ex in examples]
         for threshold in candidate_thresholds(values):
             for skip_if_ge in (True, False):
+                false_skips = 0
                 errors = 0
                 saved_time = 0.0
+                skips = 0
                 for ex in examples:
                     pred = predict(float(ex[feature]), threshold, skip_if_ge)
                     truth = bool(ex["skip_resource"])
                     if pred != truth:
                         errors += 1
+                    if pred and not truth:
+                        false_skips += 1
                     if pred:
+                        skips += 1
                         saved_time += max(0.0, float(ex["resource_time_s"]) - float(ex["screen_time_s"]))
-                # Lower errors first, then prefer gates that save more time,
-                # then simpler scale feature if tied.
+                # Safety first: a false skip loses the Resource-NMCTS tail.
+                # If two gates are otherwise tied on observed data, prefer the
+                # narrower skip region to avoid midpoint extrapolation such as
+                # learning n >= 19 from only n=18 and n=20 observations.
                 complexity = 0.0 if feature == "n" else 1.0
-                score = (errors, -saved_time, complexity)
-                if best is None or score < best[:3]:
-                    best = (errors, -saved_time, complexity, feature, threshold, skip_if_ge)
+                conservative_boundary = -threshold if skip_if_ge else threshold
+                score = (false_skips, errors, -saved_time, -skips, conservative_boundary, complexity)
+                if best is None or score < best[0]:
+                    best = (score, feature, threshold, skip_if_ge)
     assert best is not None
-    errors, neg_saved, _complexity, feature, threshold, skip_if_ge = best
+    score, feature, threshold, skip_if_ge = best
     return {
         "kind": "decision_stump",
         "feature": feature,
         "threshold": threshold,
         "skip_if_ge": skip_if_ge,
-        "training_errors": int(errors),
+        "training_false_skips": int(score[0]),
+        "training_errors": int(score[1]),
         "training_examples": len(examples),
-        "training_saved_time_s": -float(neg_saved),
+        "training_saved_time_s": -float(score[2]),
         "features": FEATURES,
     }
 
@@ -211,6 +221,7 @@ def write_analysis(path: Path, model: dict[str, object], evaluation: dict[str, o
         f"- skip if >= threshold: `{bool(model['skip_if_ge'])}`",
         f"- training examples: {model['training_examples']}",
         f"- training errors: {model['training_errors']}",
+        f"- training false skips: {model.get('training_false_skips', 0)}",
         f"- apparent saved time: {float(evaluation['saved_time_s']):.3f} s",
         "",
         "## Confusion Matrix",

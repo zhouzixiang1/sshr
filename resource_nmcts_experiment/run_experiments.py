@@ -201,6 +201,13 @@ PRESETS = {
         "structured_limit": 0,
         "workers": 3,
     },
+    "gate_holdout_resource": {
+        "methods": ["and_boolean_linear_pair_screen", "and_boolean_linear_pair_screen_adaptive", "and_resource_nmcts", "and_resource_nmcts_screen_gate"],
+        "random_truth": [],
+        "random_anf": [(19, 8), (20, 8)],
+        "structured_limit": 0,
+        "workers": 4,
+    },
     "boolean_neural_highdim": {
         "methods": ["and_fprm_boolean_linear_pair_deep", "and_fprm_boolean_linear_pair_deep_root_neural", "and_fprm_boolean_linear_pair_deep_ai_guard", "and_resource_nmcts", "and_pareto_resource_nmcts"],
         "random_truth": [],
@@ -236,6 +243,7 @@ BOUNDED_RESOURCE_PRESETS = {
     "ultra_highdim_resource",
     "mega_highdim_resource",
     "giga_highdim_resource",
+    "gate_holdout_resource",
     "boolean_neural_highdim",
     "boolean_neural_mega",
 }
@@ -251,6 +259,7 @@ HIGH_RESOURCE_PRESETS = {
     "ultra_highdim_resource",
     "mega_highdim_resource",
     "giga_highdim_resource",
+    "gate_holdout_resource",
     "boolean_neural_highdim",
     "boolean_neural_mega",
 }

@@ -19,6 +19,7 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python train_screen_depth_policy.py --train-per-n 80 --valid-per-n 24 --test-per-n 48 --epochs 140 --hidden 96
 /opt/anaconda3/envs/mcts-qoracle/bin/python train_screen_depth_guard.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python train_structure_gate.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --workers 6
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset smoke
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset evidence_affine --model models/action_scorer_rollout_logical_and.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset evidence_affine
@@ -194,6 +195,10 @@ and saved at `models/resource_structure_gate.json`; it adds
 `and_resource_nmcts_screen_gate`, a gated Resource-NMCTS variant that skips the
 expensive Resource tail when the adaptive Boolean-ring screen is predicted to be
 sufficient.
+Term-set scale tests beyond truth-table-feasible sizes are run with
+`run_screen_scale_terms.py`; outputs are written to
+`results/analysis_screen_scale_terms.md`, `results/raw_screen_scale_terms.csv`,
+and `paper_latex/tables/screen_scale_terms.tex`.
 
 Current structure-policy evidence:
 
@@ -217,16 +222,34 @@ Current structure-policy evidence:
   evaluates shallow screens before falling back.  This is stronger
   structure-level guard evidence, not a final high-dimensional quality
   breakthrough.
+- Term-set scale evidence now covers 192 generated high-dimensional ANF term
+  sets at `n=20,22,24,28`.  All-depth adaptive Boolean-ring screening improves
+  over single screen by 169/0/23 score W/L/T with a -6.63% mean score change,
+  but ties fixed depth-2 in score and costs +47.90% runtime.  The learned depth
+  policy preserves nearly all of that quality signal: 169/0/23 vs single screen
+  with -6.56% mean score, and 0/6/186 vs all-depth adaptive with only +0.08%
+  mean score while saving -31.04% runtime.  At `n=28`, the policy ties
+  all-depth adaptive on all 48 term sets and saves -32.07% runtime.  The
+  conservative direct depth-2 guard ties fixed depth-2 on all 192 term sets and
+  has -0.15% mean runtime change.  This is large-scale structural evidence,
+  not truth-table verification.
 
 Current screen-gate evidence:
 
 - The decision-stump gate is trained on 18 labelled adaptive-screen vs
-  Resource rows from `n=18` and `n=20`, so it is inspectable but not yet broad
-  enough to claim robust generalization.
+  Resource rows from `n=18` and `n=20`; after safety-first threshold selection
+  it uses the rule `n >= 20`.
 - On the committed `n=20` `giga_highdim_resource` slice,
   `and_resource_nmcts_screen_gate` matches full `and_resource_nmcts` exactly on
   T, CNOT, depth, peak ancilla, and score (0/0/6 score W/L/T), while mean runtime
-  drops from 77.10 s to 31.18 s (-61.31%).
+  drops from 77.10 s to 20.71 s (-75.58%).
+- On the held-out `gate_holdout_resource` slice with 8 functions each at
+  `n=19` and `n=20`, the gate matches full Resource-NMCTS on score for all
+  16 functions and reduces mean runtime by 36.83% overall.  The dimension split
+  matters: at `n=19`, adaptive screen alone loses score on 4/8 functions, so
+  the gate correctly keeps the Resource tail; at `n=20`, adaptive screen ties
+  full Resource on all 8 functions and the gate skips the tail, saving 73.66%
+  mean runtime.
 
 External-tool benchmark exchange:
 

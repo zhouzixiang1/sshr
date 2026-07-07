@@ -1186,6 +1186,17 @@ def _structure_gate_skip_resource(features: dict[str, float]) -> bool:
     return value >= threshold if skip_if_ge else value < threshold
 
 
+def _structure_gate_static_skip_resource(bf: BooleanFunction) -> bool | None:
+    model = _load_structure_gate_model()
+    feature = str(model.get("feature", "n"))
+    if feature != "n":
+        return None
+    threshold = float(model.get("threshold", 20.0))
+    skip_if_ge = bool(model.get("skip_if_ge", True))
+    value = float(bf.n)
+    return value >= threshold if skip_if_ge else value < threshold
+
+
 def _portfolio_result(
     requested_method: str,
     portfolio: list[SynthesisResult],
@@ -1294,6 +1305,46 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         return _portfolio_result(requested_method, portfolio, config.weights, time.time() - t0)
     if method == "resource_nmcts_screen_gate":
         if bf.n < 18:
+            child = synthesize("resource_nmcts", bf, config, seed=seed, model_path=model_path)
+            return SynthesisResult(
+                method=requested_method,
+                cost=child.cost,
+                time_s=time.time() - t0,
+                correct=child.correct,
+                terms=child.terms,
+                gates=child.gates,
+                n_qubits=child.n_qubits,
+            )
+        static_skip = _structure_gate_static_skip_resource(bf)
+        if static_skip is False:
+            child = synthesize("resource_nmcts", bf, config, seed=seed, model_path=model_path)
+            return SynthesisResult(
+                method=requested_method,
+                cost=child.cost,
+                time_s=time.time() - t0,
+                correct=child.correct,
+                terms=child.terms,
+                gates=child.gates,
+                n_qubits=child.n_qubits,
+            )
+        if static_skip is True:
+            adaptive_screen = synthesize(
+                "boolean_linear_pair_screen_adaptive",
+                bf,
+                config,
+                seed=seed,
+                model_path=model_path,
+            )
+            if adaptive_screen.correct:
+                return SynthesisResult(
+                    method=requested_method,
+                    cost=adaptive_screen.cost,
+                    time_s=time.time() - t0,
+                    correct=adaptive_screen.correct,
+                    terms=adaptive_screen.terms,
+                    gates=adaptive_screen.gates,
+                    n_qubits=adaptive_screen.n_qubits,
+                )
             child = synthesize("resource_nmcts", bf, config, seed=seed, model_path=model_path)
             return SynthesisResult(
                 method=requested_method,

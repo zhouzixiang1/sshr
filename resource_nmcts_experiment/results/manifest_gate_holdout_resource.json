@@ -1,0 +1,49 @@
+{
+  "preset": "gate_holdout_resource",
+  "seed": 20260710,
+  "functions": 16,
+  "methods": [
+    "and_boolean_linear_pair_screen",
+    "and_boolean_linear_pair_screen_adaptive",
+    "and_resource_nmcts",
+    "and_resource_nmcts_screen_gate"
+  ],
+  "last_run_methods": [
+    "and_boolean_linear_pair_screen",
+    "and_boolean_linear_pair_screen_adaptive",
+    "and_resource_nmcts",
+    "and_resource_nmcts_screen_gate"
+  ],
+  "resume": false,
+  "raw_rows": 64,
+  "raw_methods": [
+    "and_boolean_linear_pair_screen",
+    "and_boolean_linear_pair_screen_adaptive",
+    "and_resource_nmcts",
+    "and_resource_nmcts_screen_gate"
+  ],
+  "model": "models/action_scorer.pt",
+  "workers": 4,
+  "seconds": 1717.6098020076752,
+  "seconds_current_run": 1717.6098020076752,
+  "config": {
+    "weights": {
+      "t": 1.0,
+      "cnot": 0.04,
+      "depth": 0.015,
+      "gates": 0.01,
+      "ancilla": 2.0
+    },
+    "max_factor_ancilla": 4,
+    "max_factor_size": 5,
+    "candidate_top_k": 24,
+    "min_factor_count": 2,
+    "use_relative_phase": true,
+    "mcts_simulations": 24,
+    "neural_mcts_simulations": 32,
+    "max_polarities": 12,
+    "gate_mode": "mct",
+    "neural_prior_weight": 2.5,
+    "task_timeout_s": 300
+  }
+}

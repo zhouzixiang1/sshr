@@ -7,10 +7,11 @@ or whether the expensive Resource-NMCTS tail should still run.
 
 - model: `decision_stump`
 - feature: `n`
-- threshold: `19`
+- threshold: `20`
 - skip if >= threshold: `True`
 - training examples: 18
 - training errors: 1
+- training false skips: 0
 - apparent saved time: 338.589 s
 
 ## Confusion Matrix
