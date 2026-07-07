@@ -36,6 +36,7 @@ cp /tmp/resource_nmcts_traditional_no_prior/raw_traditional_resource.csv results
 cp /tmp/resource_nmcts_traditional_no_prior/summary_traditional_resource.csv results/summary_traditional_resource_no_prior.csv
 cp /tmp/resource_nmcts_traditional_no_prior/manifest_traditional_resource.json results/manifest_traditional_resource_no_prior.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_neural_prior_ablation.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_search_contribution.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_resource_sweep.py --model models/action_scorer_rollout_logical_and.pt --workers 10
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_resource_sweep.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset large_resource_core --model models/action_scorer_rollout_logical_and.pt --resume --workers 6 --checkpoint-every 1 --isolate-timeouts
@@ -203,6 +204,27 @@ Neural-prior ablation evidence from `results/analysis_neural_prior_ablation.md`:
   mean relative runtime increases are 91.22%, 87.31%, and 67.44% on this
   small-function slice, so the learned prior is a quality-improving search
   signal rather than the current fastest mode.
+
+Search-contribution decomposition evidence from
+`results/analysis_search_contribution.md`:
+
+- The report consolidates matched-pair evidence from `ablation_affine`,
+  `traditional_resource`, `highdim_resource`, `highdim_scale_resource`,
+  `ultra_highdim_resource`, `mega_highdim_resource`, and the learned-prior
+  reruns.
+- Affine-greedy versus completed fixed-coordinate MCTS pairs has 165 score
+  wins, 88 losses, and 68 ties, with a 12.12% mean score reduction; this is
+  the largest pre-portfolio algorithmic jump, but not a monotone guard.
+- Neural refine over affine-greedy has 65 score wins, 0 losses, and 257 ties;
+  guarded Affine-NMCTS over no-guard has 88 score wins, 0 losses, and 234 ties.
+- The Pareto archive improves over Resource-NMCTS on the 177-function
+  `traditional_resource` slice with 74 score wins, 0 losses, 103 ties, and a
+  4.59% mean score reduction.
+- The high-dimensional scale contribution is mainly the bounded linear-pair
+  guard: score improvements over root beam are 60/0/4 at n=14, 30/0/2 at
+  n=15, 22/0/2 at n=16, and 6/0/6 at n=18.  Resource/Pareto selection adds
+  further separation in some suites but should not be overstated when it ties
+  its guarded child.
 
 Traditional Boolean/ESOP baseline evidence from
 `results/analysis_traditional_resource.md` and

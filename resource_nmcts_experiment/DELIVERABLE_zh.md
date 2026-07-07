@@ -1,7 +1,7 @@
 # Resource-NMCTS 中文交付文档
 
 更新时间：2026-07-07
-当前提交：`52197b6 Add Chinese delivery document`
+当前代码版本：以 `origin/main` 最新提交为准
 代码位置：`/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment`
 
 ## 1. 项目定位
@@ -101,6 +101,33 @@
 - ABC-AIG 和 ABC-XAG 在多数高维函数上保持更低的 level/depth 估计。
 - 因此，高维外部结果支持“低 ancilla / 低加权资源 / 低 T-count”，但不支持“depth-only 支配”。
 
+### 2.4 搜索贡献分解
+
+新增 `analyze_search_contribution.py`，把分散在多个实验文件中的消融结果统一成一张 contribution decomposition 表，避免论文只给出“大结果”而无法回答“提升到底来自哪里”。
+
+主要产物：
+
+- `results/analysis_search_contribution.md`
+- `results/summary_search_contribution.csv`
+- `paper_latex/tables/search_contribution_decomposition.tex`
+
+关键结论：
+
+| 贡献环节 | 函数集 | score 胜/负/平 | 平均 score 变化 | 解释 |
+|---|---|---:|---:|---|
+| affine greedy vs fixed-coordinate MCTS | `ablation_affine` | 165/88/68 | -12.12% | 仿射坐标搜索是最大前置收益，但不是单调 guard |
+| neural refine over affine greedy | `ablation_affine` | 65/0/257 | -1.08% | 神经 refine 有小幅、无 score loss 的增益 |
+| guarded Affine-NMCTS over no-guard | `ablation_affine` | 88/0/234 | -1.74% | final guard 有无损增益 |
+| learned prior for Resource-NMCTS | `traditional_resource` | 41/0/136 | -1.34% | 学习先验是质量信号，但不是最快模式 |
+| Pareto archive over Resource-NMCTS | `traditional_resource` | 74/0/103 | -4.59% | 小规模 profile/Pareto archive 贡献明确 |
+| linear-pair guard vs root beam, n=14 | `highdim_resource` | 60/0/4 | -3.00% | 高维主要增益来自 bounded linear-pair guard |
+| recursive linear-pair guard vs root beam, n=15 | `highdim_scale_resource` | 30/0/2 | -5.28% | 递归 pair guard 是 n=15 的主要规模贡献 |
+| linear-pair guard vs root beam, n=16 | `ultra_highdim_resource` | 22/0/2 | -1.88% | n=16 仍有可测增益，但幅度变小 |
+| fast linear-pair guard vs root beam, n=18 | `mega_highdim_resource` | 6/0/6 | -1.91% | n=18 是可验证的压力边界证据 |
+| Resource-NMCTS vs fast linear-pair, n=18 | `mega_highdim_resource` | 12/0/0 | -3.55% | n=18 Resource guard 对 fast child 仍有进一步选择收益 |
+
+这个结果把论文主张进一步收窄为：仿射坐标搜索、神经 refine、guard/Pareto archive 和高维 linear-pair guard 共同构成方法贡献；其中高维大规模证据不能夸大为完整 Pareto archive 的强独立优势，因为部分高维设置中 Resource/Profile/Pareto 会退化为同一稳定 guard。
+
 ## 3. 当前文件交付清单
 
 ### 3.1 核心代码
@@ -112,6 +139,7 @@
 - `analyze_runtime.py`：运行时间和资源表生成。
 - `analyze_external_baselines.py`：外部 baseline 对比分析。
 - `analyze_esop_baseline.py`：新增 ESOP 专项分析。
+- `analyze_search_contribution.py`：新增搜索贡献分解分析。
 
 ### 3.2 结果文件
 
@@ -123,12 +151,15 @@
 - `results/analysis_mega_highdim_resource.md`
 - `results/runtime_mega_highdim_resource.md`
 - `results/analysis_external_mega_highdim_resource.md`
+- `results/analysis_search_contribution.md`
+- `results/summary_search_contribution.csv`
 
 ### 3.3 论文文件
 
 - `paper_latex/main.tex`
 - `paper_latex/main.pdf`
 - `paper_latex/tables/esop_baseline_by_n.tex`
+- `paper_latex/tables/search_contribution_decomposition.tex`
 - `paper_latex/tables/resource_mega_highdim_resource.tex`
 - `paper_latex/tables/runtime_mega_highdim_resource.tex`
 
@@ -152,6 +183,13 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 ```bash
 cd /Users/zhouzixiang/Desktop/tzb/src
 /opt/anaconda3/envs/mcts-qoracle/bin/python resource_nmcts_experiment/analyze_esop_baseline.py
+```
+
+重新生成搜索贡献分解：
+
+```bash
+cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_search_contribution.py
 ```
 
 重新生成 n=18 内部分析：
@@ -189,10 +227,11 @@ latexmk -pdf -g main.tex
 - `py_compile` 通过。
 - `git diff --check` 通过。
 - `raw_mega_highdim_resource.csv` 审计：84 行、0 error、0 skipped、0 incorrect。
+- `analysis_search_contribution.md` 审计：无 NaN/空配对。
 
 Git 状态：
 
-- 最新提交：`e08e67f Add ESOP baseline evidence and finish mega run`
+- 最新提交：以本轮最终回复中的 Git commit 为准。
 - 远端：`origin/main` 已同步。
 - 注意：仓库根目录外层曾出现未跟踪压缩包 `resource_nmcts_experiment.zip`，不属于本次代码交付。
 
@@ -205,6 +244,7 @@ Git 状态：
 3. 在 `n<=6` 传统 baseline 切片上，Pareto-Resource-NMCTS 对 ESOP cube beam、ESOP-MILP 和 ABC-ESOP 均有明显 score 优势。
 4. 在 `n=18` 高维随机 ANF stress test 上，fast linear-pair guard 与 Resource/Profile/Pareto 可稳定改善 root-beam，说明高维 guard 不再只是保底策略。
 5. 外部 ABC/BDD 结果支持低加权资源和低 ancilla 优势，但 depth 仍是 ABC-AIG/ABC-XAG 的优势指标。
+6. 贡献分解显示：仿射坐标搜索是最大前置收益，神经 refine 和 final guard 提供无 score loss 的小幅增益，Pareto archive 在小规模传统切片上贡献明确，高维主要由 bounded linear-pair guard 支撑。
 
 不应写的主张：
 
@@ -215,23 +255,23 @@ Git 状态：
 
 ## 7. 下一步建议
 
-当前还需要一个更强的“AI/MCTS 贡献拆解”实验，否则审稿人可能认为主要提升来自 FPRM/linear-pair 工程启发，而不是强化学习或 MCTS。
+当前已经完成第一版“搜索贡献分解”，但这一步主要是复用已有 verified CSV 做统一审稿口径分析，不等价于新增所有 dedicated ablation。投稿前仍建议继续补强：
 
-建议下一步：
+1. 做真正的 `heuristic-only / no-MCTS` rerun，而不是只从已有方法间接比较。
+2. 做 `no-neural-prior` 的高维小切片，验证 learned prior 在大规模下是否仍有正贡献。
+3. 把 `beam-only`、`linear-pair-only`、`Resource/Pareto` 做成同一 preset 的统一 rerun，避免跨 preset 解释。
+4. 如果时间允许，补一个小规模 exact/exhaustive oracle slice，强化公平性。
 
-1. 做 `no-neural-prior`、`heuristic-only`、`beam-only`、`MCTS-without-profile` 的统一 ablation。
-2. 选择 `n<=6` 和 `n=14/15/16/18` 两个尺度分别汇报。
-3. 把结果写成“搜索策略贡献”而不是“单一启发式贡献”。
-4. 如果时间允许，补一个小规模 exact/ILP 或 exhaustive oracle slice，强化公平性。
+已完成/待补强状态：
 
-最有价值的下一个表格：
-
-| 设置 | 函数集 | 方法 | 相对当前方法 score 差距 | 目的 |
-|---|---|---|---:|---|
-| no neural prior | n<=6 traditional | Resource/Pareto | 待测 | 证明 neural prior 贡献 |
-| heuristic-only | n<=6 traditional | Resource/Pareto | 待测 | 证明 MCTS/搜索贡献 |
-| beam-only | highdim | fast/root/linear | 待测 | 区分 beam 与 portfolio |
-| profile disabled | resource sweep | Profile/Pareto | 待测 | 证明 profile/Pareto archive 贡献 |
+| 设置 | 函数集 | 当前证据 | 状态 |
+|---|---|---|---|
+| no neural prior | n<=6 traditional | Resource-NMCTS score 41/0/136，-1.34% | 已有 |
+| affine/neural/guard 分解 | 322-function ablation | neural refine 65/0/257，guard 88/0/234 | 已有 |
+| Pareto archive | n<=6 traditional | Pareto vs Resource 74/0/103，-4.59% | 已有 |
+| highdim guard | n=14/15/16/18 | linear-pair guard 相对 root-beam 均无 score loss | 已有 |
+| heuristic-only / no-MCTS | 统一 preset | 需要新增 rerun | 待补 |
+| highdim no-neural-prior | 高维小切片 | 需要新增 rerun | 待补 |
 
 ## 8. 当前结论
 
@@ -240,3 +280,5 @@ Git 状态：
 “基于资源感知搜索、神经先验和 MCTS/Pareto 候选选择的量子布尔函数 oracle 综合方法，在同 benchmark 的 ESOP、ABC、BDD 和 direct ANF baseline 上展示显著低 T-count 与低加权资源优势。”
 
 但是投稿前还需要继续补强“AI 搜索本身带来的贡献”这一点。否则文章容易被评价为一组 FPRM/ESOP 工程启发的组合，而不是强化学习与 MCTS 方法论文。
+
+本轮新增贡献分解后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard 和 Pareto archive 都有可测贡献。不过真正的 `heuristic-only / no-MCTS` dedicated rerun 仍然缺失，所以目标还不能判定完成。

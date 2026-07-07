@@ -595,6 +595,29 @@ heuristic action prior.  Negative mean score change favors the learned prior.}
 \input{tables/neural_prior_ablation}
 \end{table}
 
+Table~\ref{tab:contribution-decomposition} consolidates the scattered
+ablation evidence into one matched-pair contribution account.  The strongest
+pre-portfolio algorithmic step is affine coordinate search: affine-greedy
+already reduces the composite score by 12.12\% relative to completed
+fixed-coordinate MCTS pairs, albeit with score losses on some functions.  The
+neural refinement and final guard are smaller but monotone in score on this
+suite, and the learned prior gives a positive no-loss quality signal on the
+$n\leq 6$ rerun.  The table also clarifies the high-dimensional claim.  At
+$n=14$--$n=18$, most of the measurable scale gain comes from bounded
+linear-pair guards and their recursive/fast variants; Pareto or Resource
+selection provides additional separation in some suites, but should not be
+described as a large independent archive effect when it ties the guarded child.
+
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{Contribution decomposition from matched function-level comparisons.
+Wins/losses/ties use the composite resource score.  Negative mean score change
+favors the component in the first column.}
+\label{tab:contribution-decomposition}
+\input{tables/search_contribution_decomposition}
+\end{table}
+
 \subsection{Runtime and resource tradeoff}
 
 The ablation also exposes the computational cost of the search components.
