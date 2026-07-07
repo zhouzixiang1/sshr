@@ -207,7 +207,7 @@ Current structure-policy evidence:
   final quality improvement over the strongest deterministic depth-2 screen.
 - The conservative depth-2 skip guard removes that quality loss on a fresh
   held-out `n=20` run: 48/48 score ties vs fixed depth-2, 0 false skips, and
-  mean runtime -2.88% vs all-depth adaptive.  It is still +39.43% slower than
+  mean runtime -2.87% vs all-depth adaptive.  It is still +39.45% slower than
   fixed depth-2 because it evaluates shallow screens before falling back, so it
   is a quality-safe guard direction rather than a final speed breakthrough.
 

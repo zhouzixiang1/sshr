@@ -29,6 +29,26 @@ from train_screen_depth_policy import FEATURE_NAMES, Example, make_examples, spl
 
 
 THIS_DIR = Path(__file__).resolve().parent
+SHALLOW_FEATURE_NAMES = [
+    "single_score",
+    "depth1_score",
+    "depth1_vs_single_score_pct",
+    "depth1_vs_single_T_pct",
+    "depth1_vs_single_CNOT_pct",
+    "depth1_vs_single_depth_pct",
+    "single_T_per_term",
+    "depth1_T_per_term",
+    "single_CNOT_per_term",
+    "depth1_CNOT_per_term",
+    "single_depth_per_term",
+    "depth1_depth_per_term",
+    "single_peak_ancilla",
+    "depth1_peak_ancilla",
+    "depth1_time_s",
+    "single_time_s",
+    "shallow_time_s",
+    "depth1_time_over_single",
+]
 
 
 class Depth2GuardNet(nn.Module):
@@ -67,9 +87,57 @@ def safe_skip_label(ex: Example, eps: float) -> int:
     return int(ex.evals[1].score <= ex.evals[2].score + eps)
 
 
-def _standardize(train: Sequence[Example], other: Sequence[Example]) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
-    x_train = torch.tensor([ex.features for ex in train], dtype=torch.float32)
-    x_other = torch.tensor([ex.features for ex in other], dtype=torch.float32)
+def _pct(target: float, baseline: float) -> float:
+    return (target - baseline) / max(abs(baseline), 1.0) * 100.0
+
+
+def guard_feature_names(mode: str) -> list[str]:
+    if mode == "static":
+        return list(FEATURE_NAMES)
+    if mode == "shallow":
+        return [*FEATURE_NAMES, *SHALLOW_FEATURE_NAMES]
+    raise ValueError(f"unknown feature mode: {mode}")
+
+
+def guard_features(ex: Example, mode: str) -> list[float]:
+    if mode == "static":
+        return list(ex.features)
+    if mode != "shallow":
+        raise ValueError(f"unknown feature mode: {mode}")
+
+    single = ex.evals[0]
+    depth1 = ex.evals[1]
+    term_count = max(len(ex.terms), 1)
+    shallow = [
+        single.score,
+        depth1.score,
+        _pct(depth1.score, single.score),
+        _pct(float(depth1.t_count), float(single.t_count)),
+        _pct(float(depth1.cnot), float(single.cnot)),
+        _pct(float(depth1.depth_cost), float(single.depth_cost)),
+        single.t_count / term_count,
+        depth1.t_count / term_count,
+        single.cnot / term_count,
+        depth1.cnot / term_count,
+        single.depth_cost / term_count,
+        depth1.depth_cost / term_count,
+        float(single.peak_ancilla),
+        float(depth1.peak_ancilla),
+        depth1.time_s,
+        single.time_s,
+        single.time_s + depth1.time_s,
+        depth1.time_s / max(single.time_s, 1e-9),
+    ]
+    return [*ex.features, *shallow]
+
+
+def _standardize(
+    train: Sequence[Example],
+    other: Sequence[Example],
+    feature_mode: str,
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+    x_train = torch.tensor([guard_features(ex, feature_mode) for ex in train], dtype=torch.float32)
+    x_other = torch.tensor([guard_features(ex, feature_mode) for ex in other], dtype=torch.float32)
     mean = x_train.mean(dim=0)
     std = x_train.std(dim=0).clamp_min(1e-6)
     return (x_train - mean) / std, (x_other - mean) / std, mean, std
@@ -82,8 +150,9 @@ def train_guard(
     hidden: int,
     epochs: int,
     eps: float,
+    feature_mode: str,
 ) -> tuple[Depth2GuardNet, torch.Tensor, torch.Tensor, dict[str, float]]:
-    x_train, x_valid, mean, std = _standardize(train, valid)
+    x_train, x_valid, mean, std = _standardize(train, valid, feature_mode)
     y_train = torch.tensor([safe_skip_label(ex, eps) for ex in train], dtype=torch.float32)
     y_valid = torch.tensor([safe_skip_label(ex, eps) for ex in valid], dtype=torch.float32)
 
@@ -93,7 +162,8 @@ def train_guard(
 
     torch.manual_seed(seed)
     device = default_device()
-    model = Depth2GuardNet(len(FEATURE_NAMES), hidden=hidden).to(device)
+    feature_names = guard_feature_names(feature_mode)
+    model = Depth2GuardNet(len(feature_names), hidden=hidden).to(device)
     opt = torch.optim.AdamW(model.parameters(), lr=2e-3, weight_decay=1e-4)
     loss_fn = nn.BCEWithLogitsLoss(pos_weight=pos_weight.to(device))
 
@@ -137,10 +207,16 @@ def train_guard(
 
 
 @torch.no_grad()
-def predict_skip_prob(model: Depth2GuardNet, mean: torch.Tensor, std: torch.Tensor, examples: Sequence[Example]) -> list[float]:
+def predict_skip_prob(
+    model: Depth2GuardNet,
+    mean: torch.Tensor,
+    std: torch.Tensor,
+    examples: Sequence[Example],
+    feature_mode: str,
+) -> list[float]:
     if not examples:
         return []
-    x = torch.tensor([ex.features for ex in examples], dtype=torch.float32)
+    x = torch.tensor([guard_features(ex, feature_mode) for ex in examples], dtype=torch.float32)
     x = (x - mean) / std
     return [float(v) for v in torch.sigmoid(model(x)).tolist()]
 
@@ -249,7 +325,8 @@ def write_outputs(
             "state_dict": model.state_dict(),
             "mean": mean.tolist(),
             "std": std.tolist(),
-            "feature_names": FEATURE_NAMES,
+            "feature_names": guard_feature_names(args.feature_mode),
+            "feature_mode": args.feature_mode,
             "hidden": args.hidden,
             "threshold": threshold,
             "metrics": metrics,
@@ -262,7 +339,8 @@ def write_outputs(
                 "kind": "depth2_skip_guard",
                 "threshold": threshold,
                 "label": "skip_depth2_when_depth1_ties_depth2_score",
-                "feature_names": FEATURE_NAMES,
+                "feature_names": guard_feature_names(args.feature_mode),
+                "feature_mode": args.feature_mode,
                 "stats": {name: asdict(value) for name, value in stats.items()},
             },
             indent=2,
@@ -343,6 +421,7 @@ def write_outputs(
         f.write(f"- validation examples: {len(valid)}\n")
         f.write(f"- held-out test examples: {len(test)}\n")
         f.write(f"- train n: {args.train_n}; test n: {args.test_n}\n")
+        f.write(f"- feature mode: {args.feature_mode}\n")
         f.write(f"- selected skip threshold: {threshold:.6f}\n")
         f.write(f"- validation loss at best checkpoint: {metrics['valid_loss']:.4f}\n")
         f.write(f"- validation accuracy at 0.5: {metrics['valid_acc_at_0_5']:.3f}\n\n")
@@ -396,6 +475,7 @@ def main(argv: Iterable[str] | None = None) -> int:
     ap.add_argument("--action-width", type=int, default=6)
     ap.add_argument("--gate-mode", choices=["mct", "logical_and"], default="mct")
     ap.add_argument("--score-eps", type=float, default=1e-9)
+    ap.add_argument("--feature-mode", choices=["static", "shallow"], default="static")
     ap.add_argument("--model-out", default=str(THIS_DIR / "models" / "boolean_screen_depth_guard.pt"))
     ap.add_argument("--rule-out", default=str(THIS_DIR / "models" / "boolean_screen_depth_guard.json"))
     ap.add_argument("--results-dir", default=str(THIS_DIR / "results"))
@@ -420,11 +500,19 @@ def main(argv: Iterable[str] | None = None) -> int:
     print("building held-out test examples")
     test = make_examples("test", test_ns, args.test_per_n, rng, config, args.action_width)
 
-    model, mean, std, metrics = train_guard(train, valid, args.seed, args.hidden, args.epochs, args.score_eps)
+    model, mean, std, metrics = train_guard(
+        train,
+        valid,
+        args.seed,
+        args.hidden,
+        args.epochs,
+        args.score_eps,
+        args.feature_mode,
+    )
     probs = {
-        "train": predict_skip_prob(model, mean, std, train),
-        "valid": predict_skip_prob(model, mean, std, valid),
-        "test": predict_skip_prob(model, mean, std, test),
+        "train": predict_skip_prob(model, mean, std, train, args.feature_mode),
+        "valid": predict_skip_prob(model, mean, std, valid, args.feature_mode),
+        "test": predict_skip_prob(model, mean, std, test, args.feature_mode),
     }
     threshold, train_stats, valid_stats = select_threshold(train, valid, probs["train"], probs["valid"], args.score_eps)
     stats = {

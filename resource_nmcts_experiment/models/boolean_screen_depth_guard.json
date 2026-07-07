@@ -1,4 +1,5 @@
 {
+  "feature_mode": "static",
   "feature_names": [
     "n",
     "term_count",
@@ -35,8 +36,8 @@
     "test": {
       "false_skips": 0,
       "mean_rel_score_vs_depth2": 0.0,
-      "mean_rel_time_vs_all_depth": -0.02875541744752786,
-      "mean_rel_time_vs_depth2": 0.3943383164054471,
+      "mean_rel_time_vs_all_depth": -0.02865895916968832,
+      "mean_rel_time_vs_depth2": 0.39447058220419007,
       "pairs": 48,
       "score_losses": 0,
       "score_ties": 48,
@@ -48,8 +49,8 @@
     "train": {
       "false_skips": 0,
       "mean_rel_score_vs_depth2": 0.0,
-      "mean_rel_time_vs_all_depth": -0.044759738576955165,
-      "mean_rel_time_vs_depth2": 0.2595902930902642,
+      "mean_rel_time_vs_all_depth": -0.04492340046663601,
+      "mean_rel_time_vs_depth2": 0.2582614219543521,
       "pairs": 240,
       "score_losses": 0,
       "score_ties": 240,
@@ -61,8 +62,8 @@
     "valid": {
       "false_skips": 0,
       "mean_rel_score_vs_depth2": 0.0,
-      "mean_rel_time_vs_all_depth": -0.01612657074293471,
-      "mean_rel_time_vs_depth2": 0.2650257233112276,
+      "mean_rel_time_vs_all_depth": -0.01613115781013374,
+      "mean_rel_time_vs_depth2": 0.26536058505734045,
       "pairs": 72,
       "score_losses": 0,
       "score_ties": 72,
