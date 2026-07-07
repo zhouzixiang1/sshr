@@ -78,6 +78,41 @@
 - 相对 AND-direct ANF，T、CNOT、depth 和 score 都改善，但 peak ancilla 增加。
 - n=18 的 Pareto-Resource-NMCTS 当前故意收窄到与 Resource/Profile 相同的稳定高维 guard，因此它不是新的 Pareto 分离证据，而是规模和验证边界证据。
 
+### 2.2.1 n=20 giga stress 边界测试
+
+本轮新增 `giga_highdim_resource` 压力边界切片，覆盖 6 个随机 `n=20` ANF 函数、7 个方法、42 行结果：
+
+- `direct_anf`
+- `and_direct_anf`
+- `and_fprm_root_beam`
+- `and_fprm_linear_pair_fast`
+- `and_resource_nmcts`
+- `and_profile_resource_nmcts`
+- `and_pareto_resource_nmcts`
+
+主要产物：
+
+- `results/raw_giga_highdim_resource.csv`
+- `results/summary_giga_highdim_resource.csv`
+- `results/manifest_giga_highdim_resource.json`
+- `results/analysis_giga_highdim_resource.md`
+- `results/runtime_giga_highdim_resource.md`
+- `paper_latex/tables/resource_giga_highdim_resource.tex`
+- `paper_latex/tables/runtime_giga_highdim_resource.tex`
+
+核心结果：
+
+| 对比 | T-count 胜/负/平 | score 胜/负/平 | 平均 T-count 变化 | 平均 score 变化 |
+|---|---:|---:|---:|---:|
+| Resource/Profile/Pareto vs direct ANF | 4/0/2 | 4/2/0 | -32.93% | -30.34% |
+| Resource/Profile/Pareto vs AND-direct ANF | 0/0/6 | 0/0/6 | +0.00% | +0.00% |
+
+运行边界：
+
+- `and_fprm_root_beam` 和 `and_fprm_linear_pair_fast` 在 6 个函数上全部触发 300 s task timeout。
+- Resource/Profile/Pareto 均完成 6/6，但结果与 AND-direct ANF 完全一致；它们相对 direct ANF 仍能降低 T-count 和 score，但已经不再体现新的搜索分离。
+- 因此，n=20 不能写成新的强正向主结果。它应写成当前规模边界：验证路径还能完成，基础 logical-AND 化仍有效，但当前高维 FPRM/root-beam/linear-pair 搜索在 300 s 限制下已经无法支撑更强结构发现。
+
 ### 2.3 外部 ABC/BDD 高维对比
 
 当前高维外部 baseline 覆盖：
@@ -393,6 +428,10 @@
 - `results/raw_mega_highdim_resource.csv`
 - `results/analysis_mega_highdim_resource.md`
 - `results/runtime_mega_highdim_resource.md`
+- `results/raw_giga_highdim_resource.csv`
+- `results/summary_giga_highdim_resource.csv`
+- `results/analysis_giga_highdim_resource.md`
+- `results/runtime_giga_highdim_resource.md`
 - `results/analysis_external_mega_highdim_resource.md`
 - `results/analysis_search_contribution.md`
 - `results/summary_search_contribution.csv`
@@ -428,6 +467,8 @@
 - `paper_latex/tables/external_traditional_resource_n6.tex`
 - `paper_latex/tables/resource_mega_highdim_resource.tex`
 - `paper_latex/tables/runtime_mega_highdim_resource.tex`
+- `paper_latex/tables/resource_giga_highdim_resource.tex`
+- `paper_latex/tables/runtime_giga_highdim_resource.tex`
 - `paper_latex_zh/resource_nmcts_zh_report.tex`
 - `paper_latex_zh/resource_nmcts_zh_report.pdf`
 - `paper_latex_zh/resource_nmcts_zh_robustness.tex`
@@ -551,6 +592,7 @@ latexmk -pdf -g main.tex
 - `py_compile` 通过。
 - `git diff --check` 通过。
 - `raw_mega_highdim_resource.csv` 审计：84 行、0 error、0 skipped、0 incorrect。
+- `raw_giga_highdim_resource.csv` 审计：42 行、30 usable、12 timeout error、0 skipped；timeout 均来自 `and_fprm_root_beam` 和 `and_fprm_linear_pair_fast`。
 - `analysis_search_contribution.md` 审计：无 NaN/空配对。
 - `raw_search_ablation_highdim.csv` 审计：128 行、0 error、0 skipped、0 incorrect。
 - `raw_neural_prior_highdim_ablation.csv` 审计：24 行、0 error、0 skipped、0 incorrect。
@@ -581,6 +623,7 @@ Git 状态：
 8. `n<=4` exact XAG 乘法复杂度切片显示：Resource/Pareto 在 12/72 个函数上达到全局 T 下界，平均 T gap 为 +53.01%，明显低于 ESOP-MILP 的 +120.14% 和 SSHR-I-T 的 +143.06%。
 9. 高维 root-action teacher 诊断显示：oracle top-24 相对启发式 top-4 有 3/0/7、-0.18% 的小幅 headroom；pairwise-wide root-action ranker 进一步在 n=16 full synthesis 中相对 deterministic recursive guard 获得 10/0/14、-0.18%，因此高维 AI 贡献已从负向诊断推进到小幅正向证据。
 10. 外部工具链 readiness 审计显示：ABC 已可用并支撑当前 AIG/XAG/LUT/ESOP baseline；mockturtle/RevKit 当前缺失，因此不能声称已完成这类 reversible-toolchain 复现。
+11. `n=20` giga stress 是边界证据：Resource/Profile/Pareto 完成验证并相对 direct ANF 降低 score，但与 AND-direct ANF 完全一致，root-beam 与 fast linear-pair 全部 timeout，因此不能作为新的明显提升主张。
 
 不应写的主张：
 
@@ -590,6 +633,7 @@ Git 状态：
 4. 不应直接拿 SSHR 论文表格里的 ESOP 总量横比，除非函数集和成本模型一致。
 5. 不应把 Exact FPRM-DP 写成全局可逆线路最优；它只是在 bounded fixed-polarity FPRM factor model 内 exact。
 6. 不应把 Exact XAG 乘法复杂度写成 CNOT/depth/ancilla 最优；它只给出 logical-AND T-count 的全局下界。
+7. 不应把 n=20 giga stress 写成 Resource-NMCTS 的新突破；当前它主要暴露 300 s 预算下 root-beam/linear-pair 搜索失效和 Resource 退化到 AND-direct 的边界。
 
 ## 7. 下一步建议
 

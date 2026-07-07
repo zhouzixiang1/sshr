@@ -34,7 +34,7 @@
 \maketitle
 
 \begin{abstract}
-量子布尔函数 oracle 综合把经典谓词嵌入可逆量子线路，是量子搜索、量子密码分析和若干算法原语中的关键编译步骤。直接由代数正规形（algebraic normal form, ANF）生成线路具有语义透明性，但在高次数项和稠密项集合上会产生大量重复计算，并推高 T-count。本文提出 \method{}，将 oracle 综合表述为 \anf{}/固定极性 Reed--Muller（fixed-polarity Reed--Muller, FPRM）项集合上的资源约束因子搜索问题。该方法以公共因子、线性因子和 compute/uncompute 复用作为动作空间，结合神经动作先验、蒙特卡洛树搜索、baseline-preserving guard 与 Pareto 候选库，在统一逻辑资源模型下选择正确线路。实验覆盖 $n\leq6$ 的 177 个传统函数、$n=14$ 至 $n=18$ 的高维随机 \anf{} 压力测试、ESOP/ABC/BDD/SSHR baseline、搜索消融和小规模 exact 参照。在传统函数切片上，\pareto{} 相对 ESOP cube beam 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%；相对 weighted ESOP-MILP 获得 167/3/7，平均 score 降低 29.84\%。在 $n=16$ 的 24 个随机 \anf{} 函数上，baseline-preserving AI guard 相对 deterministic recursive guard 获得 6/0/18，平均 score 降低 0.05\%；在 $n=18$ 的 12 个函数上，\method{} 相对 direct ANF 平均 T-count 降低 60.05\%，平均 score 降低 56.99\%。这些结果表明，面向 \anf{}/\fprm{} 项集合的资源感知神经搜索可以稳定降低逻辑层 T-count 与加权资源；同时，本文不主张 CNOT-only 全面最优，也不覆盖硬件映射、连通性约束或真实噪声模型。
+量子布尔函数 oracle 综合把经典谓词嵌入可逆量子线路，是量子搜索、量子密码分析和若干算法原语中的关键编译步骤。直接由代数正规形（algebraic normal form, ANF）生成线路具有语义透明性，但在高次数项和稠密项集合上会产生大量重复计算，并推高 T-count。本文提出 \method{}，将 oracle 综合表述为 \anf{}/固定极性 Reed--Muller（fixed-polarity Reed--Muller, FPRM）项集合上的资源约束因子搜索问题。该方法以公共因子、线性因子和 compute/uncompute 复用作为动作空间，结合神经动作先验、蒙特卡洛树搜索、baseline-preserving guard 与 Pareto 候选库，在统一逻辑资源模型下选择正确线路。实验覆盖 $n\leq6$ 的 177 个传统函数、$n=14$ 至 $n=20$ 的高维随机 \anf{} 压力测试、ESOP/ABC/BDD/SSHR baseline、搜索消融和小规模 exact 参照。在传统函数切片上，\pareto{} 相对 ESOP cube beam 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%；相对 weighted ESOP-MILP 获得 167/3/7，平均 score 降低 29.84\%。在 $n=16$ 的 24 个随机 \anf{} 函数上，baseline-preserving AI guard 相对 deterministic recursive guard 获得 6/0/18，平均 score 降低 0.05\%；在 $n=18$ 的 12 个函数上，\method{} 相对 direct ANF 平均 T-count 降低 60.05\%，平均 score 降低 56.99\%。$n=20$ 边界测试显示，root-beam 与 fast linear-pair 在 300 s 预算下全部超时，而 \method{} 完成验证但退化到 AND-direct ANF。这些结果表明，面向 \anf{}/\fprm{} 项集合的资源感知神经搜索可以稳定降低逻辑层 T-count 与加权资源；同时，本文不主张 CNOT-only 全面最优，也不覆盖硬件映射、连通性约束或真实噪声模型。
 \end{abstract}
 
 \noindent\textbf{关键词：}量子 oracle 综合；布尔函数综合；神经蒙特卡洛树搜索；ANF；FPRM；T-count；资源约束
@@ -144,7 +144,7 @@ FPRM 极性搜索进一步改变项集合形状。固定某些变量的极性，
 
 \subsection{Benchmark}
 
-实验包含四类数据。第一类是 $n\leq6$ 的 177 个传统函数，用于与 direct ANF、AND-direct ANF、固定坐标 MCTS、ESOP cube beam、ESOP-MILP、SSHR-H 和外部 ABC/BDD/SSHR 结果比较。第二类是中高维随机 \anf{} 压力测试，包括 $n=14$ 的 64 个函数、$n=15$ 的 32 个函数、$n=16$ 的 24 个函数和 $n=18$ 的 12 个函数。第三类是外部 baseline，包括 ABC-AIG、ABC-XAG、ABC-LUT、BDD/Shannon、ABC-ESOP 和 SSHR-I。第四类是小规模 exact 参照，包括 exact FPRM-DP 和 exact XAG multiplicative complexity 下界。
+实验包含四类数据。第一类是 $n\leq6$ 的 177 个传统函数，用于与 direct ANF、AND-direct ANF、固定坐标 MCTS、ESOP cube beam、ESOP-MILP、SSHR-H 和外部 ABC/BDD/SSHR 结果比较。第二类是中高维随机 \anf{} 压力测试，包括 $n=14$ 的 64 个函数、$n=15$ 的 32 个函数、$n=16$ 的 24 个函数、$n=18$ 的 12 个函数，以及 $n=20$ 的 6 个边界函数。第三类是外部 baseline，包括 ABC-AIG、ABC-XAG、ABC-LUT、BDD/Shannon、ABC-ESOP 和 SSHR-I。第四类是小规模 exact 参照，包括 exact FPRM-DP 和 exact XAG multiplicative complexity 下界。
 
 所有内部结果均记录在 CSV 与 manifest 中，并由分析脚本生成表格。传统函数切片包含 1770 行方法结果，$n=16$ 切片包含 240 行结果，$n=18$ 切片包含 84 行结果。报告时同时给出 T-count、CNOT、depth、peak ancilla 和 score，避免用单一 score 掩盖资源 trade-off。
 
@@ -222,11 +222,15 @@ $n=16$ & \method{} vs root beam & 24 & 23/0/1 & $-4.36\%$ \\
 $n=16$ & AI guard vs recursive guard & 24 & 6/0/18 & $-0.05\%$ \\
 $n=18$ & Fast guard vs root beam & 12 & 6/0/6 & $-1.91\%$ \\
 $n=18$ & \method{} vs fast guard & 12 & 12/0/0 & $-3.55\%$ \\
+$n=20$ & \method{} vs direct ANF & 6 & 4/2/0 & $-30.34\%$ \\
+$n=20$ & \method{} vs AND-direct ANF & 6 & 0/0/6 & $+0.00\%$ \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 从 direct ANF 角度看，高维结果更显著。$n=16$ 的 24 个函数上，\method{} 平均 T-count 降低 63.36\%，平均 score 降低 60.83\%；$n=18$ 的 12 个函数上，平均 T-count 降低 60.05\%，平均 score 降低 56.99\%。代价是 peak ancilla 通常上升，且相对 direct ANF 的 CNOT/depth 在部分函数上变差。这是典型的逻辑资源 trade-off：本文方法主要减少昂贵的非 Clifford 结构，而不是单独最小化所有资源。
+
+$n=20$ 结果应单独解释。该切片包含 6 个随机 \anf{} 函数、7 个方法、42 行结果，其中 12 行为 timeout：FPRM root beam 和 fast linear-pair 在所有 6 个函数上均触发 300 s task timeout。\method{}、Profile-\method{} 和 \pareto{} 均完成 6/6，但资源与 AND-direct ANF 完全一致。它们相对 direct ANF 仍有 4/2/0 的 score 胜/负/平和 30.34\% 的平均 score 降低，但这来自 logical-AND 化而不是新的高维搜索分离。因此，$n=20$ 更适合写成当前规模边界，而不是新的正向主结果。
 
 \subsection{资源权重鲁棒性}
 
@@ -258,7 +262,7 @@ $n=18$: FPRM root beam & 12/0/0, $-5.29\%$ & 12/0/0, $-6.19\%$ & 12/0/0, $-4.54\
 
 本文结果支持一个明确但有边界的结论：\method{} 能在逻辑层 Boolean oracle synthesis 中稳定降低 T-count 和加权 score。传统函数切片给出最强统计证据，高维随机 \anf{} 切片说明 bounded linear-pair guard 和 resource-aware portfolio 可以扩展到更大变量数，权重鲁棒性分析说明结论不依赖单一 score 权重。
 
-第一个限制是 CNOT trade-off。SSHR-H 在传统函数上的平均 CNOT 更低，因此若目标是 CNOT-only，SSHR 仍然是强 baseline。本文方法更适合 T-count 或综合 score 更重要的场景。第二个限制是高维 learned prior 的收益仍小。baseline-preserving AI guard 能保证无 score-loss 小增益，但这还不是“神经模型显著主导高维搜索”的证据。第三个限制是本文只处理逻辑层资源，没有硬件 coupling graph、routing、容错调度或噪声模型。第四个限制是外部 reversible-toolchain 对比仍可加强，特别是 ROS、mockturtle 或 RevKit 风格流程。
+第一个限制是 CNOT trade-off。SSHR-H 在传统函数上的平均 CNOT 更低，因此若目标是 CNOT-only，SSHR 仍然是强 baseline。本文方法更适合 T-count 或综合 score 更重要的场景。第二个限制是高维 learned prior 的收益仍小。baseline-preserving AI guard 能保证无 score-loss 小增益，但这还不是“神经模型显著主导高维搜索”的证据。第三个限制是 $n=20$ 压力测试已经暴露当前实现的规模边界：root-beam 与 fast linear-pair 均超时，Resource portfolio 退化到 AND-direct ANF，说明高维结构搜索还需要更强的剪枝、排序或并行实现。第四个限制是本文只处理逻辑层资源，没有硬件 coupling graph、routing、容错调度或噪声模型。第五个限制是外部 reversible-toolchain 对比仍可加强，特别是 ROS、mockturtle 或 RevKit 风格流程。
 
 下一步最有价值的提升方向有三点。第一，训练更强的 high-dimensional root-action/value ranker，使用更宽 teacher、top-k distillation 和 pairwise/listwise 混合损失，把当前 0.04\% 的高维 learned-prior 改善提升到可见量级。第二，补充可复现的外部 reversible-toolchain baseline，减少审稿人对工具链覆盖不足的质疑。第三，加入代表性函数案例，展示 direct ANF、root beam、linear-pair guard 和 \method{} 如何在项集合层面产生不同因子分解，从而解释 T-count 降低的机制。
 
@@ -267,7 +271,7 @@ $n=18$: FPRM root beam & 12/0/0, $-5.29\%$ & 12/0/0, $-6.19\%$ & 12/0/0, $-4.54\
 本文提出 \method{}，将量子布尔函数 oracle 综合建模为 \anf{}/\fprm{} 项集合上的资源约束神经搜索问题。通过公共因子、线性因子、FPRM 极性、神经动作先验、\mcts{}、baseline-preserving guard 和 Pareto portfolio，本文在传统函数和高维随机 \anf{} 上获得了低 T-count 与低加权逻辑资源优势。当前证据足以支持逻辑层方法论文的主线，但不足以支持硬件映射最优、CNOT-only 全面支配或高维神经先验已经显著领先的强结论。后续工作应集中在更强高维排序模型、外部 reversible-toolchain 对比和可解释线路案例上。
 
 \begingroup
-\small
+\footnotesize
 \begin{thebibliography}{99}
 
 \bibitem{meuli2022xag}

@@ -277,6 +277,10 @@ def _solve_plan(method: str, terms: frozenset[int], config: SearchConfig, seed: 
         return min([baseline, neural_plan], key=lambda p: p.score(config.weights))
     if method == "fprm_linear_pair_deep_wide":
         return linear_pair_beam_plan(terms, config=config, action_width=12, recursive_depth=1)
+    if method == "fprm_boolean_linear_pair":
+        return linear_pair_beam_plan(terms, config=config, boolean_ring=True)
+    if method == "fprm_boolean_linear_pair_deep":
+        return linear_pair_beam_plan(terms, config=config, recursive_depth=1, boolean_ring=True)
     if method == "fprm_linear_parity":
         return linear_pair_beam_plan(terms, config=config, max_linear_width=3)
     if method == "fprm_affine_linear_pair":
@@ -323,6 +327,8 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
         "fprm_linear_pair_deep_neural",
         "fprm_linear_pair_deep_root_neural",
         "fprm_linear_pair_deep_root_neural_wide",
+        "fprm_boolean_linear_pair",
+        "fprm_boolean_linear_pair_deep",
         "fprm_linear_parity",
         "fprm_affine_linear_pair",
         "fprm_affine_linear_pair_deep",
@@ -471,6 +477,10 @@ def _best_polarity_plan(method: str, bf: BooleanFunction, config: SearchConfig, 
                 neural_scorer=neural,
                 root_neural_only=True,
             )
+        elif method == "fprm_boolean_linear_pair":
+            plan = linear_pair_beam_plan(terms, config=config, boolean_ring=True)
+        elif method == "fprm_boolean_linear_pair_deep":
+            plan = linear_pair_beam_plan(terms, config=config, recursive_depth=1, boolean_ring=True)
         elif method == "fprm_linear_parity":
             plan = linear_pair_beam_plan(terms, config=config, max_linear_width=3)
         elif method == "fprm_affine_linear_pair":
@@ -1116,6 +1126,8 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             highdim_config = replace(fast_config, candidate_top_k=config.candidate_top_k)
             linear_method = "fprm_linear_pair_deep"
             child_specs.append((linear_method, highdim_config))
+            if bf.n <= 16:
+                child_specs.append(("fprm_boolean_linear_pair_deep", highdim_config))
             if model_path:
                 neural_linear = (
                     "fprm_linear_pair_deep_ai_guard_wide"
@@ -1179,6 +1191,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
                     child_specs.append(("fprm_linear_parity", child_config))
                     if bf.n <= 15 and child_config.max_factor_ancilla >= 2:
                         child_specs.append(("fprm_linear_pair_deep", child_config))
+                        child_specs.append(("fprm_boolean_linear_pair_deep", child_config))
                         if model_path:
                             child_specs.append(("fprm_linear_pair_deep_root_neural_wide", child_config))
                 elif label == "cnot_depth":
@@ -1403,6 +1416,8 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         "fprm_linear_pair_deep_neural",
         "fprm_linear_pair_deep_root_neural",
         "fprm_linear_pair_deep_root_neural_wide",
+        "fprm_boolean_linear_pair",
+        "fprm_boolean_linear_pair_deep",
         "fprm_linear_parity",
         "fprm_affine_linear_pair",
         "fprm_affine_linear_pair_deep",

@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import csv
 import math
+import sys
 from collections import defaultdict
 from pathlib import Path
 from statistics import mean, median
@@ -67,6 +68,16 @@ METHOD_LABELS = {
     "and_esop_milp": "ESOP MILP",
     "sshr_h": "SSHR-H",
 }
+
+
+def raise_csv_field_limit() -> None:
+    limit = sys.maxsize
+    while True:
+        try:
+            csv.field_size_limit(limit)
+            return
+        except OverflowError:
+            limit //= 10
 
 
 def fnum(value: str | None) -> float | None:
@@ -245,6 +256,8 @@ def write_latex_tables(preset: str, summaries: list[dict[str, object]]) -> tuple
 
 
 def main() -> int:
+    raise_csv_field_limit()
+
     ap = argparse.ArgumentParser()
     ap.add_argument("--preset", default="ablation_affine")
     args = ap.parse_args()

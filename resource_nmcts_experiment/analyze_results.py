@@ -4,10 +4,21 @@ from __future__ import annotations
 
 import argparse
 import csv
+import sys
 from pathlib import Path
 
 
 THIS_DIR = Path(__file__).resolve().parent
+
+
+def raise_csv_field_limit() -> None:
+    limit = sys.maxsize
+    while True:
+        try:
+            csv.field_size_limit(limit)
+            return
+        except OverflowError:
+            limit //= 10
 
 
 def pct(new: float, base: float) -> float:
@@ -38,6 +49,8 @@ def comparison_rows(
 
 
 def main() -> int:
+    raise_csv_field_limit()
+
     ap = argparse.ArgumentParser()
     ap.add_argument("--preset", default="pilot")
     args = ap.parse_args()

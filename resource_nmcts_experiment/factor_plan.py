@@ -203,6 +203,21 @@ def _subsets_of_size(mask: int, size: int) -> Iterable[int]:
         yield s
 
 
+def _linear_boolean_expansion(factor: int, residual: int) -> frozenset[int]:
+    """Expand ``(xor factor variables) * residual`` in the Boolean ring."""
+    out: set[int] = set()
+    bits = int(factor)
+    while bits:
+        bit = bits & -bits
+        term = int(residual) | bit
+        if term in out:
+            out.remove(term)
+        else:
+            out.add(term)
+        bits ^= bit
+    return frozenset(out)
+
+
 def linear_factor_actions(
     terms: frozenset[int],
     prefix_len: int,
@@ -293,6 +308,156 @@ def linear_factor_actions(
                 linear=True,
             )
         )
+
+    if neural_scorer is not None and actions:
+        features = [
+            action_features(
+                terms,
+                prefix_len,
+                live_factor_ancilla,
+                action.factor,
+                action.group,
+                action.residuals,
+                action.rest,
+                action.immediate_gain,
+                direct_total,
+            )
+            for action in actions
+        ]
+        scores = neural_scorer.score_many(features)
+        actions = [
+            replace(action, prior=action.prior + config.neural_prior_weight * float(score))
+            for action, score in zip(actions, scores)
+        ]
+
+    width = action_width if action_width is not None else max(2, min(config.candidate_top_k, 8))
+    actions.sort(key=lambda a: (-a.prior, -a.immediate_gain, -len(a.group), a.factor))
+    return actions[: max(1, min(width, len(actions)))]
+
+
+def boolean_linear_factor_actions(
+    terms: frozenset[int],
+    prefix_len: int,
+    live_factor_ancilla: int,
+    config: SearchConfig,
+    action_width: int | None = None,
+    max_linear_width: int = 2,
+    neural_scorer=None,
+) -> List[FactorAction]:
+    """Find linear factors in the square-free Boolean ring.
+
+    Unlike ``linear_factor_actions``, quotient monomials may share variables
+    with the parity factor.  Expansion uses ``x_i^2=x_i`` and cancels duplicate
+    ANF terms over GF(2).  Candidate quotients are restricted to disjoint
+    expansions already present in ``terms`` so the residual problem is still a
+    monotone set subtraction.
+    """
+    if live_factor_ancilla >= config.max_factor_ancilla or len(terms) < 2 * config.min_factor_count:
+        return []
+    n_bits = max((int(t).bit_length() for t in terms), default=0)
+    if n_bits < 2:
+        return []
+
+    termset = set(terms)
+    direct_total = direct_cost_for_terms(
+        terms, prefix_len, live_factor_ancilla, config.use_relative_phase, config.gate_mode
+    ).score(config.weights)
+    actions: List[FactorAction] = []
+    max_width = max(2, min(max_linear_width, n_bits))
+    all_vars = (1 << n_bits) - 1
+
+    for width in range(2, max_width + 1):
+        for factor in _subsets_of_size(all_vars, width):
+            factor_bits = [1 << i for i in range(factor.bit_length()) if (factor >> i) & 1]
+            residual_candidates: dict[int, frozenset[int]] = {}
+            for term in termset:
+                residual_candidates.setdefault(term, _linear_boolean_expansion(factor, term))
+                for bit in factor_bits:
+                    if term & bit:
+                        residual = term ^ bit
+                        residual_candidates.setdefault(
+                            residual,
+                            _linear_boolean_expansion(factor, residual),
+                        )
+
+            scored_residuals: list[tuple[float, int, int, frozenset[int]]] = []
+            for residual, expansion in residual_candidates.items():
+                if not expansion or not expansion.issubset(termset):
+                    continue
+                group_direct = direct_cost_for_terms(
+                    expansion,
+                    prefix_len,
+                    live_factor_ancilla,
+                    config.use_relative_phase,
+                    config.gate_mode,
+                ).score(config.weights)
+                residual_direct = direct_cost_for_terms(
+                    frozenset({residual}),
+                    prefix_len + 1,
+                    live_factor_ancilla + 1,
+                    config.use_relative_phase,
+                    config.gate_mode,
+                ).score(config.weights)
+                local_gain = group_direct - residual_direct
+                if local_gain <= 0:
+                    continue
+                scored_residuals.append((local_gain, len(expansion), residual, expansion))
+
+            if len(scored_residuals) < config.min_factor_count:
+                continue
+            scored_residuals.sort(key=lambda item: (-item[0], -item[1], item[2]))
+
+            used_terms: set[int] = set()
+            selected_residuals: set[int] = set()
+            for _gain, _size, residual, expansion in scored_residuals:
+                if used_terms.intersection(expansion):
+                    continue
+                used_terms.update(expansion)
+                selected_residuals.add(residual)
+
+            if len(selected_residuals) < config.min_factor_count or len(used_terms) < 2 * config.min_factor_count:
+                continue
+
+            group = frozenset(used_terms)
+            residual_set = frozenset(selected_residuals)
+            rest = frozenset(t for t in terms if t not in used_terms)
+            group_direct = direct_cost_for_terms(
+                group, prefix_len, live_factor_ancilla, config.use_relative_phase, config.gate_mode
+            ).score(config.weights)
+            residual_direct = direct_cost_for_terms(
+                residual_set,
+                prefix_len + 1,
+                live_factor_ancilla + 1,
+                config.use_relative_phase,
+                config.gate_mode,
+            ).score(config.weights)
+            compute = _linear_factor_resource(factor, live_factor_ancilla)
+            uncompute = _linear_factor_resource(factor, live_factor_ancilla)
+            gain = group_direct - compute.score(config.weights) - uncompute.score(config.weights) - residual_direct
+            if gain <= 0:
+                continue
+            coverage = len(group) / max(len(terms), 1)
+            density = sum(t.bit_count() for t in residual_set) / max(len(residual_set), 1)
+            overlap = sum(1 for residual in residual_set if residual & factor) / max(len(residual_set), 1)
+            heuristic_prior = (
+                gain / max(direct_total, 1.0)
+                + 0.04 * len(group)
+                + 0.10 * coverage
+                + 0.02 * factor.bit_count()
+                + 0.03 * overlap
+                - 0.02 * density
+            )
+            actions.append(
+                FactorAction(
+                    factor=factor,
+                    group=group,
+                    residuals=residual_set,
+                    rest=rest,
+                    immediate_gain=gain,
+                    prior=heuristic_prior,
+                    linear=True,
+                )
+            )
 
     if neural_scorer is not None and actions:
         features = [
@@ -654,6 +819,7 @@ def linear_pair_beam_plan(
     rest_greedy_term_limit: int | None = None,
     use_root_child_baseline: bool = True,
     root_neural_only: bool = False,
+    boolean_ring: bool = False,
 ) -> Plan:
     """Try CNOT-only pairwise XOR factors above cheap subplans.
 
@@ -671,7 +837,8 @@ def linear_pair_beam_plan(
     else:
         best = root_beam_plan(terms, prefix_len, live_factor_ancilla, config, neural_scorer=baseline_scorer)
     best_score = best.score(config.weights)
-    actions = linear_factor_actions(
+    action_fn = boolean_linear_factor_actions if boolean_ring else linear_factor_actions
+    actions = action_fn(
         terms,
         prefix_len,
         live_factor_ancilla,
@@ -697,6 +864,7 @@ def linear_pair_beam_plan(
                 neural_scorer=child_scorer,
                 rest_greedy_term_limit=rest_greedy_term_limit,
                 use_root_child_baseline=use_root_child_baseline,
+                boolean_ring=boolean_ring,
             )
         else:
             group = greedy_plan(
@@ -719,6 +887,7 @@ def linear_pair_beam_plan(
                 neural_scorer=child_scorer,
                 rest_greedy_term_limit=rest_greedy_term_limit,
                 use_root_child_baseline=use_root_child_baseline,
+                boolean_ring=boolean_ring,
             )
         elif rest_greedy_term_limit is not None and len(action.rest) > rest_greedy_term_limit:
             rest = direct_plan(action.rest, prefix_len, live_factor_ancilla, child_config)

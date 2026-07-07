@@ -75,6 +75,9 @@ cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json resul
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset mega_highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 4 --checkpoint-every 5
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset mega_highdim_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset mega_highdim_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset giga_highdim_resource --model models/action_scorer_rollout_logical_and.pt --workers 3 --checkpoint-every 6 --isolate-timeouts
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset giga_highdim_resource
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset giga_highdim_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset large_resource_core --formats pla,blif,truth
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset traditional_resource --formats pla,blif,truth --out-dir benchmark_exports/traditional_resource_external_seed42
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/traditional_resource_external_seed42/manifest.json --max-n 4 --max-ilp-n 4 --timeout 10 --workers 4 --out results/raw_external_traditional_resource_n4.csv --summary results/summary_external_traditional_resource_n4.csv --run-manifest results/manifest_external_traditional_resource_n4.json
@@ -155,6 +158,13 @@ Current presets:
   Resource-NMCTS, Profile-Resource-NMCTS, and Pareto-Resource-NMCTS.  It uses a
   fast high-dimensional linear-pair guard that limits expensive rest-branch
   greedy solves and keeps a root-beam baseline.
+- `giga_highdim_resource`: isolated `n=20` random-ANF pressure-boundary check
+  with direct ANF, logical-AND direct ANF, bounded FPRM root-beam, fast FPRM
+  linear-pair, Resource-NMCTS, Profile-Resource-NMCTS, and
+  Pareto-Resource-NMCTS.  In the current run, root-beam and fast linear-pair
+  hit the 300 s task timeout on all six functions; Resource/Profile/Pareto
+  complete but reduce to the AND-direct candidate.  Treat this as a scale
+  boundary, not a new positive high-dimensional search contribution.
 - `large_resource`: experimental `n=14` stress extension.  This preset exposed
   the mixed-suite runtime tail and is kept for broader engineering sweeps.
 - `main`: large-scale placeholder for broader sweeps.
@@ -611,6 +621,22 @@ Ultra-high-dimensional scale check from
   `and_profile_resource_nmcts` completes 12/12 with median 83.339 s and p95
   173.780 s; `and_pareto_resource_nmcts` completes 12/12 with median 83.500 s
   and p95 172.934 s.
+
+`results/analysis_giga_highdim_resource.md` and
+`results/runtime_giga_highdim_resource.md`:
+
+- 6 random ANF functions at `n=20`, 7 methods, 42 result rows, 12 timeout
+  rows, and 0 skipped rows.
+- `and_fprm_root_beam` and `and_fprm_linear_pair_fast` timed out on all six
+  functions under the 300 s isolated task budget.
+- Resource/Profile/Pareto completed all six functions, but matched
+  logical-AND direct ANF exactly.  Compared with direct ANF they have 4
+  weighted-score wins, 2 losses, and 0 ties, with a 32.93% mean T-count
+  reduction and a 30.34% mean score reduction.
+- The n=20 run is therefore a useful pressure boundary: the current guarded
+  high-dimensional search still verifies correctness, but the stronger
+  FPRM/root-beam structure searches are no longer completing inside the current
+  timeout and the portfolio no longer separates from AND-direct ANF.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost

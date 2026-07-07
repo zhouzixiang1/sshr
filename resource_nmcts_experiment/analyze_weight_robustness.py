@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import math
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from statistics import mean
@@ -12,6 +13,16 @@ from statistics import mean
 THIS_DIR = Path(__file__).resolve().parent
 RESULTS = THIS_DIR / "results"
 PAPER_TABLES = THIS_DIR / "paper_latex" / "tables"
+
+
+def raise_csv_field_limit() -> None:
+    limit = sys.maxsize
+    while True:
+        try:
+            csv.field_size_limit(limit)
+            return
+        except OverflowError:
+            limit //= 10
 
 
 @dataclass(frozen=True)
@@ -369,6 +380,8 @@ def write_latex(rows: list[dict[str, str]], path: Path) -> None:
 
 
 def main() -> int:
+    raise_csv_field_limit()
+
     rows = build_rows()
     write_csv(rows, RESULTS / "summary_weight_robustness.csv")
     write_markdown(rows, RESULTS / "analysis_weight_robustness.md")
