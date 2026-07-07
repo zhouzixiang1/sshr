@@ -261,7 +261,31 @@
 
 结论：这是比 action-level prior 更明确的结构级 AI 证据，说明模型可以学习何时需要更深 Boolean-ring screen；但它仍不能写成最终质量突破，因为固定 depth-2 screen 在 score 上略优。论文里应表述为“结构级 AI 已经能减少全 depth adaptive 评估开销，并优于浅层固定策略；下一步需要加 baseline-preserving guard，让 policy 在不劣于 depth-2 的前提下降低运行时间或选择更强分支”。
 
-### 2.5.2 Resource screen-gate 运行时门控
+### 2.5.2 保守 depth-2 skip guard
+
+本轮新增 `train_screen_depth_guard.py`，专门修补上一节的质量缺口。它不再直接预测 single/depth-1/depth-2 三分类，而是学习一个更保守的问题：何时可以跳过 depth-2，使 depth-1 screen 与固定 depth-2 screen 的 score 持平。阈值在 train+validation 上按 zero-false-skip 约束选择。
+
+主要产物：
+
+- `train_screen_depth_guard.py`
+- `models/boolean_screen_depth_guard.pt`
+- `models/boolean_screen_depth_guard.json`
+- `results/raw_boolean_screen_depth_guard.csv`
+- `results/summary_boolean_screen_depth_guard.csv`
+- `results/analysis_boolean_screen_depth_guard.md`
+- `paper_latex/tables/boolean_screen_depth_guard.tex`
+
+核心结果：
+
+| split | 函数数 | skip depth-2 | false skip | vs fixed depth-2 score | vs all-depth time |
+|---|---:|---:|---:|---:|---:|
+| train | 240 | 22 | 0 | 0/0/240 持平 | -4.48% |
+| valid | 72 | 3 | 0 | 0/0/72 持平 | -1.61% |
+| held-out test, n=20 | 48 | 3 | 0 | 0/0/48 持平 | -2.87% |
+
+解释：这个 guard 第一次把结构级策略的 score 缺口降为 0，但收益仍小。它相对固定 depth-2 screen 平均慢 39.40%，因为需要先评估浅层 screen 再决定是否回退。因此它是“质量安全的结构级门控证据”，还不是最终速度突破。下一步应让 guard 选择更多分支，或者在不先跑 shallow screen 的情况下预测安全跳过。
+
+### 2.5.3 Resource screen-gate 运行时门控
 
 本轮还出现了一个工程性改进：`train_structure_gate.py` 用 adaptive Boolean-ring screen 与完整 Resource-NMCTS 的配对结果训练一个可解释 decision stump，判断何时可以跳过昂贵的 Resource-NMCTS tail。当前模型很小，学到的规则是 `n >= 19` 时优先跳过 Resource tail；它应被视为运行时门控证据，而不是新的资源质量模型。
 

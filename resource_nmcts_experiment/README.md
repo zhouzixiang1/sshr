@@ -181,6 +181,11 @@ The structure-level Boolean screen-depth policy is trained with
 `models/boolean_screen_depth_policy.pt`; its held-out analysis is written to
 `results/analysis_boolean_screen_depth_policy.md`, with the paper table at
 `paper_latex/tables/boolean_screen_depth_policy.tex`.
+The conservative depth-2 skip guard is trained with
+`train_screen_depth_guard.py` and saved at
+`models/boolean_screen_depth_guard.pt`; its held-out analysis is written to
+`results/analysis_boolean_screen_depth_guard.md`, with the paper table at
+`paper_latex/tables/boolean_screen_depth_guard.tex`.
 The high-dimensional Resource screen gate is trained with `train_structure_gate.py`
 and saved at `models/resource_structure_gate.json`; it adds
 `and_resource_nmcts_screen_gate`, a gated Resource-NMCTS variant that skips the
@@ -200,6 +205,11 @@ Current structure-policy evidence:
 - Policy vs fixed depth-2 screen: 0/5/43, mean score +0.28%, mean runtime
   -10.85%; therefore this is useful structure-level AI evidence, but not yet a
   final quality improvement over the strongest deterministic depth-2 screen.
+- The conservative depth-2 skip guard removes that quality loss on a fresh
+  held-out `n=20` run: 48/48 score ties vs fixed depth-2, 0 false skips, and
+  mean runtime -2.87% vs all-depth adaptive.  It is still +39.40% slower than
+  fixed depth-2 because it evaluates shallow screens before falling back, so it
+  is a quality-safe guard direction rather than a final speed breakthrough.
 
 Current screen-gate evidence:
 

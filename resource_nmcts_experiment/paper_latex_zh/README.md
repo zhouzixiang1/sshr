@@ -16,7 +16,7 @@
 - `resource_nmcts_zh_boolean_ring_v3.tex` / `resource_nmcts_zh_boolean_ring_v3.pdf`：中文短论文稿 v3，聚焦布尔环线性因子、n=16 matched improvement、n=20 边界测试和当前仍未完成的高维 AI 缺口。
 - `resource_nmcts_zh_stage_delivery.tex` / `resource_nmcts_zh_stage_delivery.pdf`：中文阶段交付稿，面向导师/合作者快速阅读，压缩说明项目定位、方法主线、已达成提升、负面结果和下一步“明显提升”目标。
 - `resource_nmcts_zh_adaptive_screen.tex` / `resource_nmcts_zh_adaptive_screen.pdf`：中文技术论文稿 v4，聚焦自适应 depth-2 布尔环筛选、n=18/n=20 最新 matched comparison，以及“筛选有效但高维神经先验仍弱”的边界。
-- `resource_nmcts_zh_structure_policy_v5.tex` / `resource_nmcts_zh_structure_policy_v5.pdf`：中文技术论文稿 v5，聚焦结构级 depth policy 与 screen-gate，把 AI 贡献从动作排序推进到结构选择，同时保留“尚未超过固定 depth-2 screen”的边界。
+- `resource_nmcts_zh_structure_policy_v5.tex` / `resource_nmcts_zh_structure_policy_v5.pdf`：中文技术论文稿 v5，聚焦结构级 depth policy、保守 depth-2 skip guard 与 screen-gate，把 AI 贡献从动作排序推进到结构选择，同时保留“guard 覆盖率仍小”的边界。
 - `resource_nmcts_zh_research_position.tex` / `resource_nmcts_zh_research_position.pdf`：中文研究定位稿，重新梳理“不从 SSHR 入手”的论文主线、AI 在搜索问题中的角色、当前证据边界和下一步明显提升目标。
 - 最新 v4 稿已补充 `train_screen_depth_policy.py` 的结构级 depth policy 结果：n=14/16/18 训练、held-out n=20 测试，说明 AI 已能学习 screen 深度选择，但尚未超过固定 depth-2 的 score。
 - 最新 v4 稿同时补充 `train_structure_gate.py` 的 screen-gated Resource-NMCTS 结果：n=20 上资源与完整 Resource-NMCTS 持平，平均运行时间降低 61.31%，但只作为运行时门控证据。
