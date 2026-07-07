@@ -19,6 +19,10 @@ function-level comparison; negative relative values favor the target method.
 | dedicated ablation | Resource-NMCTS over heuristic-only | search_ablation_traditional | 177 | 98/0/79 | -3.93% | -4.03% |
 | dedicated ablation | Resource-NMCTS over no-MCTS portfolio | search_ablation_traditional | 177 | 54/0/123 | -1.44% | -1.36% |
 | dedicated ablation | Pareto Resource-NMCTS over no-MCTS portfolio | search_ablation_traditional | 177 | 106/0/71 | -4.69% | -5.07% |
+| highdim ablation | Highdim no-MCTS portfolio over heuristic-only | search_ablation_highdim | 16 | 14/0/2 | -6.50% | -7.66% |
+| highdim ablation | Highdim no-MCTS portfolio over beam-only | search_ablation_highdim | 16 | 14/0/2 | -3.08% | -3.45% |
+| highdim ablation | Highdim no-MCTS portfolio over root beam | search_ablation_highdim | 16 | 14/0/2 | -6.25% | -7.39% |
+| highdim ablation | Highdim no-MCTS portfolio over linear-pair | search_ablation_highdim | 16 | 14/0/2 | -3.08% | -3.45% |
 | esop boundary | Pareto Resource-NMCTS vs ESOP-MILP | traditional_resource | 177 | 167/3/7 | -29.84% | -32.77% |
 | n14 guard | Linear-pair guard vs root beam at n=14 | highdim_resource | 64 | 60/0/4 | -3.00% | -4.19% |
 | n14 portfolio | Pareto Resource-NMCTS vs linear-pair at n=14 | highdim_resource | 64 | 59/0/5 | -3.49% | -3.83% |
@@ -91,6 +95,26 @@ function-level comparison; negative relative values favor the target method.
 | Pareto Resource-NMCTS over no-MCTS portfolio | depth | 93/9/75 | 88.00 | 95.34 | -4.73% |
 | Pareto Resource-NMCTS over no-MCTS portfolio | peak_ancilla | 14/19/144 | 2.03 | 1.99 | +2.26% |
 | Pareto Resource-NMCTS over no-MCTS portfolio | score | 106/0/71 | 49.56 | 53.90 | -4.69% |
+| Highdim no-MCTS portfolio over heuristic-only | T | 14/0/2 | 3081.75 | 3231.00 | -7.66% |
+| Highdim no-MCTS portfolio over heuristic-only | CNOT | 14/0/2 | 5312.56 | 5541.19 | -5.28% |
+| Highdim no-MCTS portfolio over heuristic-only | depth | 12/2/2 | 5314.62 | 5541.31 | -2.83% |
+| Highdim no-MCTS portfolio over heuristic-only | peak_ancilla | 0/14/2 | 3.25 | 2.25 | +45.83% |
+| Highdim no-MCTS portfolio over heuristic-only | score | 14/0/2 | 3400.92 | 3561.57 | -6.50% |
+| Highdim no-MCTS portfolio over beam-only | T | 14/0/2 | 3081.75 | 3135.75 | -3.45% |
+| Highdim no-MCTS portfolio over beam-only | CNOT | 14/0/2 | 5312.56 | 5395.50 | -1.77% |
+| Highdim no-MCTS portfolio over beam-only | depth | 11/3/2 | 5314.62 | 5396.00 | +0.32% |
+| Highdim no-MCTS portfolio over beam-only | peak_ancilla | 0/2/14 | 3.25 | 3.12 | +3.65% |
+| Highdim no-MCTS portfolio over beam-only | score | 14/0/2 | 3400.92 | 3459.50 | -3.08% |
+| Highdim no-MCTS portfolio over root beam | T | 14/0/2 | 3081.75 | 3220.00 | -7.39% |
+| Highdim no-MCTS portfolio over root beam | CNOT | 14/0/2 | 5312.56 | 5537.75 | -5.20% |
+| Highdim no-MCTS portfolio over root beam | depth | 12/2/2 | 5314.62 | 5537.88 | -2.76% |
+| Highdim no-MCTS portfolio over root beam | peak_ancilla | 0/14/2 | 3.25 | 2.25 | +45.83% |
+| Highdim no-MCTS portfolio over root beam | score | 14/0/2 | 3400.92 | 3550.39 | -6.25% |
+| Highdim no-MCTS portfolio over linear-pair | T | 14/0/2 | 3081.75 | 3135.75 | -3.45% |
+| Highdim no-MCTS portfolio over linear-pair | CNOT | 14/0/2 | 5312.56 | 5395.50 | -1.77% |
+| Highdim no-MCTS portfolio over linear-pair | depth | 11/3/2 | 5314.62 | 5396.00 | +0.32% |
+| Highdim no-MCTS portfolio over linear-pair | peak_ancilla | 0/2/14 | 3.25 | 3.12 | +3.65% |
+| Highdim no-MCTS portfolio over linear-pair | score | 14/0/2 | 3400.92 | 3459.50 | -3.08% |
 | Pareto Resource-NMCTS vs ESOP-MILP | T | 166/0/11 | 40.43 | 83.59 | -32.77% |
 | Pareto Resource-NMCTS vs ESOP-MILP | CNOT | 123/41/13 | 83.04 | 133.51 | -14.97% |
 | Pareto Resource-NMCTS vs ESOP-MILP | depth | 156/12/9 | 88.00 | 159.56 | -22.54% |

@@ -602,11 +602,17 @@ already reduces the composite score by 12.12\% relative to completed
 fixed-coordinate MCTS pairs, albeit with score losses on some functions.  The
 neural refinement and final guard are smaller but monotone in score on this
 suite, and the learned prior gives a positive no-loss quality signal on the
-$n\leq 6$ rerun.  The table also clarifies the high-dimensional claim.  At
-$n=14$--$n=18$, most of the measurable scale gain comes from bounded
-linear-pair guards and their recursive/fast variants; Pareto or Resource
-selection provides additional separation in some suites, but should not be
-described as a large independent archive effect when it ties the guarded child.
+$n\leq 6$ rerun.  A dedicated small-function rerun further separates
+heuristic-only, beam-only, no-MCTS, Resource-NMCTS, and Pareto-Resource-NMCTS
+portfolios on the same 177 functions.  The table also clarifies the
+high-dimensional claim.  At $n=14$--$n=18$, most of the measurable scale gain
+comes from bounded linear-pair guards and their recursive/fast variants.  A
+lightweight $n=14$ high-dimensional ablation confirms that the no-MCTS guard
+portfolio improves both root-beam and linear-pair children on 14 functions
+with no score losses among 16 matched random ANF functions.  Pareto or
+Resource selection provides additional separation in some suites, but should
+not be described as a large independent archive effect when it ties the
+guarded child.
 
 \begin{table}[t]
 \centering

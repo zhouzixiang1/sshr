@@ -121,7 +121,7 @@ PRESETS = {
         "workers": 10,
     },
     "search_ablation_highdim": {
-        "methods": ["direct_anf", "and_direct_anf", "and_fprm_greedy", "and_fprm_root_beam", "and_fprm_linear_pair", "and_resource_heuristic", "and_resource_beam_only", "and_resource_no_mcts", "and_resource_nmcts", "and_pareto_resource_nmcts"],
+        "methods": ["direct_anf", "and_direct_anf", "and_fprm_greedy", "and_fprm_root_beam", "and_fprm_linear_pair", "and_resource_heuristic", "and_resource_beam_only", "and_resource_no_mcts"],
         "random_truth": [],
         "random_anf": [(14, 16)],
         "structured_limit": 0,

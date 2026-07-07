@@ -29,6 +29,10 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset traditional_resource
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset search_ablation_traditional --model models/action_scorer_rollout_logical_and.pt --workers 10 --checkpoint-every 100 --isolate-timeouts
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset search_ablation_traditional
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset search_ablation_traditional
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset search_ablation_highdim --model models/action_scorer_rollout_logical_and.pt --workers 6 --checkpoint-every 16 --isolate-timeouts
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset search_ablation_highdim
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_runtime.py --preset search_ablation_highdim
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset traditional_resource --only-methods and_affine_nmcts,and_resource_nmcts,and_pareto_resource_nmcts --model models/action_scorer_rollout_logical_and.pt --out-dir /tmp/resource_nmcts_traditional_learned_prior --workers 10 --checkpoint-every 50
 cp /tmp/resource_nmcts_traditional_learned_prior/raw_traditional_resource.csv results/raw_traditional_resource_learned_prior.csv
 cp /tmp/resource_nmcts_traditional_learned_prior/summary_traditional_resource.csv results/summary_traditional_resource_learned_prior.csv
@@ -97,6 +101,12 @@ Current presets:
   neural MCTS, ESOP cube beam, time-limited weighted ESOP MILP, and SSHR-H.
 - `traditional_resource`: same $n \leq 6$ slice with the full Resource-NMCTS
   portfolio guard and Pareto-Resource-NMCTS archive added.
+- `search_ablation_traditional`: dedicated $n \leq 6$ contribution rerun that
+  compares heuristic-only, beam-only, no-MCTS, Resource-NMCTS, and
+  Pareto-Resource-NMCTS portfolios on the same functions.
+- `search_ablation_highdim`: lightweight $n=14$ random-ANF guard rerun that
+  compares heuristic-only, beam-only, root-beam, linear-pair, and no-MCTS
+  portfolios without the expensive high-dimensional Pareto tail.
 - `large_resource_core`: 330-function large logical benchmark through `n=12`,
   now including the profile-aware Resource-NMCTS variant and process-isolated
   hard timeouts for long-tail tasks.
@@ -227,6 +237,13 @@ Search-contribution decomposition evidence from
   portfolio with 54 score wins, 0 losses, 123 ties, and a 1.44% mean score
   reduction; Pareto-Resource-NMCTS improves over the same no-MCTS portfolio
   with 106 score wins, 0 losses, 71 ties, and a 4.69% mean score reduction.
+- A lightweight high-dimensional `search_ablation_highdim` rerun adds a
+  same-preset n=14 guard/no-MCTS check with 16 random ANF functions, 8 methods,
+  128 rows, and 0 errors/skips.  The no-MCTS portfolio improves over
+  heuristic-only by 14/0/2 score W/L/T with a 6.50% mean score reduction, over
+  root beam by 14/0/2 with a 6.25% reduction, and over linear-pair by 14/0/2
+  with a 3.08% reduction.  This is a bounded high-dimensional mechanism check,
+  not a full high-dimensional Pareto rerun.
 - The high-dimensional scale contribution is mainly the bounded linear-pair
   guard: score improvements over root beam are 60/0/4 at n=14, 30/0/2 at
   n=15, 22/0/2 at n=16, and 6/0/6 at n=18.  Resource/Pareto selection adds

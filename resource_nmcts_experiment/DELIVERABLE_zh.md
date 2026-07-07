@@ -111,6 +111,8 @@
 - `results/summary_search_contribution.csv`
 - `results/raw_search_ablation_traditional.csv`
 - `results/analysis_search_ablation_traditional.md`
+- `results/raw_search_ablation_highdim.csv`
+- `results/analysis_search_ablation_highdim.md`
 - `results/raw_neural_prior_ablation.csv`
 - `results/analysis_neural_prior_ablation.md`
 - `paper_latex/tables/search_contribution_decomposition.tex`
@@ -126,6 +128,8 @@
 | Pareto archive over Resource-NMCTS | `traditional_resource` | 68/0/109 | -3.26% | 小规模 profile/Pareto archive 贡献明确 |
 | Resource-NMCTS over no-MCTS portfolio | `search_ablation_traditional` | 54/0/123 | -1.44% | dedicated rerun 证明 MCTS/神经候选在强化 no-MCTS baseline 后仍有增益 |
 | Pareto Resource-NMCTS over no-MCTS portfolio | `search_ablation_traditional` | 106/0/71 | -4.69% | Pareto archive 对 no-MCTS portfolio 的增益更明确 |
+| highdim no-MCTS portfolio over root beam | `search_ablation_highdim` | 14/0/2 | -6.25% | n=14 同 preset 高维 guard/no-MCTS 机制证据 |
+| highdim no-MCTS portfolio over linear-pair | `search_ablation_highdim` | 14/0/2 | -3.08% | 说明 no-MCTS portfolio 在高维下仍能改善单一 linear-pair child |
 | linear-pair guard vs root beam, n=14 | `highdim_resource` | 60/0/4 | -3.00% | 高维主要增益来自 bounded linear-pair guard |
 | recursive linear-pair guard vs root beam, n=15 | `highdim_scale_resource` | 30/0/2 | -5.28% | 递归 pair guard 是 n=15 的主要规模贡献 |
 | linear-pair guard vs root beam, n=16 | `ultra_highdim_resource` | 22/0/2 | -1.88% | n=16 仍有可测增益，但幅度变小 |
@@ -167,6 +171,8 @@
 - `paper_latex/tables/esop_baseline_by_n.tex`
 - `paper_latex/tables/neural_prior_ablation.tex`
 - `paper_latex/tables/search_contribution_decomposition.tex`
+- `paper_latex/tables/resource_search_ablation_highdim.tex`
+- `paper_latex/tables/runtime_search_ablation_highdim.tex`
 - `paper_latex/tables/external_traditional_resource_n6.tex`
 - `paper_latex/tables/resource_mega_highdim_resource.tex`
 - `paper_latex/tables/runtime_mega_highdim_resource.tex`
@@ -199,6 +205,8 @@ cd /Users/zhouzixiang/Desktop/tzb/src
 cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset search_ablation_traditional --model models/action_scorer_rollout_logical_and.pt --workers 10 --checkpoint-every 100 --isolate-timeouts
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset search_ablation_traditional
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset search_ablation_highdim --model models/action_scorer_rollout_logical_and.pt --workers 6 --checkpoint-every 16 --isolate-timeouts
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset search_ablation_highdim
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_search_contribution.py
 ```
 
@@ -238,6 +246,7 @@ latexmk -pdf -g main.tex
 - `git diff --check` 通过。
 - `raw_mega_highdim_resource.csv` 审计：84 行、0 error、0 skipped、0 incorrect。
 - `analysis_search_contribution.md` 审计：无 NaN/空配对。
+- `raw_search_ablation_highdim.csv` 审计：128 行、0 error、0 skipped、0 incorrect。
 
 Git 状态：
 
@@ -265,12 +274,11 @@ Git 状态：
 
 ## 7. 下一步建议
 
-当前已经完成第一版“搜索贡献分解”，但这一步主要是复用已有 verified CSV 做统一审稿口径分析，不等价于新增所有 dedicated ablation。投稿前仍建议继续补强：
+当前已经完成第一版“搜索贡献分解”，并新增了 `search_ablation_traditional` 与 `search_ablation_highdim` 两个 dedicated ablation。投稿前仍建议继续补强：
 
-1. 做真正的 `heuristic-only / no-MCTS` rerun，而不是只从已有方法间接比较。
-2. 做 `no-neural-prior` 的高维小切片，验证 learned prior 在大规模下是否仍有正贡献。
-3. 把 `beam-only`、`linear-pair-only`、`Resource/Pareto` 做成同一 preset 的统一 rerun，避免跨 preset 解释。
-4. 如果时间允许，补一个小规模 exact/exhaustive oracle slice，强化公平性。
+1. 做 `no-neural-prior` 的高维小切片，验证 learned prior 在大规模下是否仍有正贡献。
+2. 如果时间允许，补一个小规模 exact/exhaustive oracle slice，强化公平性。
+3. 继续补 ROS/mockturtle 或其他外部 reversible-toolchain 对比，减少“估算式 ABC/BDD baseline”的审稿风险。
 
 已完成/待补强状态：
 
@@ -279,6 +287,7 @@ Git 状态：
 | no neural prior | n<=6 traditional | Resource-NMCTS score 39/0/138，-1.10% | 已有 |
 | affine/neural/guard 分解 | 322-function ablation | neural refine 65/0/257，guard 88/0/234 | 已有 |
 | heuristic-only / no-MCTS | n<=6 traditional | Resource vs no-MCTS 54/0/123，-1.44%；Pareto vs no-MCTS 106/0/71，-4.69% | 已有 |
+| highdim no-MCTS guard | n=14 random ANF | no-MCTS vs root-beam 14/0/2，-6.25%；no-MCTS vs linear-pair 14/0/2，-3.08% | 已有 |
 | Pareto archive | n<=6 traditional | Pareto vs Resource 68/0/109，-3.26% | 已有 |
 | highdim guard | n=14/15/16/18 | linear-pair guard 相对 root-beam 均无 score loss | 已有 |
 | highdim no-neural-prior | 高维小切片 | 需要新增 rerun | 待补 |
@@ -291,4 +300,4 @@ Git 状态：
 
 但是投稿前还需要继续补强“AI 搜索本身带来的贡献”这一点。否则文章容易被评价为一组 FPRM/ESOP 工程启发的组合，而不是强化学习与 MCTS 方法论文。
 
-本轮新增贡献分解和 `search_ablation_traditional` dedicated rerun 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS 和 Pareto archive 都有可测贡献。不过高维 no-prior / no-MCTS 小切片仍然缺失，所以目标还不能判定完成。
+本轮新增贡献分解、`search_ablation_traditional` 和 `search_ablation_highdim` 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive 和高维 guard/no-MCTS 组合都有可测贡献。不过高维 no-prior 小切片和更强外部 reversible-toolchain 对比仍然缺失，所以目标还不能判定完成。
