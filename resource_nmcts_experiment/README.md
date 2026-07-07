@@ -624,7 +624,9 @@ Ultra-high-dimensional scale check from
   173.780 s; `and_pareto_resource_nmcts` completes 12/12 with median 83.500 s
   and p95 172.934 s.
 
-`results/analysis_giga_highdim_resource.md` and
+`results/analysis_giga_highdim_resource.md`,
+`results/analysis_giga_resource_vs_boolean_screen.md`,
+`results/analysis_giga_resource_vs_and_direct.md`, and
 `results/runtime_giga_highdim_resource.md`:
 
 - 6 random ANF functions at `n=20`, 8 methods, 48 result rows, 12 timeout
@@ -635,14 +637,18 @@ Ultra-high-dimensional scale check from
   runtime 10.659 s, improving over AND-direct ANF on 5/6 functions and tying on
   one.  It reduces mean T-count by 5.24% and mean weighted score by 4.89%
   relative to AND-direct ANF.
-- Resource/Profile/Pareto now complete all six functions and select the
-  Boolean-ring screen candidate, giving 5/0/1 score wins/losses/ties relative
-  to AND-direct ANF and 5/1/0 relative to direct ANF.  Mean score is 34.00%
-  lower than direct ANF.
-- The n=20 run is therefore a useful pressure boundary with a bounded positive
-  repair: the scalable ANF-only screen still verifies correctness and separates
-  from AND-direct ANF, but the stronger FPRM/root-beam searches remain outside
-  the current 300 s timeout.
+- The updated Resource/Pareto portfolio also evaluates a recursive Boolean-ring
+  screen.  It completes all six functions and improves over the single screen
+  on 5/6 functions, tying on one: mean T-count is 4.62% lower and mean weighted
+  score is 4.52% lower than the single Boolean screen.
+- Relative to AND-direct ANF, the updated Resource-NMCTS has 5/0/1 score
+  wins/losses/ties, with mean T-count 9.43% lower and mean weighted score
+  9.04% lower.  Relative to direct ANF, it has 5/1/0 score wins/losses/ties
+  and mean weighted score 37.10% lower.
+- The n=20 run is therefore a useful pressure boundary with a stronger bounded
+  repair: recursive ANF-only Boolean-ring screening verifies correctness and
+  separates from AND-direct ANF, but the stronger FPRM/root-beam searches remain
+  outside the current 300 s timeout.
 
 Scope boundary: all costs are logical-level resource estimates.  The verifier
 circuit is deterministic and classically checked, while the logical-AND cost
