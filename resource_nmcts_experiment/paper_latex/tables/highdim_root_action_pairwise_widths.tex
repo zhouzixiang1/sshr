@@ -1,0 +1,15 @@
+\begin{tabular}{llrr}
+\toprule
+Target & Baseline & Score W/L/T & Mean $\Delta$ score \\
+\midrule
+oracle top-12 & heuristic top-4 & 3/0/7 & $-0.18\%$ \\
+oracle top-24 & heuristic top-4 & 3/0/7 & $-0.18\%$ \\
+oracle top-24 & heuristic top-1 & 7/0/3 & $-0.43\%$ \\
+neural top-12 & heuristic top-4 & 2/1/7 & $-0.07\%$ \\
+neural top-4 & heuristic top-4 & 2/1/7 & $-0.01\%$ \\
+neural top-8 & heuristic top-4 & 2/1/7 & $-0.05\%$ \\
+heuristic top-4 + neural top-12 & heuristic top-4 & 2/0/8 & $-0.14\%$ \\
+heuristic top-4 + neural top-4 & heuristic top-4 & 2/0/8 & $-0.09\%$ \\
+heuristic top-4 + neural top-8 & heuristic top-4 & 2/0/8 & $-0.14\%$ \\
+\bottomrule
+\end{tabular}

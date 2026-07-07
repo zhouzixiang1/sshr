@@ -205,6 +205,33 @@ def compare(rows: list[dict[str, str]], target: str, baseline: str, metric: str)
     return wins, losses, ties, statistics.mean(changes) if changes else float("nan")
 
 
+def _parse_widths(text: str) -> list[int]:
+    widths: list[int] = []
+    for part in text.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        value = int(part)
+        if value <= 0:
+            raise ValueError(f"neural width must be positive: {value}")
+        if value not in widths:
+            widths.append(value)
+    return widths or [4]
+
+
+def _union_ordered(left: list[int], right: list[int], limit: int) -> list[int]:
+    seen = set()
+    merged: list[int] = []
+    for idx in list(left) + list(right):
+        if idx in seen:
+            continue
+        seen.add(idx)
+        merged.append(idx)
+        if len(merged) >= limit:
+            break
+    return merged
+
+
 def write_outputs(
     rows: list[dict[str, object]],
     raw_path: Path,
@@ -267,9 +294,16 @@ def write_outputs(
         ("root_oracle24", "root_beam4_oracle_eval"),
         ("root_oracle24", "root_heuristic_top1"),
     ]
-    if any(row["method"] == "root_neural_top4" for row in rows):
-        comparisons.append(("root_neural_top4", "root_beam4_oracle_eval"))
-        comparisons.append(("root_oracle24", "root_neural_top4"))
+    neural_methods = sorted(
+        {
+            str(row["method"])
+            for row in rows
+            if str(row.get("method", "")).startswith(("root_neural_top", "root_union_h4_n"))
+        }
+    )
+    for method in neural_methods:
+        comparisons.append((method, "root_beam4_oracle_eval"))
+        comparisons.append(("root_oracle24", method))
 
     lines = [
         "# High-dimensional root-action oracle analysis",
@@ -318,6 +352,7 @@ def write_outputs(
             "",
             "- `root_beam4_oracle_eval` measures the best action available inside the current heuristic top-4 window after true child evaluation.",
             "- `root_oracle12` and `root_oracle24` measure how much extra quality is available if a wider root-action set can be ranked correctly.",
+            "- `root_union_h4_nK` keeps the deterministic heuristic top-4 actions and adds neural top-K actions, so it measures whether the learned ranker adds useful candidates without discarding the current heuristic window.",
             "- Positive headroom here is a supervised target for a stronger high-dimensional learned root-action ranker; it should not be presented as a final synthesis optimum.",
         ]
     )
@@ -334,6 +369,11 @@ def write_outputs(
             ("root_oracle24", "root_beam4_oracle_eval"),
             ("root_oracle24", "root_heuristic_top1"),
             ("root_neural_top4", "root_beam4_oracle_eval"),
+            ("root_neural_top8", "root_beam4_oracle_eval"),
+            ("root_neural_top12", "root_beam4_oracle_eval"),
+            ("root_union_h4_n4", "root_beam4_oracle_eval"),
+            ("root_union_h4_n8", "root_beam4_oracle_eval"),
+            ("root_union_h4_n12", "root_beam4_oracle_eval"),
         }
     ]
     table = [
@@ -348,6 +388,11 @@ def write_outputs(
         "root_oracle12": "oracle top-12",
         "root_oracle24": "oracle top-24",
         "root_neural_top4": "neural top-4",
+        "root_neural_top8": "neural top-8",
+        "root_neural_top12": "neural top-12",
+        "root_union_h4_n4": "heuristic top-4 + neural top-4",
+        "root_union_h4_n8": "heuristic top-4 + neural top-8",
+        "root_union_h4_n12": "heuristic top-4 + neural top-12",
     }
     for target, base, _metric, wins, losses, ties, mean in selected:
         table.append(f"{labels.get(target, target)} & {labels.get(base, base)} & {wins}/{losses}/{ties} & ${mean:+.2f}\\%$ \\\\")
@@ -365,6 +410,7 @@ def main() -> int:
     parser.add_argument("--screen-budget", type=int, default=48)
     parser.add_argument("--screen-top-k", type=int, default=1)
     parser.add_argument("--neural-prior-weight", type=float, default=10.0)
+    parser.add_argument("--neural-widths", default="4")
     parser.add_argument("--model", default=str(THIS_DIR / "models" / "linear_action_scorer_highdim.pt"))
     parser.add_argument("--raw", type=Path, default=RESULTS / "raw_highdim_root_action_oracle.csv")
     parser.add_argument("--summary", type=Path, default=RESULTS / "summary_highdim_root_action_oracle.csv")
@@ -388,6 +434,7 @@ def main() -> int:
     )
     scorer = NeuralScorer(args.model) if args.model and Path(args.model).exists() else None
     model_label = args.model if scorer is not None else ""
+    neural_widths = _parse_widths(args.neural_widths)
     rows: list[dict[str, object]] = []
     suite = list(make_suite(args.preset, args.seed))[: args.max_functions]
 
@@ -440,7 +487,12 @@ def main() -> int:
             ]
             if scorer is not None:
                 order = neural_order(actions, shifted_terms, config, scorer, direct_score)
-                variants.append(("root_neural_top4", order[: min(4, len(order))]))
+                heuristic_top4 = list(range(min(4, len(actions))))
+                for width in neural_widths:
+                    neural_indices = order[: min(width, len(order))]
+                    variants.append((f"root_neural_top{width}", neural_indices))
+                    union_indices = _union_ordered(heuristic_top4, neural_indices, min(len(actions), 4 + width))
+                    variants.append((f"root_union_h4_n{width}", union_indices))
 
             for method, indices in variants:
                 before = time.time()

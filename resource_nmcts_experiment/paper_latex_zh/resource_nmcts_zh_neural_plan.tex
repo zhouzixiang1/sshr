@@ -34,7 +34,7 @@
 \maketitle
 
 \begin{abstract}
-本文整理一个可继续发展为正式投稿的中文方案：将量子布尔函数 oracle 综合建模为 \anf{}/\fprm{} 项集合上的资源约束搜索问题，并以神经动作先验、蒙特卡洛树搜索、linear-pair 因子、baseline-preserving guard 和 Pareto 候选库共同生成逻辑层低资源线路。该方案不依赖 SSHR 的 parallelotope 候选空间；SSHR 只作为 CNOT-oriented small-scale baseline 参与比较。当前最强证据来自三条线：第一，$n\leq6$ 的 177 个传统函数上，\pareto{} 相对 ESOP cube beam 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%；第二，$n=16$ 的 24 个随机 ANF 函数上，baseline-preserving AI guard 相对 deterministic recursive guard 获得 6/0/18，平均 score 降低 0.05\%，说明神经排序在确定性兜底下可以转化为无 score-loss 小增益；第三，$n=18$ 的 12 个函数上，\method{} 相对 direct ANF 平均 T-count 降低 60.05\%，平均 score 降低 56.99\%。新增 pairwise root-action ranker 将 $n=14$ 高维 learned prior 结果从 1/0/11、平均 score 降低 0.01\% 改进到 2/0/10、平均 score 降低 0.04\%，但运行时间增加 124.91\%，因此当前 AI 证据仍不足以作为目标结束点。本文建议把论文主张限定为逻辑层低 T-count 与低加权资源优势，并把下一阶段重点放在更强的高维神经排序、外部 reversible-toolchain 复现和代表性线路案例上。
+本文整理一个可继续发展为正式投稿的中文方案：将量子布尔函数 oracle 综合建模为 \anf{}/\fprm{} 项集合上的资源约束搜索问题，并以神经动作先验、蒙特卡洛树搜索、linear-pair 因子、baseline-preserving guard 和 Pareto 候选库共同生成逻辑层低资源线路。该方案不依赖 SSHR 的 parallelotope 候选空间；SSHR 只作为 CNOT-oriented small-scale baseline 参与比较。当前最强证据来自三条线：第一，$n\leq6$ 的 177 个传统函数上，\pareto{} 相对 ESOP cube beam 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%；第二，$n=16$ 的 24 个随机 ANF 函数上，pairwise-wide \method{} 相对 deterministic recursive guard 获得 10/0/14，平均 score 降低 0.18\%，相对旧 root-teacher \method{} 获得 10/0/14，平均 score 降低 0.12\%，说明神经排序在保留启发式 top-4 并加入 neural top-8 的候选扩展后可以转化为 full synthesis 层面的无 score-loss 增益；第三，$n=18$ 的 12 个函数上，\method{} 相对 direct ANF 平均 T-count 降低 60.05\%，平均 score 降低 56.99\%。新增 pairwise-wide root-action ranker 将 $n=14$ 高维 learned prior 结果从 1/0/11、平均 score 降低 0.01\% 改进到 2/0/10、平均 score 降低 0.05\%，并在 $n=16$ 根动作诊断中把旧 neural top-4 的负迁移修正为 5/0/18、平均 score 降低 0.06\%。当前 AI 证据已经从负向诊断推进到小幅正向证据，但幅度仍不足以作为目标结束点。本文建议把论文主张限定为逻辑层低 T-count 与低加权资源优势，并把下一阶段重点放在更强的高维神经排序、外部 reversible-toolchain 复现和代表性线路案例上。
 \end{abstract}
 
 \noindent\textbf{关键词：}量子 oracle 综合；布尔函数综合；神经蒙特卡洛树搜索；ANF；FPRM；T-count；资源约束
@@ -62,7 +62,7 @@
 \pareto{} & 在小规模切片中保留多资源非支配候选的 portfolio 变体 & 高维中若退化为稳定 guard，需明确说明 \\
 SSHR & parallelotope 空间上的 CNOT-oriented baseline & 作为比较对象，不作为本文内部搜索空间 \\
 AI guard & deterministic guard 与 neural guard 并行运行后取更低 score 的保守策略 & 写成无 score-loss 小增益，而非神经模型单独胜出 \\
-Pairwise root-action ranker & 用同一根状态内动作对训练排序的高维动作模型 & 当前是弱正向诊断，不是最终突破 \\
+Pairwise-wide root-action ranker & 用同一根状态内动作对训练排序，并把 heuristic top-4 与 neural top-8 合并为候选扩展 & 当前是小幅正向证据，不是最终突破 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -147,7 +147,8 @@ SSHR-H & 81.0 & \textbf{67.6} & 88.7 & 1.36 & 88.2 \\
 $n=14$ & linear-pair guard vs root beam & 64 & 60/0/4 & $-3.00\%$ \\
 $n=15$ & recursive guard vs root beam & 32 & 30/0/2 & $-5.28\%$ \\
 $n=16$ & \method{} vs root beam & 24 & 23/0/1 & $-4.36\%$ \\
-$n=16$ & AI guard vs recursive guard & 24 & 6/0/18 & $-0.05\%$ \\
+$n=16$ & old AI guard vs recursive guard & 24 & 6/0/18 & $-0.05\%$ \\
+$n=16$ & pairwise-wide \method{} vs recursive guard & 24 & 10/0/14 & $-0.18\%$ \\
 $n=18$ & fast guard vs root beam & 12 & 6/0/6 & $-1.91\%$ \\
 $n=18$ & \method{} vs fast guard & 12 & 12/0/0 & $-3.55\%$ \\
 \bottomrule
@@ -156,25 +157,28 @@ $n=18$ & \method{} vs fast guard & 12 & 12/0/0 & $-3.55\%$ \\
 
 从 direct ANF 角度看，$n=16$ 上 \method{} 平均 T-count 降低 63.36\%，平均 score 降低 60.83\%；$n=18$ 上平均 T-count 降低 60.05\%，平均 score 降低 56.99\%。但相对 direct ANF，CNOT、depth 和 peak ancilla 往往上升，所以这一结果应解释为用更多 Clifford/辅助结构换取明显 T-count 与 score 降低。
 
-\subsection{Pairwise root-action ranker 的新增结果}
+\subsection{Pairwise-wide root-action ranker 的新增结果}
 
-上一阶段的高维 learned prior 结果很弱：在 12 个 $n=14$ 函数上，learned prior 相对 no-prior 的 score 胜/负/平为 1/0/11，平均 score 只降低 0.01\%，运行时间增加约 104.07\%。这说明 immediate-gain 标签没有有效学到高维根动作排序。
+上一阶段的高维 learned prior 结果很弱：在 12 个 $n=14$ 函数上，learned prior 相对 no-prior 的 score 胜/负/平为 1/0/11，平均 score 只降低 0.01\%，运行时间增加约 104.07\%。这说明 immediate-gain 标签没有有效学到高维根动作排序。进一步的 root-teacher neural top-4 在 $n=16$ 诊断中甚至出现负迁移，score 为 4/2/17，平均变化 +0.05\%。
 
-新增 pairwise root-action ranker 改用同一根状态内的动作对进行训练，并用 root-teacher 标签鼓励更好动作排在更前。诊断结果见表~\ref{tab:pairwise}。它把 final highdim neural prior 的 score 胜/负/平提高到 2/0/10，平均 score 降低 0.04\%；root-action 诊断中 neural top-4 相对 heuristic top-4 变为 2/1/7，平均 score 降低 0.01\%。这说明 pairwise 训练确实降低了负迁移，但幅度仍小，且 final synthesis 运行时间增加 124.91\%。因此这不是目标结束点，只能写成下一轮高维 AI 改进的起点。
+新增 pairwise root-action ranker 改用同一根状态内的动作对进行训练，并用 root-teacher 标签鼓励更好动作排在更前。随后加入 pairwise-wide 候选扩展：保留 heuristic top-4，同时额外评估 neural top-8。诊断结果见表~\ref{tab:pairwise}。在 $n=14$ 根动作诊断中，heuristic top-4 + neural top-8 相对 heuristic top-4 为 2/0/8，平均 score 降低 0.14\%，接近 oracle top-24 的 3/0/7、0.18\% headroom。在 $n=16$ 根动作诊断中，该策略为 5/0/18，平均 score 降低 0.06\%，消除了旧 neural top-4 的负迁移。
+
+更重要的是，pairwise-wide 策略已经落实到 full synthesis 层面。在 24 个 $n=16$ random ANF 函数上，pairwise-wide \method{} 相对 deterministic recursive linear-pair guard 获得 10/0/14，平均 T-count 降低 0.18\%，平均 score 降低 0.18\%；相对旧 root-teacher \method{} 获得 10/0/14，平均 score 降低 0.12\%。代价是运行时间仍较高：相对 deterministic recursive guard 增加约 274.75\%，相对旧 \method{} 增加约 8.06\%。因此这是一条可信但幅度仍小的 AI 增强证据，不能写成目标已经完成。
 
 \begin{table}[t]
 \centering
 \small
-\caption{高维 pairwise root-action ranker 的阶段性结果。}
+\caption{高维 pairwise-wide root-action ranker 的阶段性结果。}
 \label{tab:pairwise}
 \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}Xrrr}
 \toprule
 比较 & 函数数 & score 胜/负/平 & 平均 $\Delta$ score \\
 \midrule
-Oracle top-24 vs heuristic top-1 & 10 & 7/0/3 & $-0.43\%$ \\
-Oracle top-24 vs heuristic top-4 & 10 & 3/0/7 & $-0.18\%$ \\
-Pairwise neural top-4 vs heuristic top-4 & 10 & 2/1/7 & $-0.01\%$ \\
-Pairwise learned prior vs no-prior final synthesis & 12 & 2/0/10 & $-0.04\%$ \\
+Oracle top-24 vs heuristic top-4, $n=14$ & 10 & 3/0/7 & $-0.18\%$ \\
+Heuristic top-4 + neural top-8 vs heuristic top-4, $n=14$ & 10 & 2/0/8 & $-0.14\%$ \\
+Heuristic top-4 + neural top-8 vs heuristic top-4, $n=16$ & 23 & 5/0/18 & $-0.06\%$ \\
+PW-wide \method{} vs recursive guard, $n=16$ & 24 & 10/0/14 & $-0.18\%$ \\
+PW-wide \method{} vs old \method{}, $n=16$ & 24 & 10/0/14 & $-0.12\%$ \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -189,7 +193,7 @@ XAG oracle synthesis 把 XOR 与 AND 结构分开，使 AND 节点数量与 T-co
 
 当前结果已经能形成一篇逻辑层方法论文的雏形，但还没有达到 ``明显提升后结束'' 的目标。投稿前最需要补齐三件事。
 
-第一，高维神经排序必须从弱正向变成可见增益。pairwise root-action ranker 已经把负迁移压低，但 0.04\% 的 score 改善不足以支撑强 AI 主张。下一步应训练更强的 root-action/value ranker，例如扩大 teacher width、加入 top-k distillation、使用 pairwise/listwise 混合损失，并在 $n=14,16$ 上报告 matched no-prior、heuristic-prior 和 learned-prior 三组对比。
+第一，高维神经排序必须从小幅正向变成可见增益。pairwise-wide root-action ranker 已经在 $n=16$ full synthesis 上形成 10/0/14、-0.18\% 的无 score-loss 增益，但幅度仍不足以支撑强 AI 主张。下一步应训练更强的 root-action/value ranker，例如扩大 teacher width、加入 top-k distillation、使用 pairwise/listwise 混合损失，并在 $n=14,16,18$ 上报告 matched no-prior、heuristic-prior 和 learned-prior 三组对比。
 
 第二，外部 reversible-toolchain baseline 需要继续增强。当前已有 ABC、BDD、ESOP、SSHR 和 exact 小规模参照，但 ROS、mockturtle/RevKit 风格流程仍是审稿人可能追问的空白。若能在导出的 benchmark 上复现至少一个更接近 reversible oracle synthesis 的工具链，论文可信度会明显提高。
 
@@ -201,7 +205,7 @@ XAG oracle synthesis 把 XOR 与 AND 结构分开，使 AND 节点数量与 T-co
 
 \section{结论}
 
-本文当前最稳的主线是：\method{} 将量子布尔函数 oracle 综合转化为 ANF/FPRM 项集合上的资源约束搜索，并通过神经先验、MCTS、linear-pair guard 和 portfolio selection 获得逻辑层低 T-count 与低加权 score 优势。传统函数和高维随机 ANF 已经给出可写入论文的结果，pairwise root-action ranker 也提供了更合理的高维 AI 训练方向。与此同时，高维 learned prior 的实际收益仍小，外部 reversible-toolchain 对比和线路案例仍需补强。因此，这份文档应作为下一轮实验和正式英文稿的路线图，而不是最终定稿。
+本文当前最稳的主线是：\method{} 将量子布尔函数 oracle 综合转化为 ANF/FPRM 项集合上的资源约束搜索，并通过神经先验、MCTS、linear-pair guard 和 portfolio selection 获得逻辑层低 T-count 与低加权 score 优势。传统函数和高维随机 ANF 已经给出可写入论文的结果，pairwise-wide root-action ranker 也把高维 AI 模块从负向诊断推进到 full synthesis 层面的小幅正向证据。与此同时，高维 learned prior 的实际收益仍小，外部 reversible-toolchain 对比和线路案例仍需补强。因此，这份文档应作为下一轮实验和正式英文稿的路线图，而不是最终定稿。
 
 \begin{thebibliography}{99}
 

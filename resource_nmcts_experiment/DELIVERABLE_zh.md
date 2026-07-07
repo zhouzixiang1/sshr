@@ -139,10 +139,12 @@
 | recursive linear-pair guard vs root beam, n=16 | `ultra_highdim_resource` | 23/0/1 | -4.31% | n=16 的主要规模贡献已更新为 recursive linear-pair guard |
 | root-neural recursive guard vs deterministic recursive guard, n=16 | `ultra_highdim_resource` | 6/7/11 | +0.08% | 单独神经排序不稳定，不能作为正向主张 |
 | baseline-preserving AI guard vs deterministic recursive guard, n=16 | `ultra_highdim_resource` | 6/0/18 | -0.05% | 用 deterministic guard 兜底后获得无 score-loss 小增益 |
+| pairwise-wide Resource-NMCTS vs deterministic recursive guard, n=16 | `ultra_pairwise_wide_vs_recursive` | 10/0/14 | -0.18% | root-action pairwise ranker + heuristic/neural union 把高维 AI 增益放大到 full synthesis 层面 |
+| pairwise-wide Resource-NMCTS vs old Resource-NMCTS, n=16 | `ultra_pairwise_wide_vs_old_resource` | 10/0/14 | -0.12% | 新 pairwise-wide 分支优于旧 root-teacher Resource 结果 |
 | fast linear-pair guard vs root beam, n=18 | `mega_highdim_resource` | 6/0/6 | -1.91% | n=18 是可验证的压力边界证据 |
 | Resource-NMCTS vs fast linear-pair, n=18 | `mega_highdim_resource` | 12/0/0 | -3.55% | n=18 Resource guard 对 fast child 仍有进一步选择收益 |
 
-这个结果把论文主张进一步收窄为：仿射坐标搜索、神经 refine、guard/Pareto archive 和高维 linear-pair guard 共同构成方法贡献；其中高维大规模证据不能夸大为完整 Pareto archive 的强独立优势，因为部分高维设置中 Resource/Profile/Pareto 会退化或收窄到稳定 guard。最新 `n=16` rerun 后，`Resource/Profile` 在 `ultra_highdim_resource` 中吸收 baseline-preserving AI guard，并与该 guard 完全持平；`Pareto` 行非常接近，但不作为独立高维 Pareto 增益主张。因此该切片应写成“recursive guard + 无损 AI guard 小增益”的证据，而不是独立 Pareto archive 证据。
+这个结果把论文主张进一步收窄为：仿射坐标搜索、神经 refine、guard/Pareto archive 和高维 linear-pair guard 共同构成方法贡献；其中高维大规模证据不能夸大为完整 Pareto archive 的强独立优势，因为部分高维设置中 Resource/Profile/Pareto 会退化或收窄到稳定 guard。最新 `n=16` pairwise-wide rerun 后，`Resource-NMCTS` 在 full synthesis 层面相对 deterministic recursive guard 获得 10/0/14、平均 score 降低 0.18%；相对旧 root-teacher Resource 获得 10/0/14、平均 score 降低 0.12%。因此该切片现在应写成“recursive guard + pairwise-wide baseline-preserving AI guard 小幅正向增益”的证据，而不是独立 Pareto archive 证据。
 
 ### 2.5 高维 learned-prior 诊断
 
@@ -193,6 +195,35 @@
 - 这个结果不是新的最终综合最优结果，而是给高维 neural guidance 提供监督目标。
 - 它说明高维 root-action 排序有真实但幅度较小的可学习空间；当前 immediate-gain 训练的 `linear_action_scorer_highdim.pt` 还没有学到这个 one-step teacher。
 - 后续如果继续补强 AI 贡献，应优先训练 root-action ranker 去逼近 oracle top-12/top-24，而不是继续简单叠加现有 neural prior。
+
+### 2.6.1 Pairwise-wide root-action ranker 与 n=16 full synthesis
+
+本轮在 pairwise root-action ranker 基础上继续补了一层保守候选扩展：不再让神经排序替换启发式 top-4，而是保留 heuristic top-4，并额外加入 neural top-8 的 root action。这个策略对应代码中的 `fprm_linear_pair_deep_root_neural_wide` 和 `fprm_linear_pair_deep_ai_guard_wide`。它的意义是把神经模型写成“候选扩展器”，而不是高维递归搜索的单点决策器。
+
+新增/更新产物：
+
+- `analyze_paired_method_comparison.py`
+- `results/raw_highdim_root_action_pairwise_widths.csv`
+- `results/analysis_highdim_root_action_pairwise_widths.md`
+- `results/raw_ultra_root_action_pairwise_widths.csv`
+- `results/analysis_ultra_root_action_pairwise_widths.md`
+- `results/raw_highdim_neural_prior_pairwise_wide.csv`
+- `results/analysis_neural_prior_highdim_pairwise_wide_ablation.md`
+- `results/raw_ultra_highdim_resource_pairwise_wide_resource.csv`
+- `results/analysis_ultra_pairwise_wide_vs_recursive.md`
+- `results/analysis_ultra_pairwise_wide_vs_old_resource.md`
+
+关键结果：
+
+| 对比 | 函数集 | score 胜/负/平 | 平均 score 变化 | 解释 |
+|---|---|---:|---:|---|
+| heuristic top-4 + neural top-8 vs heuristic top-4 | 10 个有 linear action 的 n=14 random ANF | 2/0/8 | -0.14% | 接近 oracle top-24 的 3/0/7、-0.18% headroom |
+| highdim pairwise-wide learned prior vs no-prior | 12 个 n=14 random ANF | 2/0/10 | -0.05% | 比原 pairwise top-4 的 -0.04% 略好，但运行时间 +179.59% |
+| heuristic top-4 + neural top-8 vs heuristic top-4 | 23 个有 linear action 的 n=16 random ANF | 5/0/18 | -0.06% | 修复旧 neural top-4 的负迁移；旧 neural top-4 为 4/2/17、+0.05% |
+| pairwise-wide Resource-NMCTS vs deterministic recursive guard | 24 个 n=16 random ANF | 10/0/14 | -0.18% | full synthesis 层面的无 score-loss AI 增益 |
+| pairwise-wide Resource-NMCTS vs old Resource-NMCTS root-teacher | 24 个 n=16 random ANF | 10/0/14 | -0.12% | 新 ranker 与 wide union 明确优于旧 root-teacher 结果 |
+
+解释：这是当前高维 AI 贡献中最可信的一组正向证据。它仍不是“大幅提升”：n=16 平均 score 降幅为 0.18%，且运行时间相对 deterministic recursive guard 增加约 274.75%。但它已经把之前“高维 neural top-4 会负迁移”的问题改成了 full synthesis 层面的无 score-loss 正向结果，适合作为下一版论文中 AI 模块的核心消融之一。
 
 ### 2.7 小规模 exact FPRM-DP 精确切片
 
@@ -548,7 +579,7 @@ Git 状态：
 6. 贡献分解显示：仿射坐标搜索是最大前置收益，神经 refine 和 final guard 提供无 score loss 的小幅增益，Pareto archive 在小规模传统切片上贡献明确，高维主要由 bounded linear-pair guard 支撑。
 7. `n<=4` exact FPRM-DP 精确切片显示：Resource/Pareto portfolio 可以在受限 FPRM exact 模型之外继续降低 score；Exact FPRM-DP 本身也优于 ESOP-MILP 和 exact SSHR-I 的加权 score。
 8. `n<=4` exact XAG 乘法复杂度切片显示：Resource/Pareto 在 12/72 个函数上达到全局 T 下界，平均 T gap 为 +53.01%，明显低于 ESOP-MILP 的 +120.14% 和 SSHR-I-T 的 +143.06%。
-9. 高维 root-action teacher 诊断显示：oracle top-24 相对启发式 top-4 有 3/0/7、-0.18% 的小幅 headroom；但 root-teacher 模型和 wide-fast guard 暂未形成可用提升，因此高维 AI 贡献仍应写成待改进方向。
+9. 高维 root-action teacher 诊断显示：oracle top-24 相对启发式 top-4 有 3/0/7、-0.18% 的小幅 headroom；pairwise-wide root-action ranker 进一步在 n=16 full synthesis 中相对 deterministic recursive guard 获得 10/0/14、-0.18%，因此高维 AI 贡献已从负向诊断推进到小幅正向证据。
 10. 外部工具链 readiness 审计显示：ABC 已可用并支撑当前 AIG/XAG/LUT/ESOP baseline；mockturtle/RevKit 当前缺失，因此不能声称已完成这类 reversible-toolchain 复现。
 
 不应写的主张：
@@ -564,7 +595,7 @@ Git 状态：
 
 当前已经完成第一版“搜索贡献分解”，并新增了 `search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、`highdim_root_action_teacher` 和 `highdim_guard_upgrade` 等 dedicated ablation/diagnostic。投稿前仍建议继续补强：
 
-1. 高维 neural guidance 需要继续改进；当前 highdim prior 只有 1/0/11、-0.01% 的弱正向结果。root-action teacher 诊断显示有 3/0/7、-0.18% 的小幅可学习 headroom，但 root-teacher 模型没有利用它，wide-fast guard 也只有 0/0/12 且更慢。
+1. 高维 neural guidance 仍需继续改进；当前 pairwise-wide 版本已经把 n=16 full synthesis 推进到 10/0/14、-0.18%，但幅度仍小，且运行时间显著增加。下一步应继续提高 learned ranker 的效果，而不是只扩大 root action 宽度。
 2. 小规模 exact/exhaustive oracle slice 已完成 bounded FPRM-DP 和 exact XAG 乘法复杂度版本；如果继续加强，可以再补一个更接近全局 reversible circuit 的 exact/SMT/SAT 小规模证书。
 3. 继续补 ROS/mockturtle 或其他外部 reversible-toolchain 对比，减少“估算式 ABC/BDD baseline”的审稿风险；当前 readiness 审计显示 mockturtle/RevKit 尚未安装。
 
@@ -578,8 +609,9 @@ Git 状态：
 | highdim no-MCTS guard | n=14 random ANF | no-MCTS vs root-beam 14/0/2，-6.25%；no-MCTS vs linear-pair 14/0/2，-3.08% | 已有 |
 | Pareto archive | n<=6 traditional | Pareto vs Resource 68/0/109，-3.26% | 已有 |
 | highdim guard | n=14/15/16/18 | linear-pair guard 相对 root-beam 均无 score loss | 已有 |
-| highdim no-neural-prior | 12 个 n=14 random ANF | learned prior 1/0/11，-0.01%，运行时间 +104.07% | 已有但弱 |
-| highdim root-action teacher | 10 个有 linear action 的 n=14 random ANF | oracle top-24 vs heuristic top-4 为 3/0/7，-0.18%；root-teacher neural top-4 为 2/3/5，+0.16% | 已有但属负向诊断 |
+| highdim no-neural-prior | 12 个 n=14 random ANF | pairwise-wide learned prior 2/0/10，-0.05%，运行时间 +179.59% | 已有但仍弱 |
+| highdim root-action teacher | n=14/n=16 random ANF | n=14 heuristic top-4 + neural top-8 为 2/0/8，-0.14%；n=16 为 5/0/18，-0.06% | 已有小幅正向诊断 |
+| n=16 pairwise-wide full synthesis | 24 个 n=16 random ANF | vs deterministic recursive guard 为 10/0/14，-0.18%；vs old Resource 为 10/0/14，-0.12% | 新增正向 AI 证据，但运行时间更高 |
 | highdim wide-fast guard | 12 个 n=14 random ANF | wide vs Resource 为 0/0/12，运行时间 +59.80% | 已有但属负向诊断 |
 | exact FPRM-DP | n<=4 traditional | Resource vs exact FPRM-DP 51/3/18，-12.18%；Pareto vs exact FPRM-DP 51/0/21，-12.20% | 已有但模型受限 |
 | exact XAG MC | n<=4 traditional | Resource/Pareto 达到 T 下界 12/72，平均 T gap +53.01%；ESOP 为 +120.14%，SSHR-I-T 为 +143.06% | 已有全局 T 下界 |
@@ -593,4 +625,4 @@ Git 状态：
 
 但是投稿前还需要继续补强“AI 搜索本身带来的贡献”这一点。否则文章容易被评价为一组 FPRM/ESOP 工程启发的组合，而不是强化学习与 MCTS 方法论文。
 
-本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp` 和 `exact_xag_mc` 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照，以及高维 root-action teacher headroom 都有可测证据。不过高维 neural guidance 仍然很弱，root-teacher/wide-fast 两个补强尝试还没有形成正向贡献，更强外部 reversible-toolchain 对比也仍然缺失，所以目标还不能判定完成。
+本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc` 和 pairwise-wide n=16 full synthesis 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照，以及高维 pairwise-wide root-action ranker 都有可测证据。不过高维 neural guidance 的幅度仍然偏小，更强外部 reversible-toolchain 对比也仍然缺失，所以目标还不能判定完成。

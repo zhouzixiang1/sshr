@@ -1,0 +1,49 @@
+{
+  "preset": "ultra_highdim_resource",
+  "seed": 42,
+  "functions": 24,
+  "methods": [
+    "direct_anf",
+    "and_direct_anf",
+    "and_fprm_root_beam",
+    "and_fprm_linear_pair",
+    "and_fprm_linear_pair_deep",
+    "and_fprm_linear_pair_deep_root_neural",
+    "and_fprm_linear_pair_deep_ai_guard",
+    "and_resource_nmcts",
+    "and_profile_resource_nmcts",
+    "and_pareto_resource_nmcts"
+  ],
+  "last_run_methods": [
+    "and_resource_nmcts"
+  ],
+  "resume": false,
+  "raw_rows": 24,
+  "raw_methods": [
+    "and_resource_nmcts"
+  ],
+  "model": "resource_nmcts_experiment/models/linear_action_scorer_root_pairwise.pt",
+  "workers": 6,
+  "seconds": 604.7594170570374,
+  "seconds_current_run": 604.7594170570374,
+  "config": {
+    "weights": {
+      "t": 1.0,
+      "cnot": 0.04,
+      "depth": 0.015,
+      "gates": 0.01,
+      "ancilla": 2.0
+    },
+    "max_factor_ancilla": 4,
+    "max_factor_size": 5,
+    "candidate_top_k": 24,
+    "min_factor_count": 2,
+    "use_relative_phase": true,
+    "mcts_simulations": 24,
+    "neural_mcts_simulations": 32,
+    "max_polarities": 12,
+    "gate_mode": "mct",
+    "neural_prior_weight": 2.5,
+    "task_timeout_s": 300
+  }
+}
