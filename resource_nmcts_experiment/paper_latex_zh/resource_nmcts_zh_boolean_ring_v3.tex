@@ -34,7 +34,7 @@
 \maketitle
 
 \begin{abstract}
-量子布尔函数 oracle 综合需要把经典谓词嵌入可逆量子线路，其逻辑层 T-count、CNOT、深度和辅助比特数会影响后续容错资源估计。直接从代数正规形（algebraic normal form, \anf{}）逐项生成线路语义清晰，但在高次数项和随机项集合中会重复计算大量 AND 结构。本文提出一条独立于 SSHR parallelotope 空间的路线：把 oracle 综合建模为 \anf{}/固定极性 Reed--Muller（fixed-polarity Reed--Muller, \fprm{}）项集合上的资源约束搜索问题，并用神经动作先验、蒙特卡洛树搜索、baseline-preserving guard、Pareto portfolio 和布尔环线性因子共同生成低资源逻辑线路。当前证据表明，在 $n\leq6$ 的 177 个传统函数上，\pareto{} 相对 ESOP cube beam 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%；相对 weighted ESOP-MILP 获得 167/3/7，平均 score 降低 29.84\%。在 $n=16$ 的 24 个随机 \anf{} 函数上，布尔环线性因子分支相对旧 recursive linear-pair guard 获得 17/3/4，平均 score 降低 0.39\%；将该分支纳入 \method{} 后，相对上一轮 pairwise-wide \method{} 获得 14/0/10，平均 score 降低 0.34\%。在 $n=20$ 的 6 个边界函数上，传统 root beam 和 fast linear-pair 均全部超时，而布尔环 screen 使 \method{} 相对 AND-direct ANF 获得 5/0/1，平均 score 降低 4.89\%。这些结果支持本文作为逻辑层资源优化方法的投稿雏形；同时，高维 learned prior 的质量增益仍小，外部 reversible-toolchain 对比仍需补齐，因此本文不主张硬件映射最优、CNOT-only 全面支配或全局最优。
+量子布尔函数 oracle 综合需要把经典谓词嵌入可逆量子线路，其逻辑层 T-count、CNOT、深度和辅助比特数会影响后续容错资源估计。直接从代数正规形（algebraic normal form, \anf{}）逐项生成线路语义清晰，但在高次数项和随机项集合中会重复计算大量 AND 结构。本文提出一条独立于 SSHR parallelotope 空间的路线：把 oracle 综合建模为 \anf{}/固定极性 Reed--Muller（fixed-polarity Reed--Muller, \fprm{}）项集合上的资源约束搜索问题，并用神经动作先验、蒙特卡洛树搜索、baseline-preserving guard、Pareto portfolio 和布尔环线性因子共同生成低资源逻辑线路。当前证据表明，在 $n\leq6$ 的 177 个传统函数上，\pareto{} 相对 ESOP cube beam 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%；相对 weighted ESOP-MILP 获得 167/3/7，平均 score 降低 29.84\%。在 $n=16$ 的 24 个随机 \anf{} 函数上，布尔环线性因子分支相对旧 recursive linear-pair guard 获得 17/3/4，平均 score 降低 0.39\%；将该分支纳入 \method{} 后，相对上一轮 pairwise-wide \method{} 获得 14/0/10，平均 score 降低 0.34\%。在 $n=20$ 的 6 个边界函数上，传统 root beam 和 fast linear-pair 均全部超时，而布尔环 screen 使 \method{} 相对 AND-direct ANF 获得 5/0/1，平均 score 降低 4.89\%。这些结果表明，本文方法可以作为一种逻辑层资源优化路线；同时，高维 learned prior 的质量增益仍小，外部 reversible-toolchain 对比仍需补齐，因此本文不主张硬件映射最优、CNOT-only 全面支配或全局最优。
 \end{abstract}
 
 \noindent\textbf{关键词：}量子 oracle 综合；布尔函数综合；神经蒙特卡洛树搜索；布尔环；ANF；FPRM；T-count
@@ -162,7 +162,7 @@ SSHR-H & 81.0 & \textbf{67.6} & 88.7 & 1.36 & 88.2 \\
 \end{tabular}
 \end{table}
 
-SSHR-H 的平均 CNOT 最低，这一点必须保留在论文中。本文优势不是 CNOT-only，而是低 T-count 与低 weighted score。若审稿人更重视 CNOT-depth profile，本文相对 SSHR-H 的优势会收窄，但在当前权重鲁棒性分析中仍保持正向。
+SSHR-H 的平均 CNOT 最低，说明本文优势不是 CNOT-only，而是低 T-count 与低 weighted score。若评价准则更重视 CNOT-depth profile，本文相对 SSHR-H 的优势会收窄，但在当前权重鲁棒性分析中仍保持正向。
 
 \subsection{搜索贡献分解}
 
@@ -208,7 +208,7 @@ Boolean-guard \method{} vs old recursive guard & 24 & 18/0/6 & $-0.52\%$ \\
 \end{tabularx}
 \end{table}
 
-这些数字的绝对幅度不大，但可信度高于单纯神经排序诊断：它同时改善 T-count、CNOT、depth 和 score，并且在 portfolio 后没有 score loss。更重要的是，它指出了下一轮真正应该扩展的动作空间，即让策略网络选择 Boolean-ring factor、递归深度和 FPRM polarity，而不是只重排旧候选。
+这些数字的绝对幅度不大，但可信度高于单纯神经排序诊断：它同时改善 T-count、CNOT、depth 和 score，并且在 portfolio 后没有 score loss。更重要的是，它指出了后续应优先扩展的动作空间，即让策略网络选择 Boolean-ring factor、递归深度和 FPRM polarity，而不是只重排旧候选。
 
 \subsection{\texorpdfstring{$n=20$}{n=20} 边界测试}
 
@@ -231,7 +231,7 @@ FPRM root beam / fast linear-pair & 6 & 全部 timeout & 300 s task timeout \\
 \end{tabularx}
 \end{table}
 
-该结果应被写成边界可扩展性证据，而不是强神经搜索证据。$n=20$ 的收益主要来自单层布尔环 screen，说明某些高维 ANF 可以通过极便宜的 Boolean algebra screen 获得改进；但该结果仍不能说明 learned prior 已经能在 $n=20$ 上做深搜索。
+该结果更适合解释为边界可扩展性证据，而不是强神经搜索证据。$n=20$ 的收益主要来自单层布尔环 screen，说明某些高维 ANF 可以通过极便宜的 Boolean algebra screen 获得改进；但该结果仍不能说明 learned prior 已经能在 $n=20$ 上做深搜索。
 
 \subsection{负面结果与不足}
 
@@ -241,13 +241,13 @@ FPRM root beam / fast linear-pair & 6 & 全部 timeout & 300 s task timeout \\
 
 \section{讨论}
 
-当前结果可以支撑一篇逻辑层方法论文的雏形，核心不是 ``比 SSHR 强''，而是 ``不同搜索空间下的资源感知 Boolean oracle synthesis''。SSHR 的存在帮助暴露 CNOT trade-off；ESOP、ABC、BDD 和 XAG 文献帮助定位本文与传统布尔表示方法的关系；AI 搜索文献帮助说明 MCTS/learned prior 是合理的组合优化工具。本文真正需要强调的新点是：\anf{}/\fprm{} 项集合本身可以作为神经树搜索状态，布尔环线性因子能补上旧候选空间中的结构盲区。
+当前结果将本文定位为一篇逻辑层方法论文，核心不是 ``比 SSHR 强''，而是 ``不同搜索空间下的资源感知 Boolean oracle synthesis''。SSHR 的存在帮助暴露 CNOT trade-off；ESOP、ABC、BDD 和 XAG 文献帮助定位本文与传统布尔表示方法的关系；AI 搜索文献帮助说明 MCTS/learned prior 是合理的组合优化工具。本文真正需要强调的新点是：\anf{}/\fprm{} 项集合本身可以作为神经树搜索状态，布尔环线性因子能补上旧候选空间中的结构盲区。
 
-投稿前仍需要补强三项内容。第一，补一个 reproduced ROS 或 mockturtle/RevKit 风格 reversible-toolchain baseline，否则审稿人可能认为 external comparison 不够贴近 oracle synthesis。第二，补 2 到 3 个代表性线路案例，展示 direct ANF、root beam、recursive guard 和 Boolean-ring \method{} 如何分解同一函数。第三，训练结构级策略网络，证明 AI 模块不仅能在旧候选上做小幅排序，还能预测高收益 Boolean-ring/FPRM 分支。
+进一步完善该路线仍需要三项内容。第一，补一个 reproduced ROS 或 mockturtle/RevKit 风格 reversible-toolchain baseline，以增强 external comparison 与 oracle synthesis 场景的贴合度。第二，补 2 到 3 个代表性线路案例，展示 direct ANF、root beam、recursive guard 和 Boolean-ring \method{} 如何分解同一函数。第三，训练结构级策略网络，证明 AI 模块不仅能在旧候选上做小幅排序，还能预测高收益 Boolean-ring/FPRM 分支。
 
 \section{结论}
 
-本文给出了一版面向投稿推进的中文短论文稿。当前最稳的结论是：\method{} 在 \anf{}/\fprm{} 项集合上进行资源感知搜索，配合 Pareto portfolio、baseline-preserving guard 和布尔环线性因子，可以在传统函数和高维随机 \anf{} 上降低逻辑层 T-count 与加权 score。布尔环线性因子为 $n=16$ 和 $n=20$ 提供了比单纯扩大神经 root-action 更明确的新增证据。不过，目标尚未结束：高维 learned prior 的贡献仍偏小，外部 reversible-toolchain 对比和线路案例仍需补齐。后续工作应围绕结构级神经策略、可复现实验矩阵和正式英文稿展开。
+本文表明，\method{} 在 \anf{}/\fprm{} 项集合上进行资源感知搜索，配合 Pareto portfolio、baseline-preserving guard 和布尔环线性因子，可以在传统函数和高维随机 \anf{} 上降低逻辑层 T-count 与加权 score。布尔环线性因子为 $n=16$ 和 $n=20$ 提供了比单纯扩大神经 root-action 更明确的新增证据。不过，高维 learned prior 的贡献仍偏小，外部 reversible-toolchain 对比和线路案例仍需补齐。后续工作应围绕结构级神经策略、可复现实验矩阵和英文正式稿展开。
 
 \begin{thebibliography}{99}
 
