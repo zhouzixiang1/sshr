@@ -183,6 +183,47 @@ PRESETS = {
         "structured_limit": 0,
         "workers": 4,
     },
+    "giga_highdim_resource": {
+        "methods": ["direct_anf", "and_direct_anf", "and_fprm_root_beam", "and_fprm_linear_pair_fast", "and_resource_nmcts", "and_profile_resource_nmcts", "and_pareto_resource_nmcts"],
+        "random_truth": [],
+        "random_anf": [(20, 6)],
+        "structured_limit": 0,
+        "workers": 3,
+    },
+}
+
+BOUNDED_RESOURCE_PRESETS = {
+    "smoke",
+    "large_fast",
+    "evidence",
+    "evidence_affine",
+    "ablation_affine",
+    "traditional_small",
+    "traditional_resource",
+    "search_ablation_traditional",
+    "large_resource",
+    "large_resource_core",
+    "highdim_resource",
+    "search_ablation_highdim",
+    "highdim_neural_prior",
+    "highdim_guard_upgrade",
+    "highdim_scale_resource",
+    "ultra_highdim_resource",
+    "mega_highdim_resource",
+    "giga_highdim_resource",
+}
+
+HIGH_RESOURCE_PRESETS = {
+    "large_resource",
+    "large_resource_core",
+    "highdim_resource",
+    "search_ablation_highdim",
+    "highdim_neural_prior",
+    "highdim_guard_upgrade",
+    "highdim_scale_resource",
+    "ultra_highdim_resource",
+    "mega_highdim_resource",
+    "giga_highdim_resource",
 }
 
 
@@ -454,12 +495,12 @@ def main(argv: Iterable[str] | None = None) -> int:
         "candidate_top_k": 24,
         "min_factor_count": 2,
         "use_relative_phase": True,
-        "mcts_simulations": 24 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "search_ablation_traditional", "large_resource", "large_resource_core", "highdim_resource", "search_ablation_highdim", "highdim_neural_prior", "highdim_guard_upgrade", "highdim_scale_resource", "ultra_highdim_resource", "mega_highdim_resource"} else (48 if args.preset == "pilot" else (32 if args.preset == "large" else 96)),
-        "neural_mcts_simulations": 32 if args.preset in {"smoke", "large_fast", "evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "search_ablation_traditional", "large_resource", "large_resource_core", "highdim_resource", "search_ablation_highdim", "highdim_neural_prior", "highdim_guard_upgrade", "highdim_scale_resource", "ultra_highdim_resource", "mega_highdim_resource"} else (64 if args.preset == "pilot" else (32 if args.preset == "large" else 128)),
-        "max_polarities": 32 if args.preset in {"smoke", "pilot"} else (12 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "search_ablation_traditional", "large_resource", "large_resource_core", "highdim_resource", "search_ablation_highdim", "highdim_neural_prior", "highdim_guard_upgrade", "highdim_scale_resource", "ultra_highdim_resource", "mega_highdim_resource"} else (16 if args.preset == "large_fast" else (48 if args.preset == "large" else 384))),
+        "mcts_simulations": 24 if args.preset in BOUNDED_RESOURCE_PRESETS else (48 if args.preset == "pilot" else (32 if args.preset == "large" else 96)),
+        "neural_mcts_simulations": 32 if args.preset in BOUNDED_RESOURCE_PRESETS else (64 if args.preset == "pilot" else (32 if args.preset == "large" else 128)),
+        "max_polarities": 32 if args.preset in {"smoke", "pilot"} else (12 if args.preset in (BOUNDED_RESOURCE_PRESETS - {"smoke", "large_fast"}) else (16 if args.preset == "large_fast" else (48 if args.preset == "large" else 384))),
         "gate_mode": "mct",
         "neural_prior_weight": 10.0 if args.preset == "highdim_neural_prior" else 2.5,
-        "task_timeout_s": 300 if args.preset in {"evidence", "evidence_affine", "ablation_affine", "traditional_small", "traditional_resource", "search_ablation_traditional", "large_resource", "large_resource_core", "highdim_resource", "search_ablation_highdim", "highdim_neural_prior", "highdim_guard_upgrade", "highdim_scale_resource", "ultra_highdim_resource", "mega_highdim_resource"} else (120 if args.preset == "pilot" else (180 if args.preset in {"large", "large_fast"} else (300 if args.preset == "main" else 0))),
+        "task_timeout_s": 300 if args.preset in (BOUNDED_RESOURCE_PRESETS - {"smoke", "large_fast"}) else (120 if args.preset == "pilot" else (180 if args.preset in {"large", "large_fast"} else (300 if args.preset == "main" else 0))),
     }
     methods = cfg["methods"]
     if args.only_methods:
@@ -473,7 +514,7 @@ def main(argv: Iterable[str] | None = None) -> int:
         for i, (name, bf) in enumerate(suite)
         for method in methods
     ]
-    if args.preset in {"large_resource", "large_resource_core", "highdim_resource", "search_ablation_highdim", "highdim_neural_prior", "highdim_guard_upgrade", "highdim_scale_resource", "ultra_highdim_resource", "mega_highdim_resource"}:
+    if args.preset in HIGH_RESOURCE_PRESETS:
         method_rank = {
             "direct_anf": 0,
             "and_direct_anf": 1,

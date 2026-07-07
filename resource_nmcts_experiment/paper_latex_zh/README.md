@@ -11,7 +11,7 @@
 - `resource_nmcts_zh_full.tex` / `resource_nmcts_zh_full.pdf`：当前更完整的中文论文草稿，整合 $n=16$ baseline-preserving AI guard、$n=18$ stress test、搜索贡献分解和 exact 小规模参照。
 - `resource_nmcts_zh_report.tex` / `resource_nmcts_zh_report.pdf`：中文论文报告版，按“主张与边界、相关工作、方法、实验、结果、讨论”组织。
 - `resource_nmcts_zh_robustness.tex` / `resource_nmcts_zh_robustness.pdf`：中文投稿论证稿，突出独立于 SSHR 的 Resource-NMCTS 主线、n=16 清洗后的 240 行结果和多资源权重鲁棒性分析。
-- `resource_nmcts_zh_report.tex` / `resource_nmcts_zh_report.pdf`：中文论文报告版，更明确地区分研究主张、实验支撑和当前边界，适合继续讨论与修改。
+- `resource_nmcts_zh_neural_plan.tex` / `resource_nmcts_zh_neural_plan.pdf`：中文方案与阶段性证据稿，聚焦神经 MCTS 论文主线、pairwise root-action ranker 诊断、当前不足和下一步实验目标。
 
 编译命令：
 
@@ -22,7 +22,7 @@ latexmk -xelatex -g resource_nmcts_zh_draft.tex
 latexmk -xelatex -g resource_nmcts_zh_full.tex
 latexmk -xelatex -g resource_nmcts_zh_report.tex
 latexmk -xelatex -g resource_nmcts_zh_robustness.tex
-latexmk -xelatex -g resource_nmcts_zh_report.tex
+latexmk -xelatex -g resource_nmcts_zh_neural_plan.tex
 ```
 
 主要证据来源：
@@ -33,6 +33,8 @@ latexmk -xelatex -g resource_nmcts_zh_report.tex
 - `../results/analysis_search_contribution.md`
 - `../results/analysis_weight_robustness.md`
 - `../results/analysis_highdim_root_action_oracle.md`
+- `../results/analysis_highdim_root_action_pairwise.md`
+- `../results/analysis_neural_prior_highdim_pairwise_ablation.md`
 - `../results/analysis_exact_fprm_dp.md`
 - `../results/analysis_exact_xag_mc.md`
 - `../results/analysis_mega_highdim_resource.md`

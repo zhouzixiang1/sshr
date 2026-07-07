@@ -33,6 +33,7 @@ PRESETS = {
     "rollout": {"samples": 520, "epochs": 60, "n_min": 3, "n_max": 9},
     "linear_highdim": {"samples": 260, "epochs": 50, "n_min": 8, "n_max": 14},
     "linear_root_teacher": {"samples": 140, "epochs": 70, "n_min": 10, "n_max": 14},
+    "linear_root_pairwise": {"samples": 360, "epochs": 90, "n_min": 10, "n_max": 14},
     "main": {"samples": 2200, "epochs": 80, "n_min": 3, "n_max": 10},
 }
 
@@ -52,6 +53,8 @@ def collect_from_terms(
     greedy_memo: dict | None = None,
     root_teacher_width: int = 24,
     rest_direct_limit: int = 450,
+    groups: List[int] | None = None,
+    group_counter: List[int] | None = None,
 ) -> None:
     greedy_memo = {} if greedy_memo is None else greedy_memo
     direct_score = direct_plan(terms, prefix_len, live_factor_ancilla, config).score(config.weights)
@@ -68,6 +71,12 @@ def collect_from_terms(
     if not actions:
         return
     if label_mode == "root_teacher":
+        group_id = -1
+        if groups is not None:
+            if group_counter is None:
+                raise ValueError("group_counter is required when groups are collected")
+            group_id = group_counter[0]
+            group_counter[0] += 1
         teacher_actions = actions[: max(1, min(root_teacher_width, len(actions)))]
         child_config = replace(config, greedy_eval_limit=1)
         action_scores = []
@@ -111,6 +120,8 @@ def collect_from_terms(
             else:
                 label = (mean_score - action_score) / spread
             labels.append(max(-2.0, min(2.0, label)))
+            if groups is not None:
+                groups.append(group_id)
     else:
         for action in actions:
             rows.append(
@@ -146,6 +157,8 @@ def collect_from_terms(
             else:
                 improvement = action.immediate_gain
             labels.append(max(-2.0, min(2.0, 8.0 * improvement / max(direct_score, 1.0))))
+            if groups is not None:
+                groups.append(-1)
     if depth >= max_depth or not actions:
         return
     # Follow a few strong actions to collect child-state contexts.
@@ -165,6 +178,8 @@ def collect_from_terms(
             greedy_memo,
             root_teacher_width,
             rest_direct_limit,
+            groups,
+            group_counter,
         )
         collect_from_terms(
             action.rest,
@@ -181,6 +196,8 @@ def collect_from_terms(
             greedy_memo,
             root_teacher_width,
             rest_direct_limit,
+            groups,
+            group_counter,
         )
 
 
@@ -194,11 +211,13 @@ def build_dataset(
     action_family: str,
     root_teacher_width: int,
     rest_direct_limit: int,
-) -> Tuple[torch.Tensor, torch.Tensor]:
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     cfg = PRESETS[preset]
     rng = random.Random(seed)
     rows: List[List[float]] = []
     labels: List[float] = []
+    groups: List[int] = []
+    group_counter = [0]
 
     for _, bf in structured_suite():
         if cfg["n_min"] <= bf.n <= cfg["n_max"]:
@@ -213,6 +232,8 @@ def build_dataset(
                 action_family=action_family,
                 root_teacher_width=root_teacher_width,
                 rest_direct_limit=rest_direct_limit,
+                groups=groups,
+                group_counter=group_counter,
             )
 
     for _ in range(cfg["samples"]):
@@ -234,11 +255,57 @@ def build_dataset(
             action_family=action_family,
             root_teacher_width=root_teacher_width,
             rest_direct_limit=rest_direct_limit,
+            groups=groups,
+            group_counter=group_counter,
         )
 
     if not rows:
         raise RuntimeError("no training rows collected")
-    return torch.tensor(rows, dtype=torch.float32), torch.tensor(labels, dtype=torch.float32)
+    return (
+        torch.tensor(rows, dtype=torch.float32),
+        torch.tensor(labels, dtype=torch.float32),
+        torch.tensor(groups, dtype=torch.long),
+    )
+
+
+def pairwise_rank_loss(pred: torch.Tensor, target: torch.Tensor, groups: torch.Tensor) -> torch.Tensor:
+    """Pairwise root-action ranking loss within each collected teacher state.
+
+    Root-teacher labels are larger for better actions.  The pairwise loss
+    therefore asks the model score difference to be positive whenever one
+    action has a larger teacher label than another action from the same state.
+    """
+    losses = []
+    for group in torch.unique(groups):
+        if int(group.item()) < 0:
+            continue
+        idx = torch.nonzero(groups == group, as_tuple=False).flatten()
+        if idx.numel() < 2:
+            continue
+        local_target = target[idx]
+        label_diff = local_target[:, None] - local_target[None, :]
+        mask = label_diff > 1e-6
+        if not bool(mask.any()):
+            continue
+        local_pred = pred[idx]
+        pred_diff = local_pred[:, None] - local_pred[None, :]
+        weights = label_diff[mask].clamp(max=2.0)
+        losses.append((torch.nn.functional.softplus(-pred_diff[mask]) * weights).mean())
+    if not losses:
+        return nn.SmoothL1Loss()(pred, target)
+    return torch.stack(losses).mean()
+
+
+def objective_loss(
+    pred: torch.Tensor,
+    target: torch.Tensor,
+    groups: torch.Tensor,
+    loss_mode: str,
+    regression_loss: nn.Module,
+) -> torch.Tensor:
+    if loss_mode == "pairwise":
+        return pairwise_rank_loss(pred, target, groups) + 0.10 * regression_loss(pred, target)
+    return regression_loss(pred, target)
 
 
 def main() -> int:
@@ -247,6 +314,7 @@ def main() -> int:
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--gate-mode", choices=["mct", "logical_and"], default="mct")
     ap.add_argument("--label-mode", choices=["immediate", "rollout", "root_teacher"], default="immediate")
+    ap.add_argument("--loss-mode", choices=["regression", "pairwise"], default="regression")
     ap.add_argument("--action-family", choices=["factor", "linear"], default="factor")
     ap.add_argument("--max-depth", type=int, default=4)
     ap.add_argument("--child-branch", type=int, default=3)
@@ -257,7 +325,7 @@ def main() -> int:
     args = ap.parse_args()
 
     config = SearchConfig(max_factor_ancilla=4, max_factor_size=5, candidate_top_k=24, gate_mode=args.gate_mode)
-    x, y = build_dataset(
+    x, y, groups = build_dataset(
         args.preset,
         args.seed,
         config,
@@ -273,9 +341,24 @@ def main() -> int:
     x = (x - mean) / std
 
     rng = torch.Generator().manual_seed(args.seed)
-    perm = torch.randperm(x.shape[0], generator=rng)
-    split = max(1, int(0.85 * x.shape[0]))
-    train_idx, valid_idx = perm[:split], perm[split:]
+    if args.loss_mode == "pairwise" and bool((groups >= 0).any()):
+        unique_groups = torch.unique(groups[groups >= 0])
+        group_perm = unique_groups[torch.randperm(unique_groups.shape[0], generator=rng)]
+        group_split = max(1, int(0.85 * group_perm.shape[0]))
+        train_groups = set(int(g) for g in group_perm[:group_split].tolist())
+        valid_groups = set(int(g) for g in group_perm[group_split:].tolist())
+        train_idx = torch.tensor(
+            [i for i, g in enumerate(groups.tolist()) if int(g) in train_groups or int(g) < 0],
+            dtype=torch.long,
+        )
+        valid_idx = torch.tensor(
+            [i for i, g in enumerate(groups.tolist()) if int(g) in valid_groups],
+            dtype=torch.long,
+        )
+    else:
+        perm = torch.randperm(x.shape[0], generator=rng)
+        split = max(1, int(0.85 * x.shape[0]))
+        train_idx, valid_idx = perm[:split], perm[split:]
 
     device = default_device()
     model = ActionNet(hidden=args.hidden).to(device)
@@ -285,20 +368,25 @@ def main() -> int:
 
     x_train, y_train = x[train_idx].to(device), y[train_idx].to(device)
     x_valid, y_valid = x[valid_idx].to(device), y[valid_idx].to(device)
+    g_train, g_valid = groups[train_idx].to(device), groups[valid_idx].to(device)
 
     best_state = None
     best_valid = float("inf")
     for epoch in range(cfg["epochs"]):
         model.train()
         pred = model(x_train)
-        loss = loss_fn(pred, y_train)
+        loss = objective_loss(pred, y_train, g_train, args.loss_mode, loss_fn)
         opt.zero_grad()
         loss.backward()
         opt.step()
 
         model.eval()
         with torch.no_grad():
-            valid = loss_fn(model(x_valid), y_valid).item() if len(valid_idx) else loss.item()
+            valid = (
+                objective_loss(model(x_valid), y_valid, g_valid, args.loss_mode, loss_fn).item()
+                if len(valid_idx)
+                else loss.item()
+            )
         if valid < best_valid:
             best_valid = valid
             best_state = {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
