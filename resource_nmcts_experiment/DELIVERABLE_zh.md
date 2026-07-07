@@ -263,27 +263,34 @@
 
 ### 2.5.2 保守 depth-2 skip guard
 
-本轮新增 `train_screen_depth_guard.py`，专门修补上一节的质量缺口。它不再直接预测 single/depth-1/depth-2 三分类，而是学习一个更保守的问题：何时可以跳过 depth-2，使 depth-1 screen 与固定 depth-2 screen 的 score 持平。阈值在 train+validation 上按 zero-false-skip 约束选择。
+本轮新增并更新 `train_screen_depth_guard.py`，专门修补上一节的质量缺口。它不再直接预测 single/depth-1/depth-2 三分类，而是学习一个更保守的问题：何时可以跳过 depth-2，使 depth-1 screen 与固定 depth-2 screen 的 score 持平。当前实现区分两种执行模式：`static-direct` 只用静态 ANF/action 特征，在综合前直接派发到 depth-1 或 depth-2；`shallow-staged` 先运行 single/depth-1 screen，再用浅层观测特征决定是否跳过 depth-2。阈值在 train+validation 上按 zero-false-skip 约束选择；shallow-staged 额外使用 0.95 高置信阈值下限。
 
 主要产物：
 
 - `train_screen_depth_guard.py`
 - `models/boolean_screen_depth_guard.pt`
 - `models/boolean_screen_depth_guard.json`
+- `models/boolean_screen_depth_guard_shallow_staged.pt`
+- `models/boolean_screen_depth_guard_shallow_staged.json`
 - `results/raw_boolean_screen_depth_guard.csv`
 - `results/summary_boolean_screen_depth_guard.csv`
 - `results/analysis_boolean_screen_depth_guard.md`
+- `results/boolean_screen_depth_guard_shallow_staged/`
+- `results/analysis_boolean_screen_depth_guard_modes.md`
+- `results/summary_boolean_screen_depth_guard_modes.csv`
 - `paper_latex/tables/boolean_screen_depth_guard.tex`
+- `paper_latex/tables/boolean_screen_depth_guard_modes.tex`
 
 核心结果：
 
-| split | 函数数 | skip depth-2 | false skip | vs fixed depth-2 score | vs all-depth time |
-|---|---:|---:|---:|---:|---:|
-| train | 240 | 22 | 0 | 0/0/240 持平 | -4.49% |
-| valid | 72 | 3 | 0 | 0/0/72 持平 | -1.61% |
-| held-out test, n=20 | 48 | 3 | 0 | 0/0/48 持平 | -2.87% |
+| split | 函数数 | skip depth-2 | false skip | vs fixed depth-2 score | vs fixed depth-2 time | vs all-depth time |
+|---|---:|---:|---:|---:|---:|---:|
+| static-direct train | 480 | 12 | 0 | 0/0/480 持平 | -0.16% | -23.62% |
+| static-direct valid | 144 | 3 | 0 | 0/0/144 持平 | -0.28% | -23.45% |
+| static-direct test, n=20 | 96 | 4 | 0 | 0/0/96 持平 | -0.54% | -24.74% |
+| shallow-staged test, n=20 | 48 | 8 | 0 | 0/0/48 持平 | +29.10% | -7.81% |
 
-解释：这个 guard 第一次把结构级策略的 score 缺口降为 0，但收益仍小。它相对固定 depth-2 screen 平均慢 39.45%，因为需要先评估浅层 screen 再决定是否回退。因此它是“质量安全的结构级门控证据”，还不是最终速度突破。下一步应让 guard 选择更多分支，或者在不先跑 shallow screen 的情况下预测安全跳过。
+解释：这个 guard 第一次把结构级策略的 score 缺口降为 0，并把运行时证据拆成两条清晰路线。`static-direct` 是可部署默认模式：不先跑 shallow screen，在 96 个 held-out `n=20` 样本上相对固定 depth-2 小幅节省 0.54%，相对 all-depth adaptive 节省 24.74%。`shallow-staged` 用浅层观测把安全跳过覆盖提高到 8/48，仍保持 0 false skip 和 0 score loss，但因为先运行 single/depth-1 screen，相对固定 depth-2 screen 仍慢 29.10%。这已经比上一版“3/48 skip、-2.87% all-depth time”的证据更清楚，但仍不能写成最终高维质量突破。下一步应把 shallow 观测蒸馏回 direct guard，或让 guard 同时选择 Resource tail / FPRM / screen 分支。
 
 ### 2.5.3 Resource screen-gate 运行时门控
 

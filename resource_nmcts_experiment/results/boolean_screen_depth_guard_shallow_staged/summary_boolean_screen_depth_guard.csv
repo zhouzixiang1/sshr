@@ -1,0 +1,4 @@
+split,pairs,skips,true_skips,false_skips,score_wins,score_losses,score_ties,mean_rel_score_vs_depth2,mean_rel_time_vs_depth2,mean_rel_time_vs_all_depth
+train,240,22,22,0,0,0,240,0.0,0.2585968994525548,-0.04489492411421035
+valid,72,3,3,0,0,0,72,0.0,0.26633395387867703,-0.016016114924678103
+test,48,8,8,0,0,0,48,0.0,0.2910305552565885,-0.07806134656666419

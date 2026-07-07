@@ -1,6 +1,6 @@
 {
-  "execution_mode": "direct",
-  "feature_mode": "static",
+  "execution_mode": "staged",
+  "feature_mode": "shallow",
   "feature_names": [
     "n",
     "term_count",
@@ -29,51 +29,69 @@
     "top_rest_frac",
     "mean_rest_frac",
     "top_residual_terms",
-    "mean_residual_terms"
+    "mean_residual_terms",
+    "single_score",
+    "depth1_score",
+    "depth1_vs_single_score_pct",
+    "depth1_vs_single_T_pct",
+    "depth1_vs_single_CNOT_pct",
+    "depth1_vs_single_depth_pct",
+    "single_T_per_term",
+    "depth1_T_per_term",
+    "single_CNOT_per_term",
+    "depth1_CNOT_per_term",
+    "single_depth_per_term",
+    "depth1_depth_per_term",
+    "single_peak_ancilla",
+    "depth1_peak_ancilla",
+    "depth1_time_s",
+    "single_time_s",
+    "shallow_time_s",
+    "depth1_time_over_single"
   ],
   "kind": "depth2_skip_guard",
   "label": "skip_depth2_when_depth1_ties_depth2_score",
-  "min_threshold": 0.0,
+  "min_threshold": 0.95,
   "stats": {
     "test": {
       "false_skips": 0,
       "mean_rel_score_vs_depth2": 0.0,
-      "mean_rel_time_vs_all_depth": -0.2473565249956117,
-      "mean_rel_time_vs_depth2": -0.005396417871273198,
-      "pairs": 96,
+      "mean_rel_time_vs_all_depth": -0.07806134656666419,
+      "mean_rel_time_vs_depth2": 0.2910305552565885,
+      "pairs": 48,
       "score_losses": 0,
-      "score_ties": 96,
+      "score_ties": 48,
       "score_wins": 0,
-      "skips": 4,
+      "skips": 8,
       "split": "test",
-      "true_skips": 4
+      "true_skips": 8
     },
     "train": {
       "false_skips": 0,
       "mean_rel_score_vs_depth2": 0.0,
-      "mean_rel_time_vs_all_depth": -0.23617160385634878,
-      "mean_rel_time_vs_depth2": -0.0015959158451573257,
-      "pairs": 480,
+      "mean_rel_time_vs_all_depth": -0.04489492411421035,
+      "mean_rel_time_vs_depth2": 0.2585968994525548,
+      "pairs": 240,
       "score_losses": 0,
-      "score_ties": 480,
+      "score_ties": 240,
       "score_wins": 0,
-      "skips": 12,
+      "skips": 22,
       "split": "train",
-      "true_skips": 12
+      "true_skips": 22
     },
     "valid": {
       "false_skips": 0,
       "mean_rel_score_vs_depth2": 0.0,
-      "mean_rel_time_vs_all_depth": -0.2344983478702529,
-      "mean_rel_time_vs_depth2": -0.002821806817121166,
-      "pairs": 144,
+      "mean_rel_time_vs_all_depth": -0.016016114924678103,
+      "mean_rel_time_vs_depth2": 0.26633395387867703,
+      "pairs": 72,
       "score_losses": 0,
-      "score_ties": 144,
+      "score_ties": 72,
       "score_wins": 0,
       "skips": 3,
       "split": "valid",
       "true_skips": 3
     }
   },
-  "threshold": 0.9873884926305542
+  "threshold": 0.95
 }

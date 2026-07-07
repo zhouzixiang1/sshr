@@ -221,7 +221,22 @@ def predict_skip_prob(
     return [float(v) for v in torch.sigmoid(model(x)).tolist()]
 
 
-def eval_guard(examples: Sequence[Example], probs: Sequence[float], threshold: float, eps: float, split: str) -> GuardStats:
+def target_eval_time(ex: Example, skip: bool, execution_mode: str) -> float:
+    if execution_mode == "direct":
+        return ex.evals[1].time_s if skip else ex.evals[2].time_s
+    if execution_mode == "staged":
+        return ex.evals[0].time_s + ex.evals[1].time_s + (0.0 if skip else ex.evals[2].time_s)
+    raise ValueError(f"unknown execution mode: {execution_mode}")
+
+
+def eval_guard(
+    examples: Sequence[Example],
+    probs: Sequence[float],
+    threshold: float,
+    eps: float,
+    split: str,
+    execution_mode: str,
+) -> GuardStats:
     skips = true_skips = false_skips = wins = losses = ties = 0
     rel_score: list[float] = []
     rel_time_depth2: list[float] = []
@@ -238,7 +253,7 @@ def eval_guard(examples: Sequence[Example], probs: Sequence[float], threshold: f
 
         target = ex.evals[1] if skip else ex.evals[2]
         depth2 = ex.evals[2]
-        target_time = ex.evals[0].time_s + ex.evals[1].time_s + (0.0 if skip else ex.evals[2].time_s)
+        target_time = target_eval_time(ex, skip, execution_mode)
         all_time = ex.evals[0].time_s + ex.evals[1].time_s + ex.evals[2].time_s
 
         if target.score < depth2.score - 1e-9:
@@ -272,6 +287,7 @@ def select_threshold(
     train_prob: list[float],
     valid_prob: list[float],
     eps: float,
+    execution_mode: str,
 ) -> tuple[float, GuardStats, GuardStats]:
     candidates = sorted(set(train_prob + valid_prob + [0.0, 0.5, 1.0]))
     # A value just above a probability is needed to express "skip none above this point".
@@ -280,8 +296,8 @@ def select_threshold(
 
     best: tuple[tuple[float, int, int], float, GuardStats, GuardStats] | None = None
     for threshold in candidates:
-        train_stats = eval_guard(train, train_prob, threshold, eps, "train")
-        valid_stats = eval_guard(valid, valid_prob, threshold, eps, "valid")
+        train_stats = eval_guard(train, train_prob, threshold, eps, "train", execution_mode)
+        valid_stats = eval_guard(valid, valid_prob, threshold, eps, "valid", execution_mode)
         if train_stats.false_skips or valid_stats.false_skips:
             continue
         key = (
@@ -294,7 +310,11 @@ def select_threshold(
             best = candidate
     if best is None:
         threshold = 1.0
-        return threshold, eval_guard(train, train_prob, threshold, eps, "train"), eval_guard(valid, valid_prob, threshold, eps, "valid")
+        return (
+            threshold,
+            eval_guard(train, train_prob, threshold, eps, "train", execution_mode),
+            eval_guard(valid, valid_prob, threshold, eps, "valid", execution_mode),
+        )
     return best[1], best[2], best[3]
 
 
@@ -329,6 +349,8 @@ def write_outputs(
             "feature_mode": args.feature_mode,
             "hidden": args.hidden,
             "threshold": threshold,
+            "min_threshold": args.min_threshold,
+            "execution_mode": args.execution_mode,
             "metrics": metrics,
         },
         model_path,
@@ -341,6 +363,8 @@ def write_outputs(
                 "label": "skip_depth2_when_depth1_ties_depth2_score",
                 "feature_names": guard_feature_names(args.feature_mode),
                 "feature_mode": args.feature_mode,
+                "min_threshold": args.min_threshold,
+                "execution_mode": args.execution_mode,
                 "stats": {name: asdict(value) for name, value in stats.items()},
             },
             indent=2,
@@ -363,6 +387,9 @@ def write_outputs(
             "target_depth",
             "target_score",
             "depth2_score",
+            "single_time_s",
+            "depth1_time_s",
+            "depth2_time_s",
             "target_time_s",
             "all_depth_time_s",
         ]
@@ -372,7 +399,7 @@ def write_outputs(
             for ex, prob in zip(examples, probs[split]):
                 skip = prob >= threshold
                 target = ex.evals[1] if skip else ex.evals[2]
-                target_time = ex.evals[0].time_s + ex.evals[1].time_s + (0.0 if skip else ex.evals[2].time_s)
+                target_time = target_eval_time(ex, skip, args.execution_mode)
                 writer.writerow(
                     {
                         "split": split,
@@ -385,6 +412,9 @@ def write_outputs(
                         "target_depth": 1 if skip else 2,
                         "target_score": target.score,
                         "depth2_score": ex.evals[2].score,
+                        "single_time_s": ex.evals[0].time_s,
+                        "depth1_time_s": ex.evals[1].time_s,
+                        "depth2_time_s": ex.evals[2].time_s,
                         "target_time_s": target_time,
                         "all_depth_time_s": ex.evals[0].time_s + ex.evals[1].time_s + ex.evals[2].time_s,
                     }
@@ -422,10 +452,15 @@ def write_outputs(
         f.write(f"- held-out test examples: {len(test)}\n")
         f.write(f"- train n: {args.train_n}; test n: {args.test_n}\n")
         f.write(f"- feature mode: {args.feature_mode}\n")
+        f.write(f"- execution mode: {args.execution_mode}\n")
+        f.write(f"- minimum skip threshold: {args.min_threshold:.6f}\n")
         f.write(f"- selected skip threshold: {threshold:.6f}\n")
         f.write(f"- validation loss at best checkpoint: {metrics['valid_loss']:.4f}\n")
         f.write(f"- validation accuracy at 0.5: {metrics['valid_acc_at_0_5']:.3f}\n\n")
-        f.write("The guard runs shallow screening and uses depth-1 only when the model predicts that depth-1 ties fixed depth-2 in score. Otherwise it falls back to depth-2.\n\n")
+        if args.execution_mode == "direct":
+            f.write("The guard uses only static ANF features to dispatch directly to depth-1 when the model predicts that depth-1 ties fixed depth-2 in score; otherwise it runs depth-2 directly.\n\n")
+        else:
+            f.write("The guard runs shallow screening and uses depth-1 only when the model predicts that depth-1 ties fixed depth-2 in score. Otherwise it falls back to depth-2.\n\n")
         f.write("| split | pairs | skips | false skips | score W/L/T vs depth-2 | mean score vs depth-2 | mean time vs depth-2 | mean time vs all-depth |\n")
         f.write("|---|---:|---:|---:|---:|---:|---:|---:|\n")
         for split in ["train", "valid", "test"]:
@@ -440,16 +475,22 @@ def write_outputs(
 
     table_path = tables_dir / "boolean_screen_depth_guard.tex"
     with table_path.open("w", encoding="utf-8") as f:
-        f.write("\\begin{tabular}{lrrrrrr}\n")
+        f.write("\\begin{tabular}{lrrrrrrr}\n")
         f.write("\\toprule\n")
-        f.write("Split & Pairs & Skips & False skips & Score W/L/T & Mean $\\Delta$ score & Mean $\\Delta$ time \\\\\n")
+        f.write(
+            "Split & Pairs & Skips & False skips & Score W/L/T & "
+            "Mean $\\Delta$ score & Mean $\\Delta$ time vs D2 & "
+            "Mean $\\Delta$ time vs all-depth \\\\\n"
+        )
         f.write("\\midrule\n")
         for split in ["train", "valid", "test"]:
             s = stats[split]
             f.write(
                 f"{split} & {s.pairs} & {s.skips} & {s.false_skips} & "
                 f"{s.score_wins}/{s.score_losses}/{s.score_ties} & "
-                f"{s.mean_rel_score_vs_depth2:+.2%} & {s.mean_rel_time_vs_all_depth:+.2%} \\\\\n"
+                f"{s.mean_rel_score_vs_depth2:+.2%} & "
+                f"{s.mean_rel_time_vs_depth2:+.2%} & "
+                f"{s.mean_rel_time_vs_all_depth:+.2%} \\\\\n"
             )
         f.write("\\bottomrule\n")
         f.write("\\end{tabular}\n")
@@ -467,20 +508,29 @@ def main(argv: Iterable[str] | None = None) -> int:
     ap.add_argument("--seed", type=int, default=20260709)
     ap.add_argument("--train-n", default="14,16,18")
     ap.add_argument("--test-n", default="20")
-    ap.add_argument("--train-per-n", type=int, default=80)
-    ap.add_argument("--valid-per-n", type=int, default=24)
-    ap.add_argument("--test-per-n", type=int, default=48)
-    ap.add_argument("--epochs", type=int, default=140)
-    ap.add_argument("--hidden", type=int, default=96)
+    ap.add_argument("--train-per-n", type=int, default=160)
+    ap.add_argument("--valid-per-n", type=int, default=48)
+    ap.add_argument("--test-per-n", type=int, default=96)
+    ap.add_argument("--epochs", type=int, default=180)
+    ap.add_argument("--hidden", type=int, default=128)
     ap.add_argument("--action-width", type=int, default=6)
     ap.add_argument("--gate-mode", choices=["mct", "logical_and"], default="mct")
     ap.add_argument("--score-eps", type=float, default=1e-9)
     ap.add_argument("--feature-mode", choices=["static", "shallow"], default="static")
+    ap.add_argument("--execution-mode", choices=["direct", "staged"], default="direct")
+    ap.add_argument(
+        "--min-threshold",
+        type=float,
+        default=0.0,
+        help="Conservative floor for skip probability after zero-false-skip calibration.",
+    )
     ap.add_argument("--model-out", default=str(THIS_DIR / "models" / "boolean_screen_depth_guard.pt"))
     ap.add_argument("--rule-out", default=str(THIS_DIR / "models" / "boolean_screen_depth_guard.json"))
     ap.add_argument("--results-dir", default=str(THIS_DIR / "results"))
     ap.add_argument("--tables-dir", default=str(THIS_DIR / "paper_latex" / "tables"))
     args = ap.parse_args(list(argv) if argv is not None else None)
+    if args.execution_mode == "direct" and args.feature_mode != "static":
+        raise ValueError("direct execution mode requires static features; shallow features are only available after running shallow screens")
 
     config = SearchConfig(
         weights=ResourceWeights(t=1.0, cnot=0.04, depth=0.015, gates=0.01, ancilla=2.0),
@@ -514,11 +564,19 @@ def main(argv: Iterable[str] | None = None) -> int:
         "valid": predict_skip_prob(model, mean, std, valid, args.feature_mode),
         "test": predict_skip_prob(model, mean, std, test, args.feature_mode),
     }
-    threshold, train_stats, valid_stats = select_threshold(train, valid, probs["train"], probs["valid"], args.score_eps)
+    calibrated_threshold, _, _ = select_threshold(
+        train,
+        valid,
+        probs["train"],
+        probs["valid"],
+        args.score_eps,
+        args.execution_mode,
+    )
+    threshold = max(calibrated_threshold, args.min_threshold)
     stats = {
-        "train": train_stats,
-        "valid": valid_stats,
-        "test": eval_guard(test, probs["test"], threshold, args.score_eps, "test"),
+        "train": eval_guard(train, probs["train"], threshold, args.score_eps, "train", args.execution_mode),
+        "valid": eval_guard(valid, probs["valid"], threshold, args.score_eps, "valid", args.execution_mode),
+        "test": eval_guard(test, probs["test"], threshold, args.score_eps, "test", args.execution_mode),
     }
     write_outputs(train, valid, test, probs, stats, threshold, model, mean, std, metrics, args)
     return 0

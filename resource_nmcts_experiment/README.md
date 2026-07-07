@@ -17,6 +17,7 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python train_neural_policy.py --preset rollout --gate-mode logical_and --label-mode rollout --max-depth 3 --child-branch 2 --out models/action_scorer_rollout_logical_and.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python train_neural_policy.py --preset linear_highdim --gate-mode logical_and --label-mode immediate --action-family linear --max-depth 1 --child-branch 1 --out models/linear_action_scorer_highdim.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python train_screen_depth_policy.py --train-per-n 80 --valid-per-n 24 --test-per-n 48 --epochs 140 --hidden 96
+/opt/anaconda3/envs/mcts-qoracle/bin/python train_screen_depth_guard.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python train_structure_gate.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset smoke
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset evidence_affine --model models/action_scorer_rollout_logical_and.pt
@@ -185,7 +186,9 @@ The conservative depth-2 skip guard is trained with
 `train_screen_depth_guard.py` and saved at
 `models/boolean_screen_depth_guard.pt`; its held-out analysis is written to
 `results/analysis_boolean_screen_depth_guard.md`, with the paper table at
-`paper_latex/tables/boolean_screen_depth_guard.tex`.
+`paper_latex/tables/boolean_screen_depth_guard.tex`.  A shallow-feature staged
+variant is saved at `models/boolean_screen_depth_guard_shallow_staged.pt`, with
+mode comparison in `results/analysis_boolean_screen_depth_guard_modes.md`.
 The high-dimensional Resource screen gate is trained with `train_structure_gate.py`
 and saved at `models/resource_structure_gate.json`; it adds
 `and_resource_nmcts_screen_gate`, a gated Resource-NMCTS variant that skips the
@@ -205,11 +208,15 @@ Current structure-policy evidence:
 - Policy vs fixed depth-2 screen: 0/5/43, mean score +0.28%, mean runtime
   -10.85%; therefore this is useful structure-level AI evidence, but not yet a
   final quality improvement over the strongest deterministic depth-2 screen.
-- The conservative depth-2 skip guard removes that quality loss on a fresh
-  held-out `n=20` run: 48/48 score ties vs fixed depth-2, 0 false skips, and
-  mean runtime -2.87% vs all-depth adaptive.  It is still +39.45% slower than
-  fixed depth-2 because it evaluates shallow screens before falling back, so it
-  is a quality-safe guard direction rather than a final speed breakthrough.
+- The conservative static-direct depth-2 skip guard removes that quality loss
+  on a fresh held-out `n=20` run: 96/96 score ties vs fixed depth-2, 0 false
+  skips, 4/96 safe skips, mean runtime -0.54% vs fixed depth-2, and mean
+  runtime -24.74% vs all-depth adaptive.  A shallow-staged high-confidence
+  variant raises safe skips to 8/48 with 0 false skips and -7.81% runtime vs
+  all-depth adaptive, but remains +29.10% slower than fixed depth-2 because it
+  evaluates shallow screens before falling back.  This is stronger
+  structure-level guard evidence, not a final high-dimensional quality
+  breakthrough.
 
 Current screen-gate evidence:
 
