@@ -314,12 +314,12 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 | Boolean-linear-deep vs pairwise-wide Resource-NMCTS | 24 个 n=16 random ANF | 14/6/4 | -0.22% | 单分支质量优于上一轮完整 Resource，且平均时间低 72.31% |
 | Boolean-guard Resource-NMCTS vs pairwise-wide Resource-NMCTS | 24 个 n=16 random ANF | 14/0/10 | -0.34% | 组合主方法无 score-loss 改善，T/CNOT/depth 同时下降 |
 | Boolean-guard Resource-NMCTS vs deterministic recursive guard | 24 个 n=16 random ANF | 18/0/6 | -0.52% | 当前最强 n=16 full synthesis 证据 |
-| Boolean-linear neural guard vs deterministic Boolean-linear | 24 个 n=16 random ANF | 4/0/20 | -0.12% | 新 boolean-linear root-teacher 模型只有小幅无 loss 收益，仍不是主提升来源 |
+| Boolean-linear neural guard vs deterministic Boolean-linear | 24 个 n=16 random ANF | 4/0/20 | -0.12% | 新 boolean-linear root-teacher 模型只有小幅无 loss 收益，平均时间 +94.49%，仍不是主提升来源 |
 | Boolean-linear screen vs old Resource-NMCTS | 12 个 n=18 random ANF | 0/12/0 | +42.45% | ANF-only screen 很快但质量差，只能作为 n=18/n=20 边界诊断 |
 | Recursive Boolean screen vs single Boolean screen | 12 个 n=18 random ANF | 11/0/1 | -3.99% | 递归 screen 改善单层 screen，但仍远差于旧 Resource |
 | Recursive-screen Resource-NMCTS vs old Resource-NMCTS | 6 个 n=20 random ANF | 5/0/1 | -4.52% | root-beam/fast pair timeout 时的超高维有效修复 |
 
-解释：Boolean-ring linear-deep 是 n=16 上最重要的实际提升。它不是单纯扩大 beam 或神经 top-k，而是扩大了可表示的代数因子类型；因此相对 pairwise-wide neural guard 更像“方法创新”。但必须区分 deep 版本和 screen 版本：deep 版本在 n=14/n=16 有稳定质量收益；recursive screen 在 n=20 这种 FPRM 分支全部 timeout 的边界上有效，但在 n=18 仍远差于旧 Resource，不应作为中高维主质量方法。
+解释：Boolean-ring linear-deep 是 n=16 上最重要的实际提升。它不是单纯扩大 beam 或神经 top-k，而是扩大了可表示的代数因子类型；因此相对 pairwise-wide neural guard 更像“方法创新”。本轮新训练的 Boolean-linear action scorer 能在 guard 下避免 score loss，但 4/0/20、-0.12% 的幅度仍不足以作为显著 AI 贡献。必须区分 deep 版本和 screen 版本：deep 版本在 n=14/n=16 有稳定质量收益；recursive screen 在 n=20 这种 FPRM 分支全部 timeout 的边界上有效，但在 n=18 仍远差于旧 Resource，不应作为中高维主质量方法。
 
 ### 2.7 小规模 exact FPRM-DP 精确切片
 
