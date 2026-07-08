@@ -926,6 +926,26 @@ optimality, but to strengthen the phase/Rz policy and complete fuller
 toolchain reproductions while keeping the claim at the logical synthesis
 layer.
 
+\section*{Data and Code Availability}
+
+The artifact package used for this manuscript is maintained in the project
+repository under \texttt{resource\_nmcts\_experiment/}.  The directory contains
+the synthesis code, neural and search-policy scripts, external-toolchain probe
+drivers, generated raw and summary CSV files, manifest JSON files, LaTeX table
+fragments, figure source data, and the compiled manuscript PDF.  The main
+reproducibility entry points are the \texttt{run\_*.py},
+\texttt{train\_*.py}, and \texttt{analyze\_*.py} scripts listed in the project
+README; generated measurements are stored in \texttt{results/raw\_*.csv},
+\texttt{results/summary\_*.csv}, and \texttt{results/manifest\_*.json}.
+The paper tables are generated under \texttt{paper\_latex/tables/}, and the
+submission figures and source data are stored under
+\texttt{paper\_latex/figures/submission\_v36/}.  The experiments use the
+\texttt{mcts-qoracle} Conda environment and the direct interpreter
+\path{/opt/anaconda3/envs/mcts-qoracle/bin/python}.  External-tool rows are
+reported with manifest-level provenance; hardware mapping, routing, and
+magic-state-factory artifacts are intentionally absent because they are outside
+the logical-layer scope of the study.
+
 \bibliographystyle{plain}
 \bibliography{references}
 

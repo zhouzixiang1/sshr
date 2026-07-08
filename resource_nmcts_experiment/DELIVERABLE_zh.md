@@ -135,7 +135,15 @@
 - `results/manifest_reproducibility_audit.json`
 - `paper_latex/tables/reproducibility_audit.tex`
 
-该审计记录当前工作站为 Apple M4 Pro，14 CPU cores，24.0 GiB RAM，20-core Metal GPU；`mcts-qoracle` 环境中 Python 3.11.15、PyTorch 2.12.0、MPS=True、CUDA=False。manifest 层面有 54 个运行记录包含 worker count，最大 workers=10；代表性流程包括 traditional resource 10 workers/1770 rows、RevKit CLI 8 workers/708 rows、ROS-style LUT 8 workers/927 rows、CirKit 8 workers/177 rows、mockturtle 4 workers/177 rows。论文中应把 runtime/time 结果限定在这个工作站上下文；可移植主张仍是逻辑资源数量和验证通过率。
+该审计记录当前工作站为 Apple M4 Pro，14 CPU cores，24.0 GiB RAM，20-core Metal GPU；`mcts-qoracle` 环境中 Python 3.11.15、PyTorch 2.12.0、MPS=True、CUDA=False。manifest 层面有 54 个运行记录包含 worker count，最大 workers=10；代表性流程包括 traditional resource 10 workers/1770 rows、RevKit CLI 8 workers/708 rows、ROS-style LUT 8 workers/927 rows、CirKit 8 workers/177 rows、mockturtle 4 workers/177 rows。重新生成后的 artifact coverage 为 57 个顶层 run/train/analyze 脚本、144 个 raw CSV、164 个 summary CSV、65 个 manifest、148 张 paper table 和 7 个 figure panel。论文中应把 runtime/time 结果限定在这个工作站上下文；可移植主张仍是逻辑资源数量和验证通过率。
+
+本轮新增投稿完整性层：英文投稿稿末尾加入 `Data and Code Availability`，明确代码、raw/summary CSV、manifest、LaTeX 表、图源数据和 PDF 均位于 `resource_nmcts_experiment/` artifact package，运行入口为 `run_*.py`、`train_*.py`、`analyze_*.py`，环境为 `mcts-qoracle` 和直接解释器路径 `/opt/anaconda3/envs/mcts-qoracle/bin/python`。同时新增自动 submission-readiness audit：
+
+- `analyze_submission_readiness_audit.py`
+- `results/summary_submission_readiness_audit.csv`
+- `results/analysis_submission_readiness_audit.md`
+
+当前审计结果为 8 项 pass、1 项 needs author input。已通过项包括 bounded abstract claim、contribution-to-evidence chain、baseline fairness/scope、reproducibility evidence、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder、25 页 compiled PDF。唯一保留项是作者特定的 funding、acknowledgements、competing interests 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
 
 ## 2. 当前已完成内容
 
