@@ -23,10 +23,11 @@ RevKit 3.x is a Python package backed by C++ code.
 |---|---|---|---|---|---|
 | ABC | binary | available | implemented AIG/XAG/LUT/ESOP external estimates | `file: /Users/zhouzixiang/Desktop/tzb/src/tmp/abc/abc` | usage: /Users/zhouzixiang/Desktop/tzb/src/tmp/abc/abc [-c cmd] [-q cmd] [-C cmd] [-Q cmd] [-f script] [-h] [-o file] [-s] [-t type] [-T type] [-x] [-b] [file] |
 | mockturtle | cxx_header_library | available | official-header KLUT-to-XAG probe adapter; full ROS flow remains separate | `source: /Users/zhouzixiang/Desktop/tzb/src/tmp/mockturtle` | local source checkout exists |
-| RevKit | binary_or_python | available | Python oracle_synth baseline adapter; legacy CLI flow remains separate | `python: revkit` | /opt/anaconda3/envs/mcts-qoracle/lib/python3.11/site-packages/revkit/__init__.py |
+| RevKit | binary_or_python | available | Python oracle_synth phase-netlist baseline adapter | `python: revkit` | /opt/anaconda3/envs/mcts-qoracle/lib/python3.11/site-packages/revkit/__init__.py |
 | CirKit 3 shell | binary_or_source | available | official CirKit shell for AIG/LUT optimization probes; not legacy RevKit reversible synthesis | `file: /Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit/build/cli/cirkit` | Usage: /Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit/build/cli/cirkit [OPTIONS] |
 | CirKit 3 shell | binary_or_source | available (additional) | official CirKit shell for AIG/LUT optimization probes; not legacy RevKit reversible synthesis | `source: /Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit` | local source checkout exists |
-| RevKit CLI / CirKit legacy | binary_or_source | missing | legacy command-line reversible synthesis flow for RevKit-style baselines |  | not found in configured paths, PATH, or Python modules |
+| RevKit CLI / CirKit legacy | binary_or_source | available | legacy command-line reversible synthesis flow for exact oracle-permutation baselines | `file: /Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit_legacy/build/programs/revkit` | Usage: /Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit_legacy/build/programs/revkit [OPTIONS] |
+| RevKit CLI / CirKit legacy | binary_or_source | available (additional) | legacy command-line reversible synthesis flow for exact oracle-permutation baselines | `source: /Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit_legacy` | local source checkout exists |
 
 ## Upstream Source Reachability
 
@@ -65,8 +66,9 @@ RevKit 3.x is a Python package backed by C++ code.
 
 ### RevKit CLI / CirKit legacy
 
-- `git clone --recursive https://github.com/msoeken/cirkit.git tmp/cirkit`
-- `cd tmp/cirkit && mkdir -p build && cd build && cmake .. && make revkit`
+- `git -C tmp/cirkit worktree add ../cirkit_legacy origin/develop && git -C tmp/cirkit_legacy submodule update --init --recursive`
+- `cd tmp/cirkit_legacy && mkdir -p build && cd build && cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -Denable_cirkit-addon-reversible=ON .. && cmake --build . --target revkit --parallel 8`
+- `/opt/anaconda3/envs/mcts-qoracle/bin/python resource_nmcts_experiment/run_revkit_cli_probe.py --workers 8 --timeout 20 --flow tbs=tbs --flow dbs=dbs --flow rms=rms`
 
 ## Interpretation
 
@@ -75,7 +77,7 @@ RevKit 3.x is a Python package backed by C++ code.
 - mockturtle source and the project KLUT-to-XAG adapter are available; `run_mockturtle_xag_probe.py` has produced a reproducible official-header probe. This is still not the full official ROS flow.
 - RevKit Python API is locally available and can support an API-level `oracle_synth` baseline; this is distinct from the legacy RevKit/CirKit CLI flow.
 - CirKit 3 shell is locally available and `run_cirkit_aig_probe.py` has produced a reproducible AIG/multiplicative-complexity probe. This is not legacy RevKit reversible synthesis or full ROS.
-- RevKit/CirKit legacy CLI is not yet available, so legacy command-line reversible-synthesis reproduction remains pending.
+- RevKit/CirKit legacy CLI is locally available and `run_revkit_cli_probe.py` has produced a reproducible reversible-synthesis CLI portfolio probe on exact oracle permutations.
 - This audit is intentionally environment-specific; rerun it after installing external tools before claiming reproduced external reversible-toolchain results.
 
 ## Primary References / Tool Sources

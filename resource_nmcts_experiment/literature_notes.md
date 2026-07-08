@@ -103,8 +103,16 @@
   subprocess: 1/8 rows returned under a 30 s cutoff, 7/8 timed out, and the
   returned row still contained 32767 non-Clifford Rz rotations.  High-dimensional
   RevKit comparisons should therefore be reported as an adapter/scalability and
-  gate-set boundary until a faster RevKit/CirKit flow is available.  The legacy
-  RevKit/CirKit command-line flow is still not reproduced locally.
+  gate-set boundary for the Python API.  The legacy RevKit/CirKit command-line
+  flow is now reproduced locally from the legacy `develop` branch as an
+  exact-oracle SPEC permutation probe: TBS/DBS/RMS produce 531/531 usable
+  direct flow rows on the `n<=6` traditional set, and the best-score portfolio
+  gives Pareto-Resource-NMCTS vs RevKit CLI at 173/0/4 with mean score -67.28%
+  and mean T-count -72.59%.  This strengthens the reversible-synthesis
+  comparison, but it is still logic-layer only: CNOT/depth are derived from
+  RevKit's Toffoli-control distribution, peak ancilla is a visible trade-off,
+  and the probe is not ROS, SAT garbage management, hardware mapping, or
+  rotation-sequence synthesis.
   <https://github.com/msoeken/revkit>
 
 - The project now has an internal phase/Rz-aware baseline,
@@ -178,12 +186,16 @@ linear-pair factoring.  The current high-dimensional evidence is promising
 against direct ANF, logical-AND direct ANF, root-beam, FPRM-greedy, ABC
 AIG/XAG, and a verified BDD/Shannon baseline, but a submission-ready paper
 still needs reproduced ROS or mockturtle-style reversible-toolchain results on
-the exported benchmarks.
+the exported benchmarks.  The project has since added a legacy RevKit CLI
+exact-oracle probe, so the remaining external-toolchain gap should be stated
+more narrowly as official ROS/full reversible-toolchain coverage and hardware
+mapping, not as "RevKit CLI unavailable".
 
 The current local readiness audit is stored in
 `results/analysis_toolchain_readiness.md`: ABC is available through the bundled
 `tmp/abc/abc` binary, mockturtle and CirKit 3 shell probes are available, and
-RevKit Python is available in the conda environment.  The legacy
-RevKit/CirKit reversible-synthesis CLI and full official ROS remain future
-external-comparison work.  This should be treated as an environment fact, not
-as a field-wide statement.
+RevKit Python is available in the conda environment.  The legacy RevKit/CirKit
+CLI is also available through `tmp/cirkit_legacy/build/programs/revkit` and has
+produced the exact-oracle TBS/DBS/RMS portfolio.  Full official ROS remains
+future external-comparison work.  This should be treated as an environment
+fact, not as a field-wide statement.

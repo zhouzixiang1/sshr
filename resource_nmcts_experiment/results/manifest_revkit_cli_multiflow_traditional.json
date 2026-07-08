@@ -1,0 +1,28 @@
+{
+  "created_at": "2026-07-09T01:19:06+0800",
+  "script": "run_revkit_cli_probe.py",
+  "argv": {
+    "input": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_traditional_resource.csv",
+    "max_n": 6,
+    "limit": null,
+    "timeout": 20.0,
+    "workers": 8,
+    "flow": [
+      "tbs=tbs",
+      "dbs=dbs",
+      "rms=rms"
+    ],
+    "targets": "and_resource_nmcts,and_profile_resource_nmcts,and_pareto_resource_nmcts,and_fprm_polarity_archive,and_fprm_linear_pair,and_fprm_root_beam,and_direct_anf,direct_anf,and_esop_milp,sshr_h",
+    "revkit_bin": "/Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit_legacy/build/programs/revkit",
+    "revkit_root": "/Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit_legacy",
+    "raw_out": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_revkit_cli_multiflow_traditional.csv",
+    "summary": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/summary_revkit_cli_multiflow_traditional.csv",
+    "analysis": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/analysis_revkit_cli_multiflow_traditional.md",
+    "latex_out": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/paper_latex/tables/revkit_cli_multiflow_traditional.tex",
+    "run_manifest": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/manifest_revkit_cli_multiflow_traditional.json"
+  },
+  "revkit_commit": "104eb35f1933b080aa228ad419756f04682d4a2e",
+  "rows": 708,
+  "usable_rows": 708,
+  "summary_rows": 140
+}

@@ -24,6 +24,7 @@ resource_nmcts_experiment/benchmark_exports/
 tmp/abc/
 tmp/bin/
 tmp/cirkit/
+tmp/cirkit_legacy/
 tmp/cirkit_probe/
 tmp/mockturtle/
 resource_nmcts_experiment.zip

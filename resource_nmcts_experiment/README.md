@@ -33,6 +33,19 @@ Latest external-toolchain progress:
   all rows, but loses depth on 50/64 rows under this proxy.
 - This is a CirKit-shell AIG/multiplicative-complexity probe, not legacy RevKit
   reversible synthesis, not full ROS, and not hardware mapping.
+- `run_revkit_cli_probe.py` builds on the legacy RevKit/CirKit CLI.  Each
+  Boolean function is embedded as the exact reversible oracle permutation
+  `(x,y)->(x,y xor f(x))`; RevKit reads the SPEC permutation and runs
+  TBS/DBS/RMS reversible synthesis flows.
+- Traditional `n<=6`: 531/531 direct RevKit CLI flow rows returned and 177
+  synthetic best-score portfolio rows were generated.  Pareto-Resource-NMCTS vs
+  the RevKit CLI best-score portfolio is 173/0/4 on score, mean -67.28%, and
+  173/0/4 on T-count, mean -72.59%.  The visible trade-off is auxiliary lines:
+  peak ancilla is 0/169/8, mean +153.11%.
+- This is a real legacy reversible-synthesis CLI probe for exact oracle
+  permutations.  It is still logic-layer only: CNOT/depth are derived from
+  RevKit's Toffoli-control distribution, and the run does not include full ROS,
+  hardware mapping, routing, or magic-state scheduling.
 
 Latest phase/Rz progress:
 
@@ -587,14 +600,15 @@ External-tool benchmark exchange:
   runs ABC `if -K` for a configurable K sweep, verifies each mapped BLIF truth
   table, estimates every LUT network by local-ANF compute/action/uncompute
   logic, and chooses the best K under the project score.  It is now complemented
-  by a mockturtle KLUT-to-XAG probe, a CirKit-shell AIG/MC probe, and a RevKit
-  Python API baseline, but the full official ROS flow and legacy RevKit/CirKit
-  reversible-synthesis CLI flow remain future work.
+  by a mockturtle KLUT-to-XAG probe, a CirKit-shell AIG/MC probe, a RevKit
+  Python API phase-netlist baseline, and a legacy RevKit CLI exact-oracle
+  reversible-synthesis probe.  The full official ROS flow remains future work.
 - `analyze_toolchain_readiness.py` records external-tool availability for the
   current workstation.  The current audit finds the bundled ABC binary,
   mockturtle source/adapter availability, RevKit Python API availability, and
-  CirKit 3 shell availability, while legacy RevKit/CirKit CLI remains
-  unavailable; see `results/analysis_toolchain_readiness.md`.
+  CirKit 3 shell availability; the legacy RevKit/CirKit CLI is available
+  through `tmp/cirkit_legacy/build/programs/revkit`; see
+  `results/analysis_toolchain_readiness.md`.
 
 Current evidence from `results/analysis_evidence_affine.md`:
 
@@ -822,8 +836,9 @@ External toolchain readiness from `results/analysis_toolchain_readiness.md`:
   produced verified official-header probe rows.  CirKit 3 shell is available
   and has produced verified AIG/multiplicative-complexity probe rows.  RevKit
   Python API is available and has produced the `oracle_synth` phase-netlist
-  baseline.  Full official ROS and legacy RevKit/CirKit reversible-synthesis
-  CLI reproduction remain future work.
+  baseline.  Legacy RevKit CLI is available and has produced a TBS/DBS/RMS
+  exact-oracle reversible-synthesis portfolio.  Full official ROS reproduction
+  remains future work.
 - Against CNOT-optimized SSHR-I, `and_resource_nmcts` has 164 T-count wins, 3
   losses, and 10 ties; score wins/losses/ties are 168/9/0 with a 27.92% mean
   score reduction.  CNOT count is worse on 168/177 functions.

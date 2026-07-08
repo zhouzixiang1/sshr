@@ -11,7 +11,7 @@
 - 用资源加权目标函数评价候选线路：
   `score = T + 0.04*CNOT + 0.015*depth + 0.01*gates + 2*ancilla`。
 - 用神经先验、MCTS、FPRM 极性搜索、线性因子分解和 Pareto archive 生成候选。
-- 用 direct ANF、AND-direct ANF、ESOP、ABC、BDD、SSHR-H/SSHR-I、mockturtle、CirKit 和 RevKit API 等作为外部或内部 baseline。
+- 用 direct ANF、AND-direct ANF、ESOP、ABC、BDD、SSHR-H/SSHR-I、mockturtle、CirKit、RevKit API 和 legacy RevKit CLI 等作为外部或内部 baseline。
 - 所有结果均是逻辑层资源估计，不包含硬件映射和连通性约束。
 
 论文主张应限定为：资源约束、低 T-count、低加权 score 的量子布尔函数 oracle 综合方法。不能写成 CNOT-only 最优，也不能写成硬件映射优势。
@@ -94,6 +94,41 @@
 - 资源数仍是逻辑层 AIG/MC proxy：`T=4*MC`，CNOT/depth/ancilla 用项目统一的 AND/XAG proxy 转换。
 - 这个 probe 对 depth 很强，本文方法在 depth 上多数输给 CirKit，论文必须把它写成清晰 trade-off：本文主要赢 T-count、weighted score、CNOT 和 ancilla，而不是 depth-only。
 - 这不是 legacy RevKit reversible synthesis，不是官方 ROS，也不输出 Clifford+T 可逆线路或硬件 mapping。
+
+### 2.0a3 legacy RevKit CLI exact-oracle reversible-synthesis probe
+
+本轮把 legacy RevKit/CirKit 命令行路径从“待复现”推进为“可构建、可运行、可产出 exact oracle permutation 可逆综合 baseline”。流程如下：每个布尔函数先嵌入为精确可逆 oracle 置换 `(x,y)->(x,y xor f(x))`；legacy RevKit CLI 用 `read_spec -p` 读入该 SPEC permutation，并分别运行 TBS、DBS、RMS 三个 reversible-synthesis flow；随后从 `ps -c` 读取 RevKit 的 T-count 和 logic-qubit 统计，并从 `gates` 的 Toffoli control distribution 派生 CNOT/depth proxy。
+
+主要产物：
+
+- `run_revkit_cli_probe.py`
+- `results/raw_revkit_cli_tbs_traditional.csv`
+- `results/summary_revkit_cli_tbs_traditional.csv`
+- `results/analysis_revkit_cli_tbs_traditional.md`
+- `results/manifest_revkit_cli_tbs_traditional.json`
+- `results/raw_revkit_cli_multiflow_traditional.csv`
+- `results/summary_revkit_cli_multiflow_traditional.csv`
+- `results/analysis_revkit_cli_multiflow_traditional.md`
+- `results/manifest_revkit_cli_multiflow_traditional.json`
+- `paper_latex/tables/revkit_cli_tbs_traditional.tex`
+- `paper_latex/tables/revkit_cli_multiflow_traditional.tex`
+- `tmp/cirkit_legacy/build/programs/revkit`（构建产物，已在 `.gitignore` 中排除）
+
+核心结果：
+
+| 对比 | 函数数 | score 胜/负/平 | 平均 score 变化 | T 胜/负/平 | CNOT 胜/负/平 | depth 胜/负/平 | peak ancilla 胜/负/平 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Resource-NMCTS vs RevKit CLI best-score | 177 | 173/0/4 | -66.32% | 173/0/4 | 102/70/5 | 88/82/7 | 0/169/8 |
+| Pareto-Resource-NMCTS vs RevKit CLI best-score | 177 | 173/0/4 | -67.28% | 173/0/4 | 107/63/7 | 90/79/8 | 0/169/8 |
+| FPRM polarity archive vs RevKit CLI best-score | 177 | 173/0/4 | -64.24% | 173/0/4 | 91/78/8 | 76/94/7 | 0/171/6 |
+
+解释边界：
+
+- 三个直接 CLI flow 合计 531/531 行 usable，0 error，0 timeout；best-score portfolio 额外生成 177 行。
+- 这是真实调用 legacy RevKit CLI 的 exact reversible oracle specification 实验，比 RevKit Python `oracle_synth` 的 phase-netlist boundary 更接近 bit-flip reversible synthesis。
+- RevKit CLI 的 `T` 来自 `ps -c` 的 Maslov-style T-count；CNOT/depth 是从 Toffoli control distribution 和项目 MCT cost table 派生，因此仍是逻辑层 proxy。
+- RevKit CLI portfolio 在辅助线数量上明显更强；本文方法的优势主要是 T-count 和 weighted score，CNOT/depth 仅为小幅或混合优势，不能写成全面支配。
+- 该结果不是官方 ROS，不包含 SAT garbage management、硬件 mapping、routing 或 magic-state factory 调度。
 
 ### 2.0b phase-parity ANF emitter
 
@@ -354,7 +389,7 @@
 - `run_revkit_highdim_timeout_probe.py` 用一次一子进程的硬超时方式审计高维 RevKit API 边界。当前 `n=14` 前 8 个函数中 1 行返回、7 行触发 30 s timeout；唯一返回行 `anf_n14_10` 含 32767 个非 Clifford `Rz`，RevKit lower-bound score 为 2948.79，`score+1/Rz` 为 35715.79，说明高维 RevKit API 结果既受可扩展性限制，也受 phase/Rz 口径支配。
 - 高维 timeout 行没有线路资源，不能参与 paired resource 均值；该结果支持把正式 RevKit API paired benchmark 限定在已经验证的 `n <= 6`，把高维 RevKit 写成 adapter/scalability boundary。
 - 该结果不是坏消息，而是新的强基线：投稿前要么新增 phase/Rz-aware emitter 并处理 rotation synthesis 成本，要么把论文主张严格限定为 bit-flip oracle 的逻辑层资源综合。
-- 当前已打通 mockturtle official-header probe 和 CirKit 3 shell AIG/MC probe；但官方 ROS 与 legacy RevKit/CirKit reversible-synthesis CLI 流程仍未完整复现。
+- 当前已打通 mockturtle official-header probe、CirKit 3 shell AIG/MC probe 和 legacy RevKit CLI exact-oracle reversible-synthesis probe；官方 ROS 全流程仍未完整复现。
 
 ### 2.1 ESOP baseline 对比
 
@@ -1198,12 +1233,14 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 | 工具 | 当前状态 | 作用 |
 |---|---|---|
 | ABC | 可用，位于 `tmp/abc/abc` | 已支撑 AIG/XAG/LUT/ESOP 外部估算 baseline |
-| mockturtle | 未在 PATH 或 Python 环境中发现 | 后续 logic-network / reversible-toolchain baseline 候选 |
-| RevKit | 未在 PATH 或 Python 环境中发现 | 后续 reversible-synthesis baseline 候选 |
+| mockturtle | 源码与项目 KLUT-to-XAG adapter 可用 | 已支撑 official-header mockturtle XAG probe |
+| CirKit 3 shell | 可用，位于 `tmp/cirkit/build/cli/cirkit` | 已支撑 AIG/MC 外部 probe |
+| RevKit Python API | 可用 | 已支撑 `oracle_synth` phase-netlist baseline |
+| legacy RevKit CLI | 可用，位于 `tmp/cirkit_legacy/build/programs/revkit` | 已支撑 exact-oracle TBS/DBS/RMS reversible-synthesis portfolio |
 
 解释：
 
-- 这不是新的资源提升结果，但它降低了投稿准备中的不确定性：当前能诚实声称的是 ABC/BDD/ESOP/SSHR 复现路径，不能声称已经完成 mockturtle/RevKit/ROS 复现。
+- 这不是新的资源提升结果，但它降低了投稿准备中的不确定性：当前能诚实声称的是 ABC/BDD/ESOP/SSHR、mockturtle KLUT-to-XAG、CirKit AIG/MC、RevKit Python API 和 legacy RevKit CLI exact-oracle probe；仍不能声称已经完成官方 ROS 或硬件 mapping。
 - 文献上，back-end-aware fault-tolerant oracle synthesis 已经把 XAG oracle synthesis 扩展到后端感知指标；本文目前只做逻辑层，因此不能借用其 mapping/back-end 结论。
 - 本轮还临时探测了两个潜在算法升级方向：高维 affine-linear factor 和局部 polarity 下降。前者在前几个 `n=14` 函数上更慢且 score 更差，后者在高项数函数上选回 polarity 0 且 fast linear-pair 结果更差；因此暂不纳入方法贡献。
 
@@ -1486,7 +1523,7 @@ latexmk -pdf -g main.tex
 - `raw_highdim_root_action_oracle.csv` 审计：62 行、0 error、0 incorrect。
 - `raw_highdim_root_action_teacher.csv` 审计：62 行、0 error、0 incorrect。
 - `raw_highdim_guard_upgrade.csv` 审计：24 行、0 error、0 skipped、0 incorrect。
-- `analysis_toolchain_readiness.md` 审计：ABC 可用；mockturtle 源码与项目 KLUT-to-XAG adapter 可用；CirKit 3 shell AIG/MC probe 可用；RevKit Python API 可用；legacy RevKit/CirKit CLI 仍不可用。
+- `analysis_toolchain_readiness.md` 审计：ABC 可用；mockturtle 源码与项目 KLUT-to-XAG adapter 可用；CirKit 3 shell AIG/MC probe 可用；RevKit Python API 可用；legacy RevKit/CirKit CLI 可用并已生成 exact-oracle portfolio。
 - `raw_cirkit_aig_probe.csv` 审计：177 行、177/177 correct、0 error、0 timeout。
 - `raw_cirkit_aig_highdim_probe.csv` 审计：64 行、64/64 correct、0 error、0 timeout。
 - `raw_screen_scale_extended_terms.csv` 审计：1008 行、1008/1008 plan 符号验证通过、1008/1008 emitted-circuit 符号验证通过、0 mismatch。
@@ -1516,7 +1553,7 @@ Git 状态：
 8. `n<=4` exact XAG 乘法复杂度切片显示：Resource/Pareto 在 12/72 个函数上达到全局 T 下界，平均 T gap 为 +53.01%，明显低于 ESOP-MILP 的 +120.14% 和 SSHR-I-T 的 +143.06%。
 9. 高维 root-action teacher 诊断显示：oracle top-24 相对启发式 top-4 有 3/0/7、-0.18% 的小幅 headroom；pairwise-wide root-action ranker 进一步在 n=16 full synthesis 中相对 deterministic recursive guard 获得 10/0/14、-0.18%，因此高维 AI 贡献已从负向诊断推进到小幅正向证据。
 10. Boolean-ring linear factor 将 quotient 与 linear factor 的变量不相交限制放宽到 Boolean 环 `x_i^2=x_i` 展开；在 n=16 上，Boolean-guard Resource-NMCTS 相对 pairwise-wide Resource-NMCTS 获得 14/0/10、平均 score 降低 0.34%，相对 deterministic recursive guard 获得 18/0/6、平均 score 降低 0.52%。这是当前高维结构搜索中比 pairwise-wide 更明显的正向提升。
-11. 外部工具链 readiness 审计显示：ABC 已可用并支撑当前 AIG/XAG/LUT/ESOP baseline；mockturtle 已推进到 official-header KLUT-to-XAG probe；CirKit 3 shell 已推进到 AIG/multiplicative-complexity probe；RevKit Python API 已形成 `oracle_synth` phase-netlist baseline；但官方 ROS 与 legacy RevKit/CirKit reversible-synthesis CLI 仍未完整复现。
+11. 外部工具链 readiness 审计显示：ABC 已可用并支撑当前 AIG/XAG/LUT/ESOP baseline；mockturtle 已推进到 official-header KLUT-to-XAG probe；CirKit 3 shell 已推进到 AIG/multiplicative-complexity probe；RevKit Python API 已形成 `oracle_synth` phase-netlist baseline；legacy RevKit CLI 已形成 exact-oracle reversible-synthesis portfolio；官方 ROS 全流程仍未完整复现。
 12. ROS-style LUT proxy 显示：在 309 个 `n=3..6,14,15,16,18` 函数上，ABC `K=3,4,5` LUT sweep 的 927/927 行均通过 truth-table 检查；best-K proxy 相对固定 K=4 为 219/0/90、平均 score -18.12%，而 Resource-NMCTS 相对该更强 proxy 仍为 309/0/0、平均 score -83.77%。
 13. `n=20` giga stress 已从纯边界失败推进为边界改善：root-beam 与 fast linear-pair 仍全部 timeout，但 depth-2 recursive Boolean screen 让 Resource-NMCTS 相对旧 Resource-NMCTS 获得 5/0/1、平均 score -7.47%；相对 AND-direct ANF 获得 5/0/1、平均 score -11.80%；相对 direct ANF 获得 5/1/0、平均 score -38.86%。
 14. `n=32,36,40` extended screen-scale 显示：depth policy 相对 single screen 获得 110/0/34、平均 score -5.55%；相对 all-depth adaptive 在 144 个项集上全部 score 持平，并节省 33.14% 平均运行时间；1008/1008 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。
@@ -1529,6 +1566,7 @@ Git 状态：
 21. wide Affine-FPRM phase search 显示 phase/Rz 分支仍受可逆线性预条件搜索预算限制：将 transform budget 从 32 扩展到 128 后，531/531 selected rows 继续 up-to-global-phase 验证通过；相对 budget 32，`T/Rz=30` 目标为 43/0/134、平均 synth-score -0.60%，total Rz -2.39%，CNOT -1.74%，depth -1.93%。该结果为后续 learned phase/Rz-aware policy 提供了明确搜索空间，而不是只做固定极性枚举。
 22. learned phase candidate pruning 已把 phase/Rz 分支从“宽预算穷举”推进到“可学习剪枝”诊断：`train_phase_affine_policy.py` 在 `n<=5` 训练、held-out `n=6` 的 38 个函数测试；policy top-512 只 exact-score 512/8192 个候选，相对 budget-32 的 2048 个候选为 17/0/21、`T/Rz=30` synth-score -2.47%，相对 wide-128 仅 +0.01%，且 1947/1947 selected rows up-to-global-phase 验证通过。不过 same-budget random top-k 也非常接近，所以该证据只能写成 pruned-search feasibility 和候选空间密集性，不能写成 learned policy 已显著优于随机。
 23. CirKit 3 shell AIG/MC probe 把外部工具链对比从 mockturtle/ABC 继续补强：传统 177 行与高维 `n=14` 64 行均逐行 Verilog readback truth-table 验证通过。Pareto-Resource-NMCTS 相对 CirKit AIG/MC 在传统集为 177/0/0、平均 score -62.34%，在 `n=14` 为 64/0/0、平均 score -94.46%；但 depth 分别为 16/156/5 和 14/50/0，说明本文不能宣称 depth-only 支配 CirKit。
+24. Legacy RevKit CLI exact-oracle reversible-synthesis probe 进一步补齐可逆工具链对比：TBS/DBS/RMS 三流合计 531/531 行 usable，best-score portfolio 覆盖传统 177 个函数。Pareto-Resource-NMCTS 相对 RevKit CLI best-score portfolio 在 score 上为 173/0/4、平均 -67.28%，T-count 为 173/0/4、平均 -72.59%；但 peak ancilla 为 0/169/8、平均 +153.11%，说明本文方法用更多辅助线换取低 T 和低 weighted score。
 
 不应写的主张：
 
@@ -1548,7 +1586,7 @@ Git 状态：
 1. 高维 neural guidance 仍需继续改进；当前 pairwise-wide 版本已经把 n=16 full synthesis 推进到 10/0/14、-0.18%，但真正更明显的新收益来自 Boolean-ring linear factor。下一步应把 neural ranker 从“排序旧 pair action”升级为“选择 Boolean-ring factor / recursive depth / polarity 的策略网络”，否则 AI 贡献仍弱于手工结构扩展。
 2. phase/Rz 分支已经有 learned candidate-pruning 诊断，但 same-budget random shortlist 接近，说明当前 policy objective 仍弱；下一步需要从候选剪枝推进到 learned/optimized phase policy、旋转谱优化和 rotation-sequence audit，不能声明 phase/Rz 全局最优。
 3. 小规模 exact/exhaustive oracle slice 已完成 bounded FPRM-DP 和 exact XAG 乘法复杂度版本；如果继续加强，可以再补一个更接近全局 reversible circuit 的 exact/SMT/SAT 小规模证书。
-4. 继续补官方 ROS 或 legacy RevKit/CirKit 等外部 reversible-toolchain 对比，减少“proxy 式 ABC/BDD/LUT baseline”的审稿风险；当前已有 ROS-style LUT proxy、official-header mockturtle probe、CirKit 3 shell AIG/MC probe 和 RevKit Python API baseline，但官方 ROS 与 legacy RevKit/CirKit reversible-synthesis CLI 仍未完整复现。
+4. 继续补官方 ROS 全流程和更强 reversible-toolchain 对比，减少“proxy 式 ABC/BDD/LUT baseline”的审稿风险；当前已有 ROS-style LUT proxy、official-header mockturtle probe、CirKit 3 shell AIG/MC probe、RevKit Python API baseline 和 legacy RevKit CLI exact-oracle portfolio，但官方 ROS 仍未完整复现，RevKit CLI 也尚未覆盖 ROS/SAT garbage-management 或硬件 mapping。
 
 已完成/待补强状态：
 
@@ -1578,13 +1616,14 @@ Git 状态：
 | schedule proxy | 96 个 n=24/28/32/40 项集 + 30 个 n=21/22/23 bridge/rerun 函数 | frontier policy vs depth-2：项集 T-depth proxy 40/0/56、-1.85%，large n=23 vs old policy 为 1/0/5、-0.45% T-depth proxy；cost n=23 vs large 为 time -56.29%、lifetime -12.62% | 新增逻辑层后端相关指标，非硬件 mapping |
 | ROS-style LUT proxy | 309 个 n=3..6/14/15/16/18 函数 | 927/927 K-sweep truth-table 检查通过；best-K vs fixed K=4 为 219/0/90、-18.12%；Resource vs proxy 为 309/0/0、-83.77% | 新增更强 LUT proxy，但不是官方 ROS 复现 |
 | CirKit 3 shell AIG/MC probe | n<=6 traditional 177 个函数 + n=14 highdim 64 个函数 | 传统 177/177、n=14 64/64 Verilog readback truth-table 验证通过；Pareto vs CirKit score 分别为 177/0/0、-62.34% 和 64/0/0、-94.46%；depth 多数输给 CirKit | 新增官方 CirKit shell probe，但不是 legacy RevKit/ROS |
+| RevKit CLI exact-oracle portfolio | n<=6 traditional 177 个函数 | TBS/DBS/RMS 三流 531/531 usable；best-score portfolio 下 Pareto vs RevKit score 为 173/0/4、-67.28%，T 为 173/0/4、-72.59%，peak ancilla 为 0/169/8、+153.11% | 新增 legacy reversible-synthesis CLI probe，但不是 ROS 或硬件 mapping |
 | Affine-FPRM phase search | n<=6 traditional, 177 个函数 | 531/531 selected rows up-to-global-phase 验证通过；`T/Rz=30` vs fixed-polarity FPRM 为 81/0/96、-2.51%；vs phase-parity ANF 为 85/0/92、-2.98%；vs RevKit 为 177/0/0、-65.50% | 当前最强 phase/Rz 搜索证据，仍非旋转序列级综合 |
 | Wide Affine-FPRM phase search | n<=6 traditional, 177 个函数；transform budget 128 | 531/531 selected rows up-to-global-phase 验证通过；相对 budget 32，`T/Rz=30` 目标为 43/0/134、synth-score -0.60%，total Rz -2.39%，CNOT -1.74%，depth -1.93% | 新增 phase/Rz 搜索预算扩展证据 |
 | Learned phase candidate pruning | train n<=5, held-out n=6 38 个函数；transform budget 128 | 1947/1947 selected rows up-to-global-phase 验证通过；policy top-512 vs budget-32 为 17/0/21、`T/Rz=30` synth-score -2.47%；vs wide-128 仅 +0.01%；same-budget random top-k 接近 | 新增可学习剪枝证据，但不能声称显著优于 random |
 | highdim wide-fast guard | 12 个 n=14 random ANF | wide vs Resource 为 0/0/12，运行时间 +59.80% | 已有但属负向诊断 |
 | exact FPRM-DP | n<=4 traditional | Resource vs exact FPRM-DP 51/3/18，-12.18%；Pareto vs exact FPRM-DP 51/0/21，-12.20% | 已有但模型受限 |
 | exact XAG MC | n<=4 traditional | Resource/Pareto 达到 T 下界 12/72，平均 T gap +53.01%；ESOP 为 +120.14%，SSHR-I-T 为 +143.06% | 已有全局 T 下界 |
-| toolchain readiness | 当前工作站 | ABC 可用；mockturtle probe、CirKit 3 shell probe 与 RevKit Python API 可用；legacy RevKit/CirKit CLI 不可用 | 已有环境审计，仍需完整 ROS/legacy CLI 复现 |
+| toolchain readiness | 当前工作站 | ABC 可用；mockturtle probe、CirKit 3 shell probe、RevKit Python API 与 legacy RevKit CLI 可用 | 已有环境审计，仍需完整 ROS 复现和更强 reversible-toolchain 对比 |
 
 ## 8. 当前结论
 
@@ -1594,4 +1633,4 @@ Git 状态：
 
 但是投稿前还需要继续补强“AI 搜索本身带来的贡献”这一点。否则文章容易被评价为一组 FPRM/ESOP 工程启发的组合，而不是强化学习与 MCTS 方法论文。
 
-本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、pairwise-wide n=16 full synthesis、Boolean-ring linear factor、schedule proxy、n=23/24/25 完整 truth-table bridge、ROS-style LUT proxy、CirKit 3 shell AIG/MC probe、large frontier policy、cost-aware frontier policy、Affine-FPRM phase search、wide Affine-FPRM budget 扩展和 learned phase candidate pruning 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照、高维 pairwise-wide root-action ranker、Boolean-ring factor 扩展、emitted-circuit 层 T-depth/辅助生命周期 trade-off、n=21/22/23/24/25 共 400/400 方法行的完整 oracle 验证、large frontier policy 相对旧 policy 的质量提升、cost-aware frontier policy 的快速质量折中、相对更强 LUT proxy 的 309/0/0 score 优势、相对 CirKit AIG/MC 的传统 177/0/0 与 n=14 64/0/0 score 优势、Affine-FPRM 相对 fixed-polarity FPRM 的 81/0/96 phase-search 增益、wide128 相对 budget32 的 43/0/134 `T/Rz=30` 增益，以及 policy top-512 相对 budget32 的 17/0/21 剪枝增益。不过官方 ROS 与 legacy RevKit/CirKit 完整复现、更强且显著优于 random 的 learned phase/Rz policy、以及目标期刊格式英文稿仍需继续推进，所以目标还不能判定完成。
+本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、pairwise-wide n=16 full synthesis、Boolean-ring linear factor、schedule proxy、n=23/24/25 完整 truth-table bridge、ROS-style LUT proxy、CirKit 3 shell AIG/MC probe、legacy RevKit CLI exact-oracle portfolio、large frontier policy、cost-aware frontier policy、Affine-FPRM phase search、wide Affine-FPRM budget 扩展和 learned phase candidate pruning 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照、高维 pairwise-wide root-action ranker、Boolean-ring factor 扩展、emitted-circuit 层 T-depth/辅助生命周期 trade-off、n=21/22/23/24/25 共 400/400 方法行的完整 oracle 验证、large frontier policy 相对旧 policy 的质量提升、cost-aware frontier policy 的快速质量折中、相对更强 LUT proxy 的 309/0/0 score 优势、相对 CirKit AIG/MC 的传统 177/0/0 与 n=14 64/0/0 score 优势、相对 RevKit CLI best-score portfolio 的 173/0/4 score 优势、Affine-FPRM 相对 fixed-polarity FPRM 的 81/0/96 phase-search 增益、wide128 相对 budget32 的 43/0/134 `T/Rz=30` 增益，以及 policy top-512 相对 budget32 的 17/0/21 剪枝增益。不过官方 ROS 完整复现、更强且显著优于 random 的 learned phase/Rz policy、以及目标期刊格式英文稿仍需继续推进，所以目标还不能判定完成。

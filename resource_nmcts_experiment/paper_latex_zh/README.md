@@ -49,6 +49,7 @@
 - `resource_nmcts_zh_manuscript_v36.tex` / `resource_nmcts_zh_manuscript_v36.pdf`：中文论文稿 v36，图表化投稿主稿；新增 `make_submission_figures.py` 生成 5 张主图和 source data，把正文重组为“问题-方法-外部基线-消融-验证-边界”的投稿结构，并按当前 source data 修正完整 truth-table bridge 为 400/400。
 - `resource_nmcts_zh_manuscript_v37.tex` / `resource_nmcts_zh_manuscript_v37.pdf`：中文论文稿 v37，wide Affine-FPRM phase search 增量稿；新增 transform-budget 128 相对 budget 32 的配对分析，`T/Rz=30` 目标为 43/0/134、平均 synth-score 再降 0.60%，并保持 531/531 phase selected rows 验证通过。
 - `resource_nmcts_zh_manuscript_v38.tex` / `resource_nmcts_zh_manuscript_v38.pdf`：中文论文稿 v38，learned phase candidate pruning 增量稿；新增 `train_phase_affine_policy.py`，在 `n<=5` 训练、held-out `n=6` 测试，policy top-512 相对 budget-32 为 17/0/21、`T/Rz=30` synth-score -2.47%，相对 wide-128 仅 +0.01%；但 same-budget random shortlist 也接近，因此写作上只作为可学习剪枝和候选空间密集性证据。
+- `resource_nmcts_zh_manuscript_v39.tex` / `resource_nmcts_zh_manuscript_v39.pdf`：中文论文稿 v39，CirKit/RevKit CLI 外部 probe 增量稿；新增 legacy RevKit CLI exact-oracle reversible-synthesis portfolio，把每个函数嵌入为 `(x,y)->(x,y xor f(x))` 的 SPEC permutation，并运行 TBS/DBS/RMS 三个 flow。三流 531/531 行 usable，best-score portfolio 下 Pareto-Resource-NMCTS 相对 RevKit CLI 为 173/0/4、平均 score -67.28%，T-count -72.59%；但 peak ancilla 为 0/169/8、平均 +153.11%，因此写作上必须保留辅助线 trade-off。
 - `resource_nmcts_zh_research_position.tex` / `resource_nmcts_zh_research_position.pdf`：中文研究定位稿，重新梳理“不从 SSHR 入手”的论文主线、AI 在搜索问题中的角色、当前证据边界和下一步明显提升目标。
 - 最新 v4 稿已补充 `train_screen_depth_policy.py` 的结构级 depth policy 结果：n=14/16/18 训练、held-out n=20 测试，说明 AI 已能学习 screen 深度选择，但尚未超过固定 depth-2 的 score。
 - 最新 v8 稿补充 `train_structure_gate.py` 的 screen-gated Resource-NMCTS 边界验证：原 n=20 切片资源持平且平均运行时间降低 75.58%，held-out n=19/20 合计 16/16 score 持平并平均节省 36.83%，但仍只作为运行时门控证据。
@@ -100,6 +101,7 @@ latexmk -xelatex -g resource_nmcts_zh_manuscript_v35.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v36.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v37.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v38.tex
+latexmk -xelatex -g resource_nmcts_zh_manuscript_v39.tex
 latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 ```
 
@@ -165,6 +167,8 @@ latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 - `../results/analysis_phase_parity_affine_wide128.md`
 - `../results/analysis_phase_affine_budget_wide128_vs_32.md`
 - `../results/analysis_phase_affine_policy.md`
+- `../results/analysis_revkit_cli_multiflow_traditional.md`
+- `../results/analysis_revkit_cli_tbs_traditional.md`
 - `../results/analysis_truth_bridge_n24_terms.md`
 - `../results/toolchain_readiness.json`
 - `../results/analysis_giga_screen_gate_vs_resource.md`

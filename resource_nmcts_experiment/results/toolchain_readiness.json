@@ -108,7 +108,7 @@
     {
       "name": "RevKit",
       "kind": "binary_or_python",
-      "role": "Python oracle_synth baseline adapter; legacy CLI flow remains separate",
+      "role": "Python oracle_synth phase-netlist baseline adapter",
       "source_url": "https://github.com/msoeken/revkit",
       "remote": "https://github.com/msoeken/revkit.git",
       "install": [
@@ -176,15 +176,27 @@
     {
       "name": "RevKit CLI / CirKit legacy",
       "kind": "binary_or_source",
-      "role": "legacy command-line reversible synthesis flow for RevKit-style baselines",
+      "role": "legacy command-line reversible synthesis flow for exact oracle-permutation baselines",
       "source_url": "https://github.com/msoeken/cirkit",
       "remote": "https://github.com/msoeken/cirkit.git",
       "install": [
-        "git clone --recursive https://github.com/msoeken/cirkit.git tmp/cirkit",
-        "cd tmp/cirkit && mkdir -p build && cd build && cmake .. && make revkit"
+        "git -C tmp/cirkit worktree add ../cirkit_legacy origin/develop && git -C tmp/cirkit_legacy submodule update --init --recursive",
+        "cd tmp/cirkit_legacy && mkdir -p build && cd build && cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -Denable_cirkit-addon-reversible=ON .. && cmake --build . --target revkit --parallel 8",
+        "/opt/anaconda3/envs/mcts-qoracle/bin/python resource_nmcts_experiment/run_revkit_cli_probe.py --workers 8 --timeout 20 --flow tbs=tbs --flow dbs=dbs --flow rms=rms"
       ],
-      "available": false,
-      "hits": [],
+      "available": true,
+      "hits": [
+        [
+          "file",
+          "/Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit_legacy/build/programs/revkit",
+          "Usage: /Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit_legacy/build/programs/revkit [OPTIONS]"
+        ],
+        [
+          "source",
+          "/Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit_legacy",
+          "local source checkout exists"
+        ]
+      ],
       "remote_heads": [
         {
           "branch": "master",
