@@ -31,6 +31,9 @@ PAYLOAD_MANIFEST = RESULTS / "manifest_submission_payload_archive.json"
 METADATA_ANALYSIS = RESULTS / "analysis_submission_metadata_audit.md"
 METADATA_SUMMARY = RESULTS / "summary_submission_metadata_audit.csv"
 METADATA_MANIFEST = RESULTS / "manifest_submission_metadata_audit.json"
+GOAL_ANALYSIS = RESULTS / "analysis_goal_completion_audit.md"
+GOAL_SUMMARY = RESULTS / "summary_goal_completion_audit.csv"
+GOAL_MANIFEST = RESULTS / "manifest_goal_completion_audit.json"
 SUPPORT_FILES = [
     SUBMISSION_PACKAGE / "cover_letter_template.md",
     SUBMISSION_PACKAGE / "author_declarations_template.md",
@@ -156,6 +159,14 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_submission_metadata_audit.py after filling author declarations or choosing a target venue.",
         },
         {
+            "item": "Goal completion audit",
+            "status": "pass"
+            if GOAL_ANALYSIS.exists() and GOAL_SUMMARY.exists() and GOAL_MANIFEST.exists()
+            else "needs revision",
+            "evidence": "The original project objective is mapped to concrete evidence files, boundaries, and remaining author-gated items.",
+            "next_action": "Rerun analyze_goal_completion_audit.py after adding major evidence or filling author/venue metadata.",
+        },
+        {
             "item": "Uploadable payload archive",
             "status": "pass"
             if PAYLOAD_ARCHIVE.exists()
@@ -202,7 +213,7 @@ def build_rows() -> list[dict[str, str]]:
         {
             "item": "Author-specific declarations",
             "status": "needs author input",
-            "evidence": "Funding, acknowledgements, author metadata, competing interests, target-venue fields, and final archival links are author-specific even though templates and a metadata audit are prepared.",
+            "evidence": "Funding, acknowledgements, author metadata, competing interests, target-venue fields, and final archival links are author-specific even though templates, metadata audit, and goal-completion audit are prepared.",
             "next_action": "Complete `submission_package/author_declarations_template.md`, update the cover letter/checklist, and replace repository-relative availability links at the target journal's submission step.",
         },
     ]

@@ -37,8 +37,8 @@ rebuilt with:
 ./rebuild_submission_package.sh
 ```
 
-This regenerates paper-facing analysis tables, figures, the metadata audit, the
-archive manifest, uploadable payload archive, audits, and
+This regenerates paper-facing analysis tables, figures, the metadata audit,
+goal-completion audit, the archive manifest, uploadable payload archive, audits, and
 `resource_nmcts_submission_v1.pdf` from existing experiment artifacts.  It does
 not rerun raw benchmark sweeps, external-toolchain probes, or neural training.
 
@@ -100,6 +100,12 @@ Current source evidence:
   `../results/analysis_submission_metadata_audit.md`
 - submission metadata audit JSON:
   `../results/manifest_submission_metadata_audit.json`
+- goal-completion audit CSV:
+  `../results/summary_goal_completion_audit.csv`
+- goal-completion audit analysis:
+  `../results/analysis_goal_completion_audit.md`
+- goal-completion audit JSON:
+  `../results/manifest_goal_completion_audit.json`
 - submission-support templates:
   `../submission_package/*.md`
 - submission-readiness audit CSV:

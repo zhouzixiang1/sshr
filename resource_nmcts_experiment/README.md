@@ -153,6 +153,13 @@ venue-specific fields that remain deliberately human-gated: author identity,
 CRediT roles, funding, acknowledgements, competing interests, archive links,
 code license/repository metadata, AI-assistance disclosure, preprint history,
 cover-letter routing fields, and target-venue policy checks.
+The goal-completion audit is materialized by
+`analyze_goal_completion_audit.py`, which writes
+`results/summary_goal_completion_audit.csv`,
+`results/analysis_goal_completion_audit.md`, and
+`results/manifest_goal_completion_audit.json`.  It maps the original project
+objective to concrete evidence files and keeps the overall closure gate open
+until author- and venue-specific metadata are supplied.
 The uploadable payload archive is materialized by
 `make_submission_payload_archive.py`, which writes
 `submission_package/dist/resource_nmcts_submission_payload.tar.gz`,
@@ -169,8 +176,9 @@ The lightweight derived submission package can be regenerated with:
 ./rebuild_submission_package.sh
 ```
 
-This command rebuilds paper-facing analysis tables, figures, the metadata
-audit, archive manifest, uploadable payload archive, traceability and readiness audits, and
+This command rebuilds paper-facing analysis tables, figures, the metadata and
+goal-completion audits, archive manifest, uploadable payload archive,
+traceability and readiness audits, and
 `paper_latex/resource_nmcts_submission_v1.pdf` from the existing experiment
 artifacts.  It does not rerun raw benchmark sweeps, external-toolchain probes,
 or neural training jobs; those remain under the individual `run_*.py` and
@@ -183,10 +191,10 @@ submission draft contains bounded and concise abstract claims,
 contribution/evidence mapping, baseline fairness tables, reproducibility
 evidence, claim-to-artifact traceability, a derived-package rebuild command,
 an archive package manifest, submission-support templates, an uploadable
-payload archive, submission metadata audit, limitations, data/code availability,
-a compiled PDF, and no source TODO markers; it leaves funding,
-acknowledgements, competing interests, author metadata, venue fields, and
-archival links as author-specific submission-time items.
+payload archive, submission metadata audit, goal-completion audit, limitations,
+data/code availability, a compiled PDF, and no source TODO markers; it leaves
+funding, acknowledgements, competing interests, author metadata, venue fields,
+and archival links as author-specific submission-time items.
 
 Latest external-toolchain progress:
 
