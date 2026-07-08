@@ -1,0 +1,14 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.09\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}r>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.11\linewidth}>{\raggedright\arraybackslash}p{0.11\linewidth}>{\raggedright\arraybackslash}X}
+\toprule
+Slice & Comparison & Pairs & Score W/L/T & Mean $\Delta$ score & Mean $\Delta$ time & Interpretation \\
+\midrule
+$n=14$ & Boolean guard vs pairwise-wide & 12 & 9/0/3 & -0.82\% & +32.80\% & quality gain; slower exhaustive guard \\
+$n=16$ & Boolean guard vs pairwise-wide & 24 & 14/0/10 & -0.34\% & +22.80\% & quality gain; slower guard \\
+$n=16$ & Boolean guard vs deterministic deep & 24 & 18/0/6 & -0.52\% & +356.64\% & stronger quality branch; expensive \\
+$n=16$ & Boolean-linear deep vs pairwise-wide & 24 & 14/6/4 & -0.22\% & -72.31\% & fast structural variant with small quality gain \\
+$n=20$ & Resource update vs Boolean screen & 6 & 5/0/1 & -4.52\% & +453.05\% & quality frontier; much slower \\
+$n=20$ & Screen gate vs full Resource & 6 & 0/0/6 & +0.00\% & -75.58\% & safe skip: same resources, less planning time \\
+$n=20$ & Recursive Boolean screen vs old Resource & 6 & 5/0/1 & -7.47\% & -7.32\% & large-n positive screen; ancilla tradeoff \\
+$n=18$ & Recursive Boolean screen vs old Resource & 12 & 0/11/1 & +36.94\% & -97.90\% & speed-only negative control; not promoted \\
+\bottomrule
+\end{tabularx}

@@ -55,6 +55,15 @@
 
 该分析只用 T-count、CNOT、depth、peak ancilla 判断 Pareto 支配，不把 weighted score 放进支配谓词。核心结果是：Pareto-Resource-NMCTS 在 12-method `n<=6` 方法池中 170/177 个函数非支配；它对 ESOP beam 是 165/0/9/3（目标支配/基线支配/不可比/相同），对 ESOP-MILP 是 123/2/45/7。但对 SSHR-H、SSHR-I CNOT、mockturtle、CirKit、RevKit CLI 多数行是不可比，这反而更适合投稿：说明本文的优势是 T-count 和 weighted-score 方向的资源搜索优势，同时承认 SSHR 的 CNOT、CirKit 的 depth、RevKit 的 line-count 等真实 trade-off。
 
+本轮新增 Boolean-ring structural evidence 层，把此前分散的高维结构搜索结果整理成一张可投稿表：
+
+- `analyze_boolean_ring_structural_evidence.py`
+- `results/summary_boolean_ring_structural_evidence.csv`
+- `results/analysis_boolean_ring_structural_evidence.md`
+- `paper_latex/tables/boolean_ring_structural_evidence.tex`
+
+该表把 Boolean-ring/Boolean-screen 分成三类证据，而不是简单说“AI 更强”：质量型 guard 在 `n=14` 为 9/0/3、score -0.82%，在 `n=16` 为 14/0/10、score -0.34%；`n=16` boolean-linear deep 仍有 14/6/4、score -0.22%，同时 planning time -72.31%；`n=20` screen gate 与 full Resource 资源完全持平 0/0/6，但 time -75.58%；`n=20` recursive Boolean screen 相对 old Resource 为 5/0/1、score -7.47%，但 ancilla +13.06%。同时保留 `n=18` speed-only negative control：score +36.94%、time -97.90%，说明简单 screen 不能被宣传成普遍质量提升。
+
 本轮新增 learned-control audit 层，用于校准题目中“neural/MCTS”的贡献强度：
 
 - `analyze_learned_control_audit.py`

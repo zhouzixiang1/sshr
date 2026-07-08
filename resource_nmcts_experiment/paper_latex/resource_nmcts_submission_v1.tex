@@ -492,11 +492,18 @@ Table~\ref{tab:contribution} consolidates the contribution analysis.  The
 largest pre-portfolio gain comes from affine and Boolean-ring structural
 search.  The learned prior gives smaller but non-degrading quality gains on the
 traditional slice, while the frontier policies mainly control the
-quality/time frontier in high-dimensional term-set experiments.  Table
-\ref{tab:stage-frontier} adds a staged teacher/guard for this frontier.  Its
-depth-4 trigger is selected only on the large-policy validation split; on the
-independent $n=24,28,32,40$ scale rows it remains within 0.04\% of all-depth
-score while reducing staged planning time by 25.43\%.
+quality/time frontier in high-dimensional term-set experiments.
+Table~\ref{tab:boolean-ring-structural} isolates the high-dimensional
+Boolean-ring and Boolean-screen branch.  This table is deliberately mixed: it
+shows quality-seeking structural guards, a screen gate that preserves the
+selected resource vector while saving time, and a negative control where a fast
+screen is not resource-competitive.  This prevents the structural-search claim
+from being reduced to a neural-prior claim or overstated as a universal screen
+improvement.  Table~\ref{tab:stage-frontier} adds a staged teacher/guard for
+the high-dimensional frontier.  Its depth-4 trigger is selected only on the
+large-policy validation split; on the independent $n=24,28,32,40$ scale rows
+it remains within 0.04\% of all-depth score while reducing staged planning time
+by 25.43\%.
 
 \begin{table}[H]
 \centering
@@ -505,6 +512,18 @@ score while reducing staged planning time by 25.43\%.
 favor the first method in each comparison.}
 \label{tab:contribution}
 \input{tables/search_contribution_decomposition}
+\end{table}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.08}
+\caption{Boolean-ring structural evidence in high-dimensional slices.  Negative
+mean changes favor the first method in each comparison.  The $n=18$ row is kept
+as a speed-only negative control rather than promoted as a quality result.}
+\label{tab:boolean-ring-structural}
+\input{tables/boolean_ring_structural_evidence}
 \end{table}
 
 \begin{table}[H]
@@ -678,7 +697,12 @@ on most traditional functions.
 The ablations also calibrate the role of AI.  The neural prior is useful, but
 the largest gain comes from the searchable algebraic action space and from
 guarded portfolio selection.  This is a better fit for the evidence than
-claiming that deep reinforcement learning alone drives the result.  The large,
+claiming that deep reinforcement learning alone drives the result.  The
+Boolean-ring structural audit further separates resource quality from planning
+cost: at $n=14$ and $n=16$ the guard improves score by 0.34--0.82\% over the
+pairwise-wide baseline; at $n=20$ a deeper screen gives a 7.47\% score
+reduction over the old Resource baseline with an ancilla tradeoff; and the
+$n=18$ screen-only row is much faster but worse in score.  The large,
 cost-aware, and staged frontier controllers should be read as three operating
 points on the same search frontier: quality-oriented single-shot selection,
 faster cost-aware selection, and a validation-calibrated staged teacher that
