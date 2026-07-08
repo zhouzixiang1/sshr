@@ -71,9 +71,9 @@ held-out $n=6$ function and matches the wide-search mean within 0.01\% under
 the $T/R_z=30$ proxy.  A sparse depth-2/4 frontier exactly matches the measured
 depth-2/3/4 frontier on 186 scale and truth-bridge instances while reducing
 frontier evaluation time by 24.94--28.88\%.  A learned sparse depth-4 gate
-preserves this sparse frontier score on held-out $n=28,40$ instances while
-reducing its evaluation time by 17.39\%.  High-dimensional correctness is
-supported by 5640/5640 item-level symbolic runs, 1512/1512 width-probe
+preserves this sparse frontier score on a 144-pair multi-seed $n=24,28,32,40$
+audit while reducing its evaluation time by 13.43\%.  High-dimensional
+correctness is supported by 5640/5640 item-level symbolic runs, 1512/1512 width-probe
 symbolic runs, 531/531 exact phase-search rows, 7611/7611 policy-pruning rows,
 and 400/400 complete \ttable{}-bridge method rows for $n=21$--$25$.  The
 contribution is therefore a verified logical-layer search method with strong
@@ -517,10 +517,14 @@ held-out $n=28,40$ term sets, it runs depth 4 on 32/48 test pairs, records zero
 false skips, exactly matches the sparse-frontier score, and reduces
 sparse-frontier evaluation time by 17.39\%.  The deterministic sparse frontier
 remains the quality reference; the learned component controls search budget
-after the depth-2 screen.  Table~\ref{tab:stage-frontier} adds the earlier
-staged teacher/guard.  Its depth-4 trigger is selected only on the large-policy
-validation split; on the independent $n=24,28,32,40$ scale rows it remains
-within 0.04\% of all-depth score while reducing staged planning time by
+after the depth-2 screen.  Table~\ref{tab:sparse-depth4-gate-generalization}
+then audits the same trained gate without retraining on three independent seeds
+over $n=24,28,32,40$.  Across 144 additional pairs it records zero false skips,
+matches the deterministic sparse frontier on every row, and saves 13.43\% of
+sparse-frontier evaluation time.  Table~\ref{tab:stage-frontier} adds the
+earlier staged teacher/guard.  Its depth-4 trigger is selected only on the
+large-policy validation split; on the independent $n=24,28,32,40$ scale rows it
+remains within 0.04\% of all-depth score while reducing staged planning time by
 25.43\%.
 
 \begin{table}[H]
@@ -567,6 +571,19 @@ evaluated.  The threshold is selected on validation data with a conservative
 false-skip guard and is applied unchanged to held-out $n=28,40$ test rows.}
 \label{tab:sparse-depth4-gate}
 \input{tables/sparse_depth4_gate}
+\end{table}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.08}
+\caption{Independent-seed sparse depth-4 gate audit.  The trained gate and its
+validation-selected threshold are reused without retraining on three new seeds.
+The table reports aggregate and per-$n$ comparisons against the deterministic
+sparse depth-2/4 frontier.}
+\label{tab:sparse-depth4-gate-generalization}
+\input{tables/sparse_depth4_gate_generalization}
 \end{table}
 
 \begin{table}[H]
@@ -754,11 +771,12 @@ while removing roughly one quarter of frontier evaluation time.  This is an
 empirical controller for the present generated slices, not a proof that depth 3
 is universally dominated.  The learned sparse depth-4 gate adds a narrower
 AI-control result: after the sparse frontier has removed depth 3, the gate
-skips some depth-4 evaluations without changing held-out score under its
-conservative threshold.  The large, cost-aware, sparse-gated, and staged
-frontier controllers should be read as operating points on the same search
-frontier: quality-oriented single-shot selection, faster cost-aware selection,
-learned sparse-budget control, and a validation-calibrated staged teacher.  In the
+skips some depth-4 evaluations without changing score in either the held-out
+split or the independent multi-seed audit under its conservative threshold.
+The large, cost-aware, sparse-gated, and staged frontier controllers should be
+read as operating points on the same search frontier: quality-oriented
+single-shot selection, faster cost-aware selection, learned sparse-budget
+control, and a validation-calibrated staged teacher.  In the
 phase/Rz branch, affine and polarity search give verified improvements, and the
 rank-trained diverse shortlist now tracks the wide-search frontier with 6.25\%
 of the exact evaluations.  However, random-repeat margins remain small, so this
@@ -790,10 +808,10 @@ clear depth and ancilla tradeoffs.  Large symbolic experiments and
 $n=21$--$25$ complete truth-table bridges support the semantic correctness of
 the logical-layer circuits.  The sparse depth-frontier analysis further reduces
 high-dimensional planning cost by skipping depth 3 in the audited frontier, and
-the learned sparse depth-4 gate preserves held-out sparse-frontier score while
-removing additional depth-4 evaluations.  The staged frontier analysis remains
-a validation-calibrated controller when depth-4 evaluation itself should be
-conditional.  The next step is not to
+the learned sparse depth-4 gate preserves sparse-frontier score across both
+held-out and independent-seed audits while removing additional depth-4
+evaluations.  The staged frontier analysis remains a validation-calibrated
+controller when depth-4 evaluation itself should be conditional.  The next step is not to
 claim hardware-level
 optimality, but to strengthen the phase/Rz policy and complete fuller
 toolchain reproductions while keeping the claim at the logical synthesis

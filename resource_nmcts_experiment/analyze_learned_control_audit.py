@@ -52,8 +52,8 @@ def build_rows() -> list[dict[str, str]]:
         baseline="adaptive_all_depth",
     )
 
-    sparse_gate = read_csv(RESULTS / "summary_sparse_depth4_gate.csv")
-    sparse_gate_test = require_row(sparse_gate, split="test")
+    sparse_gate = read_csv(RESULTS / "summary_sparse_depth4_gate_generalization.csv")
+    sparse_gate_all = require_row(sparse_gate, scope="all")
 
     phase = read_csv(RESULTS / "summary_phase_affine_policy_rank_diverse.csv")
     phase_budget = require_row(
@@ -106,9 +106,9 @@ def build_rows() -> list[dict[str, str]]:
         },
         {
             "component": "Sparse depth-4 gate",
-            "scope": "held-out n=28,40; 48 pairs",
-            "quality": f"vs sparse frontier {sparse_gate_test['score_wlt_vs_sparse']}, {pct(sparse_gate_test['mean_rel_score_vs_sparse'])}; false skips {sparse_gate_test['false_skips']}",
-            "cost": f"{pct(sparse_gate_test['mean_rel_time_vs_sparse'])} time vs sparse frontier",
+            "scope": "multi-seed n=24,28,32,40; 144 pairs",
+            "quality": f"vs sparse frontier {sparse_gate_all['score_wlt_vs_sparse']}, {pct(sparse_gate_all['mean_rel_score_vs_sparse'])}; false skips {sparse_gate_all['false_skips']}",
+            "cost": f"{pct(sparse_gate_all['mean_rel_time_vs_sparse'])} time vs sparse frontier",
             "role": "promoted budget gate after depth-2",
         },
         {

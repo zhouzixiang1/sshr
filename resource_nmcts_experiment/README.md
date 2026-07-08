@@ -62,8 +62,12 @@ The learned sparse depth-4 gate is materialized by
 `train_sparse_depth4_gate.py`.  It trains a conservative binary controller after
 the depth-2 sparse-frontier state, writes `models/sparse_depth4_gate.pt`,
 `results/analysis_sparse_depth4_gate.md`, and
-`paper_latex/tables/sparse_depth4_gate.tex`, and preserves held-out `n=28,40`
-sparse-frontier score while reducing sparse-frontier evaluation time by 17.39%.
+`paper_latex/tables/sparse_depth4_gate.tex`.  The independent-seed audit is
+materialized by `audit_sparse_depth4_gate_generalization.py`, which writes
+`results/analysis_sparse_depth4_gate_generalization.md` and
+`paper_latex/tables/sparse_depth4_gate_generalization.tex`; on 144 multi-seed
+`n=24,28,32,40` pairs it preserves sparse-frontier score with 0 false skips and
+reduces sparse-frontier evaluation time by 13.43%.
 The high-dimensional scale audit is materialized by
 `analyze_scaling_resource_audit.py`, which separates functions/settings,
 method rows, verified rows, and representative resource means for the large
@@ -201,6 +205,7 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_frontier_policy_upgrade.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_stage_gated_frontier.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python train_sparse_depth4_gate.py --train-n 16,20,24 --test-n 28,40 --train-per-n 32 --valid-per-n 16 --test-per-n 24 --epochs 120 --workers 6
+/opt/anaconda3/envs/mcts-qoracle/bin/python audit_sparse_depth4_gate_generalization.py --seeds 20260801,20260802,20260803 --ns 24,28,32,40 --per-n 12 --workers 6
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_learned_control_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_scaling_resource_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_reproducibility_audit.py
@@ -497,15 +502,17 @@ truth-table bridge it ties all-depth score and saves -11.51% staged time.
 This is a high-quality teacher/guard, not a faster replacement for the large
 single-shot policy.
 The learned sparse depth-4 gate is summarized in
-`results/analysis_sparse_depth4_gate.md`.  It uses the deterministic sparse
-depth-2/4 frontier as the quality reference and predicts whether the depth-4
-screen should run after depth-2 has been evaluated.  The formal run trains on
-`n=16,20,24`, selects a conservative validation threshold, and tests on held-out
-`n=28,40` generated term sets.  On the 48 test pairs it runs depth 4 on 32 rows,
-has 0 false skips, matches the sparse-frontier score on all rows, and saves
--17.39% sparse-frontier evaluation time.  This is a learned planning-budget
-controller, not a stronger quality frontier than the deterministic sparse
-depth-2/4 audit.
+`results/analysis_sparse_depth4_gate.md` and audited in
+`results/analysis_sparse_depth4_gate_generalization.md`.  It uses the
+deterministic sparse depth-2/4 frontier as the quality reference and predicts
+whether the depth-4 screen should run after depth-2 has been evaluated.  The
+formal run trains on `n=16,20,24`, selects a conservative validation threshold,
+and tests on held-out `n=28,40` generated term sets: 48/48 rows match the sparse
+frontier, false skips are 0, and time falls by -17.39%.  The independent audit
+then reuses the same gate on three new seeds over `n=24,28,32,40`: 144/144 rows
+match the sparse frontier with 0 false skips while saving -13.43%
+sparse-frontier evaluation time.  This is a learned planning-budget controller,
+not a stronger quality frontier than the deterministic sparse depth-2/4 audit.
 Term-set scale tests beyond truth-table-feasible sizes are run with
 `run_screen_scale_terms.py`; outputs are written to
 `results/analysis_screen_scale_terms.md`, `results/raw_screen_scale_terms.csv`,
@@ -630,9 +637,10 @@ Current structure-policy evidence:
   score and -25.43% staged time against all-depth on the independent
   `n=24,28,32,40` scale run, with 96/96 selected rows verified.
 - The learned sparse depth-4 gate,
-  `results/analysis_sparse_depth4_gate.md`, trains on `n=16,20,24` generated
-  term sets and tests on held-out `n=28,40`.  It matches the deterministic
-  sparse frontier on all 48 test pairs with 0 false skips while saving -17.39%
+  `results/analysis_sparse_depth4_gate_generalization.md`, trains on
+  `n=16,20,24` generated term sets and is audited without retraining on three
+  independent seeds over `n=24,28,32,40`.  It matches the deterministic sparse
+  frontier on all 144 audit pairs with 0 false skips while saving -13.43%
   sparse-frontier evaluation time.
 - Logic-level schedule-proxy evidence is now emitted by `run_screen_scale_terms.py`
   and `run_truth_bridge_terms.py`, then summarized by
