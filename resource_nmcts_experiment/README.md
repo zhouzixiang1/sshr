@@ -25,7 +25,15 @@ SSHR-H/SSHR-I are important CNOT-oriented small-function baselines, but the
 project claim is a resource-aware logical-layer AI search framework rather than
 an SSHR variant.
 
-The comparison scope is materialized by
+The comparison claim boundary is materialized by
+`analyze_baseline_claim_matrix.py`, which writes
+`results/summary_baseline_claim_matrix.csv`,
+`results/analysis_baseline_claim_matrix.md`, and
+`paper_latex/tables/baseline_claim_matrix.tex`.  It separates primary
+logical-oracle baselines, external toolchain probes, reversible-synthesis
+probes, phase/Rz proxies, internal ablations, scaling bridges, and trade-off
+audits before the quantitative results are presented.
+The comparison evidence scope is materialized by
 `analyze_comparison_evidence_matrix.py`, which writes
 `results/summary_comparison_evidence_matrix.csv`,
 `results/analysis_comparison_evidence_matrix.md`, and

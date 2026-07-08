@@ -26,14 +26,19 @@
 
 因此论文意义应写成“面向资源约束量子布尔函数 oracle 综合的逻辑层 AI 搜索框架”，SSHR-H/SSHR-I 是小规模、CNOT-oriented 的重要结构化 baseline，但不是本文方法的定义边界。
 
-本轮已把这层定位固化为可复现证据矩阵：
+本轮已把这层定位固化为两张可复现矩阵：先用 claim matrix 说明每类 baseline 的论证角色和不能支持的过度主张，再用 evidence matrix 汇总覆盖范围、verified rows 和 paired score 结果。
+
+- `analyze_baseline_claim_matrix.py`
+- `results/summary_baseline_claim_matrix.csv`
+- `results/analysis_baseline_claim_matrix.md`
+- `paper_latex/tables/baseline_claim_matrix.tex`
 
 - `analyze_comparison_evidence_matrix.py`
 - `results/summary_comparison_evidence_matrix.csv`
 - `results/analysis_comparison_evidence_matrix.md`
 - `paper_latex/tables/comparison_evidence_matrix.tex`
 
-该矩阵按 baseline family 汇总覆盖范围、verified rows、主 paired score 结果和不能夸大的边界，并已接入英文投稿稿 `resource_nmcts_submission_v1.tex`。
+这两张矩阵已接入英文投稿稿 `resource_nmcts_submission_v1.tex`，用于直接回答“和什么比、为什么有意义、不能夸大到哪里”。
 
 本轮进一步补充了 paired statistical evidence 层，避免论文只依赖均值叙述：
 

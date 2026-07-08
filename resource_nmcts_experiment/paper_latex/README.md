@@ -32,6 +32,10 @@ latexmk -pdf resource_nmcts_submission_v1.tex
 
 Current source evidence:
 
+- baseline claim matrix CSV:
+  `../results/summary_baseline_claim_matrix.csv`
+- baseline claim matrix analysis:
+  `../results/analysis_baseline_claim_matrix.md`
 - comparison evidence matrix CSV:
   `../results/summary_comparison_evidence_matrix.csv`
 - comparison evidence matrix analysis:

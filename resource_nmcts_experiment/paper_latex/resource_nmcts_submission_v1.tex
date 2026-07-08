@@ -284,8 +284,22 @@ random-ANF sets for ABC/BDD, and $n=14$ sets for mockturtle and CirKit.  Scale
 and bridge experiments cover item-level $n=20$--$40$ term sets and complete
 \ttable{} bridge functions at $n=21$--$25$.  Paired comparisons include only
 matching functions or items with successful semantic checks and no timeout.
-Table~\ref{tab:evidence-matrix} summarizes the comparison evidence and the
-claim boundary for each baseline family.
+Because these baselines operate at different abstraction levels,
+Table~\ref{tab:baseline-claim-matrix} first separates their role in the
+argument from the claims they cannot support.  Table~\ref{tab:evidence-matrix}
+then summarizes the quantitative comparison evidence for each baseline family.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Baseline claim matrix.  The table explains why each comparison family
+is included, what conclusion it supports, and which stronger conclusion is
+outside the scope of the logical-layer experiments.}
+\label{tab:baseline-claim-matrix}
+\input{tables/baseline_claim_matrix}
+\end{table}
 
 \begin{table}[H]
 \centering
