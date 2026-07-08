@@ -1,0 +1,22 @@
+{
+  "input": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_traditional_resource.csv",
+  "anf_baseline": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_phase_parity_anf.csv",
+  "fprm_baseline": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_phase_parity_fprm.csv",
+  "revkit": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_revkit_oracle_synth_traditional.csv",
+  "raw_out": "resource_nmcts_experiment/results/raw_phase_parity_affine_wide128.csv",
+  "summary": "resource_nmcts_experiment/results/summary_phase_parity_affine_wide128.csv",
+  "analysis": "resource_nmcts_experiment/results/analysis_phase_parity_affine_wide128.md",
+  "latex_out": "resource_nmcts_experiment/paper_latex/tables/phase_parity_affine_wide128.tex",
+  "max_n": 6,
+  "seed": 20260708,
+  "transform_budget": 128,
+  "rank_metrics": [
+    "score",
+    "score_rz1",
+    "score_synth_tperrz30"
+  ],
+  "rows": 531,
+  "verified_rows": 531,
+  "elapsed_s": 223.48165917396545,
+  "claim_boundary": "Bounded affine-linear plus fixed-polarity phase-oracle search; logic-layer Rz resource model; not hardware mapping."
+}

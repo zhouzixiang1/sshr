@@ -1,0 +1,22 @@
+comparison,method,metric,pairs,wins,losses,ties,mean_relative,target_mean,baseline_mean
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_score,score,177,38,0,139,-0.015915069093222555,8.357966101694917,8.582401129943499
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_score,score_rz1,177,35,3,139,-0.00810949426540418,30.171525423728816,30.463757062146907
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_score,score_synth_tperrz30,177,34,4,139,-0.004687484928529817,679.1249152542368,681.4340960451972
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_score,rz_non_clifford,177,3,4,170,-0.0017007327469557806,21.8135593220339,21.88135593220339
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_score,rz_total,177,29,2,146,-0.016146617982956583,25.6045197740113,26.073446327683616
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_score,CNOT,177,28,6,143,-0.008684357073121242,83.1864406779661,84.37288135593221
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_score,depth,177,32,6,139,-0.010979392726551232,108.7909604519774,110.44632768361582
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_rz1,score,177,33,7,137,-0.011899704120929175,8.467062146892653,8.664858757062145
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_rz1,score_rz1,177,40,0,137,-0.009340338421704317,29.91338983050848,30.26372881355933
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_rz1,score_synth_tperrz30,177,40,0,137,-0.008098830409453785,667.9416384180788,672.8301129943499
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_rz1,rz_non_clifford,177,9,0,168,-0.005219978362783988,21.44632768361582,21.598870056497177
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_rz1,rz_total,177,30,2,145,-0.018596412444193966,25.34463276836158,25.92090395480226
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_rz1,CNOT,177,34,2,141,-0.013917804369636431,82.53107344632768,84.13559322033899
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_rz1,depth,177,38,2,137,-0.015425164904767625,107.87570621468926,110.05649717514125
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_tperrz30,score,177,42,1,134,-0.01894566559021736,8.615423728813557,8.922627118644067
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_tperrz30,score_rz1,177,42,1,134,-0.010434666712114503,29.9713559322034,30.374604519774017
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_tperrz30,score_synth_tperrz30,177,43,0,134,-0.005988330171462266,665.3103389830508,668.5709322033896
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_tperrz30,rz_non_clifford,177,3,0,174,-0.002935835351089588,21.35593220338983,21.451977401129945
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_tperrz30,rz_total,177,35,2,140,-0.023883796612813323,25.389830508474578,26.141242937853107
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_tperrz30,CNOT,177,37,2,138,-0.01741892535158855,83.2316384180791,85.32203389830508
+Affine-FPRM transform-budget 128 vs 32,phase_parity_affine_fprm_opt_tperrz30,depth,177,41,2,134,-0.01934809851577204,108.62146892655367,111.46327683615819
