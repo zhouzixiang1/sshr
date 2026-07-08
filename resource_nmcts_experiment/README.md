@@ -22,6 +22,21 @@ Latest external-toolchain progress:
 - This is an official-header mockturtle probe, not full ROS, not reversible
   garbage management, and not hardware mapping.
 
+Latest phase/Rz progress:
+
+- `run_phase_parity_baseline.py` implements a concrete internal phase-oracle
+  emitter by expanding ANF monomials into merged parity-phase Rz gadgets.
+- Traditional `n<=6`: 177/177 phase-parity rows verify exactly up to global
+  phase.  The baseline has mean lower-bound score 10.11, mean total Rz 27.56,
+  and mean non-Clifford Rz 21.75.
+- Against RevKit `oracle_synth`, phase-parity ANF is weaker under the raw
+  RevKit lower-bound score (40/137/0, mean +69.25%), but wins once each
+  non-Clifford Rz is charged: `score+1/Rz` is 177/0/0 with mean -48.16%, and
+  the `T/Rz=30` synthesis proxy is 177/0/0 with mean -64.98%.
+- This is a useful emitter baseline, not a solved phase/Rz search problem: the
+  next target is learned or optimized phase/Rz-aware search plus actual
+  rotation-synthesis sequence auditing.
+
 Core commands:
 
 ```bash
@@ -145,6 +160,7 @@ cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json resul
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_revkit_highdim_timeout_probe.py --input results/raw_highdim_resource.csv --min-n 14 --max-n 14 --limit 8 --timeout 30 --workers 4
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_phase_rz_portfolio.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_rz_synthesis_cost.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_phase_parity_baseline.py
 ```
 
 The RevKit command is a real Python API baseline (`oracle_synth`) on complete
@@ -178,6 +194,18 @@ have no circuit metrics and should not be averaged as a paired resource
 benchmark.
 This result should be presented as a phase-rotation representation-boundary
 finding, not as a hardware-mapping or exact Clifford+T T-count claim.
+
+`run_phase_parity_baseline.py` moves this boundary forward by adding a real
+internal phase/Rz emitter.  It expands each ANF monomial into a parity-phase
+identity, merges equal parity masks, and verifies all 177 `n <= 6` traditional
+functions as phase oracles up to global phase.  The result is intentionally
+reported as both evidence and limitation: phase-parity ANF loses to RevKit's
+raw lower-bound score by 40/137/0, mean +69.25%, but has far fewer
+non-Clifford rotations (171/0/6, mean -63.33%) and wins by 177/0/0 once each
+non-Clifford Rz is charged one score unit or a `T/Rz=30` synthesis proxy is
+used.  This establishes a concrete internal phase-oracle baseline while
+setting the next target: learned or optimized phase/Rz-aware search, not naive
+parity expansion.
 
 Current presets:
 
@@ -472,11 +500,13 @@ External-tool benchmark exchange:
   than an official ROS reproduction.  It reuses the exported BLIF benchmarks,
   runs ABC `if -K` for a configurable K sweep, verifies each mapped BLIF truth
   table, estimates every LUT network by local-ANF compute/action/uncompute
-  logic, and chooses the best K under the project score.  Official
-  ROS/mockturtle/RevKit adapters are still future work.
+  logic, and chooses the best K under the project score.  It is now complemented
+  by a mockturtle KLUT-to-XAG probe and a RevKit Python API baseline, but the
+  full official ROS flow and legacy RevKit/CirKit CLI flow remain future work.
 - `analyze_toolchain_readiness.py` records external-tool availability for the
-  current workstation.  The current audit finds the bundled ABC binary but no
-  mockturtle or RevKit binary/Python module; see
+  current workstation.  The current audit finds the bundled ABC binary,
+  mockturtle source/adapter availability, and RevKit Python API availability,
+  while legacy RevKit/CirKit CLI remains unavailable; see
   `results/analysis_toolchain_readiness.md`.
 
 Current evidence from `results/analysis_evidence_affine.md`:
@@ -701,10 +731,10 @@ External toolchain readiness from `results/analysis_toolchain_readiness.md`:
 
 - ABC is available through `tmp/abc/abc` and is already used for AIG/XAG/LUT/ESOP
   exported-baseline paths.
-- mockturtle and RevKit are currently missing from both PATH and the Python
-  environment, so reproduced ROS/mockturtle/RevKit-style reversible-toolchain
-  comparisons remain future work until those dependencies are installed or
-  vendored.
+- mockturtle source plus the project KLUT-to-XAG adapter are available and have
+  produced verified official-header probe rows.  RevKit Python API is available
+  and has produced the `oracle_synth` phase-netlist baseline.  Full official
+  ROS and legacy RevKit/CirKit CLI reproduction remain future work.
 - Against CNOT-optimized SSHR-I, `and_resource_nmcts` has 164 T-count wins, 3
   losses, and 10 ties; score wins/losses/ties are 168/9/0 with a 27.92% mean
   score reduction.  CNOT count is worse on 168/177 functions.

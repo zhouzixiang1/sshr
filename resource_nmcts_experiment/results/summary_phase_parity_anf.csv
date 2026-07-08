@@ -1,0 +1,13 @@
+baseline,items,losses,mean_CNOT,mean_T,mean_depth,mean_relative,mean_rz_non_clifford,mean_rz_total,mean_score,metric,target,ties,wins
+external_revkit_oracle_synth,177,137,,,,0.6924897394199085,,,,lower_bound_score,phase_parity_anf,0,40
+external_revkit_oracle_synth,177,0,,,,-0.481622699858712,,,,score_plus_1_per_rz,phase_parity_anf,0,177
+external_revkit_oracle_synth,177,0,,,,-0.532617673010858,,,,score_plus_1p5_per_rz,phase_parity_anf,0,177
+external_revkit_oracle_synth,177,0,,,,-0.5605284063491457,,,,score_plus_2_per_rz,phase_parity_anf,0,177
+external_revkit_oracle_synth,177,0,,,,-0.6060270422416794,,,,score_plus_4_per_rz,phase_parity_anf,0,177
+external_revkit_oracle_synth,177,0,,,,-0.649828947258794,,,,synth_tperrz30_score,phase_parity_anf,0,177
+external_revkit_oracle_synth,177,0,,,,-0.6532853462927947,,,,synth_tperrz60_score,phase_parity_anf,0,177
+external_revkit_oracle_synth,177,0,,,,-0.6333353330471607,,,,non_clifford_rz,phase_parity_anf,6,171
+external_revkit_oracle_synth,177,3,,,,-0.45103947128985394,,,,total_rz,phase_parity_anf,1,173
+external_revkit_oracle_synth,177,140,,,,0.3435836300783177,,,,CNOT,phase_parity_anf,3,34
+external_revkit_oracle_synth,177,97,,,,0.02400024403738965,,,,depth,phase_parity_anf,3,77
+self,177,,87.40112994350282,3.7401129943502824,114.96045197740114,,21.74576271186441,27.559322033898304,10.110169491525424,resource_means,phase_parity_anf,,

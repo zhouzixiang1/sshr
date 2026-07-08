@@ -91,6 +91,17 @@
   RevKit/CirKit command-line flow is still not reproduced locally.
   <https://github.com/msoeken/revkit>
 
+- The project now has an internal phase/Rz-aware baseline,
+  `run_phase_parity_baseline.py`, that expands ANF monomials into merged
+  parity-phase gadgets and verifies 177/177 `n <= 6` traditional functions as
+  phase oracles up to global phase.  This is a project contribution, not a
+  literature baseline.  It loses to RevKit under the raw lower-bound score
+  (40/137/0, mean +69.25%), but has fewer non-Clifford rotations
+  (171/0/6, mean -63.33%) and wins under `score+1/Rz` (177/0/0,
+  mean -48.16%) and `T/Rz=30` proxy (177/0/0, mean -64.98%).  The correct
+  interpretation is that naive phase expansion is a verified starting point for
+  phase/Rz-aware search, not the final optimized emitter.
+
 ## AI-guided synthesis references
 
 - Tsaras et al., "ShortCircuit: AlphaZero-Driven Circuit Design",

@@ -57,6 +57,42 @@
 - 这仍不是官方 ROS，不包含 SAT garbage management，不输出可逆线路或 Clifford+T gate sequence，也不包含硬件 mapping。
 - 论文中应写成“official-header mockturtle KLUT-to-XAG resynthesis probe”，不能写成“复现完整 ROS”。
 
+### 2.0b phase-parity ANF emitter
+
+本轮把 phase/Rz 方向从“只对 RevKit 的非 Clifford `Rz` 做成本敏感性分析”推进为“项目内部已有一个可验证的 phase-oracle emitter baseline”。新增 `run_phase_parity_baseline.py`，对每个非空 ANF 单项式使用 parity-phase 恒等式展开，合并相同 parity mask 的旋转角，并用 `Fraction` 精确验证每个函数的 phase oracle 语义（允许全局相位）。
+
+主要产物：
+
+- `run_phase_parity_baseline.py`
+- `results/raw_phase_parity_anf.csv`
+- `results/summary_phase_parity_anf.csv`
+- `results/analysis_phase_parity_anf.md`
+- `results/manifest_phase_parity_anf.json`
+- `paper_latex/tables/phase_parity_anf.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v30.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v30.pdf`
+
+核心结果：
+
+| 项目 | 口径 | 结果 | 平均变化或均值 |
+|---|---|---|---|
+| phase-parity ANF 验证 | 177 functions | 177/177 verified | up to global phase |
+| phase-parity ANF vs RevKit | lower-bound score | 40/137/0 | +69.25% |
+| phase-parity ANF vs RevKit | score+1/Rz | 177/0/0 | -48.16% |
+| phase-parity ANF vs RevKit | score+1.5/Rz | 177/0/0 | -53.26% |
+| phase-parity ANF vs RevKit | Ross-Selinger-style `T/Rz=30` proxy | 177/0/0 | -64.98% |
+| phase-parity ANF vs RevKit | non-Clifford Rz | 171/0/6 | -63.33% |
+| phase-parity ANF vs RevKit | total Rz | 173/3/1 | -45.10% |
+| phase-parity ANF 资源均值 | 177 | - | score 10.11 / CNOT 87.40 / depth 114.96 / total Rz 27.56 / non-Clifford Rz 21.75 |
+
+解释边界：
+
+- 这是 phase oracle emitter，不是现有 bit-flip Resource-NMCTS emitter 的替代品；两者语义口径不同。
+- 常数项作为全局相位处理，因此正确性口径是 phase oracle up to global phase。
+- lower-bound score 下 naive parity expansion 仍弱于 RevKit，说明“朴素 phase 展开”不足以作为最终投稿方法。
+- 一旦给非 Clifford `Rz` 加入非常保守之前的 1/Rz 符号成本，phase-parity ANF 转为 177/0/0；这说明 RevKit lower-bound 优势高度依赖未计入旋转综合成本。
+- 下一步明显提升目标应是 learned/optimized phase/Rz-aware search 和实际 rotation sequence 审计，而不是继续只做 `T/Rz` 常数 proxy。
+
 ### 2.0 RevKit API baseline 与工具链边界
 
 本轮已把外部工具链审计从“是否存在命令”升级为“能否真实运行一个可复现 baseline”。当前 `mcts-qoracle` 环境中已安装 `cmake`、`pybind11` 和 RevKit Python API，并新增 `run_revkit_baseline.py` 调用 RevKit 的 `oracle_synth` 对完整 truth-table 函数合成。
@@ -1266,7 +1302,7 @@ latexmk -pdf -g main.tex
 - `raw_highdim_root_action_oracle.csv` 审计：62 行、0 error、0 incorrect。
 - `raw_highdim_root_action_teacher.csv` 审计：62 行、0 error、0 incorrect。
 - `raw_highdim_guard_upgrade.csv` 审计：24 行、0 error、0 skipped、0 incorrect。
-- `analysis_toolchain_readiness.md` 审计：ABC 可用；mockturtle 和 RevKit 在当前环境缺失。
+- `analysis_toolchain_readiness.md` 审计：ABC 可用；mockturtle 源码与项目 KLUT-to-XAG adapter 可用；RevKit Python API 可用；legacy RevKit/CirKit CLI 仍不可用。
 - `raw_screen_scale_extended_terms.csv` 审计：1008 行、1008/1008 plan 符号验证通过、1008/1008 emitted-circuit 符号验证通过、0 mismatch。
 - `raw_screen_scale_depth_frontier_terms.csv` 审计：648 行、648/648 plan 符号验证通过、648/648 emitted-circuit 符号验证通过、0 mismatch。
 - `raw_screen_scale_depth_frontier_policy_large_generalization_terms.csv` 审计：960 行、960/960 plan 符号验证通过、960/960 emitted-circuit 符号验证通过、0 mismatch。
@@ -1294,7 +1330,7 @@ Git 状态：
 8. `n<=4` exact XAG 乘法复杂度切片显示：Resource/Pareto 在 12/72 个函数上达到全局 T 下界，平均 T gap 为 +53.01%，明显低于 ESOP-MILP 的 +120.14% 和 SSHR-I-T 的 +143.06%。
 9. 高维 root-action teacher 诊断显示：oracle top-24 相对启发式 top-4 有 3/0/7、-0.18% 的小幅 headroom；pairwise-wide root-action ranker 进一步在 n=16 full synthesis 中相对 deterministic recursive guard 获得 10/0/14、-0.18%，因此高维 AI 贡献已从负向诊断推进到小幅正向证据。
 10. Boolean-ring linear factor 将 quotient 与 linear factor 的变量不相交限制放宽到 Boolean 环 `x_i^2=x_i` 展开；在 n=16 上，Boolean-guard Resource-NMCTS 相对 pairwise-wide Resource-NMCTS 获得 14/0/10、平均 score 降低 0.34%，相对 deterministic recursive guard 获得 18/0/6、平均 score 降低 0.52%。这是当前高维结构搜索中比 pairwise-wide 更明显的正向提升。
-11. 外部工具链 readiness 审计显示：ABC 已可用并支撑当前 AIG/XAG/LUT/ESOP baseline；mockturtle/RevKit 当前缺失，因此不能声称已完成这类 reversible-toolchain 复现。
+11. 外部工具链 readiness 审计显示：ABC 已可用并支撑当前 AIG/XAG/LUT/ESOP baseline；mockturtle 已推进到 official-header KLUT-to-XAG probe；RevKit Python API 已形成 `oracle_synth` phase-netlist baseline；但官方 ROS 与 legacy RevKit/CirKit CLI 仍未完整复现。
 12. ROS-style LUT proxy 显示：在 309 个 `n=3..6,14,15,16,18` 函数上，ABC `K=3,4,5` LUT sweep 的 927/927 行均通过 truth-table 检查；best-K proxy 相对固定 K=4 为 219/0/90、平均 score -18.12%，而 Resource-NMCTS 相对该更强 proxy 仍为 309/0/0、平均 score -83.77%。
 13. `n=20` giga stress 已从纯边界失败推进为边界改善：root-beam 与 fast linear-pair 仍全部 timeout，但 depth-2 recursive Boolean screen 让 Resource-NMCTS 相对旧 Resource-NMCTS 获得 5/0/1、平均 score -7.47%；相对 AND-direct ANF 获得 5/0/1、平均 score -11.80%；相对 direct ANF 获得 5/1/0、平均 score -38.86%。
 14. `n=32,36,40` extended screen-scale 显示：depth policy 相对 single screen 获得 110/0/34、平均 score -5.55%；相对 all-depth adaptive 在 144 个项集上全部 score 持平，并节省 33.14% 平均运行时间；1008/1008 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。
@@ -1351,7 +1387,7 @@ Git 状态：
 | highdim wide-fast guard | 12 个 n=14 random ANF | wide vs Resource 为 0/0/12，运行时间 +59.80% | 已有但属负向诊断 |
 | exact FPRM-DP | n<=4 traditional | Resource vs exact FPRM-DP 51/3/18，-12.18%；Pareto vs exact FPRM-DP 51/0/21，-12.20% | 已有但模型受限 |
 | exact XAG MC | n<=4 traditional | Resource/Pareto 达到 T 下界 12/72，平均 T gap +53.01%；ESOP 为 +120.14%，SSHR-I-T 为 +143.06% | 已有全局 T 下界 |
-| toolchain readiness | 当前工作站 | ABC 可用；mockturtle/RevKit 缺失 | 已有环境审计，仍需安装后复现 |
+| toolchain readiness | 当前工作站 | ABC 可用；mockturtle probe 与 RevKit Python API 可用；legacy RevKit/CirKit CLI 不可用 | 已有环境审计，仍需完整 ROS/legacy CLI 复现 |
 
 ## 8. 当前结论
 
