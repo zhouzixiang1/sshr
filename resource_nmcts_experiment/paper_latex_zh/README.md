@@ -24,6 +24,7 @@
 - `resource_nmcts_zh_manuscript_v10.tex` / `resource_nmcts_zh_manuscript_v10.pdf`：中文论文稿 v10，进一步补充 emitted X/CNOT/MCT circuit 的 ANF 符号模拟验证，1344/1344 方法行通过，边界收窄为“不是完整 truth-table simulation”。
 - `resource_nmcts_zh_manuscript_v11.tex` / `resource_nmcts_zh_manuscript_v11.pdf`：中文论文稿 v11，主线收束版；在 v10 证据基础上补充 n=32/36/40 extended scale 和 n=20/28/40 depth-frontier，3000/3000 个项集级方法行通过 plan 与 emitted-circuit 两层 ANF 符号验证，并更明确地区分 Resource-NMCTS 主方法、Boolean-ring screen、结构级 AI、screen-gate 与尚未完成的高维 learned-prior 质量收益。
 - `resource_nmcts_zh_manuscript_v12.tex` / `resource_nmcts_zh_manuscript_v12.pdf`：中文论文稿 v12，投稿框架与证据边界版；在 v11 的结果基础上重写摘要、引言和证据地图，把 depth-frontier 明确定位为新的质量前沿，同时把高维 learned-prior、完整 truth-table bridge 和外部工具链比较列为投稿前缺口。
+- `resource_nmcts_zh_manuscript_v13.tex` / `resource_nmcts_zh_manuscript_v13.pdf`：中文论文稿 v13，frontier policy 与 truth-table bridge 版；补充 depth-frontier policy（scale n=20/28/40 相对 fixed depth-2 为 35/0/37、平均 score -2.19%，相对 all-depth depth<=4 省时 58.69%）和 n=21/22 完整 truth-table bridge（120/120 方法行通过完整 oracle 验证、plan 验证和 emitted-circuit 符号验证；bridge 中 frontier policy 相对 fixed depth-2 为 8/0/4、平均 score -3.50%）。
 - `resource_nmcts_zh_research_position.tex` / `resource_nmcts_zh_research_position.pdf`：中文研究定位稿，重新梳理“不从 SSHR 入手”的论文主线、AI 在搜索问题中的角色、当前证据边界和下一步明显提升目标。
 - 最新 v4 稿已补充 `train_screen_depth_policy.py` 的结构级 depth policy 结果：n=14/16/18 训练、held-out n=20 测试，说明 AI 已能学习 screen 深度选择，但尚未超过固定 depth-2 的 score。
 - 最新 v8 稿补充 `train_structure_gate.py` 的 screen-gated Resource-NMCTS 边界验证：原 n=20 切片资源持平且平均运行时间降低 75.58%，held-out n=19/20 合计 16/16 score 持平并平均节省 36.83%，但仍只作为运行时门控证据。
@@ -50,6 +51,7 @@ latexmk -xelatex -g resource_nmcts_zh_manuscript_v9.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v10.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v11.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v12.tex
+latexmk -xelatex -g resource_nmcts_zh_manuscript_v13.tex
 latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 ```
 
@@ -91,6 +93,9 @@ latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 - `../results/analysis_giga_resource_deeper_vs_old_resource.md`
 - `../results/analysis_giga_resource_deeper_vs_and_direct.md`
 - `../results/analysis_boolean_screen_depth_policy.md`
+- `../results/analysis_boolean_screen_depth_frontier_policy.md`
+- `../results/analysis_screen_scale_depth_frontier_policy_terms.md`
+- `../results/analysis_truth_bridge_terms.md`
 - `../results/analysis_giga_screen_gate_vs_resource.md`
 - `../results/analysis_structure_gate.md`
 - `../results/analysis_exact_fprm_dp.md`

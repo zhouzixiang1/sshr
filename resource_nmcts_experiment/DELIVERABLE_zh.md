@@ -401,6 +401,66 @@
 
 结论：这是本轮最重要的质量增益证据。Depth-3/4 不再只是省时门控，而是稳定打破 fixed depth-2 的 score 上限：在 n=20/28/40 上均无 score loss，depth-4 平均 score 进一步降低 3.10%。代价也很明确，depth-4 平均运行时间比 depth-2 增加约 6.8 倍，all-depth<=4 因需要同时跑多种深度，时间开销更高。因此论文中应把它写成“可调预算的质量-时间前沿”：快速默认模式仍是 depth policy/guard，投稿级质量模式可以加入 depth-3/4 作为高预算候选。
 
+### 2.5.7 depth-frontier policy：把高预算质量前沿学习化
+
+v12 中把 depth-frontier 写成下一步缺口：需要训练一个策略，在 depth-2/3/4 之间选择，使其接近 depth-4 的质量但低于 all-depth<=4 的运行成本。本轮新增 `train_screen_depth_frontier_policy.py`，训练结构级 depth-frontier policy，并把该策略接入 `run_screen_scale_terms.py`。
+
+主要产物：
+
+- `train_screen_depth_frontier_policy.py`
+- `models/boolean_screen_depth_frontier_policy.pt`
+- `results/raw_boolean_screen_depth_frontier_policy.csv`
+- `results/summary_boolean_screen_depth_frontier_policy.csv`
+- `results/analysis_boolean_screen_depth_frontier_policy.md`
+- `paper_latex/tables/boolean_screen_depth_frontier_policy.tex`
+- `results/raw_screen_scale_depth_frontier_policy_terms.csv`
+- `results/summary_screen_scale_depth_frontier_policy_terms.csv`
+- `results/analysis_screen_scale_depth_frontier_policy_terms.md`
+- `paper_latex/tables/screen_scale_depth_frontier_policy_terms.tex`
+
+核心结果：
+
+| 设置 | 对比 | 项集数 | score 胜/负/平 | 平均 score 变化 | 平均运行时间变化 |
+|---|---|---:|---:|---:|---:|
+| held-out n=28/40 | frontier policy vs depth-2 | 32 | 13/0/19 | -1.95% | +455.93% |
+| held-out n=28/40 | frontier policy vs depth-4 | 32 | 0/9/23 | +0.80% | -25.99% |
+| held-out n=28/40 | frontier policy vs oracle depth-2/3/4 frontier | 32 | 0/9/23 | +0.80% | -58.76% |
+| scale n=20/28/40 | depth_frontier_policy vs depth-2 | 72 | 35/0/37 | -2.19% | +503.20% |
+| scale n=20/28/40 | depth_frontier_policy vs depth-4 | 72 | 0/16/56 | +0.97% | -22.17% |
+| scale n=20/28/40 | depth_frontier_policy vs all-depth depth<=4 | 72 | 0/16/56 | +0.97% | -58.69% |
+| ANF plan 符号验证 | 720 方法行 | 720/0 通过/失败 | 0 mismatch | - |
+| emitted-circuit ANF 符号验证 | 720 方法行 | 720/0 通过/失败 | 0 mismatch | max wire terms 244 |
+
+结论：这是本轮相对 v12 的主要 AI 进展。Depth-frontier policy 不能完全达到 depth-4/oracle frontier，但已经把 depth-4 的质量收益学习化为可选择策略：相对 fixed depth-2 平均 score 降低 2.19%，同时相对完整 all-depth<=4 评估节省 58.69% 时间。论文中应写成“结构级 AI 的质量-时间折中证据”，而不是写成全局最优策略。
+
+### 2.5.8 n=21/22 完整 truth-table bridge
+
+为回应“n>20 只有项集级符号验证”的审稿风险，本轮新增 `run_truth_bridge_terms.py`，在 n=21/22 上构造完整 truth table，并对 emitted X/CNOT/MCT oracle circuit 做 bit-parallel truth-table verification。该实验规模故意小于 n=20--40 scale，因为 truth-table 构造是主成本，但它把完整验证边界向 n>20 后移。
+
+主要产物：
+
+- `run_truth_bridge_terms.py`
+- `results/raw_truth_bridge_terms.csv`
+- `results/summary_truth_bridge_terms.csv`
+- `results/analysis_truth_bridge_terms.md`
+- `paper_latex/tables/truth_bridge_terms.tex`
+
+核心结果：
+
+| 验证项或比较 | 结果 | 说明 |
+|---|---:|---|
+| 完整 truth-table oracle 验证 | 120/120 | 所有 emitted circuit 逐点验证通过 |
+| ANF plan 符号验证 | 120/120 | 0 plan mismatch |
+| emitted-circuit ANF 符号验证 | 120/120 | 0 circuit mismatch，max wire terms 215 |
+| 平均 truth-table 构造时间 | 30.34 s/function | n=21/22 合计 12 个函数 |
+| screen depth-4 vs fixed depth-2 | 10/0/2 | 平均 score -3.81%，plan time +734.91% |
+| depth-frontier policy vs fixed depth-2 | 8/0/4 | 平均 score -3.50%，plan time +634.71% |
+| depth-frontier policy vs depth-4 | 0/2/10 | 平均 score +0.32%，plan time -15.54% |
+| depth-frontier policy vs all-depth | 0/2/10 | 平均 score +0.32%，plan time -50.87% |
+| adaptive all-depth vs single screen | 11/0/1 | 平均 score -10.19% |
+
+结论：这是验证边界上的实质推进。n=21/22 bridge 不能替代 n=24--40 的完整 truth-table simulation，但它证明本项目的 emitted-circuit 生成与符号验证不是孤立的资源估算；同一类方法在 n>20 的完整枚举切片上也通过了逐点 oracle 验证。
+
 ### 2.6 高维 root-action teacher 诊断
 
 新增 `analyze_highdim_root_action_oracle.py`，用于回答一个更具体的问题：高维 CNOT-only linear-pair 根层动作排序是否还有可学习空间。该脚本不追求全局最优，而是在 `highdim_neural_prior` 的 12 个 `n=14` random ANF 函数上，用真实 greedy child plan 对更宽的 root-action 集合做 one-step teacher 评分。
@@ -903,6 +963,8 @@ Git 状态：
 12. `n=20` giga stress 已从纯边界失败推进为边界改善：root-beam 与 fast linear-pair 仍全部 timeout，但 depth-2 recursive Boolean screen 让 Resource-NMCTS 相对旧 Resource-NMCTS 获得 5/0/1、平均 score -7.47%；相对 AND-direct ANF 获得 5/0/1、平均 score -11.80%；相对 direct ANF 获得 5/1/0、平均 score -38.86%。
 13. `n=32,36,40` extended screen-scale 显示：depth policy 相对 single screen 获得 110/0/34、平均 score -5.55%；相对 all-depth adaptive 在 144 个项集上全部 score 持平，并节省 33.14% 平均运行时间；1008/1008 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。
 14. `n=20,28,40` depth-frontier 显示：depth-3 Boolean-ring screen 相对 fixed depth-2 为 49/0/23、平均 score -1.93%；depth-4 相对 fixed depth-2 为 49/0/23、平均 score -3.10%；648/648 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。这是新的高预算质量前沿证据，但运行时间显著增加。
+15. Depth-frontier policy 已把高预算质量前沿学习化：在 `n=20,28,40` scale harness 中，相对 fixed depth-2 获得 35/0/37、平均 score -2.19%；相对 all-depth depth<=4 平均 score +0.97%，但节省 58.69% 时间；720/720 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。
+16. `n=21,22` 完整 truth-table bridge 显示：12 个生成式 ANF 函数、120/120 个方法行同时通过完整 truth-table oracle 验证、ANF plan 符号验证和 emitted-circuit ANF 符号验证；该结果把完整验证边界从 n<=20 主实验推进到 n>20 的桥接切片。
 
 不应写的主张：
 
@@ -942,6 +1004,8 @@ Git 状态：
 | n=20 depth-2 recursive Boolean screen | 6 个 n=20 random ANF | Resource vs old Resource 为 5/0/1，-7.47%；vs AND-direct 为 5/0/1，-11.80%；vs depth-1 Resource 为 5/0/1，-3.13% | 当前最明确的超高维边界改善 |
 | n=32/36/40 extended screen-scale | 144 个高维 ANF 项集 | depth policy vs single 为 110/0/34，-5.55%；vs all-depth adaptive 为 0/0/144，省时 -33.14%；1008/1008 emitted-circuit 符号验证通过 | 新增大规模泛化证据 |
 | n=20/28/40 depth-frontier | 72 个高维 ANF 项集 | depth-3 vs depth-2 为 49/0/23，-1.93%；depth-4 vs depth-2 为 49/0/23，-3.10%；648/648 emitted-circuit 符号验证通过 | 新增高预算质量前沿 |
+| depth-frontier policy | 32 个 held-out + 72 个 scale 项集 | held-out vs oracle frontier 为 +0.80% score、-58.76% time；scale vs depth-2 为 35/0/37、-2.19%；720/720 emitted-circuit 符号验证通过 | 新增结构级 AI 质量-时间折中 |
+| n=21/22 truth-table bridge | 12 个生成式 ANF 函数 | 120/120 完整 truth-table oracle 验证通过，120/120 plan 与 emitted-circuit 符号验证通过，0 mismatch；frontier policy vs depth-2 为 8/0/4、-3.50% | 新增 n>20 完整验证桥接 |
 | highdim wide-fast guard | 12 个 n=14 random ANF | wide vs Resource 为 0/0/12，运行时间 +59.80% | 已有但属负向诊断 |
 | exact FPRM-DP | n<=4 traditional | Resource vs exact FPRM-DP 51/3/18，-12.18%；Pareto vs exact FPRM-DP 51/0/21，-12.20% | 已有但模型受限 |
 | exact XAG MC | n<=4 traditional | Resource/Pareto 达到 T 下界 12/72，平均 T gap +53.01%；ESOP 为 +120.14%，SSHR-I-T 为 +143.06% | 已有全局 T 下界 |

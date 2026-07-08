@@ -20,6 +20,9 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python train_screen_depth_guard.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python train_structure_gate.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --workers 6
+/opt/anaconda3/envs/mcts-qoracle/bin/python train_screen_depth_frontier_policy.py --train-n 16,20,24 --test-n 28,40 --train-per-n 32 --valid-per-n 12 --test-per-n 16 --workers 6 --epochs 160 --hidden 96
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --ns 20,28,40 --per-n 24 --workers 6 --max-screen-depth 4 --tag depth_frontier_policy
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --workers 2
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset smoke
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset evidence_affine --model models/action_scorer_rollout_logical_and.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset evidence_affine
@@ -195,6 +198,12 @@ and saved at `models/resource_structure_gate.json`; it adds
 `and_resource_nmcts_screen_gate`, a gated Resource-NMCTS variant that skips the
 expensive Resource tail when the adaptive Boolean-ring screen is predicted to be
 sufficient.
+The high-budget Boolean screen depth-frontier policy is trained with
+`train_screen_depth_frontier_policy.py` and saved at
+`models/boolean_screen_depth_frontier_policy.pt`.  It chooses among depth-2,
+depth-3, and depth-4 Boolean-ring screens; its held-out analysis is written to
+`results/analysis_boolean_screen_depth_frontier_policy.md`, with the table at
+`paper_latex/tables/boolean_screen_depth_frontier_policy.tex`.
 Term-set scale tests beyond truth-table-feasible sizes are run with
 `run_screen_scale_terms.py`; outputs are written to
 `results/analysis_screen_scale_terms.md`, `results/raw_screen_scale_terms.csv`,
@@ -257,6 +266,21 @@ Current structure-policy evidence:
   +682.97%, respectively.  All 648 method rows pass both symbolic plan
   expansion and emitted-circuit ANF verification with zero mismatches.  This is
   quality-frontier evidence, not the default fast policy.
+- The learned depth-frontier policy turns that high-budget frontier into a
+  structure-level AI tradeoff.  On the held-out `n=28,40` policy test it is
+  +0.80% mean score from the oracle depth-2/3/4 frontier while saving -58.76%
+  runtime.  In the `n=20,28,40` scale harness it improves over fixed depth-2 by
+  35/0/37 with -2.19% mean score, and is +0.97% mean score from all-depth
+  depth<=4 while saving -58.69% runtime.  All 720 method rows pass both
+  symbolic plan expansion and emitted-circuit ANF verification.
+- The truth-table bridge run, `results/analysis_truth_bridge_terms.md`, builds
+  full truth tables for 12 generated `n=21,22` ANF functions.  All 120 method
+  rows pass complete truth-table oracle verification, ANF plan expansion, and
+  emitted-circuit symbolic verification with zero mismatches.  It also includes
+  the depth-frontier policy: 8/0/4 vs fixed depth-2 with -3.50% mean score, and
+  +0.32% mean score / -50.87% plan time vs all-depth adaptive.  This moves the
+  complete-verification boundary beyond `n=20` on a small bridge slice; larger
+  `n=24--40` runs remain symbolic term-set evaluations.
 
 Current screen-gate evidence:
 
