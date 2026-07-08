@@ -26,6 +26,15 @@
 
 因此论文意义应写成“面向资源约束量子布尔函数 oracle 综合的逻辑层 AI 搜索框架”，SSHR-H/SSHR-I 是小规模、CNOT-oriented 的重要结构化 baseline，但不是本文方法的定义边界。
 
+本轮新增 contribution-to-evidence map，把引言中的四类贡献直接连接到实现机制、论文证据和 claim boundary：
+
+- `analyze_contribution_evidence_map.py`
+- `results/summary_contribution_evidence_map.csv`
+- `results/analysis_contribution_evidence_map.md`
+- `paper_latex/tables/contribution_evidence_map.tex`
+
+该表已接入英文投稿稿引言，用于说明创新点不是单点技巧，而是“逻辑层搜索 formulation + neural/MCTS 资源搜索 workflow + 广泛 baseline/toolchain 对比 + 高维/phase 验证边界”的组合。
+
 本轮进一步把 related work 定位固化为可复现矩阵：
 
 - `analyze_related_work_positioning.py`

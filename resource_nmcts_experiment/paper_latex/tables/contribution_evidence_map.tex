@@ -1,0 +1,10 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}}
+\toprule
+Contribution & Implementation & Paper evidence & Boundary \\
+\midrule
+Resource-constrained Boolean-oracle search formulation & \anf{}/\fprm{} term-set state, Boolean-ring and affine actions, guarded candidate selection, symbolic circuit emission. & Fig.~\ref{fig:pipeline}; Table~\ref{tab:related-positioning} & Logical-layer oracle synthesis only; no routing, native-gate mapping, or noise model. \\
+Neural/\mcts{} resource-search workflow & Neural action priors, \mcts{}/beam/portfolio search, Pareto archive, frontier policies, staged and sparse learned gates. & Tables~\ref{tab:contribution}, \ref{tab:learned-control-audit}; Fig.~\ref{fig:learned-control-summary} & The largest gains come from searchable algebraic actions plus guarded selection; the paper does not claim deep RL alone explains all gains. \\
+Broad baseline and toolchain comparison & Direct \anf{}, ESOP beam/MILP, SSHR, ABC/BDD, ROS-style LUT, mockturtle, CirKit, RevKit CLI, and phase/Rz probes. & Tables~\ref{tab:baseline-claim-matrix}, \ref{tab:evidence-matrix}, \ref{tab:paired-statistics}; Fig.~\ref{fig:baselines} & Strong T-count and weighted-score evidence, not universal CNOT/depth/ancilla dominance or full ROS reproduction. \\
+High-dimensional and phase-search verification envelope & $n=20$--$40$ symbolic term-set checks, $n=21$--$25$ complete truth-table bridges, Affine-\fprm{} phase search, learned phase shortlist. & Tables~\ref{tab:scale-audit}, \ref{tab:validation}, \ref{tab:phase-policy-random}; Fig.~\ref{fig:validation} & Large rows are logically and symbolically verified; complete truth-table enumeration remains limited to bridge slices. \\
+\bottomrule
+\end{tabularx}

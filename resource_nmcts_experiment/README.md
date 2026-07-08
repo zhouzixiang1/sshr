@@ -25,6 +25,13 @@ SSHR-H/SSHR-I are important CNOT-oriented small-function baselines, but the
 project claim is a resource-aware logical-layer AI search framework rather than
 an SSHR variant.
 
+The introduction-level contribution map is materialized by
+`analyze_contribution_evidence_map.py`, which writes
+`results/summary_contribution_evidence_map.csv`,
+`results/analysis_contribution_evidence_map.md`, and
+`paper_latex/tables/contribution_evidence_map.tex`.  It links the four
+headline contributions to implementation mechanisms, manuscript evidence, and
+claim boundaries.
 The literature positioning layer is materialized by
 `analyze_related_work_positioning.py`, which writes
 `results/summary_related_work_positioning.csv`,

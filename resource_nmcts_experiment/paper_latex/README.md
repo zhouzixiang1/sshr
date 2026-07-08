@@ -32,6 +32,10 @@ latexmk -pdf resource_nmcts_submission_v1.tex
 
 Current source evidence:
 
+- contribution-to-evidence map CSV:
+  `../results/summary_contribution_evidence_map.csv`
+- contribution-to-evidence map analysis:
+  `../results/analysis_contribution_evidence_map.md`
 - related-work positioning matrix CSV:
   `../results/summary_related_work_positioning.csv`
 - related-work positioning matrix analysis:
