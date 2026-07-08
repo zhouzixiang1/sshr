@@ -56,6 +56,10 @@ Current source evidence:
   `../results/summary_baseline_comparability_audit.csv`
 - baseline comparability audit analysis:
   `../results/analysis_baseline_comparability_audit.md`
+- submission traceability audit CSV:
+  `../results/summary_submission_traceability_audit.csv`
+- submission traceability audit analysis:
+  `../results/analysis_submission_traceability_audit.md`
 - submission-readiness audit CSV:
   `../results/summary_submission_readiness_audit.csv`
 - submission-readiness audit analysis:

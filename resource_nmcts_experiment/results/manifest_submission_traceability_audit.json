@@ -1,0 +1,13 @@
+{
+  "outputs": {
+    "analysis": "results/analysis_submission_traceability_audit.md",
+    "summary": "results/summary_submission_traceability_audit.csv",
+    "table": "paper_latex/tables/submission_traceability_audit.tex"
+  },
+  "python": "3.11.15",
+  "rows": 9,
+  "script": "analyze_submission_traceability_audit.py",
+  "status_counts": {
+    "complete": 9
+  }
+}

@@ -1,0 +1,299 @@
+#!/usr/bin/env python3
+"""Build a submission traceability audit for headline claims.
+
+The readiness audit checks whether manuscript sections exist.  This audit is
+stricter: it links each paper-facing claim family to the script/data/table or
+figure artifacts that support it, and marks rows incomplete if any listed
+artifact is missing from the submission package.
+"""
+from __future__ import annotations
+
+import csv
+import json
+import sys
+from pathlib import Path
+
+
+THIS_DIR = Path(__file__).resolve().parent
+RESULTS = THIS_DIR / "results"
+TABLES = THIS_DIR / "paper_latex" / "tables"
+FIGURES = THIS_DIR / "paper_latex" / "figures" / "submission_v36"
+
+
+def rel(path: Path) -> str:
+    return str(path.relative_to(THIS_DIR))
+
+
+def status_for(paths: list[Path]) -> tuple[str, str]:
+    missing = [rel(path) for path in paths if not path.exists()]
+    if missing:
+        return "missing artifact", "; ".join(missing)
+    return "complete", "all listed artifacts present"
+
+
+def row(
+    claim_family: str,
+    claim_use: str,
+    artifacts: list[Path],
+    manuscript_anchor: str,
+    boundary: str,
+) -> dict[str, str]:
+    status, evidence = status_for(artifacts)
+    return {
+        "claim_family": claim_family,
+        "claim_use": claim_use,
+        "artifact_chain": "; ".join(rel(path) for path in artifacts),
+        "manuscript_anchor": manuscript_anchor,
+        "boundary": boundary,
+        "status": status,
+        "evidence": evidence,
+    }
+
+
+def build_rows() -> list[dict[str, str]]:
+    return [
+        row(
+            "Method formulation",
+            "Defines Resource-NMCTS as a logical ANF/FPRM search workflow.",
+            [
+                THIS_DIR / "analyze_method_workflow_table.py",
+                RESULTS / "summary_method_workflow.csv",
+                RESULTS / "analysis_method_workflow.md",
+                TABLES / "method_workflow.tex",
+            ],
+            "Method, Table method-workflow",
+            "Establishes the executable workflow, not a hardware compiler.",
+        ),
+        row(
+            "Contribution mapping",
+            "Links each stated contribution to implementation, evidence, and claim boundary.",
+            [
+                THIS_DIR / "analyze_contribution_evidence_map.py",
+                RESULTS / "summary_contribution_evidence_map.csv",
+                RESULTS / "analysis_contribution_evidence_map.md",
+                TABLES / "contribution_evidence_map.tex",
+            ],
+            "Introduction, Table contribution-map",
+            "Prevents the introduction from making unsupported novelty claims.",
+        ),
+        row(
+            "Primary small-function resources",
+            "Supports T-count and weighted-score claims on matched n<=6 functions.",
+            [
+                THIS_DIR / "run_experiments.py",
+                RESULTS / "manifest_traditional_resource.json",
+                RESULTS / "raw_traditional_resource.csv",
+                RESULTS / "analysis_traditional_resource.md",
+                RESULTS / "analysis_paired_statistical_evidence.md",
+                TABLES / "paired_statistical_evidence.tex",
+                FIGURES / "fig2_traditional_resources.pdf",
+            ],
+            "Results, traditional functions",
+            "Same logical cost model; not a CNOT-only or hardware-level claim.",
+        ),
+        row(
+            "Baseline scope and fairness",
+            "Explains why each baseline family is comparable and which claim it can support.",
+            [
+                THIS_DIR / "analyze_baseline_claim_matrix.py",
+                THIS_DIR / "analyze_comparison_evidence_matrix.py",
+                THIS_DIR / "analyze_baseline_comparability_audit.py",
+                TABLES / "baseline_claim_matrix.tex",
+                TABLES / "comparison_evidence_matrix.tex",
+                TABLES / "baseline_comparability_audit.tex",
+            ],
+            "Experimental Design, baseline matrices",
+            "Treats comparisons as layered evidence rather than a universal leaderboard.",
+        ),
+        row(
+            "External toolchain probes",
+            "Traces ROS-style LUT, mockturtle, CirKit, and RevKit CLI comparison evidence.",
+            [
+                RESULTS / "raw_ros_lut_proxy_best.csv",
+                RESULTS / "raw_mockturtle_xag_probe.csv",
+                RESULTS / "raw_cirkit_aig_probe.csv",
+                RESULTS / "raw_revkit_cli_multiflow_traditional.csv",
+                TABLES / "ros_lut_line_sensitivity.tex",
+                TABLES / "cirkit_aig_probe.tex",
+                TABLES / "revkit_cli_multiflow_traditional.tex",
+                FIGURES / "fig3_baseline_comparisons.pdf",
+            ],
+            "Results, external probes",
+            "Logic-level probes or exact-oracle reversible probe; not full hardware mapping.",
+        ),
+        row(
+            "Multi-resource tradeoff",
+            "Audits whether weighted-score wins imply raw-resource dominance.",
+            [
+                THIS_DIR / "analyze_multimetric_pareto_tradeoff.py",
+                RESULTS / "analysis_multimetric_pareto_tradeoff.md",
+                TABLES / "multimetric_pairwise_dominance.tex",
+                TABLES / "multimetric_nondominated.tex",
+            ],
+            "Results, raw multi-resource dominance",
+            "Dominance uses T-count, CNOT, depth, and peak ancilla, not weighted score.",
+        ),
+        row(
+            "Learned-control contribution",
+            "Separates promoted neural/search controllers from limited diagnostics.",
+            [
+                THIS_DIR / "analyze_learned_control_audit.py",
+                THIS_DIR / "train_sparse_depth4_gate.py",
+                RESULTS / "analysis_learned_control_audit.md",
+                RESULTS / "analysis_sparse_depth4_gate_generalization.md",
+                TABLES / "learned_control_audit.tex",
+                TABLES / "sparse_depth4_gate_generalization.tex",
+                FIGURES / "fig7_learned_control_summary.pdf",
+            ],
+            "Results, search contribution and ablation",
+            "Supports guarded learned-control evidence, not a claim that RL alone explains all gains.",
+        ),
+        row(
+            "High-dimensional verification",
+            "Traces large symbolic checks, phase checks, and complete truth-table bridge slices.",
+            [
+                THIS_DIR / "analyze_scaling_resource_audit.py",
+                RESULTS / "analysis_scaling_resource_audit.md",
+                TABLES / "scaling_resource_audit.tex",
+                RESULTS / "raw_truth_bridge_terms.csv",
+                RESULTS / "raw_truth_bridge_n24_terms.csv",
+                RESULTS / "raw_truth_bridge_n25_terms.csv",
+                FIGURES / "fig5_validation.pdf",
+            ],
+            "Results, high-dimensional verification",
+            "Large rows are symbolic or bridge-slice verified, not exhaustive high-dimensional truth tables.",
+        ),
+        row(
+            "Reproducibility package",
+            "Documents compute envelope, worker manifests, artifact counts, and availability section.",
+            [
+                THIS_DIR / "analyze_reproducibility_audit.py",
+                THIS_DIR / "analyze_submission_readiness_audit.py",
+                RESULTS / "analysis_reproducibility_audit.md",
+                RESULTS / "analysis_submission_readiness_audit.md",
+                TABLES / "reproducibility_audit.tex",
+                THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.tex",
+                THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.pdf",
+            ],
+            "Experimental Design and Data and Code Availability",
+            "Repository-relative package until an archival DOI or anonymous link is supplied.",
+        ),
+    ]
+
+
+def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fields = [
+        "claim_family",
+        "claim_use",
+        "artifact_chain",
+        "manuscript_anchor",
+        "boundary",
+        "status",
+        "evidence",
+    ]
+    with path.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
+    counts: dict[str, int] = {}
+    for item in rows:
+        counts[item["status"]] = counts.get(item["status"], 0) + 1
+    lines = [
+        "# Submission Traceability Audit",
+        "",
+        "This audit links headline manuscript claims to supporting scripts, raw/summary artifacts, tables, figures, and claim boundaries.",
+        "",
+        "## Status counts",
+        "",
+    ]
+    for status in sorted(counts):
+        lines.append(f"- {status}: {counts[status]}")
+    lines.extend(
+        [
+            "",
+            "| claim family | claim use | manuscript anchor | boundary | status |",
+            "|---|---|---|---|---|",
+        ]
+    )
+    for item in rows:
+        lines.append(
+            f"| {item['claim_family']} | {item['claim_use']} | {item['manuscript_anchor']} | {item['boundary']} | {item['status']} |"
+        )
+    lines.extend(["", "## Artifact chains", ""])
+    for item in rows:
+        lines.append(f"- **{item['claim_family']}**: {item['artifact_chain']}")
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def tex_escape(text: str) -> str:
+    replacements = {
+        "\\": r"\textbackslash{}",
+        "&": r"\&",
+        "%": r"\%",
+        "_": r"\_",
+        "#": r"\#",
+    }
+    for old, new in replacements.items():
+        text = text.replace(old, new)
+    text = text.replace("<=", r"$\leq$")
+    return text
+
+
+def write_latex(path: Path, rows: list[dict[str, str]]) -> None:
+    lines = [
+        r"\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}X}",
+        r"\toprule",
+        r"Claim family & Paper-facing use & Manuscript anchor & Boundary \\",
+        r"\midrule",
+    ]
+    for item in rows:
+        lines.append(
+            " & ".join(
+                [
+                    tex_escape(item["claim_family"]),
+                    tex_escape(item["claim_use"]),
+                    tex_escape(item["manuscript_anchor"]),
+                    tex_escape(item["boundary"]),
+                ]
+            )
+            + r" \\"
+        )
+    lines.extend([r"\bottomrule", r"\end{tabularx}"])
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
+    data = {
+        "script": Path(__file__).name,
+        "python": sys.version.split()[0],
+        "rows": len(rows),
+        "status_counts": {status: sum(1 for row in rows if row["status"] == status) for status in sorted({row["status"] for row in rows})},
+        "outputs": {
+            "summary": rel(RESULTS / "summary_submission_traceability_audit.csv"),
+            "analysis": rel(RESULTS / "analysis_submission_traceability_audit.md"),
+            "table": rel(TABLES / "submission_traceability_audit.tex"),
+        },
+    }
+    path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def main() -> int:
+    rows = build_rows()
+    write_csv(RESULTS / "summary_submission_traceability_audit.csv", rows)
+    write_markdown(RESULTS / "analysis_submission_traceability_audit.md", rows)
+    write_latex(TABLES / "submission_traceability_audit.tex", rows)
+    write_manifest(RESULTS / "manifest_submission_traceability_audit.json", rows)
+    missing = [row for row in rows if row["status"] != "complete"]
+    print(f"wrote {len(rows)} submission traceability rows")
+    if missing:
+        print(f"warning: {len(missing)} rows have missing artifacts")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

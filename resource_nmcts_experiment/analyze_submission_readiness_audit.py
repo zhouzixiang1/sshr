@@ -105,6 +105,12 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_reproducibility_audit.py after adding scripts, tables, or figures.",
         },
         {
+            "item": "Claim-to-artifact traceability",
+            "status": "pass" if "tab:traceability-audit" in text else "needs revision",
+            "evidence": "Manuscript includes a submission traceability audit linking claim families to scripts, data, tables, and figures.",
+            "next_action": "Rerun analyze_submission_traceability_audit.py after adding or moving headline evidence.",
+        },
+        {
             "item": "Limitations and failure modes",
             "status": "pass"
             if contains_all(text, ["Several limitations are deliberate", "full ROS reproduction", "not a hardware mapping"])

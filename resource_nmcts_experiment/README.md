@@ -121,15 +121,24 @@ The compute/reproducibility audit is materialized by
 `analyze_reproducibility_audit.py`, which records the local CPU/GPU/Python
 environment, manifest-level worker counts, artifact coverage, and external
 tool commits in `paper_latex/tables/reproducibility_audit.tex`.
+The submission traceability audit is materialized by
+`analyze_submission_traceability_audit.py`, which writes
+`results/summary_submission_traceability_audit.csv`,
+`results/analysis_submission_traceability_audit.md`,
+`results/manifest_submission_traceability_audit.json`, and
+`paper_latex/tables/submission_traceability_audit.tex`.  It links the main
+claim families to the scripts, CSVs, tables, figures, manuscript anchors, and
+boundaries that support them.
 The submission-readiness audit is materialized by
 `analyze_submission_readiness_audit.py`, which writes
 `results/summary_submission_readiness_audit.csv` and
 `results/analysis_submission_readiness_audit.md`.  It checks that the
 submission draft contains bounded and concise abstract claims,
 contribution/evidence mapping, baseline fairness tables, reproducibility
-evidence, limitations, data/code availability, a compiled PDF, and no source
-TODO markers; it leaves funding, acknowledgements, competing interests, and
-archival links as author-specific submission-time items.
+evidence, claim-to-artifact traceability, limitations, data/code availability,
+a compiled PDF, and no source TODO markers; it leaves funding,
+acknowledgements, competing interests, and archival links as author-specific
+submission-time items.
 
 Latest external-toolchain progress:
 
