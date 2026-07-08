@@ -127,6 +127,18 @@ Current source evidence:
   `../results/raw_truth_bridge_n23_large_frontier_terms.csv`
 - large frontier n=23 truth-table bridge analysis:
   `../results/analysis_truth_bridge_n23_large_frontier_terms.md`
+- cost-aware depth-frontier policy CSV:
+  `../results/raw_boolean_screen_depth_frontier_policy_cost_time003.csv`
+- cost-aware depth-frontier policy analysis:
+  `../results/analysis_boolean_screen_depth_frontier_policy_cost_time003.md`
+- cost-aware depth-frontier policy generalization CSV:
+  `../results/raw_screen_scale_depth_frontier_policy_cost_time003_generalization_terms.csv`
+- cost-aware depth-frontier policy generalization analysis:
+  `../results/analysis_screen_scale_depth_frontier_policy_cost_time003_generalization_terms.md`
+- cost-aware frontier n=23 truth-table bridge CSV:
+  `../results/raw_truth_bridge_n23_cost_time003_frontier_terms.csv`
+- cost-aware frontier n=23 truth-table bridge analysis:
+  `../results/analysis_truth_bridge_n23_cost_time003_frontier_terms.md`
 - frontier-policy upgrade analysis:
   `../results/analysis_frontier_policy_upgrade.md`
 - truth-table bridge CSV:
@@ -185,6 +197,9 @@ Current source evidence:
 	  `tables/screen_scale_depth_frontier_policy_large_generalization_terms.tex`,
 	  `tables/truth_bridge_terms.tex`,
 	  `tables/truth_bridge_n23_large_frontier_terms.tex`,
+	  `tables/boolean_screen_depth_frontier_policy_cost_time003.tex`,
+	  `tables/screen_scale_depth_frontier_policy_cost_time003_generalization_terms.tex`,
+	  `tables/truth_bridge_n23_cost_time003_frontier_terms.tex`,
 	  `tables/frontier_policy_upgrade.tex`,
 	  `tables/schedule_truth_bridge_n23_terms.tex`,
 	  `tables/schedule_metrics.tex`,

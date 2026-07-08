@@ -31,6 +31,7 @@
 - `resource_nmcts_zh_manuscript_v17.tex` / `resource_nmcts_zh_manuscript_v17.pdf`：中文论文稿 v17，$n=23$ 完整 bridge 版；在 v16 基础上补充 6 个 $n=23$ 生成式 ANF 函数、60 个方法行的完整 truth-table oracle 验证，并把 n=21/22/23 bridge 合计更新为 180/180 完整验证通过。
 - `resource_nmcts_zh_manuscript_v18.tex` / `resource_nmcts_zh_manuscript_v18.pdf`：中文论文稿 v18，ROS-style LUT proxy 版；在 v17 基础上补充 ABC `K=3,4,5` LUT sweep proxy，覆盖 309 个函数、927/927 truth-table 检查通过，并明确该 proxy 不是官方 ROS/RevKit/mockturtle 复现。
 - `resource_nmcts_zh_manuscript_v19.tex` / `resource_nmcts_zh_manuscript_v19.pdf`：中文论文稿 v19，large frontier policy 版；在 v18 基础上补充扩大训练集后的 frontier policy、独立 seed `n=24,28,32,40` 泛化、large-policy `n=23` 完整 bridge rerun 和 `analysis_frontier_policy_upgrade.md` 汇总，当前项集级方法行验证更新为 5640/5640，完整 truth-table bridge 更新为 240/240。
+- `resource_nmcts_zh_manuscript_v20.tex` / `resource_nmcts_zh_manuscript_v20.pdf`：中文论文稿 v20，cost-aware frontier policy 版；在 v19 基础上补充质量-时间折中标签 `score_delta + 0.003*time_delta`、cost-aware 独立泛化、cost-aware `n=23` 完整 bridge rerun 和升级后的 frontier policy 汇总，当前项集级方法行验证更新为 6600/6600，完整 truth-table bridge 更新为 300/300，并把 frontier policy 明确拆成偏质量的 large 模式和偏运行成本/辅助线生命周期的 cost-aware 模式。
 - `resource_nmcts_zh_research_position.tex` / `resource_nmcts_zh_research_position.pdf`：中文研究定位稿，重新梳理“不从 SSHR 入手”的论文主线、AI 在搜索问题中的角色、当前证据边界和下一步明显提升目标。
 - 最新 v4 稿已补充 `train_screen_depth_policy.py` 的结构级 depth policy 结果：n=14/16/18 训练、held-out n=20 测试，说明 AI 已能学习 screen 深度选择，但尚未超过固定 depth-2 的 score。
 - 最新 v8 稿补充 `train_structure_gate.py` 的 screen-gated Resource-NMCTS 边界验证：原 n=20 切片资源持平且平均运行时间降低 75.58%，held-out n=19/20 合计 16/16 score 持平并平均节省 36.83%，但仍只作为运行时门控证据。
@@ -64,6 +65,7 @@ latexmk -xelatex -g resource_nmcts_zh_manuscript_v16.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v17.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v18.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v19.tex
+latexmk -xelatex -g resource_nmcts_zh_manuscript_v20.tex
 latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 ```
 
@@ -107,11 +109,14 @@ latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 - `../results/analysis_boolean_screen_depth_policy.md`
 - `../results/analysis_boolean_screen_depth_frontier_policy.md`
 - `../results/analysis_boolean_screen_depth_frontier_policy_large.md`
+- `../results/analysis_boolean_screen_depth_frontier_policy_cost_time003.md`
 - `../results/analysis_screen_scale_depth_frontier_policy_terms.md`
 - `../results/analysis_screen_scale_depth_frontier_policy_generalization_terms.md`
 - `../results/analysis_screen_scale_depth_frontier_policy_large_generalization_terms.md`
+- `../results/analysis_screen_scale_depth_frontier_policy_cost_time003_generalization_terms.md`
 - `../results/analysis_truth_bridge_terms.md`
 - `../results/analysis_truth_bridge_n23_large_frontier_terms.md`
+- `../results/analysis_truth_bridge_n23_cost_time003_frontier_terms.md`
 - `../results/analysis_frontier_policy_upgrade.md`
 - `../results/analysis_schedule_truth_bridge_n23_terms.md`
 - `../results/analysis_schedule_metrics.md`

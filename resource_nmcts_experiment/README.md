@@ -25,11 +25,14 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 24,28,32,40 --per-n 24 --workers 6 --max-screen-depth 4 --tag depth_frontier_policy_generalization
 /opt/anaconda3/envs/mcts-qoracle/bin/python train_screen_depth_frontier_policy.py --seed 20260715 --train-per-n 64 --valid-per-n 24 --test-per-n 24 --epochs 220 --hidden 160 --workers 8 --action-width 6 --tag large --model-out models/boolean_screen_depth_frontier_policy_large.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 24,28,32,40 --per-n 24 --workers 8 --max-screen-depth 4 --frontier-policy-model models/boolean_screen_depth_frontier_policy_large.pt --tag depth_frontier_policy_large_generalization
+/opt/anaconda3/envs/mcts-qoracle/bin/python train_screen_depth_frontier_policy.py --seed 20260716 --train-per-n 64 --valid-per-n 24 --test-per-n 24 --epochs 220 --hidden 160 --workers 8 --action-width 6 --label-time-weight 0.003 --tag cost_time003 --model-out models/boolean_screen_depth_frontier_policy_cost_time003.pt
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 24,28,32,40 --per-n 24 --workers 8 --max-screen-depth 4 --frontier-policy-model models/boolean_screen_depth_frontier_policy_cost_time003.pt --tag depth_frontier_policy_cost_time003_generalization
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --workers 2
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 24,28,32,40 --per-n 24 --workers 6 --max-screen-depth 4 --tag schedule_depth_frontier_policy_generalization
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260711 --ns 21,22 --per-n 6 --workers 2 --max-screen-depth 4 --tag schedule_truth_bridge
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260713 --ns 23 --per-n 6 --workers 2 --max-screen-depth 4 --tag schedule_truth_bridge_n23
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260713 --ns 23 --per-n 6 --workers 2 --max-screen-depth 4 --frontier-policy-model models/boolean_screen_depth_frontier_policy_large.pt --tag truth_bridge_n23_large_frontier
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260713 --ns 23 --per-n 6 --workers 2 --max-screen-depth 4 --frontier-policy-model models/boolean_screen_depth_frontier_policy_cost_time003.pt --tag truth_bridge_n23_cost_time003_frontier
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_schedule_metrics.py --input schedule_generalization=results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv --input schedule_truth_bridge=results/raw_schedule_truth_bridge_terms.csv --input schedule_truth_bridge_n23=results/raw_schedule_truth_bridge_n23_terms.csv
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_frontier_policy_upgrade.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset smoke
@@ -224,6 +227,17 @@ mean score, improves over the old policy by 17/0/79 with -0.49% mean score,
 and remains +0.10% from all-depth while saving -53.50% planning time.  This is
 a quality-strengthened policy, not a faster policy: it chooses depth-3/4 more
 often and is slower than the old frontier policy.
+The cost-aware depth-frontier policy is saved at
+`models/boolean_screen_depth_frontier_policy_cost_time003.pt`.  It uses the
+same training size and hidden width as the large model, but labels examples
+with a relative objective `score_delta + 0.003*time_delta` against depth-2.  On
+the independent `n=24,28,32,40` generalization run, it keeps 56/0/40 score W/L/T
+against fixed depth-2 with -1.39% mean score, while lowering mean planning-time
+overhead to +170.03% and explicit ancilla lifetime-area overhead to +14.63%.
+Against the large quality model it trades +0.99% score for -33.02% time and
+-7.61% lifetime area.  On the `n=23` truth-table bridge it passes 60/60
+truth/plan/circuit checks and trades +0.92% score for -56.29% time and -12.62%
+lifetime area against the large model.
 Term-set scale tests beyond truth-table-feasible sizes are run with
 `run_screen_scale_terms.py`; outputs are written to
 `results/analysis_screen_scale_terms.md`, `results/raw_screen_scale_terms.csv`,
@@ -240,6 +254,10 @@ functions and sixty method rows; its frontier policy improves score by 1.88%
 and T-depth proxy by 1.69% against fixed depth-2.  The large-policy `n=23`
 rerun improves over the old policy by 1/0/5 with -0.48% mean score and -0.45%
 T-depth proxy, with the expected increase in explicit ancilla lifetime area.
+The cost-aware `n=23` rerun adds another 60 fully verified method rows and is
+best treated as a fast-quality operating point: 4/0/2 against fixed depth-2
+with -1.46% mean score and +196.09% plan time, while saving -80.46% plan time
+against all-depth adaptive.
 
 Current structure-policy evidence:
 
@@ -331,6 +349,13 @@ Current structure-policy evidence:
   -2.36% mean score, 0/1/5 against all-depth with +0.12% mean score and
   -45.99% plan time, and 1/0/5 against the old frontier policy with -0.48%
   mean score and -0.45% T-depth proxy.
+- The cost-aware frontier-policy generalization run,
+  `results/analysis_screen_scale_depth_frontier_policy_cost_time003_generalization_terms.md`,
+  keeps the same 56/0/40 score W/L/T against fixed depth-2 as the large model
+  but reduces the planning-time overhead to +170.03%.  The corresponding
+  `n=23` bridge rerun,
+  `results/analysis_truth_bridge_n23_cost_time003_frontier_terms.md`, passes
+  60/60 complete truth-table, plan, and emitted-circuit checks.
 - Logic-level schedule-proxy evidence is now emitted by `run_screen_scale_terms.py`
   and `run_truth_bridge_terms.py`, then summarized by
   `analyze_schedule_metrics.py`.  The metrics are not hardware mapping results:

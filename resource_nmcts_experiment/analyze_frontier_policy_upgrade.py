@@ -225,32 +225,34 @@ def write_summary(path: Path, rows: list[dict[str, object]]) -> None:
 def write_analysis(
     path: Path,
     rows: list[dict[str, object]],
-    old_scale_counts: tuple[int, int, int, int],
-    large_scale_counts: tuple[int, int, int, int],
-    old_truth_counts: tuple[int, int, int, int],
-    large_truth_counts: tuple[int, int, int, int],
+    verification_counts: list[tuple[str, tuple[int, int, int, int]]],
 ) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     lines = [
         "# Large Depth-Frontier Policy Upgrade",
         "",
         "This analysis compares the original depth-frontier policy with a larger",
-        "retraining of the same structure-level neural policy.  The policy still",
-        "selects one of depth-2, depth-3, or depth-4 Boolean-ring screening; the",
-        "change is more labelled frontier data and a larger hidden layer.",
+        "retraining and a cost-aware variant of the same structure-level neural",
+        "policy.  Each policy still selects one of depth-2, depth-3, or depth-4",
+        "Boolean-ring screening; the changes are more labelled frontier data, a",
+        "larger hidden layer, or a cost-aware label objective.",
         "",
         "## Verification",
         "",
-        f"- old scale rows: {old_scale_counts[0]}, plan {old_scale_counts[1]}/{old_scale_counts[0]}, circuit {old_scale_counts[2]}/{old_scale_counts[0]}",
-        f"- large-policy scale rows: {large_scale_counts[0]}, plan {large_scale_counts[1]}/{large_scale_counts[0]}, circuit {large_scale_counts[2]}/{large_scale_counts[0]}",
-        f"- old n=23 bridge rows: {old_truth_counts[0]}, truth {old_truth_counts[3]}/{old_truth_counts[0]}, plan {old_truth_counts[1]}/{old_truth_counts[0]}, circuit {old_truth_counts[2]}/{old_truth_counts[0]}",
-        f"- large-policy n=23 bridge rows: {large_truth_counts[0]}, truth {large_truth_counts[3]}/{large_truth_counts[0]}, plan {large_truth_counts[1]}/{large_truth_counts[0]}, circuit {large_truth_counts[2]}/{large_truth_counts[0]}",
-        "",
-        "## Comparisons",
-        "",
-        "| source | comparison | pairs | score W/L/T | score | time | T-depth | aux area |",
-        "|---|---|---:|---:|---:|---:|---:|---:|",
     ]
+    for label, counts in verification_counts:
+        total, plan, circuit, truth = counts
+        truth_part = f", truth {truth}/{total}" if truth else ""
+        lines.append(f"- {label}: rows {total}{truth_part}, plan {plan}/{total}, circuit {circuit}/{total}")
+    lines.extend(
+        [
+            "",
+            "## Comparisons",
+            "",
+            "| source | comparison | pairs | score W/L/T | score | time | T-depth | aux area |",
+            "|---|---|---:|---:|---:|---:|---:|---:|",
+        ]
+    )
     for row in rows:
         lines.append(
             f"| {row['source']} | {row['comparison']} | {row['pairs']} | "
@@ -272,6 +274,12 @@ def write_analysis(
             "- On the n=23 full truth-table bridge, it improves the old frontier policy",
             "  by 1/0/5 with -0.48% score and -0.45% T-depth proxy, with all 60",
             "  method rows passing truth-table, plan, and emitted-circuit verification.",
+            "- The cost-aware retraining is a faster quality mode.  On the same",
+            "  independent n=24/28/32/40 generalization run, it keeps the 56/0/40",
+            "  score W/L/T pattern against fixed depth-2, but lowers mean plan-time",
+            "  overhead from the large model's +563.80% to +170.03%.  On the n=23",
+            "  bridge, it reduces plan time by -56.29% and auxiliary lifetime area",
+            "  by -12.62% relative to the large model, at a +0.92% score cost.",
             "",
         ]
     )
@@ -286,9 +294,15 @@ def write_latex(path: Path, rows: list[dict[str, object]]) -> None:
         "large scale policy vs adaptive_all_depth",
         "old scale policy vs adaptive_all_depth",
         "large scale policy vs old policy",
+        "cost scale policy vs screen_depth2",
+        "cost scale policy vs large policy",
+        "cost scale policy vs old policy",
         "large n23 policy vs screen_depth2",
         "old n23 policy vs screen_depth2",
         "large n23 policy vs old policy",
+        "cost n23 policy vs screen_depth2",
+        "cost n23 policy vs large policy",
+        "cost n23 policy vs old policy",
     ]
     selected = [row for label in focus for row in rows if row["comparison"] == label]
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -310,34 +324,50 @@ def write_latex(path: Path, rows: list[dict[str, object]]) -> None:
 def main() -> int:
     old_training = read_csv(RESULTS / "raw_boolean_screen_depth_frontier_policy.csv")
     large_training = read_csv(RESULTS / "raw_boolean_screen_depth_frontier_policy_large.csv")
+    cost_training = read_csv(RESULTS / "raw_boolean_screen_depth_frontier_policy_cost_time003.csv")
     old_scale = read_csv(RESULTS / "raw_screen_scale_depth_frontier_policy_generalization_terms.csv")
     large_scale = read_csv(RESULTS / "raw_screen_scale_depth_frontier_policy_large_generalization_terms.csv")
+    cost_scale = read_csv(RESULTS / "raw_screen_scale_depth_frontier_policy_cost_time003_generalization_terms.csv")
     old_truth = read_csv(RESULTS / "raw_schedule_truth_bridge_n23_terms.csv")
     large_truth = read_csv(RESULTS / "raw_truth_bridge_n23_large_frontier_terms.csv")
+    cost_truth = read_csv(RESULTS / "raw_truth_bridge_n23_cost_time003_frontier_terms.csv")
 
     rows: list[dict[str, object]] = [
         training_summary(old_training, "old heldout policy vs oracle frontier"),
         training_summary(large_training, "large heldout policy vs oracle frontier"),
+        training_summary(cost_training, "cost heldout policy vs cost-aware frontier"),
         compare_methods(large_scale, "depth_frontier_policy", "screen_depth2", "large scale policy vs screen_depth2", "scale_generalization"),
         compare_methods(old_scale, "depth_frontier_policy", "screen_depth2", "old scale policy vs screen_depth2", "scale_generalization"),
+        compare_methods(cost_scale, "depth_frontier_policy", "screen_depth2", "cost scale policy vs screen_depth2", "scale_generalization"),
         compare_methods(large_scale, "depth_frontier_policy", "adaptive_all_depth", "large scale policy vs adaptive_all_depth", "scale_generalization"),
         compare_methods(old_scale, "depth_frontier_policy", "adaptive_all_depth", "old scale policy vs adaptive_all_depth", "scale_generalization"),
+        compare_methods(cost_scale, "depth_frontier_policy", "adaptive_all_depth", "cost scale policy vs adaptive_all_depth", "scale_generalization"),
         compare_policy_files(large_scale, old_scale, "large scale policy vs old policy", "scale_generalization"),
+        compare_policy_files(cost_scale, old_scale, "cost scale policy vs old policy", "scale_generalization"),
+        compare_policy_files(cost_scale, large_scale, "cost scale policy vs large policy", "scale_generalization"),
         compare_methods(large_truth, "depth_frontier_policy", "screen_depth2", "large n23 policy vs screen_depth2", "truth_bridge_n23"),
         compare_methods(old_truth, "depth_frontier_policy", "screen_depth2", "old n23 policy vs screen_depth2", "truth_bridge_n23"),
+        compare_methods(cost_truth, "depth_frontier_policy", "screen_depth2", "cost n23 policy vs screen_depth2", "truth_bridge_n23"),
         compare_methods(large_truth, "depth_frontier_policy", "adaptive_all_depth", "large n23 policy vs adaptive_all_depth", "truth_bridge_n23"),
         compare_methods(old_truth, "depth_frontier_policy", "adaptive_all_depth", "old n23 policy vs adaptive_all_depth", "truth_bridge_n23"),
+        compare_methods(cost_truth, "depth_frontier_policy", "adaptive_all_depth", "cost n23 policy vs adaptive_all_depth", "truth_bridge_n23"),
         compare_policy_files(large_truth, old_truth, "large n23 policy vs old policy", "truth_bridge_n23"),
+        compare_policy_files(cost_truth, old_truth, "cost n23 policy vs old policy", "truth_bridge_n23"),
+        compare_policy_files(cost_truth, large_truth, "cost n23 policy vs large policy", "truth_bridge_n23"),
     ]
 
     write_summary(RESULTS / "summary_frontier_policy_upgrade.csv", rows)
     write_analysis(
         RESULTS / "analysis_frontier_policy_upgrade.md",
         rows,
-        verify_counts(old_scale),
-        verify_counts(large_scale),
-        verify_counts(old_truth),
-        verify_counts(large_truth),
+        [
+            ("old scale", verify_counts(old_scale)),
+            ("large-policy scale", verify_counts(large_scale)),
+            ("cost-aware scale", verify_counts(cost_scale)),
+            ("old n=23 bridge", verify_counts(old_truth)),
+            ("large-policy n=23 bridge", verify_counts(large_truth)),
+            ("cost-aware n=23 bridge", verify_counts(cost_truth)),
+        ],
     )
     write_latex(TABLES / "frontier_policy_upgrade.tex", rows)
     print("wrote results/summary_frontier_policy_upgrade.csv")

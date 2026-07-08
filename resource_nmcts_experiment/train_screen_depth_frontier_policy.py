@@ -58,6 +58,13 @@ class Example:
     oracle_depth: int
 
 
+@dataclass(frozen=True)
+class LabelObjective:
+    time_weight: float = 0.0
+    ancilla_weight: float = 0.0
+    baseline_depth: int = 2
+
+
 def split_arg(value: str) -> list[int]:
     return [int(v.strip()) for v in value.split(",") if v.strip()]
 
@@ -102,12 +109,32 @@ def evaluate_depths(
     return out
 
 
-def oracle_depth(evals: dict[int, PlanEval], depths: Sequence[int]) -> int:
-    return min(depths, key=lambda d: (evals[d].score, evals[d].time_s, d))
+def relative_delta(target: float, baseline: float, floor: float = 1.0) -> float:
+    return (target - baseline) / max(abs(baseline), floor)
 
 
-def build_one(task: tuple[str, int, int, int, str, int, tuple[int, ...]]) -> Example:
-    split, n, index, seed, profile, action_width, depths = task
+def oracle_depth(evals: dict[int, PlanEval], depths: Sequence[int], objective: LabelObjective | None = None) -> int:
+    if objective is None or (objective.time_weight == 0.0 and objective.ancilla_weight == 0.0):
+        return min(depths, key=lambda d: (evals[d].score, evals[d].time_s, d))
+    base = evals.get(objective.baseline_depth, evals[depths[0]])
+
+    def label_cost(depth: int) -> tuple[float, float, int]:
+        ev = evals[depth]
+        score_term = relative_delta(ev.score, base.score)
+        time_term = max(0.0, relative_delta(ev.time_s, base.time_s, floor=1e-9))
+        ancilla_term = max(0.0, relative_delta(float(ev.peak_ancilla), float(base.peak_ancilla)))
+        objective_value = (
+            score_term
+            + objective.time_weight * time_term
+            + objective.ancilla_weight * ancilla_term
+        )
+        return objective_value, ev.time_s, depth
+
+    return min(depths, key=label_cost)
+
+
+def build_one(task: tuple[str, int, int, int, str, int, tuple[int, ...], LabelObjective]) -> Example:
+    split, n, index, seed, profile, action_width, depths, objective = task
     rng = random.Random(seed)
     config = make_config()
     terms = generate_terms(n, rng, profile)
@@ -121,7 +148,7 @@ def build_one(task: tuple[str, int, int, int, str, int, tuple[int, ...]]) -> Exa
         term_count=len(terms),
         features=features,
         evals=evals,
-        oracle_depth=oracle_depth(evals, depths),
+        oracle_depth=oracle_depth(evals, depths, objective),
     )
 
 
@@ -132,14 +159,15 @@ def make_tasks(
     seed: int,
     action_width: int,
     depths: tuple[int, ...],
-) -> list[tuple[str, int, int, int, str, int, tuple[int, ...]]]:
+    objective: LabelObjective,
+) -> list[tuple[str, int, int, int, str, int, tuple[int, ...], LabelObjective]]:
     profiles = ["shallow", "mixed", "deep"]
     tasks = []
     split_offset = {"train": 0, "valid": 1_000_000, "test": 2_000_000}[split]
     for n in ns:
         for i in range(count_per_n):
             profile = profiles[(i + n) % len(profiles)]
-            tasks.append((split, n, i, seed + split_offset + n * 10_000 + i, profile, action_width, depths))
+            tasks.append((split, n, i, seed + split_offset + n * 10_000 + i, profile, action_width, depths, objective))
     return tasks
 
 
@@ -151,8 +179,9 @@ def build_examples(
     action_width: int,
     depths: tuple[int, ...],
     workers: int,
+    objective: LabelObjective,
 ) -> list[Example]:
-    tasks = make_tasks(split, ns, count_per_n, seed, action_width, depths)
+    tasks = make_tasks(split, ns, count_per_n, seed, action_width, depths, objective)
     examples: list[Example] = []
     if workers <= 1:
         for idx, task in enumerate(tasks, 1):
@@ -330,6 +359,9 @@ def write_outputs(
             "train_per_n": args.train_per_n,
             "valid_per_n": args.valid_per_n,
             "test_per_n": args.test_per_n,
+            "label_time_weight": args.label_time_weight,
+            "label_ancilla_weight": args.label_ancilla_weight,
+            "label_baseline_depth": args.label_baseline_depth,
         },
         model_path,
     )
@@ -449,6 +481,10 @@ def write_outputs(
         f.write(f"- validation examples: {len(valid)}\n")
         f.write(f"- held-out test examples: {len(test)}\n")
         f.write(f"- train n: {args.train_n}; test n: {args.test_n}\n")
+        f.write(
+            f"- label objective: score_delta + {args.label_time_weight:g}*time_delta "
+            f"+ {args.label_ancilla_weight:g}*ancilla_delta vs depth-{args.label_baseline_depth}\n"
+        )
         f.write(f"- parallel workers for data generation: {args.workers}\n")
         f.write(f"- validation accuracy at best checkpoint: {metrics['valid_acc']:.3f}\n")
         f.write(f"- held-out depth accuracy: {accuracy:.3f}\n")
@@ -508,19 +544,49 @@ def main(argv: Iterable[str] | None = None) -> int:
     ap.add_argument("--results-dir", default=str(THIS_DIR / "results"))
     ap.add_argument("--tables-dir", default=str(THIS_DIR / "paper_latex" / "tables"))
     ap.add_argument("--tag", default="", help="Optional filename suffix for model-result variants.")
+    ap.add_argument(
+        "--label-time-weight",
+        type=float,
+        default=0.0,
+        help="Relative runtime penalty for selecting depth-frontier labels. Default keeps score-only labels.",
+    )
+    ap.add_argument(
+        "--label-ancilla-weight",
+        type=float,
+        default=0.0,
+        help="Relative peak-ancilla penalty for selecting depth-frontier labels.",
+    )
+    ap.add_argument(
+        "--label-baseline-depth",
+        type=int,
+        default=2,
+        choices=list(FRONTIER_DEPTHS),
+        help="Baseline depth used by relative cost-aware label penalties.",
+    )
     args = ap.parse_args(list(argv) if argv is not None else None)
 
     depths = FRONTIER_DEPTHS
     train_ns = split_arg(args.train_n)
     test_ns = split_arg(args.test_n)
+    label_objective = LabelObjective(
+        time_weight=args.label_time_weight,
+        ancilla_weight=args.label_ancilla_weight,
+        baseline_depth=args.label_baseline_depth,
+    )
 
     started = time.time()
     print("building train examples", flush=True)
-    train = build_examples("train", train_ns, args.train_per_n, args.seed, args.action_width, depths, args.workers)
+    train = build_examples(
+        "train", train_ns, args.train_per_n, args.seed, args.action_width, depths, args.workers, label_objective
+    )
     print("building validation examples", flush=True)
-    valid = build_examples("valid", train_ns, args.valid_per_n, args.seed, args.action_width, depths, args.workers)
+    valid = build_examples(
+        "valid", train_ns, args.valid_per_n, args.seed, args.action_width, depths, args.workers, label_objective
+    )
     print("building held-out test examples", flush=True)
-    test = build_examples("test", test_ns, args.test_per_n, args.seed, args.action_width, depths, args.workers)
+    test = build_examples(
+        "test", test_ns, args.test_per_n, args.seed, args.action_width, depths, args.workers, label_objective
+    )
 
     model, mean, std, metrics = train_model(train, valid, depths, args.seed, args.hidden, args.epochs)
     predictions = {
