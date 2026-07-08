@@ -36,6 +36,7 @@ run_py analyze_learned_control_audit.py
 run_py analyze_scaling_resource_audit.py
 run_py analyze_weight_robustness.py
 run_py analyze_reproducibility_audit.py
+run_py analyze_submission_metadata_audit.py
 run_py make_submission_figures.py
 run_py analyze_submission_archive_manifest.py
 run_py analyze_submission_traceability_audit.py

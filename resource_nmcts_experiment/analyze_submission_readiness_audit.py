@@ -28,6 +28,9 @@ PAYLOAD_SHA256 = SUBMISSION_PACKAGE / "dist" / "resource_nmcts_submission_payloa
 PAYLOAD_ANALYSIS = RESULTS / "analysis_submission_payload_archive.md"
 PAYLOAD_SUMMARY = RESULTS / "summary_submission_payload_archive.csv"
 PAYLOAD_MANIFEST = RESULTS / "manifest_submission_payload_archive.json"
+METADATA_ANALYSIS = RESULTS / "analysis_submission_metadata_audit.md"
+METADATA_SUMMARY = RESULTS / "summary_submission_metadata_audit.csv"
+METADATA_MANIFEST = RESULTS / "manifest_submission_metadata_audit.json"
 SUPPORT_FILES = [
     SUBMISSION_PACKAGE / "cover_letter_template.md",
     SUBMISSION_PACKAGE / "author_declarations_template.md",
@@ -145,6 +148,14 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Fill the author-specific fields before journal upload.",
         },
         {
+            "item": "Submission metadata audit",
+            "status": "pass"
+            if METADATA_ANALYSIS.exists() and METADATA_SUMMARY.exists() and METADATA_MANIFEST.exists()
+            else "needs revision",
+            "evidence": "Author- and venue-specific metadata fields are enumerated in CSV, Markdown, and JSON audit outputs.",
+            "next_action": "Rerun analyze_submission_metadata_audit.py after filling author declarations or choosing a target venue.",
+        },
+        {
             "item": "Uploadable payload archive",
             "status": "pass"
             if PAYLOAD_ARCHIVE.exists()
@@ -191,8 +202,8 @@ def build_rows() -> list[dict[str, str]]:
         {
             "item": "Author-specific declarations",
             "status": "needs author input",
-            "evidence": "Funding, acknowledgements, author metadata, competing interests, and final archival links are author-specific even though templates are prepared.",
-            "next_action": "Complete `submission_package/author_declarations_template.md` and replace repository-relative availability links at the target journal's submission step.",
+            "evidence": "Funding, acknowledgements, author metadata, competing interests, target-venue fields, and final archival links are author-specific even though templates and a metadata audit are prepared.",
+            "next_action": "Complete `submission_package/author_declarations_template.md`, update the cover letter/checklist, and replace repository-relative availability links at the target journal's submission step.",
         },
     ]
     return rows

@@ -41,6 +41,12 @@ AUTHOR INPUT REQUIRED:
 
 State all funding sources, grant numbers, and institutional support.  If there was no external funding, write the exact no-funding statement required by the target venue.
 
+## Acknowledgements
+
+AUTHOR INPUT REQUIRED:
+
+State any technical assistance, institutional support, computing support, or individuals who should be acknowledged.  If there are no acknowledgements, use the exact no-acknowledgement wording required by the target venue.
+
 ## Competing Interests
 
 AUTHOR INPUT REQUIRED:

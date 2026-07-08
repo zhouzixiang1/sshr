@@ -1,0 +1,118 @@
+{
+  "outputs": {
+    "analysis": "results/analysis_submission_metadata_audit.md",
+    "manifest": "results/manifest_submission_metadata_audit.json",
+    "summary": "results/summary_submission_metadata_audit.csv"
+  },
+  "python": "3.11.15",
+  "rows": [
+    {
+      "evidence": "1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md.",
+      "item": "Author identity and affiliations",
+      "next_action": "Fill the author list, affiliations, ORCIDs, corresponding author, and email addresses.",
+      "reason": "These identify the accountable authors and cannot be inferred from experiment artifacts.",
+      "required_fields": "author order; ORCID IDs; affiliations; corresponding author; emails",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "evidence": "1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md.",
+      "item": "CRediT author contributions",
+      "next_action": "Assign CRediT-style roles for every author before upload.",
+      "reason": "Contribution roles require author confirmation.",
+      "required_fields": "conceptualization; methodology; software; validation; writing; supervision",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "evidence": "1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md.",
+      "item": "Funding statement",
+      "next_action": "Insert the exact target-venue funding or no-funding wording.",
+      "reason": "Funding sources and grant numbers are external to the experiment package.",
+      "required_fields": "funding sources; grant numbers; no-funding statement if applicable",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "evidence": "1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md.",
+      "item": "Acknowledgements",
+      "next_action": "Add acknowledgements or the venue-required no-acknowledgement statement.",
+      "reason": "Acknowledgements require author approval and consent where appropriate.",
+      "required_fields": "technical help; institutional support; people to acknowledge; no-acknowledgement statement if applicable",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "evidence": "1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md.",
+      "item": "Competing interests",
+      "next_action": "Insert the exact competing-interest statement required by the target venue.",
+      "reason": "Conflict-of-interest declarations must be made by the authors.",
+      "required_fields": "financial interests; non-financial interests; none-declared wording if applicable",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "evidence": "1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md.",
+      "item": "Data availability archive link",
+      "next_action": "Create or select the final archive/repository link and paste it into the statement.",
+      "reason": "The local artifact paths must be replaced or supplemented by a submission-time archive link.",
+      "required_fields": "repository DOI or URL; anonymous review link if needed; access restrictions if any",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "evidence": "1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md.",
+      "item": "Code availability and license",
+      "next_action": "Add the final repository URL, commit hash, license, and any anonymous review link.",
+      "reason": "The final public or anonymous code location is a submission decision.",
+      "required_fields": "repository URL; commit hash; license; environment notes; anonymous review link if needed",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "evidence": "1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md.",
+      "item": "AI assistance disclosure",
+      "next_action": "Use the venue-required disclosure wording or confirm that no disclosure is required.",
+      "reason": "Disclosure requirements vary by target venue and must be approved by the authors.",
+      "required_fields": "venue wording; scope of assistance; author verification statement",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "evidence": "1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md.",
+      "item": "Preprint and prior submission history",
+      "next_action": "Record any preprint, previous submission, or related manuscript under review.",
+      "reason": "Editorial declarations depend on author publication history.",
+      "required_fields": "preprint DOI/URL; prior submission history; related manuscripts",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "evidence": "2 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/cover_letter_template.md.",
+      "item": "Cover-letter routing metadata",
+      "next_action": "Fill the cover-letter required fields after selecting the target venue.",
+      "reason": "The cover letter needs venue and editorial-routing information.",
+      "required_fields": "corresponding author; target venue; manuscript type; reviewer suggestions; excluded reviewers",
+      "source": "submission_package/cover_letter_template.md",
+      "status": "needs author input"
+    },
+    {
+      "evidence": "5 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/submission_checklist.md.",
+      "item": "Target-venue policy check",
+      "next_action": "Check the target venue guide and update manuscript or support files accordingly.",
+      "reason": "Venue-specific policies can only be finalized after the target venue is chosen.",
+      "required_fields": "formatting policy; reference style; word limit; supplement policy; AI disclosure policy",
+      "source": "submission_package/submission_checklist.md",
+      "status": "needs author input"
+    }
+  ],
+  "script": "analyze_submission_metadata_audit.py",
+  "source_files": [
+    "submission_package/author_declarations_template.md",
+    "submission_package/cover_letter_template.md",
+    "submission_package/submission_checklist.md"
+  ],
+  "status_counts": {
+    "needs author input": 11
+  }
+}

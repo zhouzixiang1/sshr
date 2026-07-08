@@ -1,0 +1,23 @@
+# Submission Metadata Audit
+
+This audit enumerates author- and venue-specific fields that cannot be inferred from the experimental artifact package.
+
+## Status counts
+
+- needs author input: 11
+
+## Checklist
+
+| item | status | source | required fields | evidence | next action |
+|---|---|---|---|---|---|
+| Author identity and affiliations | needs author input | `submission_package/author_declarations_template.md` | author order; ORCID IDs; affiliations; corresponding author; emails | 1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md. | Fill the author list, affiliations, ORCIDs, corresponding author, and email addresses. |
+| CRediT author contributions | needs author input | `submission_package/author_declarations_template.md` | conceptualization; methodology; software; validation; writing; supervision | 1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md. | Assign CRediT-style roles for every author before upload. |
+| Funding statement | needs author input | `submission_package/author_declarations_template.md` | funding sources; grant numbers; no-funding statement if applicable | 1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md. | Insert the exact target-venue funding or no-funding wording. |
+| Acknowledgements | needs author input | `submission_package/author_declarations_template.md` | technical help; institutional support; people to acknowledge; no-acknowledgement statement if applicable | 1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md. | Add acknowledgements or the venue-required no-acknowledgement statement. |
+| Competing interests | needs author input | `submission_package/author_declarations_template.md` | financial interests; non-financial interests; none-declared wording if applicable | 1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md. | Insert the exact competing-interest statement required by the target venue. |
+| Data availability archive link | needs author input | `submission_package/author_declarations_template.md` | repository DOI or URL; anonymous review link if needed; access restrictions if any | 1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md. | Create or select the final archive/repository link and paste it into the statement. |
+| Code availability and license | needs author input | `submission_package/author_declarations_template.md` | repository URL; commit hash; license; environment notes; anonymous review link if needed | 1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md. | Add the final repository URL, commit hash, license, and any anonymous review link. |
+| AI assistance disclosure | needs author input | `submission_package/author_declarations_template.md` | venue wording; scope of assistance; author verification statement | 1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md. | Use the venue-required disclosure wording or confirm that no disclosure is required. |
+| Preprint and prior submission history | needs author input | `submission_package/author_declarations_template.md` | preprint DOI/URL; prior submission history; related manuscripts | 1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md. | Record any preprint, previous submission, or related manuscript under review. |
+| Cover-letter routing metadata | needs author input | `submission_package/cover_letter_template.md` | corresponding author; target venue; manuscript type; reviewer suggestions; excluded reviewers | 2 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/cover_letter_template.md. | Fill the cover-letter required fields after selecting the target venue. |
+| Target-venue policy check | needs author input | `submission_package/submission_checklist.md` | formatting policy; reference style; word limit; supplement policy; AI disclosure policy | 5 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/submission_checklist.md. | Check the target venue guide and update manuscript or support files accordingly. |

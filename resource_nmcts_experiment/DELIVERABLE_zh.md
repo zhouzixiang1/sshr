@@ -144,13 +144,13 @@
 - `results/manifest_reproducibility_audit.json`
 - `paper_latex/tables/reproducibility_audit.tex`
 
-该审计记录当前工作站为 Apple M4 Pro，14 CPU cores，24.0 GiB RAM，20-core Metal GPU；`mcts-qoracle` 环境中 Python 3.11.15、PyTorch 2.12.0、MPS=True、CUDA=False。manifest 层面有 54 个运行记录包含 worker count，最大 workers=10；代表性流程包括 traditional resource 10 workers/1770 rows、RevKit CLI 8 workers/708 rows、ROS-style LUT 8 workers/927 rows、CirKit 8 workers/177 rows、mockturtle 4 workers/177 rows。重新生成后的 artifact coverage 为 60 个顶层 run/train/analyze 脚本、144 个 raw CSV、169 个 summary CSV、68 个 manifest、151 张 paper table 和 7 个 figure panel。论文中应把 runtime/time 结果限定在这个工作站上下文；可移植主张仍是逻辑资源数量和验证通过率。
+该审计记录当前工作站为 Apple M4 Pro，14 CPU cores，24.0 GiB RAM，20-core Metal GPU；`mcts-qoracle` 环境中 Python 3.11.15、PyTorch 2.12.0、MPS=True、CUDA=False。manifest 层面有 54 个运行记录包含 worker count，最大 workers=10；代表性流程包括 traditional resource 10 workers/1770 rows、RevKit CLI 8 workers/708 rows、ROS-style LUT 8 workers/927 rows、CirKit 8 workers/177 rows、mockturtle 4 workers/177 rows。重新生成后的 artifact coverage 为 61 个顶层 run/train/analyze 脚本、144 个 raw CSV、170 个 summary CSV、69 个 manifest、151 张 paper table 和 7 个 figure panel。论文中应把 runtime/time 结果限定在这个工作站上下文；可移植主张仍是逻辑资源数量和验证通过率。
 
 本轮新增轻量投稿包再生成入口：
 
 - `rebuild_submission_package.sh`
 
-该脚本从现有 experiment artifacts 重建 paper-facing analysis tables、submission figures/source data、archive manifest、uploadable payload archive、traceability/readiness audits 和英文投稿 PDF；实测连续运行两次后当前变更/新增文件 hash 完全一致，第二次 `latexmk` 显示 PDF up-to-date。它不重跑 raw benchmark sweeps、external-toolchain probes 或 neural training jobs，这些仍由各自 `run_*.py` 和 `train_*.py` 入口负责。
+该脚本从现有 experiment artifacts 重建 paper-facing analysis tables、submission figures/source data、metadata audit、archive manifest、uploadable payload archive、traceability/readiness audits 和英文投稿 PDF；实测连续运行两次后当前变更/新增文件 hash 完全一致，第二次 `latexmk` 显示 PDF up-to-date。它不重跑 raw benchmark sweeps、external-toolchain probes 或 neural training jobs，这些仍由各自 `run_*.py` 和 `train_*.py` 入口负责。
 
 本轮新增 submission traceability audit，用于把投稿稿中的核心主张连接到实际脚本、CSV、表格、图和正文位置：
 
@@ -170,7 +170,7 @@
 - `results/manifest_submission_archive_manifest.json`
 - `paper_latex/tables/submission_archive_manifest.tex`
 
-该清单按 manuscript source、paper tables、submission figures、raw measurements、derived summaries、run manifests、scripts/docs、models、external adapters 和 submission support 十类统计文件数、缺失数、字节数和类别 SHA256 摘要。为避免自引用哈希，它不把终端 submission audits 和编译出的 PDF 纳入 payload digest；PDF 存在性和页数仍由 readiness audit 单独检查。该表已接入英文投稿稿 Experimental Design，用于降低归档/上传阶段遗漏文件的风险。
+该清单按 manuscript source、paper tables、submission figures、raw measurements、derived summaries、run manifests、scripts/docs、models、external adapters 和 submission support 十类统计文件数、缺失数、字节数和类别 SHA256 摘要。为避免自引用哈希，它不把终端 submission package/audit outputs 和编译出的 PDF 纳入 payload digest；PDF 存在性和页数仍由 readiness audit 单独检查。该表已接入英文投稿稿 Experimental Design，用于降低归档/上传阶段遗漏文件的风险。
 
 本轮新增投稿支持模板，把最后的作者侧人工输入拆成可填写文件：
 
@@ -180,6 +180,15 @@
 - `submission_package/reviewer_concern_brief.md`
 
 这些文件已经把论文事实、边界和审稿人可能关切整理好；所有不能从实验产物推断的信息统一标成 `AUTHOR INPUT REQUIRED`，包括作者顺序、单位、ORCID、通信作者、funding、acknowledgements、competing interests、AI-assistance disclosure、最终仓库/归档链接和目标期刊特定字段。它们被纳入 archive manifest，但不把作者声明视为已经完成。
+
+本轮新增 submission metadata audit，把最后剩余的人工字段拆成机器可检查清单：
+
+- `analyze_submission_metadata_audit.py`
+- `results/summary_submission_metadata_audit.csv`
+- `results/analysis_submission_metadata_audit.md`
+- `results/manifest_submission_metadata_audit.json`
+
+该审计逐项列出 author identity、CRediT contribution、funding、acknowledgements、competing interests、data/code availability archive link、license/repository metadata、AI-assistance disclosure、preprint/prior submission、cover-letter routing fields 和 target-venue policy check。当前这些项仍保持 `needs author input`，但已经从模糊“还差作者信息”变成可填写、可复查、可归档的最终投稿元数据清单。
 
 本轮新增可上传 payload archive 生成器，把归档清单进一步转成实际上传包：
 
@@ -198,7 +207,7 @@
 - `results/summary_submission_readiness_audit.csv`
 - `results/analysis_submission_readiness_audit.md`
 
-当前审计结果为 15 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、contribution-to-evidence chain、executable method workflow、baseline fairness/scope、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、uploadable payload archive、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder、compiled PDF。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
+当前审计结果为 16 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、contribution-to-evidence chain、executable method workflow、baseline fairness/scope、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、uploadable payload archive、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder、compiled PDF。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
 
 ## 2. 当前已完成内容
 

@@ -37,10 +37,10 @@ rebuilt with:
 ./rebuild_submission_package.sh
 ```
 
-This regenerates paper-facing analysis tables, figures, the archive manifest,
-uploadable payload archive, audits, and `resource_nmcts_submission_v1.pdf` from
-existing experiment artifacts.  It does not rerun raw benchmark sweeps,
-external-toolchain probes, or neural training.
+This regenerates paper-facing analysis tables, figures, the metadata audit, the
+archive manifest, uploadable payload archive, audits, and
+`resource_nmcts_submission_v1.pdf` from existing experiment artifacts.  It does
+not rerun raw benchmark sweeps, external-toolchain probes, or neural training.
 
 Submission-support templates are kept in `../submission_package/`:
 
@@ -94,6 +94,12 @@ Current source evidence:
   `../submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256`
 - submission payload archive manifest:
   `../results/manifest_submission_payload_archive.json`
+- submission metadata audit CSV:
+  `../results/summary_submission_metadata_audit.csv`
+- submission metadata audit analysis:
+  `../results/analysis_submission_metadata_audit.md`
+- submission metadata audit JSON:
+  `../results/manifest_submission_metadata_audit.json`
 - submission-support templates:
   `../submission_package/*.md`
 - submission-readiness audit CSV:

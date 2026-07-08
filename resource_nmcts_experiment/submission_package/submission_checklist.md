@@ -25,6 +25,7 @@ Use this checklist immediately before uploading the manuscript.
 
 - Rebuild script: `rebuild_submission_package.sh`
 - Readiness audit: `results/analysis_submission_readiness_audit.md`
+- Metadata audit: `results/analysis_submission_metadata_audit.md`
 - Traceability audit: `results/analysis_submission_traceability_audit.md`
 - Archive manifest: `results/analysis_submission_archive_manifest.md`
 - Payload archive manifest: `results/analysis_submission_payload_archive.md`
@@ -42,6 +43,7 @@ Run these from `resource_nmcts_experiment/`:
 ```bash
 /opt/anaconda3/envs/mcts-qoracle/bin/python -m py_compile \
   analyze_submission_archive_manifest.py \
+  analyze_submission_metadata_audit.py \
   analyze_submission_readiness_audit.py \
   analyze_submission_traceability_audit.py
 ./rebuild_submission_package.sh
@@ -53,6 +55,7 @@ Expected current state:
 
 - Archive manifest: all payload groups complete.
 - Payload archive: tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.
+- Metadata audit: all author- and venue-specific fields are enumerated before upload.
 - Traceability audit: all claim families complete.
 - Readiness audit: all paper/package checks pass except author-specific declarations.
 - LaTeX warning status: only the existing `\showhyphens` package warning should remain.

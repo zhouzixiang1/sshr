@@ -136,14 +136,23 @@ The submission archive manifest is materialized by
 `results/manifest_submission_archive_manifest.json`, and
 `paper_latex/tables/submission_archive_manifest.tex`.  It hashes stable
 payload groups for the source package while excluding terminal submission
-audits and the compiled PDF from the digest set to avoid self-referential
-checks.
+package/audit outputs and the compiled PDF from the digest set to avoid
+self-referential checks.
 The submission-support files live in `submission_package/`: a cover-letter
 template, author-declarations template, upload checklist, and reviewer-concern
 brief.  These files are ready to use at upload time, but fields marked
 `AUTHOR INPUT REQUIRED` must be completed by the author because funding,
 affiliations, competing interests, and final archive links cannot be inferred
 from experiment artifacts.
+The submission metadata audit is materialized by
+`analyze_submission_metadata_audit.py`, which writes
+`results/summary_submission_metadata_audit.csv`,
+`results/analysis_submission_metadata_audit.md`, and
+`results/manifest_submission_metadata_audit.json`.  It enumerates author- and
+venue-specific fields that remain deliberately human-gated: author identity,
+CRediT roles, funding, acknowledgements, competing interests, archive links,
+code license/repository metadata, AI-assistance disclosure, preprint history,
+cover-letter routing fields, and target-venue policy checks.
 The uploadable payload archive is materialized by
 `make_submission_payload_archive.py`, which writes
 `submission_package/dist/resource_nmcts_submission_payload.tar.gz`,
@@ -160,8 +169,8 @@ The lightweight derived submission package can be regenerated with:
 ./rebuild_submission_package.sh
 ```
 
-This command rebuilds paper-facing analysis tables, figures, the archive
-manifest, uploadable payload archive, traceability and readiness audits, and
+This command rebuilds paper-facing analysis tables, figures, the metadata
+audit, archive manifest, uploadable payload archive, traceability and readiness audits, and
 `paper_latex/resource_nmcts_submission_v1.pdf` from the existing experiment
 artifacts.  It does not rerun raw benchmark sweeps, external-toolchain probes,
 or neural training jobs; those remain under the individual `run_*.py` and
@@ -174,9 +183,10 @@ submission draft contains bounded and concise abstract claims,
 contribution/evidence mapping, baseline fairness tables, reproducibility
 evidence, claim-to-artifact traceability, a derived-package rebuild command,
 an archive package manifest, submission-support templates, an uploadable
-payload archive, limitations, data/code availability, a compiled PDF, and no
-source TODO markers; it leaves funding, acknowledgements, competing interests,
-author metadata, and archival links as author-specific submission-time items.
+payload archive, submission metadata audit, limitations, data/code availability,
+a compiled PDF, and no source TODO markers; it leaves funding,
+acknowledgements, competing interests, author metadata, venue fields, and
+archival links as author-specific submission-time items.
 
 Latest external-toolchain progress:
 
