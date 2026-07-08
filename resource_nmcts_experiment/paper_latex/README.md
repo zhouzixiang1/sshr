@@ -123,6 +123,10 @@ Current source evidence:
   `../results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv`
 - schedule-proxy truth-table bridge CSV:
   `../results/raw_schedule_truth_bridge_terms.csv`
+- schedule-proxy n=23 truth-table bridge CSV:
+  `../results/raw_schedule_truth_bridge_n23_terms.csv`
+- schedule-proxy n=23 truth-table bridge analysis:
+  `../results/analysis_schedule_truth_bridge_n23_terms.md`
 - schedule-proxy combined analysis:
   `../results/analysis_schedule_metrics.md`
 - external-tool benchmark exporter: `../export_benchmarks.py`
@@ -155,9 +159,10 @@ Current source evidence:
   `tables/screen_scale_depth_frontier_terms.tex`,
   `tables/boolean_screen_depth_frontier_policy.tex`,
   `tables/screen_scale_depth_frontier_policy_terms.tex`,
-  `tables/screen_scale_depth_frontier_policy_generalization_terms.tex`,
-  `tables/truth_bridge_terms.tex`,
-  `tables/schedule_metrics.tex`
+	  `tables/screen_scale_depth_frontier_policy_generalization_terms.tex`,
+	  `tables/truth_bridge_terms.tex`,
+	  `tables/schedule_truth_bridge_n23_terms.tex`,
+	  `tables/schedule_metrics.tex`
 - manifests: `../results/manifest_evidence_affine.json`,
   `../results/manifest_traditional_resource_learned_prior.json`,
   `../results/manifest_traditional_resource_no_prior.json`,

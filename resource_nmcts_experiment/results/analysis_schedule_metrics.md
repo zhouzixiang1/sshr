@@ -119,3 +119,59 @@ and explicit ancilla lifetime area.
 | schedule_truth_bridge | screen_depth4 | screen_depth2 | explicit live ancilla peak | 12 | 0/0/12 | +0.00% |
 | schedule_truth_bridge | screen_depth4 | screen_depth2 | explicit ancilla lifetime area | 12 | 0/10/2 | +38.31% |
 | schedule_truth_bridge | screen_depth4 | screen_depth2 | peak ancilla | 12 | 0/0/12 | +0.00% |
+| schedule_truth_bridge_n23 | adaptive_all_depth | screen_depth2 | Score | 6 | 5/0/1 | -2.47% |
+| schedule_truth_bridge_n23 | adaptive_all_depth | screen_depth2 | parallel logical depth | 6 | 0/5/1 | +2.90% |
+| schedule_truth_bridge_n23 | adaptive_all_depth | screen_depth2 | CNOT-depth proxy | 6 | 5/0/1 | -2.15% |
+| schedule_truth_bridge_n23 | adaptive_all_depth | screen_depth2 | T-depth proxy | 6 | 5/0/1 | -2.20% |
+| schedule_truth_bridge_n23 | adaptive_all_depth | screen_depth2 | explicit live ancilla peak | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | adaptive_all_depth | screen_depth2 | explicit ancilla lifetime area | 6 | 0/5/1 | +36.83% |
+| schedule_truth_bridge_n23 | adaptive_all_depth | screen_depth2 | peak ancilla | 6 | 0/1/5 | +2.78% |
+| schedule_truth_bridge_n23 | depth2_guard_direct | screen_depth2 | Score | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth2_guard_direct | screen_depth2 | parallel logical depth | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth2_guard_direct | screen_depth2 | CNOT-depth proxy | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth2_guard_direct | screen_depth2 | T-depth proxy | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth2_guard_direct | screen_depth2 | explicit live ancilla peak | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth2_guard_direct | screen_depth2 | explicit ancilla lifetime area | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth2_guard_direct | screen_depth2 | peak ancilla | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | adaptive_all_depth | Score | 6 | 0/1/5 | +0.61% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | adaptive_all_depth | parallel logical depth | 6 | 1/0/5 | -1.28% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | adaptive_all_depth | CNOT-depth proxy | 6 | 0/1/5 | +0.41% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | adaptive_all_depth | T-depth proxy | 6 | 0/1/5 | +0.52% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | adaptive_all_depth | explicit live ancilla peak | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | adaptive_all_depth | explicit ancilla lifetime area | 6 | 1/0/5 | -5.09% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | adaptive_all_depth | peak ancilla | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | screen_depth2 | Score | 6 | 4/0/2 | -1.88% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | screen_depth2 | parallel logical depth | 6 | 0/4/2 | +1.51% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | screen_depth2 | CNOT-depth proxy | 6 | 4/0/2 | -1.75% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | screen_depth2 | T-depth proxy | 6 | 4/0/2 | -1.69% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | screen_depth2 | explicit live ancilla peak | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | screen_depth2 | explicit ancilla lifetime area | 6 | 0/4/2 | +29.49% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | screen_depth2 | peak ancilla | 6 | 0/1/5 | +2.78% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | screen_depth4 | Score | 6 | 0/1/5 | +0.61% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | screen_depth4 | parallel logical depth | 6 | 1/0/5 | -1.28% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | screen_depth4 | CNOT-depth proxy | 6 | 0/1/5 | +0.41% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | screen_depth4 | T-depth proxy | 6 | 0/1/5 | +0.52% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | screen_depth4 | explicit live ancilla peak | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | screen_depth4 | explicit ancilla lifetime area | 6 | 1/0/5 | -5.09% |
+| schedule_truth_bridge_n23 | depth_frontier_policy | screen_depth4 | peak ancilla | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth_policy | screen_depth2 | Score | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth_policy | screen_depth2 | parallel logical depth | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth_policy | screen_depth2 | CNOT-depth proxy | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth_policy | screen_depth2 | T-depth proxy | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth_policy | screen_depth2 | explicit live ancilla peak | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth_policy | screen_depth2 | explicit ancilla lifetime area | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | depth_policy | screen_depth2 | peak ancilla | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | screen_depth3 | screen_depth2 | Score | 6 | 5/0/1 | -1.94% |
+| schedule_truth_bridge_n23 | screen_depth3 | screen_depth2 | parallel logical depth | 6 | 0/5/1 | +1.03% |
+| schedule_truth_bridge_n23 | screen_depth3 | screen_depth2 | CNOT-depth proxy | 6 | 5/0/1 | -1.70% |
+| schedule_truth_bridge_n23 | screen_depth3 | screen_depth2 | T-depth proxy | 6 | 5/0/1 | -1.88% |
+| schedule_truth_bridge_n23 | screen_depth3 | screen_depth2 | explicit live ancilla peak | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | screen_depth3 | screen_depth2 | explicit ancilla lifetime area | 6 | 0/5/1 | +19.95% |
+| schedule_truth_bridge_n23 | screen_depth3 | screen_depth2 | peak ancilla | 6 | 0/1/5 | +2.78% |
+| schedule_truth_bridge_n23 | screen_depth4 | screen_depth2 | Score | 6 | 5/0/1 | -2.47% |
+| schedule_truth_bridge_n23 | screen_depth4 | screen_depth2 | parallel logical depth | 6 | 0/5/1 | +2.90% |
+| schedule_truth_bridge_n23 | screen_depth4 | screen_depth2 | CNOT-depth proxy | 6 | 5/0/1 | -2.15% |
+| schedule_truth_bridge_n23 | screen_depth4 | screen_depth2 | T-depth proxy | 6 | 5/0/1 | -2.20% |
+| schedule_truth_bridge_n23 | screen_depth4 | screen_depth2 | explicit live ancilla peak | 6 | 0/0/6 | +0.00% |
+| schedule_truth_bridge_n23 | screen_depth4 | screen_depth2 | explicit ancilla lifetime area | 6 | 0/5/1 | +36.83% |
+| schedule_truth_bridge_n23 | screen_depth4 | screen_depth2 | peak ancilla | 6 | 0/1/5 | +2.78% |

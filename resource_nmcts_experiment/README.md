@@ -26,7 +26,8 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --workers 2
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 24,28,32,40 --per-n 24 --workers 6 --max-screen-depth 4 --tag schedule_depth_frontier_policy_generalization
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260711 --ns 21,22 --per-n 6 --workers 2 --max-screen-depth 4 --tag schedule_truth_bridge
-/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_schedule_metrics.py --input schedule_generalization=results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv --input schedule_truth_bridge=results/raw_schedule_truth_bridge_terms.csv
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260713 --ns 23 --per-n 6 --workers 2 --max-screen-depth 4 --tag schedule_truth_bridge_n23
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_schedule_metrics.py --input schedule_generalization=results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv --input schedule_truth_bridge=results/raw_schedule_truth_bridge_terms.csv --input schedule_truth_bridge_n23=results/raw_schedule_truth_bridge_n23_terms.csv
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset smoke
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset evidence_affine --model models/action_scorer_rollout_logical_and.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset evidence_affine
@@ -216,6 +217,12 @@ also expanded symbolically back to its ANF monomial set, so these runs now
 include plan-level ANF equivalence checks.  The emitted X/CNOT/MCT oracle
 circuit is then simulated symbolically over GF(2) polynomials, which gives
 emitted-circuit equivalence evidence without constructing full truth tables.
+The high-dimensional truth-table bridge now covers `n=21,22,23`: 180/180
+method rows pass complete oracle truth-table verification, plan ANF verification,
+and emitted-circuit ANF verification.  The `n=23` slice alone contains six
+functions and sixty method rows; its frontier policy improves score by 1.88%
+and T-depth proxy by 1.69% against fixed depth-2, with the expected increase in
+explicit ancilla lifetime area.
 
 Current structure-policy evidence:
 
@@ -284,14 +291,16 @@ Current structure-policy evidence:
   expansion and emitted-circuit ANF verification.  This strengthens the claim
   that frontier-policy gains are not tied to the first `n=20,28,40` random
   slice.
-- The truth-table bridge run, `results/analysis_truth_bridge_terms.md`, builds
-  full truth tables for 12 generated `n=21,22` ANF functions.  All 120 method
-  rows pass complete truth-table oracle verification, ANF plan expansion, and
-  emitted-circuit symbolic verification with zero mismatches.  It also includes
-  the depth-frontier policy: 8/0/4 vs fixed depth-2 with -3.50% mean score, and
-  +0.32% mean score / -50.87% plan time vs all-depth adaptive.  This moves the
-  complete-verification boundary beyond `n=20` on a small bridge slice; larger
-  `n=24--40` runs remain symbolic term-set evaluations.
+- The truth-table bridge runs, `results/analysis_truth_bridge_terms.md` and
+  `results/analysis_schedule_truth_bridge_n23_terms.md`, build full truth
+  tables for 18 generated `n=21,22,23` ANF functions.  All 180 method rows pass
+  complete truth-table oracle verification, ANF plan expansion, and
+  emitted-circuit symbolic verification with zero mismatches.  The new `n=23`
+  slice has 6 functions / 60 method rows; depth-frontier policy is 4/0/2 vs
+  fixed depth-2 with -1.88% mean score, and +0.61% mean score / -48.77% plan
+  time vs all-depth adaptive.  This moves the complete-verification boundary
+  beyond `n=20` on a small bridge slice; larger `n=24--40` runs remain symbolic
+  term-set evaluations.
 - Logic-level schedule-proxy evidence is now emitted by `run_screen_scale_terms.py`
   and `run_truth_bridge_terms.py`, then summarized by
   `analyze_schedule_metrics.py`.  The metrics are not hardware mapping results:
@@ -302,9 +311,11 @@ Current structure-policy evidence:
   proxy W/L/T with -1.85%; it trades this for +20.09% explicit ancilla lifetime
   area.  Against depth-4/all-depth it is only +0.55% T-depth proxy but reduces
   explicit ancilla lifetime area by -5.42%.  The schedule truth-table bridge
-  reproduces the same pattern on 120 fully verified method rows: frontier policy
-  vs depth-2 is 8/0/4 in score (-3.50%) and T-depth proxy (-3.32%), with a
-  +32.93% lifetime-area tradeoff.
+  reproduces the same pattern on 180 fully verified method rows: on `n=21,22`,
+  frontier policy vs depth-2 is 8/0/4 in score (-3.50%) and T-depth proxy
+  (-3.32%), with a +32.93% lifetime-area tradeoff; on `n=23`, it is 4/0/2 in
+  score (-1.88%) and T-depth proxy (-1.69%), with a +29.49% lifetime-area
+  tradeoff.
 
 Current screen-gate evidence:
 

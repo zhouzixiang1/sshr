@@ -483,8 +483,12 @@ v12 中把 depth-frontier 写成下一步缺口：需要训练一个策略，在
 - `results/raw_schedule_truth_bridge_terms.csv`
 - `results/summary_schedule_truth_bridge_terms.csv`
 - `results/analysis_schedule_truth_bridge_terms.md`
+- `results/raw_schedule_truth_bridge_n23_terms.csv`
+- `results/summary_schedule_truth_bridge_n23_terms.csv`
+- `results/analysis_schedule_truth_bridge_n23_terms.md`
 - `results/summary_schedule_metrics.csv`
 - `results/analysis_schedule_metrics.md`
+- `paper_latex/tables/schedule_truth_bridge_n23_terms.tex`
 - `paper_latex/tables/schedule_metrics.tex`
 
 核心结果：
@@ -497,8 +501,44 @@ v12 中把 depth-frontier 写成下一步缺口：需要训练一个策略，在
 | schedule truth bridge n=21/22 | frontier policy vs fixed depth-2 | 12 函数/120 方法行 | 8/0/4，-3.50% | 8/0/4，-3.32% | +32.93% |
 | schedule truth bridge n=21/22 | frontier policy vs depth-4 | 12 函数/120 方法行 | 0/2/10，+0.32% | 0/2/10，+0.32% | -4.01% |
 | schedule truth bridge n=21/22 | 完整 truth-table 验证 | 120 方法行 | 120/120 通过 | 120/120 plan/circuit 验证通过 | 0 mismatch |
+| schedule truth bridge n=23 | frontier policy vs fixed depth-2 | 6 函数/60 方法行 | 4/0/2，-1.88% | 4/0/2，-1.69% | +29.49% |
+| schedule truth bridge n=23 | frontier policy vs depth-4 | 6 函数/60 方法行 | 0/1/5，+0.61% | 0/1/5，+0.52% | -5.09% |
+| schedule truth bridge n=23 | 完整 truth-table 验证 | 60 方法行 | 60/60 通过 | 60/60 plan/circuit 验证通过 | 0 mismatch |
 
-解释：这个结果让 frontier policy 的定位更清楚。相对 fixed depth-2，它不仅降低 score，也同步降低 T-depth proxy；代价是显式辅助线生命周期面积增加，说明更深结构会延长部分辅助线占用。相对 depth-4/all-depth，它牺牲约 0.32%--0.55% 的 T-depth proxy，却减少约 4%--5% 的显式辅助线 lifetime area，并显著节省搜索时间。论文中应把它写成“逻辑层后端相关 proxy 下的质量-生命周期 trade-off”，而不是写成硬件后端映射结论。
+解释：这个结果让 frontier policy 的定位更清楚。相对 fixed depth-2，它不仅降低 score，也同步降低 T-depth proxy；代价是显式辅助线生命周期面积增加，说明更深结构会延长部分辅助线占用。相对 depth-4/all-depth，它牺牲约 0.32%--0.55% 的 T-depth proxy，在 n=23 上牺牲 0.52%，却减少约 4%--5% 的显式辅助线 lifetime area，并显著节省搜索时间。论文中应把它写成“逻辑层后端相关 proxy 下的质量-生命周期 trade-off”，而不是写成硬件后端映射结论。
+
+### 2.5.10 n=23 完整 truth-table bridge
+
+本轮把完整 truth-table bridge 从 n=21/22 继续推进到 n=23。该实验仍只覆盖小样本，因为完整 truth-table 构造是主成本；但它把“项集级符号验证是否可信”的验证边界向更高维推进了一步。
+
+运行命令：
+
+```bash
+cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260713 --ns 23 --per-n 6 --workers 2 --max-screen-depth 4 --tag schedule_truth_bridge_n23
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_schedule_metrics.py --input schedule_generalization=results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv --input schedule_truth_bridge=results/raw_schedule_truth_bridge_terms.csv --input schedule_truth_bridge_n23=results/raw_schedule_truth_bridge_n23_terms.csv --summary results/summary_schedule_metrics.csv --out results/analysis_schedule_metrics.md --latex-out paper_latex/tables/schedule_metrics.tex
+```
+
+主要产物：
+
+- `results/raw_schedule_truth_bridge_n23_terms.csv`
+- `results/summary_schedule_truth_bridge_n23_terms.csv`
+- `results/analysis_schedule_truth_bridge_n23_terms.md`
+- `paper_latex/tables/schedule_truth_bridge_n23_terms.tex`
+
+核心审计：
+
+| 验证项或比较 | 结果 | 说明 |
+|---|---:|---|
+| n=23 完整 truth-table oracle 验证 | 60/60 | 6 个函数、10 个方法，所有 emitted circuit 逐点验证通过 |
+| n=23 ANF plan 符号验证 | 60/60 | 0 plan mismatch |
+| n=23 emitted-circuit ANF 符号验证 | 60/60 | 0 circuit mismatch |
+| 平均 truth-table 构造时间 | 209.54 s/function | 总运行时间 665.54 s，2 workers |
+| depth-frontier policy vs fixed depth-2 | 4/0/2 | score -1.88%，T-depth proxy -1.69%，lifetime area +29.49% |
+| depth-frontier policy vs depth-4 | 0/1/5 | score +0.61%，T-depth proxy +0.52%，lifetime area -5.09% |
+| depth-frontier policy vs all-depth | 0/1/5 | score +0.61%，plan time -48.77% |
+
+结论：n=21/22/23 bridge 合计达到 18 个函数、180 个方法行的完整 truth-table oracle 验证、plan 验证和 emitted-circuit 符号验证。它仍不能替代 n=24--40 的完整枚举，但比 v16 更有力地证明了项集级符号验证与最终 oracle circuit 逐点语义之间的一致性。
 
 ### 2.6 高维 root-action teacher 诊断
 
@@ -1003,7 +1043,7 @@ Git 状态：
 13. `n=32,36,40` extended screen-scale 显示：depth policy 相对 single screen 获得 110/0/34、平均 score -5.55%；相对 all-depth adaptive 在 144 个项集上全部 score 持平，并节省 33.14% 平均运行时间；1008/1008 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。
 14. `n=20,28,40` depth-frontier 显示：depth-3 Boolean-ring screen 相对 fixed depth-2 为 49/0/23、平均 score -1.93%；depth-4 相对 fixed depth-2 为 49/0/23、平均 score -3.10%；648/648 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。这是新的高预算质量前沿证据，但运行时间显著增加。
 15. Depth-frontier policy 已把高预算质量前沿学习化：在 `n=20,28,40` scale harness 中，相对 fixed depth-2 获得 35/0/37、平均 score -2.19%；相对 all-depth depth<=4 平均 score +0.97%，但节省 58.69% 时间；720/720 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。
-16. `n=21,22` 完整 truth-table bridge 显示：12 个生成式 ANF 函数、120/120 个方法行同时通过完整 truth-table oracle 验证、ANF plan 符号验证和 emitted-circuit ANF 符号验证；该结果把完整验证边界从 n<=20 主实验推进到 n>20 的桥接切片。
+16. `n=21,22,23` 完整 truth-table bridge 显示：18 个生成式 ANF 函数、180/180 个方法行同时通过完整 truth-table oracle 验证、ANF plan 符号验证和 emitted-circuit ANF 符号验证；新增 n=23 切片中 frontier policy 相对 fixed depth-2 为 4/0/2、平均 score -1.88%，该结果把完整验证边界从 n<=20 主实验推进到 n>20 的桥接切片。
 
 不应写的主张：
 
@@ -1044,8 +1084,8 @@ Git 状态：
 | n=32/36/40 extended screen-scale | 144 个高维 ANF 项集 | depth policy vs single 为 110/0/34，-5.55%；vs all-depth adaptive 为 0/0/144，省时 -33.14%；1008/1008 emitted-circuit 符号验证通过 | 新增大规模泛化证据 |
 | n=20/28/40 depth-frontier | 72 个高维 ANF 项集 | depth-3 vs depth-2 为 49/0/23，-1.93%；depth-4 vs depth-2 为 49/0/23，-3.10%；648/648 emitted-circuit 符号验证通过 | 新增高预算质量前沿 |
 | depth-frontier policy | 32 个 held-out + 72 个 scale 项集 | held-out vs oracle frontier 为 +0.80% score、-58.76% time；scale vs depth-2 为 35/0/37、-2.19%；720/720 emitted-circuit 符号验证通过 | 新增结构级 AI 质量-时间折中 |
-| n=21/22 truth-table bridge | 12 个生成式 ANF 函数 | 120/120 完整 truth-table oracle 验证通过，120/120 plan 与 emitted-circuit 符号验证通过，0 mismatch；frontier policy vs depth-2 为 8/0/4、-3.50% | 新增 n>20 完整验证桥接 |
-| schedule proxy | 96 个 n=24/28/32/40 项集 + 12 个 n=21/22 bridge 函数 | frontier policy vs depth-2：项集 T-depth proxy 40/0/56、-1.85%，bridge T-depth proxy 8/0/4、-3.32%；相对 depth-4 lifetime area 分别 -5.42% 和 -4.01% | 新增逻辑层后端相关指标，非硬件 mapping |
+| n=21/22/23 truth-table bridge | 18 个生成式 ANF 函数 | 180/180 完整 truth-table oracle 验证通过，180/180 plan 与 emitted-circuit 符号验证通过，0 mismatch；n=23 frontier policy vs depth-2 为 4/0/2、-1.88% | 新增 n>20 完整验证桥接 |
+| schedule proxy | 96 个 n=24/28/32/40 项集 + 18 个 n=21/22/23 bridge 函数 | frontier policy vs depth-2：项集 T-depth proxy 40/0/56、-1.85%，n=21/22 bridge 为 8/0/4、-3.32%，n=23 bridge 为 4/0/2、-1.69%；相对 depth-4 lifetime area 分别 -5.42%、-4.01%、-5.09% | 新增逻辑层后端相关指标，非硬件 mapping |
 | highdim wide-fast guard | 12 个 n=14 random ANF | wide vs Resource 为 0/0/12，运行时间 +59.80% | 已有但属负向诊断 |
 | exact FPRM-DP | n<=4 traditional | Resource vs exact FPRM-DP 51/3/18，-12.18%；Pareto vs exact FPRM-DP 51/0/21，-12.20% | 已有但模型受限 |
 | exact XAG MC | n<=4 traditional | Resource/Pareto 达到 T 下界 12/72，平均 T gap +53.01%；ESOP 为 +120.14%，SSHR-I-T 为 +143.06% | 已有全局 T 下界 |
@@ -1059,4 +1099,4 @@ Git 状态：
 
 但是投稿前还需要继续补强“AI 搜索本身带来的贡献”这一点。否则文章容易被评价为一组 FPRM/ESOP 工程启发的组合，而不是强化学习与 MCTS 方法论文。
 
-本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、pairwise-wide n=16 full synthesis、Boolean-ring linear factor 和 schedule proxy 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照、高维 pairwise-wide root-action ranker、Boolean-ring factor 扩展，以及 emitted-circuit 层 T-depth/辅助生命周期 trade-off 都有可测证据。不过高维 neural guidance 的幅度仍然偏小，更强外部 reversible-toolchain 对比也仍然缺失，所以目标还不能判定完成。
+本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、pairwise-wide n=16 full synthesis、Boolean-ring linear factor、schedule proxy 和 n=23 完整 truth-table bridge 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照、高维 pairwise-wide root-action ranker、Boolean-ring factor 扩展、emitted-circuit 层 T-depth/辅助生命周期 trade-off，以及 n=21/22/23 共 180/180 方法行的完整 oracle 验证。不过高维 neural guidance 的幅度仍然偏小，更强外部 reversible-toolchain 对比也仍然缺失，所以目标还不能判定完成。
