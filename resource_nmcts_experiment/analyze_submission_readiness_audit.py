@@ -24,6 +24,7 @@ ARCHIVE_ANALYSIS = RESULTS / "analysis_submission_archive_manifest.md"
 ARCHIVE_SUMMARY = RESULTS / "summary_submission_archive_manifest.csv"
 ARCHIVE_MANIFEST = RESULTS / "manifest_submission_archive_manifest.json"
 SUBMISSION_PACKAGE = THIS_DIR / "submission_package"
+AUTHOR_INPUT_PACKET = SUBMISSION_PACKAGE / "AUTHOR_INPUT_REQUIRED.md"
 PAYLOAD_ARCHIVE = SUBMISSION_PACKAGE / "dist" / "resource_nmcts_submission_payload.tar.gz"
 PAYLOAD_SHA256 = SUBMISSION_PACKAGE / "dist" / "resource_nmcts_submission_payload.tar.gz.sha256"
 PAYLOAD_ANALYSIS = RESULTS / "analysis_submission_payload_archive.md"
@@ -44,6 +45,7 @@ RERUN_REGISTRY_MANIFEST = RESULTS / "manifest_artifact_rerun_registry.json"
 RERUN_REGISTRY_TABLE = THIS_DIR / "paper_latex" / "tables" / "artifact_rerun_registry.tex"
 SUPPORT_FILES = [
     SUBMISSION_PACKAGE / "README.md",
+    AUTHOR_INPUT_PACKET,
     SUBMISSION_PACKAGE / "artifact_reproduction_guide.md",
     SUBMISSION_PACKAGE / "cover_letter_template.md",
     SUBMISSION_PACKAGE / "author_declarations_template.md",
@@ -187,7 +189,7 @@ def build_rows() -> list[dict[str, str]]:
         {
             "item": "Submission support templates",
             "status": "pass" if all(path.exists() for path in SUPPORT_FILES) else "needs revision",
-            "evidence": "Package README, artifact guide, cover letter, author declarations, upload checklist, reviewer-concern brief, editor-screening brief, and target-venue brief are present.",
+            "evidence": "Package README, author-input packet, artifact guide, cover letter, author declarations, upload checklist, reviewer-concern brief, editor-screening brief, and target-venue brief are present.",
             "next_action": "Fill the author-specific fields before journal upload.",
         },
         {

@@ -4,6 +4,7 @@ Use this checklist immediately before uploading the manuscript.
 
 ## Required Author Input
 
+- AUTHOR INPUT REQUIRED: Work through `submission_package/AUTHOR_INPUT_REQUIRED.md` before uploading.
 - AUTHOR INPUT REQUIRED: Choose the target venue using `submission_package/target_venue_brief.md` as a planning aid, then copy the final choice into `submission_package/submission_metadata.json`.
 - AUTHOR INPUT REQUIRED: Copy `submission_package/submission_metadata_template.json` to `submission_package/submission_metadata.json` and fill every `AUTHOR INPUT REQUIRED` value.
 - AUTHOR INPUT REQUIRED: Confirm author order, affiliations, ORCID IDs, and corresponding author details.
@@ -29,6 +30,7 @@ Use this checklist immediately before uploading the manuscript.
 - Rebuild script: `rebuild_submission_package.sh`
 - Fast verifier script: `verify_submission_package.sh`
 - Readiness audit: `results/analysis_submission_readiness_audit.md`
+- Author input packet: `submission_package/AUTHOR_INPUT_REQUIRED.md`
 - Terminal package verifier: `results/analysis_submission_package_verifier.md`
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
 - Goal-completion audit: `results/analysis_goal_completion_audit.md`

@@ -1,0 +1,82 @@
+{
+  "items": [
+    {
+      "item": "Structured metadata intake file",
+      "next_action": "Create `submission_package/submission_metadata.json` from the template, fill it, then rerun the rebuild script.",
+      "source": "submission_package/submission_metadata_template.json",
+      "status": "needs author input"
+    },
+    {
+      "item": "Author identity and affiliations",
+      "next_action": "Fill the author list, affiliations, ORCIDs, corresponding author, and email addresses.",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "item": "CRediT author contributions",
+      "next_action": "Assign CRediT-style roles for every author before upload.",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "item": "Funding statement",
+      "next_action": "Insert the exact target-venue funding or no-funding wording.",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "item": "Acknowledgements",
+      "next_action": "Add acknowledgements or the venue-required no-acknowledgement statement.",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "item": "Competing interests",
+      "next_action": "Insert the exact competing-interest statement required by the target venue.",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "item": "Data availability archive link",
+      "next_action": "Create or select the final archive/repository link and paste it into the statement.",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "item": "Code availability and license",
+      "next_action": "Add the final repository URL, commit hash, license, and any anonymous review link.",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "item": "AI assistance disclosure",
+      "next_action": "Use the venue-required disclosure wording or confirm that no disclosure is required.",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "item": "Preprint and prior submission history",
+      "next_action": "Record any preprint, previous submission, or related manuscript under review.",
+      "source": "submission_package/author_declarations_template.md",
+      "status": "needs author input"
+    },
+    {
+      "item": "Cover-letter routing metadata",
+      "next_action": "Fill the cover-letter required fields after selecting the target venue.",
+      "source": "submission_package/cover_letter_template.md",
+      "status": "needs author input"
+    },
+    {
+      "item": "Target-venue policy check",
+      "next_action": "Check the target venue guide and update manuscript or support files accordingly.",
+      "source": "submission_package/submission_checklist.md",
+      "status": "needs author input"
+    }
+  ],
+  "metadata_rows": 12,
+  "needs_author_input": 12,
+  "output": "submission_package/AUTHOR_INPUT_REQUIRED.md",
+  "python": "3.11.15",
+  "script": "make_author_input_packet.py",
+  "source": "results/summary_submission_metadata_audit.csv"
+}

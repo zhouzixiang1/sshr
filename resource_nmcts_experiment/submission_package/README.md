@@ -23,6 +23,8 @@ noise modeling, or magic-state-factory accounting.
 
 ## Support Documents
 
+- `AUTHOR_INPUT_REQUIRED.md`: consolidated author and target-venue fields that
+  must be supplied before final upload.
 - `cover_letter_template.md`: editor-facing cover-letter draft with author
   fields left blank.
 - `artifact_reproduction_guide.md`: reviewer-facing quick rebuild path,

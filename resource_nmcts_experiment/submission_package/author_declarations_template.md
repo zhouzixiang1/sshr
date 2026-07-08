@@ -7,6 +7,9 @@ For a single structured intake path, copy `submission_metadata_template.json` to
 `./rebuild_submission_package.sh`.  The filled JSON file is ignored by Git so
 private author metadata is not committed accidentally.
 
+Use `AUTHOR_INPUT_REQUIRED.md` as the final author-side checklist before
+upload.
+
 Use `target_venue_brief.md` to pick the venue-specific declaration style before
 filling author contributions, AI assistance, and policy fields.
 
