@@ -70,7 +70,7 @@ def read_csv(path: Path) -> list[dict[str, str]]:
 def write_source(name: str, rows: list[dict[str, object]], fieldnames: Iterable[str]) -> None:
     SOURCE.mkdir(parents=True, exist_ok=True)
     with (SOURCE / f"{name}.csv").open("w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=list(fieldnames))
+        writer = csv.DictWriter(f, fieldnames=list(fieldnames), lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -460,7 +460,8 @@ def validation_rows() -> list[dict[str, object]]:
             "summary_truth_bridge_n24_terms.csv",
             "summary_truth_bridge_n25_terms.csv",
         ]),
-        ("phase selected rows", "verified_up_to_global_phase", ["raw_phase_parity_affine.csv"]),
+        ("phase exact search", "verified_up_to_global_phase", ["raw_phase_parity_affine.csv"]),
+        ("phase policy pruning", "verified_up_to_global_phase", ["raw_phase_affine_policy_rank_diverse.csv"]),
     ]
     out: list[dict[str, object]] = []
     for label, column, files in groups:
@@ -483,10 +484,21 @@ def validation_rows() -> list[dict[str, object]]:
 def fig_validation() -> None:
     data = validation_rows()
     write_source("fig5_validation", data, ["group", "verified", "total", "fraction"])
-    fig, ax = plt.subplots(figsize=(6.8, 2.8))
+    fig, ax = plt.subplots(figsize=(6.8, 3.2))
     y = list(range(len(data)))
     vals = [int(r["verified"]) for r in data]
-    ax.barh(y, vals, color=[PALETTE["resource"], PALETTE["baseline"], PALETTE["gain"], PALETTE["phase"]], height=0.62)
+    ax.barh(
+        y,
+        vals,
+        color=[
+            PALETTE["resource"],
+            PALETTE["baseline"],
+            PALETTE["gain"],
+            PALETTE["phase"],
+            PALETTE["direct"],
+        ],
+        height=0.62,
+    )
     ax.set_yticks(y)
     ax.set_yticklabels([str(r["group"]) for r in data])
     ax.invert_yaxis()

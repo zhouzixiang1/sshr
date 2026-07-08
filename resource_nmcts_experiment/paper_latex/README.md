@@ -17,10 +17,10 @@ Current English submission draft:
 - `resource_nmcts_submission_v1.tex` / `resource_nmcts_submission_v1.pdf`:
   English manuscript rebuilt from the latest Chinese v39 evidence.  It adds
   the CirKit AIG/MC probe, legacy RevKit CLI exact-oracle portfolio, Affine-FPRM
-  phase-search results, learned phase-candidate pruning, and the current
-  high-dimensional verification boundary.  The claim is explicitly limited to
-  logical-layer synthesis, with CirKit depth and RevKit CLI peak-ancilla
-  trade-offs stated in the abstract and discussion.
+  phase-search results, rank-trained diversity-reranked phase-candidate
+  pruning, and the current high-dimensional verification boundary.  The claim
+  is explicitly limited to logical-layer synthesis, with CirKit depth and
+  RevKit CLI peak-ancilla trade-offs stated in the abstract and discussion.
 
 Build:
 
@@ -182,6 +182,8 @@ Current source evidence:
   `../results/analysis_cirkit_aig_highdim_probe.md`
 - legacy RevKit CLI reversible-synthesis portfolio analysis:
   `../results/analysis_revkit_cli_multiflow_traditional.md`
+- rank-diverse learned phase-candidate pruning analysis:
+  `../results/analysis_phase_affine_policy_rank_diverse.md`
 - external-tool benchmark exporter: `../export_benchmarks.py`
 - ROS-style LUT proxy runner: `../run_ros_lut_proxy.py`
 - LaTeX tables: `tables/runtime_ablation_affine.tex`,

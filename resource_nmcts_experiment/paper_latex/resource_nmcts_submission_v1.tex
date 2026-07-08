@@ -63,9 +63,12 @@ embeds each function as the exact reversible oracle permutation
 $(x,y)\mapsto(x,y\xor f(x))$ and runs TBS/DBS/RMS synthesis flows.  All 531
 direct flow rows return; against the per-function RevKit best-score portfolio,
 Pareto-\method{} has 173/0/4 score wins and a mean score reduction of 67.28\%,
-but uses more peak ancilla on 169/177 functions.  High-dimensional correctness
-is supported by 5640/5640 item-level symbolic runs, 1512/1512 width-probe
-symbolic runs, 531/531 phase selected rows, and 400/400 complete
+but uses more peak ancilla on 169/177 functions.  In the phase-search branch,
+a rank-trained diverse policy exact-scores 512 of 8192 affine candidates per
+held-out $n=6$ function and matches the wide-search mean within 0.01\% under
+the $T/R_z=30$ proxy.  High-dimensional correctness is supported by 5640/5640
+item-level symbolic runs, 1512/1512 width-probe symbolic runs, 531/531 exact
+phase-search rows, 7611/7611 policy-pruning rows, and 400/400 complete
 \ttable{}-bridge method rows for $n=21$--$25$.  The contribution is therefore
 a verified logical-layer search method with strong T-count and weighted-score
 advantages, not a hardware-mapped or depth-only synthesis claim.
@@ -403,10 +406,14 @@ a logical phase/Rz proxy rather than an approximate-rotation sequence.}
 Increasing the affine transform budget from 32 to 128 yields additional but
 bounded gains: under the $T/R_z=30$ proxy, the wide search gives 43/0/134
 wins/losses/ties over budget 32 and reduces mean synthesis score by 0.60\%.
-The learned phase candidate policy can recover nearly the wide-search quality
-with fewer exact evaluations, but same-budget random shortlists are close.
-Thus the result supports pruned phase-search feasibility, not a claim that the
-current neural scorer is already superior to random shortlisting.
+A rank-trained policy and a deterministic diversity reranker then compress this
+search.  On the held-out $n=6$ split, the diverse top-512 policy exact-scores
+only 512 of 8192 affine forms per function, keeps the budget-32 comparison at
+17/0/21 with a 2.48\% mean reduction, and matches the wide-128 mean within
+0.01\%.  Across eight same-budget random repeats, each policy top-$k$ mean is
+lower than all random-repeat means, although the absolute margins are small.
+Thus the result supports learned pruned phase-search feasibility, not a claim
+that the current scorer solves phase/Rz synthesis globally.
 
 \begin{table}[H]
 \centering
@@ -419,26 +426,29 @@ current neural scorer is already superior to random shortlisting.
 \begin{table}[H]
 \centering
 \small
-\caption{Learned phase candidate pruning on held-out $n=6$ functions.}
+\caption{Rank-trained and diversity-reranked phase candidate pruning on
+held-out $n=6$ functions.}
 \label{tab:phase-policy}
-\input{tables/phase_affine_policy}
+\input{tables/phase_affine_policy_rank_diverse}
 \end{table}
 
 \subsection{High-dimensional verification}
 
 Figure~\ref{fig:validation} summarizes the current verification envelope.
 The manuscript-level evidence includes 5640/5640 item-level symbolic runs for
-$n=20$--$40$, 1512/1512 width-probe symbolic runs, 531/531 phase selected rows,
-and 400/400 complete \ttable{} bridge method rows.  The complete bridge spans
-$n=21$--$25$ and checks the oracle relation, the expanded \anf{} plan, and the
-emitted-circuit symbolic semantics.
+$n=20$--$40$, 1512/1512 width-probe symbolic runs, 531/531 exact phase-search
+rows, 7611/7611 phase-policy pruning rows, and 400/400 complete \ttable{}
+bridge method rows.  The complete bridge spans $n=21$--$25$ and checks the
+oracle relation, the expanded \anf{} plan, and the emitted-circuit symbolic
+semantics.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.94\linewidth]{fig5_validation.pdf}
 \caption{\textbf{Verification coverage.}  Large term-set experiments are
-validated symbolically; $n=21$--$25$ bridge slices add complete \ttable{}
-checking on selected generated functions.}
+validated symbolically; phase-search and phase-policy rows are checked up to
+global phase; $n=21$--$25$ bridge slices add complete \ttable{} checking on
+selected generated functions.}
 \label{fig:validation}
 \end{figure}
 
@@ -454,7 +464,8 @@ Check & Current coverage & Boundary \\
 $n=20$--$40$ item-level symbolic runs & 5640/5640 & Not full truth-table enumeration. \\
 Width-probe symbolic runs & 1512/1512 & Supports the default action width, but remains term-set validation. \\
 $n=21$--$25$ complete bridge & 400/400 & Small generated slices; not exhaustive coverage of all high-dimensional functions. \\
-Phase selected rows & 531/531 & Verified up to global phase; no rotation-sequence output. \\
+Exact phase-search rows & 531/531 & Verified up to global phase; no rotation-sequence output. \\
+Phase-policy pruning rows & 7611/7611 & Learned shortlist rows verified up to global phase; still no rotation-sequence output. \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -473,10 +484,12 @@ The ablations also calibrate the role of AI.  The neural prior is useful, but
 the largest gain comes from the searchable algebraic action space and from
 guarded portfolio selection.  This is a better fit for the evidence than
 claiming that deep reinforcement learning alone drives the result.  In the
-phase/Rz branch, affine and polarity search give verified improvements, but
-same-budget random candidate shortlists remain close to the learned scorer.
-This leaves a clear next target: stronger phase/Rz policy objectives and
-rotation-spectrum optimization.
+phase/Rz branch, affine and polarity search give verified improvements, and the
+rank-trained diverse shortlist now tracks the wide-search frontier with 6.25\%
+of the exact evaluations.  However, random-repeat margins remain small, so this
+branch should be read as learned pruning evidence rather than as a solved
+rotation-synthesis policy.  The next target is rotation-spectrum-aware
+optimization and sequence-level audit.
 
 Several limitations are deliberate.  All results are logical-layer estimates;
 the paper does not model routing, hardware connectivity, native gate sets,

@@ -2,4 +2,5 @@ group,verified,total,fraction
 n=20-40 item symbolic,5640,5640,1.0
 width probe symbolic,1512,1512,1.0
 truth bridge n=21-25,400,400,1.0
-phase selected rows,531,531,1.0
+phase exact search,531,531,1.0
+phase policy pruning,7611,7611,1.0

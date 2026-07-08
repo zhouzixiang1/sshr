@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Train a learned policy for pruning Affine-FPRM phase-search candidates.
+"""Train learned policies for pruning Affine-FPRM phase-search candidates.
 
 The wide Affine-FPRM search evaluates all ``transform_budget * 2**n`` affine
 forms for each function.  This script keeps the same logic-layer phase
 polynomial model, but trains a small neural scorer from candidate features so a
-policy-guided run can exact-score only the top-k predicted candidates.
+policy-guided run can exact-score only the top-k predicted candidates.  It can
+also apply a deterministic diversity reranker and repeated random controls.
 """
 from __future__ import annotations
 
@@ -69,6 +70,7 @@ FEATURE_NAMES = [
 
 TARGET_METRIC = "score_synth_tperrz30"
 RANK_METHOD = "phase_parity_affine_policy_tperrz30"
+DIVERSE_METHOD = "phase_parity_affine_policy_diverse_tperrz30"
 
 
 @dataclass(frozen=True, slots=True)
@@ -328,17 +330,25 @@ def build_all_groups(
     return groups_by_split
 
 
-def group_labels(groups: list[list[Candidate]]) -> tuple[torch.Tensor, torch.Tensor]:
+def group_labels(groups: list[list[Candidate]], label_mode: str) -> tuple[torch.Tensor, torch.Tensor]:
     features: list[tuple[float, ...]] = []
     labels: list[float] = []
     for group in groups:
         values = [candidate.score_synth_tperrz30 for candidate in group]
-        mean = statistics.mean(values)
-        stdev = statistics.pstdev(values)
-        if stdev <= 1e-9:
-            rewards = [0.0 for _ in values]
+        if label_mode == "rank":
+            ordered = sorted(range(len(values)), key=lambda idx: (values[idx], idx))
+            ranks = [0] * len(values)
+            for rank, idx in enumerate(ordered):
+                ranks[idx] = rank
+            denom = max(1, len(values) - 1)
+            rewards = [1.0 - 2.0 * ranks[idx] / denom for idx in range(len(values))]
         else:
-            rewards = [max(-5.0, min(5.0, (mean - value) / stdev)) for value in values]
+            mean = statistics.mean(values)
+            stdev = statistics.pstdev(values)
+            if stdev <= 1e-9:
+                rewards = [0.0 for _ in values]
+            else:
+                rewards = [max(-5.0, min(5.0, (mean - value) / stdev)) for value in values]
         for candidate, reward in zip(group, rewards):
             features.append(candidate.features)
             labels.append(reward)
@@ -352,9 +362,10 @@ def train_model(
     hidden: int,
     epochs: int,
     batch_size: int,
+    label_mode: str,
 ) -> tuple[PhasePolicyNet, torch.Tensor, torch.Tensor, dict[str, float]]:
-    x_train, y_train = group_labels(train_groups)
-    x_valid, y_valid = group_labels(valid_groups)
+    x_train, y_train = group_labels(train_groups, label_mode)
+    x_valid, y_valid = group_labels(valid_groups, label_mode)
     mean = x_train.mean(dim=0)
     std = x_train.std(dim=0).clamp_min(1e-6)
     x_train = (x_train - mean) / std
@@ -421,19 +432,82 @@ def predict_group(
     return list(zip(pred, group))
 
 
+def cheap_candidate_key(candidate: Candidate) -> tuple[float, ...]:
+    return (
+        float(candidate.transform_index),
+        float(int(candidate.polarity).bit_count()),
+        float(candidate.polarity),
+    )
+
+
+def diversity_signature(candidate: Candidate, strictness: float) -> tuple[int, ...]:
+    n = max(1, candidate.n)
+    transform_bucket = candidate.transform_index // max(1, round(4 + 12 * strictness))
+    polarity_weight = int(candidate.polarity).bit_count()
+    shifted_terms_bucket = round(candidate.features[13] * (1 << n) / max(1, round(1 + 3 * strictness)))
+    shifted_max_degree = round(candidate.features[14] * n)
+    shifted_high_bucket = round(candidate.features[16] * max(1, round(4 + 8 * strictness)))
+    row_weight_bucket = round(candidate.features[8] * n * n / max(1, round(1 + 3 * strictness)))
+    return (
+        transform_bucket,
+        polarity_weight,
+        shifted_terms_bucket,
+        shifted_max_degree,
+        shifted_high_bucket,
+        row_weight_bucket,
+    )
+
+
+def diverse_shortlist(
+    ranked_predictions: list[tuple[float, Candidate]],
+    topk: int,
+    prepool_multiplier: int,
+    diversity_weight: float,
+) -> list[Candidate]:
+    prepool_size = min(len(ranked_predictions), max(topk, topk * prepool_multiplier))
+    prepool = ranked_predictions[:prepool_size]
+    if topk >= len(prepool) or diversity_weight <= 0:
+        return [candidate for _, candidate in prepool]
+
+    selected: list[Candidate] = []
+    selected_ids: set[int] = set()
+    seen_signatures: set[tuple[int, ...]] = set()
+    for _, candidate in prepool:
+        signature = diversity_signature(candidate, diversity_weight)
+        if signature in seen_signatures:
+            continue
+        selected.append(candidate)
+        selected_ids.add(id(candidate))
+        seen_signatures.add(signature)
+        if len(selected) >= topk:
+            return selected
+
+    for _, candidate in prepool:
+        if id(candidate) in selected_ids:
+            continue
+        selected.append(candidate)
+        selected_ids.add(id(candidate))
+        if len(selected) >= topk:
+            break
+    return selected
+
+
 def select_methods_for_group(
     group: list[Candidate],
     predictions: list[tuple[float, Candidate]],
     topks: Sequence[int],
     rng: random.Random,
     transform_budget: int,
+    random_repeats: int,
+    diverse_prepool_multiplier: int,
+    diverse_weight: float,
 ) -> list[dict[str, object]]:
     selected: list[dict[str, object]] = []
     candidate_affine_forms = len(group)
     prefix32 = [candidate for candidate in group if candidate.transform_index < 32]
     prefix16 = [candidate for candidate in group if candidate.transform_index < 16]
     wide = group
-    ranked_predictions = sorted(predictions, key=lambda item: (-item[0], candidate_key(item[1])))
+    ranked_predictions = sorted(predictions, key=lambda item: (-item[0], cheap_candidate_key(item[1])))
 
     baselines = [
         ("phase_affine_prefix16_tperrz30", prefix16, len(prefix16), None),
@@ -459,17 +533,33 @@ def select_methods_for_group(
         )
 
     for topk in topks:
-        pool = rng.sample(group, min(topk, len(group)))
+        pool = diverse_shortlist(ranked_predictions, min(topk, len(group)), diverse_prepool_multiplier, diverse_weight)
         best = min(pool, key=candidate_key)
+        prediction_rank = next(i for i, (_, candidate) in enumerate(ranked_predictions, 1) if candidate is best)
         selected.append(
             make_candidate_row(
                 best,
-                f"phase_affine_random_top{topk}",
+                f"{DIVERSE_METHOD}_top{topk}",
                 min(topk, candidate_affine_forms),
                 candidate_affine_forms,
-                None,
+                prediction_rank,
             )
         )
+
+    for repeat in range(random_repeats):
+        for topk in topks:
+            pool = rng.sample(group, min(topk, len(group)))
+            best = min(pool, key=candidate_key)
+            method = f"phase_affine_random_top{topk}" if repeat == 0 else f"phase_affine_random_s{repeat}_top{topk}"
+            selected.append(
+                make_candidate_row(
+                    best,
+                    method,
+                    min(topk, candidate_affine_forms),
+                    candidate_affine_forms,
+                    None,
+                )
+            )
     return selected
 
 
@@ -507,16 +597,24 @@ def compare_method_rows(
     }
 
 
-def build_summary(rows: list[dict[str, object]], topks: Sequence[int]) -> list[dict[str, object]]:
+def random_method_names(topk: int, random_repeats: int) -> list[str]:
+    return [
+        f"phase_affine_random_top{topk}" if repeat == 0 else f"phase_affine_random_s{repeat}_top{topk}"
+        for repeat in range(random_repeats)
+    ]
+
+
+def build_summary(rows: list[dict[str, object]], topks: Sequence[int], random_repeats: int) -> list[dict[str, object]]:
     methods = [
         "phase_affine_prefix16_tperrz30",
         *(f"{RANK_METHOD}_top{topk}" for topk in topks),
-        *(f"phase_affine_random_top{topk}" for topk in topks),
+        *(f"{DIVERSE_METHOD}_top{topk}" for topk in topks),
+        *(method for topk in topks for method in random_method_names(topk, random_repeats)),
     ]
     baselines = [
         "phase_affine_budget32_tperrz30",
         "phase_affine_wide128_tperrz30",
-        *(f"phase_affine_random_top{topk}" for topk in topks),
+        *(method for topk in topks for method in random_method_names(topk, random_repeats)),
     ]
     metrics = [TARGET_METRIC, "score", "score_rz1", "rz_non_clifford", "rz_total", "CNOT", "depth"]
     summary: list[dict[str, object]] = []
@@ -554,8 +652,12 @@ def write_latex(path: Path, summary: list[dict[str, object]], best_topk: int) ->
     focus = [
         (f"{RANK_METHOD}_top{best_topk}", "phase_affine_budget32_tperrz30", TARGET_METRIC, rf"Policy top-{best_topk} vs budget-32"),
         (f"{RANK_METHOD}_top{best_topk}", "phase_affine_wide128_tperrz30", TARGET_METRIC, rf"Policy top-{best_topk} vs wide-128"),
+        (f"{DIVERSE_METHOD}_top{best_topk}", "phase_affine_budget32_tperrz30", TARGET_METRIC, rf"Diverse policy top-{best_topk} vs budget-32"),
+        (f"{DIVERSE_METHOD}_top{best_topk}", "phase_affine_wide128_tperrz30", TARGET_METRIC, rf"Diverse policy top-{best_topk} vs wide-128"),
         (f"{RANK_METHOD}_top64", "phase_affine_random_top64", TARGET_METRIC, r"Policy top-64 vs random top-64"),
+        (f"{DIVERSE_METHOD}_top64", "phase_affine_random_top64", TARGET_METRIC, r"Diverse policy top-64 vs random top-64"),
         (f"{RANK_METHOD}_top128", "phase_affine_random_top128", TARGET_METRIC, r"Policy top-128 vs random top-128"),
+        (f"{DIVERSE_METHOD}_top128", "phase_affine_random_top128", TARGET_METRIC, r"Diverse policy top-128 vs random top-128"),
         (f"{RANK_METHOD}_top{best_topk}", "phase_affine_budget32_tperrz30", "rz_total", rf"Policy top-{best_topk} total Rz vs budget-32"),
         (f"{RANK_METHOD}_top{best_topk}", "phase_affine_budget32_tperrz30", "CNOT", rf"Policy top-{best_topk} CNOT vs budget-32"),
         (f"{RANK_METHOD}_top{best_topk}", "phase_affine_budget32_tperrz30", "depth", rf"Policy top-{best_topk} depth vs budget-32"),
@@ -594,6 +696,10 @@ def write_analysis(
     topks: Sequence[int],
     best_topk: int,
     transform_budget: int,
+    label_mode: str,
+    random_repeats: int,
+    diverse_prepool_multiplier: int,
+    diverse_weight: float,
     started: float,
 ) -> None:
     lines = [
@@ -605,6 +711,10 @@ def write_analysis(
         "",
         f"- transform budget: {transform_budget}",
         f"- target metric: {TARGET_METRIC}",
+        f"- label mode: {label_mode}",
+        f"- diverse prepool multiplier: {diverse_prepool_multiplier}",
+        f"- diverse weight: {diverse_weight:.2f}",
+        f"- random repeats per top-k: {random_repeats}",
         f"- train functions: {split_sizes['train']}",
         f"- valid functions: {split_sizes['valid']}",
         f"- held-out n=6 test functions: {split_sizes['test_n6']}",
@@ -620,6 +730,7 @@ def write_analysis(
     methods = [
         "phase_affine_prefix16_tperrz30",
         *(f"{RANK_METHOD}_top{topk}" for topk in topks),
+        *(f"{DIVERSE_METHOD}_top{topk}" for topk in topks),
         *(f"phase_affine_random_top{topk}" for topk in topks),
         "phase_affine_budget32_tperrz30",
         "phase_affine_wide128_tperrz30",
@@ -655,10 +766,41 @@ def write_analysis(
     lines.extend(
         [
             "",
+            "## Same-budget random-repeat control",
+            "",
+            "| target | top-k | target mean | random mean +/- sd | target better than random seeds | relative vs random mean |",
+            "|---|---:|---:|---:|---:|---:|",
+        ]
+    )
+    for topk in topks:
+        random_methods = random_method_names(topk, random_repeats)
+        random_means = [
+            method_mean(selected_rows, "test_n6", method, TARGET_METRIC)
+            for method in random_methods
+            if not math.isnan(method_mean(selected_rows, "test_n6", method, TARGET_METRIC))
+        ]
+        if not random_means:
+            continue
+        random_mean = statistics.mean(random_means)
+        random_sd = statistics.pstdev(random_means) if len(random_means) > 1 else 0.0
+        for target in [f"{RANK_METHOD}_top{topk}", f"{DIVERSE_METHOD}_top{topk}"]:
+            target_mean = method_mean(selected_rows, "test_n6", target, TARGET_METRIC)
+            if math.isnan(target_mean):
+                continue
+            better = sum(1 for value in random_means if target_mean < value)
+            mean_relative = (target_mean - random_mean) / max(abs(random_mean), 1.0)
+            lines.append(
+                f"| {target} | {topk} | {target_mean:.2f} | {random_mean:.2f} +/- {random_sd:.2f} | "
+                f"{better}/{len(random_means)} | {pct(mean_relative)} |"
+            )
+    lines.extend(
+        [
+            "",
             "## Interpretation",
             "",
             "- A positive row against budget-32 means the learned scorer found useful candidates outside the deterministic budget-32 prefix while exact-scoring fewer affine forms.",
-            "- Same-budget random shortlists are intentionally included because this candidate space is dense; the current neural policy is best read as a pruned-search feasibility result, not as a decisive learned-vs-random win.",
+            "- Same-budget random shortlists are intentionally repeated because this candidate space is dense; policy-vs-random claims should use the repeat-control table rather than a single random seed.",
+            "- The diverse policy reranker selects from high-scoring predicted candidates while covering distinct transforms and polarities.  It is still a cheap-feature shortlist, not an exact-score oracle.",
             "- A small gap against wide-128 is expected because wide-128 is the exhaustive oracle over the same transform budget.",
             "- This remains a logic-layer phase-polynomial search result; it does not synthesize approximate rotations or include hardware mapping.",
         ]
@@ -702,6 +844,10 @@ def write_manifest(
         "transform_budget": args.transform_budget,
         "topk": args.topk,
         "random_topk": args.topk,
+        "random_repeats": args.random_repeats,
+        "label_mode": args.label_mode,
+        "diverse_prepool_multiplier": args.diverse_prepool_multiplier,
+        "diverse_weight": args.diverse_weight,
         "split_sizes": split_sizes,
         "model_stats": model_stats,
         "rows": len(selected_rows),
@@ -723,6 +869,10 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser.add_argument("--seed", type=int, default=20260709)
     parser.add_argument("--transform-budget", type=int, default=128)
     parser.add_argument("--topk", default="64,128,256,512")
+    parser.add_argument("--random-repeats", type=int, default=1)
+    parser.add_argument("--label-mode", choices=["zscore", "rank"], default="zscore")
+    parser.add_argument("--diverse-prepool-multiplier", type=int, default=8)
+    parser.add_argument("--diverse-weight", type=float, default=0.35)
     parser.add_argument("--workers", type=int, default=1)
     parser.add_argument("--epochs", type=int, default=50)
     parser.add_argument("--hidden", type=int, default=96)
@@ -748,6 +898,7 @@ def main(argv: Iterable[str] | None = None) -> int:
         args.hidden,
         args.epochs,
         args.batch_size,
+        args.label_mode,
     )
     save_model(args.model_out, model, mean, std, model_stats)
 
@@ -763,10 +914,13 @@ def main(argv: Iterable[str] | None = None) -> int:
                     topks,
                     rng,
                     args.transform_budget,
+                    args.random_repeats,
+                    args.diverse_prepool_multiplier,
+                    args.diverse_weight,
                 )
             )
     write_csv(args.raw_out, selected_rows)
-    summary = build_summary(selected_rows, topks)
+    summary = build_summary(selected_rows, topks, args.random_repeats)
     write_summary_csv(args.summary, summary)
     best_topk = max(topks)
     write_latex(args.latex_out, summary, best_topk)
@@ -779,6 +933,10 @@ def main(argv: Iterable[str] | None = None) -> int:
         topks,
         best_topk,
         args.transform_budget,
+        args.label_mode,
+        args.random_repeats,
+        args.diverse_prepool_multiplier,
+        args.diverse_weight,
         started,
     )
     write_manifest(args.manifest, args, selected_rows, split_sizes, model_stats, started)

@@ -1,0 +1,29 @@
+{
+  "input": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_traditional_resource.csv",
+  "raw_out": "resource_nmcts_experiment/results/raw_phase_affine_policy_rank_diverse.csv",
+  "summary": "resource_nmcts_experiment/results/summary_phase_affine_policy_rank_diverse.csv",
+  "analysis": "resource_nmcts_experiment/results/analysis_phase_affine_policy_rank_diverse.md",
+  "latex_out": "resource_nmcts_experiment/paper_latex/tables/phase_affine_policy_rank_diverse.tex",
+  "model_out": "resource_nmcts_experiment/models/phase_affine_policy_rank_diverse_tperrz30.pt",
+  "seed": 20260709,
+  "transform_budget": 128,
+  "topk": "64,128,256,512",
+  "random_topk": "64,128,256,512",
+  "random_repeats": 8,
+  "label_mode": "rank",
+  "diverse_prepool_multiplier": 8,
+  "diverse_weight": 0.35,
+  "split_sizes": {
+    "train": 114,
+    "valid": 25,
+    "test_n6": 38
+  },
+  "model_stats": {
+    "train_mse": 0.09820636535106703,
+    "valid_mse": 0.11494508385658264
+  },
+  "rows": 7611,
+  "verified_rows": 7611,
+  "elapsed_s": 62.01864504814148,
+  "claim_boundary": "Learned candidate pruning for logic-layer Affine-FPRM phase-polynomial search; not rotation sequence synthesis or hardware mapping."
+}
