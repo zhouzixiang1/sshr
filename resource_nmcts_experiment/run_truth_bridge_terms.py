@@ -623,6 +623,9 @@ def write_summary(summary_path: Path, analysis_path: Path, table_path: Path, exa
     def latex_pct(value: float) -> str:
         return f"{value:+.2%}".replace("%", r"\%")
 
+    def latex_text(value: str) -> str:
+        return value.replace("_", r"\_")
+
     table_path.parent.mkdir(parents=True, exist_ok=True)
     with table_path.open("w", encoding="utf-8") as f:
         f.write("\\begin{tabular}{rllrrr}\n")
@@ -645,7 +648,7 @@ def write_summary(summary_path: Path, analysis_path: Path, table_path: Path, exa
                     continue
                 wins, losses, ties, rel_score, rel_time = _comparison(subset, method, baseline)
                 f.write(
-                    f"{n_label} & {method} & {baseline} & {wins}/{losses}/{ties} & "
+                    f"{n_label} & {latex_text(method)} & {latex_text(baseline)} & {wins}/{losses}/{ties} & "
                     f"{latex_pct(rel_score)} & {latex_pct(rel_time)} \\\\\n"
                 )
         f.write("\\bottomrule\n")

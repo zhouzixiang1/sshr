@@ -127,6 +127,39 @@
 - 结果是正向但幅度小。相对 phase-parity ANF，`T/Rz=30` 目标虽然 59/0/118 不退化，但平均只降低 0.47%。这不足以作为最终论文的主要创新结果。
 - 该结果应写成“phase/Rz-aware search 的第一个可验证极性维度”，并把下一步目标设为 learned/optimized phase search，例如选择极性、线性变量变换、parity gadget 合并和旋转谱代价的联合搜索。
 
+### 2.0d n=24 完整 truth-table bridge
+
+本轮把高维完整验证边界从 `n=23` 推进到 `n=24`。新增结果复用 `run_truth_bridge_terms.py`，并依赖当前 `anf_utils.truth_table_from_anf` 的位掩码 truth-table evaluator：对每个变量预先构造赋值位集，单项式用大整数 AND 计算，完整 ANF 用 XOR 合并。该实现已与原 zeta 实现做小规模随机等价测试；在 `n=24` bridge 首样本上，truth-table 构造从中断前 10 min 未完成降到约 0.10 s。
+
+主要产物：
+
+- `results/raw_truth_bridge_n24_terms.csv`
+- `results/summary_truth_bridge_n24_terms.csv`
+- `results/analysis_truth_bridge_n24_terms.md`
+- `paper_latex/tables/truth_bridge_n24_terms.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v33.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v33.pdf`
+
+核心结果：
+
+| 项目 | 结果 |
+|---|---:|
+| n=24 生成式 ANF 函数 | 6 |
+| 完整 truth-table oracle 验证 | 60/60 |
+| ANF plan 验证 | 60/60 |
+| emitted-circuit 符号验证 | 60/60，mismatch=0 |
+| 平均 truth-table 构造时间 | 0.18 s/函数 |
+| adaptive all-depth vs single screen | 6/0/0，score -9.42% |
+| adaptive all-depth vs fixed depth-2 | 4/0/2，score -2.21% |
+| depth-frontier policy vs fixed depth-2 | 3/0/3，score -2.05% |
+| depth-frontier policy vs depth-4 | 0/1/5，score +0.16%，plan time -27.08% |
+
+解释边界：
+
+- 这是完整 oracle 验证边界的实质推进：此前主稿的完整 bridge 为 `n=21,22,23` 合计 300/300 方法行，现在加上 `n=24` 后为 360/360。
+- 该结果提升的是验证 harness 和高维语义可信度，不改变 Resource-NMCTS 搜索算法本身。
+- 仍不能写成 `n=25--40` 已完整枚举；这些维度目前仍主要依赖项集级 plan 验证和 emitted-circuit GF(2) 符号验证。
+
 ### 2.0 RevKit API baseline 与工具链边界
 
 本轮已把外部工具链审计从“是否存在命令”升级为“能否真实运行一个可复现 baseline”。当前 `mcts-qoracle` 环境中已安装 `cmake`、`pybind11` 和 RevKit Python API，并新增 `run_revkit_baseline.py` 调用 RevKit 的 `oracle_synth` 对完整 truth-table 函数合成。

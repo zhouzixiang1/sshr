@@ -43,6 +43,7 @@
 - `resource_nmcts_zh_manuscript_v30.tex` / `resource_nmcts_zh_manuscript_v30.pdf`：中文论文稿 v30，phase-parity emitter 版；新增 `run_phase_parity_baseline.py` 的实际 phase-oracle baseline，把 ANF 单项式展开为 parity-phase Rz gadgets 并用 Fraction 精确验证 177/177 个 `n<=6` 传统函数 up to global phase。该 emitter 相对 RevKit lower-bound score 为 40/137/0、平均 +69.25%，但 `score+1/Rz` 为 177/0/0、平均 -48.16%，`T/Rz=30` proxy 为 177/0/0、平均 -64.98%，说明朴素 phase 展开不是最终方法，但已把 phase/Rz 边界推进为项目内部可验证 emitter 起点。
 - `resource_nmcts_zh_manuscript_v31.tex` / `resource_nmcts_zh_manuscript_v31.pdf`：中文论文稿 v31，搜索主线交付版；在 v30 证据基础上重写为更聚焦的中文 LaTeX 论文文本，把标题、摘要、引言和讨论都收束到“基于强化学习与 MCTS 的资源约束量子布尔函数综合搜索方法”，明确 SSHR 只作为 CNOT-oriented baseline，并把“明显提升”的投稿前终点写成 phase/Rz-aware search、标准外部工具链复现和最小后端映射评估三项。
 - `resource_nmcts_zh_manuscript_v32.tex` / `resource_nmcts_zh_manuscript_v32.pdf`：中文论文稿 v32，FPRM phase 搜索版；新增 `run_phase_parity_fprm_search.py`，对每个 `n<=6` 传统函数枚举 fixed-polarity Reed-Muller 极性并把 shifted parity phase 精确翻译回原变量，3 个 rank metric 共 531/531 行 up-to-global-phase 验证通过。`T/Rz=30` 目标相对 phase-parity ANF 为 59/0/118、平均 -0.47%，相对 RevKit 为 177/0/0、平均 -65.16%；该版本明确它是“真实但小幅”的 phase/Rz 搜索增量，不是最终 phase 方法。
+- `resource_nmcts_zh_manuscript_v33.tex` / `resource_nmcts_zh_manuscript_v33.pdf`：中文论文稿 v33，n=24 完整验证桥接版；在 v32 phase 搜索主线基础上新增 `truth_bridge_n24`，使用位掩码 ANF truth-table evaluator 把完整 oracle 验证推进到 `n=24`。6 个生成式 ANF 函数、60 个方法行均通过完整 oracle 验证、ANF plan 验证和 emitted-circuit 符号验证，mismatch=0，平均 truth-table 构造时间 0.18 s/函数。该版本把完整 bridge 证据从 300/300 扩展为 360/360，同时明确 `n=25--40` 仍不是完整枚举。
 - `resource_nmcts_zh_research_position.tex` / `resource_nmcts_zh_research_position.pdf`：中文研究定位稿，重新梳理“不从 SSHR 入手”的论文主线、AI 在搜索问题中的角色、当前证据边界和下一步明显提升目标。
 - 最新 v4 稿已补充 `train_screen_depth_policy.py` 的结构级 depth policy 结果：n=14/16/18 训练、held-out n=20 测试，说明 AI 已能学习 screen 深度选择，但尚未超过固定 depth-2 的 score。
 - 最新 v8 稿补充 `train_structure_gate.py` 的 screen-gated Resource-NMCTS 边界验证：原 n=20 切片资源持平且平均运行时间降低 75.58%，held-out n=19/20 合计 16/16 score 持平并平均节省 36.83%，但仍只作为运行时门控证据。
@@ -88,6 +89,7 @@ latexmk -xelatex -g resource_nmcts_zh_manuscript_v29.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v30.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v31.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v32.tex
+latexmk -xelatex -g resource_nmcts_zh_manuscript_v33.tex
 latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 ```
 
@@ -150,6 +152,7 @@ latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 - `../results/analysis_rz_synthesis_cost.md`
 - `../results/analysis_phase_parity_anf.md`
 - `../results/analysis_phase_parity_fprm.md`
+- `../results/analysis_truth_bridge_n24_terms.md`
 - `../results/toolchain_readiness.json`
 - `../results/analysis_giga_screen_gate_vs_resource.md`
 - `../results/analysis_structure_gate.md`

@@ -43,6 +43,20 @@ Latest phase/Rz progress:
   next target is learned or optimized phase/Rz-aware search plus actual
   rotation-synthesis sequence auditing.
 
+Latest high-dimensional verification progress:
+
+- `run_truth_bridge_terms.py --ns 24 --per-n 6 --tag truth_bridge_n24` extends
+  the full truth-table bridge from `n=21,22,23` to `n=24`.
+- The bridge uses the bit-mask ANF truth-table evaluator in `anf_utils.py`; it
+  builds variable assignment masks and evaluates monomials with large-integer
+  AND/XOR instead of Python-level coefficient zeta expansion.
+- `n=24`: 6 generated ANF functions and 60 method rows all verify: 60/60 full
+  oracle checks, 60/60 ANF plan checks, 60/60 emitted-circuit symbolic checks,
+  mismatches=0.  Mean truth-table build time is 0.18 s per function.
+- This is a verification-boundary improvement, not a hardware-mapping claim;
+  `n=25--40` remain covered by plan/circuit symbolic verification rather than
+  full truth-table enumeration.
+
 Core commands:
 
 ```bash
@@ -67,6 +81,7 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260713 --ns 23 --per-n 6 --workers 2 --max-screen-depth 4 --tag schedule_truth_bridge_n23
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260713 --ns 23 --per-n 6 --workers 2 --max-screen-depth 4 --frontier-policy-model models/boolean_screen_depth_frontier_policy_large.pt --tag truth_bridge_n23_large_frontier
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260713 --ns 23 --per-n 6 --workers 2 --max-screen-depth 4 --frontier-policy-model models/boolean_screen_depth_frontier_policy_cost_time003.pt --tag truth_bridge_n23_cost_time003_frontier
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260724 --ns 24 --per-n 6 --workers 4 --action-width 6 --max-screen-depth 4 --tag truth_bridge_n24
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_schedule_metrics.py --input schedule_generalization=results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv --input schedule_truth_bridge=results/raw_schedule_truth_bridge_terms.csv --input schedule_truth_bridge_n23=results/raw_schedule_truth_bridge_n23_terms.csv
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_frontier_policy_upgrade.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_mockturtle_xag_probe.py --workers 4 --timeout 20
