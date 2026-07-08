@@ -1,0 +1,85 @@
+# Artifact Rerun Registry
+
+This registry maps paper-facing evidence families to rerun entry points, existing raw CSV artifacts, manifest coverage, and dependency boundaries.
+
+## Status counts
+
+- complete: 14
+- unique raw files covered by registry: 144
+- unique raw CSV rows covered by registry: 55308
+
+| evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |
+|---|---|---:|---:|---:|---|---|
+| Lightweight paper-facing rebuild | quick rebuild | 0 | 0 | 5 | complete | Python, latexmk, and existing raw artifacts; does not rerun raw sweeps or external probes. |
+| Traditional logical baselines | raw Python rerun | 4 | 4071 | 4 | complete | Python rerun; ILP-based subbaselines need Gurobi where enabled. |
+| External logical baseline extension | raw Python plus optional solvers | 3 | 2049 | 3 | complete | Python with optional Gurobi/logic-tool components; rows with skips/errors remain explicit. |
+| ROS-style LUT proxy | raw proxy rerun | 3 | 2472 | 2 | complete | Proxy-level LUT analysis only; not a full ROS SAT garbage-management rerun. |
+| mockturtle KLUT-to-XAG probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded mockturtle checkout/header path; still a logical proxy, not reversible mapping. |
+| CirKit AIG/MC probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded CirKit executable/commit; results are logical estimates, not hardware mapping. |
+| RevKit exact and Rz probes | external toolchain rerun | 5 | 3194 | 5 | complete | Requires RevKit CLI/API availability; Rz rows are phase/sensitivity probes, not final Clifford+T decomposition. |
+| Phase and affine FPRM branch | raw phase rerun and training | 7 | 11859 | 7 | complete | Logical phase verification up to global phase; not approximate rotation synthesis. |
+| Learned-control and ablations | training plus ablation rerun | 13 | 3959 | 9 | complete | Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only. |
+| High-dimensional symbolic screen-scale runs | large raw rerun | 76 | 11480 | 24 | complete | Symbolic or generated-instance verification; not exhaustive truth-table enumeration for all large n. |
+| External high-dimensional resource extensions | large raw rerun | 4 | 528 | 4 | complete | Generated large-instance comparisons; external availability and timeout behavior are recorded in manifests. |
+| Boolean screen, frontier, and gate auxiliaries | training plus ablation rerun | 11 | 2170 | 3 | complete | Auxiliary policy-selection evidence; not all rows are promoted as final-quality gains. |
+| Exact, resource-sweep, and development probes | auxiliary raw rerun | 11 | 12524 | 6 | complete | Development and auxiliary evidence retained in the payload; not all rows correspond to headline manuscript claims. |
+| Complete truth-table bridge slices | bridge raw rerun | 8 | 580 | 0 | complete | Narrow bridge slices because full truth tables grow exponentially. |
+
+## Driver scripts and representative raw artifacts
+
+- **Lightweight paper-facing rebuild**
+  - claim use: Regenerates manuscript-facing analyses, figures, audits, PDF, archive manifest, and payload from existing artifacts.
+  - scripts: `rebuild_submission_package.sh`
+  - representative raw: not applicable for this tier
+- **Traditional logical baselines**
+  - claim use: Primary n<=6 same-task resource comparison against direct, AND-direct, ESOP, SSHR, affine, MCTS, and Pareto variants.
+  - scripts: `run_experiments.py`
+  - representative raw: `results/raw_traditional_resource.csv; results/raw_traditional_resource_learned_prior.csv; results/raw_traditional_resource_no_prior.csv; results/raw_traditional_small.csv`
+- **External logical baseline extension**
+  - claim use: Matched exported-function comparisons against SSHR-I, ABC/BDD, and related logical estimates.
+  - scripts: `run_external_baselines.py`
+  - representative raw: `results/raw_external_traditional_resource_n4.csv; results/raw_external_traditional_resource_n5.csv; results/raw_external_traditional_resource_n6.csv`
+- **ROS-style LUT proxy**
+  - claim use: Tests whether the score advantage survives LUT-style oracle-synthesis proxies and line-aware reselection.
+  - scripts: `run_ros_lut_proxy.py; analyze_ros_lut_line_sensitivity.py`
+  - representative raw: `results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; results/raw_ros_lut_proxy_sweep.csv`
+- **mockturtle KLUT-to-XAG probe**
+  - claim use: Official-header XAG resynthesis probe for external logic-network comparison.
+  - scripts: `run_mockturtle_xag_probe.py`
+  - representative raw: `results/raw_mockturtle_xag_highdim_probe.csv; results/raw_mockturtle_xag_probe.csv`
+- **CirKit AIG/MC probe**
+  - claim use: External AIG and multiplicative-complexity counterpoint, especially for depth-oriented tradeoffs.
+  - scripts: `run_cirkit_aig_probe.py`
+  - representative raw: `results/raw_cirkit_aig_highdim_probe.csv; results/raw_cirkit_aig_probe.csv`
+- **RevKit exact and Rz probes**
+  - claim use: Exact reversible-oracle CLI portfolio and phase/Rz sensitivity boundary for RevKit comparisons.
+  - scripts: `run_revkit_cli_probe.py; run_revkit_baseline.py; run_revkit_highdim_timeout_probe.py`
+  - representative raw: `results/raw_revkit_cli_multiflow_traditional.csv; results/raw_revkit_cli_tbs_traditional.csv; results/raw_revkit_highdim_timeout_probe.csv; results/raw_revkit_oracle_synth_traditional.csv; +1 more`
+- **Phase and affine FPRM branch**
+  - claim use: Checks whether the search framing extends to phase-oracle/Rz proxy objectives and affine shortlist policies.
+  - scripts: `run_phase_parity_baseline.py; run_phase_parity_affine_search.py; run_phase_parity_fprm_search.py; train_phase_affine_policy.py`
+  - representative raw: `results/raw_phase_affine_policy.csv; results/raw_phase_affine_policy_rank_diverse.csv; results/raw_phase_parity_affine.csv; results/raw_phase_parity_affine_wide128.csv; +3 more`
+- **Learned-control and ablations**
+  - claim use: Separates neural/search-control effects from deterministic algebraic construction and guarded portfolio selection.
+  - scripts: `train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; analyze_learned_control_audit.py`
+  - representative raw: `results/raw_highdim_neural_prior_boolean_guard.csv; results/raw_highdim_neural_prior_learned_prior.csv; results/raw_highdim_neural_prior_no_prior.csv; results/raw_highdim_neural_prior_pairwise.csv; +9 more`
+- **High-dimensional symbolic screen-scale runs**
+  - claim use: Tests scaling behavior on n=20-40 generated term-set instances with symbolic emitted-circuit checks.
+  - scripts: `run_screen_scale_terms.py`
+  - representative raw: `results/raw_giga_adaptive_resource_vs_and_direct.csv; results/raw_giga_adaptive_screen_resource.csv; results/raw_giga_adaptive_screen_vs_single.csv; results/raw_giga_boolean_neural_resource.csv; +72 more`
+- **External high-dimensional resource extensions**
+  - claim use: Auxiliary high-dimensional extensions for external/resource baselines used to stress-test scaling claims.
+  - scripts: `run_external_baselines.py; analyze_external_baselines.py`
+  - representative raw: `results/raw_external_highdim_resource.csv; results/raw_external_highdim_scale_resource.csv; results/raw_external_mega_highdim_resource.csv; results/raw_external_ultra_highdim_resource.csv`
+- **Boolean screen, frontier, and gate auxiliaries**
+  - claim use: Auxiliary guard/frontier/gate slices used to decide which learned or screened controls are promoted or demoted.
+  - scripts: `train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_structure_gate.py; analyze_stage_gated_frontier.py; analyze_structure_gate_holdout.py`
+  - representative raw: `results/raw_boolean_neural_guard_vs_deterministic.csv; results/raw_boolean_neural_highdim.csv; results/raw_boolean_screen_depth_frontier_policy.csv; results/raw_boolean_screen_depth_frontier_policy_cost_time003.csv; +7 more`
+- **Exact, resource-sweep, and development probes**
+  - claim use: Auxiliary exact-DP, XAG/MC, resource-sweep, pilot, smoke, and early evidence checks retained for auditability.
+  - scripts: `analyze_exact_fprm_dp.py; analyze_exact_xag_mc.py; run_resource_sweep.py; analyze_resource_sweep.py`
+  - representative raw: `results/raw_ablation_affine.csv; results/raw_evidence.csv; results/raw_evidence_affine.csv; results/raw_exact_fprm_dp.csv; +7 more`
+- **Complete truth-table bridge slices**
+  - claim use: Connects high-dimensional symbolic plans to complete truth-table simulation on n=21-25 bridge rows.
+  - scripts: `run_truth_bridge_terms.py`
+  - representative raw: `results/raw_schedule_truth_bridge_n23_terms.csv; results/raw_schedule_truth_bridge_terms.csv; results/raw_truth_bridge_n23_cost_time003_frontier_terms.csv; results/raw_truth_bridge_n23_large_frontier_terms.csv; +4 more`

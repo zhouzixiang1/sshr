@@ -30,6 +30,7 @@ Use this checklist immediately before uploading the manuscript.
 - Readiness audit: `results/analysis_submission_readiness_audit.md`
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
 - Goal-completion audit: `results/analysis_goal_completion_audit.md`
+- Raw rerun registry: `results/analysis_artifact_rerun_registry.md`
 - Artifact reproduction guide: `submission_package/artifact_reproduction_guide.md`
 - Editor screening brief: `submission_package/editor_screening_brief.md`
 - Target venue brief: `submission_package/target_venue_brief.md`

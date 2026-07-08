@@ -35,6 +35,7 @@ run_py analyze_sparse_depth4_gate_sensitivity.py
 run_py analyze_learned_control_audit.py
 run_py analyze_scaling_resource_audit.py
 run_py analyze_weight_robustness.py
+run_py analyze_artifact_rerun_registry.py
 run_py analyze_reproducibility_audit.py
 run_py analyze_submission_metadata_audit.py
 run_py analyze_goal_completion_audit.py

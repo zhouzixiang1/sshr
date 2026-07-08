@@ -34,6 +34,10 @@ METADATA_MANIFEST = RESULTS / "manifest_submission_metadata_audit.json"
 GOAL_ANALYSIS = RESULTS / "analysis_goal_completion_audit.md"
 GOAL_SUMMARY = RESULTS / "summary_goal_completion_audit.csv"
 GOAL_MANIFEST = RESULTS / "manifest_goal_completion_audit.json"
+RERUN_REGISTRY_ANALYSIS = RESULTS / "analysis_artifact_rerun_registry.md"
+RERUN_REGISTRY_SUMMARY = RESULTS / "summary_artifact_rerun_registry.csv"
+RERUN_REGISTRY_MANIFEST = RESULTS / "manifest_artifact_rerun_registry.json"
+RERUN_REGISTRY_TABLE = THIS_DIR / "paper_latex" / "tables" / "artifact_rerun_registry.tex"
 SUPPORT_FILES = [
     SUBMISSION_PACKAGE / "README.md",
     SUBMISSION_PACKAGE / "artifact_reproduction_guide.md",
@@ -147,6 +151,17 @@ def build_rows() -> list[dict[str, str]]:
             "status": "pass" if "tab:reproducibility" in text else "needs revision",
             "evidence": "Manuscript includes compute, worker, artifact, and external-tool provenance table.",
             "next_action": "Rerun analyze_reproducibility_audit.py after adding scripts, tables, or figures.",
+        },
+        {
+            "item": "Raw rerun registry",
+            "status": "pass"
+            if RERUN_REGISTRY_ANALYSIS.exists()
+            and RERUN_REGISTRY_SUMMARY.exists()
+            and RERUN_REGISTRY_MANIFEST.exists()
+            and RERUN_REGISTRY_TABLE.exists()
+            else "needs revision",
+            "evidence": "Artifact rerun registry maps evidence families to driver scripts, raw CSV coverage, manifests, rerun tiers, and dependency boundaries.",
+            "next_action": "Rerun analyze_artifact_rerun_registry.py after adding raw data families, run scripts, or external-tool probes.",
         },
         {
             "item": "Claim-to-artifact traceability",

@@ -1,0 +1,463 @@
+#!/usr/bin/env python3
+"""Create a reviewer-facing registry for raw rerun entry points.
+
+The registry maps evidence families to driver scripts, existing raw CSVs,
+manifest files, and dependency boundaries.  It is an artifact guide rather
+than a scientific result: its purpose is to make clear which claims are
+verified by the lightweight rebuild and which require heavier raw reruns or
+external tools.
+"""
+from __future__ import annotations
+
+import csv
+import json
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+
+
+THIS_DIR = Path(__file__).resolve().parent
+RESULTS = THIS_DIR / "results"
+TABLES = THIS_DIR / "paper_latex" / "tables"
+
+
+@dataclass(frozen=True)
+class EvidenceFamily:
+    family: str
+    claim_use: str
+    rerun_tier: str
+    scripts: tuple[str, ...]
+    raw_patterns: tuple[str, ...]
+    manifest_patterns: tuple[str, ...]
+    summary_patterns: tuple[str, ...]
+    analysis_patterns: tuple[str, ...]
+    dependency_boundary: str
+
+
+def rel(path: Path) -> str:
+    return str(path.relative_to(THIS_DIR))
+
+
+def collect_result(patterns: tuple[str, ...]) -> list[Path]:
+    files: list[Path] = []
+    for pattern in patterns:
+        files.extend(path for path in RESULTS.glob(pattern) if path.is_file())
+    return sorted(set(files), key=rel)
+
+
+def script_paths(names: tuple[str, ...]) -> list[Path]:
+    return [THIS_DIR / name for name in names]
+
+
+def csv_rows(path: Path) -> int:
+    try:
+        with path.open("r", encoding="utf-8", newline="") as f:
+            reader = csv.reader(f)
+            next(reader, None)
+            return sum(1 for _ in reader)
+    except Exception:
+        return 0
+
+
+def raw_row_count(files: list[Path]) -> int:
+    return sum(csv_rows(path) for path in files)
+
+
+def unique_registry_raw_files() -> list[Path]:
+    files: set[Path] = set()
+    for spec in specs():
+        files.update(collect_result(spec.raw_patterns))
+    return sorted(files, key=rel)
+
+
+def paths_text(files: list[Path], limit: int = 4) -> str:
+    if not files:
+        return ""
+    shown = [rel(path) for path in files[:limit]]
+    if len(files) > limit:
+        shown.append(f"+{len(files) - limit} more")
+    return "; ".join(shown)
+
+
+def specs() -> list[EvidenceFamily]:
+    return [
+        EvidenceFamily(
+            family="Lightweight paper-facing rebuild",
+            claim_use="Regenerates manuscript-facing analyses, figures, audits, PDF, archive manifest, and payload from existing artifacts.",
+            rerun_tier="quick rebuild",
+            scripts=("rebuild_submission_package.sh",),
+            raw_patterns=(),
+            manifest_patterns=("manifest_submission_*.json", "manifest_goal_completion_audit.json"),
+            summary_patterns=("summary_submission_*.csv", "summary_goal_completion_audit.csv"),
+            analysis_patterns=("analysis_submission_*.md", "analysis_goal_completion_audit.md"),
+            dependency_boundary="Python, latexmk, and existing raw artifacts; does not rerun raw sweeps or external probes.",
+        ),
+        EvidenceFamily(
+            family="Traditional logical baselines",
+            claim_use="Primary n<=6 same-task resource comparison against direct, AND-direct, ESOP, SSHR, affine, MCTS, and Pareto variants.",
+            rerun_tier="raw Python rerun",
+            scripts=("run_experiments.py",),
+            raw_patterns=("raw_traditional_resource.csv", "raw_traditional_resource_*.csv", "raw_traditional_small.csv"),
+            manifest_patterns=("manifest_traditional_resource*.json", "manifest_traditional_small.json"),
+            summary_patterns=("summary_traditional*.csv", "summary_paired_statistical_evidence.csv"),
+            analysis_patterns=("analysis_traditional*.md", "analysis_paired_statistical_evidence.md"),
+            dependency_boundary="Python rerun; ILP-based subbaselines need Gurobi where enabled.",
+        ),
+        EvidenceFamily(
+            family="External logical baseline extension",
+            claim_use="Matched exported-function comparisons against SSHR-I, ABC/BDD, and related logical estimates.",
+            rerun_tier="raw Python plus optional solvers",
+            scripts=("run_external_baselines.py",),
+            raw_patterns=("raw_external_traditional_resource_n*.csv",),
+            manifest_patterns=("manifest_external_traditional_resource_n*.json",),
+            summary_patterns=("summary_external_traditional_resource_n*.csv",),
+            analysis_patterns=("analysis_external_traditional_resource_n*.md",),
+            dependency_boundary="Python with optional Gurobi/logic-tool components; rows with skips/errors remain explicit.",
+        ),
+        EvidenceFamily(
+            family="ROS-style LUT proxy",
+            claim_use="Tests whether the score advantage survives LUT-style oracle-synthesis proxies and line-aware reselection.",
+            rerun_tier="raw proxy rerun",
+            scripts=("run_ros_lut_proxy.py", "analyze_ros_lut_line_sensitivity.py"),
+            raw_patterns=("raw_ros_lut_proxy_*.csv", "raw_ros_lut_line_sensitivity.csv"),
+            manifest_patterns=("manifest_ros_lut_proxy.json", "manifest_ros_lut_line_sensitivity.json"),
+            summary_patterns=("summary_ros_lut_*.csv",),
+            analysis_patterns=("analysis_ros_lut_*.md",),
+            dependency_boundary="Proxy-level LUT analysis only; not a full ROS SAT garbage-management rerun.",
+        ),
+        EvidenceFamily(
+            family="mockturtle KLUT-to-XAG probe",
+            claim_use="Official-header XAG resynthesis probe for external logic-network comparison.",
+            rerun_tier="external toolchain rerun",
+            scripts=("run_mockturtle_xag_probe.py",),
+            raw_patterns=("raw_mockturtle_xag*.csv",),
+            manifest_patterns=("manifest_mockturtle_xag*.json",),
+            summary_patterns=("summary_mockturtle_xag*.csv",),
+            analysis_patterns=("analysis_mockturtle_xag*.md",),
+            dependency_boundary="Requires the recorded mockturtle checkout/header path; still a logical proxy, not reversible mapping.",
+        ),
+        EvidenceFamily(
+            family="CirKit AIG/MC probe",
+            claim_use="External AIG and multiplicative-complexity counterpoint, especially for depth-oriented tradeoffs.",
+            rerun_tier="external toolchain rerun",
+            scripts=("run_cirkit_aig_probe.py",),
+            raw_patterns=("raw_cirkit_aig*.csv",),
+            manifest_patterns=("manifest_cirkit_aig*.json",),
+            summary_patterns=("summary_cirkit_aig*.csv",),
+            analysis_patterns=("analysis_cirkit_aig*.md",),
+            dependency_boundary="Requires the recorded CirKit executable/commit; results are logical estimates, not hardware mapping.",
+        ),
+        EvidenceFamily(
+            family="RevKit exact and Rz probes",
+            claim_use="Exact reversible-oracle CLI portfolio and phase/Rz sensitivity boundary for RevKit comparisons.",
+            rerun_tier="external toolchain rerun",
+            scripts=("run_revkit_cli_probe.py", "run_revkit_baseline.py", "run_revkit_highdim_timeout_probe.py"),
+            raw_patterns=("raw_revkit_*.csv", "raw_rz_synthesis_cost.csv"),
+            manifest_patterns=("manifest_revkit_*.json", "manifest_rz_synthesis_cost.json"),
+            summary_patterns=("summary_revkit_*.csv", "summary_rz_synthesis_cost.csv"),
+            analysis_patterns=("analysis_revkit_*.md", "analysis_rz_synthesis_cost.md"),
+            dependency_boundary="Requires RevKit CLI/API availability; Rz rows are phase/sensitivity probes, not final Clifford+T decomposition.",
+        ),
+        EvidenceFamily(
+            family="Phase and affine FPRM branch",
+            claim_use="Checks whether the search framing extends to phase-oracle/Rz proxy objectives and affine shortlist policies.",
+            rerun_tier="raw phase rerun and training",
+            scripts=(
+                "run_phase_parity_baseline.py",
+                "run_phase_parity_affine_search.py",
+                "run_phase_parity_fprm_search.py",
+                "train_phase_affine_policy.py",
+            ),
+            raw_patterns=("raw_phase_*.csv",),
+            manifest_patterns=("manifest_phase_*.json",),
+            summary_patterns=("summary_phase_*.csv",),
+            analysis_patterns=("analysis_phase_*.md",),
+            dependency_boundary="Logical phase verification up to global phase; not approximate rotation synthesis.",
+        ),
+        EvidenceFamily(
+            family="Learned-control and ablations",
+            claim_use="Separates neural/search-control effects from deterministic algebraic construction and guarded portfolio selection.",
+            rerun_tier="training plus ablation rerun",
+            scripts=(
+                "train_neural_policy.py",
+                "train_screen_depth_policy.py",
+                "train_screen_depth_frontier_policy.py",
+                "train_sparse_depth4_gate.py",
+                "analyze_learned_control_audit.py",
+            ),
+            raw_patterns=("raw_neural_*.csv", "raw_highdim_neural_*.csv", "raw_sparse_depth4_gate*.csv", "raw_search_ablation_*.csv"),
+            manifest_patterns=("manifest_*neural*.json", "manifest_search_ablation_*.json"),
+            summary_patterns=("summary_*neural*.csv", "summary_sparse_depth4_gate*.csv", "summary_search_ablation_*.csv"),
+            analysis_patterns=("analysis_*neural*.md", "analysis_sparse_depth4_gate*.md", "analysis_search_ablation_*.md", "analysis_learned_control_audit.md"),
+            dependency_boundary="Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only.",
+        ),
+        EvidenceFamily(
+            family="High-dimensional symbolic screen-scale runs",
+            claim_use="Tests scaling behavior on n=20-40 generated term-set instances with symbolic emitted-circuit checks.",
+            rerun_tier="large raw rerun",
+            scripts=("run_screen_scale_terms.py",),
+            raw_patterns=("raw_screen_scale*.csv", "raw_highdim_*.csv", "raw_mega_*.csv", "raw_giga_*.csv", "raw_ultra_*.csv"),
+            manifest_patterns=("manifest_highdim*.json", "manifest_mega*.json", "manifest_giga*.json", "manifest_ultra*.json"),
+            summary_patterns=("summary_screen_scale*.csv", "summary_highdim*.csv", "summary_mega*.csv", "summary_giga*.csv", "summary_ultra*.csv"),
+            analysis_patterns=("analysis_screen_scale*.md", "analysis_highdim*.md", "analysis_mega*.md", "analysis_giga*.md", "analysis_ultra*.md"),
+            dependency_boundary="Symbolic or generated-instance verification; not exhaustive truth-table enumeration for all large n.",
+        ),
+        EvidenceFamily(
+            family="External high-dimensional resource extensions",
+            claim_use="Auxiliary high-dimensional extensions for external/resource baselines used to stress-test scaling claims.",
+            rerun_tier="large raw rerun",
+            scripts=("run_external_baselines.py", "analyze_external_baselines.py"),
+            raw_patterns=("raw_external_highdim*.csv", "raw_external_mega*.csv", "raw_external_ultra*.csv"),
+            manifest_patterns=("manifest_external_highdim*.json", "manifest_external_mega*.json", "manifest_external_ultra*.json"),
+            summary_patterns=("summary_external_highdim*.csv", "summary_external_mega*.csv", "summary_external_ultra*.csv"),
+            analysis_patterns=("analysis_external_highdim*.md", "analysis_external_mega*.md", "analysis_external_ultra*.md"),
+            dependency_boundary="Generated large-instance comparisons; external availability and timeout behavior are recorded in manifests.",
+        ),
+        EvidenceFamily(
+            family="Boolean screen, frontier, and gate auxiliaries",
+            claim_use="Auxiliary guard/frontier/gate slices used to decide which learned or screened controls are promoted or demoted.",
+            rerun_tier="training plus ablation rerun",
+            scripts=(
+                "train_screen_depth_policy.py",
+                "train_screen_depth_frontier_policy.py",
+                "train_structure_gate.py",
+                "analyze_stage_gated_frontier.py",
+                "analyze_structure_gate_holdout.py",
+            ),
+            raw_patterns=("raw_boolean_*.csv", "raw_gate_holdout*.csv", "raw_stage_gated_frontier.csv"),
+            manifest_patterns=("manifest_boolean*.json", "manifest_gate_holdout*.json", "manifest_stage_gated_frontier.json"),
+            summary_patterns=("summary_boolean*.csv", "summary_gate_holdout*.csv", "summary_stage_gated_frontier.csv"),
+            analysis_patterns=("analysis_boolean*.md", "analysis_gate_holdout*.md", "analysis_stage_gated_frontier.md"),
+            dependency_boundary="Auxiliary policy-selection evidence; not all rows are promoted as final-quality gains.",
+        ),
+        EvidenceFamily(
+            family="Exact, resource-sweep, and development probes",
+            claim_use="Auxiliary exact-DP, XAG/MC, resource-sweep, pilot, smoke, and early evidence checks retained for auditability.",
+            rerun_tier="auxiliary raw rerun",
+            scripts=(
+                "analyze_exact_fprm_dp.py",
+                "analyze_exact_xag_mc.py",
+                "run_resource_sweep.py",
+                "analyze_resource_sweep.py",
+            ),
+            raw_patterns=(
+                "raw_ablation_affine.csv",
+                "raw_evidence*.csv",
+                "raw_exact_*.csv",
+                "raw_large*.csv",
+                "raw_pilot.csv",
+                "raw_resource_sweep.csv",
+                "raw_smoke.csv",
+            ),
+            manifest_patterns=(
+                "manifest_ablation_affine.json",
+                "manifest_evidence_affine.json",
+                "manifest_large_resource_core.json",
+                "manifest_pilot.json",
+                "manifest_resource_sweep.json",
+                "manifest_smoke.json",
+            ),
+            summary_patterns=(
+                "summary_ablation_affine.csv",
+                "summary_evidence*.csv",
+                "summary_exact_*.csv",
+                "summary_large*.csv",
+                "summary_pilot.csv",
+                "summary_resource_sweep.csv",
+                "summary_smoke.csv",
+            ),
+            analysis_patterns=(
+                "analysis_ablation_affine.md",
+                "analysis_evidence*.md",
+                "analysis_exact_*.md",
+                "analysis_large*.md",
+                "analysis_pilot.md",
+                "analysis_resource_sweep.md",
+                "analysis_smoke.md",
+            ),
+            dependency_boundary="Development and auxiliary evidence retained in the payload; not all rows correspond to headline manuscript claims.",
+        ),
+        EvidenceFamily(
+            family="Complete truth-table bridge slices",
+            claim_use="Connects high-dimensional symbolic plans to complete truth-table simulation on n=21-25 bridge rows.",
+            rerun_tier="bridge raw rerun",
+            scripts=("run_truth_bridge_terms.py",),
+            raw_patterns=("raw_truth_bridge*.csv", "raw_schedule_truth_bridge*.csv"),
+            manifest_patterns=(),
+            summary_patterns=("summary_truth_bridge*.csv", "summary_schedule_truth_bridge*.csv"),
+            analysis_patterns=("analysis_truth_bridge*.md", "analysis_schedule_truth_bridge*.md"),
+            dependency_boundary="Narrow bridge slices because full truth tables grow exponentially.",
+        ),
+    ]
+
+
+def build_rows() -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    for spec in specs():
+        scripts = script_paths(spec.scripts)
+        raw_files = collect_result(spec.raw_patterns)
+        manifests = collect_result(spec.manifest_patterns)
+        summaries = collect_result(spec.summary_patterns)
+        analyses = collect_result(spec.analysis_patterns)
+        missing_scripts = [rel(path) for path in scripts if not path.exists()]
+        missing_raw = bool(spec.raw_patterns and not raw_files)
+        status = "complete" if not missing_scripts and not missing_raw else "needs artifact"
+        rows.append(
+            {
+                "evidence_family": spec.family,
+                "claim_use": spec.claim_use,
+                "rerun_tier": spec.rerun_tier,
+                "driver_scripts": "; ".join(spec.scripts),
+                "scripts_present": str(len(scripts) - len(missing_scripts)),
+                "scripts_missing": "; ".join(missing_scripts),
+                "raw_files": str(len(raw_files)),
+                "raw_rows": str(raw_row_count(raw_files)),
+                "manifest_files": str(len(manifests)),
+                "summary_files": str(len(summaries)),
+                "analysis_files": str(len(analyses)),
+                "representative_raw": paths_text(raw_files),
+                "dependency_boundary": spec.dependency_boundary,
+                "status": status,
+            }
+        )
+    return rows
+
+
+def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fields = [
+        "evidence_family",
+        "claim_use",
+        "rerun_tier",
+        "driver_scripts",
+        "scripts_present",
+        "scripts_missing",
+        "raw_files",
+        "raw_rows",
+        "manifest_files",
+        "summary_files",
+        "analysis_files",
+        "representative_raw",
+        "dependency_boundary",
+        "status",
+    ]
+    with path.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
+    counts: dict[str, int] = {}
+    for row in rows:
+        counts[row["status"]] = counts.get(row["status"], 0) + 1
+    unique_raw = unique_registry_raw_files()
+    total_rows = raw_row_count(unique_raw)
+    lines = [
+        "# Artifact Rerun Registry",
+        "",
+        "This registry maps paper-facing evidence families to rerun entry points, existing raw CSV artifacts, manifest coverage, and dependency boundaries.",
+        "",
+        "## Status counts",
+        "",
+    ]
+    for status in sorted(counts):
+        lines.append(f"- {status}: {counts[status]}")
+    lines.extend(
+        [
+            f"- unique raw files covered by registry: {len(unique_raw)}",
+            f"- unique raw CSV rows covered by registry: {total_rows}",
+            "",
+            "| evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |",
+            "|---|---|---:|---:|---:|---|---|",
+        ]
+    )
+    for row in rows:
+        lines.append(
+            f"| {row['evidence_family']} | {row['rerun_tier']} | {row['raw_files']} | {row['raw_rows']} | "
+            f"{row['manifest_files']} | {row['status']} | {row['dependency_boundary']} |"
+        )
+    lines.extend(["", "## Driver scripts and representative raw artifacts", ""])
+    for row in rows:
+        lines.append(f"- **{row['evidence_family']}**")
+        lines.append(f"  - claim use: {row['claim_use']}")
+        lines.append(f"  - scripts: `{row['driver_scripts']}`")
+        if row["representative_raw"]:
+            lines.append(f"  - representative raw: `{row['representative_raw']}`")
+        else:
+            lines.append("  - representative raw: not applicable for this tier")
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def tex_escape(text: str) -> str:
+    replacements = {
+        "\\": r"\textbackslash{}",
+        "&": r"\&",
+        "%": r"\%",
+        "_": r"\_",
+        "#": r"\#",
+    }
+    for old, new in replacements.items():
+        text = text.replace(old, new)
+    text = text.replace("<=", r"$\leq$")
+    return text
+
+
+def write_latex(path: Path, rows: list[dict[str, str]]) -> None:
+    lines = [
+        r"\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}rr>{\raggedright\arraybackslash}X}",
+        r"\toprule",
+        r"Evidence family & Rerun tier & Raw files & Raw rows & Dependency boundary \\",
+        r"\midrule",
+    ]
+    for row in rows:
+        lines.append(
+            " & ".join(
+                [
+                    tex_escape(row["evidence_family"]),
+                    tex_escape(row["rerun_tier"]),
+                    row["raw_files"],
+                    row["raw_rows"],
+                    tex_escape(row["dependency_boundary"]),
+                ]
+            )
+            + r" \\"
+        )
+    lines.extend([r"\bottomrule", r"\end{tabularx}"])
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
+    unique_raw = unique_registry_raw_files()
+    data = {
+        "script": Path(__file__).name,
+        "python": sys.version.split()[0],
+        "rows": len(rows),
+        "complete_rows": sum(1 for row in rows if row["status"] == "complete"),
+        "unique_raw_files": len(unique_raw),
+        "unique_raw_rows": raw_row_count(unique_raw),
+        "raw_file_names": [rel(path) for path in unique_raw],
+        "outputs": {
+            "summary": "results/summary_artifact_rerun_registry.csv",
+            "analysis": "results/analysis_artifact_rerun_registry.md",
+            "table": "paper_latex/tables/artifact_rerun_registry.tex",
+        },
+        "families": rows,
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def main() -> int:
+    rows = build_rows()
+    write_csv(RESULTS / "summary_artifact_rerun_registry.csv", rows)
+    write_markdown(RESULTS / "analysis_artifact_rerun_registry.md", rows)
+    write_latex(TABLES / "artifact_rerun_registry.tex", rows)
+    write_manifest(RESULTS / "manifest_artifact_rerun_registry.json", rows)
+    print(f"wrote {len(rows)} artifact rerun registry rows")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

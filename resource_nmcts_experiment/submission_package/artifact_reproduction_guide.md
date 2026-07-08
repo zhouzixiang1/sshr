@@ -59,13 +59,13 @@ neural model training.
 After the quick rebuild, the current package should report:
 
 - compiled PDF: `paper_latex/resource_nmcts_submission_v1.pdf`
-- PDF pages: 26
-- readiness audit: 18 pass, 1 author-input item
-- submission support files: 8 present, 0 missing
 - payload archive: `submission_package/dist/resource_nmcts_submission_payload.tar.gz`
-- payload file count: 809
-- payload SHA256:
-  `909990d8fbaca09e1a44ce0204e131efedae3b0cbf1e7014561764c03d1e67f4`
+- readiness state in `results/analysis_submission_readiness_audit.md`
+- payload file count and SHA256 in
+  `results/analysis_submission_payload_archive.md`
+- submission support-file count in
+  `results/analysis_submission_archive_manifest.md`
+- raw rerun registry in `results/analysis_artifact_rerun_registry.md`
 
 The remaining readiness item is author-specific metadata and cannot be
 reconstructed from the artifact.
@@ -107,6 +107,8 @@ layout warnings.
   `results/analysis_scaling_resource_audit.md`
 - Compute and artifact audit:
   `results/analysis_reproducibility_audit.md`
+- Raw rerun registry:
+  `results/analysis_artifact_rerun_registry.md`
 - Submission traceability:
   `results/analysis_submission_traceability_audit.md`
 - Payload manifest:
@@ -116,6 +118,10 @@ layout warnings.
 
 These scripts are included for deeper reruns or selective checks.  They are not
 part of the quick rebuild.
+
+The generated registry `results/analysis_artifact_rerun_registry.md` gives a
+family-by-family map from evidence claims to driver scripts, raw CSV coverage,
+manifest coverage, rerun tier, and dependency boundary.
 
 - Core traditional resource experiments: `run_experiments.py`
 - External baseline aggregation: `run_external_baselines.py`
@@ -148,4 +154,3 @@ The artifact should be evaluated under the manuscript's stated scope:
 
 Do not interpret the artifact as evidence for hardware-mapped quantum-circuit
 performance, physical-device execution, or universal raw-resource dominance.
-
