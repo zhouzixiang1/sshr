@@ -23,11 +23,15 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python train_screen_depth_frontier_policy.py --train-n 16,20,24 --test-n 28,40 --train-per-n 32 --valid-per-n 12 --test-per-n 16 --workers 6 --epochs 160 --hidden 96
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --ns 20,28,40 --per-n 24 --workers 6 --max-screen-depth 4 --tag depth_frontier_policy
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 24,28,32,40 --per-n 24 --workers 6 --max-screen-depth 4 --tag depth_frontier_policy_generalization
+/opt/anaconda3/envs/mcts-qoracle/bin/python train_screen_depth_frontier_policy.py --seed 20260715 --train-per-n 64 --valid-per-n 24 --test-per-n 24 --epochs 220 --hidden 160 --workers 8 --action-width 6 --tag large --model-out models/boolean_screen_depth_frontier_policy_large.pt
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 24,28,32,40 --per-n 24 --workers 8 --max-screen-depth 4 --frontier-policy-model models/boolean_screen_depth_frontier_policy_large.pt --tag depth_frontier_policy_large_generalization
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --workers 2
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 24,28,32,40 --per-n 24 --workers 6 --max-screen-depth 4 --tag schedule_depth_frontier_policy_generalization
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260711 --ns 21,22 --per-n 6 --workers 2 --max-screen-depth 4 --tag schedule_truth_bridge
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260713 --ns 23 --per-n 6 --workers 2 --max-screen-depth 4 --tag schedule_truth_bridge_n23
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260713 --ns 23 --per-n 6 --workers 2 --max-screen-depth 4 --frontier-policy-model models/boolean_screen_depth_frontier_policy_large.pt --tag truth_bridge_n23_large_frontier
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_schedule_metrics.py --input schedule_generalization=results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv --input schedule_truth_bridge=results/raw_schedule_truth_bridge_terms.csv --input schedule_truth_bridge_n23=results/raw_schedule_truth_bridge_n23_terms.csv
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_frontier_policy_upgrade.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset smoke
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset evidence_affine --model models/action_scorer_rollout_logical_and.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset evidence_affine
@@ -210,6 +214,16 @@ The high-budget Boolean screen depth-frontier policy is trained with
 depth-3, and depth-4 Boolean-ring screens; its held-out analysis is written to
 `results/analysis_boolean_screen_depth_frontier_policy.md`, with the table at
 `paper_latex/tables/boolean_screen_depth_frontier_policy.tex`.
+The larger depth-frontier policy is saved at
+`models/boolean_screen_depth_frontier_policy_large.pt`.  Its training run uses
+192 train / 72 validation / 48 held-out generated term sets, hidden width 160,
+and a wider action frontier.  The held-out score gap to the oracle depth-2/3/4
+frontier falls from +0.80% to +0.04%; on the independent `n=24,28,32,40`
+generalization run, it improves over fixed depth-2 by 56/0/40 with -2.34%
+mean score, improves over the old policy by 17/0/79 with -0.49% mean score,
+and remains +0.10% from all-depth while saving -53.50% planning time.  This is
+a quality-strengthened policy, not a faster policy: it chooses depth-3/4 more
+often and is slower than the old frontier policy.
 Term-set scale tests beyond truth-table-feasible sizes are run with
 `run_screen_scale_terms.py`; outputs are written to
 `results/analysis_screen_scale_terms.md`, `results/raw_screen_scale_terms.csv`,
@@ -218,12 +232,14 @@ also expanded symbolically back to its ANF monomial set, so these runs now
 include plan-level ANF equivalence checks.  The emitted X/CNOT/MCT oracle
 circuit is then simulated symbolically over GF(2) polynomials, which gives
 emitted-circuit equivalence evidence without constructing full truth tables.
-The high-dimensional truth-table bridge now covers `n=21,22,23`: 180/180
-method rows pass complete oracle truth-table verification, plan ANF verification,
-and emitted-circuit ANF verification.  The `n=23` slice alone contains six
+The high-dimensional truth-table bridge now covers `n=21,22,23`, plus a large
+frontier-policy rerun on the same `n=23` seed: 240/240 method rows pass
+complete oracle truth-table verification, plan ANF verification, and
+emitted-circuit ANF verification.  The original `n=23` slice contains six
 functions and sixty method rows; its frontier policy improves score by 1.88%
-and T-depth proxy by 1.69% against fixed depth-2, with the expected increase in
-explicit ancilla lifetime area.
+and T-depth proxy by 1.69% against fixed depth-2.  The large-policy `n=23`
+rerun improves over the old policy by 1/0/5 with -0.48% mean score and -0.45%
+T-depth proxy, with the expected increase in explicit ancilla lifetime area.
 
 Current structure-policy evidence:
 
@@ -292,6 +308,13 @@ Current structure-policy evidence:
   expansion and emitted-circuit ANF verification.  This strengthens the claim
   that frontier-policy gains are not tied to the first `n=20,28,40` random
   slice.
+- The larger frontier policy rerun at the same independent seed,
+  `results/analysis_screen_scale_depth_frontier_policy_large_generalization_terms.md`,
+  strengthens the quality side of that claim.  It gives 56/0/40 score W/L/T
+  against fixed depth-2 with a -2.34% mean score change, improves over the old
+  frontier policy by 17/0/79 with -0.49% mean score, and is only +0.10% mean
+  score from all-depth while saving -53.50% plan time.  All 960 method rows
+  again pass both symbolic plan expansion and emitted-circuit ANF verification.
 - The truth-table bridge runs, `results/analysis_truth_bridge_terms.md` and
   `results/analysis_schedule_truth_bridge_n23_terms.md`, build full truth
   tables for 18 generated `n=21,22,23` ANF functions.  All 180 method rows pass
@@ -302,6 +325,12 @@ Current structure-policy evidence:
   time vs all-depth adaptive.  This moves the complete-verification boundary
   beyond `n=20` on a small bridge slice; larger `n=24--40` runs remain symbolic
   term-set evaluations.
+- The large-policy `n=23` bridge rerun,
+  `results/analysis_truth_bridge_n23_large_frontier_terms.md`, adds another
+  60 fully verified method rows.  It is 5/0/1 against fixed depth-2 with
+  -2.36% mean score, 0/1/5 against all-depth with +0.12% mean score and
+  -45.99% plan time, and 1/0/5 against the old frontier policy with -0.48%
+  mean score and -0.45% T-depth proxy.
 - Logic-level schedule-proxy evidence is now emitted by `run_screen_scale_terms.py`
   and `run_truth_bridge_terms.py`, then summarized by
   `analyze_schedule_metrics.py`.  The metrics are not hardware mapping results:

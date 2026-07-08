@@ -1,0 +1,5 @@
+comparison,pairs,score_wins,score_losses,score_ties,mean_rel_score,mean_rel_time
+frontier_policy_vs_depth-2_screen,48,24,0,24,-0.016910948144769716,4.932639543118478
+frontier_policy_vs_depth-3_screen,48,20,1,27,-0.00650179770789108,0.8341495035053864
+frontier_policy_vs_depth-4_screen,48,0,3,45,0.0004070060415572765,-0.08383618565542279
+frontier_policy_vs_oracle_depth-2_3_4_frontier,48,0,3,45,0.0004070060415572765,-0.5129565388295518

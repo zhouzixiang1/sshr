@@ -309,6 +309,7 @@ def write_outputs(
     results_dir = Path(args.results_dir)
     tables_dir = Path(args.tables_dir)
     model_path = Path(args.model_out)
+    tag = f"_{args.tag.strip().replace('-', '_')}" if getattr(args, "tag", "").strip() else ""
     results_dir.mkdir(parents=True, exist_ok=True)
     tables_dir.mkdir(parents=True, exist_ok=True)
     model_path.parent.mkdir(parents=True, exist_ok=True)
@@ -323,11 +324,17 @@ def write_outputs(
             "hidden": args.hidden,
             "metrics": metrics,
             "policy_kind": "boolean_screen_depth_frontier",
+            "tag": getattr(args, "tag", ""),
+            "train_n": args.train_n,
+            "test_n": args.test_n,
+            "train_per_n": args.train_per_n,
+            "valid_per_n": args.valid_per_n,
+            "test_per_n": args.test_per_n,
         },
         model_path,
     )
 
-    raw_path = results_dir / "raw_boolean_screen_depth_frontier_policy.csv"
+    raw_path = results_dir / f"raw_boolean_screen_depth_frontier_policy{tag}.csv"
     with raw_path.open("w", newline="", encoding="utf-8") as f:
         fieldnames = [
             "split",
@@ -405,7 +412,7 @@ def write_outputs(
         for ex, pred in zip(test, test_pred)
     )
 
-    summary_path = results_dir / "summary_boolean_screen_depth_frontier_policy.csv"
+    summary_path = results_dir / f"summary_boolean_screen_depth_frontier_policy{tag}.csv"
     with summary_path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(
             f,
@@ -434,7 +441,7 @@ def write_outputs(
                 }
             )
 
-    analysis_path = results_dir / "analysis_boolean_screen_depth_frontier_policy.md"
+    analysis_path = results_dir / f"analysis_boolean_screen_depth_frontier_policy{tag}.md"
     with analysis_path.open("w", encoding="utf-8") as f:
         f.write("# Boolean Screen Depth-Frontier Policy\n\n")
         f.write("Structure-level policy for selecting depth-2, depth-3, or depth-4 Boolean-ring screening.\n\n")
@@ -460,7 +467,10 @@ def write_outputs(
                 f"{stats['mean_rel_score']:+.2%} | {stats['mean_rel_time']:+.2%} |\n"
             )
 
-    table_path = tables_dir / "boolean_screen_depth_frontier_policy.tex"
+    def latex_pct(value: float) -> str:
+        return f"{value:+.2%}".replace("%", r"\%")
+
+    table_path = tables_dir / f"boolean_screen_depth_frontier_policy{tag}.tex"
     with table_path.open("w", encoding="utf-8") as f:
         f.write("\\begin{tabular}{lrrrr}\n")
         f.write("\\toprule\n")
@@ -470,7 +480,7 @@ def write_outputs(
             f.write(
                 f"Frontier policy vs {label} & {stats['pairs']} & "
                 f"{stats['wins']}/{stats['losses']}/{stats['ties']} & "
-                f"{stats['mean_rel_score']:+.2%} & {stats['mean_rel_time']:+.2%} \\\\\n"
+                f"{latex_pct(float(stats['mean_rel_score']))} & {latex_pct(float(stats['mean_rel_time']))} \\\\\n"
             )
         f.write("\\bottomrule\n")
         f.write("\\end{tabular}\n")
@@ -497,6 +507,7 @@ def main(argv: Iterable[str] | None = None) -> int:
     ap.add_argument("--model-out", default=str(THIS_DIR / "models" / "boolean_screen_depth_frontier_policy.pt"))
     ap.add_argument("--results-dir", default=str(THIS_DIR / "results"))
     ap.add_argument("--tables-dir", default=str(THIS_DIR / "paper_latex" / "tables"))
+    ap.add_argument("--tag", default="", help="Optional filename suffix for model-result variants.")
     args = ap.parse_args(list(argv) if argv is not None else None)
 
     depths = FRONTIER_DEPTHS

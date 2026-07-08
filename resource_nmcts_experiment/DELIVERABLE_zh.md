@@ -442,6 +442,45 @@ v12 中把 depth-frontier 写成下一步缺口：需要训练一个策略，在
 
 结论：这是本轮相对 v12 的主要 AI 进展。Depth-frontier policy 不能完全达到 depth-4/oracle frontier，但已经把 depth-4 的质量收益学习化为可选择策略：正式 scale 中相对 fixed depth-2 平均 score 降低 2.19%，独立 seed 泛化集中仍降低 1.85%，两组均无 score loss；同时相对完整 all-depth<=4 评估节省 58.69%--61.25% 时间。论文中应写成“结构级 AI 的质量-时间折中证据”，而不是写成全局最优策略。
 
+### 2.5.7.1 large frontier policy：压缩质量 gap 的增强版
+
+为回应“frontier policy 相对 all-depth 仍有约 0.61%--0.80% score gap”的问题，本轮把 teacher 数据和模型容量继续放大：训练样本从 96 增至 192，验证样本从 36 增至 72，held-out 测试样本从 32 增至 48，隐藏层宽度从 96 增至 160，并保留 depth-2/3/4 frontier 作为监督目标。
+
+主要产物：
+
+- `models/boolean_screen_depth_frontier_policy_large.pt`
+- `results/raw_boolean_screen_depth_frontier_policy_large.csv`
+- `results/summary_boolean_screen_depth_frontier_policy_large.csv`
+- `results/analysis_boolean_screen_depth_frontier_policy_large.md`
+- `paper_latex/tables/boolean_screen_depth_frontier_policy_large.tex`
+- `results/raw_screen_scale_depth_frontier_policy_large_generalization_terms.csv`
+- `results/summary_screen_scale_depth_frontier_policy_large_generalization_terms.csv`
+- `results/analysis_screen_scale_depth_frontier_policy_large_generalization_terms.md`
+- `paper_latex/tables/screen_scale_depth_frontier_policy_large_generalization_terms.tex`
+- `results/raw_truth_bridge_n23_large_frontier_terms.csv`
+- `results/summary_truth_bridge_n23_large_frontier_terms.csv`
+- `results/analysis_truth_bridge_n23_large_frontier_terms.md`
+- `paper_latex/tables/truth_bridge_n23_large_frontier_terms.tex`
+- `results/analysis_frontier_policy_upgrade.md`
+- `paper_latex/tables/frontier_policy_upgrade.tex`
+
+核心结果：
+
+| 设置 | 对比 | 项集/函数数 | score 胜/负/平 | 平均 score 变化 | 平均时间变化 |
+|---|---|---:|---:|---:|---:|
+| held-out n=28/40 | large frontier vs oracle depth-2/3/4 frontier | 48 | 0/3/45 | +0.04% | -51.30% |
+| independent seed n=24/28/32/40 | large frontier vs fixed depth-2 | 96 | 56/0/40 | -2.34% | +563.80% |
+| independent seed n=24/28/32/40 | large frontier vs old frontier | 96 | 17/0/79 | -0.49% | +119.26% |
+| independent seed n=24/28/32/40 | large frontier vs all-depth depth<=4 | 96 | 0/6/90 | +0.10% | -53.50% |
+| n=23 bridge | large frontier vs fixed depth-2 | 6 | 5/0/1 | -2.36% | +790.62% |
+| n=23 bridge | large frontier vs old frontier | 6 | 1/0/5 | -0.48% | +46.16% |
+| n=23 bridge | large frontier vs all-depth | 6 | 0/1/5 | +0.12% | -45.99% |
+| large scale ANF plan 验证 | 960 方法行 | 960/0 通过/失败 | 0 mismatch | - |
+| large scale emitted-circuit ANF 验证 | 960 方法行 | 960/0 通过/失败 | 0 mismatch | - |
+| large n=23 完整 truth-table / plan / emitted-circuit 验证 | 60 方法行 | 60/0 通过/失败 | 0 mismatch | - |
+
+结论：large frontier policy 是本轮更明确的“明显提升”证据。它把 held-out 相对 oracle frontier 的 score gap 从旧模型的 +0.80% 压到 +0.04%，把独立泛化集相对 all-depth 的 gap 从 +0.61% 压到 +0.10%，并在同一泛化集上相对旧 policy 取得 17/0/79、平均 score -0.49%。但它更频繁选择 depth-3/4，因而比旧 policy 慢、辅助线 lifetime area 也可能增加。论文中应写成“质量增强型结构策略”，不能写成“同时更快更优”的策略。
+
 ### 2.5.8 n=21/22 完整 truth-table bridge
 
 为回应“n>20 只有项集级符号验证”的审稿风险，本轮新增 `run_truth_bridge_terms.py`，在 n=21/22 上构造完整 truth table，并对 emitted X/CNOT/MCT oracle circuit 做 bit-parallel truth-table verification。该实验规模故意小于 n=20--40 scale，因为 truth-table 构造是主成本，但它把完整验证边界向 n>20 后移。
@@ -810,6 +849,8 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 - `paper_latex/tables/ros_lut_proxy.tex`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v18.tex`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v18.pdf`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v19.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v19.pdf`
 
 覆盖范围与正确性：
 
@@ -920,6 +961,8 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 - `paper_latex_zh/resource_nmcts_zh_stage_delivery.pdf`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v18.tex`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v18.pdf`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v19.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v19.pdf`
 
 ## 4. 复现命令
 
@@ -1056,6 +1099,7 @@ latexmk -pdf -g main.tex
 已完成验证：
 
 - `latexmk -pdf -g main.tex` 通过。
+- `latexmk -xelatex -g resource_nmcts_zh_manuscript_v19.tex` 通过；生成 13 页中文 PDF。
 - `tests_smoke.py` 通过，输出 `smoke ok`。
 - `py_compile` 通过。
 - `git diff --check` 通过。
@@ -1072,6 +1116,8 @@ latexmk -pdf -g main.tex
 - `analysis_toolchain_readiness.md` 审计：ABC 可用；mockturtle 和 RevKit 在当前环境缺失。
 - `raw_screen_scale_extended_terms.csv` 审计：1008 行、1008/1008 plan 符号验证通过、1008/1008 emitted-circuit 符号验证通过、0 mismatch。
 - `raw_screen_scale_depth_frontier_terms.csv` 审计：648 行、648/648 plan 符号验证通过、648/648 emitted-circuit 符号验证通过、0 mismatch。
+- `raw_screen_scale_depth_frontier_policy_large_generalization_terms.csv` 审计：960 行、960/960 plan 符号验证通过、960/960 emitted-circuit 符号验证通过、0 mismatch。
+- `raw_truth_bridge_n23_large_frontier_terms.csv` 审计：60 行、60/60 完整 truth-table oracle 验证通过、60/60 plan 符号验证通过、60/60 emitted-circuit 符号验证通过、0 mismatch。
 
 Git 状态：
 
@@ -1099,7 +1145,8 @@ Git 状态：
 14. `n=32,36,40` extended screen-scale 显示：depth policy 相对 single screen 获得 110/0/34、平均 score -5.55%；相对 all-depth adaptive 在 144 个项集上全部 score 持平，并节省 33.14% 平均运行时间；1008/1008 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。
 15. `n=20,28,40` depth-frontier 显示：depth-3 Boolean-ring screen 相对 fixed depth-2 为 49/0/23、平均 score -1.93%；depth-4 相对 fixed depth-2 为 49/0/23、平均 score -3.10%；648/648 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。这是新的高预算质量前沿证据，但运行时间显著增加。
 16. Depth-frontier policy 已把高预算质量前沿学习化：在 `n=20,28,40` scale harness 中，相对 fixed depth-2 获得 35/0/37、平均 score -2.19%；相对 all-depth depth<=4 平均 score +0.97%，但节省 58.69% 时间；720/720 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。
-17. `n=21,22,23` 完整 truth-table bridge 显示：18 个生成式 ANF 函数、180/180 个方法行同时通过完整 truth-table oracle 验证、ANF plan 符号验证和 emitted-circuit ANF 符号验证；新增 n=23 切片中 frontier policy 相对 fixed depth-2 为 4/0/2、平均 score -1.88%，该结果把完整验证边界从 n<=20 主实验推进到 n>20 的桥接切片。
+17. Large frontier policy 进一步压缩质量 gap：held-out 相对 oracle frontier 从旧模型 +0.80% 降到 +0.04%；独立 seed `n=24,28,32,40` 相对旧 policy 为 17/0/79、平均 score -0.49%，相对 all-depth 仅 +0.10% 且节省 53.50% 时间；代价是比旧 policy 更慢。
+18. `n=21,22,23` 完整 truth-table bridge 加 large-policy `n=23` rerun 显示：240/240 个方法行同时通过完整 truth-table oracle 验证、ANF plan 符号验证和 emitted-circuit ANF 符号验证；large frontier 在 n=23 上相对旧 policy 为 1/0/5、平均 score -0.48%、T-depth proxy -0.45%，该结果把完整验证边界从 n<=20 主实验推进到 n>20 的桥接切片。
 
 不应写的主张：
 
@@ -1140,8 +1187,9 @@ Git 状态：
 | n=32/36/40 extended screen-scale | 144 个高维 ANF 项集 | depth policy vs single 为 110/0/34，-5.55%；vs all-depth adaptive 为 0/0/144，省时 -33.14%；1008/1008 emitted-circuit 符号验证通过 | 新增大规模泛化证据 |
 | n=20/28/40 depth-frontier | 72 个高维 ANF 项集 | depth-3 vs depth-2 为 49/0/23，-1.93%；depth-4 vs depth-2 为 49/0/23，-3.10%；648/648 emitted-circuit 符号验证通过 | 新增高预算质量前沿 |
 | depth-frontier policy | 32 个 held-out + 72 个 scale 项集 | held-out vs oracle frontier 为 +0.80% score、-58.76% time；scale vs depth-2 为 35/0/37、-2.19%；720/720 emitted-circuit 符号验证通过 | 新增结构级 AI 质量-时间折中 |
-| n=21/22/23 truth-table bridge | 18 个生成式 ANF 函数 | 180/180 完整 truth-table oracle 验证通过，180/180 plan 与 emitted-circuit 符号验证通过，0 mismatch；n=23 frontier policy vs depth-2 为 4/0/2、-1.88% | 新增 n>20 完整验证桥接 |
-| schedule proxy | 96 个 n=24/28/32/40 项集 + 18 个 n=21/22/23 bridge 函数 | frontier policy vs depth-2：项集 T-depth proxy 40/0/56、-1.85%，n=21/22 bridge 为 8/0/4、-3.32%，n=23 bridge 为 4/0/2、-1.69%；相对 depth-4 lifetime area 分别 -5.42%、-4.01%、-5.09% | 新增逻辑层后端相关指标，非硬件 mapping |
+| large frontier policy | 48 个 held-out + 96 个独立泛化项集 + 6 个 n=23 bridge 函数 | held-out vs oracle frontier 为 +0.04% score、-51.30% time；独立泛化 vs 旧 policy 为 17/0/79、-0.49%；n=23 bridge vs 旧 policy 为 1/0/5、-0.48% score、-0.45% T-depth proxy | 新增质量增强型结构 AI 证据 |
+| n=21/22/23 truth-table bridge | 18 个生成式 ANF 函数 + 6 个 large-policy n=23 rerun 函数 | 240/240 完整 truth-table oracle 验证通过，240/240 plan 与 emitted-circuit 符号验证通过，0 mismatch；large n=23 frontier vs depth-2 为 5/0/1、-2.36% | 新增 n>20 完整验证桥接 |
+| schedule proxy | 96 个 n=24/28/32/40 项集 + 24 个 n=21/22/23 bridge/rerun 函数 | frontier policy vs depth-2：项集 T-depth proxy 40/0/56、-1.85%，n=21/22 bridge 为 8/0/4、-3.32%，n=23 bridge 为 4/0/2、-1.69%；large n=23 vs old policy 为 1/0/5、-0.45% T-depth proxy | 新增逻辑层后端相关指标，非硬件 mapping |
 | ROS-style LUT proxy | 309 个 n=3..6/14/15/16/18 函数 | 927/927 K-sweep truth-table 检查通过；best-K vs fixed K=4 为 219/0/90、-18.12%；Resource vs proxy 为 309/0/0、-83.77% | 新增更强 LUT proxy，但不是官方 ROS 复现 |
 | highdim wide-fast guard | 12 个 n=14 random ANF | wide vs Resource 为 0/0/12，运行时间 +59.80% | 已有但属负向诊断 |
 | exact FPRM-DP | n<=4 traditional | Resource vs exact FPRM-DP 51/3/18，-12.18%；Pareto vs exact FPRM-DP 51/0/21，-12.20% | 已有但模型受限 |
@@ -1156,4 +1204,4 @@ Git 状态：
 
 但是投稿前还需要继续补强“AI 搜索本身带来的贡献”这一点。否则文章容易被评价为一组 FPRM/ESOP 工程启发的组合，而不是强化学习与 MCTS 方法论文。
 
-本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、pairwise-wide n=16 full synthesis、Boolean-ring linear factor、schedule proxy、n=23 完整 truth-table bridge 和 ROS-style LUT proxy 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照、高维 pairwise-wide root-action ranker、Boolean-ring factor 扩展、emitted-circuit 层 T-depth/辅助生命周期 trade-off、n=21/22/23 共 180/180 方法行的完整 oracle 验证，以及相对更强 LUT proxy 的 309/0/0 score 优势。不过高维 neural guidance 的幅度仍然偏小，官方 ROS/RevKit/mockturtle 复现和真实后端 mapping 仍然缺失，所以目标还不能判定完成。
+本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、pairwise-wide n=16 full synthesis、Boolean-ring linear factor、schedule proxy、n=23 完整 truth-table bridge、ROS-style LUT proxy 和 large frontier policy 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照、高维 pairwise-wide root-action ranker、Boolean-ring factor 扩展、emitted-circuit 层 T-depth/辅助生命周期 trade-off、n=21/22/23 加 large n=23 rerun 共 240/240 方法行的完整 oracle 验证、large frontier policy 相对旧 policy 的质量提升，以及相对更强 LUT proxy 的 309/0/0 score 优势。不过官方 ROS/RevKit/mockturtle 复现和真实后端 mapping 仍然缺失，所以目标还不能判定完成。
