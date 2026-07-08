@@ -37,6 +37,9 @@ VERIFIER_MANIFEST = RESULTS / "manifest_submission_package_verifier.json"
 METADATA_ANALYSIS = RESULTS / "analysis_submission_metadata_audit.md"
 METADATA_SUMMARY = RESULTS / "summary_submission_metadata_audit.csv"
 METADATA_MANIFEST = RESULTS / "manifest_submission_metadata_audit.json"
+TEXT_PREVIEW_ANALYSIS = RESULTS / "analysis_submission_text_preview.md"
+TEXT_PREVIEW_SUMMARY = RESULTS / "summary_submission_text_preview.csv"
+TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
 GOAL_ANALYSIS = RESULTS / "analysis_goal_completion_audit.md"
 GOAL_SUMMARY = RESULTS / "summary_goal_completion_audit.csv"
 GOAL_MANIFEST = RESULTS / "manifest_goal_completion_audit.json"
@@ -110,6 +113,9 @@ def build_rows() -> list[dict[str, str]]:
     pages = pdf_pages(PDF)
     claim_scope_manifest = read_json(CLAIM_SCOPE_MANIFEST)
     claim_scope_unresolved = int(claim_scope_manifest.get("unresolved_count", -1)) if claim_scope_manifest else -1
+    text_preview_manifest = read_json(TEXT_PREVIEW_MANIFEST)
+    text_preview_counts = text_preview_manifest.get("status_counts", {}) if text_preview_manifest else {}
+    private_outputs_ignored = bool(text_preview_manifest.get("private_outputs_are_git_ignored", False))
     lower = text.lower()
     todo_hits = re.findall(r"\b(?:todo|tbd|placeholder)\b", lower)
     abstract_words = abstract_word_count(text)
@@ -227,6 +233,17 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_submission_metadata_audit.py after filling author declarations or choosing a target venue.",
         },
         {
+            "item": "Private submission text preview",
+            "status": "pass"
+            if TEXT_PREVIEW_ANALYSIS.exists()
+            and TEXT_PREVIEW_SUMMARY.exists()
+            and TEXT_PREVIEW_MANIFEST.exists()
+            and private_outputs_ignored
+            else "needs revision",
+            "evidence": f"Private preview generator audit exists; status_counts={text_preview_counts}; private_outputs_are_git_ignored={private_outputs_ignored}.",
+            "next_action": "Rerun make_submission_text_preview.py after filling private metadata; generated_*.md files must remain ignored by Git.",
+        },
+        {
             "item": "Goal completion audit",
             "status": "pass"
             if GOAL_ANALYSIS.exists() and GOAL_SUMMARY.exists() and GOAL_MANIFEST.exists()
@@ -254,7 +271,7 @@ def build_rows() -> list[dict[str, str]]:
             and VERIFIER_SUMMARY.exists()
             and VERIFIER_MANIFEST.exists()
             else "needs revision",
-            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check PDF availability, payload SHA consistency, readiness state, raw registry coverage, and LaTeX log boundaries.",
+            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private-preview protection, and LaTeX log boundaries.",
             "next_action": "Run verify_submission_package.sh after rebuilding the payload archive.",
         },
         {

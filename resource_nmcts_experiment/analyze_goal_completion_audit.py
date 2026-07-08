@@ -293,15 +293,16 @@ def build_items() -> list[GoalItem]:
         GoalItem(
             requirement="Final author and venue metadata",
             status="needs author input" if metadata_needs else "pass",
-            evidence=f"Submission metadata audit reports {metadata_needs} author/venue field group(s) needing author input.",
+            evidence=f"Submission metadata audit reports {metadata_needs} author/venue field group(s) needing author input; a private text-preview generator is prepared for filled metadata.",
             evidence_files=(
                 RESULTS / "analysis_submission_metadata_audit.md",
+                RESULTS / "analysis_submission_text_preview.md",
                 THIS_DIR / "submission_package" / "author_declarations_template.md",
                 THIS_DIR / "submission_package" / "cover_letter_template.md",
                 THIS_DIR / "submission_package" / "submission_checklist.md",
             ),
             boundary="These fields cannot be inferred from code or experiments and must be confirmed by the author or target venue.",
-            next_action="Fill author order, affiliations, ORCIDs, funding, acknowledgements, competing interests, archive links, license, disclosure, and target-venue fields.",
+            next_action="Fill author order, affiliations, ORCIDs, funding, acknowledgements, competing interests, archive links, license, disclosure, and target-venue fields, then review generated private submission text previews.",
         ),
         GoalItem(
             requirement="Overall goal closure gate",
@@ -310,6 +311,7 @@ def build_items() -> list[GoalItem]:
             evidence_files=(
                 RESULTS / "analysis_submission_readiness_audit.md",
                 RESULTS / "analysis_submission_metadata_audit.md",
+                RESULTS / "analysis_submission_text_preview.md",
             ),
             boundary="The research/package side is audit-complete, but the full objective is not closed until author and target-venue metadata are supplied.",
             next_action="Do not mark the objective complete until the author-specific declarations and final archive/venue links are filled and audits rerun.",

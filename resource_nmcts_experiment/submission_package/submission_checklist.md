@@ -34,6 +34,7 @@ Use this checklist immediately before uploading the manuscript.
 - Terminal package verifier: `results/analysis_submission_package_verifier.md`
 - Claim-scope lint: `results/analysis_claim_scope_lint.md`
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
+- Private submission text preview audit: `results/analysis_submission_text_preview.md`
 - Goal-completion audit: `results/analysis_goal_completion_audit.md`
 - Raw rerun registry: `results/analysis_artifact_rerun_registry.md`
 - Artifact reproduction guide: `submission_package/artifact_reproduction_guide.md`
@@ -61,7 +62,8 @@ Run these from `resource_nmcts_experiment/`:
   analyze_claim_scope_lint.py \
   analyze_submission_metadata_audit.py \
   analyze_submission_readiness_audit.py \
-  analyze_submission_traceability_audit.py
+  analyze_submission_traceability_audit.py \
+  make_submission_text_preview.py
 ./rebuild_submission_package.sh
 ./verify_submission_package.sh
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
@@ -75,6 +77,7 @@ Expected current state:
 - Payload archive: tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
 - Metadata audit: all author- and venue-specific fields are enumerated before upload, and any filled `submission_metadata.json` is checked.
+- Private submission text preview: public audit exists; generated private Markdown previews remain ignored by Git and excluded from the payload archive.
 - Goal-completion audit: all research/package requirements pass and only author/venue gates remain open.
 - Traceability audit: all claim families complete.
 - Readiness audit: all paper/package checks pass except author-specific declarations.
@@ -94,5 +97,6 @@ Expected current state:
 2. Upload `submission_package/dist/resource_nmcts_submission_payload.tar.gz` or a venue-specific source archive assembled from it.
 3. Upload generated figure files and source data separately if the venue requires them outside the payload archive.
 4. Paste author declarations into the submission system.
-5. Paste the cover letter and reviewer suggestions if requested.
-6. Review the generated proof for table placement and figure readability before final approval.
+5. Paste generated private preview text from `submission_package/generated_*.md` after reviewing venue wording, or paste the manually edited declarations if the venue requires a different format.
+6. Paste the cover letter and reviewer suggestions if requested.
+7. Review the generated proof for table placement and figure readability before final approval.

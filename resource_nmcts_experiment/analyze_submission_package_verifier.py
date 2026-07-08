@@ -4,8 +4,9 @@
 The verifier runs after the payload archive has been created.  It checks the
 terminal package invariants that are easy to regress during final polishing:
 compiled PDF availability, payload SHA consistency, readiness status, raw rerun
-registry coverage, claim-scope hygiene, and LaTeX log cleanliness.  It writes a
-small audit report but does not rerun experiments or alter manuscript sources.
+registry coverage, claim-scope hygiene, private-preview protection, and LaTeX
+log cleanliness.  It writes a small audit report but does not rerun experiments
+or alter manuscript sources.
 """
 from __future__ import annotations
 
@@ -30,6 +31,7 @@ REGISTRY_MANIFEST = RESULTS / "manifest_artifact_rerun_registry.json"
 PAYLOAD_SUMMARY = RESULTS / "summary_submission_payload_archive.csv"
 PAYLOAD_MANIFEST = RESULTS / "manifest_submission_payload_archive.json"
 CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
+TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
 
 
 def rel(path: Path) -> str:
@@ -179,6 +181,19 @@ def verify_claim_scope() -> dict[str, str]:
     )
 
 
+def verify_text_preview() -> dict[str, str]:
+    manifest = read_json(TEXT_PREVIEW_MANIFEST)
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    ignored = bool(manifest.get("private_outputs_are_git_ignored", False))
+    status = "pass" if manifest and ignored else "needs revision"
+    return row(
+        "Private submission text preview",
+        status,
+        f"status_counts={counts}; private_outputs_are_git_ignored={ignored}.",
+        "Run make_submission_text_preview.py and keep generated private Markdown files ignored by Git.",
+    )
+
+
 def verify_latex_log() -> dict[str, str]:
     if not LOG.exists():
         return row("LaTeX log boundary", "needs revision", "LaTeX log is missing.", "Rebuild the PDF with latexmk.")
@@ -205,7 +220,7 @@ def verify_latex_log() -> dict[str, str]:
 def build_rows() -> list[dict[str, str]]:
     rows = [verify_pdf()]
     rows.extend(verify_payload_sha())
-    rows.extend([verify_readiness(), verify_registry(), verify_claim_scope(), verify_latex_log()])
+    rows.extend([verify_readiness(), verify_registry(), verify_claim_scope(), verify_text_preview(), verify_latex_log()])
     return rows
 
 

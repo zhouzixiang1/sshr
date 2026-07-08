@@ -49,6 +49,13 @@ TERMINAL_PACKAGE_OUTPUTS = {
     TABLES / "submission_traceability_audit.tex",
 }
 
+PRIVATE_SUBMISSION_TEXT_OUTPUTS = {
+    SUBMISSION_PACKAGE / "generated_author_declarations.md",
+    SUBMISSION_PACKAGE / "generated_availability_statements.md",
+    SUBMISSION_PACKAGE / "generated_cover_letter.md",
+    SUBMISSION_PACKAGE / "generated_submission_text.md",
+}
+
 
 @dataclass(frozen=True)
 class CategorySpec:
@@ -87,7 +94,7 @@ def collect(spec: CategorySpec) -> tuple[list[Path], list[Path]]:
         if root.exists():
             found.extend(path for path in root.glob(pattern) if path.is_file())
 
-    exclusions = set(SELF_OUTPUTS)
+    exclusions = set(SELF_OUTPUTS) | PRIVATE_SUBMISSION_TEXT_OUTPUTS
     if spec.exclude_terminal_outputs:
         exclusions |= TERMINAL_PACKAGE_OUTPUTS
     found = [path for path in found if path not in exclusions]
@@ -182,7 +189,7 @@ def specs() -> list[CategorySpec]:
             category="Submission support",
             explicit=(),
             patterns=((SUBMISSION_PACKAGE, "*.md"), (SUBMISSION_PACKAGE, "*_template.json")),
-            boundary="Includes package README, author-input packet, artifact guide, cover-letter, declaration, checklist, reviewer-brief, editor-screening, venue-selection, and structured metadata templates; author-specific fields remain manual.",
+            boundary="Includes public package README, author-input packet, artifact guide, cover-letter, declaration, checklist, reviewer-brief, editor-screening, venue-selection, and structured metadata templates; ignored generated private submission text is excluded.",
         ),
     ]
 

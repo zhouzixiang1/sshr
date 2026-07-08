@@ -7,6 +7,11 @@ For a single structured intake path, copy `submission_metadata_template.json` to
 `./rebuild_submission_package.sh`.  The filled JSON file is ignored by Git so
 private author metadata is not committed accidentally.
 
+When the JSON file is complete, the rebuild writes ignored private previews:
+`generated_author_declarations.md`, `generated_availability_statements.md`,
+`generated_cover_letter.md`, and `generated_submission_text.md`.  Review these
+against the target venue submission system before upload.
+
 Use `AUTHOR_INPUT_REQUIRED.md` as the final author-side checklist before
 upload.
 

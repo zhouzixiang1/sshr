@@ -40,6 +40,7 @@ run_py analyze_artifact_rerun_registry.py
 run_py analyze_reproducibility_audit.py
 run_py analyze_submission_metadata_audit.py
 run_py make_author_input_packet.py
+run_py make_submission_text_preview.py
 run_py analyze_goal_completion_audit.py
 run_py make_submission_figures.py
 run_py analyze_submission_archive_manifest.py

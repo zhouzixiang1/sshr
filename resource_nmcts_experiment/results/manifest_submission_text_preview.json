@@ -1,0 +1,29 @@
+{
+  "outputs": {
+    "analysis": "results/analysis_submission_text_preview.md",
+    "manifest": "results/manifest_submission_text_preview.json",
+    "summary": "results/summary_submission_text_preview.csv"
+  },
+  "private_output_paths": [
+    "submission_package/generated_author_declarations.md",
+    "submission_package/generated_availability_statements.md",
+    "submission_package/generated_cover_letter.md",
+    "submission_package/generated_submission_text.md"
+  ],
+  "private_outputs_are_git_ignored": true,
+  "python": "3.11.15",
+  "rows": [
+    {
+      "evidence": "submission_package/submission_metadata.json is missing; removed stale private output files=0.",
+      "item": "Private submission text preview",
+      "next_action": "Copy submission_metadata_template.json to submission_metadata.json, fill every AUTHOR INPUT REQUIRED value, then rerun the rebuild script.",
+      "private_outputs": "submission_package/generated_author_declarations.md; submission_package/generated_availability_statements.md; submission_package/generated_cover_letter.md; submission_package/generated_submission_text.md",
+      "source": "submission_package/submission_metadata_template.json",
+      "status": "needs author input"
+    }
+  ],
+  "script": "make_submission_text_preview.py",
+  "status_counts": {
+    "needs author input": 1
+  }
+}
