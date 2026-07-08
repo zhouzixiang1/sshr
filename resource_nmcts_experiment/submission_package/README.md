@@ -1,0 +1,98 @@
+# Submission Package README
+
+This directory contains the human-facing upload and handoff files for the
+manuscript "Resource-Constrained Neural Monte Carlo Tree Search for Quantum
+Boolean Oracle Synthesis".
+
+The package is prepared for a logical-layer quantum Boolean oracle synthesis
+paper.  It does not include hardware mapping, routing, native-gate scheduling,
+noise modeling, or magic-state-factory accounting.
+
+## Primary Upload Artifacts
+
+- Main manuscript source: `../paper_latex/resource_nmcts_submission_v1.tex`
+- Main manuscript PDF: `../paper_latex/resource_nmcts_submission_v1.pdf`
+- Bibliography: `../paper_latex/references.bib`
+- Generated tables: `../paper_latex/tables/*.tex`
+- Generated figures and source data:
+  `../paper_latex/figures/submission_v36/`
+- Uploadable source/data payload:
+  `dist/resource_nmcts_submission_payload.tar.gz`
+- Payload checksum:
+  `dist/resource_nmcts_submission_payload.tar.gz.sha256`
+
+## Support Documents
+
+- `cover_letter_template.md`: editor-facing cover-letter draft with author
+  fields left blank.
+- `editor_screening_brief.md`: one-page scope, comparison, and claim-boundary
+  brief for editor or associate-editor screening.
+- `reviewer_concern_brief.md`: anticipated reviewer concerns and manuscript
+  anchors.
+- `target_venue_brief.md`: venue-fit shortlist and pre-upload action list.
+- `author_declarations_template.md`: author, funding, acknowledgement,
+  competing-interest, data, code, AI-disclosure, and prior-submission intake.
+- `submission_metadata_template.json`: structured version of the author and
+  venue fields that must be filled before upload.
+- `submission_checklist.md`: final upload checklist and verification commands.
+
+## Required Author Actions Before Upload
+
+Do not infer these fields from the experiment artifacts.  They must be supplied
+by the author or selected target venue.
+
+- Choose the target venue and manuscript type.
+- Copy `submission_metadata_template.json` to `submission_metadata.json`, then
+  fill every `AUTHOR INPUT REQUIRED` value.
+- Confirm author order, affiliations, ORCID IDs, and corresponding-author
+  details.
+- Complete funding, acknowledgements, author contributions, competing
+  interests, AI-assistance disclosure, and prior-submission statements.
+- Replace repository-relative availability text with a permanent archive DOI,
+  repository URL, or anonymous review link if the venue requires it.
+- Confirm venue template, reference style, word limit, supplementary-material
+  policy, data/code policy, and anonymous-review policy.
+
+`submission_metadata.json` is intentionally ignored by Git so private author
+metadata is not committed accidentally.
+
+## Claim Boundary Check
+
+Keep the paper framed as a logical-layer resource-synthesis contribution.
+
+Supported:
+
+- Resource-constrained ANF/FPRM search for Boolean oracle synthesis.
+- Neural/MCTS/search-control assistance with guarded candidate selection.
+- T-count and weighted-score gains under matched logical resource models.
+- Layered comparison against direct/ESOP/SSHR/ABC/BDD/toolchain/RevKit probes.
+- High-dimensional symbolic and bridge-truth-table verification within the
+  stated generated-instance scope.
+
+Not supported:
+
+- Hardware-mapped performance.
+- Universal CNOT, depth, ancilla, or line-count dominance.
+- A full ROS SAT garbage-management reproduction.
+- A final Clifford+T decomposition claim for RevKit `oracle_synth` Rz outputs.
+- Exhaustive truth-table benchmarking for all large-dimensional functions.
+
+## Rebuild And Verification
+
+Run these commands from `../` after any payload-affecting edit:
+
+```bash
+./rebuild_submission_package.sh
+git diff --check
+pdfinfo paper_latex/resource_nmcts_submission_v1.pdf | sed -n '1,20p'
+rg -n "Warning|Overfull|Underfull|LaTeX Error|Undefined|Rerun" \
+  paper_latex/resource_nmcts_submission_v1.log
+rg -n "needs author input|pass:|file count|archive sha256|Submission support" \
+  results/analysis_submission_readiness_audit.md \
+  results/analysis_submission_payload_archive.md \
+  results/analysis_submission_archive_manifest.md
+```
+
+Expected current boundary: the readiness audit should pass all paper/package
+checks except author-specific declarations.
+

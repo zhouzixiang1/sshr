@@ -14,6 +14,7 @@ Use this checklist immediately before uploading the manuscript.
 
 ## Manuscript Files
 
+- Submission package guide: `submission_package/README.md`
 - Main source: `paper_latex/resource_nmcts_submission_v1.tex`
 - Main PDF: `paper_latex/resource_nmcts_submission_v1.pdf`
 - Bibliography: `paper_latex/references.bib`
