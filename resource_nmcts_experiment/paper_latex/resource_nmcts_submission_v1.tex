@@ -180,6 +180,24 @@ generator, and not an SSHR parallelotope search.  Its learned component ranks
 verifiable Boolean-algebraic actions, while ESOP, BDD, XAG/LUT, ROS-style,
 SSHR, RevKit, mockturtle, CirKit, and ABC flows define the comparison set.
 
+Table~\ref{tab:related-positioning} summarizes this positioning.  It is used
+to keep the manuscript's contribution narrow and testable: existing tools and
+representations define strong baselines or motivation, while \method{} is
+claimed only as a logical-layer resource-aware search method over verifiable
+Boolean-algebraic actions.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Related-work positioning matrix.  The table states what each
+literature family optimizes, which gap motivates the proposed search, and how
+the manuscript uses that family in experiments or claim boundaries.}
+\label{tab:related-positioning}
+\input{tables/related_work_positioning}
+\end{table}
+
 \section{Problem and Resource Model}
 
 We represent a Boolean function by its square-free \anf{}

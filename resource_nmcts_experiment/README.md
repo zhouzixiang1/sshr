@@ -25,6 +25,13 @@ SSHR-H/SSHR-I are important CNOT-oriented small-function baselines, but the
 project claim is a resource-aware logical-layer AI search framework rather than
 an SSHR variant.
 
+The literature positioning layer is materialized by
+`analyze_related_work_positioning.py`, which writes
+`results/summary_related_work_positioning.csv`,
+`results/analysis_related_work_positioning.md`, and
+`paper_latex/tables/related_work_positioning.tex`.  It separates BDD, LUT/ROS,
+XAG, reversible toolchain, SSHR, and learning-guided synthesis families before
+the experimental baseline boundaries are introduced.
 The comparison claim boundary is materialized by
 `analyze_baseline_claim_matrix.py`, which writes
 `results/summary_baseline_claim_matrix.csv`,

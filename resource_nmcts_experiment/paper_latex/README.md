@@ -32,6 +32,10 @@ latexmk -pdf resource_nmcts_submission_v1.tex
 
 Current source evidence:
 
+- related-work positioning matrix CSV:
+  `../results/summary_related_work_positioning.csv`
+- related-work positioning matrix analysis:
+  `../results/analysis_related_work_positioning.md`
 - baseline claim matrix CSV:
   `../results/summary_baseline_claim_matrix.csv`
 - baseline claim matrix analysis:

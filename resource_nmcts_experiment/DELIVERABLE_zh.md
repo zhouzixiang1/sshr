@@ -26,6 +26,15 @@
 
 因此论文意义应写成“面向资源约束量子布尔函数 oracle 综合的逻辑层 AI 搜索框架”，SSHR-H/SSHR-I 是小规模、CNOT-oriented 的重要结构化 baseline，但不是本文方法的定义边界。
 
+本轮进一步把 related work 定位固化为可复现矩阵：
+
+- `analyze_related_work_positioning.py`
+- `results/summary_related_work_positioning.csv`
+- `results/analysis_related_work_positioning.md`
+- `paper_latex/tables/related_work_positioning.tex`
+
+该矩阵按 BDD、LUT/ROS、XAG/multiplicative complexity、ABC/RevKit/mockturtle/CirKit、SSHR 和 learning-guided synthesis 六类文献说明各自优化杠杆、本文缺口和实验用途，已经接入英文投稿稿的 Related Work 末尾。
+
 本轮已把这层定位固化为两张可复现矩阵：先用 claim matrix 说明每类 baseline 的论证角色和不能支持的过度主张，再用 evidence matrix 汇总覆盖范围、verified rows 和 paired score 结果。
 
 - `analyze_baseline_claim_matrix.py`
