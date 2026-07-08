@@ -9,6 +9,22 @@ oracle synthesis as a symbolic factorization search over ANF/XAG-style
 compute/uncompute plans, then verifies the generated oracle circuits by
 classical simulation.
 
+Comparison scope:
+
+- Boolean-oracle synthesis baselines: direct ANF, logical-AND direct ANF, ESOP
+  beam/MILP, BDD, ABC AIG/XAG/LUT/ESOP, XAG, and ROS-style LUT probes.
+- External toolchain probes: official-header mockturtle KLUT-to-XAG, CirKit 3
+  AIG/multiplicative-complexity, RevKit API, and legacy RevKit CLI exact-oracle
+  reversible-synthesis flows.
+- Search-policy baselines and ablations: greedy/direct construction, beam,
+  fixed-coordinate MCTS, neural-prior ablations, Pareto archives,
+  depth-frontier policies, stage-gated frontier control, and rank-diverse
+  phase pruning.
+
+SSHR-H/SSHR-I are important CNOT-oriented small-function baselines, but the
+project claim is a resource-aware logical-layer AI search framework rather than
+an SSHR variant.
+
 Latest external-toolchain progress:
 
 - `run_mockturtle_xag_probe.py` builds a small C++ adapter over the official

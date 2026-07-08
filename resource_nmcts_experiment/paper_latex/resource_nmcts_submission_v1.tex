@@ -96,7 +96,7 @@ BDD representations reduce different Boolean resources; ROS makes LUT-based
 oracle synthesis resource-aware; RevKit, mockturtle, CirKit, and ABC provide
 mature logic and reversible-synthesis toolchains; and SSHR uses parallelotope
 structures in the Boolean hypercube to target small-scale CNOT-oriented
-synthesis~\cite{meuli2020ros,meuli2022xag,meuli2019multiplicative,wille2009bdd,brayton2010abc,zheng2025sshr,revkit,mockturtle,cirkit}.
+synthesis~\cite{meuli2020ros,meuli2022xag,meuli2019multiplicative,wille2009bdd,brayton2010abc,soeken2018epfl,soeken2012revkit,zheng2025sshr,revkit,mockturtle,cirkit}.
 These methods motivate the baselines used in this paper, but they also expose a
 gap: a fixed representation or a single resource objective may miss useful
 tradeoffs when T-count, CNOTs, depth, gates, and ancilla are optimized
@@ -149,12 +149,14 @@ logical-layer study~\cite{yu2025backend}.
 
 ABC supplies mature AIG, XAG/GIA, LUT, and ESOP optimization flows for
 classical logic~\cite{brayton2010abc}.  mockturtle and CirKit provide reusable
-logic-network optimization libraries and shells~\cite{mockturtle,cirkit}.
-RevKit provides reversible-logic and quantum-compilation functionality,
+logic-network optimization libraries and shells in the EPFL logic-synthesis
+ecosystem~\cite{soeken2018epfl,mockturtle,cirkit}.  RevKit provides
+reversible-logic and quantum-compilation functionality,
 including the Python \texttt{oracle\_synth} API and legacy command-line
-reversible synthesis flows~\cite{revkit}.  In this work these toolchains are
-used as external baselines or probes.  They are not called inside
-\method{}.
+reversible synthesis flows~\cite{soeken2012revkit,revkit}.  In this work these
+toolchains are used as external baselines or probes.  They are not called
+inside \method{}, which keeps the proposed search policy separated from the
+comparison backends.
 
 \subsection{Learning-guided synthesis}
 
@@ -163,10 +165,15 @@ circuits.  ShortCircuit uses AlphaZero-style search for classical Boolean
 circuit design~\cite{tsaras2024shortcircuit}.  Gumbel AlphaZero has been used
 for Clifford+T unitary synthesis~\cite{rietsch2024unitary}; reinforcement
 learning has been used for non-Clifford-count optimization and ZX-calculus
-rewriting~\cite{kremer2025nonclifford,riu2025rlzx}; and MonteQ uses \mcts{}
-for quantum circuit synthesis~\cite{machiya2026monteq}.  The present work is
-different in scope: the learned component ranks verifiable Boolean-algebraic
-actions rather than generating arbitrary gate sequences.
+rewriting~\cite{kremer2025nonclifford,riu2025rlzx}; \mcts{} has been used for
+quantum circuit transformation under connectivity constraints~\cite{zhou2022qctmcts};
+and MonteQ uses \mcts{} for Hamiltonian-simulation circuit
+synthesis~\cite{machiya2026monteq}.  The present work is different in scope:
+it is a logical-layer Boolean-oracle synthesizer, not a hardware-routing
+method, not a Hamiltonian-simulation scheduler, not a gate-by-gate unitary
+generator, and not an SSHR parallelotope search.  Its learned component ranks
+verifiable Boolean-algebraic actions, while ESOP, BDD, XAG/LUT, ROS-style,
+SSHR, RevKit, mockturtle, CirKit, and ABC flows define the comparison set.
 
 \section{Problem and Resource Model}
 

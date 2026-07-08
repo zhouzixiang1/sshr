@@ -16,6 +16,16 @@
 
 论文主张应限定为：资源约束、低 T-count、低加权 score 的量子布尔函数 oracle 综合方法。不能写成 CNOT-only 最优，也不能写成硬件映射优势。
 
+### 1.1 对比对象与论文意义
+
+当前方法的对比对象分三层，而不是只和 SSHR 比：
+
+1. 传统 oracle 综合和布尔表示 baseline：direct ANF、AND-direct ANF、ESOP/ESOP-MILP、BDD、ABC-AIG/XAG/LUT/ESOP、XAG、ROS-style LUT。这一层证明方法不是只优化某个 SSHR 实现，而是在布尔函数表示和 oracle 资源层面降低 T-count、CNOT、深度、gate 和辅助比特等逻辑资源。
+2. 可复现外部工具链 baseline：mockturtle official-header KLUT-to-XAG、CirKit 3 AIG/multiplicative-complexity probe、RevKit API 和 legacy RevKit CLI exact-oracle reversible-synthesis probe。这一层用于回应审稿人对“是否只和自写 baseline 比”的质疑，但必须保留边界：它们是逻辑层 probe 或复现，不能写成 full ROS/hardware mapping。
+3. 搜索策略 baseline：greedy、direct、beam、fixed-coordinate MCTS、neural-prior ablation、Pareto archive、depth-frontier/stage-gated frontier、rank-diverse pruning 等。这一层证明创新点来自资源感知搜索和学习引导，而不是单纯换了一个 cost function。
+
+因此论文意义应写成“面向资源约束量子布尔函数 oracle 综合的逻辑层 AI 搜索框架”，SSHR-H/SSHR-I 是小规模、CNOT-oriented 的重要结构化 baseline，但不是本文方法的定义边界。
+
 ## 2. 当前已完成内容
 
 ### 2.0a mockturtle official-header XAG probe
