@@ -19,6 +19,9 @@ RESULTS = THIS_DIR / "results"
 PAPER = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.tex"
 PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.pdf"
 REBUILD_SCRIPT = THIS_DIR / "rebuild_submission_package.sh"
+ARCHIVE_ANALYSIS = RESULTS / "analysis_submission_archive_manifest.md"
+ARCHIVE_SUMMARY = RESULTS / "summary_submission_archive_manifest.csv"
+ARCHIVE_MANIFEST = RESULTS / "manifest_submission_archive_manifest.json"
 
 
 def read_text(path: Path) -> str:
@@ -111,6 +114,17 @@ def build_rows() -> list[dict[str, str]]:
             "status": "pass" if "tab:traceability-audit" in text else "needs revision",
             "evidence": "Manuscript includes a submission traceability audit linking claim families to scripts, data, tables, and figures.",
             "next_action": "Rerun analyze_submission_traceability_audit.py after adding or moving headline evidence.",
+        },
+        {
+            "item": "Archive package manifest",
+            "status": "pass"
+            if contains_all(text, ["tab:archive-manifest", "submission archive manifest"])
+            and ARCHIVE_ANALYSIS.exists()
+            and ARCHIVE_SUMMARY.exists()
+            and ARCHIVE_MANIFEST.exists()
+            else "needs revision",
+            "evidence": "Manuscript includes an archive-level payload manifest with generated CSV, Markdown, and JSON outputs.",
+            "next_action": "Rerun analyze_submission_archive_manifest.py after adding tables, figures, scripts, models, or result files.",
         },
         {
             "item": "Derived package rebuild command",

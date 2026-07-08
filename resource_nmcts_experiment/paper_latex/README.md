@@ -37,9 +37,10 @@ rebuilt with:
 ./rebuild_submission_package.sh
 ```
 
-This regenerates paper-facing analysis tables, figures, audits, and
-`resource_nmcts_submission_v1.pdf` from existing experiment artifacts.  It does
-not rerun raw benchmark sweeps, external-toolchain probes, or neural training.
+This regenerates paper-facing analysis tables, figures, the archive manifest,
+audits, and `resource_nmcts_submission_v1.pdf` from existing experiment
+artifacts.  It does not rerun raw benchmark sweeps, external-toolchain probes,
+or neural training.
 
 Current source evidence:
 
@@ -71,6 +72,12 @@ Current source evidence:
   `../results/summary_submission_traceability_audit.csv`
 - submission traceability audit analysis:
   `../results/analysis_submission_traceability_audit.md`
+- submission archive manifest CSV:
+  `../results/summary_submission_archive_manifest.csv`
+- submission archive manifest analysis:
+  `../results/analysis_submission_archive_manifest.md`
+- submission archive manifest JSON:
+  `../results/manifest_submission_archive_manifest.json`
 - submission-readiness audit CSV:
   `../results/summary_submission_readiness_audit.csv`
 - submission-readiness audit analysis:

@@ -412,6 +412,26 @@ family to the manuscript location and artifact chain used to support it.}
 \input{tables/submission_traceability_audit}
 \end{table}
 
+The submission archive manifest in Table~\ref{tab:archive-manifest} adds a
+package-level check over the stable payload groups.  It hashes source files,
+tables, figures, raw measurements, summaries, manifests, scripts, trained
+models, and local tool adapters while excluding terminal submission audits and
+the compiled PDF from the digest set.  This exclusion avoids self-referential
+hashes because the final PDF contains the manifest table itself; PDF existence
+and page count are checked separately by the readiness audit.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Submission archive manifest.  Each row reports a stable payload group,
+the number of files found, missing expected files, a category digest, and the
+scope boundary for that group.}
+\label{tab:archive-manifest}
+\input{tables/submission_archive_manifest}
+\end{table}
+
 \section{Results}
 
 \subsection{Traditional functions}
@@ -974,9 +994,12 @@ submission figures and source data are stored under
 \texttt{paper\_latex/figures/submission\_v36/}.  The lightweight derived
 submission package can be rebuilt with
 \texttt{./rebuild\_submission\_package.sh}; this regenerates paper-facing
-tables, figures, audits, and the English PDF from existing experiment
-artifacts, but does not rerun raw benchmark sweeps, external-toolchain probes,
-or neural training jobs.  The experiments use the
+tables, figures, the submission archive manifest, audits, and the English PDF
+from existing experiment artifacts, but does not rerun raw benchmark sweeps,
+external-toolchain probes, or neural training jobs.  The archive manifest
+records category-level hashes for stable payload groups; terminal submission
+audits and the compiled PDF are checked separately to avoid self-referential
+digests.  The experiments use the
 \texttt{mcts-qoracle} Conda environment and the direct interpreter
 \path{/opt/anaconda3/envs/mcts-qoracle/bin/python}.  External-tool rows are
 reported with manifest-level provenance; hardware mapping, routing, and

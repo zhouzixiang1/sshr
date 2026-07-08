@@ -4,7 +4,7 @@ This audit links headline manuscript claims to supporting scripts, raw/summary a
 
 ## Status counts
 
-- complete: 9
+- complete: 10
 
 | claim family | claim use | manuscript anchor | boundary | status |
 |---|---|---|---|---|
@@ -16,6 +16,7 @@ This audit links headline manuscript claims to supporting scripts, raw/summary a
 | Multi-resource tradeoff | Audits whether weighted-score wins imply raw-resource dominance. | Results, raw multi-resource dominance | Dominance uses T-count, CNOT, depth, and peak ancilla, not weighted score. | complete |
 | Learned-control contribution | Separates promoted neural/search controllers from limited diagnostics. | Results, search contribution and ablation | Supports guarded learned-control evidence, not a claim that RL alone explains all gains. | complete |
 | High-dimensional verification | Traces large symbolic checks, phase checks, and complete truth-table bridge slices. | Results, high-dimensional verification | Large rows are symbolic or bridge-slice verified, not exhaustive high-dimensional truth tables. | complete |
+| Archive package integrity | Hashes stable submission payload groups and records archive boundaries. | Experimental Design, archive manifest | Excludes terminal submission audits and compiled PDF from payload hashes to avoid self-reference. | complete |
 | Reproducibility package | Documents compute envelope, worker manifests, artifact counts, and availability section. | Experimental Design and Data and Code Availability | Repository-relative package until an archival DOI or anonymous link is supplied. | complete |
 
 ## Artifact chains
@@ -28,4 +29,5 @@ This audit links headline manuscript claims to supporting scripts, raw/summary a
 - **Multi-resource tradeoff**: analyze_multimetric_pareto_tradeoff.py; results/analysis_multimetric_pareto_tradeoff.md; paper_latex/tables/multimetric_pairwise_dominance.tex; paper_latex/tables/multimetric_nondominated.tex
 - **Learned-control contribution**: analyze_learned_control_audit.py; train_sparse_depth4_gate.py; results/analysis_learned_control_audit.md; results/analysis_sparse_depth4_gate_generalization.md; paper_latex/tables/learned_control_audit.tex; paper_latex/tables/sparse_depth4_gate_generalization.tex; paper_latex/figures/submission_v36/fig7_learned_control_summary.pdf
 - **High-dimensional verification**: analyze_scaling_resource_audit.py; results/analysis_scaling_resource_audit.md; paper_latex/tables/scaling_resource_audit.tex; results/raw_truth_bridge_terms.csv; results/raw_truth_bridge_n24_terms.csv; results/raw_truth_bridge_n25_terms.csv; paper_latex/figures/submission_v36/fig5_validation.pdf
-- **Reproducibility package**: analyze_reproducibility_audit.py; analyze_submission_readiness_audit.py; rebuild_submission_package.sh; results/analysis_reproducibility_audit.md; results/analysis_submission_readiness_audit.md; paper_latex/tables/reproducibility_audit.tex; paper_latex/resource_nmcts_submission_v1.tex; paper_latex/resource_nmcts_submission_v1.pdf
+- **Archive package integrity**: analyze_submission_archive_manifest.py; results/summary_submission_archive_manifest.csv; results/analysis_submission_archive_manifest.md; results/manifest_submission_archive_manifest.json; paper_latex/tables/submission_archive_manifest.tex
+- **Reproducibility package**: analyze_reproducibility_audit.py; analyze_submission_readiness_audit.py; analyze_submission_archive_manifest.py; rebuild_submission_package.sh; results/analysis_reproducibility_audit.md; results/analysis_submission_archive_manifest.md; results/analysis_submission_readiness_audit.md; paper_latex/tables/reproducibility_audit.tex; paper_latex/tables/submission_archive_manifest.tex; paper_latex/resource_nmcts_submission_v1.tex; paper_latex/resource_nmcts_submission_v1.pdf
