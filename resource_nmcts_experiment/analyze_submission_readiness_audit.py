@@ -39,6 +39,7 @@ SUPPORT_FILES = [
     SUBMISSION_PACKAGE / "author_declarations_template.md",
     SUBMISSION_PACKAGE / "submission_checklist.md",
     SUBMISSION_PACKAGE / "reviewer_concern_brief.md",
+    SUBMISSION_PACKAGE / "editor_screening_brief.md",
     SUBMISSION_PACKAGE / "target_venue_brief.md",
 ]
 
@@ -165,7 +166,7 @@ def build_rows() -> list[dict[str, str]]:
         {
             "item": "Submission support templates",
             "status": "pass" if all(path.exists() for path in SUPPORT_FILES) else "needs revision",
-            "evidence": "Cover letter, author declarations, upload checklist, reviewer-concern brief, and target-venue brief are present.",
+            "evidence": "Cover letter, author declarations, upload checklist, reviewer-concern brief, editor-screening brief, and target-venue brief are present.",
             "next_action": "Fill the author-specific fields before journal upload.",
         },
         {

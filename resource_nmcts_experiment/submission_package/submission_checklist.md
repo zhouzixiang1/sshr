@@ -29,6 +29,7 @@ Use this checklist immediately before uploading the manuscript.
 - Readiness audit: `results/analysis_submission_readiness_audit.md`
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
 - Goal-completion audit: `results/analysis_goal_completion_audit.md`
+- Editor screening brief: `submission_package/editor_screening_brief.md`
 - Target venue brief: `submission_package/target_venue_brief.md`
 - Structured metadata template: `submission_package/submission_metadata_template.json`
 - Traceability audit: `results/analysis_submission_traceability_audit.md`
