@@ -1,0 +1,31 @@
+{
+  "created_at": "2026-07-09T00:41:11+0800",
+  "script": "run_cirkit_aig_probe.py",
+  "argv": {
+    "manifest": [
+      "traditional=benchmark_exports/traditional_resource_external_seed42/manifest.json"
+    ],
+    "internal": [
+      "traditional=results/raw_traditional_resource.csv"
+    ],
+    "min_n": null,
+    "max_n": 6,
+    "limit": null,
+    "timeout": 45.0,
+    "workers": 8,
+    "abc_bin": "/Users/zhouzixiang/Desktop/tzb/src/tmp/abc/abc",
+    "cirkit_root": "/Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit",
+    "cirkit_bin": "/Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit/build/cli/cirkit",
+    "flow": "cut_rewrite,resub",
+    "targets": "and_resource_nmcts,and_profile_resource_nmcts,and_pareto_resource_nmcts,and_fprm_polarity_archive,and_fprm_linear_pair,and_fprm_root_beam,and_fprm_greedy,and_affine_greedy,and_direct_anf,direct_anf,and_esop_milp,sshr_h",
+    "out": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_cirkit_aig_probe.csv",
+    "summary": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/summary_cirkit_aig_probe.csv",
+    "analysis": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/analysis_cirkit_aig_probe.md",
+    "latex_out": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/paper_latex/tables/cirkit_aig_probe.tex",
+    "run_manifest": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/manifest_cirkit_aig_probe.json"
+  },
+  "cirkit_commit": "4531533394725864a304e710d82087ff74fbe801",
+  "rows": 177,
+  "usable_rows": 177,
+  "summary_rows": 35
+}

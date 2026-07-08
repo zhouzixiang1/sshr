@@ -21,6 +21,18 @@ Latest external-toolchain progress:
   vs mockturtle XAG K4 score is 64/0/0, mean -91.49%.
 - This is an official-header mockturtle probe, not full ROS, not reversible
   garbage management, and not hardware mapping.
+- `run_cirkit_aig_probe.py` builds on the official CirKit 3 shell.  ABC
+  converts exported BLIFs to AIGER; CirKit applies `cut_rewrite; resub`, reports
+  `mccost -a`, writes Verilog, and ABC reads that Verilog back for row-level
+  truth-table verification.
+- Traditional `n<=6`: 177/177 CirKit rows verified; Pareto-Resource-NMCTS vs
+  CirKit AIG/MC score is 177/0/0, mean -62.34%.  Depth is the visible trade-off:
+  Pareto-Resource-NMCTS loses depth on 156/177 rows, mean +93.16%.
+- High-dimensional `n=14`: 64/64 CirKit rows verified; Pareto-Resource-NMCTS vs
+  CirKit AIG/MC score is 64/0/0, mean -94.46%.  It also wins T/CNOT/ancilla on
+  all rows, but loses depth on 50/64 rows under this proxy.
+- This is a CirKit-shell AIG/multiplicative-complexity probe, not legacy RevKit
+  reversible synthesis, not full ROS, and not hardware mapping.
 
 Latest phase/Rz progress:
 
@@ -111,6 +123,8 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_frontier_policy_upgrade.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_mockturtle_xag_probe.py --workers 4 --timeout 20
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_mockturtle_xag_probe.py --manifest highdim=benchmark_exports/highdim_resource_external_seed42/manifest.json --internal highdim=results/raw_highdim_resource.csv --min-n 14 --max-n 14 --workers 4 --timeout 30 --targets and_resource_nmcts,and_profile_resource_nmcts,and_pareto_resource_nmcts,and_direct_anf,direct_anf --out results/raw_mockturtle_xag_highdim_probe.csv --summary results/summary_mockturtle_xag_highdim_probe.csv --analysis results/analysis_mockturtle_xag_highdim_probe.md --latex-out paper_latex/tables/mockturtle_xag_highdim_probe.tex --run-manifest results/manifest_mockturtle_xag_highdim_probe.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_cirkit_aig_probe.py --workers 8 --timeout 45
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_cirkit_aig_probe.py --manifest highdim=benchmark_exports/highdim_resource_external_seed42/manifest.json --internal highdim=results/raw_highdim_resource.csv --min-n 14 --max-n 14 --workers 8 --timeout 90 --out results/raw_cirkit_aig_highdim_probe.csv --summary results/summary_cirkit_aig_highdim_probe.csv --analysis results/analysis_cirkit_aig_highdim_probe.md --latex-out paper_latex/tables/cirkit_aig_highdim_probe.tex --run-manifest results/manifest_cirkit_aig_highdim_probe.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset smoke
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset evidence_affine --model models/action_scorer_rollout_logical_and.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset evidence_affine
@@ -573,13 +587,14 @@ External-tool benchmark exchange:
   runs ABC `if -K` for a configurable K sweep, verifies each mapped BLIF truth
   table, estimates every LUT network by local-ANF compute/action/uncompute
   logic, and chooses the best K under the project score.  It is now complemented
-  by a mockturtle KLUT-to-XAG probe and a RevKit Python API baseline, but the
-  full official ROS flow and legacy RevKit/CirKit CLI flow remain future work.
+  by a mockturtle KLUT-to-XAG probe, a CirKit-shell AIG/MC probe, and a RevKit
+  Python API baseline, but the full official ROS flow and legacy RevKit/CirKit
+  reversible-synthesis CLI flow remain future work.
 - `analyze_toolchain_readiness.py` records external-tool availability for the
   current workstation.  The current audit finds the bundled ABC binary,
-  mockturtle source/adapter availability, and RevKit Python API availability,
-  while legacy RevKit/CirKit CLI remains unavailable; see
-  `results/analysis_toolchain_readiness.md`.
+  mockturtle source/adapter availability, RevKit Python API availability, and
+  CirKit 3 shell availability, while legacy RevKit/CirKit CLI remains
+  unavailable; see `results/analysis_toolchain_readiness.md`.
 
 Current evidence from `results/analysis_evidence_affine.md`:
 
@@ -804,9 +819,11 @@ External toolchain readiness from `results/analysis_toolchain_readiness.md`:
 - ABC is available through `tmp/abc/abc` and is already used for AIG/XAG/LUT/ESOP
   exported-baseline paths.
 - mockturtle source plus the project KLUT-to-XAG adapter are available and have
-  produced verified official-header probe rows.  RevKit Python API is available
-  and has produced the `oracle_synth` phase-netlist baseline.  Full official
-  ROS and legacy RevKit/CirKit CLI reproduction remain future work.
+  produced verified official-header probe rows.  CirKit 3 shell is available
+  and has produced verified AIG/multiplicative-complexity probe rows.  RevKit
+  Python API is available and has produced the `oracle_synth` phase-netlist
+  baseline.  Full official ROS and legacy RevKit/CirKit reversible-synthesis
+  CLI reproduction remain future work.
 - Against CNOT-optimized SSHR-I, `and_resource_nmcts` has 164 T-count wins, 3
   losses, and 10 ties; score wins/losses/ties are 168/9/0 with a 27.92% mean
   score reduction.  CNOT count is worse on 168/177 functions.

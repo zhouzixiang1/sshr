@@ -23,7 +23,10 @@ resource_nmcts_experiment/paper_latex/*.pdf
 resource_nmcts_experiment/benchmark_exports/
 tmp/abc/
 tmp/bin/
+tmp/cirkit/
+tmp/cirkit_probe/
 tmp/mockturtle/
+resource_nmcts_experiment.zip
 
 # Generated visualizations
 sshr/viz/*.png

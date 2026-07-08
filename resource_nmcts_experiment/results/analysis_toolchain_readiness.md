@@ -24,6 +24,8 @@ RevKit 3.x is a Python package backed by C++ code.
 | ABC | binary | available | implemented AIG/XAG/LUT/ESOP external estimates | `file: /Users/zhouzixiang/Desktop/tzb/src/tmp/abc/abc` | usage: /Users/zhouzixiang/Desktop/tzb/src/tmp/abc/abc [-c cmd] [-q cmd] [-C cmd] [-Q cmd] [-f script] [-h] [-o file] [-s] [-t type] [-T type] [-x] [-b] [file] |
 | mockturtle | cxx_header_library | available | official-header KLUT-to-XAG probe adapter; full ROS flow remains separate | `source: /Users/zhouzixiang/Desktop/tzb/src/tmp/mockturtle` | local source checkout exists |
 | RevKit | binary_or_python | available | Python oracle_synth baseline adapter; legacy CLI flow remains separate | `python: revkit` | /opt/anaconda3/envs/mcts-qoracle/lib/python3.11/site-packages/revkit/__init__.py |
+| CirKit 3 shell | binary_or_source | available | official CirKit shell for AIG/LUT optimization probes; not legacy RevKit reversible synthesis | `file: /Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit/build/cli/cirkit` | Usage: /Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit/build/cli/cirkit [OPTIONS] |
+| CirKit 3 shell | binary_or_source | available (additional) | official CirKit shell for AIG/LUT optimization probes; not legacy RevKit reversible synthesis | `source: /Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit` | local source checkout exists |
 | RevKit CLI / CirKit legacy | binary_or_source | missing | legacy command-line reversible synthesis flow for RevKit-style baselines |  | not found in configured paths, PATH, or Python modules |
 
 ## Upstream Source Reachability
@@ -34,6 +36,8 @@ RevKit 3.x is a Python package backed by C++ code.
 | mockturtle | <https://github.com/lsils/mockturtle> | master | reachable | `25beb0e294e4613bb9fe62319b91d9f2ab764e88` |
 | RevKit | <https://github.com/msoeken/revkit> | develop | reachable | `20d7d5ff72b33441583ed381fb0011964008d86b` |
 | RevKit | <https://github.com/msoeken/revkit> | master | reachable | `a59fa132f73a2483a00b11c23f5f1c599a34f074` |
+| CirKit 3 shell | <https://github.com/msoeken/cirkit> | cirkit3 | reachable | `4531533394725864a304e710d82087ff74fbe801` |
+| CirKit 3 shell | <https://github.com/msoeken/cirkit> | master | reachable | `8a098dae1f09f9e8af6e132b1fa76f05948689ed` |
 | RevKit CLI / CirKit legacy | <https://github.com/msoeken/cirkit> | master | reachable | `8a098dae1f09f9e8af6e132b1fa76f05948689ed` |
 | RevKit CLI / CirKit legacy | <https://github.com/msoeken/cirkit> | develop | reachable | `104eb35f1933b080aa228ad419756f04682d4a2e` |
 
@@ -53,6 +57,12 @@ RevKit 3.x is a Python package backed by C++ code.
 - `/opt/anaconda3/envs/mcts-qoracle/bin/python -m pip install 'git+https://github.com/msoeken/revkit@develop'`
 - `or: git clone -b develop https://github.com/msoeken/revkit tmp/revkit && cd tmp/revkit && make devbuild`
 
+### CirKit 3 shell
+
+- `git clone --recursive https://github.com/msoeken/cirkit.git tmp/cirkit`
+- `cd tmp/cirkit && mkdir -p build && cd build && cmake .. && cmake --build . --target cirkit --parallel 8`
+- `/opt/anaconda3/envs/mcts-qoracle/bin/python resource_nmcts_experiment/run_cirkit_aig_probe.py --workers 8 --timeout 45`
+
 ### RevKit CLI / CirKit legacy
 
 - `git clone --recursive https://github.com/msoeken/cirkit.git tmp/cirkit`
@@ -64,6 +74,7 @@ RevKit 3.x is a Python package backed by C++ code.
 - No basic build prerequisite blocker was detected.
 - mockturtle source and the project KLUT-to-XAG adapter are available; `run_mockturtle_xag_probe.py` has produced a reproducible official-header probe. This is still not the full official ROS flow.
 - RevKit Python API is locally available and can support an API-level `oracle_synth` baseline; this is distinct from the legacy RevKit/CirKit CLI flow.
+- CirKit 3 shell is locally available and `run_cirkit_aig_probe.py` has produced a reproducible AIG/multiplicative-complexity probe. This is not legacy RevKit reversible synthesis or full ROS.
 - RevKit/CirKit legacy CLI is not yet available, so legacy command-line reversible-synthesis reproduction remains pending.
 - This audit is intentionally environment-specific; rerun it after installing external tools before claiming reproduced external reversible-toolchain results.
 

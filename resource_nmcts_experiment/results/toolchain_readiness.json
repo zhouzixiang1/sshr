@@ -137,6 +137,43 @@
       ]
     },
     {
+      "name": "CirKit 3 shell",
+      "kind": "binary_or_source",
+      "role": "official CirKit shell for AIG/LUT optimization probes; not legacy RevKit reversible synthesis",
+      "source_url": "https://github.com/msoeken/cirkit",
+      "remote": "https://github.com/msoeken/cirkit.git",
+      "install": [
+        "git clone --recursive https://github.com/msoeken/cirkit.git tmp/cirkit",
+        "cd tmp/cirkit && mkdir -p build && cd build && cmake .. && cmake --build . --target cirkit --parallel 8",
+        "/opt/anaconda3/envs/mcts-qoracle/bin/python resource_nmcts_experiment/run_cirkit_aig_probe.py --workers 8 --timeout 45"
+      ],
+      "available": true,
+      "hits": [
+        [
+          "file",
+          "/Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit/build/cli/cirkit",
+          "Usage: /Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit/build/cli/cirkit [OPTIONS]"
+        ],
+        [
+          "source",
+          "/Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit",
+          "local source checkout exists"
+        ]
+      ],
+      "remote_heads": [
+        {
+          "branch": "cirkit3",
+          "status": "reachable",
+          "commit": "4531533394725864a304e710d82087ff74fbe801"
+        },
+        {
+          "branch": "master",
+          "status": "reachable",
+          "commit": "8a098dae1f09f9e8af6e132b1fa76f05948689ed"
+        }
+      ]
+    },
+    {
       "name": "RevKit CLI / CirKit legacy",
       "kind": "binary_or_source",
       "role": "legacy command-line reversible synthesis flow for RevKit-style baselines",

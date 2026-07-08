@@ -69,6 +69,22 @@
   emission, no Clifford+T sequence, and no hardware mapping.
   <https://github.com/lsils/mockturtle>
 
+- CirKit 3 is now locally checked out under `tmp/cirkit` at commit
+  `4531533394725864a304e710d82087ff74fbe801`, and the `cli/cirkit` shell builds
+  on this workstation.  The project includes `run_cirkit_aig_probe.py`, which
+  exports the same benchmark BLIFs through ABC into AIGER, runs CirKit
+  `cut_rewrite -a; resub -a; mccost -a`, writes optimized Verilog, and verifies
+  the Verilog readback with ABC plus the bit-parallel truth-table checker.
+  Traditional `n<=6` results are 177/177 correct, with Pareto-Resource-NMCTS vs
+  CirKit AIG/MC at 177/0/0 and mean score -62.34%.  High-dimensional `n=14`
+  results are 64/64 correct, with Pareto-Resource-NMCTS at 64/0/0 and mean
+  score -94.46%.  This probe strengthens external-toolchain evidence, but it is
+  an AIG/multiplicative-complexity logic-network comparison: it is not the
+  legacy RevKit/CirKit reversible-synthesis CLI, not full ROS, and not hardware
+  mapping.  The depth metric remains a visible trade-off, since Resource-NMCTS
+  loses depth on most CirKit rows under this proxy.
+  <https://github.com/msoeken/cirkit>
+
 - RevKit is an open-source reversible-logic synthesis framework built around
   tweedledum and mockturtle.  The Python API is now installed in the local
   `mcts-qoracle` environment and has been used through `oracle_synth` on the
@@ -166,7 +182,8 @@ the exported benchmarks.
 
 The current local readiness audit is stored in
 `results/analysis_toolchain_readiness.md`: ABC is available through the bundled
-`tmp/abc/abc` binary, RevKit Python is available in the conda environment, and
-mockturtle plus the legacy RevKit/CirKit CLI remain future external-comparison
-work.  This should be treated as an environment fact, not as a field-wide
-statement.
+`tmp/abc/abc` binary, mockturtle and CirKit 3 shell probes are available, and
+RevKit Python is available in the conda environment.  The legacy
+RevKit/CirKit reversible-synthesis CLI and full official ROS remain future
+external-comparison work.  This should be treated as an environment fact, not
+as a field-wide statement.

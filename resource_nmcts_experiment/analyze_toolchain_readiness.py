@@ -28,6 +28,7 @@ ENV_BIN = Path("/opt/anaconda3/envs/mcts-qoracle/bin")
 ENV_PYTHON = ENV_BIN / "python"
 MOCKTURTLE_ADAPTER_SRC = THIS_DIR / "tools" / "mockturtle_blif_xag_stats.cpp"
 MOCKTURTLE_PROBE_ANALYSIS = RESULTS / "analysis_mockturtle_xag_probe.md"
+CIRKIT_AIG_PROBE_ANALYSIS = RESULTS / "analysis_cirkit_aig_probe.md"
 
 
 BUILD_PREREQS = [
@@ -101,9 +102,25 @@ TOOLS = [
         ],
     },
     {
+        "name": "CirKit 3 shell",
+        "kind": "binary_or_source",
+        "paths": [ROOT / "tmp" / "cirkit" / "build" / "cli" / "cirkit", ROOT / "tmp" / "cirkit"],
+        "commands": [],
+        "modules": [],
+        "role": "official CirKit shell for AIG/LUT optimization probes; not legacy RevKit reversible synthesis",
+        "source_url": "https://github.com/msoeken/cirkit",
+        "remote": "https://github.com/msoeken/cirkit.git",
+        "branches": ["cirkit3", "master"],
+        "install": [
+            "git clone --recursive https://github.com/msoeken/cirkit.git tmp/cirkit",
+            "cd tmp/cirkit && mkdir -p build && cd build && cmake .. && cmake --build . --target cirkit --parallel 8",
+            "/opt/anaconda3/envs/mcts-qoracle/bin/python resource_nmcts_experiment/run_cirkit_aig_probe.py --workers 8 --timeout 45",
+        ],
+    },
+    {
         "name": "RevKit CLI / CirKit legacy",
         "kind": "binary_or_source",
-        "paths": [ROOT / "tmp" / "cirkit" / "build" / "cli" / "revkit", ROOT / "tmp" / "cirkit"],
+        "paths": [ROOT / "tmp" / "cirkit" / "build" / "cli" / "revkit"],
         "commands": [],
         "modules": [],
         "role": "legacy command-line reversible synthesis flow for RevKit-style baselines",
@@ -231,6 +248,7 @@ def write_markdown(prereqs: list[dict], results: list[dict], out: Path) -> None:
     missing_prereqs = [item["name"] for item in prereqs if not item["available"]]
     availability = {item["name"]: item["available"] for item in results}
     mockturtle_adapter_ready = MOCKTURTLE_ADAPTER_SRC.exists() and MOCKTURTLE_PROBE_ANALYSIS.exists()
+    cirkit_aig_probe_ready = CIRKIT_AIG_PROBE_ANALYSIS.exists()
     lines = [
         "# External Toolchain Readiness",
         "",
@@ -337,6 +355,17 @@ def write_markdown(prereqs: list[dict], results: list[dict], out: Path) -> None:
         lines.append(
             "- RevKit Python API is not locally available; a reproduced RevKit API comparison still requires installation."
         )
+    if availability.get("CirKit 3 shell"):
+        if cirkit_aig_probe_ready:
+            lines.append(
+                "- CirKit 3 shell is locally available and `run_cirkit_aig_probe.py` has produced a reproducible AIG/multiplicative-complexity probe. This is not legacy RevKit reversible synthesis or full ROS."
+            )
+        else:
+            lines.append(
+                "- CirKit 3 shell is locally available, but the AIG/multiplicative-complexity probe output has not yet been generated."
+            )
+    else:
+        lines.append("- CirKit 3 shell is not locally available; AIG/LUT shell probes still require a checkout and build.")
     if availability.get("RevKit CLI / CirKit legacy"):
         lines.append("- RevKit/CirKit legacy CLI is locally available for future command-line flow probes.")
     else:
