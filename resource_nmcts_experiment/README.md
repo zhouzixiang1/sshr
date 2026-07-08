@@ -52,6 +52,14 @@ The comparison evidence scope is materialized by
 `results/summary_comparison_evidence_matrix.csv`,
 `results/analysis_comparison_evidence_matrix.md`, and
 `paper_latex/tables/comparison_evidence_matrix.tex` for the submission draft.
+The baseline comparability audit is materialized by
+`analyze_baseline_comparability_audit.py`, which writes
+`results/summary_baseline_comparability_audit.csv`,
+`results/analysis_baseline_comparability_audit.md`, and
+`paper_latex/tables/baseline_comparability_audit.tex`.  It explains the task
+alignment, fairness controls, residual abstraction risk, and usable claim for
+each baseline family, so the paper does not overstate cross-toolchain
+comparisons.
 The paired statistical layer is materialized by
 `analyze_paired_statistical_evidence.py`, which recomputes selected score
 comparisons from usable raw CSV rows, reports mean and median relative effects,

@@ -48,6 +48,10 @@ Current source evidence:
   `../results/summary_comparison_evidence_matrix.csv`
 - comparison evidence matrix analysis:
   `../results/analysis_comparison_evidence_matrix.md`
+- baseline comparability audit CSV:
+  `../results/summary_baseline_comparability_audit.csv`
+- baseline comparability audit analysis:
+  `../results/analysis_baseline_comparability_audit.md`
 - experiment CSV: `../results/raw_evidence_affine.csv`
 - compact analysis: `../results/analysis_evidence_affine.md`
 - ablation CSV: `../results/raw_ablation_affine.csv`

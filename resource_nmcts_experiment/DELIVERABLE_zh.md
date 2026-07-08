@@ -58,6 +58,15 @@
 
 这两张矩阵已接入英文投稿稿 `resource_nmcts_submission_v1.tex`，用于直接回答“和什么比、为什么有意义、不能夸大到哪里”。
 
+本轮进一步新增 baseline comparability audit，专门回答审稿人会问的“这些 baseline 是否真的可比”：
+
+- `analyze_baseline_comparability_audit.py`
+- `results/summary_baseline_comparability_audit.csv`
+- `results/analysis_baseline_comparability_audit.md`
+- `paper_latex/tables/baseline_comparability_audit.tex`
+
+该审计把 direct/ESOP、SSHR、ABC/BDD、ROS-style LUT/mockturtle/CirKit、legacy RevKit CLI、phase/Rz 和高维 symbolic/bridge 检查逐项拆开，分别说明 task alignment、fairness control、residual risk 和 usable claim。它的作用是把“有意义的对比”限定在可证明范围内：同任务 bit-flip oracle baseline 支撑主结果，外部 toolchain probe 支撑鲁棒性，RevKit CLI 支撑 exact reversible-oracle 对照，phase/Rz 支撑搜索框架外延，但所有这些都不被写成硬件映射或全指标支配。
+
 本轮进一步补充了 paired statistical evidence 层，避免论文只依赖均值叙述：
 
 - `analyze_paired_statistical_evidence.py`

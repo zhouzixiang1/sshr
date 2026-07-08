@@ -343,6 +343,25 @@ scope boundary used by the manuscript claims.}
 \input{tables/comparison_evidence_matrix}
 \end{table}
 
+Table~\ref{tab:comparability-audit} makes the fairness boundary explicit.  It
+separates comparisons that share the same bit-flip oracle target from
+logic-network proxies, exact reversible-oracle probes, phase/\rz{} proxies, and
+large symbolic bridge checks.  The table is intentionally conservative: a
+comparison is used only for the conclusion supported by its task alignment,
+verification route, and resource abstraction.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Baseline comparability audit.  The table records why each comparison
+family is fair enough for the paper's bounded claim, which controls are used,
+and what residual abstraction mismatch remains.}
+\label{tab:comparability-audit}
+\input{tables/baseline_comparability_audit}
+\end{table}
+
 The experiments were executed as a reproducible artifact package rather than
 as isolated hand runs.  Table~\ref{tab:reproducibility} records the local
 compute envelope, manifest-level parallelism, artifact counts, and external
