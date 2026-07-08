@@ -25,6 +25,12 @@ SSHR-H/SSHR-I are important CNOT-oriented small-function baselines, but the
 project claim is a resource-aware logical-layer AI search framework rather than
 an SSHR variant.
 
+The comparison scope is materialized by
+`analyze_comparison_evidence_matrix.py`, which writes
+`results/summary_comparison_evidence_matrix.csv`,
+`results/analysis_comparison_evidence_matrix.md`, and
+`paper_latex/tables/comparison_evidence_matrix.tex` for the submission draft.
+
 Latest external-toolchain progress:
 
 - `run_mockturtle_xag_probe.py` builds a small C++ adapter over the official

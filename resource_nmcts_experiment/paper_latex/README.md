@@ -32,6 +32,10 @@ latexmk -pdf resource_nmcts_submission_v1.tex
 
 Current source evidence:
 
+- comparison evidence matrix CSV:
+  `../results/summary_comparison_evidence_matrix.csv`
+- comparison evidence matrix analysis:
+  `../results/analysis_comparison_evidence_matrix.md`
 - experiment CSV: `../results/raw_evidence_affine.csv`
 - compact analysis: `../results/analysis_evidence_affine.md`
 - ablation CSV: `../results/raw_ablation_affine.csv`

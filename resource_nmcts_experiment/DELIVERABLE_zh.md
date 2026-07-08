@@ -26,6 +26,15 @@
 
 因此论文意义应写成“面向资源约束量子布尔函数 oracle 综合的逻辑层 AI 搜索框架”，SSHR-H/SSHR-I 是小规模、CNOT-oriented 的重要结构化 baseline，但不是本文方法的定义边界。
 
+本轮已把这层定位固化为可复现证据矩阵：
+
+- `analyze_comparison_evidence_matrix.py`
+- `results/summary_comparison_evidence_matrix.csv`
+- `results/analysis_comparison_evidence_matrix.md`
+- `paper_latex/tables/comparison_evidence_matrix.tex`
+
+该矩阵按 baseline family 汇总覆盖范围、verified rows、主 paired score 结果和不能夸大的边界，并已接入英文投稿稿 `resource_nmcts_submission_v1.tex`。
+
 ## 2. 当前已完成内容
 
 ### 2.0a mockturtle official-header XAG probe
