@@ -27,6 +27,7 @@
 - `analyze_toolchain_readiness.py`
 - `run_revkit_baseline.py`
 - `analyze_phase_rz_portfolio.py`
+- `analyze_rz_synthesis_cost.py`
 - `results/analysis_toolchain_readiness.md`
 - `results/toolchain_readiness.json`
 - `results/raw_revkit_oracle_synth_traditional.csv`
@@ -37,14 +38,21 @@
 - `results/summary_phase_rz_portfolio.csv`
 - `results/analysis_phase_rz_portfolio.md`
 - `results/manifest_phase_rz_portfolio.json`
+- `results/raw_rz_synthesis_cost.csv`
+- `results/summary_rz_synthesis_cost.csv`
+- `results/analysis_rz_synthesis_cost.md`
+- `results/manifest_rz_synthesis_cost.json`
 - `paper_latex/tables/revkit_oracle_synth_traditional.tex`
 - `paper_latex/tables/phase_rz_portfolio.tex`
+- `paper_latex/tables/rz_synthesis_cost.tex`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v21.tex`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v21.pdf`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v22.tex`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v22.pdf`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v23.tex`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v23.pdf`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v25.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v25.pdf`
 
 核心结果：
 
@@ -59,6 +67,8 @@
 | Resource-NMCTS family portfolio vs RevKit `oracle_synth` | score+1/Rz | 177 | 157/20/0 | -17.89% |
 | Resource-NMCTS family portfolio vs RevKit `oracle_synth` | score+1.5/Rz | 177 | 177/0/0 | -42.26% |
 | Traditional baseline family portfolio vs RevKit `oracle_synth` | score+1/Rz | 177 | 80/97/0 | +7.58% |
+| Resource-NMCTS family portfolio vs RevKit `oracle_synth` | Ross-Selinger-style `T/Rz=30` proxy | 177 | 177/0/0 | -95.03% |
+| Resource-NMCTS family portfolio vs RevKit `oracle_synth` | conservative `T/Rz=90` proxy | 177 | 177/0/0 | -97.01% |
 
 解释边界：
 
@@ -67,6 +77,8 @@
 - 当前 `score` 是 RevKit lower-bound proxy，没有包含非 Clifford rotation synthesis 成本；因此不能写成精确 Clifford+T T-count 对比。
 - `score+1/Rz`、`score+2/Rz`、`T+Rz` 只是符号敏感性分析，不是硬件 mapping 或精确 rotation synthesis；但它们说明 RevKit 差距高度依赖非 Clifford phase cost 口径。
 - `analyze_phase_rz_portfolio.py` 进一步说明 Resource-NMCTS family 的中位 break-even 为 0.80/Rz；`lambda_Rz=1.5` 时 family portfolio 已覆盖 177/177 行，而传统 baseline family 在 `lambda_Rz=1` 时仍只有 80/177 行获胜。
+- `analyze_rz_synthesis_cost.py` 进一步把每个非 Clifford `Rz` 按 `ceil(a log2(1/epsilon)+b)` 计入近似 Clifford+T T-count proxy。Ross-Selinger-style `epsilon=1e-3` 时 `T/Rz=30`，Resource-NMCTS family 相对 RevKit 为 177/0/0、平均 score 降低 95.03%；更保守的 `4 log2(1/epsilon)+10` proxy 在 `epsilon=1e-6` 时 `T/Rz=90`，同样为 177/0/0、平均 score 降低 97.01%。
+- 近似 Rz synthesis 结果仍是逻辑层成本模型，不输出实际 Clifford+T rotation sequence，不测量 synthesis runtime，也不包含硬件 mapping；它用于界定 RevKit phase lower-bound 口径，而不能替代最终 gate-sequence 级实验。
 - 该结果不是坏消息，而是新的强基线：投稿前要么新增 phase/Rz-aware emitter 并处理 rotation synthesis 成本，要么把论文主张严格限定为 bit-flip oracle 的逻辑层资源综合。
 - 当前仍未打通官方 ROS、mockturtle 和 legacy RevKit/CirKit CLI 流程。
 

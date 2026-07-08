@@ -1,0 +1,13 @@
+portfolio,model,epsilon,t_per_rz,items,wins,losses,ties,mean_relative,mean_selected_score,mean_revkit_synth_score,mean_extra_T,winner_counts
+resource_nmcts_family,ross_selinger_z,0.001,30,177,177,0,0,-0.9502696029903192,49.556497175141246,1611.3910734463277,1566.4406779661017,and_pareto_resource_nmcts:115;and_fprm_polarity_archive:62
+resource_nmcts_family,ross_selinger_z,1e-06,60,177,177,0,0,-0.9651438562094595,49.556497175141246,3216.992768361582,3132.8813559322034,and_pareto_resource_nmcts:115;and_fprm_polarity_archive:62
+resource_nmcts_family,ross_selinger_z,1e-10,100,177,177,0,0,-0.9711153185669412,49.556497175141246,5357.795028248587,5221.468926553673,and_pareto_resource_nmcts:115;and_fprm_polarity_archive:62
+resource_nmcts_family,selinger_su2,0.001,50,177,177,0,0,-0.9621628031324445,49.556497175141246,2681.792203389831,2610.7344632768363,and_pareto_resource_nmcts:115;and_fprm_polarity_archive:62
+resource_nmcts_family,selinger_su2,1e-06,90,177,177,0,0,-0.9701192066587545,49.556497175141246,4822.594463276836,4699.322033898305,and_pareto_resource_nmcts:115;and_fprm_polarity_archive:62
+resource_nmcts_family,selinger_su2,1e-10,143,177,177,0,0,-0.9738128356756522,49.556497175141246,7659.157457627119,7466.700564971751,and_pareto_resource_nmcts:115;and_fprm_polarity_archive:62
+traditional_baseline_family,ross_selinger_z,0.001,30,177,177,0,0,-0.9409793809051799,67.45666666666666,1611.3910734463277,1566.4406779661017,and_esop_milp:90;and_cube_beam:52;sshr_h:29;and_direct_anf:5;direct_anf:1
+traditional_baseline_family,ross_selinger_z,1e-06,60,177,177,0,0,-0.9605355576092482,67.45666666666666,3216.992768361582,3132.8813559322034,and_esop_milp:90;and_cube_beam:52;sshr_h:29;and_direct_anf:5;direct_anf:1
+traditional_baseline_family,ross_selinger_z,1e-10,100,177,177,0,0,-0.9683860182918276,67.45666666666666,5357.795028248587,5221.468926553673,and_esop_milp:90;and_cube_beam:52;sshr_h:29;and_direct_anf:5;direct_anf:1
+traditional_baseline_family,selinger_su2,0.001,50,177,177,0,0,-0.9566163440713139,67.45666666666666,2681.792203389831,2610.7344632768363,and_esop_milp:90;and_cube_beam:52;sshr_h:29;and_direct_anf:5;direct_anf:1
+traditional_baseline_family,selinger_su2,1e-06,90,177,177,0,0,-0.9670764915998636,67.45666666666666,4822.594463276836,4699.322033898305,and_esop_milp:90;and_cube_beam:52;sshr_h:29;and_direct_anf:5;direct_anf:1
+traditional_baseline_family,selinger_su2,1e-10,143,177,177,0,0,-0.9719322272269246,67.45666666666666,7659.157457627119,7466.700564971751,and_esop_milp:90;and_cube_beam:52;sshr_h:29;and_direct_anf:5;direct_anf:1

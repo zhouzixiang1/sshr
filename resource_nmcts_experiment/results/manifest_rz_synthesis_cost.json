@@ -1,0 +1,29 @@
+{
+  "internal": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_traditional_resource.csv",
+  "revkit": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_revkit_oracle_synth_traditional.csv",
+  "epsilons": [
+    0.001,
+    1e-06,
+    1e-10
+  ],
+  "models": [
+    {
+      "name": "ross_selinger_z",
+      "slope": 3.0,
+      "offset": 0.0
+    },
+    {
+      "name": "selinger_su2",
+      "slope": 4.0,
+      "offset": 10.0
+    }
+  ],
+  "raw_out": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_rz_synthesis_cost.csv",
+  "summary": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/summary_rz_synthesis_cost.csv",
+  "analysis": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/analysis_rz_synthesis_cost.md",
+  "latex_out": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/paper_latex/tables/rz_synthesis_cost.tex",
+  "rows": 2124,
+  "summary_rows": 12,
+  "elapsed_s": 0.01851177215576172,
+  "claim_boundary": "Approximate logic-layer Rz synthesis cost model; no emitted rotation sequences and no hardware mapping."
+}

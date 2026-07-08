@@ -35,6 +35,7 @@
 - `resource_nmcts_zh_manuscript_v21.tex` / `resource_nmcts_zh_manuscript_v21.pdf`：中文论文稿 v21，RevKit API baseline 旧版；在 v20 基础上补充本机 RevKit Python `oracle_synth` baseline，177/177 个 `n<=6` 传统函数合成成功。该版本对 RevKit netlist 的 Clifford+T 口径表述过强，已由 v22 的 Rz 角度审计修正，后续引用应以 v22 为准。
 - `resource_nmcts_zh_manuscript_v22.tex` / `resource_nmcts_zh_manuscript_v22.pdf`：中文论文稿 v22，RevKit Rz 角度审计版；修正 v21 的过强表述，确认 RevKit `oracle_synth` 返回的是 Rz-phase netlist lower-bound proxy，171/177 行含非 Clifford `Rz`、总数 9242、最大 angle/pi 分母 64，因此 `6/171/0`、score `+751.69%` 和 T-like count `+4060.08%` 不能写成精确 Clifford+T T-count 对比；新增 `score+1/Rz` 与 `score+2/Rz` 符号敏感性，Resource-NMCTS 分别为 140/37/0 和 177/0/0。
 - `resource_nmcts_zh_manuscript_v23.tex` / `resource_nmcts_zh_manuscript_v23.pdf`：中文论文稿 v23，RevKit Rz portfolio 敏感性版；新增 `analyze_phase_rz_portfolio.py` 结果，把 Resource-NMCTS、Pareto-Resource-NMCTS 和 FPRM polarity archive 作为 score-reranked family portfolio。该 family 在 `lambda_Rz=1` 时相对 RevKit 为 157/20/0，在 `lambda_Rz=1.5` 时为 177/0/0；传统 baseline family 在 `lambda_Rz=1` 时只有 80/97/0。
+- `resource_nmcts_zh_manuscript_v25.tex` / `resource_nmcts_zh_manuscript_v25.pdf`：中文论文稿 v25，近似 Rz 综合成本模型版；在 v23 基础上新增 `analyze_rz_synthesis_cost.py` 结果，把 RevKit 每个非 Clifford `Rz` 按 `ceil(a log2(1/epsilon)+b)` 计入近似 Clifford+T T-count proxy。Ross-Selinger-style `epsilon=1e-3` 时 `T/Rz=30`，Resource-NMCTS family 相对 RevKit 为 177/0/0、平均 score 降低 95.03%；更保守的 `4 log2(1/epsilon)+10` proxy 在 `epsilon=1e-6` 时仍为 177/0/0、平均 score 降低 97.01%。该版本明确声明 proxy 不输出实际 rotation sequence，也不是硬件 mapping。
 - `resource_nmcts_zh_research_position.tex` / `resource_nmcts_zh_research_position.pdf`：中文研究定位稿，重新梳理“不从 SSHR 入手”的论文主线、AI 在搜索问题中的角色、当前证据边界和下一步明显提升目标。
 - 最新 v4 稿已补充 `train_screen_depth_policy.py` 的结构级 depth policy 结果：n=14/16/18 训练、held-out n=20 测试，说明 AI 已能学习 screen 深度选择，但尚未超过固定 depth-2 的 score。
 - 最新 v8 稿补充 `train_structure_gate.py` 的 screen-gated Resource-NMCTS 边界验证：原 n=20 切片资源持平且平均运行时间降低 75.58%，held-out n=19/20 合计 16/16 score 持平并平均节省 36.83%，但仍只作为运行时门控证据。
@@ -72,6 +73,7 @@ latexmk -xelatex -g resource_nmcts_zh_manuscript_v20.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v21.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v22.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v23.tex
+latexmk -xelatex -g resource_nmcts_zh_manuscript_v25.tex
 latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 ```
 
@@ -130,6 +132,7 @@ latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 - `../results/analysis_toolchain_readiness.md`
 - `../results/analysis_revkit_oracle_synth_traditional.md`
 - `../results/analysis_phase_rz_portfolio.md`
+- `../results/analysis_rz_synthesis_cost.md`
 - `../results/toolchain_readiness.json`
 - `../results/analysis_giga_screen_gate_vs_resource.md`
 - `../results/analysis_structure_gate.md`
