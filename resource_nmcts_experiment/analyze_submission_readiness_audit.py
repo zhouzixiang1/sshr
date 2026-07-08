@@ -36,6 +36,7 @@ GOAL_SUMMARY = RESULTS / "summary_goal_completion_audit.csv"
 GOAL_MANIFEST = RESULTS / "manifest_goal_completion_audit.json"
 SUPPORT_FILES = [
     SUBMISSION_PACKAGE / "README.md",
+    SUBMISSION_PACKAGE / "artifact_reproduction_guide.md",
     SUBMISSION_PACKAGE / "cover_letter_template.md",
     SUBMISSION_PACKAGE / "author_declarations_template.md",
     SUBMISSION_PACKAGE / "submission_checklist.md",
@@ -167,7 +168,7 @@ def build_rows() -> list[dict[str, str]]:
         {
             "item": "Submission support templates",
             "status": "pass" if all(path.exists() for path in SUPPORT_FILES) else "needs revision",
-            "evidence": "Package README, cover letter, author declarations, upload checklist, reviewer-concern brief, editor-screening brief, and target-venue brief are present.",
+            "evidence": "Package README, artifact guide, cover letter, author declarations, upload checklist, reviewer-concern brief, editor-screening brief, and target-venue brief are present.",
             "next_action": "Fill the author-specific fields before journal upload.",
         },
         {

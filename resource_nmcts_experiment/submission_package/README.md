@@ -25,6 +25,9 @@ noise modeling, or magic-state-factory accounting.
 
 - `cover_letter_template.md`: editor-facing cover-letter draft with author
   fields left blank.
+- `artifact_reproduction_guide.md`: reviewer-facing quick rebuild path,
+  expected outputs, raw rerun entry points, and artifact interpretation
+  boundary.
 - `editor_screening_brief.md`: one-page scope, comparison, and claim-boundary
   brief for editor or associate-editor screening.
 - `reviewer_concern_brief.md`: anticipated reviewer concerns and manuscript
@@ -95,4 +98,3 @@ rg -n "needs author input|pass:|file count|archive sha256|Submission support" \
 
 Expected current boundary: the readiness audit should pass all paper/package
 checks except author-specific declarations.
-

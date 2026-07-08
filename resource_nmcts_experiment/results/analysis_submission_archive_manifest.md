@@ -14,7 +14,7 @@ This audit hashes stable submission payload groups while excluding terminal subm
 | Raw measurements | 144 | 0 | 92.5 MiB | `87ee477b5c7c1d69` | Raw CSVs are regenerated only by the heavier run scripts, not by the lightweight rebuild. |
 | Derived summaries | 313 | 0 | 4.1 MiB | `0e364417e06c6c80` | Terminal submission/package outputs are excluded so this manifest remains stable. |
 | Run manifests | 67 | 0 | 91.5 KiB | `b95632ade69464c2` | Submission-level terminal manifests are excluded from this digest group. |
-| Scripts and docs | 67 | 0 | 1.2 MiB | `83973bf0a78cbd4c` | Documents reproducible entry points; raw sweeps still require their individual drivers. |
+| Scripts and docs | 67 | 0 | 1.2 MiB | `426fc2e261ac9616` | Documents reproducible entry points; raw sweeps still require their individual drivers. |
 | Models | 20 | 0 | 1.1 MiB | `4c5c2a1bfc19ff5d` | Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild. |
 | External adapters | 1 | 0 | 2.2 KiB | `de5aa3b78998ebbd` | Includes local adapter source files used for external toolchain probes, not vendored tool repositories. |
-| Submission support | 8 | 0 | 31.9 KiB | `4e73809019eeade4` | Includes package README, cover-letter, declaration, checklist, reviewer-brief, editor-screening, venue-selection, and structured metadata templates; author-specific fields remain manual. |
+| Submission support | 9 | 0 | 37.6 KiB | `c1f8f1fc3ff82dfe` | Includes package README, artifact guide, cover-letter, declaration, checklist, reviewer-brief, editor-screening, venue-selection, and structured metadata templates; author-specific fields remain manual. |

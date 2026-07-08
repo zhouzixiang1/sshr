@@ -1,0 +1,151 @@
+# Artifact Reproduction Guide
+
+This guide is for reviewers or artifact evaluators who want to verify the
+paper-facing results in the submission package.
+
+The artifact supports two levels of checking:
+
+1. A lightweight rebuild that regenerates manuscript-facing analyses, figures,
+   audits, the PDF, and the upload payload from existing experiment artifacts.
+2. Heavier raw reruns for benchmark sweeps, external toolchain probes, and
+   neural training.  These are intentionally not launched by the lightweight
+   rebuild because they depend on optional external tools and can take much
+   longer.
+
+## Environment
+
+Use the conda environment prepared for the project:
+
+```bash
+/opt/anaconda3/envs/mcts-qoracle/bin/python --version
+```
+
+The expected local audit context records:
+
+- Python 3.11
+- PyTorch with Apple MPS available
+- Apple M4 Pro CPU/GPU workstation
+- worker counts up to 10 in recorded manifests
+- mockturtle, CirKit, and RevKit provenance for external probes when present
+
+The logical resource results do not depend on hardware mapping, routing,
+native-gate scheduling, or physical noise simulation.
+
+## Quick Rebuild Check
+
+From `resource_nmcts_experiment/`, run:
+
+```bash
+./rebuild_submission_package.sh
+```
+
+This command regenerates:
+
+- contribution, method, related-work, baseline, comparison, statistical,
+  multi-resource, learned-control, scaling, robustness, and reproducibility
+  analyses;
+- paper tables under `paper_latex/tables/`;
+- figures and figure source data under `paper_latex/figures/submission_v36/`;
+- the English submission PDF;
+- archive and traceability audits;
+- the uploadable payload tarball and SHA256 sidecar;
+- the final readiness audit.
+
+It intentionally does not rerun raw benchmark sweeps, external probes, or
+neural model training.
+
+## Expected Current Outputs
+
+After the quick rebuild, the current package should report:
+
+- compiled PDF: `paper_latex/resource_nmcts_submission_v1.pdf`
+- PDF pages: 26
+- readiness audit: 18 pass, 1 author-input item
+- submission support files: 8 present, 0 missing
+- payload archive: `submission_package/dist/resource_nmcts_submission_payload.tar.gz`
+- payload file count: 809
+- payload SHA256:
+  `909990d8fbaca09e1a44ce0204e131efedae3b0cbf1e7014561764c03d1e67f4`
+
+The remaining readiness item is author-specific metadata and cannot be
+reconstructed from the artifact.
+
+## Verification Commands
+
+Run these from `resource_nmcts_experiment/`:
+
+```bash
+git diff --check
+pdfinfo paper_latex/resource_nmcts_submission_v1.pdf | sed -n '1,20p'
+rg -n "Warning|Overfull|Underfull|LaTeX Error|Undefined|Rerun" \
+  paper_latex/resource_nmcts_submission_v1.log
+rg -n "needs author input|pass:|file count|archive sha256|Submission support" \
+  results/analysis_submission_readiness_audit.md \
+  results/analysis_submission_payload_archive.md \
+  results/analysis_submission_archive_manifest.md
+```
+
+The current LaTeX log has the existing `\showhyphens` package warning.  It
+should not contain LaTeX errors, undefined references, or overfull/underfull
+layout warnings.
+
+## Main Evidence Files
+
+- Baseline role and claim boundaries:
+  `results/analysis_baseline_claim_matrix.md`
+- Verified comparison coverage:
+  `results/analysis_comparison_evidence_matrix.md`
+- Baseline comparability:
+  `results/analysis_baseline_comparability_audit.md`
+- Paired statistics:
+  `results/analysis_paired_statistical_evidence.md`
+- Raw multi-resource tradeoff:
+  `results/analysis_multimetric_pareto_tradeoff.md`
+- Learned-control contribution:
+  `results/analysis_learned_control_audit.md`
+- Scaling and bridge verification:
+  `results/analysis_scaling_resource_audit.md`
+- Compute and artifact audit:
+  `results/analysis_reproducibility_audit.md`
+- Submission traceability:
+  `results/analysis_submission_traceability_audit.md`
+- Payload manifest:
+  `results/analysis_submission_payload_archive.md`
+
+## Raw Rerun Entry Points
+
+These scripts are included for deeper reruns or selective checks.  They are not
+part of the quick rebuild.
+
+- Core traditional resource experiments: `run_experiments.py`
+- External baseline aggregation: `run_external_baselines.py`
+- ROS-style LUT proxy: `run_ros_lut_proxy.py`
+- mockturtle KLUT-to-XAG probe: `run_mockturtle_xag_probe.py`
+- CirKit AIG/MC probe: `run_cirkit_aig_probe.py`
+- RevKit CLI probe: `run_revkit_cli_probe.py`
+- Phase/Rz searches: `run_phase_parity_baseline.py`,
+  `run_phase_parity_affine_search.py`, `run_phase_parity_fprm_search.py`
+- High-dimensional screen-scale term runs: `run_screen_scale_terms.py`
+- Complete truth-table bridge runs: `run_truth_bridge_terms.py`
+- Neural policy training: `train_neural_policy.py`,
+  `train_phase_affine_policy.py`, `train_screen_depth_policy.py`,
+  `train_screen_depth_frontier_policy.py`, `train_sparse_depth4_gate.py`
+
+External-tool reruns require the corresponding toolchain executables and
+versions recorded in the reproducibility audit.  If a toolchain is unavailable,
+reviewers can still verify the already recorded raw CSVs, generated summaries,
+manuscript tables, and archive manifests.
+
+## Interpreting The Artifact
+
+The artifact should be evaluated under the manuscript's stated scope:
+
+- same-task logical Boolean oracle synthesis for primary small-function rows;
+- logic-network or exact-oracle probes for external toolchain rows;
+- symbolic and bridge-truth-table verification for high-dimensional rows;
+- T-count and weighted-score improvements reported separately from CNOT,
+  depth, peak ancilla, and line-count tradeoffs.
+
+Do not interpret the artifact as evidence for hardware-mapped quantum-circuit
+performance, physical-device execution, or universal raw-resource dominance.
+

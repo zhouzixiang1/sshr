@@ -3582,7 +3582,7 @@
     },
     {
       "boundary": "Documents reproducible entry points; raw sweeps still require their individual drivers.",
-      "bytes": 1310363,
+      "bytes": 1310454,
       "category": "Scripts and docs",
       "file_count": 67,
       "files": [
@@ -3772,9 +3772,9 @@
           "sha256": "b030bb0333467e101b2b9c7b34d86d766dfe1a11d17fb309f1c3824c9fb20b77"
         },
         {
-          "bytes": 12492,
+          "bytes": 12508,
           "path": "analyze_submission_archive_manifest.py",
-          "sha256": "b78c4a5e4157f351d3c97fc2c7fce1cee12179808b0f590220d978248cc5b3a4"
+          "sha256": "505f13340ede09ce835c615e0a035bd048f543e344e7e85afef0c9cfe86e8b4f"
         },
         {
           "bytes": 16260,
@@ -3782,9 +3782,9 @@
           "sha256": "d7c12eaf1d3ef2c6e85b69db2906d7cd314e798425b53edcee8c5461c267f90d"
         },
         {
-          "bytes": 13960,
+          "bytes": 14035,
           "path": "analyze_submission_readiness_audit.py",
-          "sha256": "a4838b4980493a051c2492249ee31873dc25a19655e040b4c67bbacc3f6e2a29"
+          "sha256": "6c726416ca5607738bc0211145e7bfb8b26b014b8a01f00e448c18087fe09127"
         },
         {
           "bytes": 12963,
@@ -3923,7 +3923,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "83973bf0a78cbd4cb47dfd0eec071f01906f0da53dbb7e90b6cc0314c5182254"
+      "sha256_digest": "426fc2e261ac961619e0588dcb6ce965606f246d6571300b6d720df09957c05a"
     },
     {
       "boundary": "Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild.",
@@ -4051,15 +4051,20 @@
       "sha256_digest": "de5aa3b78998ebbdd563b9a754a517c90d7effc9995b46f1906eb171afd1c4ca"
     },
     {
-      "boundary": "Includes package README, cover-letter, declaration, checklist, reviewer-brief, editor-screening, venue-selection, and structured metadata templates; author-specific fields remain manual.",
-      "bytes": 32615,
+      "boundary": "Includes package README, artifact guide, cover-letter, declaration, checklist, reviewer-brief, editor-screening, venue-selection, and structured metadata templates; author-specific fields remain manual.",
+      "bytes": 38495,
       "category": "Submission support",
-      "file_count": 8,
+      "file_count": 9,
       "files": [
         {
-          "bytes": 4179,
+          "bytes": 4334,
           "path": "submission_package/README.md",
-          "sha256": "ceece06e90720d3217a31181366d3bda6c7bf86a64a3f327836579878081139e"
+          "sha256": "098d2bbce0d718bec1f60ebdbfd909b17bf0141c60466acb50781b45afd1b1c2"
+        },
+        {
+          "bytes": 5642,
+          "path": "submission_package/artifact_reproduction_guide.md",
+          "sha256": "b3bf3d698a7b4867fadfc8787f753c96a52e747bf3465fa4c4cf6908b3b38aaf"
         },
         {
           "bytes": 4067,
@@ -4082,9 +4087,9 @@
           "sha256": "072775b7ea4984b46672c99d6b7755cfd6dd0cd667e9958cc533b66cd8e4ff06"
         },
         {
-          "bytes": 4950,
+          "bytes": 5033,
           "path": "submission_package/submission_checklist.md",
-          "sha256": "b8aa18e290eb05ac7d6ca7cbf0e64f26fa785ec73cba601a46b9cd52d9a62e59"
+          "sha256": "95e6b1dfaaa789e524127ba75d0fcdf6affdea33bbcec8c697dc85b69cbacd84"
         },
         {
           "bytes": 4069,
@@ -4098,7 +4103,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "4e73809019eeade47c57dc6edd1aaa71aa5dc3b955daa6fd7b6cdcecd1183654"
+      "sha256_digest": "c1f8f1fc3ff82dfe14be2519a910af6d626ffde56ad0fc2325f144559ec446e2"
     }
   ],
   "note": "Compiled PDF and terminal submission/package outputs are excluded from payload hashes to avoid self-referential digests.",
