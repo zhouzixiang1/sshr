@@ -61,6 +61,10 @@
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v25.pdf`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v26.tex`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v26.pdf`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v27.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v27.pdf`
+
+本轮新增 `resource_nmcts_zh_manuscript_v27.tex/pdf`，定位为“投稿主线压缩版”：相比 v26 的完整项目报告口径，v27 更集中呈现 ANF/FPRM 项集合搜索、Boolean-ring screen、神经 MCTS/depth-frontier/guard、外部 proxy 和 RevKit phase/Rz 边界、正确性验证与投稿限制，适合先交给导师或合作者阅读主线。
 
 核心结果：
 
