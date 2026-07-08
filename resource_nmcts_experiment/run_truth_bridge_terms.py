@@ -3,10 +3,10 @@
 
 The screen-scale experiments above n=20 use symbolic ANF verification because
 full truth-table construction is the expensive part.  This script deliberately
-builds the truth table for a small n=21/22 bridge set, then verifies the emitted
-X/CNOT/MCT circuit with the bit-parallel oracle verifier.  The goal is not a
-large sample count; it is to close the evidence gap between full function-level
-verification and the larger symbolic term-set scale tests.
+builds full truth tables for a small high-dimensional bridge set, then verifies
+the emitted X/CNOT/MCT circuit with the bit-parallel oracle verifier.  The goal
+is not a large sample count; it is to close the evidence gap between full
+function-level verification and the larger symbolic term-set scale tests.
 """
 from __future__ import annotations
 
@@ -439,6 +439,14 @@ def _comparison(examples: list[TruthExample], method: str, baseline: str) -> tup
     )
 
 
+def format_n_set(values: list[int]) -> str:
+    if not values:
+        return "n=?"
+    if len(values) == 1:
+        return f"n={values[0]}"
+    return "n=" + ",".join(str(v) for v in values)
+
+
 def write_summary(summary_path: Path, analysis_path: Path, table_path: Path, examples: list[TruthExample]) -> None:
     methods = sorted({method for ex in examples for method in ex.evals})
     by_n = sorted({ex.n for ex in examples})
@@ -525,7 +533,7 @@ def write_summary(summary_path: Path, analysis_path: Path, table_path: Path, exa
     lines = [
         "# Truth-Table Bridge for High-Dimensional Boolean Screen",
         "",
-        "This bridge set builds full truth tables for generated n=21/22 ANF",
+        f"This bridge set builds full truth tables for generated {format_n_set(by_n)} ANF",
         "term sets, emits X/CNOT/MCT oracle circuits, and verifies each circuit",
         "with the bit-parallel truth-table oracle checker.  It is smaller than",
         "the symbolic n=20--40 scale tests because truth-table construction is",

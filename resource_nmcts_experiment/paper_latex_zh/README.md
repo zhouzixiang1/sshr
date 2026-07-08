@@ -26,6 +26,7 @@
 - `resource_nmcts_zh_manuscript_v12.tex` / `resource_nmcts_zh_manuscript_v12.pdf`：中文论文稿 v12，投稿框架与证据边界版；在 v11 的结果基础上重写摘要、引言和证据地图，把 depth-frontier 明确定位为新的质量前沿，同时把高维 learned-prior、完整 truth-table bridge 和外部工具链比较列为投稿前缺口。
 - `resource_nmcts_zh_manuscript_v13.tex` / `resource_nmcts_zh_manuscript_v13.pdf`：中文论文稿 v13，frontier policy 与 truth-table bridge 版；补充 depth-frontier policy（scale n=20/28/40 相对 fixed depth-2 为 35/0/37、平均 score -2.19%；独立 seed n=24/28/32/40 为 40/0/56、平均 score -1.85%）和 n=21/22 完整 truth-table bridge（120/120 方法行通过完整 oracle 验证、plan 验证和 emitted-circuit 符号验证；bridge 中 frontier policy 相对 fixed depth-2 为 8/0/4、平均 score -3.50%）。
 - `resource_nmcts_zh_manuscript_v14.tex` / `resource_nmcts_zh_manuscript_v14.pdf`：中文论文稿 v14，搜索主线与投稿文本版；重新压缩叙事为“ANF/FPRM 项集合搜索问题 -> Boolean-ring screen -> 神经动作先验/MCTS -> depth policy/frontier policy/guard -> 证据边界”，明确本文不从 SSHR 入手，SSHR 仅作为 CNOT-oriented baseline，并把独立 seed frontier-policy 泛化结果、4680/4680 项集级符号验证与 n=21/22 的 120/120 完整 truth-table bridge 作为当前正确性证据。
+- `resource_nmcts_zh_manuscript_v15.tex` / `resource_nmcts_zh_manuscript_v15.pdf`：中文论文稿 v15，中文交付与想法梳理版；在 v14 投稿文本基础上新增“作者想法整理与当前论文定位”，直接写清“强化学习与 MCTS 的量子布尔函数综合搜索问题”主线、SSHR 的 baseline 定位、当前明显提升证据和投稿前最应补强的外部工具链/后端评估缺口。
 - `resource_nmcts_zh_research_position.tex` / `resource_nmcts_zh_research_position.pdf`：中文研究定位稿，重新梳理“不从 SSHR 入手”的论文主线、AI 在搜索问题中的角色、当前证据边界和下一步明显提升目标。
 - 最新 v4 稿已补充 `train_screen_depth_policy.py` 的结构级 depth policy 结果：n=14/16/18 训练、held-out n=20 测试，说明 AI 已能学习 screen 深度选择，但尚未超过固定 depth-2 的 score。
 - 最新 v8 稿补充 `train_structure_gate.py` 的 screen-gated Resource-NMCTS 边界验证：原 n=20 切片资源持平且平均运行时间降低 75.58%，held-out n=19/20 合计 16/16 score 持平并平均节省 36.83%，但仍只作为运行时门控证据。
@@ -54,6 +55,7 @@ latexmk -xelatex -g resource_nmcts_zh_manuscript_v11.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v12.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v13.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v14.tex
+latexmk -xelatex -g resource_nmcts_zh_manuscript_v15.tex
 latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 ```
 
