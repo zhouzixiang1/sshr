@@ -971,7 +971,12 @@ README; generated measurements are stored in \texttt{results/raw\_*.csv},
 \texttt{results/summary\_*.csv}, and \texttt{results/manifest\_*.json}.
 The paper tables are generated under \texttt{paper\_latex/tables/}, and the
 submission figures and source data are stored under
-\texttt{paper\_latex/figures/submission\_v36/}.  The experiments use the
+\texttt{paper\_latex/figures/submission\_v36/}.  The lightweight derived
+submission package can be rebuilt with
+\texttt{./rebuild\_submission\_package.sh}; this regenerates paper-facing
+tables, figures, audits, and the English PDF from existing experiment
+artifacts, but does not rerun raw benchmark sweeps, external-toolchain probes,
+or neural training jobs.  The experiments use the
 \texttt{mcts-qoracle} Conda environment and the direct interpreter
 \path{/opt/anaconda3/envs/mcts-qoracle/bin/python}.  External-tool rows are
 reported with manifest-level provenance; hardware mapping, routing, and

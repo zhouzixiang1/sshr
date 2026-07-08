@@ -7,6 +7,7 @@ synthesis experiments.
 from __future__ import annotations
 
 import csv
+from datetime import datetime, timezone
 import re
 from collections import defaultdict
 from pathlib import Path
@@ -59,6 +60,7 @@ def configure() -> None:
             "legend.frameon": False,
             "figure.facecolor": "white",
             "axes.facecolor": "white",
+            "svg.hashsalt": "resource-nmcts-submission-v36",
         }
     )
 
@@ -76,11 +78,24 @@ def write_source(name: str, rows: list[dict[str, object]], fieldnames: Iterable[
         writer.writerows(rows)
 
 
+def normalize_svg(path: Path) -> None:
+    lines = path.read_text(encoding="utf-8").splitlines()
+    path.write_text("\n".join(line.rstrip() for line in lines) + "\n", encoding="utf-8")
+
+
 def save(fig: plt.Figure, name: str) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
-    fig.savefig(OUT / f"{name}.pdf", bbox_inches="tight")
-    fig.savefig(OUT / f"{name}.svg", bbox_inches="tight")
-    fig.savefig(OUT / f"{name}.png", dpi=300, bbox_inches="tight")
+    creator = "Resource-NMCTS submission figure generator"
+    fixed_date = datetime(2026, 7, 9, tzinfo=timezone.utc)
+    fig.savefig(
+        OUT / f"{name}.pdf",
+        bbox_inches="tight",
+        metadata={"Creator": creator, "CreationDate": fixed_date, "ModDate": fixed_date},
+    )
+    svg_path = OUT / f"{name}.svg"
+    fig.savefig(svg_path, bbox_inches="tight", metadata={"Creator": creator, "Date": fixed_date.isoformat()})
+    normalize_svg(svg_path)
+    fig.savefig(OUT / f"{name}.png", dpi=300, bbox_inches="tight", metadata={"Software": creator})
     plt.close(fig)
 
 

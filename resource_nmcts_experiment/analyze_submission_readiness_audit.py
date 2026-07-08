@@ -18,6 +18,7 @@ THIS_DIR = Path(__file__).resolve().parent
 RESULTS = THIS_DIR / "results"
 PAPER = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.tex"
 PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.pdf"
+REBUILD_SCRIPT = THIS_DIR / "rebuild_submission_package.sh"
 
 
 def read_text(path: Path) -> str:
@@ -62,6 +63,7 @@ def build_rows() -> list[dict[str, str]]:
     lower = text.lower()
     todo_hits = re.findall(r"\b(?:todo|tbd|placeholder)\b", lower)
     abstract_words = abstract_word_count(text)
+    rebuild_cited = "rebuild_submission_package.sh" in text or r"rebuild\_submission\_package.sh" in text
 
     rows = [
         {
@@ -109,6 +111,12 @@ def build_rows() -> list[dict[str, str]]:
             "status": "pass" if "tab:traceability-audit" in text else "needs revision",
             "evidence": "Manuscript includes a submission traceability audit linking claim families to scripts, data, tables, and figures.",
             "next_action": "Rerun analyze_submission_traceability_audit.py after adding or moving headline evidence.",
+        },
+        {
+            "item": "Derived package rebuild command",
+            "status": "pass" if REBUILD_SCRIPT.exists() and rebuild_cited else "needs revision",
+            "evidence": "A lightweight rebuild script is present and cited in Data and Code Availability.",
+            "next_action": "Keep the rebuild script aligned with paper-facing analysis, figure, audit, and PDF outputs.",
         },
         {
             "item": "Limitations and failure modes",

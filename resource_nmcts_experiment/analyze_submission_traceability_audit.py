@@ -169,6 +169,7 @@ def build_rows() -> list[dict[str, str]]:
             [
                 THIS_DIR / "analyze_reproducibility_audit.py",
                 THIS_DIR / "analyze_submission_readiness_audit.py",
+                THIS_DIR / "rebuild_submission_package.sh",
                 RESULTS / "analysis_reproducibility_audit.md",
                 RESULTS / "analysis_submission_readiness_audit.md",
                 TABLES / "reproducibility_audit.tex",

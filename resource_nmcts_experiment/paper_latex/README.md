@@ -30,6 +30,17 @@ latexmk -pdf main.tex
 latexmk -pdf resource_nmcts_submission_v1.tex
 ```
 
+From the project root, the lightweight derived submission package can be
+rebuilt with:
+
+```bash
+./rebuild_submission_package.sh
+```
+
+This regenerates paper-facing analysis tables, figures, audits, and
+`resource_nmcts_submission_v1.pdf` from existing experiment artifacts.  It does
+not rerun raw benchmark sweeps, external-toolchain probes, or neural training.
+
 Current source evidence:
 
 - contribution-to-evidence map CSV:

@@ -129,14 +129,26 @@ The submission traceability audit is materialized by
 `paper_latex/tables/submission_traceability_audit.tex`.  It links the main
 claim families to the scripts, CSVs, tables, figures, manuscript anchors, and
 boundaries that support them.
+The lightweight derived submission package can be regenerated with:
+
+```bash
+./rebuild_submission_package.sh
+```
+
+This command rebuilds paper-facing analysis tables, figures, traceability and
+readiness audits, and `paper_latex/resource_nmcts_submission_v1.pdf` from the
+existing experiment artifacts.  It does not rerun raw benchmark sweeps,
+external-toolchain probes, or neural training jobs; those remain under the
+individual `run_*.py` and `train_*.py` entry points.
 The submission-readiness audit is materialized by
 `analyze_submission_readiness_audit.py`, which writes
 `results/summary_submission_readiness_audit.csv` and
 `results/analysis_submission_readiness_audit.md`.  It checks that the
 submission draft contains bounded and concise abstract claims,
 contribution/evidence mapping, baseline fairness tables, reproducibility
-evidence, claim-to-artifact traceability, limitations, data/code availability,
-a compiled PDF, and no source TODO markers; it leaves funding,
+evidence, claim-to-artifact traceability, a derived-package rebuild command,
+limitations, data/code availability, a compiled PDF, and no source TODO markers;
+it leaves funding,
 acknowledgements, competing interests, and archival links as author-specific
 submission-time items.
 

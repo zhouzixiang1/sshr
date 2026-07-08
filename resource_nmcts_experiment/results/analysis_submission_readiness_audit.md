@@ -5,7 +5,7 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 ## Status counts
 
 - needs author input: 1
-- pass: 11
+- pass: 12
 
 ## Checklist
 
@@ -18,6 +18,7 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 | Baseline fairness and scope | pass | Experimental design includes claim, evidence, and comparability matrices. | Keep cross-toolchain claims tied to the comparability audit. |
 | Reproducibility evidence | pass | Manuscript includes compute, worker, artifact, and external-tool provenance table. | Rerun analyze_reproducibility_audit.py after adding scripts, tables, or figures. |
 | Claim-to-artifact traceability | pass | Manuscript includes a submission traceability audit linking claim families to scripts, data, tables, and figures. | Rerun analyze_submission_traceability_audit.py after adding or moving headline evidence. |
+| Derived package rebuild command | pass | A lightweight rebuild script is present and cited in Data and Code Availability. | Keep the rebuild script aligned with paper-facing analysis, figure, audit, and PDF outputs. |
 | Limitations and failure modes | pass | Discussion names logical-layer, ROS-proxy, RevKit-derived, and high-dimensional bridge boundaries. | Add any new negative result to Discussion rather than hiding it in tables. |
 | Data and code availability | pass | Manuscript has an availability section pointing to scripts, CSVs, manifests, tables, and figures. | Replace repository-relative wording with an archival DOI or anonymous link at submission time if required. |
 | Clean submission source | pass | 0 TODO/TBD/placeholder markers in submission TeX. | Remove all source placeholders before journal upload. |
