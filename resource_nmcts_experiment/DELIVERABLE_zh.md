@@ -417,6 +417,10 @@ v12 中把 depth-frontier 写成下一步缺口：需要训练一个策略，在
 - `results/summary_screen_scale_depth_frontier_policy_terms.csv`
 - `results/analysis_screen_scale_depth_frontier_policy_terms.md`
 - `paper_latex/tables/screen_scale_depth_frontier_policy_terms.tex`
+- `results/raw_screen_scale_depth_frontier_policy_generalization_terms.csv`
+- `results/summary_screen_scale_depth_frontier_policy_generalization_terms.csv`
+- `results/analysis_screen_scale_depth_frontier_policy_generalization_terms.md`
+- `paper_latex/tables/screen_scale_depth_frontier_policy_generalization_terms.tex`
 
 核心结果：
 
@@ -428,10 +432,15 @@ v12 中把 depth-frontier 写成下一步缺口：需要训练一个策略，在
 | scale n=20/28/40 | depth_frontier_policy vs depth-2 | 72 | 35/0/37 | -2.19% | +503.20% |
 | scale n=20/28/40 | depth_frontier_policy vs depth-4 | 72 | 0/16/56 | +0.97% | -22.17% |
 | scale n=20/28/40 | depth_frontier_policy vs all-depth depth<=4 | 72 | 0/16/56 | +0.97% | -58.69% |
+| independent seed n=24/28/32/40 | depth_frontier_policy vs depth-2 | 96 | 40/0/56 | -1.85% | +456.43% |
+| independent seed n=24/28/32/40 | depth_frontier_policy vs depth-4 | 96 | 0/19/77 | +0.61% | -23.40% |
+| independent seed n=24/28/32/40 | depth_frontier_policy vs all-depth depth<=4 | 96 | 0/19/77 | +0.61% | -61.25% |
 | ANF plan 符号验证 | 720 方法行 | 720/0 通过/失败 | 0 mismatch | - |
 | emitted-circuit ANF 符号验证 | 720 方法行 | 720/0 通过/失败 | 0 mismatch | max wire terms 244 |
+| independent seed ANF plan 符号验证 | 960 方法行 | 960/0 通过/失败 | 0 mismatch | - |
+| independent seed emitted-circuit ANF 符号验证 | 960 方法行 | 960/0 通过/失败 | 0 mismatch | max wire terms 270 |
 
-结论：这是本轮相对 v12 的主要 AI 进展。Depth-frontier policy 不能完全达到 depth-4/oracle frontier，但已经把 depth-4 的质量收益学习化为可选择策略：相对 fixed depth-2 平均 score 降低 2.19%，同时相对完整 all-depth<=4 评估节省 58.69% 时间。论文中应写成“结构级 AI 的质量-时间折中证据”，而不是写成全局最优策略。
+结论：这是本轮相对 v12 的主要 AI 进展。Depth-frontier policy 不能完全达到 depth-4/oracle frontier，但已经把 depth-4 的质量收益学习化为可选择策略：正式 scale 中相对 fixed depth-2 平均 score 降低 2.19%，独立 seed 泛化集中仍降低 1.85%，两组均无 score loss；同时相对完整 all-depth<=4 评估节省 58.69%--61.25% 时间。论文中应写成“结构级 AI 的质量-时间折中证据”，而不是写成全局最优策略。
 
 ### 2.5.8 n=21/22 完整 truth-table bridge
 

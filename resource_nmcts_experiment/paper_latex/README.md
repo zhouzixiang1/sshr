@@ -111,6 +111,10 @@ Current source evidence:
   `../results/raw_screen_scale_depth_frontier_policy_terms.csv`
 - depth-frontier policy screen-scale analysis:
   `../results/analysis_screen_scale_depth_frontier_policy_terms.md`
+- depth-frontier policy generalization CSV:
+  `../results/raw_screen_scale_depth_frontier_policy_generalization_terms.csv`
+- depth-frontier policy generalization analysis:
+  `../results/analysis_screen_scale_depth_frontier_policy_generalization_terms.md`
 - truth-table bridge CSV:
   `../results/raw_truth_bridge_terms.csv`
 - truth-table bridge analysis:
@@ -145,6 +149,7 @@ Current source evidence:
   `tables/screen_scale_depth_frontier_terms.tex`,
   `tables/boolean_screen_depth_frontier_policy.tex`,
   `tables/screen_scale_depth_frontier_policy_terms.tex`,
+  `tables/screen_scale_depth_frontier_policy_generalization_terms.tex`,
   `tables/truth_bridge_terms.tex`
 - manifests: `../results/manifest_evidence_affine.json`,
   `../results/manifest_traditional_resource_learned_prior.json`,

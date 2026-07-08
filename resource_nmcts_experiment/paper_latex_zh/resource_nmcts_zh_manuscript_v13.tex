@@ -38,7 +38,7 @@
 \maketitle
 
 \begin{abstract}
-量子布尔函数 oracle 综合是把经典谓词接入量子算法的核心编译步骤。传统综合路线通常在布尔表示、可逆逻辑分解或 CNOT 导向覆盖空间中优化单一资源，但容错量子计算中的实际逻辑开销同时受 T-count、CNOT、深度、总门数和辅助比特影响。本文将 oracle 综合表述为代数正规形（algebraic normal form, \anf{}）与固定极性 Reed--Muller（fixed-polarity Reed--Muller, \fprm{}）项集合上的资源约束搜索问题，提出结合神经动作先验、蒙特卡洛树搜索、布尔环线性因子筛选、结构级 depth policy、depth-frontier policy 和保守 guard 的 \method{} 框架。与 SSHR 不同，本文方法不枚举 parallelotope cover；SSHR 仅作为 small-scale CNOT-oriented baseline。实验表明，在 $n\leq6$ 的 177 个传统函数上，Pareto-\method{} 相对 ESOP cube beam 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%；相对 weighted ESOP-MILP 获得 167/3/7，平均 score 降低 29.84\%。在 $n=18$ 的随机 \anf{} 函数上，完整 \method{} 相对 adaptive depth-2 \screen{} 进一步降低 23.85\% 平均 score；在 $n=20$ 边界函数上，screen-gated \method{} 与完整 \method{} 资源持平并把平均运行时间从 77.10 s 降至 20.71 s。在 $n=20,22,24,28,32,36,40$ 的项集级 scale 测试中，depth policy 相对 single screen 稳定降低 5.55\%--6.56\% 平均 score，并相对 all-depth adaptive 节省约三分之一时间。进一步的 depth-frontier 实验显示，depth-4 \screen{} 相对 fixed depth-2 在 $n=20,28,40$ 上平均 score 再降低 3.10\%；新训练的 depth-frontier policy 在同一切片相对 fixed depth-2 获得 35/0/37、平均 score 降低 2.19\%，并相对 all-depth depth$\leq4$ 评估节省 58.69\% 时间。当前引用的项集级结果文件中，3720/3720 个方法行均通过 factor-plan \anf{} 展开验证和 emitted X/CNOT/MCT circuit 的 GF(2) 多项式符号模拟验证。为弥合符号验证和完整枚举之间的边界，本文又在 $n=21,22$ 的 12 个生成式 \anf{} 函数上构造完整 \ttable{}，120/120 个方法行同时通过 \ttable{} oracle 验证、plan \anf{} 验证和 emitted-circuit 符号验证。本文的阶段性结论是：该路线已经形成独立于 SSHR 的逻辑层低 T-count/低加权资源综合主线，并已补上高预算质量前沿学习化与 $n>20$ 完整验证桥接；最终投稿仍需补充更强的高维 RL/MCTS 独立质量收益和外部 reversible-toolchain 对比。
+量子布尔函数 oracle 综合是把经典谓词接入量子算法的核心编译步骤。传统综合路线通常在布尔表示、可逆逻辑分解或 CNOT 导向覆盖空间中优化单一资源，但容错量子计算中的实际逻辑开销同时受 T-count、CNOT、深度、总门数和辅助比特影响。本文将 oracle 综合表述为代数正规形（algebraic normal form, \anf{}）与固定极性 Reed--Muller（fixed-polarity Reed--Muller, \fprm{}）项集合上的资源约束搜索问题，提出结合神经动作先验、蒙特卡洛树搜索、布尔环线性因子筛选、结构级 depth policy、depth-frontier policy 和保守 guard 的 \method{} 框架。与 SSHR 不同，本文方法不枚举 parallelotope cover；SSHR 仅作为 small-scale CNOT-oriented baseline。实验表明，在 $n\leq6$ 的 177 个传统函数上，Pareto-\method{} 相对 ESOP cube beam 获得 174/0/3 的 score 胜/负/平，平均 score 降低 36.09\%；相对 weighted ESOP-MILP 获得 167/3/7，平均 score 降低 29.84\%。在 $n=18$ 的随机 \anf{} 函数上，完整 \method{} 相对 adaptive depth-2 \screen{} 进一步降低 23.85\% 平均 score；在 $n=20$ 边界函数上，screen-gated \method{} 与完整 \method{} 资源持平并把平均运行时间从 77.10 s 降至 20.71 s。在 $n=20,22,24,28,32,36,40$ 的项集级 scale 测试中，depth policy 相对 single screen 稳定降低 5.55\%--6.56\% 平均 score，并相对 all-depth adaptive 节省约三分之一时间。进一步的 depth-frontier 实验显示，depth-4 \screen{} 相对 fixed depth-2 在 $n=20,28,40$ 上平均 score 再降低 3.10\%；新训练的 depth-frontier policy 在同一切片相对 fixed depth-2 获得 35/0/37、平均 score 降低 2.19\%，并相对 all-depth depth$\leq4$ 评估节省 58.69\% 时间。独立 seed 的 $n=24,28,32,40$ 泛化实验进一步给出 40/0/56、平均 score 降低 1.85\% 且无 score loss。当前引用的项集级结果文件中，4680/4680 个方法行均通过 factor-plan \anf{} 展开验证和 emitted X/CNOT/MCT circuit 的 GF(2) 多项式符号模拟验证。为弥合符号验证和完整枚举之间的边界，本文又在 $n=21,22$ 的 12 个生成式 \anf{} 函数上构造完整 \ttable{}，120/120 个方法行同时通过 \ttable{} oracle 验证、plan \anf{} 验证和 emitted-circuit 符号验证。本文的阶段性结论是：该路线已经形成独立于 SSHR 的逻辑层低 T-count/低加权资源综合主线，并已补上高预算质量前沿学习化与 $n>20$ 完整验证桥接；最终投稿仍需补充更强的高维 RL/MCTS 独立质量收益和外部 reversible-toolchain 对比。
 \end{abstract}
 
 \noindent\textbf{关键词：}量子 oracle 综合；布尔函数综合；强化学习；蒙特卡洛树搜索；ANF；FPRM；布尔环；资源约束综合
@@ -139,7 +139,7 @@ SSHR & CNOT-oriented small-scale baseline；本文方法不从 SSHR 搜索空间
 
 \section{实验设计}
 
-实验分为六组。第一组使用 $n\leq6$ 的 177 个传统函数，与 direct ANF、AND-direct ANF、ESOP cube beam、weighted ESOP-MILP、SSHR-H、ABC 和 BDD baseline 比较。第二组使用 $n=18$ 随机 \anf{} 函数，观察 adaptive screen 与完整 \method{} 的差距。第三组使用 $n=20$ 边界函数，检验在 FPRM root beam 和 fast linear-pair 超时区域中，depth-2 screen 是否仍能给出可运行改进，并用 $n=19,20$ held-out 切片验证 screen-gate 是否会错误跳过 Resource tail。第四组使用 $n=14,16,18$ 生成式项集训练 depth policy 与 skip guard，并在 held-out $n=20$ 项集上测试结构选择能力。第五组在 \anf{} 项集合上评估 $n=20,22,24,28,32,36,40$ 的 scale 行为，并对每个 plan 和 emitted circuit 做符号等价验证；同组还训练 depth-frontier policy，把 depth-3/4 的高预算质量收益学习化。第六组在 $n=21,22$ 上构造完整 \ttable{} bridge，对生成的 X/CNOT/MCT oracle circuit 做逐点语义验证。
+实验分为六组。第一组使用 $n\leq6$ 的 177 个传统函数，与 direct ANF、AND-direct ANF、ESOP cube beam、weighted ESOP-MILP、SSHR-H、ABC 和 BDD baseline 比较。第二组使用 $n=18$ 随机 \anf{} 函数，观察 adaptive screen 与完整 \method{} 的差距。第三组使用 $n=20$ 边界函数，检验在 FPRM root beam 和 fast linear-pair 超时区域中，depth-2 screen 是否仍能给出可运行改进，并用 $n=19,20$ held-out 切片验证 screen-gate 是否会错误跳过 Resource tail。第四组使用 $n=14,16,18$ 生成式项集训练 depth policy 与 skip guard，并在 held-out $n=20$ 项集上测试结构选择能力。第五组在 \anf{} 项集合上评估 $n=20,22,24,28,32,36,40$ 的 scale 行为，并对每个 plan 和 emitted circuit 做符号等价验证；同组还训练 depth-frontier policy，把 depth-3/4 的高预算质量收益学习化，并用独立 seed 的 $n=24,28,32,40$ 泛化集检验稳定性。第六组在 $n=21,22$ 上构造完整 \ttable{} bridge，对生成的 X/CNOT/MCT oracle circuit 做逐点语义验证。
 
 所有 paired comparison 只纳入函数名或项集名匹配、语义正确且未 timeout 的结果。Timeout 行保留为运行边界证据，但不参与正确结果均值比较。本文所有实验均为逻辑层资源估计，不包含 hardware mapping 和 noise-aware scheduling。
 
@@ -245,7 +245,7 @@ all-depth adaptive depth$\leq4$ & fixed depth-2 & 49/0/23 & $-3.10\%$ & $+1129.8
 \end{tabular}
 \end{table}
 
-为把高预算质量前沿转化为 AI 策略，本文训练 depth-frontier policy 在 depth-2/3/4 之间选择。表~\ref{tab:frontier-policy} 显示，在独立 held-out $n=28,40$ 的 32 个项集上，frontier policy 相对 depth-2 获得 13/0/19，平均 score 降低 1.95\%；相对 depth-4 平均 score 只高 0.80\%，但节省 25.99\% 时间；相对 oracle depth-2/3/4 frontier 的 all-depth 评估，平均 score gap 为 0.80\%，平均时间降低 58.76\%。把该 policy 接入 $n=20,28,40$ scale harness 后，它相对 fixed depth-2 获得 35/0/37，平均 score 降低 2.19\%；相对 all-depth adaptive depth$\leq4$ 平均 score 高 0.97\%，但节省 58.69\% 时间。因此，depth-frontier 已不再只是离线 oracle 质量前沿，而是形成了一个可学习的质量-时间折中策略。
+为把高预算质量前沿转化为 AI 策略，本文训练 depth-frontier policy 在 depth-2/3/4 之间选择。表~\ref{tab:frontier-policy} 显示，在独立 held-out $n=28,40$ 的 32 个项集上，frontier policy 相对 depth-2 获得 13/0/19，平均 score 降低 1.95\%；相对 depth-4 平均 score 只高 0.80\%，但节省 25.99\% 时间；相对 oracle depth-2/3/4 frontier 的 all-depth 评估，平均 score gap 为 0.80\%，平均时间降低 58.76\%。把该 policy 接入 $n=20,28,40$ scale harness 后，它相对 fixed depth-2 获得 35/0/37，平均 score 降低 2.19\%；相对 all-depth adaptive depth$\leq4$ 平均 score 高 0.97\%，但节省 58.69\% 时间。进一步使用独立 seed 的 $n=24,28,32,40$ 泛化集后，policy 相对 fixed depth-2 仍保持 40/0/56、平均 score 降低 1.85\%，相对 fixed depth-4 只高 0.61\% score 并节省 23.40\% 时间。因此，depth-frontier 已不再只是离线 oracle 质量前沿，而是形成了一个可学习且跨 seed 稳定的质量-时间折中策略。
 
 \begin{table}[H]
 \centering
@@ -262,11 +262,13 @@ held-out $n=28,40$ & policy vs oracle all-depth & 0/9/23 & $+0.80\%$ & $-58.76\%
 scale $n=20,28,40$ & policy vs depth-2 & 35/0/37 & $-2.19\%$ & $+503.20\%$ \\
 scale $n=20,28,40$ & policy vs depth-4 & 0/16/56 & $+0.97\%$ & $-22.17\%$ \\
 scale $n=20,28,40$ & policy vs all-depth & 0/16/56 & $+0.97\%$ & $-58.69\%$ \\
+generalization $n=24,28,32,40$ & policy vs depth-2 & 40/0/56 & $-1.85\%$ & $+456.43\%$ \\
+generalization $n=24,28,32,40$ & policy vs depth-4 & 0/19/77 & $+0.61\%$ & $-23.40\%$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-主 scale、extended scale、depth-frontier 和 depth-frontier-policy rerun 四组项集级结果合计包含 3720 个方法行。所有方法行均通过两层验证：factor plan 的 \anf{} 展开验证为 3720/3720，emitted X/CNOT/MCT circuit 的 GF(2) 多项式符号模拟验证为 3720/3720，mismatch 总数为 0。这使项集级结果不只是资源估计，但仍应明确它不是完整 \ttable{} simulation。
+主 scale、extended scale、depth-frontier、depth-frontier-policy rerun 和独立泛化 run 五组项集级结果合计包含 4680 个方法行。所有方法行均通过两层验证：factor plan 的 \anf{} 展开验证为 4680/4680，emitted X/CNOT/MCT circuit 的 GF(2) 多项式符号模拟验证为 4680/4680，mismatch 总数为 0。这使项集级结果不只是资源估计，但仍应明确它不是完整 \ttable{} simulation。
 
 \subsection{完整 truth-table bridge}
 
@@ -310,15 +312,15 @@ adaptive all-depth vs single screen & 11/0/1 & 平均 score $-10.19\%$ \\
 布尔环 screen 是高维有效结构筛选 & $n=18$、$n=20$ 函数级边界以及 $n=20$ 到 $n=40$ 项集级 scale 均显示相对 single screen 的 score 改善。 & 可作为核心方法贡献。 \\
 结构级 AI 能减少自适应搜索成本 & Depth policy 与 skip guard 在 held-out 项集上接近或持平 all-depth adaptive，并节省约三分之一时间。 & 可作为 AI 贡献，但不宜夸大为强质量提升。 \\
 Depth-frontier 提供新的质量提升目标 & Depth-4 相对 fixed depth-2 平均 score 再降低 3.10\%，但时间增加 682.97\%。 & 可作为高预算质量前沿。 \\
-Depth-frontier policy 学习质量-时间折中 & 相对 fixed depth-2 为 35/0/37、平均 score -2.19\%；相对 all-depth depth$\leq4$ 平均 score +0.97\%，时间 -58.69\%。 & 可作为新增结构级 AI 质量证据。 \\
-高维 emitted circuit 语义可信 & 3720/3720 项集级方法行通过 plan 展开和 emitted circuit GF(2) 符号模拟验证。 & 可支撑项集级结果；truth bridge 进一步补强但样本仍小。 \\
+Depth-frontier policy 学习质量-时间折中 & 原 scale 为 35/0/37、平均 score -2.19\%；独立 seed 泛化为 40/0/56、平均 score -1.85\%，均相对 fixed depth-2 无 score loss。 & 可作为新增结构级 AI 质量证据。 \\
+高维 emitted circuit 语义可信 & 4680/4680 项集级方法行通过 plan 展开和 emitted circuit GF(2) 符号模拟验证。 & 可支撑项集级结果；truth bridge 进一步补强但样本仍小。 \\
 $n>20$ 完整验证边界后移 & $n=21,22$ 的 120/120 方法行通过完整 \ttable{} oracle 验证、plan 验证和 emitted-circuit 符号验证。 & 可作为完整验证桥接证据。 \\
 完整 RL/MCTS 在高维上形成强独立收益 & 当前高维 learned prior 独立质量收益仍弱，部分切片主要由 screen/guard 驱动。 & 仍是投稿前主要缺口。 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-下一步最直接的提升目标已经从 ``证明 depth-frontier 存在'' 转为 ``把高预算质量进一步压缩成更便宜的策略''。具体来说，应改进 depth-frontier policy 对 depth-4 oracle 的覆盖率，减少当前相对 depth-4 的 0.97\% 平均 score gap；同时引入更强外部工具链对比，尤其是 ROS、mockturtle/ABC 风格映射和 back-end-aware oracle synthesis，使论文不只和内部 baseline 比较。
+下一步最直接的提升目标已经从 ``证明 depth-frontier 存在'' 转为 ``把高预算质量进一步压缩成更便宜的策略''。具体来说，应改进 depth-frontier policy 对 depth-4 oracle 的覆盖率，减少当前泛化集相对 depth-4 的 0.61\%--0.97\% 平均 score gap；同时引入更强外部工具链对比，尤其是 ROS、mockturtle/ABC 风格映射和 back-end-aware oracle synthesis，使论文不只和内部 baseline 比较。
 
 \section{讨论}
 

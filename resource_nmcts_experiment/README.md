@@ -22,6 +22,7 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --workers 6
 /opt/anaconda3/envs/mcts-qoracle/bin/python train_screen_depth_frontier_policy.py --train-n 16,20,24 --test-n 28,40 --train-per-n 32 --valid-per-n 12 --test-per-n 16 --workers 6 --epochs 160 --hidden 96
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --ns 20,28,40 --per-n 24 --workers 6 --max-screen-depth 4 --tag depth_frontier_policy
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 24,28,32,40 --per-n 24 --workers 6 --max-screen-depth 4 --tag depth_frontier_policy_generalization
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --workers 2
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset smoke
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset evidence_affine --model models/action_scorer_rollout_logical_and.pt
@@ -273,6 +274,13 @@ Current structure-policy evidence:
   35/0/37 with -2.19% mean score, and is +0.97% mean score from all-depth
   depth<=4 while saving -58.69% runtime.  All 720 method rows pass both
   symbolic plan expansion and emitted-circuit ANF verification.
+- An independent-seed depth-frontier-policy generalization run at
+  `n=24,28,32,40` gives 40/0/56 score W/L/T against fixed depth-2 with a
+  -1.85% mean score change, and is +0.61% mean score from fixed depth-4 while
+  saving -23.40% plan time.  All 960 method rows pass both symbolic plan
+  expansion and emitted-circuit ANF verification.  This strengthens the claim
+  that frontier-policy gains are not tied to the first `n=20,28,40` random
+  slice.
 - The truth-table bridge run, `results/analysis_truth_bridge_terms.md`, builds
   full truth tables for 12 generated `n=21,22` ANF functions.  All 120 method
   rows pass complete truth-table oracle verification, ANF plan expansion, and
