@@ -46,6 +46,11 @@ The learned-control audit is materialized by
 (frontier policy, staged frontier, phase shortlist) from limited diagnostics
 (boolean neural guard and root-action neural ranker) in
 `paper_latex/tables/learned_control_audit.tex`.
+The high-dimensional scale audit is materialized by
+`analyze_scaling_resource_audit.py`, which separates functions/settings,
+method rows, verified rows, and representative resource means for the large
+frontier, stage-gated frontier, width-probe, and complete truth-table bridge
+slices in `paper_latex/tables/scaling_resource_audit.tex`.
 
 Latest external-toolchain progress:
 
@@ -173,6 +178,7 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_schedule_metrics.py --input schedule_generalization=results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv --input schedule_truth_bridge=results/raw_schedule_truth_bridge_terms.csv --input schedule_truth_bridge_n23=results/raw_schedule_truth_bridge_n23_terms.csv
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_frontier_policy_upgrade.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_stage_gated_frontier.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_scaling_resource_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_mockturtle_xag_probe.py --workers 4 --timeout 20
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_mockturtle_xag_probe.py --manifest highdim=benchmark_exports/highdim_resource_external_seed42/manifest.json --internal highdim=results/raw_highdim_resource.csv --min-n 14 --max-n 14 --workers 4 --timeout 30 --targets and_resource_nmcts,and_profile_resource_nmcts,and_pareto_resource_nmcts,and_direct_anf,direct_anf --out results/raw_mockturtle_xag_highdim_probe.csv --summary results/summary_mockturtle_xag_highdim_probe.csv --analysis results/analysis_mockturtle_xag_highdim_probe.md --latex-out paper_latex/tables/mockturtle_xag_highdim_probe.tex --run-manifest results/manifest_mockturtle_xag_highdim_probe.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_cirkit_aig_probe.py --workers 8 --timeout 45

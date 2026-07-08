@@ -603,6 +603,9 @@ rows, 7611/7611 phase-policy pruning rows, and 400/400 complete \ttable{}
 bridge method rows.  The complete bridge spans $n=21$--$25$ and checks the
 oracle relation, the expanded \anf{} plan, and the emitted-circuit symbolic
 semantics.
+Table~\ref{tab:scale-audit} makes the large-scale evidence explicit by
+separating generated functions or settings from method rows and by reporting
+representative resource means only for the paper-facing method in each slice.
 
 \begin{figure}[H]
 \centering
@@ -613,6 +616,18 @@ global phase; $n=21$--$25$ bridge slices add complete \ttable{} checking on
 selected generated functions.}
 \label{fig:validation}
 \end{figure}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.08}
+\caption{Scaling and resource audit for high-dimensional experiments.  The
+representative resource mean is method-specific; it is not an average over all
+baselines in the slice.}
+\label{tab:scale-audit}
+\input{tables/scaling_resource_audit}
+\end{table}
 
 \begin{table}[H]
 \centering

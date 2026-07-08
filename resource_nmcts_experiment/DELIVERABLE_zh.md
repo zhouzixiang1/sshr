@@ -64,6 +64,15 @@
 
 该表把 AI/学习控制组件分成两类：可作为论文证据的 depth-frontier policy、stage-gated frontier、rank-diverse phase shortlist；以及只能作为限制或未来工作的 boolean neural guard、root-action neural ranker。关键数值：frontier policy 在 held-out `n=28,40` 上相对 oracle frontier 为 0/3/45、+0.04% score，但减少 51.30% all-depth frontier evaluation time；stage-gated frontier 在独立 `n=24,28,32,40` 上相对 all-depth 为 0/4/92、+0.04% score，减少 25.43% staged planning time；rank-diverse phase shortlist 在 held-out `n=6` 上用 512/8192 exact forms/function 贴近 wide-128。另一方面，boolean neural guard 只有 -0.12% score 但 +94.49% runtime，root-action neural ranker质量未超过 beam4，因此不能作为主贡献夸大。
 
+本轮继续补充 high-dimensional scaling/resource audit 层，避免“大规模结果”只以验证总数出现：
+
+- `analyze_scaling_resource_audit.py`
+- `results/summary_scaling_resource_audit.csv`
+- `results/analysis_scaling_resource_audit.md`
+- `paper_latex/tables/scaling_resource_audit.tex`
+
+该审计把函数/设置数、方法行数、验证行数和代表性资源均值分开。核心覆盖为：`n=24,28,32,40` large term-set frontier 96 个函数、960/960 symbolic rows；stage-gated frontier 96/96 symbolic rows；`n=20,28,40` action-width probe 216 个 width/function settings、1512/1512 symbolic rows；`n=21--25` complete truth-table bridge 40 个 function/settings、400/400 truth+symbolic rows。对应代表性资源均值约为 score 1090--1130、T 985--1023、CNOT/depth 1593--1648、peak ancilla 5.2--5.3。论文中应把这写成“高维逻辑层验证与资源审计”，不是硬件映射，也不是全体 `n=26--40` 的完整真值表枚举。
+
 ## 2. 当前已完成内容
 
 ### 2.0a mockturtle official-header XAG probe
