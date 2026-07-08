@@ -1,0 +1,510 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!50!black
+}
+
+\graphicspath{{figures/submission_v36/}}
+
+\newcommand{\method}{Resource-NMCTS}
+\newcommand{\anf}{\ensuremath{\mathrm{ANF}}}
+\newcommand{\fprm}{\ensuremath{\mathrm{FPRM}}}
+\newcommand{\mcts}{\ensuremath{\mathrm{MCTS}}}
+\newcommand{\xor}{\ensuremath{\oplus}}
+\newcommand{\mct}{\ensuremath{\mathrm{MCT}}}
+\newcommand{\rz}{\ensuremath{R_z}}
+\newcommand{\score}{\ensuremath{\mathrm{score}}}
+\newcommand{\ttable}{truth table}
+
+\title{Resource-Constrained Neural Monte Carlo Tree Search for Quantum Boolean Oracle Synthesis}
+\author{Zixiang Zhou}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Boolean oracle synthesis embeds classical predicates into quantum algorithms,
+but direct algebraic-normal-form constructions can be costly in non-Clifford
+gates, CNOTs, logical depth, and temporary workspace.  We formulate bit-flip
+Boolean oracle synthesis as a resource-constrained search problem over
+\anf{}/\fprm{} term sets and introduce \method{}, a logical-layer synthesis
+framework combining neural action priors, Monte Carlo tree search, Boolean-ring
+linear-factor screening, depth-frontier policies, Pareto archives, and
+baseline-preserving guards.  The method does not use the SSHR parallelotope
+candidate space; SSHR is used only as a CNOT-oriented small-function baseline.
+On 177 traditional functions with $n\leq 6$, Pareto-\method{} reduces mean
+T-count by 72.25\% and mean weighted score by 67.80\% relative to direct
+\anf{} synthesis.  Against ESOP beam, weighted ESOP-MILP, and SSHR-H, its
+score win/loss/tie counts are 174/0/3, 167/3/7, and 173/4/0, respectively.
+External probes strengthen this comparison.  Against a ROS-style LUT proxy over
+309 functions, Pareto-\method{} obtains 309/0/0 score wins with a mean
+84.27\% reduction.  Against an official-header mockturtle KLUT-to-XAG probe,
+it obtains 166/11/0 wins on the traditional set and 64/0/0 wins on an
+$n=14$ high-dimensional set.  A CirKit 3 AIG/multiplicative-complexity probe
+returns verified rows for 177 traditional and 64 high-dimensional functions;
+Pareto-\method{} wins all score comparisons, with mean reductions of 62.34\%
+and 94.46\%, but loses most depth comparisons.  A legacy RevKit CLI probe
+embeds each function as the exact reversible oracle permutation
+$(x,y)\mapsto(x,y\xor f(x))$ and runs TBS/DBS/RMS synthesis flows.  All 531
+direct flow rows return; against the per-function RevKit best-score portfolio,
+Pareto-\method{} has 173/0/4 score wins and a mean score reduction of 67.28\%,
+but uses more peak ancilla on 169/177 functions.  High-dimensional correctness
+is supported by 5640/5640 item-level symbolic runs, 1512/1512 width-probe
+symbolic runs, 531/531 phase selected rows, and 400/400 complete
+\ttable{}-bridge method rows for $n=21$--$25$.  The contribution is therefore
+a verified logical-layer search method with strong T-count and weighted-score
+advantages, not a hardware-mapped or depth-only synthesis claim.
+\end{abstract}
+
+\section{Introduction}
+
+Given a Boolean function $f:\{0,1\}^n\rightarrow\{0,1\}$, a bit-flip oracle
+implements
+\begin{equation}
+  |x\rangle |y\rangle \mapsto |x\rangle |y\xor f(x)\rangle .
+  \label{eq:oracle}
+\end{equation}
+Such oracles appear in Grover search, constraint solving, and quantum
+cryptanalysis.  Their cost is not determined only by the number of Boolean
+operations.  In a fault-tolerant or resource-limited setting, the chosen
+Boolean representation, compute/uncompute order, temporary workspace, and
+phase realization all affect T-count, CNOT count, logical depth, gate count,
+and peak ancilla.
+
+Existing synthesis routes provide strong local solutions.  ESOP, XAG, LUT and
+BDD representations reduce different Boolean resources; ROS makes LUT-based
+oracle synthesis resource-aware; RevKit, mockturtle, CirKit, and ABC provide
+mature logic and reversible-synthesis toolchains; and SSHR uses parallelotope
+structures in the Boolean hypercube to target small-scale CNOT-oriented
+synthesis~\cite{meuli2020ros,meuli2022xag,meuli2019multiplicative,wille2009bdd,brayton2010abc,zheng2025sshr,revkit,mockturtle,cirkit}.
+These methods motivate the baselines used in this paper, but they also expose a
+gap: a fixed representation or a single resource objective may miss useful
+tradeoffs when T-count, CNOTs, depth, gates, and ancilla are optimized
+together.
+
+We address this gap by treating Boolean oracle synthesis as an explicit search
+problem.  The state is an \anf{}/\fprm{} term set; actions are algebraic
+rewrites that can be expanded back to GF(2) semantics; neural policies and
+\mcts{} allocate the search budget; and guard rules ensure that learned
+candidates do not replace a stronger deterministic baseline.  The resulting
+circuit is checked at the plan level, at the emitted X/CNOT/\mct{} symbolic
+level, and, for bridge instances, by full \ttable{} oracle simulation.
+
+The paper makes four contributions.  First, it defines \method{} as a
+resource-constrained \anf{}/\fprm{} search pipeline rather than as an SSHR
+extension.  Second, it combines Boolean-ring linear-factor screening, neural
+action priors, \mcts{}, depth-frontier policies, Pareto archives, and
+baseline-preserving guards into one logical-layer synthesis workflow.  Third,
+it evaluates the method against ESOP, SSHR, ABC/BDD, ROS-style LUT,
+mockturtle, CirKit, RevKit CLI, and RevKit phase/Rz baselines on matched
+functions.  Fourth, it separates algorithmic gains from engineering guards
+through ablations and high-dimensional verification bridges.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{fig1_pipeline.pdf}
+\caption{\textbf{Verified search pipeline.}  \method{} operates on complete
+\ttable{} inputs or \anf{} term sets, searches algebraic actions under neural
+and tree-search control, and verifies candidate circuits at plan, emitted
+symbolic-circuit, and complete-\ttable{} levels.}
+\label{fig:pipeline}
+\end{figure}
+
+\section{Related Work}
+
+\subsection{Boolean representations for oracle synthesis}
+
+Low-T oracle synthesis is closely tied to the Boolean intermediate
+representation.  BDD-based reversible synthesis uses symbolic decision diagrams
+to handle large functions~\cite{wille2009bdd}.  ROS frames oracle synthesis as
+resource-constrained LUT mapping with downstream reversible implementation
+costs~\cite{meuli2020ros}.  XAG-based compilation separates XOR structure from
+AND nodes, making multiplicative complexity a proxy for non-Clifford
+cost~\cite{meuli2022xag,meuli2019multiplicative}.  Back-end-aware oracle
+synthesis further connects logic synthesis to downstream resource metrics, but
+that line includes mapping concerns that are outside the scope of this
+logical-layer study~\cite{yu2025backend}.
+
+\subsection{Reversible and logic-synthesis toolchains}
+
+ABC supplies mature AIG, XAG/GIA, LUT, and ESOP optimization flows for
+classical logic~\cite{brayton2010abc}.  mockturtle and CirKit provide reusable
+logic-network optimization libraries and shells~\cite{mockturtle,cirkit}.
+RevKit provides reversible-logic and quantum-compilation functionality,
+including the Python \texttt{oracle\_synth} API and legacy command-line
+reversible synthesis flows~\cite{revkit}.  In this work these toolchains are
+used as external baselines or probes.  They are not called inside
+\method{}.
+
+\subsection{Learning-guided synthesis}
+
+Learning-guided synthesis has been explored for both classical and quantum
+circuits.  ShortCircuit uses AlphaZero-style search for classical Boolean
+circuit design~\cite{tsaras2024shortcircuit}.  Gumbel AlphaZero has been used
+for Clifford+T unitary synthesis~\cite{rietsch2024unitary}; reinforcement
+learning has been used for non-Clifford-count optimization and ZX-calculus
+rewriting~\cite{kremer2025nonclifford,riu2025rlzx}; and MonteQ uses \mcts{}
+for quantum circuit synthesis~\cite{machiya2026monteq}.  The present work is
+different in scope: the learned component ranks verifiable Boolean-algebraic
+actions rather than generating arbitrary gate sequences.
+
+\section{Problem and Resource Model}
+
+We represent a Boolean function by its square-free \anf{}
+\begin{equation}
+  f(x)=\bigoplus_{m\in\mathcal{M}}\prod_{i\in m}x_i ,
+  \label{eq:anf}
+\end{equation}
+where each monomial $m$ is stored as a bit mask.  A direct construction applies
+one controlled action per monomial.  The synthesis problem is to replace this
+direct construction with reusable compute/action/uncompute subplans that
+implement Eq.~\eqref{eq:oracle} while lowering a multi-resource objective.
+
+All resource numbers in this paper are logical-layer estimates over X, CNOT
+and multi-controlled Toffoli gates.  Candidate selection uses
+\begin{equation}
+  \score =
+  T + 0.04\,\mathrm{CNOT} + 0.015\,\mathrm{depth}
+  + 0.01\,\mathrm{gates} + 2\,\mathrm{ancilla}.
+  \label{eq:score}
+\end{equation}
+The score is a ranking objective, not a physical runtime or error model.  We
+therefore report T-count, CNOT count, depth, gate count, and peak ancilla
+separately whenever a tradeoff is relevant.
+
+\section{Method}
+
+\subsection{Search state and actions}
+
+The \method{} state is the current set of unsynthesized \anf{} terms.  An
+action chooses a reusable algebraic structure, synthesizes that structure into
+a temporary line, uses it to control a quotient subproblem, and then
+uncomputes it.  Candidate actions include common monomial factors, \fprm{}
+polarity rewrites, CNOT-computed linear parity factors, Boolean-ring linear
+factors, and bounded affine changes of variables.  Each action is scored by
+its immediate resource estimate and by the size and structure of the induced
+subproblems.
+
+\subsection{Boolean-ring linear factors}
+
+A key extension is allowing the linear factor and the quotient to share
+variables under Boolean-ring semantics.  For example,
+\begin{equation}
+  (x_i\xor x_j)x_i m = x_i m \xor x_i x_j m,
+  \label{eq:boolean-ring}
+\end{equation}
+because $x_i^2=x_i$ over the Boolean ring.  Circuit-wise, the parity
+$x_i\xor x_j$ is computed by CNOTs into a temporary line, used as a control for
+the quotient plan, and uncomputed.  This expands the algebraic action space
+without changing the GF(2) verifier.
+
+\subsection{Neural prior, MCTS, frontier policy, and guard}
+
+The neural action prior ranks candidate actions using term-count, degree,
+coverage, variable-support, and immediate-resource features.  \mcts{} then
+explores combinations of actions with deterministic rollout estimates.  A
+separate frontier policy selects among depth-2, depth-3, and depth-4 Boolean
+screening frontiers; a cost-aware version trades a small score increase for
+lower planning time and reduced ancillary lifetime area.  Finally, a guard
+compares learned or expensive candidates to deterministic baselines and returns
+the best valid candidate under Eq.~\eqref{eq:score}.  This makes learning a
+search-control component, not the source of semantic correctness.
+
+\subsection{Pareto archive}
+
+The Pareto variant evaluates candidates under several internal objectives,
+including active-score, T-sparse, CNOT/depth-heavy, gate-sensitive, and
+ancilla-tight rankings.  It removes candidates dominated simultaneously in
+T-count, CNOT count, depth, gate count, and peak ancilla, then selects from the
+remaining archive using the active score.  The archive is used only after each
+candidate has passed the same plan and emitted-circuit checks as the base
+method.
+
+\subsection{Phase/Rz branch}
+
+RevKit \texttt{oracle\_synth} returns phase/Rz netlists rather than direct
+bit-flip Clifford+T circuits.  To avoid treating that boundary only as a cost
+sensitivity, we also implement a phase-parity emitter: each \anf{} monomial is
+expanded into merged parity-phase gadgets and verified up to global phase.
+Fixed-polarity \fprm{} search and bounded affine preconditioning are then added
+as phase-search actions.  This branch is reported as a logical phase/Rz proxy;
+it does not output approximate rotation sequences or mapped hardware circuits.
+
+\section{Experimental Design}
+
+Experiments answer four questions.  First, does \method{} reduce T-count and
+weighted score on small functions where full \ttable{} checking is practical?
+Second, do the conclusions survive comparisons with ESOP, SSHR, ABC/BDD,
+ROS-style LUT, mockturtle, CirKit, RevKit CLI, and RevKit phase/Rz baselines?
+Third, which components--affine search, \mcts{}, neural priors, guards,
+frontier policies, and Pareto archives--account for the gains?  Fourth, how far
+can correctness evidence be pushed beyond small truth tables?
+
+The traditional slice contains 177 functions with $n\leq 6$.  High-dimensional
+logic-network probes include exported $n=14$, $n=15$, $n=16$, and $n=18$
+random-ANF sets for ABC/BDD, and $n=14$ sets for mockturtle and CirKit.  Scale
+and bridge experiments cover item-level $n=20$--$40$ term sets and complete
+\ttable{} bridge functions at $n=21$--$25$.  Paired comparisons include only
+matching functions or items with successful semantic checks and no timeout.
+
+\section{Results}
+
+\subsection{Traditional functions}
+
+Figure~\ref{fig:traditional} and Table~\ref{tab:traditional} summarize the
+traditional $n\leq6$ slice.  Pareto-\method{} has the lowest mean T-count and
+weighted score among the shown internal baselines, reducing T-count by
+72.25\% and score by 67.80\% relative to direct \anf{} synthesis.  SSHR-H
+retains the lowest mean CNOT count, so the result is not a CNOT-only dominance
+claim.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{fig2_traditional_resources.pdf}
+\caption{\textbf{Mean logical resources on the traditional slice.}
+Pareto-\method{} has the lowest T-count and weighted score; SSHR-H remains a
+strong CNOT-oriented baseline.}
+\label{fig:traditional}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Mean logical resources on the $n\leq6$ traditional slice.}
+\label{tab:traditional}
+\begin{tabular}{lrrrrr}
+\toprule
+Method & Mean T & Mean CNOT & Mean depth & Mean ancilla & Mean score \\
+\midrule
+Direct ANF & 184.1 & 134.2 & 134.6 & 1.33 & 194.3 \\
+AND-direct ANF & 101.0 & 166.5 & 166.9 & 2.18 & 115.2 \\
+ESOP-MILP & 83.6 & 133.5 & 159.6 & 2.32 & 96.7 \\
+SSHR-H & 81.0 & \textbf{67.6} & 88.7 & 1.36 & 88.2 \\
+\method{} & 43.9 & 89.9 & 94.5 & 1.92 & 53.2 \\
+Pareto-\method{} & \textbf{40.4} & 83.0 & \textbf{88.0} & 2.03 & \textbf{49.6} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{External logic-network and reversible-synthesis probes}
+
+Figure~\ref{fig:baselines} summarizes paired score changes against several
+external or traditional baselines.  The ROS-style LUT proxy covers 309
+functions and 927 K-sweep rows, all truth-table checked; Pareto-\method{} wins
+309/309 score comparisons against the best-K proxy.  The mockturtle probe uses
+official headers to resynthesize KLUT networks into XAGs; Pareto-\method{} has
+166/11/0 score wins on the traditional set and 64/0/0 on the $n=14$ set.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.94\linewidth]{fig3_baseline_comparisons.pdf}
+\caption{\textbf{Paired baseline comparisons.} Negative values favor the
+target method.  Labels show win/loss/tie counts.}
+\label{fig:baselines}
+\end{figure}
+
+The CirKit probe converts the same BLIF benchmarks to AIGER with ABC, applies
+CirKit AIG rewriting and multiplicative-complexity analysis, writes Verilog,
+and verifies the Verilog readback through ABC.  It produces 177/177 correct
+traditional rows and 64/64 correct $n=14$ rows.  Pareto-\method{} wins all
+score comparisons but loses depth on most rows, making CirKit the strongest
+depth-oriented external probe in the current manuscript.
+
+\begin{table}[H]
+\centering
+\small
+\caption{CirKit 3 AIG/multiplicative-complexity probe on $n\leq6$ functions.}
+\label{tab:cirkit}
+\input{tables/cirkit_aig_probe}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{CirKit 3 AIG/multiplicative-complexity probe on the $n=14$ set.}
+\label{tab:cirkit-highdim}
+\input{tables/cirkit_aig_highdim_probe}
+\end{table}
+
+The RevKit CLI probe supplies a closer reversible-synthesis comparison.  Each
+function is embedded as the exact oracle permutation
+$(x,y)\mapsto(x,y\xor f(x))$, and legacy RevKit reads the SPEC permutation
+before running TBS, DBS, and RMS synthesis.  All 531 direct flow rows return.
+The per-function best-score RevKit portfolio is strong on line count, but
+Pareto-\method{} retains 173/0/4 score wins and a 67.28\% mean score reduction.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Legacy RevKit CLI reversible-synthesis portfolio on $n\leq6$
+functions.  Each function uses the best-score result among TBS, DBS, and RMS.}
+\label{tab:revkit-cli}
+\input{tables/revkit_cli_multiflow_traditional}
+\end{table}
+
+\subsection{Search contribution and ablation}
+
+Table~\ref{tab:contribution} consolidates the contribution analysis.  The
+largest pre-portfolio gain comes from affine and Boolean-ring structural
+search.  The learned prior gives smaller but non-degrading quality gains on the
+traditional slice, while the frontier policies mainly control the
+quality/time frontier in high-dimensional term-set experiments.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Matched contribution decomposition.  Negative mean score changes
+favor the first method in each comparison.}
+\label{tab:contribution}
+\input{tables/search_contribution_decomposition}
+\end{table}
+
+\subsection{Phase/Rz search}
+
+RevKit Python \texttt{oracle\_synth} returns on all 177 traditional functions,
+but 171 rows contain non-Clifford \rz{} rotations, with 9242 such rotations in
+total.  We therefore treat it as a phase/Rz lower-bound boundary rather than
+as an exact Clifford+T T-count comparison.  The internal phase-parity emitter,
+fixed-polarity \fprm{} search, and affine \fprm{} phase search turn this
+boundary into a verifiable search branch.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{fig4_phase_affine.pdf}
+\caption{\textbf{Affine-FPRM phase search.} Affine preconditioning improves the
+phase-parity proxy over fixed-polarity FPRM and ANF baselines, while remaining
+a logical phase/Rz proxy rather than an approximate-rotation sequence.}
+\label{fig:phase}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Affine-FPRM phase-parity search comparisons.}
+\label{tab:phase}
+\input{tables/phase_parity_affine}
+\end{table}
+
+Increasing the affine transform budget from 32 to 128 yields additional but
+bounded gains: under the $T/R_z=30$ proxy, the wide search gives 43/0/134
+wins/losses/ties over budget 32 and reduces mean synthesis score by 0.60\%.
+The learned phase candidate policy can recover nearly the wide-search quality
+with fewer exact evaluations, but same-budget random shortlists are close.
+Thus the result supports pruned phase-search feasibility, not a claim that the
+current neural scorer is already superior to random shortlisting.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Affine-FPRM phase-search budget expansion.}
+\label{tab:phase-budget}
+\input{tables/phase_affine_budget_wide128_vs_32}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Learned phase candidate pruning on held-out $n=6$ functions.}
+\label{tab:phase-policy}
+\input{tables/phase_affine_policy}
+\end{table}
+
+\subsection{High-dimensional verification}
+
+Figure~\ref{fig:validation} summarizes the current verification envelope.
+The manuscript-level evidence includes 5640/5640 item-level symbolic runs for
+$n=20$--$40$, 1512/1512 width-probe symbolic runs, 531/531 phase selected rows,
+and 400/400 complete \ttable{} bridge method rows.  The complete bridge spans
+$n=21$--$25$ and checks the oracle relation, the expanded \anf{} plan, and the
+emitted-circuit symbolic semantics.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.94\linewidth]{fig5_validation.pdf}
+\caption{\textbf{Verification coverage.}  Large term-set experiments are
+validated symbolically; $n=21$--$25$ bridge slices add complete \ttable{}
+checking on selected generated functions.}
+\label{fig:validation}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Verification scope and boundary.}
+\label{tab:validation}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.34\linewidth}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}X}
+\toprule
+Check & Current coverage & Boundary \\
+\midrule
+$n=20$--$40$ item-level symbolic runs & 5640/5640 & Not full truth-table enumeration. \\
+Width-probe symbolic runs & 1512/1512 & Supports the default action width, but remains term-set validation. \\
+$n=21$--$25$ complete bridge & 400/400 & Small generated slices; not exhaustive coverage of all high-dimensional functions. \\
+Phase selected rows & 531/531 & Verified up to global phase; no rotation-sequence output. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Discussion}
+
+The evidence supports a specific, bounded claim: \method{} is a logical-layer
+resource-constrained Boolean oracle synthesis method that improves T-count and
+weighted score over several fixed-representation and external-toolchain
+baselines.  The claim is not that \method{} dominates every metric.  SSHR
+remains a strong CNOT-oriented small-function baseline; CirKit AIG/MC remains a
+strong depth-oriented external probe; and RevKit CLI uses fewer auxiliary lines
+on most traditional functions.
+
+The ablations also calibrate the role of AI.  The neural prior is useful, but
+the largest gain comes from the searchable algebraic action space and from
+guarded portfolio selection.  This is a better fit for the evidence than
+claiming that deep reinforcement learning alone drives the result.  In the
+phase/Rz branch, affine and polarity search give verified improvements, but
+same-budget random candidate shortlists remain close to the learned scorer.
+This leaves a clear next target: stronger phase/Rz policy objectives and
+rotation-spectrum optimization.
+
+Several limitations are deliberate.  All results are logical-layer estimates;
+the paper does not model routing, hardware connectivity, native gate sets,
+noise, or magic-state factories.  The ROS-style LUT result is a proxy rather
+than a full ROS reproduction with SAT garbage management.  The RevKit CLI
+baseline is a real exact-oracle reversible-synthesis probe, but CNOT/depth are
+derived from RevKit's Toffoli-control distribution and the experiment is still
+not a hardware mapping.  High-dimensional symbolic checks validate emitted
+circuit semantics but do not replace full truth-table enumeration beyond the
+bridge slices.
+
+\section{Conclusion}
+
+We presented \method{}, a neural Monte Carlo tree search framework for
+resource-constrained quantum Boolean oracle synthesis over verifiable
+\anf{}/\fprm{} actions.  On matched small-function benchmarks, the method
+substantially lowers T-count and weighted score relative to direct \anf{},
+ESOP, SSHR-H, and ESOP-MILP baselines.  On external probes based on
+ROS-style LUT mapping, mockturtle, CirKit, and legacy RevKit CLI reversible
+synthesis, the method retains a strong weighted-score advantage while exposing
+clear depth and ancilla tradeoffs.  Large symbolic experiments and
+$n=21$--$25$ complete truth-table bridges support the semantic correctness of
+the logical-layer circuits.  The next step is not to claim hardware-level
+optimality, but to strengthen the phase/Rz policy and complete fuller
+toolchain reproductions while keeping the claim at the logical synthesis
+layer.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

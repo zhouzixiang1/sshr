@@ -12,10 +12,21 @@ claims in `main.tex` are limited to the current `evidence_affine`,
 `ultra_highdim_resource`, `mega_highdim_resource`, the exact bounded FPRM-DP
 slice, and exported SSHR/ABC/BDD/LUT/ESOP baseline results.
 
+Current English submission draft:
+
+- `resource_nmcts_submission_v1.tex` / `resource_nmcts_submission_v1.pdf`:
+  English manuscript rebuilt from the latest Chinese v39 evidence.  It adds
+  the CirKit AIG/MC probe, legacy RevKit CLI exact-oracle portfolio, Affine-FPRM
+  phase-search results, learned phase-candidate pruning, and the current
+  high-dimensional verification boundary.  The claim is explicitly limited to
+  logical-layer synthesis, with CirKit depth and RevKit CLI peak-ancilla
+  trade-offs stated in the abstract and discussion.
+
 Build:
 
 ```bash
 latexmk -pdf main.tex
+latexmk -pdf resource_nmcts_submission_v1.tex
 ```
 
 Current source evidence:
@@ -161,6 +172,16 @@ Current source evidence:
   `../results/raw_ros_lut_proxy_best.csv`
 - ROS-style LUT proxy analysis:
   `../results/analysis_ros_lut_proxy.md`
+- mockturtle official-header KLUT-to-XAG probe analysis:
+  `../results/analysis_mockturtle_xag_probe.md`
+- mockturtle high-dimensional KLUT-to-XAG probe analysis:
+  `../results/analysis_mockturtle_xag_highdim_probe.md`
+- CirKit AIG/MC probe analysis:
+  `../results/analysis_cirkit_aig_probe.md`
+- CirKit high-dimensional AIG/MC probe analysis:
+  `../results/analysis_cirkit_aig_highdim_probe.md`
+- legacy RevKit CLI reversible-synthesis portfolio analysis:
+  `../results/analysis_revkit_cli_multiflow_traditional.md`
 - external-tool benchmark exporter: `../export_benchmarks.py`
 - ROS-style LUT proxy runner: `../run_ros_lut_proxy.py`
 - LaTeX tables: `tables/runtime_ablation_affine.tex`,
