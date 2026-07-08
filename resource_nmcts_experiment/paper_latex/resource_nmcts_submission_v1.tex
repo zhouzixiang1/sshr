@@ -368,6 +368,16 @@ and what residual abstraction mismatch remains.}
 \input{tables/baseline_comparability_audit}
 \end{table}
 
+The comparison set should therefore be read as layered evidence rather than as
+a single universal leaderboard.  Direct \anf{}, ESOP, ABC/BDD, and related
+representation baselines test matched bit-flip oracle resource efficiency;
+SSHR tests whether the proposed search remains competitive against a
+CNOT-oriented geometric method on small functions; mockturtle, CirKit,
+ROS-style LUT, and RevKit probes test whether the advantage persists outside
+the project's own implementations; and internal ablations test whether the
+search controls contribute beyond deterministic construction.  The results
+below use each family only for the claim it can support.
+
 The experiments were executed as a reproducible artifact package rather than
 as isolated hand runs.  Table~\ref{tab:reproducibility} records the local
 compute envelope, manifest-level parallelism, artifact counts, and external
