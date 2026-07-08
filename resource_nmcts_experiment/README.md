@@ -157,6 +157,14 @@ Latest phase/Rz progress:
   non-degrading search dimension, but the next target is still learned or
   optimized phase/Rz-aware search plus actual rotation-synthesis sequence
   auditing.
+- `train_phase_affine_policy.py` adds a rank-trained learned shortlist for the
+  Affine-FPRM phase space.  `analyze_phase_policy_random_control.py` then
+  audits the held-out `n=6` policy rows against eight same-budget random
+  shortlists per top-k.  Diverse top-512 exact-scores 512/8192 affine forms per
+  function, is 17/0/21 against the per-function random-repeat mean with
+  sign-test p=1.53e-05, and beats all eight random seed means.  This is
+  reliable learned pruning for the `T/Rz=30` proxy, not sequence-level
+  rotation synthesis.
 
 Latest high-dimensional verification progress:
 
@@ -219,6 +227,7 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python audit_sparse_depth4_gate_generalization.py --seeds 20260801,20260802,20260803 --ns 24,28,32,40 --per-n 12 --workers 6
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_sparse_depth4_gate_sensitivity.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_learned_control_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_phase_policy_random_control.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python - <<'PY'
 import make_submission_figures as m
 m.configure()

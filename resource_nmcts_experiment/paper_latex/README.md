@@ -201,6 +201,8 @@ Current source evidence:
   `../results/analysis_revkit_cli_multiflow_traditional.md`
 - rank-diverse learned phase-candidate pruning analysis:
   `../results/analysis_phase_affine_policy_rank_diverse.md`
+- same-budget random control for learned phase-candidate pruning:
+  `../results/analysis_phase_policy_random_control.md`
 - external-tool benchmark exporter: `../export_benchmarks.py`
 - ROS-style LUT proxy runner: `../run_ros_lut_proxy.py`
 - ROS-style LUT line-sensitivity analyzer:

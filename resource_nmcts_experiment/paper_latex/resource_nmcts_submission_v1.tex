@@ -698,10 +698,14 @@ A rank-trained policy and a deterministic diversity reranker then compress this
 search.  On the held-out $n=6$ split, the diverse top-512 policy exact-scores
 only 512 of 8192 affine forms per function, keeps the budget-32 comparison at
 17/0/21 with a 2.48\% mean reduction, and matches the wide-128 mean within
-0.01\%.  Across eight same-budget random repeats, each policy top-$k$ mean is
-lower than all random-repeat means, although the absolute margins are small.
-Thus the result supports learned pruned phase-search feasibility, not a claim
-that the current scorer solves phase/Rz synthesis globally.
+0.01\%.  Table~\ref{tab:phase-policy-random} then uses the eight same-budget
+random repeats as a control.  The independent unit is the held-out function:
+random repeats are averaged per function before the sign test.  The strongest
+row is the diverse top-512 policy, which is 17/0/21 against the per-function
+random mean, has sign-test $p=1.53\times 10^{-5}$, and beats all eight random
+seed means.  The absolute margins are small because the affine candidate space
+is dense, so this supports learned pruned phase-search feasibility rather than
+a claim that the current scorer solves phase/Rz synthesis globally.
 
 \begin{table}[H]
 \centering
@@ -718,6 +722,17 @@ that the current scorer solves phase/Rz synthesis globally.
 held-out $n=6$ functions.}
 \label{tab:phase-policy}
 \input{tables/phase_affine_policy_rank_diverse}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Same-budget random-repeat control for the learned phase shortlist.
+Each row compares a learned top-$k$ shortlist with the mean of eight random
+top-$k$ shortlists on each held-out $n=6$ function before applying a paired
+sign test.  Negative $\Delta$ mean favors the learned shortlist.}
+\label{tab:phase-policy-random}
+\input{tables/phase_policy_random_control}
 \end{table}
 
 \subsection{High-dimensional verification}
