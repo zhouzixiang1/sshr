@@ -25,6 +25,7 @@ import torch
 from anf_utils import boolean_from_anf
 from factor_plan import (
     SearchConfig,
+    analyze_circuit_schedule,
     direct_plan,
     emit_plan_to_circuit,
     linear_pair_screen_plan,
@@ -51,6 +52,11 @@ class MethodEval:
     depth: int
     gates: int
     peak_ancilla: int
+    schedule_logical_depth: int
+    schedule_cnot_depth_proxy: int
+    schedule_t_depth_proxy: int
+    explicit_ancilla_live_peak: int
+    explicit_ancilla_lifetime_area: int
     plan_time_s: float
     truth_verify_time_s: float
     anf_verified: bool
@@ -92,6 +98,7 @@ def eval_plan(method: str, plan, plan_time_s: float, config: SearchConfig, n_inp
     plan_verification = verify_plan_anf(plan)
     circuit = emit_plan_to_circuit(plan, n_inputs, config.max_factor_ancilla)
     circuit_verification = verify_circuit_anf(circuit, n_inputs, plan.terms)
+    schedule = analyze_circuit_schedule(circuit, n_inputs, config.use_relative_phase)
     started = time.perf_counter()
     truth_verified = verify_oracle(circuit, bf)
     truth_verify_time_s = time.perf_counter() - started
@@ -103,6 +110,11 @@ def eval_plan(method: str, plan, plan_time_s: float, config: SearchConfig, n_inp
         depth=plan.cost.depth,
         gates=plan.cost.gates,
         peak_ancilla=plan.cost.peak_ancilla,
+        schedule_logical_depth=schedule.logical_depth,
+        schedule_cnot_depth_proxy=schedule.cnot_depth_proxy,
+        schedule_t_depth_proxy=schedule.t_depth_proxy,
+        explicit_ancilla_live_peak=schedule.explicit_ancilla_live_peak,
+        explicit_ancilla_lifetime_area=schedule.explicit_ancilla_lifetime_area,
         plan_time_s=plan_time_s,
         truth_verify_time_s=truth_verify_time_s,
         anf_verified=plan_verification.ok,
@@ -166,6 +178,11 @@ def evaluate_one(task: tuple[int, int, int, str, int, int]) -> TruthExample:
         depth=best_screen.depth,
         gates=best_screen.gates,
         peak_ancilla=best_screen.peak_ancilla,
+        schedule_logical_depth=best_screen.schedule_logical_depth,
+        schedule_cnot_depth_proxy=best_screen.schedule_cnot_depth_proxy,
+        schedule_t_depth_proxy=best_screen.schedule_t_depth_proxy,
+        explicit_ancilla_live_peak=best_screen.explicit_ancilla_live_peak,
+        explicit_ancilla_lifetime_area=best_screen.explicit_ancilla_lifetime_area,
         plan_time_s=sum(ev.plan_time_s for ev in screen_evals),
         truth_verify_time_s=best_screen.truth_verify_time_s,
         anf_verified=best_screen.anf_verified,
@@ -284,6 +301,11 @@ def add_learned_methods(
                 depth=chosen.depth,
                 gates=chosen.gates,
                 peak_ancilla=chosen.peak_ancilla,
+                schedule_logical_depth=chosen.schedule_logical_depth,
+                schedule_cnot_depth_proxy=chosen.schedule_cnot_depth_proxy,
+                schedule_t_depth_proxy=chosen.schedule_t_depth_proxy,
+                explicit_ancilla_live_peak=chosen.explicit_ancilla_live_peak,
+                explicit_ancilla_lifetime_area=chosen.explicit_ancilla_lifetime_area,
                 plan_time_s=chosen.plan_time_s,
                 truth_verify_time_s=chosen.truth_verify_time_s,
                 anf_verified=chosen.anf_verified,
@@ -306,6 +328,11 @@ def add_learned_methods(
                 depth=chosen.depth,
                 gates=chosen.gates,
                 peak_ancilla=chosen.peak_ancilla,
+                schedule_logical_depth=chosen.schedule_logical_depth,
+                schedule_cnot_depth_proxy=chosen.schedule_cnot_depth_proxy,
+                schedule_t_depth_proxy=chosen.schedule_t_depth_proxy,
+                explicit_ancilla_live_peak=chosen.explicit_ancilla_live_peak,
+                explicit_ancilla_lifetime_area=chosen.explicit_ancilla_lifetime_area,
                 plan_time_s=chosen.plan_time_s,
                 truth_verify_time_s=chosen.truth_verify_time_s,
                 anf_verified=chosen.anf_verified,
@@ -329,6 +356,11 @@ def add_learned_methods(
                     depth=chosen.depth,
                     gates=chosen.gates,
                     peak_ancilla=chosen.peak_ancilla,
+                    schedule_logical_depth=chosen.schedule_logical_depth,
+                    schedule_cnot_depth_proxy=chosen.schedule_cnot_depth_proxy,
+                    schedule_t_depth_proxy=chosen.schedule_t_depth_proxy,
+                    explicit_ancilla_live_peak=chosen.explicit_ancilla_live_peak,
+                    explicit_ancilla_lifetime_area=chosen.explicit_ancilla_lifetime_area,
                     plan_time_s=chosen.plan_time_s,
                     truth_verify_time_s=chosen.truth_verify_time_s,
                     anf_verified=chosen.anf_verified,
@@ -369,6 +401,11 @@ def write_raw(path: Path, examples: list[TruthExample]) -> None:
         "depth",
         "gates",
         "peak_ancilla",
+        "schedule_logical_depth",
+        "schedule_cnot_depth_proxy",
+        "schedule_t_depth_proxy",
+        "explicit_ancilla_live_peak",
+        "explicit_ancilla_lifetime_area",
         "plan_time_s",
         "truth_verify_time_s",
         "truth_verified",
@@ -399,6 +436,11 @@ def write_raw(path: Path, examples: list[TruthExample]) -> None:
                         "depth": ev.depth,
                         "gates": ev.gates,
                         "peak_ancilla": ev.peak_ancilla,
+                        "schedule_logical_depth": ev.schedule_logical_depth,
+                        "schedule_cnot_depth_proxy": ev.schedule_cnot_depth_proxy,
+                        "schedule_t_depth_proxy": ev.schedule_t_depth_proxy,
+                        "explicit_ancilla_live_peak": ev.explicit_ancilla_live_peak,
+                        "explicit_ancilla_lifetime_area": ev.explicit_ancilla_lifetime_area,
                         "plan_time_s": ev.plan_time_s,
                         "truth_verify_time_s": ev.truth_verify_time_s,
                         "truth_verified": ev.truth_verified,
@@ -463,6 +505,11 @@ def write_summary(summary_path: Path, analysis_path: Path, table_path: Path, exa
                 "mean_CNOT",
                 "mean_depth",
                 "mean_peak_ancilla",
+                "mean_schedule_logical_depth",
+                "mean_schedule_cnot_depth_proxy",
+                "mean_schedule_t_depth_proxy",
+                "mean_explicit_ancilla_live_peak",
+                "mean_explicit_ancilla_lifetime_area",
                 "mean_score",
                 "mean_plan_time_s",
                 "mean_truth_build_time_s",
@@ -491,6 +538,13 @@ def write_summary(summary_path: Path, analysis_path: Path, table_path: Path, exa
                         "mean_CNOT": statistics.mean(v.cnot for v in vals),
                         "mean_depth": statistics.mean(v.depth for v in vals),
                         "mean_peak_ancilla": statistics.mean(v.peak_ancilla for v in vals),
+                        "mean_schedule_logical_depth": statistics.mean(v.schedule_logical_depth for v in vals),
+                        "mean_schedule_cnot_depth_proxy": statistics.mean(v.schedule_cnot_depth_proxy for v in vals),
+                        "mean_schedule_t_depth_proxy": statistics.mean(v.schedule_t_depth_proxy for v in vals),
+                        "mean_explicit_ancilla_live_peak": statistics.mean(v.explicit_ancilla_live_peak for v in vals),
+                        "mean_explicit_ancilla_lifetime_area": statistics.mean(
+                            v.explicit_ancilla_lifetime_area for v in vals
+                        ),
                         "mean_score": statistics.mean(v.score for v in vals),
                         "mean_plan_time_s": statistics.mean(v.plan_time_s for v in vals),
                         "mean_truth_build_time_s": statistics.mean(ex.truth_build_time_s for ex in subset),

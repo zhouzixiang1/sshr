@@ -13,7 +13,7 @@ SSHR_DIR = ROOT / "sshr"
 if str(SSHR_DIR) not in sys.path:
     sys.path.insert(0, str(SSHR_DIR))
 
-from bool_func import BooleanFunction, QuantumCircuit  # noqa: E402
+from bool_func import BooleanFunction, QuantumCircuit, mct_cost, mct_cost_rp  # noqa: E402
 
 from anf_utils import anf_monomials
 from resource_model import ResourceCost, ResourceWeights, direct_cost_for_terms, gate_cost, gate_uncompute_cost
@@ -81,6 +81,22 @@ class CircuitAnfVerification:
     input_mismatches: int
     output_mismatch: int
     ancilla_mismatches: int
+
+
+@dataclass(frozen=True)
+class CircuitScheduleMetrics:
+    """Logic-level schedule proxies for an emitted oracle circuit.
+
+    These metrics deliberately avoid hardware mapping assumptions.  MCT gates
+    are treated as logical operations that occupy all controls and the target
+    for a decomposition-duration proxy.
+    """
+
+    logical_depth: int
+    cnot_depth_proxy: int
+    t_depth_proxy: int
+    explicit_ancilla_live_peak: int
+    explicit_ancilla_lifetime_area: int
 
 
 def _xor_term_sets(*items: frozenset[int]) -> frozenset[int]:
@@ -260,6 +276,96 @@ def verify_circuit_anf(circ: QuantumCircuit, n_inputs: int, expected_terms: froz
         input_mismatches=input_mismatches,
         output_mismatch=output_mismatch,
         ancilla_mismatches=ancilla_mismatches,
+    )
+
+
+def _mct_schedule_proxy(controls: int, use_relative_phase: bool = True) -> tuple[int, int]:
+    """Return (CNOT-depth proxy, T-depth proxy) for one emitted MCT gate."""
+    if controls <= 1:
+        return (1 if controls == 1 else 0), 0
+    cost = mct_cost_rp(controls) if use_relative_phase else mct_cost(controls)
+    t_count = int(cost.get("T", 0))
+    cnot_count = int(cost.get("CNOT", 0))
+    # This is a decomposition-independent stage proxy, not a hardware T-depth.
+    # It prevents a 32-T MCT and a 4-T Toffoli from looking identical while
+    # avoiding unsupported claims about a specific Clifford+T template.
+    t_depth = (t_count + 3) // 4
+    return max(1, cnot_count), t_depth
+
+
+def analyze_circuit_schedule(
+    circ: QuantumCircuit,
+    n_inputs: int,
+    use_relative_phase: bool = True,
+) -> CircuitScheduleMetrics:
+    """Compute logic-level schedule proxies for an emitted circuit.
+
+    ``logical_depth`` layers gates by wire conflicts. ``cnot_depth_proxy`` uses
+    the CNOT count of a decomposed MCT as an occupation duration. ``t_depth`` is
+    a non-Clifford stage proxy based on four T gates per stage.  Explicit
+    ancillary lifetime is measured over emitted logical-gate layers for wires
+    after the output qubit.
+    """
+    logical_ready = [0] * circ.n_qubits
+    cnot_ready = [0] * circ.n_qubits
+    t_ready = [0] * circ.n_qubits
+    ancilla_spans: dict[int, list[int]] = {}
+
+    for gate in circ.gates:
+        involved = [int(control) for control in gate.controls] + [int(gate.target)]
+        if any(wire < 0 or wire >= circ.n_qubits for wire in involved):
+            continue
+        logical_start = max((logical_ready[wire] for wire in involved), default=0)
+        logical_end = logical_start + 1
+        for wire in involved:
+            logical_ready[wire] = logical_end
+            if wire > n_inputs:
+                span = ancilla_spans.setdefault(wire, [logical_start, logical_end])
+                span[0] = min(span[0], logical_start)
+                span[1] = max(span[1], logical_end)
+
+        if gate.type == "X":
+            cnot_duration, t_duration = 1, 0
+        elif gate.type == "CNOT":
+            cnot_duration, t_duration = 1, 0
+        elif gate.type == "MCT":
+            cnot_duration, t_duration = _mct_schedule_proxy(len(gate.controls), use_relative_phase)
+        else:
+            cnot_duration, t_duration = 1, 0
+
+        cnot_start = max((cnot_ready[wire] for wire in involved), default=0)
+        cnot_end = cnot_start + cnot_duration
+        for wire in involved:
+            cnot_ready[wire] = cnot_end
+
+        t_start = max((t_ready[wire] for wire in involved), default=0)
+        t_end = t_start + t_duration
+        for wire in involved:
+            t_ready[wire] = t_end
+
+    events: list[tuple[int, int]] = []
+    area = 0
+    for first, last in ancilla_spans.values():
+        if last <= first:
+            continue
+        area += last - first
+        events.append((first, 1))
+        events.append((last, -1))
+
+    live = peak = 0
+    for layer in sorted({layer for layer, _delta in events}):
+        ending = sum(delta for event_layer, delta in events if event_layer == layer and delta < 0)
+        starting = sum(delta for event_layer, delta in events if event_layer == layer and delta > 0)
+        live += ending
+        live += starting
+        peak = max(peak, live)
+
+    return CircuitScheduleMetrics(
+        logical_depth=max(logical_ready, default=0),
+        cnot_depth_proxy=max(cnot_ready, default=0),
+        t_depth_proxy=max(t_ready, default=0),
+        explicit_ancilla_live_peak=peak,
+        explicit_ancilla_lifetime_area=area,
     )
 
 

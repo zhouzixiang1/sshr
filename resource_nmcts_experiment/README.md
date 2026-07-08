@@ -24,6 +24,9 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --ns 20,28,40 --per-n 24 --workers 6 --max-screen-depth 4 --tag depth_frontier_policy
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 24,28,32,40 --per-n 24 --workers 6 --max-screen-depth 4 --tag depth_frontier_policy_generalization
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --workers 2
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 24,28,32,40 --per-n 24 --workers 6 --max-screen-depth 4 --tag schedule_depth_frontier_policy_generalization
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260711 --ns 21,22 --per-n 6 --workers 2 --max-screen-depth 4 --tag schedule_truth_bridge
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_schedule_metrics.py --input schedule_generalization=results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv --input schedule_truth_bridge=results/raw_schedule_truth_bridge_terms.csv
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset smoke
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset evidence_affine --model models/action_scorer_rollout_logical_and.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset evidence_affine
@@ -289,6 +292,19 @@ Current structure-policy evidence:
   +0.32% mean score / -50.87% plan time vs all-depth adaptive.  This moves the
   complete-verification boundary beyond `n=20` on a small bridge slice; larger
   `n=24--40` runs remain symbolic term-set evaluations.
+- Logic-level schedule-proxy evidence is now emitted by `run_screen_scale_terms.py`
+  and `run_truth_bridge_terms.py`, then summarized by
+  `analyze_schedule_metrics.py`.  The metrics are not hardware mapping results:
+  they are emitted-circuit proxies for parallel logical depth, CNOT-depth,
+  T-depth, live explicit ancilla peak, and explicit ancilla lifetime area.  In
+  the independent `n=24,28,32,40` schedule run, depth-frontier policy vs fixed
+  depth-2 has 40/0/56 score W/L/T with -1.85% mean score and 40/0/56 T-depth
+  proxy W/L/T with -1.85%; it trades this for +20.09% explicit ancilla lifetime
+  area.  Against depth-4/all-depth it is only +0.55% T-depth proxy but reduces
+  explicit ancilla lifetime area by -5.42%.  The schedule truth-table bridge
+  reproduces the same pattern on 120 fully verified method rows: frontier policy
+  vs depth-2 is 8/0/4 in score (-3.50%) and T-depth proxy (-3.32%), with a
+  +32.93% lifetime-area tradeoff.
 
 Current screen-gate evidence:
 

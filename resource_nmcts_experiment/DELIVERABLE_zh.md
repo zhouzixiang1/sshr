@@ -470,6 +470,36 @@ v12 中把 depth-frontier 写成下一步缺口：需要训练一个策略，在
 
 结论：这是验证边界上的实质推进。n=21/22 bridge 不能替代 n=24--40 的完整 truth-table simulation，但它证明本项目的 emitted-circuit 生成与符号验证不是孤立的资源估算；同一类方法在 n>20 的完整枚举切片上也通过了逐点 oracle 验证。
 
+### 2.5.9 逻辑层 schedule proxy：补充 T-depth 与辅助线生命周期证据
+
+为回应“只报告 T-count/CNOT/peak ancilla 仍偏逻辑资源静态统计”的审稿风险，本轮新增 emitted-circuit schedule proxy。它不做硬件 mapping，不引入连通性、routing 或噪声模型；只在生成的 X/CNOT/MCT oracle circuit 上计算并行逻辑深度、CNOT-depth proxy、T-depth proxy、显式辅助线 live peak 和显式辅助线 lifetime area。这使论文能讨论后端相关的逻辑层时序/生命周期 trade-off，而不越界声称真实设备优势。
+
+主要产物：
+
+- `analyze_schedule_metrics.py`
+- `results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv`
+- `results/summary_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv`
+- `results/analysis_screen_scale_schedule_depth_frontier_policy_generalization_terms.md`
+- `results/raw_schedule_truth_bridge_terms.csv`
+- `results/summary_schedule_truth_bridge_terms.csv`
+- `results/analysis_schedule_truth_bridge_terms.md`
+- `results/summary_schedule_metrics.csv`
+- `results/analysis_schedule_metrics.md`
+- `paper_latex/tables/schedule_metrics.tex`
+
+核心结果：
+
+| 设置 | 对比 | 项数/方法行 | score 胜/负/平 | T-depth proxy 胜/负/平 | lifetime area 变化 |
+|---|---|---:|---:|---:|---:|
+| schedule generalization n=24/28/32/40 | frontier policy vs fixed depth-2 | 96 | 40/0/56，-1.85% | 40/0/56，-1.85% | +20.09% |
+| schedule generalization n=24/28/32/40 | frontier policy vs depth-4 | 96 | 0/19/77，+0.61% | 0/19/77，+0.55% | -5.42% |
+| schedule generalization n=24/28/32/40 | frontier policy vs all-depth | 96 | 0/19/77，+0.61% | 0/19/77，+0.55% | -5.42% |
+| schedule truth bridge n=21/22 | frontier policy vs fixed depth-2 | 12 函数/120 方法行 | 8/0/4，-3.50% | 8/0/4，-3.32% | +32.93% |
+| schedule truth bridge n=21/22 | frontier policy vs depth-4 | 12 函数/120 方法行 | 0/2/10，+0.32% | 0/2/10，+0.32% | -4.01% |
+| schedule truth bridge n=21/22 | 完整 truth-table 验证 | 120 方法行 | 120/120 通过 | 120/120 plan/circuit 验证通过 | 0 mismatch |
+
+解释：这个结果让 frontier policy 的定位更清楚。相对 fixed depth-2，它不仅降低 score，也同步降低 T-depth proxy；代价是显式辅助线生命周期面积增加，说明更深结构会延长部分辅助线占用。相对 depth-4/all-depth，它牺牲约 0.32%--0.55% 的 T-depth proxy，却减少约 4%--5% 的显式辅助线 lifetime area，并显著节省搜索时间。论文中应把它写成“逻辑层后端相关 proxy 下的质量-生命周期 trade-off”，而不是写成硬件后端映射结论。
+
 ### 2.6 高维 root-action teacher 诊断
 
 新增 `analyze_highdim_root_action_oracle.py`，用于回答一个更具体的问题：高维 CNOT-only linear-pair 根层动作排序是否还有可学习空间。该脚本不追求全局最优，而是在 `highdim_neural_prior` 的 12 个 `n=14` random ANF 函数上，用真实 greedy child plan 对更宽的 root-action 集合做 one-step teacher 评分。
@@ -1015,6 +1045,7 @@ Git 状态：
 | n=20/28/40 depth-frontier | 72 个高维 ANF 项集 | depth-3 vs depth-2 为 49/0/23，-1.93%；depth-4 vs depth-2 为 49/0/23，-3.10%；648/648 emitted-circuit 符号验证通过 | 新增高预算质量前沿 |
 | depth-frontier policy | 32 个 held-out + 72 个 scale 项集 | held-out vs oracle frontier 为 +0.80% score、-58.76% time；scale vs depth-2 为 35/0/37、-2.19%；720/720 emitted-circuit 符号验证通过 | 新增结构级 AI 质量-时间折中 |
 | n=21/22 truth-table bridge | 12 个生成式 ANF 函数 | 120/120 完整 truth-table oracle 验证通过，120/120 plan 与 emitted-circuit 符号验证通过，0 mismatch；frontier policy vs depth-2 为 8/0/4、-3.50% | 新增 n>20 完整验证桥接 |
+| schedule proxy | 96 个 n=24/28/32/40 项集 + 12 个 n=21/22 bridge 函数 | frontier policy vs depth-2：项集 T-depth proxy 40/0/56、-1.85%，bridge T-depth proxy 8/0/4、-3.32%；相对 depth-4 lifetime area 分别 -5.42% 和 -4.01% | 新增逻辑层后端相关指标，非硬件 mapping |
 | highdim wide-fast guard | 12 个 n=14 random ANF | wide vs Resource 为 0/0/12，运行时间 +59.80% | 已有但属负向诊断 |
 | exact FPRM-DP | n<=4 traditional | Resource vs exact FPRM-DP 51/3/18，-12.18%；Pareto vs exact FPRM-DP 51/0/21，-12.20% | 已有但模型受限 |
 | exact XAG MC | n<=4 traditional | Resource/Pareto 达到 T 下界 12/72，平均 T gap +53.01%；ESOP 为 +120.14%，SSHR-I-T 为 +143.06% | 已有全局 T 下界 |
@@ -1028,4 +1059,4 @@ Git 状态：
 
 但是投稿前还需要继续补强“AI 搜索本身带来的贡献”这一点。否则文章容易被评价为一组 FPRM/ESOP 工程启发的组合，而不是强化学习与 MCTS 方法论文。
 
-本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、pairwise-wide n=16 full synthesis 和 Boolean-ring linear factor 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照、高维 pairwise-wide root-action ranker，以及 Boolean-ring factor 扩展都有可测证据。不过高维 neural guidance 的幅度仍然偏小，更强外部 reversible-toolchain 对比也仍然缺失，所以目标还不能判定完成。
+本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、pairwise-wide n=16 full synthesis、Boolean-ring linear factor 和 schedule proxy 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照、高维 pairwise-wide root-action ranker、Boolean-ring factor 扩展，以及 emitted-circuit 层 T-depth/辅助生命周期 trade-off 都有可测证据。不过高维 neural guidance 的幅度仍然偏小，更强外部 reversible-toolchain 对比也仍然缺失，所以目标还不能判定完成。
