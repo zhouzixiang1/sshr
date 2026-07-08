@@ -1,6 +1,7 @@
 item,status,evidence,next_action
 Bounded abstract claim,pass,Abstract states logical-layer scope and excludes hardware-mapped/depth-only claims.,Keep hardware and mapping claims out of the abstract unless new evidence is added.
 Contribution-to-evidence chain,pass,Introduction includes a contribution-to-evidence map.,Update the map whenever a headline contribution changes.
+Executable method workflow,pass,Method includes an end-to-end synthesis and verification workflow table.,Keep the workflow table aligned with new candidate generators or verification stages.
 Baseline fairness and scope,pass,"Experimental design includes claim, evidence, and comparability matrices.",Keep cross-toolchain claims tied to the comparability audit.
 Reproducibility evidence,pass,"Manuscript includes compute, worker, artifact, and external-tool provenance table.","Rerun analyze_reproducibility_audit.py after adding scripts, tables, or figures."
 Limitations and failure modes,pass,"Discussion names logical-layer, ROS-proxy, RevKit-derived, and high-dimensional bridge boundaries.",Add any new negative result to Discussion rather than hiding it in tables.

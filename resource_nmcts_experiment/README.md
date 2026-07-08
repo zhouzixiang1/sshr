@@ -32,6 +32,13 @@ The introduction-level contribution map is materialized by
 `paper_latex/tables/contribution_evidence_map.tex`.  It links the four
 headline contributions to implementation mechanisms, manuscript evidence, and
 claim boundaries.
+The method workflow table is materialized by
+`analyze_method_workflow_table.py`, which writes
+`results/summary_method_workflow.csv`,
+`results/analysis_method_workflow.md`, and
+`paper_latex/tables/method_workflow.tex`.  It records the end-to-end synthesis
+path from input normalization through candidate generation, neural/MCTS search
+control, guarded selection, circuit emission, and semantic reporting.
 The literature positioning layer is materialized by
 `analyze_related_work_positioning.py`, which writes
 `results/summary_related_work_positioning.csv`,

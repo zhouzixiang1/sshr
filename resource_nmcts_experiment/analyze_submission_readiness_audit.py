@@ -68,6 +68,12 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Update the map whenever a headline contribution changes.",
         },
         {
+            "item": "Executable method workflow",
+            "status": "pass" if "tab:method-workflow" in text else "needs revision",
+            "evidence": "Method includes an end-to-end synthesis and verification workflow table.",
+            "next_action": "Keep the workflow table aligned with new candidate generators or verification stages.",
+        },
+        {
             "item": "Baseline fairness and scope",
             "status": "pass"
             if contains_all(text, ["tab:baseline-claim-matrix", "tab:evidence-matrix", "tab:comparability-audit"])

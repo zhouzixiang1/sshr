@@ -36,6 +36,10 @@ Current source evidence:
   `../results/summary_contribution_evidence_map.csv`
 - contribution-to-evidence map analysis:
   `../results/analysis_contribution_evidence_map.md`
+- method workflow CSV:
+  `../results/summary_method_workflow.csv`
+- method workflow analysis:
+  `../results/analysis_method_workflow.md`
 - related-work positioning matrix CSV:
   `../results/summary_related_work_positioning.csv`
 - related-work positioning matrix analysis:

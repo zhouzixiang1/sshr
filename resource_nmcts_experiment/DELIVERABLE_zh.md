@@ -35,6 +35,15 @@
 
 该表已接入英文投稿稿引言，用于说明创新点不是单点技巧，而是“逻辑层搜索 formulation + neural/MCTS 资源搜索 workflow + 广泛 baseline/toolchain 对比 + 高维/phase 验证边界”的组合。
 
+本轮新增 method workflow 表，把方法从输入到验证的执行链条写清楚：
+
+- `analyze_method_workflow_table.py`
+- `results/summary_method_workflow.csv`
+- `results/analysis_method_workflow.md`
+- `paper_latex/tables/method_workflow.tex`
+
+该表已接入英文投稿稿 Method 的开头，按 input normalization、candidate generation、search control、guarded selection、circuit emission、verification/reporting 六步说明机制、验证不变量和产物。它解决的是审稿人常问的“神经/MCTS 到底控制什么、语义正确性从哪里来”：学习只控制候选排序、预算分配或跳过评估，正确性来自 ANF/发射线路/完整真值表/phase verifier。
+
 本轮进一步把 related work 定位固化为可复现矩阵：
 
 - `analyze_related_work_positioning.py`
@@ -135,7 +144,7 @@
 - `results/manifest_reproducibility_audit.json`
 - `paper_latex/tables/reproducibility_audit.tex`
 
-该审计记录当前工作站为 Apple M4 Pro，14 CPU cores，24.0 GiB RAM，20-core Metal GPU；`mcts-qoracle` 环境中 Python 3.11.15、PyTorch 2.12.0、MPS=True、CUDA=False。manifest 层面有 54 个运行记录包含 worker count，最大 workers=10；代表性流程包括 traditional resource 10 workers/1770 rows、RevKit CLI 8 workers/708 rows、ROS-style LUT 8 workers/927 rows、CirKit 8 workers/177 rows、mockturtle 4 workers/177 rows。重新生成后的 artifact coverage 为 57 个顶层 run/train/analyze 脚本、144 个 raw CSV、164 个 summary CSV、65 个 manifest、148 张 paper table 和 7 个 figure panel。论文中应把 runtime/time 结果限定在这个工作站上下文；可移植主张仍是逻辑资源数量和验证通过率。
+该审计记录当前工作站为 Apple M4 Pro，14 CPU cores，24.0 GiB RAM，20-core Metal GPU；`mcts-qoracle` 环境中 Python 3.11.15、PyTorch 2.12.0、MPS=True、CUDA=False。manifest 层面有 54 个运行记录包含 worker count，最大 workers=10；代表性流程包括 traditional resource 10 workers/1770 rows、RevKit CLI 8 workers/708 rows、ROS-style LUT 8 workers/927 rows、CirKit 8 workers/177 rows、mockturtle 4 workers/177 rows。重新生成后的 artifact coverage 为 58 个顶层 run/train/analyze 脚本、144 个 raw CSV、166 个 summary CSV、65 个 manifest、149 张 paper table 和 7 个 figure panel。论文中应把 runtime/time 结果限定在这个工作站上下文；可移植主张仍是逻辑资源数量和验证通过率。
 
 本轮新增投稿完整性层：英文投稿稿末尾加入 `Data and Code Availability`，明确代码、raw/summary CSV、manifest、LaTeX 表、图源数据和 PDF 均位于 `resource_nmcts_experiment/` artifact package，运行入口为 `run_*.py`、`train_*.py`、`analyze_*.py`，环境为 `mcts-qoracle` 和直接解释器路径 `/opt/anaconda3/envs/mcts-qoracle/bin/python`。同时新增自动 submission-readiness audit：
 
@@ -143,7 +152,7 @@
 - `results/summary_submission_readiness_audit.csv`
 - `results/analysis_submission_readiness_audit.md`
 
-当前审计结果为 8 项 pass、1 项 needs author input。已通过项包括 bounded abstract claim、contribution-to-evidence chain、baseline fairness/scope、reproducibility evidence、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder、25 页 compiled PDF。唯一保留项是作者特定的 funding、acknowledgements、competing interests 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
+当前审计结果为 9 项 pass、1 项 needs author input。已通过项包括 bounded abstract claim、contribution-to-evidence chain、executable method workflow、baseline fairness/scope、reproducibility evidence、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder、compiled PDF。唯一保留项是作者特定的 funding、acknowledgements、competing interests 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
 
 ## 2. 当前已完成内容
 

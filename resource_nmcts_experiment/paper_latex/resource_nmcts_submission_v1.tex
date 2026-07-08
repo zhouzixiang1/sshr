@@ -247,6 +247,25 @@ factors, and bounded affine changes of variables.  Each action is scored by
 its immediate resource estimate and by the size and structure of the induced
 subproblems.
 
+Table~\ref{tab:method-workflow} summarizes the complete execution path.  The
+central invariant is that learning and tree search only control which
+verifiable algebraic candidates are evaluated or selected; semantic correctness
+is supplied by the ANF, emitted-circuit, truth-table, or phase verifier attached
+to the corresponding stage.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{End-to-end synthesis and verification workflow.  Each stage records
+the mechanism used by \method{}, the invariant that prevents the learned search
+from becoming a semantic oracle, and the artifact produced for downstream
+analysis.}
+\label{tab:method-workflow}
+\input{tables/method_workflow}
+\end{table}
+
 \subsection{Boolean-ring linear factors}
 
 A key extension is allowing the linear factor and the quotient to share
