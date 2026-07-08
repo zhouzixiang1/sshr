@@ -22,6 +22,42 @@ SUBMISSION_PACKAGE = THIS_DIR / "submission_package"
 AUTHOR_TEMPLATE = SUBMISSION_PACKAGE / "author_declarations_template.md"
 COVER_TEMPLATE = SUBMISSION_PACKAGE / "cover_letter_template.md"
 CHECKLIST = SUBMISSION_PACKAGE / "submission_checklist.md"
+METADATA_TEMPLATE = SUBMISSION_PACKAGE / "submission_metadata_template.json"
+METADATA_FILE = SUBMISSION_PACKAGE / "submission_metadata.json"
+
+REQUIRED_METADATA_PATHS = (
+    "target_venue.name",
+    "target_venue.manuscript_type",
+    "target_venue.formatting_policy_checked",
+    "target_venue.reference_style_checked",
+    "target_venue.word_limit_checked",
+    "target_venue.supplementary_material_policy_checked",
+    "target_venue.ai_disclosure_policy_checked",
+    "target_venue.anonymous_review_required",
+    "authors",
+    "corresponding_author.name",
+    "corresponding_author.email",
+    "corresponding_author.affiliation",
+    "author_contributions.conceptualization",
+    "author_contributions.methodology",
+    "author_contributions.software",
+    "author_contributions.validation",
+    "author_contributions.writing_original_draft",
+    "author_contributions.writing_review_editing",
+    "funding.statement",
+    "acknowledgements.statement",
+    "competing_interests.statement",
+    "data_availability.archive_link_or_doi",
+    "data_availability.statement",
+    "code_availability.repository_url",
+    "code_availability.commit_hash",
+    "code_availability.license",
+    "code_availability.statement",
+    "ai_assistance.statement",
+    "preprint_and_prior_submission.statement",
+    "cover_letter.editorial_routing_statement",
+    "permissions.third_party_material_confirmed",
+)
 
 
 @dataclass(frozen=True)
@@ -55,6 +91,91 @@ def extract_section(text: str, heading: str) -> str:
 
 def marker_count(text: str) -> int:
     return text.count("AUTHOR INPUT REQUIRED")
+
+
+def read_json(path: Path) -> object:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
+def value_at(data: object, dotted_path: str) -> object:
+    current = data
+    for part in dotted_path.split("."):
+        if isinstance(current, dict) and part in current:
+            current = current[part]
+        else:
+            return None
+    return current
+
+
+def has_author_placeholder(value: object) -> bool:
+    if value is None:
+        return True
+    if isinstance(value, str):
+        stripped = value.strip()
+        return not stripped or "AUTHOR INPUT REQUIRED" in stripped
+    if isinstance(value, list):
+        return not value or any(has_author_placeholder(item) for item in value)
+    if isinstance(value, dict):
+        return not value or any(has_author_placeholder(item) for item in value.values())
+    return False
+
+
+def structured_metadata_row() -> dict[str, str]:
+    required = "; ".join(REQUIRED_METADATA_PATHS)
+    if not METADATA_TEMPLATE.exists():
+        return {
+            "item": "Structured metadata intake file",
+            "status": "missing source",
+            "source": rel(METADATA_TEMPLATE),
+            "required_fields": required,
+            "reason": "A single structured intake file keeps author and venue metadata from being scattered across templates.",
+            "evidence": f"{rel(METADATA_TEMPLATE)} is missing.",
+            "next_action": "Restore the metadata template.",
+        }
+    if not METADATA_FILE.exists():
+        return {
+            "item": "Structured metadata intake file",
+            "status": "needs author input",
+            "source": rel(METADATA_TEMPLATE),
+            "required_fields": required,
+            "reason": "A single structured intake file keeps author and venue metadata from being scattered across templates.",
+            "evidence": f"Template exists; copy it to {rel(METADATA_FILE)} and fill every AUTHOR INPUT REQUIRED value.",
+            "next_action": "Create `submission_package/submission_metadata.json` from the template, fill it, then rerun the rebuild script.",
+        }
+    data = read_json(METADATA_FILE)
+    if data is None:
+        return {
+            "item": "Structured metadata intake file",
+            "status": "needs author input",
+            "source": rel(METADATA_FILE),
+            "required_fields": required,
+            "reason": "A single structured intake file keeps author and venue metadata from being scattered across templates.",
+            "evidence": f"{rel(METADATA_FILE)} exists but is not valid JSON.",
+            "next_action": "Fix the JSON syntax and rerun the rebuild script.",
+        }
+    missing = [path for path in REQUIRED_METADATA_PATHS if has_author_placeholder(value_at(data, path))]
+    if missing:
+        return {
+            "item": "Structured metadata intake file",
+            "status": "needs author input",
+            "source": rel(METADATA_FILE),
+            "required_fields": required,
+            "reason": "A single structured intake file keeps author and venue metadata from being scattered across templates.",
+            "evidence": f"{len(missing)} required metadata path(s) are empty or still contain AUTHOR INPUT REQUIRED.",
+            "next_action": "Fill: " + "; ".join(missing[:8]) + ("; ..." if len(missing) > 8 else ""),
+        }
+    return {
+        "item": "Structured metadata intake file",
+        "status": "pass",
+        "source": rel(METADATA_FILE),
+        "required_fields": required,
+        "reason": "A single structured intake file keeps author and venue metadata from being scattered across templates.",
+        "evidence": f"{rel(METADATA_FILE)} exists and all required metadata paths are filled.",
+        "next_action": "Use the filled metadata to update author declarations, cover letter, and final availability text.",
+    }
 
 
 def blocks() -> list[MetadataBlock]:
@@ -160,7 +281,7 @@ def block_text(block: MetadataBlock) -> str:
 
 
 def build_rows() -> list[dict[str, str]]:
-    rows: list[dict[str, str]] = []
+    rows: list[dict[str, str]] = [structured_metadata_row()]
     for block in blocks():
         text = block_text(block)
         markers = marker_count(text)

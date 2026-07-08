@@ -152,7 +152,11 @@ The submission metadata audit is materialized by
 venue-specific fields that remain deliberately human-gated: author identity,
 CRediT roles, funding, acknowledgements, competing interests, archive links,
 code license/repository metadata, AI-assistance disclosure, preprint history,
-cover-letter routing fields, and target-venue policy checks.
+cover-letter routing fields, and target-venue policy checks.  The structured
+intake template is `submission_package/submission_metadata_template.json`;
+copy it to `submission_package/submission_metadata.json`, fill every
+`AUTHOR INPUT REQUIRED` value, and rerun the rebuild script.  The filled file
+is ignored by Git to avoid accidental commits of author-private metadata.
 The goal-completion audit is materialized by
 `analyze_goal_completion_audit.py`, which writes
 `results/summary_goal_completion_audit.csv`,

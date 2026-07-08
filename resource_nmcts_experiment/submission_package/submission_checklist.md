@@ -4,6 +4,7 @@ Use this checklist immediately before uploading the manuscript.
 
 ## Required Author Input
 
+- AUTHOR INPUT REQUIRED: Copy `submission_package/submission_metadata_template.json` to `submission_package/submission_metadata.json` and fill every `AUTHOR INPUT REQUIRED` value.
 - AUTHOR INPUT REQUIRED: Confirm author order, affiliations, ORCID IDs, and corresponding author details.
 - AUTHOR INPUT REQUIRED: Complete funding, acknowledgements, author contributions, and competing-interest statements.
 - AUTHOR INPUT REQUIRED: Replace repository-relative availability wording with the target venue's required archive DOI, repository URL, or anonymous review link.
@@ -27,6 +28,7 @@ Use this checklist immediately before uploading the manuscript.
 - Readiness audit: `results/analysis_submission_readiness_audit.md`
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
 - Goal-completion audit: `results/analysis_goal_completion_audit.md`
+- Structured metadata template: `submission_package/submission_metadata_template.json`
 - Traceability audit: `results/analysis_submission_traceability_audit.md`
 - Archive manifest: `results/analysis_submission_archive_manifest.md`
 - Payload archive manifest: `results/analysis_submission_payload_archive.md`
@@ -57,7 +59,7 @@ Expected current state:
 
 - Archive manifest: all payload groups complete.
 - Payload archive: tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.
-- Metadata audit: all author- and venue-specific fields are enumerated before upload.
+- Metadata audit: all author- and venue-specific fields are enumerated before upload, and any filled `submission_metadata.json` is checked.
 - Goal-completion audit: all research/package requirements pass and only author/venue gates remain open.
 - Traceability audit: all claim families complete.
 - Readiness audit: all paper/package checks pass except author-specific declarations.

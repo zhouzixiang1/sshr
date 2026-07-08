@@ -7,6 +7,15 @@
   "python": "3.11.15",
   "rows": [
     {
+      "evidence": "Template exists; copy it to submission_package/submission_metadata.json and fill every AUTHOR INPUT REQUIRED value.",
+      "item": "Structured metadata intake file",
+      "next_action": "Create `submission_package/submission_metadata.json` from the template, fill it, then rerun the rebuild script.",
+      "reason": "A single structured intake file keeps author and venue metadata from being scattered across templates.",
+      "required_fields": "target_venue.name; target_venue.manuscript_type; target_venue.formatting_policy_checked; target_venue.reference_style_checked; target_venue.word_limit_checked; target_venue.supplementary_material_policy_checked; target_venue.ai_disclosure_policy_checked; target_venue.anonymous_review_required; authors; corresponding_author.name; corresponding_author.email; corresponding_author.affiliation; author_contributions.conceptualization; author_contributions.methodology; author_contributions.software; author_contributions.validation; author_contributions.writing_original_draft; author_contributions.writing_review_editing; funding.statement; acknowledgements.statement; competing_interests.statement; data_availability.archive_link_or_doi; data_availability.statement; code_availability.repository_url; code_availability.commit_hash; code_availability.license; code_availability.statement; ai_assistance.statement; preprint_and_prior_submission.statement; cover_letter.editorial_routing_statement; permissions.third_party_material_confirmed",
+      "source": "submission_package/submission_metadata_template.json",
+      "status": "needs author input"
+    },
+    {
       "evidence": "1 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/author_declarations_template.md.",
       "item": "Author identity and affiliations",
       "next_action": "Fill the author list, affiliations, ORCIDs, corresponding author, and email addresses.",
@@ -97,7 +106,7 @@
       "status": "needs author input"
     },
     {
-      "evidence": "5 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/submission_checklist.md.",
+      "evidence": "7 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/submission_checklist.md.",
       "item": "Target-venue policy check",
       "next_action": "Check the target venue guide and update manuscript or support files accordingly.",
       "reason": "Venue-specific policies can only be finalized after the target venue is chosen.",
@@ -110,9 +119,10 @@
   "source_files": [
     "submission_package/author_declarations_template.md",
     "submission_package/cover_letter_template.md",
-    "submission_package/submission_checklist.md"
+    "submission_package/submission_checklist.md",
+    "submission_package/submission_metadata_template.json"
   ],
   "status_counts": {
-    "needs author input": 11
+    "needs author input": 12
   }
 }

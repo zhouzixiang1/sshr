@@ -2,6 +2,11 @@
 
 This file collects author-specific statements that cannot be inferred from the code or experiment artifacts.  Complete these fields before journal upload.
 
+For a single structured intake path, copy `submission_metadata_template.json` to
+`submission_metadata.json`, fill every `AUTHOR INPUT REQUIRED` value, and rerun
+`./rebuild_submission_package.sh`.  The filled JSON file is ignored by Git so
+private author metadata is not committed accidentally.
+
 ## Manuscript
 
 - Title: Resource-Constrained Neural Monte Carlo Tree Search for Quantum Boolean Oracle Synthesis

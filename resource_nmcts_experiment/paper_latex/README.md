@@ -100,6 +100,8 @@ Current source evidence:
   `../results/analysis_submission_metadata_audit.md`
 - submission metadata audit JSON:
   `../results/manifest_submission_metadata_audit.json`
+- structured submission metadata template:
+  `../submission_package/submission_metadata_template.json`
 - goal-completion audit CSV:
   `../results/summary_goal_completion_audit.csv`
 - goal-completion audit analysis:

@@ -184,11 +184,12 @@
 本轮新增 submission metadata audit，把最后剩余的人工字段拆成机器可检查清单：
 
 - `analyze_submission_metadata_audit.py`
+- `submission_package/submission_metadata_template.json`
 - `results/summary_submission_metadata_audit.csv`
 - `results/analysis_submission_metadata_audit.md`
 - `results/manifest_submission_metadata_audit.json`
 
-该审计逐项列出 author identity、CRediT contribution、funding、acknowledgements、competing interests、data/code availability archive link、license/repository metadata、AI-assistance disclosure、preprint/prior submission、cover-letter routing fields 和 target-venue policy check。当前这些项仍保持 `needs author input`，但已经从模糊“还差作者信息”变成可填写、可复查、可归档的最终投稿元数据清单。
+该审计逐项列出 author identity、CRediT contribution、funding、acknowledgements、competing interests、data/code availability archive link、license/repository metadata、AI-assistance disclosure、preprint/prior submission、cover-letter routing fields 和 target-venue policy check。当前这些项仍保持 `needs author input`，但已经从模糊“还差作者信息”变成可填写、可复查、可归档的最终投稿元数据清单。后续只需把 `submission_metadata_template.json` 复制为被 Git 忽略的 `submission_metadata.json`，填完所有 `AUTHOR INPUT REQUIRED` 值后重跑 `./rebuild_submission_package.sh`，审计就会指出剩余未填路径或转为 pass。
 
 本轮新增 goal-completion audit，把最初目标拆成目标级证据矩阵：
 
