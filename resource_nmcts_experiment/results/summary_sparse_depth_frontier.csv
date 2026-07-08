@@ -1,0 +1,6 @@
+source,n_scope,pairs,score_wlt,mean_rel_score,mean_rel_time,mean_rel_T,mean_rel_CNOT,mean_rel_depth,mean_rel_peak_ancilla,depth4_vs_depth3_wlt,sparse_selected_depth2,sparse_selected_depth4,full_selected_depth3,verified_rows,method_rows
+scale-frontier,"20,28,40",72,0/0/72,0.0,-0.27574102303342524,0.0,0.0,0.0,0.0,44/0/28,14,58,6,216,216
+scale-generalization,"24,28,32,40",96,0/0/96,0.0,-0.2816785987950628,0.0,0.0,0.0,0.0,52/0/44,26,70,18,288,288
+truth-bridge-n23,23,6,0/0/6,0.0,-0.24941494585091012,0.0,0.0,0.0,0.0,5/0/1,0,6,1,18,18
+truth-bridge-n24,24,6,0/0/6,0.0,-0.28877215146673496,0.0,0.0,0.0,0.0,3/0/3,2,4,1,18,18
+truth-bridge-n25,25,6,0/0/6,0.0,-0.2706014601721171,0.0,0.0,0.0,0.0,4/0/2,2,4,0,18,18

@@ -52,6 +52,12 @@ high-dimensional Boolean-ring and Boolean-screen comparisons into
 `paper_latex/tables/boolean_ring_structural_evidence.tex`.  It separates
 quality-seeking structural guards, time-saving screen gates, and speed-only
 negative controls.
+The sparse frontier audit is materialized by
+`analyze_sparse_depth_frontier.py`, which reconstructs a depth-2/4 Boolean
+screen controller from the measured depth-2/3/4 raw rows.  It writes
+`paper_latex/tables/sparse_depth_frontier.tex` and shows that the sparse
+frontier exactly matches the full measured frontier on the audited scale and
+truth-bridge slices while removing the depth-3 evaluation cost.
 The high-dimensional scale audit is materialized by
 `analyze_scaling_resource_audit.py`, which separates functions/settings,
 method rows, verified rows, and representative resource means for the large

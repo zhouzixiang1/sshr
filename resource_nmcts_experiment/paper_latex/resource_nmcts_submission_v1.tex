@@ -68,12 +68,15 @@ Pareto-\method{} has 173/0/4 score wins and a mean score reduction of 67.28\%,
 but uses more peak ancilla on 169/177 functions.  In the phase-search branch,
 a rank-trained diverse policy exact-scores 512 of 8192 affine candidates per
 held-out $n=6$ function and matches the wide-search mean within 0.01\% under
-the $T/R_z=30$ proxy.  High-dimensional correctness is supported by 5640/5640
-item-level symbolic runs, 1512/1512 width-probe symbolic runs, 531/531 exact
-phase-search rows, 7611/7611 policy-pruning rows, and 400/400 complete
-\ttable{}-bridge method rows for $n=21$--$25$.  The contribution is therefore
-a verified logical-layer search method with strong T-count and weighted-score
-advantages, not a hardware-mapped or depth-only synthesis claim.
+the $T/R_z=30$ proxy.  A sparse depth-2/4 frontier exactly matches the measured
+depth-2/3/4 frontier on 186 scale and truth-bridge instances while reducing
+frontier evaluation time by 24.94--28.88\%.  High-dimensional correctness is
+supported by 5640/5640 item-level symbolic runs, 1512/1512 width-probe
+symbolic runs, 531/531 exact phase-search rows, 7611/7611 policy-pruning rows,
+and 400/400 complete \ttable{}-bridge method rows for $n=21$--$25$.  The
+contribution is therefore a verified logical-layer search method with strong
+T-count and weighted-score advantages, not a hardware-mapped or depth-only
+synthesis claim.
 \end{abstract}
 
 \section{Introduction}
@@ -499,11 +502,14 @@ shows quality-seeking structural guards, a screen gate that preserves the
 selected resource vector while saving time, and a negative control where a fast
 screen is not resource-competitive.  This prevents the structural-search claim
 from being reduced to a neural-prior claim or overstated as a universal screen
-improvement.  Table~\ref{tab:stage-frontier} adds a staged teacher/guard for
-the high-dimensional frontier.  Its depth-4 trigger is selected only on the
-large-policy validation split; on the independent $n=24,28,32,40$ scale rows
-it remains within 0.04\% of all-depth score while reducing staged planning time
-by 25.43\%.
+improvement.  Table~\ref{tab:sparse-frontier} then compresses the expensive
+depth-frontier itself.  On the listed scale and truth-bridge slices, evaluating
+only depth 2 and depth 4 exactly matches the full depth-2/3/4 frontier while
+removing 24.94--28.88\% of frontier evaluation time.  Table
+\ref{tab:stage-frontier} adds the earlier staged teacher/guard.  Its depth-4
+trigger is selected only on the large-policy validation split; on the
+independent $n=24,28,32,40$ scale rows it remains within 0.04\% of all-depth
+score while reducing staged planning time by 25.43\%.
 
 \begin{table}[H]
 \centering
@@ -524,6 +530,18 @@ mean changes favor the first method in each comparison.  The $n=18$ row is kept
 as a speed-only negative control rather than promoted as a quality result.}
 \label{tab:boolean-ring-structural}
 \input{tables/boolean_ring_structural_evidence}
+\end{table}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.08}
+\caption{Sparse depth-frontier audit.  The sparse controller evaluates
+depth-2 and depth-4 Boolean-ring screens, skips depth 3, and is compared with
+the full measured depth-2/3/4 frontier in the same raw files.}
+\label{tab:sparse-frontier}
+\input{tables/sparse_depth_frontier}
 \end{table}
 
 \begin{table}[H]
@@ -702,12 +720,16 @@ Boolean-ring structural audit further separates resource quality from planning
 cost: at $n=14$ and $n=16$ the guard improves score by 0.34--0.82\% over the
 pairwise-wide baseline; at $n=20$ a deeper screen gives a 7.47\% score
 reduction over the old Resource baseline with an ancilla tradeoff; and the
-$n=18$ screen-only row is much faster but worse in score.  The large,
-cost-aware, and staged frontier controllers should be read as three operating
-points on the same search frontier: quality-oriented single-shot selection,
-faster cost-aware selection, and a validation-calibrated staged teacher that
-nearly matches all-depth search while skipping some expensive depth-4
-evaluations.  In the
+$n=18$ screen-only row is much faster but worse in score.  The sparse
+depth-frontier audit suggests a simpler planning-cost reduction inside the
+current frontier: depth 3 was never needed once depth 4 was measured in the
+audited slices, so a depth-2/4 frontier exactly matched all-depth resources
+while removing roughly one quarter of frontier evaluation time.  This is an
+empirical controller for the present generated slices, not a proof that depth 3
+is universally dominated.  The large, cost-aware, and staged frontier
+controllers should be read as operating points on the same search frontier:
+quality-oriented single-shot selection, faster cost-aware selection, and a
+validation-calibrated staged teacher.  In the
 phase/Rz branch, affine and polarity search give verified improvements, and the
 rank-trained diverse shortlist now tracks the wide-search frontier with 6.25\%
 of the exact evaluations.  However, random-repeat margins remain small, so this
@@ -737,9 +759,11 @@ ROS-style LUT mapping, mockturtle, CirKit, and legacy RevKit CLI reversible
 synthesis, the method retains a strong weighted-score advantage while exposing
 clear depth and ancilla tradeoffs.  Large symbolic experiments and
 $n=21$--$25$ complete truth-table bridges support the semantic correctness of
-the logical-layer circuits, and the staged frontier analysis adds a
-validation-calibrated high-quality controller for depth-search budget.  The
-next step is not to claim hardware-level
+the logical-layer circuits.  The sparse depth-frontier analysis further reduces
+high-dimensional planning cost by skipping depth 3 in the audited frontier,
+while the staged frontier analysis remains a validation-calibrated controller
+when depth-4 evaluation itself should be conditional.  The next step is not to
+claim hardware-level
 optimality, but to strengthen the phase/Rz policy and complete fuller
 toolchain reproductions while keeping the claim at the logical synthesis
 layer.

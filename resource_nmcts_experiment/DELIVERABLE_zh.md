@@ -64,6 +64,15 @@
 
 该表把 Boolean-ring/Boolean-screen 分成三类证据，而不是简单说“AI 更强”：质量型 guard 在 `n=14` 为 9/0/3、score -0.82%，在 `n=16` 为 14/0/10、score -0.34%；`n=16` boolean-linear deep 仍有 14/6/4、score -0.22%，同时 planning time -72.31%；`n=20` screen gate 与 full Resource 资源完全持平 0/0/6，但 time -75.58%；`n=20` recursive Boolean screen 相对 old Resource 为 5/0/1、score -7.47%，但 ancilla +13.06%。同时保留 `n=18` speed-only negative control：score +36.94%、time -97.90%，说明简单 screen 不能被宣传成普遍质量提升。
 
+本轮进一步新增 sparse depth-frontier audit，把高维 frontier 从“depth-2/3/4 全部评估”压缩为“只评估 depth-2 和 depth-4”：
+
+- `analyze_sparse_depth_frontier.py`
+- `results/summary_sparse_depth_frontier.csv`
+- `results/analysis_sparse_depth_frontier.md`
+- `paper_latex/tables/sparse_depth_frontier.tex`
+
+核心结果是：在 `scale-frontier` 72 对、`scale-generalization` 96 对、`n=23/24/25` truth-bridge 各 6 对上，sparse depth-2/4 frontier 相对完整 depth-2/3/4 frontier 分别为 0/0/72、0/0/96、0/0/6、0/0/6、0/0/6，score/T/CNOT/depth/ancilla 完全持平，同时平均 time 分别下降 27.57%、28.17%、24.94%、28.88%、27.06%。该结果比现有 stage-gated frontier 更干净：它不牺牲 score，不需要阈值，直接删除当前审计切片中没有最终入选的 depth-3 评估。但论文中仍应写成“当前生成切片上的经验 controller”，不能写成 depth-3 在所有函数上理论上被 depth-4 支配。
+
 本轮新增 learned-control audit 层，用于校准题目中“neural/MCTS”的贡献强度：
 
 - `analyze_learned_control_audit.py`
