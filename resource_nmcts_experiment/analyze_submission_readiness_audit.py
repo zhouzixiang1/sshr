@@ -103,6 +103,23 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Keep the abstract compact; detailed per-baseline numbers belong in Results tables.",
         },
         {
+            "item": "First-pages scope and assumptions",
+            "status": "pass"
+            if contains_all(
+                text,
+                [
+                    "Scope and assumptions",
+                    "logical-layer Boolean-oracle synthesis",
+                    "hardware mapping",
+                    "baseline comparability audit",
+                    "universal leaderboard",
+                ],
+            )
+            else "needs revision",
+            "evidence": "Introduction states the logical-layer scope, excluded hardware assumptions, score role, and comparison boundary.",
+            "next_action": "Keep the scope and assumptions visible in the first pages after venue-specific template conversion.",
+        },
+        {
             "item": "Contribution-to-evidence chain",
             "status": "pass" if "tab:contribution-map" in text else "needs revision",
             "evidence": "Introduction includes a contribution-to-evidence map.",

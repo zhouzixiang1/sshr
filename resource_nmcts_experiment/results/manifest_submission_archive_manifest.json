@@ -2,7 +2,7 @@
   "categories": [
     {
       "boundary": "Compiled PDF is checked by readiness audit to avoid self-referential hashes.",
-      "bytes": 73269,
+      "bytes": 73830,
       "category": "Manuscript source",
       "file_count": 3,
       "files": [
@@ -17,13 +17,13 @@
           "sha256": "ab6321067236ad1c6bcae4fdc2509ecfb992fe915a3f0218531da7cb57466028"
         },
         {
-          "bytes": 48015,
+          "bytes": 48576,
           "path": "paper_latex/resource_nmcts_submission_v1.tex",
-          "sha256": "0b67d6981668df5df2e8614ee8f526fbc3af1af8dd6c0611ff9e9c49244c18a7"
+          "sha256": "83fb2c662abbcd9c61c2a610961706296ca5e90c288f4cf6c5a72c9ff6e09028"
         }
       ],
       "missing": [],
-      "sha256_digest": "eaf7f90c8a236c3c5def6bc26eab0433ef3e0bc9a8774e8215450940d1a22aa7"
+      "sha256_digest": "be1f55c9d8353ecc2d2efdc0fcc0648f143cd9fba58d83bef17a2f86893a5b8d"
     },
     {
       "boundary": "Terminal submission audit tables are excluded from the stable payload digest.",
@@ -3582,14 +3582,14 @@
     },
     {
       "boundary": "Documents reproducible entry points; raw sweeps still require their individual drivers.",
-      "bytes": 1309403,
+      "bytes": 1310197,
       "category": "Scripts and docs",
       "file_count": 67,
       "files": [
         {
-          "bytes": 154948,
+          "bytes": 154984,
           "path": "DELIVERABLE_zh.md",
-          "sha256": "5f5ea2a8727b766317987f8916bcde727c54276265c2b93ece523cc0945975bc"
+          "sha256": "5d24607c4a24992d0ba4d8782e33f7bfe659f6a26148ca5d51c2bb62c7236118"
         },
         {
           "bytes": 100680,
@@ -3782,9 +3782,9 @@
           "sha256": "d7c12eaf1d3ef2c6e85b69db2906d7cd314e798425b53edcee8c5461c267f90d"
         },
         {
-          "bytes": 13070,
+          "bytes": 13828,
           "path": "analyze_submission_readiness_audit.py",
-          "sha256": "a673c5b3bf585204f2c92ddb172ce746cb8d2570df802c48765d2151b0e12796"
+          "sha256": "e40f2c93d2a9c5518e9634b5879434794a6b2438ddc8bbc5c8911fc5b2fcb17d"
         },
         {
           "bytes": 12963,
@@ -3923,7 +3923,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "a115f4c52d8c3867a0dc2cd7aefdd2e3d50a6677dc8a23c0c4ad542f36fd3e49"
+      "sha256_digest": "40fdf92a6b1e15180a72aa801b284909cbd37b835e66b09dc7478b4f7b39a4fc"
     },
     {
       "boundary": "Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild.",

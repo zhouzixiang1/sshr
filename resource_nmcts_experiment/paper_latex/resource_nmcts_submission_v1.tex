@@ -112,6 +112,15 @@ mockturtle, CirKit, RevKit CLI, and RevKit phase/Rz baselines on matched
 functions.  Fourth, it separates algorithmic gains from engineering guards
 through ablations and high-dimensional verification bridges.
 
+\paragraph{Scope and assumptions.}
+The study is intentionally limited to logical-layer Boolean-oracle synthesis.
+All reported resources are computed before hardware mapping, routing,
+native-gate scheduling, noise modeling, and magic-state-factory accounting.
+The weighted score in Eq.~\eqref{eq:score} is used only to rank verified
+candidates; T-count, CNOT count, depth, gate count, and peak ancilla are also
+reported separately, and cross-toolchain comparisons are interpreted through
+the baseline comparability audit rather than as a universal leaderboard.
+
 \begin{table}[H]
 \centering
 \scriptsize

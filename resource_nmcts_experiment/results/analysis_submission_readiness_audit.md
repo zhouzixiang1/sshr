@@ -5,7 +5,7 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 ## Status counts
 
 - needs author input: 1
-- pass: 17
+- pass: 18
 
 ## Checklist
 
@@ -13,6 +13,7 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 |---|---|---|---|
 | Bounded abstract claim | pass | Abstract states logical-layer scope and excludes hardware-mapped/depth-only claims. | Keep hardware and mapping claims out of the abstract unless new evidence is added. |
 | Abstract concision | pass | Abstract word count is 287. | Keep the abstract compact; detailed per-baseline numbers belong in Results tables. |
+| First-pages scope and assumptions | pass | Introduction states the logical-layer scope, excluded hardware assumptions, score role, and comparison boundary. | Keep the scope and assumptions visible in the first pages after venue-specific template conversion. |
 | Contribution-to-evidence chain | pass | Introduction includes a contribution-to-evidence map. | Update the map whenever a headline contribution changes. |
 | Executable method workflow | pass | Method includes an end-to-end synthesis and verification workflow table. | Keep the workflow table aligned with new candidate generators or verification stages. |
 | Baseline fairness and scope | pass | Experimental design includes claim, evidence, and comparability matrices. | Keep cross-toolchain claims tied to the comparability audit. |
