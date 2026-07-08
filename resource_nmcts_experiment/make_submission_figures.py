@@ -7,6 +7,7 @@ synthesis experiments.
 from __future__ import annotations
 
 import csv
+import re
 from collections import defaultdict
 from pathlib import Path
 from typing import Iterable
@@ -432,9 +433,149 @@ def fig_phase_affine() -> None:
     for i, row in enumerate(counts):
         ax2.text(i, float(row["mean_relative_pct"]) + 2, f"{row['wins']}/177", ha="center")
     ax2.set_title("Search choices", loc="left", weight="bold")
-    fig.text(0.01, 0.96, "d", fontsize=10, weight="bold")
+    fig.text(0.01, 0.96, "e", fontsize=10, weight="bold")
     fig.tight_layout()
     save(fig, "fig4_phase_affine")
+
+
+def first_percent(text: str) -> float:
+    match = re.search(r"([+-]?\d+(?:\.\d+)?)\\?%", text)
+    if not match:
+        return 0.0
+    return float(match.group(1))
+
+
+def learned_control_rows() -> list[dict[str, object]]:
+    rows = []
+    phase_random = read_csv(RESULTS / "summary_phase_policy_random_control.csv")
+    phase_p = next(
+        float(row["sign_p"])
+        for row in phase_random
+        if row["policy"] == "diverse" and int(row["topk"]) == 512
+    )
+    for row in read_csv(RESULTS / "summary_learned_control_audit.csv"):
+        component = row["component"]
+        quality_delta = first_percent(row["quality"])
+        role = row["role"]
+        cost = row["cost"]
+        if "512/8192" in cost:
+            cost_saving = 100.0 * (1.0 - 512.0 / 8192.0)
+        else:
+            cost_saving = -first_percent(cost)
+        short = {
+            "Depth-frontier policy": "frontier",
+            "Stage-gated frontier": "stage gate",
+            "Sparse depth-4 gate": "sparse gate",
+            "Rank-diverse phase shortlist": "phase shortlist",
+            "Boolean neural guard": "neural guard",
+            "Root-action neural ranker": "root ranker",
+        }.get(component, component)
+        rows.append(
+            {
+                "component": component,
+                "short": short,
+                "promoted": role.startswith("promoted"),
+                "quality_delta_pct": quality_delta,
+                "cost_saving_pct": cost_saving,
+                "quality": row["quality"],
+                "cost": cost,
+                "role": role,
+                "phase_random_sign_p": phase_p if component == "Rank-diverse phase shortlist" else "",
+            }
+        )
+    return rows
+
+
+def fig_learned_control_summary() -> None:
+    data = learned_control_rows()
+    write_source(
+        "fig7_learned_control_summary",
+        data,
+        [
+            "component",
+            "short",
+            "promoted",
+            "quality_delta_pct",
+            "cost_saving_pct",
+            "quality",
+            "cost",
+            "role",
+            "phase_random_sign_p",
+        ],
+    )
+    promoted = [row for row in data if row["promoted"]]
+    limited = [row for row in data if not row["promoted"]]
+
+    fig, axes = plt.subplots(
+        1,
+        3,
+        figsize=(7.2, 2.75),
+        gridspec_kw={"width_ratios": [1.15, 1.15, 1.0]},
+    )
+    colors = [PALETTE["resource"], PALETTE["baseline"], PALETTE["gain"], PALETTE["phase"]]
+
+    ax = axes[0]
+    y = list(range(len(promoted)))
+    quality = [float(row["quality_delta_pct"]) for row in promoted]
+    ax.barh(y, quality, color=colors, height=0.6)
+    ax.axvline(0, color="#30343B", linewidth=0.8)
+    ax.set_yticks(y)
+    ax.set_yticklabels([str(row["short"]) for row in promoted])
+    ax.invert_yaxis()
+    ax.set_xlabel("Score change (%)")
+    ax.set_title("Promoted controls keep quality.", loc="left", weight="bold")
+    ax.set_xlim(-2.8, 0.35)
+    for i, value in enumerate(quality):
+        if value < -0.25:
+            ax.text(value + 0.10, i, f"{value:+.2f}%", va="center", ha="left", fontsize=6.3, color="white")
+        else:
+            ax.text(value + 0.05, i, f"{value:+.2f}%", va="center", ha="left", fontsize=6.3, color="#1E2329")
+    ax.grid(axis="x", color="#E3E6EA", linewidth=0.6)
+    ax.set_axisbelow(True)
+
+    ax = axes[1]
+    savings = [float(row["cost_saving_pct"]) for row in promoted]
+    ax.barh(y, savings, color=colors, height=0.6)
+    ax.set_yticks(y)
+    ax.set_yticklabels([])
+    ax.invert_yaxis()
+    ax.set_xlabel("Time/eval saved (%)")
+    ax.set_title("They reduce search effort.", loc="left", weight="bold")
+    ax.set_xlim(0, 100)
+    for i, (row, value) in enumerate(zip(promoted, savings)):
+        label = f"{value:.1f}%"
+        if row["component"] == "Rank-diverse phase shortlist":
+            label += "\np=1.5e-5"
+        ax.text(min(value + 2.0, 96), i, label, va="center", ha="left", fontsize=6.1)
+    ax.grid(axis="x", color="#E3E6EA", linewidth=0.6)
+    ax.set_axisbelow(True)
+
+    ax = axes[2]
+    for row in limited:
+        x = float(row["quality_delta_pct"])
+        yv = float(row["cost_saving_pct"])
+        ax.scatter(x, yv, s=52, color=PALETTE["warn"], edgecolors="#1E2329", linewidths=0.4)
+        ax.text(x + 0.02, yv, str(row["short"]), va="center", fontsize=6.2)
+    ax.axvline(0, color="#30343B", linewidth=0.7)
+    ax.axhline(0, color="#30343B", linewidth=0.7)
+    ax.set_xlim(-0.25, 0.18)
+    ax.set_ylim(-115, 115)
+    ax.set_xlabel("Score change (%)")
+    ax.set_ylabel("Time/eval saved (%)")
+    ax.set_title("Diagnostics expose limits.", loc="left", weight="bold")
+    ax.grid(axis="both", color="#E3E6EA", linewidth=0.6)
+    ax.set_axisbelow(True)
+
+    fig.text(0.01, 0.96, "d", fontsize=10, weight="bold")
+    fig.suptitle(
+        "Learned controllers are promoted only where quality and search-effort evidence align.",
+        x=0.53,
+        y=1.03,
+        fontsize=8.5,
+        weight="bold",
+    )
+    fig.tight_layout()
+    save(fig, "fig7_learned_control_summary")
 
 
 def validation_rows() -> list[dict[str, object]]:
@@ -508,7 +649,7 @@ def fig_validation() -> None:
         ax.text(vals[i] * 1.01, i, f"{row['verified']}/{row['total']}", va="center")
     ax.grid(axis="x", color="#E3E6EA", linewidth=0.6)
     ax.set_axisbelow(True)
-    fig.text(0.01, 0.96, "e", fontsize=10, weight="bold")
+    fig.text(0.01, 0.96, "f", fontsize=10, weight="bold")
     fig.tight_layout()
     save(fig, "fig5_validation")
 
@@ -625,7 +766,7 @@ def fig_sparse_gate_sensitivity() -> None:
     cbar = fig.colorbar(scatter, ax=ax, shrink=0.82, pad=0.02)
     cbar.set_label("False skips")
 
-    fig.text(0.01, 0.96, "f", fontsize=10, weight="bold")
+    fig.text(0.01, 0.96, "g", fontsize=10, weight="bold")
     fig.suptitle("Sparse depth-4 gate threshold sensitivity on the 144-pair independent-seed audit.", x=0.53, y=1.02, fontsize=8.5, weight="bold")
     fig.tight_layout()
     save(fig, "fig6_sparse_gate_sensitivity")
@@ -638,6 +779,7 @@ def main() -> None:
     fig_pipeline()
     fig_traditional_resources()
     fig_baseline_comparisons()
+    fig_learned_control_summary()
     fig_phase_affine()
     fig_validation()
     fig_sparse_gate_sensitivity()

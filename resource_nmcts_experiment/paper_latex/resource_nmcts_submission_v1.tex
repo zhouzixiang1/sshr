@@ -642,6 +642,23 @@ to bound the role of AI rather than promoted as headline improvements.}
 \input{tables/learned_control_audit}
 \end{table}
 
+Figure~\ref{fig:learned-control-summary} visualizes the same conservative
+separation.  Promoted controllers either preserve the reference score within a
+small tolerance or improve it, while reducing the measured planning time or
+exact-evaluation budget.  The two limited diagnostics fall outside this
+quality--effort pattern and are therefore kept out of the headline claim.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.96\linewidth]{fig7_learned_control_summary.pdf}
+\caption{\textbf{Learned-control summary.} Promoted learned controllers are
+reported only where quality and search-effort evidence align.  Positive
+time/evaluation saving means fewer frontier evaluations, less staged planning
+time, or fewer exact-scored phase candidates; negative score change favors the
+learned controller.}
+\label{fig:learned-control-summary}
+\end{figure}
+
 \subsection{Score-weight robustness}
 
 The active score in Eq.~\eqref{eq:score} is intentionally a logical-resource

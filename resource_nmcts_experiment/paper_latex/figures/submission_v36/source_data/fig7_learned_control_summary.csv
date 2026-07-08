@@ -1,0 +1,7 @@
+component,short,promoted,quality_delta_pct,cost_saving_pct,quality,cost,role,phase_random_sign_p
+Depth-frontier policy,frontier,True,0.04,51.3,"vs oracle frontier 0/3/45, +0.04%",-51.30% time vs all-depth frontier,promoted quality/time selector,
+Stage-gated frontier,stage gate,True,0.04,25.43,"vs all-depth 0/4/92, +0.04%",-25.43% staged planning time,promoted validation-calibrated guard,
+Sparse depth-4 gate,sparse gate,True,0.0,13.43,"vs sparse frontier 0/0/144, +0.00%; false skips 0",-13.43% time vs sparse frontier,promoted budget gate after depth-2,
+Rank-diverse phase shortlist,phase shortlist,True,-2.48,93.75,"vs budget-32 17/0/21, -2.48%; vs wide-128 0/7/31, +0.00%",512/8192 exact forms per function,promoted phase-search pruning,1.52587890625e-05
+Boolean neural guard,neural guard,False,-0.12,-94.49,"vs deterministic 4/0/20, -0.12%",+94.49% runtime,"limited quality guard, not runtime claim",
+Root-action neural ranker,root ranker,False,0.03,98.06,vs beam4 +0.03%; oracle24 headroom -0.12%,-98.06% ranking time vs beam4 eval,not promoted; future root-ranker target,

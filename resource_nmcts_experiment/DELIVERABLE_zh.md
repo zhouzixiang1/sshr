@@ -84,8 +84,12 @@
 - `results/summary_learned_control_audit.csv`
 - `results/analysis_learned_control_audit.md`
 - `paper_latex/tables/learned_control_audit.tex`
+- `paper_latex/figures/submission_v36/fig7_learned_control_summary.pdf`
+- `paper_latex/figures/submission_v36/source_data/fig7_learned_control_summary.csv`
 
 该表把 AI/学习控制组件分成两类：可作为论文证据的 depth-frontier policy、stage-gated frontier、sparse depth-4 gate、rank-diverse phase shortlist；以及只能作为限制或未来工作的 boolean neural guard、root-action neural ranker。关键数值：frontier policy 在 held-out `n=28,40` 上相对 oracle frontier 为 0/3/45、+0.04% score，但减少 51.30% all-depth frontier evaluation time；stage-gated frontier 在独立 `n=24,28,32,40` 上相对 all-depth 为 0/4/92、+0.04% score，减少 25.43% staged planning time；sparse depth-4 gate 在三组独立 seed 的 `n=24,28,32,40` 共 144 个 pair 上相对 deterministic sparse frontier 为 0/0/144、0 false skip，并减少 13.43% sparse-frontier evaluation time，阈值扫描显示 zero-false-skip plateau 可到 -14.92% time，允许 1 个 false skip 时为 -15.49% time 且 score gap 仅 +0.01%；rank-diverse phase shortlist 在 held-out `n=6` 上用 512/8192 exact forms/function 贴近 wide-128。另一方面，boolean neural guard 只有 -0.12% score 但 +94.49% runtime，root-action neural ranker质量未超过 beam4，因此不能作为主贡献夸大。
+
+新增 summary figure 将上述边界可视化：promoted controls 同时满足 score 不显著变差/有改善与搜索开销下降，limited diagnostics 则落在“质量弱或运行时间反向”的区域，用于防止把所有 AI 组件都写成主贡献。
 
 本轮继续补充 high-dimensional scaling/resource audit 层，避免“大规模结果”只以验证总数出现：
 

@@ -53,7 +53,11 @@ The learned-control audit is materialized by
 `analyze_learned_control_audit.py`, which separates promoted learned controls
 (frontier policy, staged frontier, sparse depth-4 gate, phase shortlist) from
 limited diagnostics (boolean neural guard and root-action neural ranker) in
-`paper_latex/tables/learned_control_audit.tex`.
+`paper_latex/tables/learned_control_audit.tex`.  The same evidence is
+visualized by `make_submission_figures.py` as
+`paper_latex/figures/submission_v36/fig7_learned_control_summary.pdf`, with
+source data in
+`paper_latex/figures/submission_v36/source_data/fig7_learned_control_summary.csv`.
 The Boolean-ring structural audit is materialized by
 `analyze_boolean_ring_structural_evidence.py`, which consolidates the
 high-dimensional Boolean-ring and Boolean-screen comparisons into
