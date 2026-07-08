@@ -1,0 +1,10 @@
+{
+  "input": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_traditional_resource.csv",
+  "max_n": 6,
+  "workers": 8,
+  "rows": 177,
+  "usable_rows": 177,
+  "elapsed_s": 0.22434306144714355,
+  "method": "external_revkit_oracle_synth",
+  "claim_boundary": "RevKit Python oracle_synth API, Clifford+T netlist proxy, no hardware mapping."
+}

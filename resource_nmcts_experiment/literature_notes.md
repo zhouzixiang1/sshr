@@ -54,14 +54,20 @@
 
 - mockturtle is a C++17 logic-network library with AIG, MIG, k-LUT, and generic
   synthesis/optimization support.  It is a plausible source for a future
-  reproduced logic-network baseline beyond the current ABC estimates, but it is
-  not currently installed in this workstation environment.
+  reproduced logic-network baseline beyond the current ABC estimates.  The
+  current readiness audit treats it as a header/library dependency, not as a
+  command-line executable; upstream is reachable, but this project still lacks a
+  local checkout and adapter.
   <https://github.com/lsils/mockturtle>
 
 - RevKit is an open-source reversible-logic synthesis framework built around
-  tweedledum and mockturtle.  It is the natural candidate for a future
-  reversible-toolchain comparison, but it is not currently available as a local
-  binary or Python module.
+  tweedledum and mockturtle.  The Python API is now installed in the local
+  `mcts-qoracle` environment and has been used through `oracle_synth` on the
+  `n <= 6` traditional truth-table benchmark.  The resulting Clifford+T netlist
+  proxy is an adverse baseline for the current X/CNOT/MCT bit-flip emitter, so
+  RevKit should be discussed as a representation-boundary result rather than as
+  a missing tool.  The legacy RevKit/CirKit command-line flow is still not
+  reproduced locally.
   <https://github.com/msoeken/revkit>
 
 ## AI-guided synthesis references
@@ -117,6 +123,7 @@ the exported benchmarks.
 
 The current local readiness audit is stored in
 `results/analysis_toolchain_readiness.md`: ABC is available through the bundled
-`tmp/abc/abc` binary, while mockturtle and RevKit are absent from PATH and the
-Python environment.  This should be treated as an environment fact, not as a
-field-wide statement.
+`tmp/abc/abc` binary, RevKit Python is available in the conda environment, and
+mockturtle plus the legacy RevKit/CirKit CLI remain future external-comparison
+work.  This should be treated as an environment fact, not as a field-wide
+statement.

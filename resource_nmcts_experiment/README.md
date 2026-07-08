@@ -124,7 +124,18 @@ cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json resul
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/mega_highdim_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_abc_lut,external_bdd --min-n 18 --max-n 18 --max-abc-n 18 --max-xag-n 18 --max-lut-n 18 --max-bdd-n 18 --bdd-orders 8 --timeout 90 --workers 8 --out results/raw_external_mega_highdim_resource.csv --summary results/summary_external_mega_highdim_resource.csv --run-manifest results/manifest_external_mega_highdim_resource.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_mega_highdim_resource.csv --internal-csv results/raw_mega_highdim_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_pareto_resource_nmcts,and_fprm_linear_pair_fast,and_fprm_root_beam,direct_anf,and_direct_anf --out results/analysis_external_mega_highdim_resource.md
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_ros_lut_proxy.py --manifest traditional=benchmark_exports/traditional_resource_external_seed42/manifest.json --manifest n14=benchmark_exports/highdim_resource_external_seed42/manifest.json --manifest n15=benchmark_exports/highdim_scale_resource_external_seed42/manifest.json --manifest n16=benchmark_exports/ultra_highdim_resource_external_seed42/manifest.json --manifest n18=benchmark_exports/mega_highdim_resource_external_seed42/manifest.json --internal traditional=results/raw_traditional_resource.csv --internal n14=results/raw_highdim_resource.csv --internal n15=results/raw_highdim_scale_resource.csv --internal n16=results/raw_ultra_highdim_resource.csv --internal n18=results/raw_mega_highdim_resource.csv --ks 3,4,5 --workers 8 --timeout 45 --raw-out results/raw_ros_lut_proxy_sweep.csv --best-out results/raw_ros_lut_proxy_best.csv --summary results/summary_ros_lut_proxy.csv --analysis results/analysis_ros_lut_proxy.md --latex-out paper_latex/tables/ros_lut_proxy.tex --run-manifest results/manifest_ros_lut_proxy.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python -m pip install cmake pybind11
+/opt/anaconda3/envs/mcts-qoracle/bin/python -m pip install --no-build-isolation 'git+https://github.com/msoeken/revkit@develop'
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_revkit_baseline.py --max-n 6 --workers 8
 ```
+
+The RevKit command is a real Python API baseline (`oracle_synth`) on complete
+truth-table rows, not the ABC-only ROS-style LUT proxy.  On the 177 usable
+`n <= 6` traditional functions it succeeds on all rows, but it is an adverse
+baseline under the returned Clifford+T netlist accounting: Resource-NMCTS vs
+RevKit is 6/171/0 on score, with mean score +751.69% and T-count +4060.08%.
+This result should be presented as a representation-boundary finding, not as a
+hardware-mapping claim.
 
 Current presets:
 

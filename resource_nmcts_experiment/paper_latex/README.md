@@ -217,7 +217,8 @@ Current source evidence:
   `../results/manifest_external_highdim_scale_resource.json`,
   `../results/manifest_external_ultra_highdim_resource.json`,
   `../results/manifest_external_mega_highdim_resource.json`,
-  `../results/manifest_ros_lut_proxy.json`
+  `../results/manifest_ros_lut_proxy.json`,
+  `../results/manifest_revkit_oracle_synth_traditional.json`
 
 Known manuscript gaps:
 
@@ -226,7 +227,7 @@ Known manuscript gaps:
   high-dimensional examples;
 - extend the external high-dimensional comparison beyond `n=18` only if the
   exported truth-table and ABC/BDD verification path remains practical;
-- replace the current ROS-style LUT proxy with reproduced official ROS,
-  mockturtle, or RevKit reversible-toolchain results when those tools are
-  available;
+- keep the RevKit Python API baseline as an adverse external boundary, and
+  separately reproduce official ROS, mockturtle, or legacy RevKit/CirKit CLI
+  flows when those tools are available;
 - decide the target venue and required reference/section style.

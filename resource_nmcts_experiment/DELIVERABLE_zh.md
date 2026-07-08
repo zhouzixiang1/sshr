@@ -18,6 +18,41 @@
 
 ## 2. 当前已完成内容
 
+### 2.0 RevKit API baseline 与工具链边界
+
+本轮已把外部工具链审计从“是否存在命令”升级为“能否真实运行一个可复现 baseline”。当前 `mcts-qoracle` 环境中已安装 `cmake`、`pybind11` 和 RevKit Python API，并新增 `run_revkit_baseline.py` 调用 RevKit 的 `oracle_synth` 对完整 truth-table 函数合成。
+
+主要产物：
+
+- `analyze_toolchain_readiness.py`
+- `run_revkit_baseline.py`
+- `results/analysis_toolchain_readiness.md`
+- `results/toolchain_readiness.json`
+- `results/raw_revkit_oracle_synth_traditional.csv`
+- `results/summary_revkit_oracle_synth_traditional.csv`
+- `results/analysis_revkit_oracle_synth_traditional.md`
+- `results/manifest_revkit_oracle_synth_traditional.json`
+- `paper_latex/tables/revkit_oracle_synth_traditional.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v21.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v21.pdf`
+
+核心结果：
+
+| 对比 | 指标 | 函数数 | 胜/负/平 | 平均变化 |
+|---|---|---:|---:|---:|
+| Resource-NMCTS vs RevKit `oracle_synth` | score | 177 | 6/171/0 | +751.69% |
+| Pareto-Resource-NMCTS vs RevKit `oracle_synth` | score | 177 | 6/171/0 | +711.60% |
+| FPRM polarity archive vs RevKit `oracle_synth` | score | 177 | 4/173/0 | +774.83% |
+| SSHR-H vs RevKit `oracle_synth` | CNOT | 177 | 34/141/2 | +34.23% |
+| Resource-NMCTS vs RevKit `oracle_synth` | T-count | 177 | 2/171/4 | +4060.08% |
+
+解释边界：
+
+- 这是一个真实 RevKit Python API baseline，不是 ABC-only 的 ROS-style LUT proxy。
+- RevKit 返回的是 Clifford+T netlist；当前 Resource-NMCTS emitter 是 X/CNOT/MCT bit-flip compute/action/uncompute 路线，两者资源口径不同。
+- 该结果不是坏消息，而是新的强基线：投稿前要么新增 phase-oracle / Clifford+T-aware emitter，要么把论文主张严格限定为 bit-flip oracle 的逻辑层资源综合。
+- 当前仍未打通官方 ROS、mockturtle 和 legacy RevKit/CirKit CLI 流程。
+
 ### 2.1 ESOP baseline 对比
 
 新增 `analyze_esop_baseline.py`，专门从同一 benchmark 的内部 ESOP-MILP 和外部 ABC-ESOP 结果中生成 ESOP 视角分析。

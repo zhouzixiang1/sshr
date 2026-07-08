@@ -1,0 +1,159 @@
+{
+  "build_prerequisites": [
+    {
+      "name": "git",
+      "required_for": "fetching mockturtle/RevKit/CirKit sources",
+      "available": true,
+      "hits": [
+        [
+          "/usr/bin/git",
+          "git version 2.50.1 (Apple Git-155)"
+        ]
+      ]
+    },
+    {
+      "name": "cmake",
+      "required_for": "building RevKit/CirKit-style C++ toolchains",
+      "available": true,
+      "hits": [
+        [
+          "/opt/anaconda3/envs/mcts-qoracle/bin/cmake",
+          "cmake version 4.3.4"
+        ],
+        [
+          "/opt/homebrew/bin/cmake",
+          "cmake version 4.3.4"
+        ]
+      ]
+    },
+    {
+      "name": "C++17 compiler",
+      "required_for": "building mockturtle/RevKit dependencies",
+      "available": true,
+      "hits": [
+        [
+          "/usr/bin/clang++",
+          "Apple clang version 21.0.0 (clang-2100.1.1.101)"
+        ],
+        [
+          "/usr/bin/g++",
+          "Apple clang version 21.0.0 (clang-2100.1.1.101)"
+        ]
+      ]
+    },
+    {
+      "name": "Python/pip",
+      "required_for": "probing RevKit 3.x Python package installation",
+      "available": true,
+      "hits": [
+        [
+          "/opt/anaconda3/envs/mcts-qoracle/bin/python",
+          "pip 26.0.1 from /opt/anaconda3/envs/mcts-qoracle/lib/python3.11/site-packages/pip (python 3.11)"
+        ]
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "name": "ABC",
+      "kind": "binary",
+      "role": "implemented AIG/XAG/LUT/ESOP external estimates",
+      "source_url": "https://github.com/berkeley-abc/abc",
+      "remote": "https://github.com/berkeley-abc/abc.git",
+      "install": [
+        "already vendored under tmp/abc/abc in this project"
+      ],
+      "available": true,
+      "hits": [
+        [
+          "file",
+          "/Users/zhouzixiang/Desktop/tzb/src/tmp/abc/abc",
+          "usage: /Users/zhouzixiang/Desktop/tzb/src/tmp/abc/abc [-c cmd] [-q cmd] [-C cmd] [-Q cmd] [-f script] [-h] [-o file] [-s] [-t type] [-T type] [-x] [-b] [file]"
+        ]
+      ],
+      "remote_heads": [
+        {
+          "branch": "master",
+          "status": "reachable",
+          "commit": "bcfdf592289a408cd67ec19260f8a60a37b085b6"
+        }
+      ]
+    },
+    {
+      "name": "mockturtle",
+      "kind": "cxx_header_library",
+      "role": "future logic-network / reversible-toolchain baseline adapter",
+      "source_url": "https://github.com/lsils/mockturtle",
+      "remote": "https://github.com/lsils/mockturtle.git",
+      "install": [
+        "git clone --recursive https://github.com/lsils/mockturtle.git tmp/mockturtle",
+        "use headers/examples from tmp/mockturtle; no project-specific adapter is implemented yet"
+      ],
+      "available": false,
+      "hits": [],
+      "remote_heads": [
+        {
+          "branch": "master",
+          "status": "reachable",
+          "commit": "25beb0e294e4613bb9fe62319b91d9f2ab764e88"
+        }
+      ]
+    },
+    {
+      "name": "RevKit",
+      "kind": "binary_or_python",
+      "role": "Python oracle_synth baseline adapter; legacy CLI flow remains separate",
+      "source_url": "https://github.com/msoeken/revkit",
+      "remote": "https://github.com/msoeken/revkit.git",
+      "install": [
+        "/opt/anaconda3/envs/mcts-qoracle/bin/python -m pip install 'git+https://github.com/msoeken/revkit@develop'",
+        "or: git clone -b develop https://github.com/msoeken/revkit tmp/revkit && cd tmp/revkit && make devbuild"
+      ],
+      "available": true,
+      "hits": [
+        [
+          "python",
+          "revkit",
+          "/opt/anaconda3/envs/mcts-qoracle/lib/python3.11/site-packages/revkit/__init__.py"
+        ]
+      ],
+      "remote_heads": [
+        {
+          "branch": "develop",
+          "status": "reachable",
+          "commit": "20d7d5ff72b33441583ed381fb0011964008d86b"
+        },
+        {
+          "branch": "master",
+          "status": "reachable",
+          "commit": "a59fa132f73a2483a00b11c23f5f1c599a34f074"
+        }
+      ]
+    },
+    {
+      "name": "RevKit CLI / CirKit legacy",
+      "kind": "binary_or_source",
+      "role": "legacy command-line reversible synthesis flow for RevKit-style baselines",
+      "source_url": "https://github.com/msoeken/cirkit",
+      "remote": "https://github.com/msoeken/cirkit.git",
+      "install": [
+        "git clone --recursive https://github.com/msoeken/cirkit.git tmp/cirkit",
+        "cd tmp/cirkit && mkdir -p build && cd build && cmake .. && make revkit"
+      ],
+      "available": false,
+      "hits": [],
+      "remote_heads": [
+        {
+          "branch": "master",
+          "status": "reachable",
+          "commit": "8a098dae1f09f9e8af6e132b1fa76f05948689ed"
+        },
+        {
+          "branch": "develop",
+          "status": "reachable",
+          "commit": "104eb35f1933b080aa228ad419756f04682d4a2e"
+        }
+      ]
+    }
+  ]
+}
