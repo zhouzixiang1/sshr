@@ -153,6 +153,10 @@ Current source evidence:
   `../results/analysis_truth_bridge_n23_cost_time003_frontier_terms.md`
 - frontier-policy upgrade analysis:
   `../results/analysis_frontier_policy_upgrade.md`
+- stage-gated frontier CSV:
+  `../results/raw_stage_gated_frontier.csv`
+- stage-gated frontier analysis:
+  `../results/analysis_stage_gated_frontier.md`
 - truth-table bridge CSV:
   `../results/raw_truth_bridge_terms.csv`
 - truth-table bridge analysis:
@@ -231,6 +235,7 @@ Current source evidence:
 	  `tables/screen_scale_depth_frontier_policy_cost_time003_generalization_terms.tex`,
 	  `tables/truth_bridge_n23_cost_time003_frontier_terms.tex`,
 	  `tables/frontier_policy_upgrade.tex`,
+	  `tables/stage_gated_frontier.tex`,
 	  `tables/schedule_truth_bridge_n23_terms.tex`,
 	  `tables/schedule_metrics.tex`,
 	  `tables/ros_lut_proxy.tex`,

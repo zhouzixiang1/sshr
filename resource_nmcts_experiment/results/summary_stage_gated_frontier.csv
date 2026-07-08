@@ -1,0 +1,9 @@
+source,method,baseline,pairs,score_wins,score_losses,score_ties,mean_rel_score,mean_rel_time,mean_rel_t_depth,mean_rel_aux_area,run_depth4,selected_depth2,selected_depth3,selected_depth4,verified_rows
+training_valid,stage_gated_frontier,adaptive_all_depth,72,0,2,70,0.0003459754840767155,-0.11708743074124325,0.0,0.0,52,13,10,49,72
+training_valid,stage_gated_frontier,screen_depth2,72,55,0,17,-0.036841334288332944,11.162296419114568,0.0,0.0,52,13,10,49,72
+scale_generalization,stage_gated_frontier,adaptive_all_depth,96,0,4,92,0.00038801444248018173,-0.2543449668421589,0.00036125071899371534,-0.006936884308365337,52,21,27,48,96
+scale_generalization,stage_gated_frontier,screen_depth2,96,58,0,38,-0.0240068130421657,8.932546137009357,-0.023333368809210494,0.30034435721668523,52,21,27,48,96
+scale_generalization,stage_gated_frontier,depth_frontier_policy,96,5,3,88,-0.0006259051693387986,1.010989342383231,-0.0005698792433799527,0.009612423297173819,52,21,27,48,96
+truth_bridge_n23,stage_gated_frontier,adaptive_all_depth,6,0,0,6,0.0,-0.1150876578816999,0.0,0.0,5,0,1,5,6
+truth_bridge_n23,stage_gated_frontier,screen_depth2,6,5,0,1,-0.0247178891548783,13.22091017345253,-0.02200953654289308,0.44191483516483515,5,0,1,5,6
+truth_bridge_n23,stage_gated_frontier,depth_frontier_policy,6,1,0,5,-0.0011770004758991338,0.9419567028527926,-0.00065359477124183,0.03225806451612903,5,0,1,5,6

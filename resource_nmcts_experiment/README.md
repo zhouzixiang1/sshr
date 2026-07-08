@@ -134,6 +134,7 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 20,28,40 --per-n 24 --workers 6 --action-width 24 --max-screen-depth 4 --tag screen_scale_width24_probe
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_schedule_metrics.py --input schedule_generalization=results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv --input schedule_truth_bridge=results/raw_schedule_truth_bridge_terms.csv --input schedule_truth_bridge_n23=results/raw_schedule_truth_bridge_n23_terms.csv
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_frontier_policy_upgrade.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_stage_gated_frontier.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_mockturtle_xag_probe.py --workers 4 --timeout 20
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_mockturtle_xag_probe.py --manifest highdim=benchmark_exports/highdim_resource_external_seed42/manifest.json --internal highdim=results/raw_highdim_resource.csv --min-n 14 --max-n 14 --workers 4 --timeout 30 --targets and_resource_nmcts,and_profile_resource_nmcts,and_pareto_resource_nmcts,and_direct_anf,direct_anf --out results/raw_mockturtle_xag_highdim_probe.csv --summary results/summary_mockturtle_xag_highdim_probe.csv --analysis results/analysis_mockturtle_xag_highdim_probe.md --latex-out paper_latex/tables/mockturtle_xag_highdim_probe.tex --run-manifest results/manifest_mockturtle_xag_highdim_probe.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_cirkit_aig_probe.py --workers 8 --timeout 45
@@ -418,6 +419,14 @@ Against the large quality model it trades +0.99% score for -33.02% time and
 -7.61% lifetime area.  On the `n=23` truth-table bridge it passes 60/60
 truth/plan/circuit checks and trades +0.92% score for -56.29% time and -12.62%
 lifetime area against the large model.
+The staged depth-frontier controller is summarized in
+`results/analysis_stage_gated_frontier.md`.  It selects a 1.25% depth-4 trigger
+on the large-policy validation split, then applies it unchanged to independent
+scale and bridge rows.  On `n=24,28,32,40`, it is only +0.04% mean score from
+all-depth while reducing staged planning time by -25.43%; on the `n=23`
+truth-table bridge it ties all-depth score and saves -11.51% staged time.
+This is a high-quality teacher/guard, not a faster replacement for the large
+single-shot policy.
 Term-set scale tests beyond truth-table-feasible sizes are run with
 `run_screen_scale_terms.py`; outputs are written to
 `results/analysis_screen_scale_terms.md`, `results/raw_screen_scale_terms.csv`,
@@ -536,6 +545,11 @@ Current structure-policy evidence:
   `n=23` bridge rerun,
   `results/analysis_truth_bridge_n23_cost_time003_frontier_terms.md`, passes
   60/60 complete truth-table, plan, and emitted-circuit checks.
+- The staged frontier analysis,
+  `results/analysis_stage_gated_frontier.md`, reuses measured and verified
+  depth-2/3/4 rows.  Its validation-selected 1.25% trigger gives +0.04% mean
+  score and -25.43% staged time against all-depth on the independent
+  `n=24,28,32,40` scale run, with 96/96 selected rows verified.
 - Logic-level schedule-proxy evidence is now emitted by `run_screen_scale_terms.py`
   and `run_truth_bridge_terms.py`, then summarized by
   `analyze_schedule_metrics.py`.  The metrics are not hardware mapping results:

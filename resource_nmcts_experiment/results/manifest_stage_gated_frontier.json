@@ -1,0 +1,13 @@
+{
+  "max_valid_score_gap": 0.0005,
+  "outputs": {
+    "analysis": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/analysis_stage_gated_frontier.md",
+    "raw": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_stage_gated_frontier.csv",
+    "summary": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/summary_stage_gated_frontier.csv",
+    "table": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/paper_latex/tables/stage_gated_frontier.tex"
+  },
+  "scale_raw": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_screen_scale_depth_frontier_policy_large_generalization_terms.csv",
+  "threshold": 0.0125,
+  "training_frontier_raw": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_boolean_screen_depth_frontier_policy_large.csv",
+  "truth_bridge_raw": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_truth_bridge_n23_large_frontier_terms.csv"
+}

@@ -889,6 +889,45 @@ large frontier policy 解决了质量 gap，但时间和辅助线生命周期代
 
 结论：cost-aware frontier policy 不是新的最高质量策略，而是一个可写进论文的“运行模式”贡献：large policy 是质量模式，cost-aware policy 是快速质量折中模式。它在独立泛化集上保持与 large policy 相同的 56/0/40 胜/负/平结构，但把相对 depth-2 的平均 plan time 增幅从 +563.80% 压到 +170.03%，把 lifetime area 增幅从 +26.13% 压到 +14.63%。在 n=23 完整 bridge 上，相对 large policy 节省 56.29% plan time 和 12.62% lifetime area，代价是 score 高 0.92%。这比单纯继续追求最低 score 更接近“资源约束综合”的论文主题。
 
+### 2.5.7.3 stage-gated frontier：接近 all-depth 的高质量 teacher/guard
+
+为进一步把 depth-frontier 从“单次神经选择”扩展成更可解释的搜索预算控制，本轮新增 `analyze_stage_gated_frontier.py`。该脚本不重新生成候选，而是复用 large frontier 实验中已经测量并验证过的 depth-2/3/4 行，构造一个 progressive controller：
+
+1. 先评估 depth-2 和 depth-3 Boolean-ring screen；
+2. 只有当 depth-3 相对 depth-2 的 score 改进达到阈值时才评估昂贵的 depth-4；
+3. 在已评估深度中选择 score 最低的候选。
+
+阈值不在独立 scale/test 上调参，而是在 large frontier 的 validation split 上选择：约束 validation 相对 all-depth 的 score gap 不超过 0.05%，再选 staged time 最低的阈值。最终阈值为 `1.25%`。
+
+主要产物：
+
+- `analyze_stage_gated_frontier.py`
+- `results/raw_stage_gated_frontier.csv`
+- `results/summary_stage_gated_frontier.csv`
+- `results/analysis_stage_gated_frontier.md`
+- `results/manifest_stage_gated_frontier.json`
+- `paper_latex/tables/stage_gated_frontier.tex`
+
+核心结果：
+
+| 设置 | 对比 | 项集/函数数 | score 胜/负/平 | 平均 score 变化 | 平均 staged time 变化 | depth-4 触发 |
+|---|---|---:|---:|---:|---:|---:|
+| validation | staged frontier vs all-depth | 72 | 0/2/70 | +0.03% | -11.71% | 52/72 |
+| independent seed n=24/28/32/40 | staged frontier vs all-depth | 96 | 0/4/92 | +0.04% | -25.43% | 52/96 |
+| independent seed n=24/28/32/40 | staged frontier vs fixed depth-2 | 96 | 58/0/38 | -2.40% | +893.25% | 52/96 |
+| independent seed n=24/28/32/40 | staged frontier vs large policy | 96 | 5/3/88 | -0.06% | +101.10% | 52/96 |
+| n=23 bridge | staged frontier vs all-depth | 6 | 0/0/6 | +0.00% | -11.51% | 5/6 |
+| n=23 bridge | staged frontier vs fixed depth-2 | 6 | 5/0/1 | -2.47% | +1322.09% | 5/6 |
+| n=23 bridge | staged frontier vs large policy | 6 | 1/0/5 | -0.12% | +94.20% | 5/6 |
+
+验证边界：
+
+- independent scale 的 staged 选择行全部来自已通过 plan 与 emitted-circuit ANF 符号验证的 960 行；`raw_stage_gated_frontier.csv` 中 96/96 selected scale rows verified。
+- n=23 bridge 的 staged 选择行全部来自已通过完整 truth-table oracle、ANF plan 和 emitted-circuit 符号验证的 60 行；6/6 selected rows verified。
+- staged time 是基于已测得的 depth-2/3/4 单深度规划时间求和得到的可部署模拟时间；当前脚本是离线重组分析，不是单独重跑一个会提前停止的 planner。
+
+结论：stage-gated frontier 不是替代 large/cost neural policy 的新 SOTA 点，而是一个接近 all-depth oracle 的高质量 teacher/guard。它在独立 scale 上把 all-depth 的 score gap 控制在 +0.04%，同时少 25.43% staged time；在 n=23 完整验证桥上与 all-depth score 持平。这可以增强论文中“搜索预算可控、质量-时间前沿可校准”的论点，也可以作为后续训练神经 policy 的 teacher，但不能写成比 large policy 同时更快更优。
+
 ### 2.5.8 n=21/22 完整 truth-table bridge
 
 为回应“n>20 只有项集级符号验证”的审稿风险，本轮新增 `run_truth_bridge_terms.py`，在 n=21/22 上构造完整 truth table，并对 emitted X/CNOT/MCT oracle circuit 做 bit-parallel truth-table verification。该实验规模故意小于 n=20--40 scale，因为 truth-table 构造是主成本，但它把完整验证边界向 n>20 后移。
@@ -1599,12 +1638,13 @@ Git 状态：
 16. Depth-frontier policy 已把高预算质量前沿学习化：在 `n=20,28,40` scale harness 中，相对 fixed depth-2 获得 35/0/37、平均 score -2.19%；相对 all-depth depth<=4 平均 score +0.97%，但节省 58.69% 时间；720/720 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。
 17. Large frontier policy 进一步压缩质量 gap：held-out 相对 oracle frontier 从旧模型 +0.80% 降到 +0.04%；独立 seed `n=24,28,32,40` 相对旧 policy 为 17/0/79、平均 score -0.49%，相对 all-depth 仅 +0.10% 且节省 53.50% 时间；代价是比旧 policy 更慢。
 18. Cost-aware frontier policy 给出更符合“资源约束”的快速质量模式：独立 seed `n=24,28,32,40` 相对 fixed depth-2 仍为 56/0/40、平均 score -1.39%，但相对 depth-2 的 plan time 增幅为 +170.03%，显著低于 large policy 的 +563.80%；在 n=23 bridge 上相对 large policy 节省 56.29% plan time 和 12.62% lifetime area，代价是 score +0.92%。
-19. `n=21,22,23` 完整 truth-table bridge 加 large-policy 与 cost-aware `n=23` rerun 显示：按当前 v36 主图源数据口径，280/280 个方法行同时通过完整 truth-table oracle 验证、ANF plan 符号验证和 emitted-circuit ANF 符号验证；该结果把完整验证边界从 n<=20 主实验推进到 n>20 的桥接切片。
-20. phase/Rz 分支已经从 RevKit 成本敏感性推进到可验证内部 emitter 和 Affine-FPRM 搜索：phase-parity ANF、fixed-polarity FPRM 与 Affine-FPRM 三组 selected rows 均为 531/531 或 177/177 up-to-global-phase 验证通过；Affine-FPRM 在 `T/Rz=30` 口径下相对 fixed-polarity FPRM 为 81/0/96、平均 score -2.51%，相对 phase-parity ANF 为 85/0/92、平均 score -2.98%，相对 RevKit 为 177/0/0、平均 score -65.50%。
-21. wide Affine-FPRM phase search 显示 phase/Rz 分支仍受可逆线性预条件搜索预算限制：将 transform budget 从 32 扩展到 128 后，531/531 selected rows 继续 up-to-global-phase 验证通过；相对 budget 32，`T/Rz=30` 目标为 43/0/134、平均 synth-score -0.60%，total Rz -2.39%，CNOT -1.74%，depth -1.93%。该结果为后续 learned phase/Rz-aware policy 提供了明确搜索空间，而不是只做固定极性枚举。
-22. learned phase candidate pruning 已把 phase/Rz 分支从“宽预算穷举”推进到“可学习剪枝”诊断，并进一步加入 rank-label 训练、diversity rerank 与 8 组 same-budget random repeat 控制：`train_phase_affine_policy.py` 在 `n<=5` 训练、held-out `n=6` 的 38 个函数测试；diverse policy top-512 只 exact-score 512/8192 个候选，相对 budget-32 的 2048 个候选为 17/0/21、`T/Rz=30` synth-score -2.48%，相对 wide-128 均值 gap 约 +0.00%，且 7611/7611 selected rows up-to-global-phase 验证通过。所有 policy/diverse top-k 均值均低于 8 个同预算 random repeat 均值，但绝对幅度只有约 0.01%--0.03%，所以该证据可写成 learned pruned-search feasibility 与稳定优于 random-repeat mean，不能写成 phase/Rz 全局最优。
-23. CirKit 3 shell AIG/MC probe 把外部工具链对比从 mockturtle/ABC 继续补强：传统 177 行与高维 `n=14` 64 行均逐行 Verilog readback truth-table 验证通过。Pareto-Resource-NMCTS 相对 CirKit AIG/MC 在传统集为 177/0/0、平均 score -62.34%，在 `n=14` 为 64/0/0、平均 score -94.46%；但 depth 分别为 16/156/5 和 14/50/0，说明本文不能宣称 depth-only 支配 CirKit。
-24. Legacy RevKit CLI exact-oracle reversible-synthesis probe 进一步补齐可逆工具链对比：TBS/DBS/RMS 三流合计 531/531 行 usable，best-score portfolio 覆盖传统 177 个函数。Pareto-Resource-NMCTS 相对 RevKit CLI best-score portfolio 在 score 上为 173/0/4、平均 -67.28%，T-count 为 173/0/4、平均 -72.59%；但 peak ancilla 为 0/169/8、平均 +153.11%，说明本文方法用更多辅助线换取低 T 和低 weighted score。
+19. Stage-gated frontier 把 depth-frontier 进一步变成 validation-calibrated 搜索预算控制：在 large frontier validation 上选出 `1.25%` depth-4 触发阈值后，独立 seed `n=24,28,32,40` 相对 all-depth 为 0/4/92、平均 score +0.04%、staged time -25.43%；n=23 bridge 与 all-depth score 持平且 staged time -11.51%。该证据是接近 all-depth 的 teacher/guard，不应写成比 large policy 同时更快更优。
+20. `n=21,22,23` 完整 truth-table bridge 加 large-policy 与 cost-aware `n=23` rerun 显示：按当前 v36 主图源数据口径，280/280 个方法行同时通过完整 truth-table oracle 验证、ANF plan 符号验证和 emitted-circuit ANF 符号验证；该结果把完整验证边界从 n<=20 主实验推进到 n>20 的桥接切片。
+21. phase/Rz 分支已经从 RevKit 成本敏感性推进到可验证内部 emitter 和 Affine-FPRM 搜索：phase-parity ANF、fixed-polarity FPRM 与 Affine-FPRM 三组 selected rows 均为 531/531 或 177/177 up-to-global-phase 验证通过；Affine-FPRM 在 `T/Rz=30` 口径下相对 fixed-polarity FPRM 为 81/0/96、平均 score -2.51%，相对 phase-parity ANF 为 85/0/92、平均 score -2.98%，相对 RevKit 为 177/0/0、平均 score -65.50%。
+22. wide Affine-FPRM phase search 显示 phase/Rz 分支仍受可逆线性预条件搜索预算限制：将 transform budget 从 32 扩展到 128 后，531/531 selected rows 继续 up-to-global-phase 验证通过；相对 budget 32，`T/Rz=30` 目标为 43/0/134、平均 synth-score -0.60%，total Rz -2.39%，CNOT -1.74%，depth -1.93%。该结果为后续 learned phase/Rz-aware policy 提供了明确搜索空间，而不是只做固定极性枚举。
+23. learned phase candidate pruning 已把 phase/Rz 分支从“宽预算穷举”推进到“可学习剪枝”诊断，并进一步加入 rank-label 训练、diversity rerank 与 8 组 same-budget random repeat 控制：`train_phase_affine_policy.py` 在 `n<=5` 训练、held-out `n=6` 的 38 个函数测试；diverse policy top-512 只 exact-score 512/8192 个候选，相对 budget-32 的 2048 个候选为 17/0/21、`T/Rz=30` synth-score -2.48%，相对 wide-128 均值 gap 约 +0.00%，且 7611/7611 selected rows up-to-global-phase 验证通过。所有 policy/diverse top-k 均值均低于 8 个同预算 random repeat 均值，但绝对幅度只有约 0.01%--0.03%，所以该证据可写成 learned pruned-search feasibility 与稳定优于 random-repeat mean，不能写成 phase/Rz 全局最优。
+24. CirKit 3 shell AIG/MC probe 把外部工具链对比从 mockturtle/ABC 继续补强：传统 177 行与高维 `n=14` 64 行均逐行 Verilog readback truth-table 验证通过。Pareto-Resource-NMCTS 相对 CirKit AIG/MC 在传统集为 177/0/0、平均 score -62.34%，在 `n=14` 为 64/0/0、平均 score -94.46%；但 depth 分别为 16/156/5 和 14/50/0，说明本文不能宣称 depth-only 支配 CirKit。
+25. Legacy RevKit CLI exact-oracle reversible-synthesis probe 进一步补齐可逆工具链对比：TBS/DBS/RMS 三流合计 531/531 行 usable，best-score portfolio 覆盖传统 177 个函数。Pareto-Resource-NMCTS 相对 RevKit CLI best-score portfolio 在 score 上为 173/0/4、平均 -67.28%，T-count 为 173/0/4、平均 -72.59%；但 peak ancilla 为 0/169/8、平均 +153.11%，说明本文方法用更多辅助线换取低 T 和低 weighted score。
 
 不应写的主张：
 
@@ -1648,6 +1688,7 @@ Git 状态：
 | depth-frontier policy | 32 个 held-out + 72 个 scale 项集 | held-out vs oracle frontier 为 +0.80% score、-58.76% time；scale vs depth-2 为 35/0/37、-2.19%；720/720 emitted-circuit 符号验证通过 | 新增结构级 AI 质量-时间折中 |
 | large frontier policy | 48 个 held-out + 96 个独立泛化项集 + 6 个 n=23 bridge 函数 | held-out vs oracle frontier 为 +0.04% score、-51.30% time；独立泛化 vs 旧 policy 为 17/0/79、-0.49%；n=23 bridge vs 旧 policy 为 1/0/5、-0.48% score、-0.45% T-depth proxy | 新增质量增强型结构 AI 证据 |
 | cost-aware frontier policy | 48 个 held-out + 96 个独立泛化项集 + 6 个 n=23 bridge 函数 | scale vs depth-2 为 56/0/40、score -1.39%、time +170.03%；n=23 vs large 为 score +0.92%、time -56.29%、lifetime -12.62% | 新增快速质量折中模式 |
+| stage-gated frontier | 72 个 validation 项集 + 96 个独立泛化项集 + 6 个 n=23 bridge 函数 | validation 选阈值 1.25%；scale vs all-depth 为 +0.04% score、staged time -25.43%；n=23 vs all-depth 为 +0.00% score、staged time -11.51% | 新增接近 all-depth 的 teacher/guard |
 | n=21/22/23 truth-table bridge | 16 个基础生成式 ANF 函数 + 12 个 n=23 rerun 函数 | 按当前 v36 主图源数据口径，280/280 完整 truth-table oracle 验证通过，280/280 plan 与 emitted-circuit 符号验证通过，0 mismatch；large/cost 两种 n=23 rerun 均完整验证 | 新增 n>20 完整验证桥接 |
 | n=24/25 truth-table bridge | 12 个生成式 ANF 函数 | 新增 120/120 完整 truth-table oracle 验证通过，120/120 plan 与 emitted-circuit 符号验证通过，0 mismatch；累计 bridge 为 400/400 | 新增 n=24 与 n=25 完整验证边界 |
 | action-width probe | n=20/28/40，每个宽度 72 个项集 | width 6/12/24 各 504/504 plan 与 emitted-circuit 符号验证通过；单纯加宽不改善默认 score 结论，时间显著上升 | 新增负向消融，支持默认 width 6 |

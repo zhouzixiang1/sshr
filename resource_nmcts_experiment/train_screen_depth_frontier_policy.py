@@ -63,6 +63,7 @@ class LabelObjective:
     time_weight: float = 0.0
     ancilla_weight: float = 0.0
     baseline_depth: int = 2
+    score_tolerance: float = 0.0
 
 
 def split_arg(value: str) -> list[int]:
@@ -115,6 +116,14 @@ def relative_delta(target: float, baseline: float, floor: float = 1.0) -> float:
 
 def oracle_depth(evals: dict[int, PlanEval], depths: Sequence[int], objective: LabelObjective | None = None) -> int:
     if objective is None or (objective.time_weight == 0.0 and objective.ancilla_weight == 0.0):
+        if objective is not None and objective.score_tolerance > 0.0:
+            best_score = min(evals[d].score for d in depths)
+            allowed = [
+                d
+                for d in depths
+                if evals[d].score <= best_score * (1.0 + objective.score_tolerance) + 1e-9
+            ]
+            return min(allowed, key=lambda d: (evals[d].time_s, evals[d].score, d))
         return min(depths, key=lambda d: (evals[d].score, evals[d].time_s, d))
     base = evals.get(objective.baseline_depth, evals[depths[0]])
 
@@ -362,6 +371,7 @@ def write_outputs(
             "label_time_weight": args.label_time_weight,
             "label_ancilla_weight": args.label_ancilla_weight,
             "label_baseline_depth": args.label_baseline_depth,
+            "label_score_tolerance": args.label_score_tolerance,
         },
         model_path,
     )
@@ -481,10 +491,16 @@ def write_outputs(
         f.write(f"- validation examples: {len(valid)}\n")
         f.write(f"- held-out test examples: {len(test)}\n")
         f.write(f"- train n: {args.train_n}; test n: {args.test_n}\n")
-        f.write(
-            f"- label objective: score_delta + {args.label_time_weight:g}*time_delta "
-            f"+ {args.label_ancilla_weight:g}*ancilla_delta vs depth-{args.label_baseline_depth}\n"
-        )
+        if args.label_score_tolerance > 0.0:
+            f.write(
+                f"- label objective: fastest depth within {args.label_score_tolerance:.3%} "
+                "of the score-only oracle frontier\n"
+            )
+        else:
+            f.write(
+                f"- label objective: score_delta + {args.label_time_weight:g}*time_delta "
+                f"+ {args.label_ancilla_weight:g}*ancilla_delta vs depth-{args.label_baseline_depth}\n"
+            )
         f.write(f"- parallel workers for data generation: {args.workers}\n")
         f.write(f"- validation accuracy at best checkpoint: {metrics['valid_acc']:.3f}\n")
         f.write(f"- held-out depth accuracy: {accuracy:.3f}\n")
@@ -563,6 +579,12 @@ def main(argv: Iterable[str] | None = None) -> int:
         choices=list(FRONTIER_DEPTHS),
         help="Baseline depth used by relative cost-aware label penalties.",
     )
+    ap.add_argument(
+        "--label-score-tolerance",
+        type=float,
+        default=0.0,
+        help="When positive, label each example with the fastest depth whose score is within this relative tolerance of the score-only oracle frontier.",
+    )
     args = ap.parse_args(list(argv) if argv is not None else None)
 
     depths = FRONTIER_DEPTHS
@@ -572,6 +594,7 @@ def main(argv: Iterable[str] | None = None) -> int:
         time_weight=args.label_time_weight,
         ancilla_weight=args.label_ancilla_weight,
         baseline_depth=args.label_baseline_depth,
+        score_tolerance=args.label_score_tolerance,
     )
 
     started = time.time()
