@@ -55,6 +55,15 @@
 
 该分析只用 T-count、CNOT、depth、peak ancilla 判断 Pareto 支配，不把 weighted score 放进支配谓词。核心结果是：Pareto-Resource-NMCTS 在 12-method `n<=6` 方法池中 170/177 个函数非支配；它对 ESOP beam 是 165/0/9/3（目标支配/基线支配/不可比/相同），对 ESOP-MILP 是 123/2/45/7。但对 SSHR-H、SSHR-I CNOT、mockturtle、CirKit、RevKit CLI 多数行是不可比，这反而更适合投稿：说明本文的优势是 T-count 和 weighted-score 方向的资源搜索优势，同时承认 SSHR 的 CNOT、CirKit 的 depth、RevKit 的 line-count 等真实 trade-off。
 
+本轮新增 learned-control audit 层，用于校准题目中“neural/MCTS”的贡献强度：
+
+- `analyze_learned_control_audit.py`
+- `results/summary_learned_control_audit.csv`
+- `results/analysis_learned_control_audit.md`
+- `paper_latex/tables/learned_control_audit.tex`
+
+该表把 AI/学习控制组件分成两类：可作为论文证据的 depth-frontier policy、stage-gated frontier、rank-diverse phase shortlist；以及只能作为限制或未来工作的 boolean neural guard、root-action neural ranker。关键数值：frontier policy 在 held-out `n=28,40` 上相对 oracle frontier 为 0/3/45、+0.04% score，但减少 51.30% all-depth frontier evaluation time；stage-gated frontier 在独立 `n=24,28,32,40` 上相对 all-depth 为 0/4/92、+0.04% score，减少 25.43% staged planning time；rank-diverse phase shortlist 在 held-out `n=6` 上用 512/8192 exact forms/function 贴近 wide-128。另一方面，boolean neural guard 只有 -0.12% score 但 +94.49% runtime，root-action neural ranker质量未超过 beam4，因此不能作为主贡献夸大。
+
 ## 2. 当前已完成内容
 
 ### 2.0a mockturtle official-header XAG probe

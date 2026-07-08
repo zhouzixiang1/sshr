@@ -41,6 +41,11 @@ T-count, CNOT count, logical depth, and peak ancilla.  It writes
 `results/analysis_multimetric_pareto_tradeoff.md` plus the paper tables
 `paper_latex/tables/multimetric_pairwise_dominance.tex` and
 `paper_latex/tables/multimetric_nondominated.tex`.
+The learned-control audit is materialized by
+`analyze_learned_control_audit.py`, which separates promoted learned controls
+(frontier policy, staged frontier, phase shortlist) from limited diagnostics
+(boolean neural guard and root-action neural ranker) in
+`paper_latex/tables/learned_control_audit.tex`.
 
 Latest external-toolchain progress:
 

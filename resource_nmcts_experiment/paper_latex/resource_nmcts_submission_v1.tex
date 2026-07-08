@@ -498,6 +498,24 @@ on validation data and applied unchanged to scale and truth-bridge rows.}
 \input{tables/stage_gated_frontier}
 \end{table}
 
+Table~\ref{tab:learned-control-audit} separates promoted learned-control
+components from limited diagnostics.  The frontier and phase policies provide
+the paper-facing learned-control evidence.  In contrast, the current
+Boolean-neural guard and root-action neural ranker are kept as bounded
+diagnostics: they show small quality or evaluation-cost signals, but not enough
+quality/runtime advantage to carry the main claim.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.08}
+\caption{Learned-control evidence audit.  Rows marked as limited are reported
+to bound the role of AI rather than promoted as headline improvements.}
+\label{tab:learned-control-audit}
+\input{tables/learned_control_audit}
+\end{table}
+
 \subsection{Score-weight robustness}
 
 The active score in Eq.~\eqref{eq:score} is intentionally a logical-resource
