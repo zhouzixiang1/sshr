@@ -402,6 +402,31 @@ functions.  Each function uses the best-score result among TBS, DBS, and RMS.}
 \input{tables/revkit_cli_multiflow_traditional}
 \end{table}
 
+\subsection{Paired statistical evidence}
+
+The headline reductions above are paired by function or item, but mean
+relative improvements alone can hide skewed instances.  We therefore recompute
+the central score comparisons directly from usable raw rows and apply an exact
+two-sided sign test that ignores ties.  Table~\ref{tab:paired-statistics}
+shows that the main traditional, external-toolchain, and high-dimensional
+score claims have negative median relative changes as well as strongly
+one-sided win counts.  The high-dimensional root-beam and fast-pair margins are
+smaller in magnitude than the external-probe margins, but they remain
+consistent across paired rows.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.06}
+\caption{Paired statistical evidence for score comparisons.  Rows are
+recomputed from correct, non-skipped raw CSV entries matched by item name.
+Negative mean and median changes favor the target method; $\log_{10}p$ is from
+a two-sided exact sign test over wins and losses, ignoring ties.}
+\label{tab:paired-statistics}
+\input{tables/paired_statistical_evidence}
+\end{table}
+
 \subsection{Search contribution and ablation}
 
 Table~\ref{tab:contribution} consolidates the contribution analysis.  The

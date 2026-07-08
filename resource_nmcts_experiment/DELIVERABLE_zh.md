@@ -35,6 +35,15 @@
 
 该矩阵按 baseline family 汇总覆盖范围、verified rows、主 paired score 结果和不能夸大的边界，并已接入英文投稿稿 `resource_nmcts_submission_v1.tex`。
 
+本轮进一步补充了 paired statistical evidence 层，避免论文只依赖均值叙述：
+
+- `analyze_paired_statistical_evidence.py`
+- `results/summary_paired_statistical_evidence.csv`
+- `results/analysis_paired_statistical_evidence.md`
+- `paper_latex/tables/paired_statistical_evidence.tex`
+
+该分析直接从 correct、non-skipped 的 raw CSV 行按 item name 重算核心 score 对比，给出胜/负/平、平均相对变化、中位相对变化和 two-sided exact sign test。核心现象是：传统、外部工具链和高维 root-beam/fast-pair 对比的中位数变化也为负，说明主要优势不是少数 outlier 拉动；但 `n=16`、`n=18` 高维内部 guard 的幅度明显小于外部工具链 probe，应写成稳定小幅增益而不是大幅碾压。
+
 ## 2. 当前已完成内容
 
 ### 2.0a mockturtle official-header XAG probe

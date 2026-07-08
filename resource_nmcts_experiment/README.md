@@ -30,6 +30,11 @@ The comparison scope is materialized by
 `results/summary_comparison_evidence_matrix.csv`,
 `results/analysis_comparison_evidence_matrix.md`, and
 `paper_latex/tables/comparison_evidence_matrix.tex` for the submission draft.
+The paired statistical layer is materialized by
+`analyze_paired_statistical_evidence.py`, which recomputes selected score
+comparisons from usable raw CSV rows, reports mean and median relative effects,
+and adds an exact two-sided sign test for the paper table
+`paper_latex/tables/paired_statistical_evidence.tex`.
 
 Latest external-toolchain progress:
 
