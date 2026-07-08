@@ -127,6 +127,7 @@ cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json resul
 /opt/anaconda3/envs/mcts-qoracle/bin/python -m pip install cmake pybind11
 /opt/anaconda3/envs/mcts-qoracle/bin/python -m pip install --no-build-isolation 'git+https://github.com/msoeken/revkit@develop'
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_revkit_baseline.py --max-n 6 --workers 8
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_phase_rz_portfolio.py
 ```
 
 The RevKit command is a real Python API baseline (`oracle_synth`) on complete
@@ -139,6 +140,10 @@ proxy comparison: 6/171/0 on score, mean score +751.69%, and T-like count
 +4060.08%.  As a sensitivity check, adding a symbolic cost of 1 score unit per
 non-Clifford Rz changes Resource-NMCTS vs RevKit to 140/37/0 with mean score
 -14.52%, and adding 2 units changes it to 177/0/0 with mean score -53.48%.
+The phase/Rz portfolio analysis then score-reranks verified internal circuits:
+the Resource-NMCTS family reaches 157/20/0 at 1 score unit per non-Clifford Rz
+and 177/0/0 at 1.5 units, while the traditional baseline family is only
+80/97/0 at 1 unit.
 This result should be presented as a phase-rotation representation-boundary
 finding, not as a hardware-mapping or exact Clifford+T T-count claim.
 
