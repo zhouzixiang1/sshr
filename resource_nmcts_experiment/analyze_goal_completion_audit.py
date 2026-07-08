@@ -113,8 +113,8 @@ def build_items() -> list[GoalItem]:
         GoalItem(
             requirement="Logical-layer scope without hardware mapping",
             status="pass" if "not a hardware-mapped" in paper_text and "logical-layer" in paper_text else "needs evidence",
-            evidence="The abstract, limitations, and availability text state that results are logical-layer estimates and exclude hardware mapping/routing/noise claims.",
-            evidence_files=(PAPER, RESULTS / "analysis_submission_readiness_audit.md"),
+            evidence="The abstract, limitations, availability text, and claim-scope lint state that results are logical-layer estimates and exclude hardware mapping/routing/noise claims.",
+            evidence_files=(PAPER, RESULTS / "analysis_claim_scope_lint.md", RESULTS / "analysis_submission_readiness_audit.md"),
             boundary="No hardware placement, routing, native-gate scheduling, noise model, or magic-state-factory resource estimate is claimed.",
             next_action="Keep this boundary unless new hardware-mapping experiments are added.",
         ),

@@ -48,6 +48,9 @@ leaderboard.
   relative score changes, and exact sign-test evidence.
 - Multi-resource tradeoff audit: reports raw T/CNOT/depth/ancilla Pareto
   dominance separately from the weighted score.
+- Claim-scope lint: automatically checks that hardware-mapping, universal
+  dominance, and external-tool-reproduction language is locally guarded by the
+  stated logical-layer scope.
 - Reproducibility, traceability, archive, and payload manifests: connect
   manuscript claims to scripts, CSV files, tables, figures, manifests, trained
   local policy artifacts, and the uploadable payload archive.
@@ -87,4 +90,3 @@ leaderboard.
 4. Check the Data and Code Availability, traceability audit, and payload
    manifest to confirm that the paper-facing results are reproducible from the
    submitted artifacts.
-

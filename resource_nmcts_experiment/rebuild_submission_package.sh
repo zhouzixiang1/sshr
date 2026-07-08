@@ -26,6 +26,7 @@ run_py analyze_related_work_positioning.py
 run_py analyze_baseline_claim_matrix.py
 run_py analyze_comparison_evidence_matrix.py
 run_py analyze_baseline_comparability_audit.py
+run_py analyze_claim_scope_lint.py
 run_py analyze_paired_statistical_evidence.py
 run_py analyze_multimetric_pareto_tradeoff.py
 run_py analyze_search_contribution.py

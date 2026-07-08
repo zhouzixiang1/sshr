@@ -1,0 +1,26 @@
+{
+  "name": "claim_scope_lint",
+  "outputs": [
+    "results/analysis_claim_scope_lint.md",
+    "results/summary_claim_scope_lint.csv",
+    "results/manifest_claim_scope_lint.json"
+  ],
+  "required_boundary_count": 5,
+  "scan_files": [
+    "paper_latex/resource_nmcts_submission_v1.tex",
+    "submission_package/README.md",
+    "submission_package/cover_letter_template.md",
+    "submission_package/artifact_reproduction_guide.md",
+    "submission_package/editor_screening_brief.md",
+    "submission_package/reviewer_concern_brief.md",
+    "submission_package/target_venue_brief.md",
+    "submission_package/author_declarations_template.md",
+    "submission_package/submission_checklist.md"
+  ],
+  "status_counts": {
+    "guarded": 53,
+    "pass": 5
+  },
+  "unresolved_count": 0,
+  "unsupported_claim_hit_count": 53
+}

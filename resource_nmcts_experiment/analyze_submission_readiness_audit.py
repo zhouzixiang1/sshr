@@ -9,6 +9,7 @@ and a clean compiled PDF.
 from __future__ import annotations
 
 import csv
+import json
 import re
 import subprocess
 from pathlib import Path
@@ -39,6 +40,9 @@ METADATA_MANIFEST = RESULTS / "manifest_submission_metadata_audit.json"
 GOAL_ANALYSIS = RESULTS / "analysis_goal_completion_audit.md"
 GOAL_SUMMARY = RESULTS / "summary_goal_completion_audit.csv"
 GOAL_MANIFEST = RESULTS / "manifest_goal_completion_audit.json"
+CLAIM_SCOPE_ANALYSIS = RESULTS / "analysis_claim_scope_lint.md"
+CLAIM_SCOPE_SUMMARY = RESULTS / "summary_claim_scope_lint.csv"
+CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
 RERUN_REGISTRY_ANALYSIS = RESULTS / "analysis_artifact_rerun_registry.md"
 RERUN_REGISTRY_SUMMARY = RESULTS / "summary_artifact_rerun_registry.csv"
 RERUN_REGISTRY_MANIFEST = RESULTS / "manifest_artifact_rerun_registry.json"
@@ -58,6 +62,15 @@ SUPPORT_FILES = [
 
 def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8")
+
+
+def read_json(path: Path) -> dict[str, object]:
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
 
 
 def pdf_pages(path: Path) -> str:
@@ -95,6 +108,8 @@ def abstract_word_count(text: str) -> int:
 def build_rows() -> list[dict[str, str]]:
     text = read_text(PAPER)
     pages = pdf_pages(PDF)
+    claim_scope_manifest = read_json(CLAIM_SCOPE_MANIFEST)
+    claim_scope_unresolved = int(claim_scope_manifest.get("unresolved_count", -1)) if claim_scope_manifest else -1
     lower = text.lower()
     todo_hits = re.findall(r"\b(?:todo|tbd|placeholder)\b", lower)
     abstract_words = abstract_word_count(text)
@@ -151,6 +166,17 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": "Experimental design includes claim, evidence, and comparability matrices.",
             "next_action": "Keep cross-toolchain claims tied to the comparability audit.",
+        },
+        {
+            "item": "Claim-scope lint",
+            "status": "pass"
+            if CLAIM_SCOPE_ANALYSIS.exists()
+            and CLAIM_SCOPE_SUMMARY.exists()
+            and CLAIM_SCOPE_MANIFEST.exists()
+            and claim_scope_unresolved == 0
+            else "needs revision",
+            "evidence": f"Claim-scope lint scans manuscript and handoff files; unresolved_count={claim_scope_unresolved}.",
+            "next_action": "Rerun analyze_claim_scope_lint.py and revise unguarded hardware-mapping, universal-dominance, optimality, or full-tool-reproduction claims.",
         },
         {
             "item": "Reproducibility evidence",

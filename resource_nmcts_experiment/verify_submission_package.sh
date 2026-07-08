@@ -18,7 +18,7 @@ if command -v git >/dev/null 2>&1 && git rev-parse --is-inside-work-tree >/dev/n
 fi
 
 if command -v rg >/dev/null 2>&1; then
-  rg -n "pass:|needs author input|Payload SHA|registry_raw|file count|archive sha256" \
+  rg -n "pass:|needs author input|Payload SHA|registry_raw|unresolved_count|file count|archive sha256" \
     results/analysis_submission_package_verifier.md \
     results/analysis_submission_readiness_audit.md \
     results/analysis_submission_payload_archive.md

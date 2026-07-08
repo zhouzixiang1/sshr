@@ -4,8 +4,8 @@
 The verifier runs after the payload archive has been created.  It checks the
 terminal package invariants that are easy to regress during final polishing:
 compiled PDF availability, payload SHA consistency, readiness status, raw rerun
-registry coverage, and LaTeX log cleanliness.  It writes a small audit report
-but does not rerun experiments or alter manuscript sources.
+registry coverage, claim-scope hygiene, and LaTeX log cleanliness.  It writes a
+small audit report but does not rerun experiments or alter manuscript sources.
 """
 from __future__ import annotations
 
@@ -29,6 +29,7 @@ REGISTRY_SUMMARY = RESULTS / "summary_artifact_rerun_registry.csv"
 REGISTRY_MANIFEST = RESULTS / "manifest_artifact_rerun_registry.json"
 PAYLOAD_SUMMARY = RESULTS / "summary_submission_payload_archive.csv"
 PAYLOAD_MANIFEST = RESULTS / "manifest_submission_payload_archive.json"
+CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
 
 
 def rel(path: Path) -> str:
@@ -165,6 +166,19 @@ def verify_registry() -> dict[str, str]:
     )
 
 
+def verify_claim_scope() -> dict[str, str]:
+    manifest = read_json(CLAIM_SCOPE_MANIFEST)
+    unresolved = int(manifest.get("unresolved_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    status = "pass" if unresolved == 0 else "needs revision"
+    return row(
+        "Claim-scope lint",
+        status,
+        f"unresolved_count={unresolved}; status_counts={counts}.",
+        "Run analyze_claim_scope_lint.py and revise unguarded hardware-mapping, universal-dominance, optimality, or full-tool-reproduction claims.",
+    )
+
+
 def verify_latex_log() -> dict[str, str]:
     if not LOG.exists():
         return row("LaTeX log boundary", "needs revision", "LaTeX log is missing.", "Rebuild the PDF with latexmk.")
@@ -191,7 +205,7 @@ def verify_latex_log() -> dict[str, str]:
 def build_rows() -> list[dict[str, str]]:
     rows = [verify_pdf()]
     rows.extend(verify_payload_sha())
-    rows.extend([verify_readiness(), verify_registry(), verify_latex_log()])
+    rows.extend([verify_readiness(), verify_registry(), verify_claim_scope(), verify_latex_log()])
     return rows
 
 

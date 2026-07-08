@@ -32,6 +32,7 @@ Use this checklist immediately before uploading the manuscript.
 - Readiness audit: `results/analysis_submission_readiness_audit.md`
 - Author input packet: `submission_package/AUTHOR_INPUT_REQUIRED.md`
 - Terminal package verifier: `results/analysis_submission_package_verifier.md`
+- Claim-scope lint: `results/analysis_claim_scope_lint.md`
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
 - Goal-completion audit: `results/analysis_goal_completion_audit.md`
 - Raw rerun registry: `results/analysis_artifact_rerun_registry.md`
@@ -57,6 +58,7 @@ Run these from `resource_nmcts_experiment/`:
 /opt/anaconda3/envs/mcts-qoracle/bin/python -m py_compile \
   analyze_goal_completion_audit.py \
   analyze_submission_archive_manifest.py \
+  analyze_claim_scope_lint.py \
   analyze_submission_metadata_audit.py \
   analyze_submission_readiness_audit.py \
   analyze_submission_traceability_audit.py
@@ -71,6 +73,7 @@ Expected current state:
 
 - Archive manifest: all payload groups complete.
 - Payload archive: tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.
+- Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
 - Metadata audit: all author- and venue-specific fields are enumerated before upload, and any filled `submission_metadata.json` is checked.
 - Goal-completion audit: all research/package requirements pass and only author/venue gates remain open.
 - Traceability audit: all claim families complete.
