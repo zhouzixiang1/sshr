@@ -8,9 +8,9 @@ This read-only verifier checks the terminal package invariants after the payload
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Compiled PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=26, bytes=597030. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
-| Payload SHA sidecar | pass | actual=2b157231d952e6772666d807a197490e5b96b038238763b5c92a6d57bea846d3; sidecar=2b157231d952e6772666d807a197490e5b96b038238763b5c92a6d57bea846d3. | Regenerate the payload archive if the digests differ. |
-| Payload manifest consistency | pass | summary=2b157231d952e6772666d807a197490e5b96b038238763b5c92a6d57bea846d3; manifest=2b157231d952e6772666d807a197490e5b96b038238763b5c92a6d57bea846d3; file_count=816. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
+| Compiled PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=26, bytes=597029. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
+| Payload SHA sidecar | pass | actual=fffab1370bbf1d6153f1c86cabaf88d021541eaa407d030c64644d96a29cf429; sidecar=fffab1370bbf1d6153f1c86cabaf88d021541eaa407d030c64644d96a29cf429. | Regenerate the payload archive if the digests differ. |
+| Payload manifest consistency | pass | summary=fffab1370bbf1d6153f1c86cabaf88d021541eaa407d030c64644d96a29cf429; manifest=fffab1370bbf1d6153f1c86cabaf88d021541eaa407d030c64644d96a29cf429; file_count=817. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
 | Readiness audit terminal state | pass | status_counts={'pass': 19, 'needs author input': 1}. | Resolve any needs-revision rows; author-specific declarations remain manual. |
 | Artifact rerun registry coverage | pass | families=14; registry_raw=144; actual_raw=144. | Rerun analyze_artifact_rerun_registry.py after adding raw CSVs or driver scripts. |
 | LaTeX log boundary | pass | Only allowed rerunfilecheck/showhyphens log lines found. | Inspect the LaTeX log and fix unexpected warnings or errors. |

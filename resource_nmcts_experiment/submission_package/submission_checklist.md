@@ -27,6 +27,7 @@ Use this checklist immediately before uploading the manuscript.
 ## Reproducibility Files
 
 - Rebuild script: `rebuild_submission_package.sh`
+- Fast verifier script: `verify_submission_package.sh`
 - Readiness audit: `results/analysis_submission_readiness_audit.md`
 - Terminal package verifier: `results/analysis_submission_package_verifier.md`
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
@@ -58,6 +59,7 @@ Run these from `resource_nmcts_experiment/`:
   analyze_submission_readiness_audit.py \
   analyze_submission_traceability_audit.py
 ./rebuild_submission_package.sh
+./verify_submission_package.sh
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
 rg -n "Overfull|Underfull|undefined|Undefined|Warning|Error|LaTeX Warning|Rerun" \
   paper_latex/resource_nmcts_submission_v1.log

@@ -86,6 +86,7 @@ Run these commands from `../` after any payload-affecting edit:
 
 ```bash
 ./rebuild_submission_package.sh
+./verify_submission_package.sh
 git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
 pdfinfo paper_latex/resource_nmcts_submission_v1.pdf | sed -n '1,20p'

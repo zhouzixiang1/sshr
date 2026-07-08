@@ -1,6 +1,6 @@
 {
   "archive": "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
-  "archive_bytes": 38878973,
+  "archive_bytes": 38879730,
   "excluded_from_payload": [
     "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
     "submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256",
@@ -10,7 +10,7 @@
     "results/summary_submission_readiness_audit.csv",
     "results/analysis_submission_readiness_audit.md"
   ],
-  "file_count": 816,
+  "file_count": 817,
   "files": [
     {
       "bytes": 154984,
@@ -203,9 +203,9 @@
       "sha256": "b030bb0333467e101b2b9c7b34d86d766dfe1a11d17fb309f1c3824c9fb20b77"
     },
     {
-      "bytes": 12681,
+      "bytes": 12803,
       "path": "analyze_submission_archive_manifest.py",
-      "sha256": "3b0a39a68eb48f3e553e52b46ad3cc2da8920185f469e9fdfc56eb1b764d16ab"
+      "sha256": "de1bb31073ccaa6b69c8236fe330ea5c5b373c6f2579498bc8a9d3190f11fdf4"
     },
     {
       "bytes": 16260,
@@ -213,14 +213,14 @@
       "sha256": "d7c12eaf1d3ef2c6e85b69db2906d7cd314e798425b53edcee8c5461c267f90d"
     },
     {
-      "bytes": 9813,
+      "bytes": 9832,
       "path": "analyze_submission_package_verifier.py",
-      "sha256": "902c6bd3a482a86acd3dbfbf66b34c70bae64d6dc31b60e3370e64fd3bf2d5a9"
+      "sha256": "26f6f2b1d5041c27d18fefb8e43c6f0f601d1e5ed93fdec1f1d20ee5ba255499"
     },
     {
-      "bytes": 15697,
+      "bytes": 15851,
       "path": "analyze_submission_readiness_audit.py",
-      "sha256": "a9da7249e17149830d0962d92fc85774eb65e00925ac3e9e91abeeb4d42987e0"
+      "sha256": "a1be0e973d54240fb0cfdbc915d44a46b720c2791779c63b59cb22ca2aadf068"
     },
     {
       "bytes": 13173,
@@ -498,9 +498,9 @@
       "sha256": "ab6321067236ad1c6bcae4fdc2509ecfb992fe915a3f0218531da7cb57466028"
     },
     {
-      "bytes": 597030,
+      "bytes": 597029,
       "path": "paper_latex/resource_nmcts_submission_v1.pdf",
-      "sha256": "4a5916a80b330487cd61760ea198a29190f4c0f82c5c903f1be9960c72a50195"
+      "sha256": "529af70d640a1cd292a7774a747e7dfe79d3e79d4b3edb0733e8babbf94cc5b8"
     },
     {
       "bytes": 48576,
@@ -1185,7 +1185,7 @@
     {
       "bytes": 1788,
       "path": "paper_latex/tables/submission_archive_manifest.tex",
-      "sha256": "ff5f5e66478e413629ae5c0e0c5989f9a109688e879dfe6fdf29bf4d50a1eee9"
+      "sha256": "fccdc8ff7562dc15820b17b5bf75b66c51e7d76329d15662d1efcb9a1c287fc3"
     },
     {
       "bytes": 2602,
@@ -1910,7 +1910,7 @@
     {
       "bytes": 1915,
       "path": "results/analysis_submission_archive_manifest.md",
-      "sha256": "9030b1f2f43a4a58b562358fdc79d589fc32af0d19d2dbf06356c754b39c04c5"
+      "sha256": "2ab586fade72b7e11b4b5c1c50c337efde900655c723fc7f871e24d9a7d41f91"
     },
     {
       "bytes": 5678,
@@ -2313,9 +2313,9 @@
       "sha256": "ada7ffbc4efdf8f3336b44c9a769a0a655834957715f0be61ead1c8d778d58a6"
     },
     {
-      "bytes": 166984,
+      "bytes": 167166,
       "path": "results/manifest_submission_archive_manifest.json",
-      "sha256": "b1944f0fc3edbecd4ad41284880c382945c431595c9caffcb091a0f9fcfbe44d"
+      "sha256": "4ad52a82507c44ab7ae3cec6158d738b1592278942f430bf15e55f362dce68c1"
     },
     {
       "bytes": 8596,
@@ -3810,7 +3810,7 @@
     {
       "bytes": 3608,
       "path": "results/summary_submission_archive_manifest.csv",
-      "sha256": "9d15b3199cd9c488c975c5aad248ff98c702ee505ef128dd5627e6d4b267f1d7"
+      "sha256": "7c5d33b83046bfca9109c939973249f807c044db9f0f25279f275b56759f411e"
     },
     {
       "bytes": 6152,
@@ -4008,14 +4008,14 @@
       "sha256": "d80ee97c6ed6c6ea7a0e1dfc304e0dd312219a9a441dcd25881751d5cdb90e82"
     },
     {
-      "bytes": 4417,
+      "bytes": 4448,
       "path": "submission_package/README.md",
-      "sha256": "58cb742724f723ab122491fb9c9ccb3200c5b0eaf7d8c68e2d08896fc205432e"
+      "sha256": "a6fbf1f991bfa9b285d051278073ee5b6e06914d0c31aee070dc9d2952572215"
     },
     {
-      "bytes": 6175,
+      "bytes": 6237,
       "path": "submission_package/artifact_reproduction_guide.md",
-      "sha256": "015a82121f935eb2bf3db877038f8b93bc1b3d3bc4ad9f0167e75e48ed5f17f2"
+      "sha256": "4638c7e8eb55742187f72eb1db4464d1b7e9e2ad43e82ef495046cd400706c8a"
     },
     {
       "bytes": 4067,
@@ -4038,9 +4038,9 @@
       "sha256": "072775b7ea4984b46672c99d6b7755cfd6dd0cd667e9958cc533b66cd8e4ff06"
     },
     {
-      "bytes": 5331,
+      "bytes": 5417,
       "path": "submission_package/submission_checklist.md",
-      "sha256": "9da7df3de873759b78195a2da490569a52f590697096894482e0767c053b24df"
+      "sha256": "e9e1d059dd18d9413f38b3059eb844224ee17153010ee5671dc3f1617e6f5685"
     },
     {
       "bytes": 4069,
@@ -4091,12 +4091,17 @@
       "bytes": 11379,
       "path": "train_structure_gate.py",
       "sha256": "5823c0425649700f793535d71ba2b1d2d1a082987dfbaf7b4072066489c8055d"
+    },
+    {
+      "bytes": 976,
+      "path": "verify_submission_package.sh",
+      "sha256": "a7f8e3d608e45785b42c4816e5e9887c41c62a720061d932c36ae98ea55a3c8b"
     }
   ],
-  "input_bytes": 106277945,
+  "input_bytes": 106279576,
   "missing": [],
   "python": "3.11.15",
   "script": "make_submission_payload_archive.py",
-  "sha256": "2b157231d952e6772666d807a197490e5b96b038238763b5c92a6d57bea846d3",
+  "sha256": "fffab1370bbf1d6153f1c86cabaf88d021541eaa407d030c64644d96a29cf429",
   "sha256_file": "submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256"
 }

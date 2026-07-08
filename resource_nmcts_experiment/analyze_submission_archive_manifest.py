@@ -157,7 +157,12 @@ def specs() -> list[CategorySpec]:
         ),
         CategorySpec(
             category="Scripts and docs",
-            explicit=(THIS_DIR / "README.md", THIS_DIR / "DELIVERABLE_zh.md", THIS_DIR / "rebuild_submission_package.sh"),
+            explicit=(
+                THIS_DIR / "README.md",
+                THIS_DIR / "DELIVERABLE_zh.md",
+                THIS_DIR / "rebuild_submission_package.sh",
+                THIS_DIR / "verify_submission_package.sh",
+            ),
             patterns=((THIS_DIR, "run_*.py"), (THIS_DIR, "train_*.py"), (THIS_DIR, "analyze_*.py"), (THIS_DIR, "make_*.py")),
             boundary="Documents reproducible entry points; raw sweeps still require their individual drivers.",
         ),

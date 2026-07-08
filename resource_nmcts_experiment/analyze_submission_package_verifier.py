@@ -248,7 +248,7 @@ def main() -> int:
     print(f"wrote {len(rows)} submission package verifier rows")
     if failures:
         print(f"warning: {failures} verifier row(s) need revision")
-    return 0
+    return 1 if failures else 0
 
 
 if __name__ == "__main__":

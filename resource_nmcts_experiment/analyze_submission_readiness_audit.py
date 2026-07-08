@@ -19,6 +19,7 @@ RESULTS = THIS_DIR / "results"
 PAPER = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.tex"
 PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.pdf"
 REBUILD_SCRIPT = THIS_DIR / "rebuild_submission_package.sh"
+VERIFY_SCRIPT = THIS_DIR / "verify_submission_package.sh"
 ARCHIVE_ANALYSIS = RESULTS / "analysis_submission_archive_manifest.md"
 ARCHIVE_SUMMARY = RESULTS / "summary_submission_archive_manifest.csv"
 ARCHIVE_MANIFEST = RESULTS / "manifest_submission_archive_manifest.json"
@@ -220,10 +221,13 @@ def build_rows() -> list[dict[str, str]]:
         {
             "item": "Terminal package verifier",
             "status": "pass"
-            if VERIFIER_ANALYSIS.exists() and VERIFIER_SUMMARY.exists() and VERIFIER_MANIFEST.exists()
+            if VERIFY_SCRIPT.exists()
+            and VERIFIER_ANALYSIS.exists()
+            and VERIFIER_SUMMARY.exists()
+            and VERIFIER_MANIFEST.exists()
             else "needs revision",
-            "evidence": "Read-only verifier checks PDF availability, payload SHA consistency, readiness state, raw registry coverage, and LaTeX log boundaries.",
-            "next_action": "Run analyze_submission_package_verifier.py after rebuilding the payload archive.",
+            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check PDF availability, payload SHA consistency, readiness state, raw registry coverage, and LaTeX log boundaries.",
+            "next_action": "Run verify_submission_package.sh after rebuilding the payload archive.",
         },
         {
             "item": "Derived package rebuild command",

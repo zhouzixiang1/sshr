@@ -37,6 +37,7 @@ From `resource_nmcts_experiment/`, run:
 
 ```bash
 ./rebuild_submission_package.sh
+./verify_submission_package.sh
 ```
 
 This command regenerates:
@@ -76,6 +77,7 @@ Run these from `resource_nmcts_experiment/`:
 
 ```bash
 git diff --check
+./verify_submission_package.sh
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
 pdfinfo paper_latex/resource_nmcts_submission_v1.pdf | sed -n '1,20p'
 rg -n "Warning|Overfull|Underfull|LaTeX Error|Undefined|Rerun" \
