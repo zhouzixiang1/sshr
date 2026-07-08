@@ -1,0 +1,16 @@
+{
+  "input": "resource_nmcts_experiment/results/raw_highdim_resource.csv",
+  "min_n": 14,
+  "max_n": 14,
+  "limit": 8,
+  "timeout_s": 30.0,
+  "workers": 4,
+  "target_method": "and_resource_nmcts",
+  "rows": 8,
+  "usable_rows": 1,
+  "timeout_rows": 7,
+  "returned_comparison_rows": 1,
+  "elapsed_s": 60.02743196487427,
+  "method": "external_revkit_oracle_synth_timeout_probe",
+  "claim_boundary": "High-dimensional RevKit Python API subprocess-timeout probe; timed-out rows have no circuit metrics."
+}

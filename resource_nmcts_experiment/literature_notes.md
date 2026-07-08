@@ -70,9 +70,16 @@
   should be discussed as a representation-boundary result rather than as a
   missing tool.  A symbolic sensitivity check shows that adding 1 score unit
   per non-Clifford Rz changes Resource-NMCTS vs RevKit to 140/37/0, and adding
-  2 units changes it to 177/0/0; this is not a substitute for exact or
-  approximate rotation synthesis.  The legacy RevKit/CirKit command-line flow
-  is still not reproduced locally.
+  2 units changes it to 177/0/0.  A score-reranked Resource-NMCTS family
+  portfolio reaches 157/20/0 at 1/Rz and 177/0/0 at 1.5/Rz, while a traditional
+  baseline family reaches only 80/97/0 at 1/Rz.  These checks are not a
+  substitute for exact or approximate rotation synthesis.  A reproducible `n=14`
+  RevKit API timeout probe now runs each `oracle_synth` call in a disposable
+  subprocess: 1/8 rows returned under a 30 s cutoff, 7/8 timed out, and the
+  returned row still contained 32767 non-Clifford Rz rotations.  High-dimensional
+  RevKit comparisons should therefore be reported as an adapter/scalability and
+  gate-set boundary until a faster RevKit/CirKit flow is available.  The legacy
+  RevKit/CirKit command-line flow is still not reproduced locally.
   <https://github.com/msoeken/revkit>
 
 ## AI-guided synthesis references

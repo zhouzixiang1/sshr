@@ -26,6 +26,7 @@
 
 - `analyze_toolchain_readiness.py`
 - `run_revkit_baseline.py`
+- `run_revkit_highdim_timeout_probe.py`
 - `analyze_phase_rz_portfolio.py`
 - `analyze_rz_synthesis_cost.py`
 - `results/analysis_toolchain_readiness.md`
@@ -34,6 +35,10 @@
 - `results/summary_revkit_oracle_synth_traditional.csv`
 - `results/analysis_revkit_oracle_synth_traditional.md`
 - `results/manifest_revkit_oracle_synth_traditional.json`
+- `results/raw_revkit_highdim_timeout_probe.csv`
+- `results/summary_revkit_highdim_timeout_probe.csv`
+- `results/analysis_revkit_highdim_timeout_probe.md`
+- `results/manifest_revkit_highdim_timeout_probe.json`
 - `results/raw_phase_rz_portfolio.csv`
 - `results/summary_phase_rz_portfolio.csv`
 - `results/analysis_phase_rz_portfolio.md`
@@ -43,6 +48,7 @@
 - `results/analysis_rz_synthesis_cost.md`
 - `results/manifest_rz_synthesis_cost.json`
 - `paper_latex/tables/revkit_oracle_synth_traditional.tex`
+- `paper_latex/tables/revkit_highdim_timeout_probe.tex`
 - `paper_latex/tables/phase_rz_portfolio.tex`
 - `paper_latex/tables/rz_synthesis_cost.tex`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v21.tex`
@@ -53,6 +59,8 @@
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v23.pdf`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v25.tex`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v25.pdf`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v26.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v26.pdf`
 
 核心结果：
 
@@ -69,6 +77,7 @@
 | Traditional baseline family portfolio vs RevKit `oracle_synth` | score+1/Rz | 177 | 80/97/0 | +7.58% |
 | Resource-NMCTS family portfolio vs RevKit `oracle_synth` | Ross-Selinger-style `T/Rz=30` proxy | 177 | 177/0/0 | -95.03% |
 | Resource-NMCTS family portfolio vs RevKit `oracle_synth` | conservative `T/Rz=90` proxy | 177 | 177/0/0 | -97.01% |
+| RevKit `oracle_synth` high-dimensional timeout probe | `n=14`, 30 s subprocess cutoff | 8 | 1 usable / 7 timeout / 0 error | median 30.00 s |
 
 解释边界：
 
@@ -79,6 +88,8 @@
 - `analyze_phase_rz_portfolio.py` 进一步说明 Resource-NMCTS family 的中位 break-even 为 0.80/Rz；`lambda_Rz=1.5` 时 family portfolio 已覆盖 177/177 行，而传统 baseline family 在 `lambda_Rz=1` 时仍只有 80/177 行获胜。
 - `analyze_rz_synthesis_cost.py` 进一步把每个非 Clifford `Rz` 按 `ceil(a log2(1/epsilon)+b)` 计入近似 Clifford+T T-count proxy。Ross-Selinger-style `epsilon=1e-3` 时 `T/Rz=30`，Resource-NMCTS family 相对 RevKit 为 177/0/0、平均 score 降低 95.03%；更保守的 `4 log2(1/epsilon)+10` proxy 在 `epsilon=1e-6` 时 `T/Rz=90`，同样为 177/0/0、平均 score 降低 97.01%。
 - 近似 Rz synthesis 结果仍是逻辑层成本模型，不输出实际 Clifford+T rotation sequence，不测量 synthesis runtime，也不包含硬件 mapping；它用于界定 RevKit phase lower-bound 口径，而不能替代最终 gate-sequence 级实验。
+- `run_revkit_highdim_timeout_probe.py` 用一次一子进程的硬超时方式审计高维 RevKit API 边界。当前 `n=14` 前 8 个函数中 1 行返回、7 行触发 30 s timeout；唯一返回行 `anf_n14_10` 含 32767 个非 Clifford `Rz`，RevKit lower-bound score 为 2948.79，`score+1/Rz` 为 35715.79，说明高维 RevKit API 结果既受可扩展性限制，也受 phase/Rz 口径支配。
+- 高维 timeout 行没有线路资源，不能参与 paired resource 均值；该结果支持把正式 RevKit API paired benchmark 限定在已经验证的 `n <= 6`，把高维 RevKit 写成 adapter/scalability boundary。
 - 该结果不是坏消息，而是新的强基线：投稿前要么新增 phase/Rz-aware emitter 并处理 rotation synthesis 成本，要么把论文主张严格限定为 bit-flip oracle 的逻辑层资源综合。
 - 当前仍未打通官方 ROS、mockturtle 和 legacy RevKit/CirKit CLI 流程。
 

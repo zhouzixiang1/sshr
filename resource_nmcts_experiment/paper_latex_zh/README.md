@@ -36,6 +36,7 @@
 - `resource_nmcts_zh_manuscript_v22.tex` / `resource_nmcts_zh_manuscript_v22.pdf`：中文论文稿 v22，RevKit Rz 角度审计版；修正 v21 的过强表述，确认 RevKit `oracle_synth` 返回的是 Rz-phase netlist lower-bound proxy，171/177 行含非 Clifford `Rz`、总数 9242、最大 angle/pi 分母 64，因此 `6/171/0`、score `+751.69%` 和 T-like count `+4060.08%` 不能写成精确 Clifford+T T-count 对比；新增 `score+1/Rz` 与 `score+2/Rz` 符号敏感性，Resource-NMCTS 分别为 140/37/0 和 177/0/0。
 - `resource_nmcts_zh_manuscript_v23.tex` / `resource_nmcts_zh_manuscript_v23.pdf`：中文论文稿 v23，RevKit Rz portfolio 敏感性版；新增 `analyze_phase_rz_portfolio.py` 结果，把 Resource-NMCTS、Pareto-Resource-NMCTS 和 FPRM polarity archive 作为 score-reranked family portfolio。该 family 在 `lambda_Rz=1` 时相对 RevKit 为 157/20/0，在 `lambda_Rz=1.5` 时为 177/0/0；传统 baseline family 在 `lambda_Rz=1` 时只有 80/97/0。
 - `resource_nmcts_zh_manuscript_v25.tex` / `resource_nmcts_zh_manuscript_v25.pdf`：中文论文稿 v25，近似 Rz 综合成本模型版；在 v23 基础上新增 `analyze_rz_synthesis_cost.py` 结果，把 RevKit 每个非 Clifford `Rz` 按 `ceil(a log2(1/epsilon)+b)` 计入近似 Clifford+T T-count proxy。Ross-Selinger-style `epsilon=1e-3` 时 `T/Rz=30`，Resource-NMCTS family 相对 RevKit 为 177/0/0、平均 score 降低 95.03%；更保守的 `4 log2(1/epsilon)+10` proxy 在 `epsilon=1e-6` 时仍为 177/0/0、平均 score 降低 97.01%。该版本明确声明 proxy 不输出实际 rotation sequence，也不是硬件 mapping。
+- `resource_nmcts_zh_manuscript_v26.tex` / `resource_nmcts_zh_manuscript_v26.pdf`：中文论文稿 v26，RevKit 高维超时边界版；在 v25 基础上新增 `run_revkit_highdim_timeout_probe.py` 的可复现实验，对 `n=14` 前 8 个函数逐行用子进程运行 RevKit `oracle_synth` 并设置 30 s 硬超时。结果为 1/8 返回、7/8 超时；唯一返回行 `anf_n14_10` 含 32767 个非 Clifford `Rz`，RevKit lower-bound score 为 2948.79，`score+1/Rz` 为 35715.79。该版本明确高维 RevKit timeout 行不进入 paired resource 均值，只作为 adapter/scalability boundary。
 - `resource_nmcts_zh_research_position.tex` / `resource_nmcts_zh_research_position.pdf`：中文研究定位稿，重新梳理“不从 SSHR 入手”的论文主线、AI 在搜索问题中的角色、当前证据边界和下一步明显提升目标。
 - 最新 v4 稿已补充 `train_screen_depth_policy.py` 的结构级 depth policy 结果：n=14/16/18 训练、held-out n=20 测试，说明 AI 已能学习 screen 深度选择，但尚未超过固定 depth-2 的 score。
 - 最新 v8 稿补充 `train_structure_gate.py` 的 screen-gated Resource-NMCTS 边界验证：原 n=20 切片资源持平且平均运行时间降低 75.58%，held-out n=19/20 合计 16/16 score 持平并平均节省 36.83%，但仍只作为运行时门控证据。
@@ -74,6 +75,7 @@ latexmk -xelatex -g resource_nmcts_zh_manuscript_v21.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v22.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v23.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v25.tex
+latexmk -xelatex -g resource_nmcts_zh_manuscript_v26.tex
 latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 ```
 
@@ -131,6 +133,7 @@ latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 - `../results/analysis_ros_lut_proxy.md`
 - `../results/analysis_toolchain_readiness.md`
 - `../results/analysis_revkit_oracle_synth_traditional.md`
+- `../results/analysis_revkit_highdim_timeout_probe.md`
 - `../results/analysis_phase_rz_portfolio.md`
 - `../results/analysis_rz_synthesis_cost.md`
 - `../results/toolchain_readiness.json`

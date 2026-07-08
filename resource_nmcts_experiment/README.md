@@ -127,6 +127,7 @@ cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json resul
 /opt/anaconda3/envs/mcts-qoracle/bin/python -m pip install cmake pybind11
 /opt/anaconda3/envs/mcts-qoracle/bin/python -m pip install --no-build-isolation 'git+https://github.com/msoeken/revkit@develop'
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_revkit_baseline.py --max-n 6 --workers 8
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_revkit_highdim_timeout_probe.py --input results/raw_highdim_resource.csv --min-n 14 --max-n 14 --limit 8 --timeout 30 --workers 4
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_phase_rz_portfolio.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_rz_synthesis_cost.py
 ```
@@ -152,6 +153,14 @@ proxy `ceil(slope*log2(1/epsilon)+offset)`.  Under the Ross-Selinger-style
 with mean score -95.03%; under the more conservative `4 log2(1/epsilon)+10`
 proxy at `epsilon=1e-6`, `T/Rz=90` and it remains 177/0/0 with mean score
 -97.01%.
+`run_revkit_highdim_timeout_probe.py` audits the high-dimensional RevKit API
+path with one subprocess per row and a hard wall-time cutoff.  On the current
+`n=14` eight-row probe, RevKit returns one circuit and times out on seven rows
+at 30 s.  The returned row has 32767 non-Clifford Rz rotations, so it remains a
+phase-netlist boundary case: Resource-NMCTS loses to the RevKit lower-bound
+score on that row but wins after a symbolic `score+1/Rz` charge.  Timeout rows
+have no circuit metrics and should not be averaged as a paired resource
+benchmark.
 This result should be presented as a phase-rotation representation-boundary
 finding, not as a hardware-mapping or exact Clifford+T T-count claim.
 
