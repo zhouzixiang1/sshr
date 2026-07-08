@@ -53,7 +53,9 @@ T-count by 72.25\% and mean weighted score by 67.80\% relative to direct
 score win/loss/tie counts are 174/0/3, 167/3/7, and 173/4/0, respectively.
 External probes strengthen this comparison.  Against a ROS-style LUT proxy over
 309 functions, Pareto-\method{} obtains 309/0/0 score wins with a mean
-84.27\% reduction.  Against an official-header mockturtle KLUT-to-XAG probe,
+84.27\% reduction; line-aware and minimum-ancilla reselections of the same
+verified LUT sweep preserve 309/0/0 score wins with 84.45--85.83\% reductions.
+Against an official-header mockturtle KLUT-to-XAG probe,
 it obtains 166/11/0 wins on the traditional set and 64/0/0 wins on an
 $n=14$ high-dimensional set.  A CirKit 3 AIG/multiplicative-complexity probe
 returns verified rows for 177 traditional and 64 high-dimensional functions;
@@ -313,6 +315,22 @@ functions and 927 K-sweep rows, all truth-table checked; Pareto-\method{} wins
 official headers to resynthesize KLUT networks into XAGs; Pareto-\method{} has
 166/11/0 score wins on the traditional set and 64/0/0 on the $n=14$ set.
 
+We further reselect the same verified LUT sweep under stricter line pressure.
+The minimum-ancilla selector reduces the LUT proxy's peak ancilla by 32.47\%
+relative to the best-score proxy, but increases its own weighted score by
+40.67\%.  Pareto-\method{} still obtains 309/0/0 score wins against this
+minimum-ancilla selector and against two line-weighted selectors.  This result
+is a robustness check for LUT-parameter choice, not a claim that the official
+ROS SAT garbage-management flow has been reproduced.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Line-aware reselection of the verified ROS-style LUT proxy sweep.}
+\label{tab:ros-line}
+\input{tables/ros_lut_line_sensitivity}
+\end{table}
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.94\linewidth]{fig3_baseline_comparisons.pdf}
@@ -494,12 +512,13 @@ optimization and sequence-level audit.
 Several limitations are deliberate.  All results are logical-layer estimates;
 the paper does not model routing, hardware connectivity, native gate sets,
 noise, or magic-state factories.  The ROS-style LUT result is a proxy rather
-than a full ROS reproduction with SAT garbage management.  The RevKit CLI
-baseline is a real exact-oracle reversible-synthesis probe, but CNOT/depth are
-derived from RevKit's Toffoli-control distribution and the experiment is still
-not a hardware mapping.  High-dimensional symbolic checks validate emitted
-circuit semantics but do not replace full truth-table enumeration beyond the
-bridge slices.
+than a full ROS reproduction with SAT garbage management; the line-aware LUT
+reselection only tests parameter sensitivity within the same proxy.  The RevKit
+CLI baseline is a real exact-oracle reversible-synthesis probe, but CNOT/depth
+are derived from RevKit's Toffoli-control distribution and the experiment is
+still not a hardware mapping.  High-dimensional symbolic checks validate
+emitted circuit semantics but do not replace full truth-table enumeration
+beyond the bridge slices.
 
 \section{Conclusion}
 

@@ -1285,6 +1285,36 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 - Resource/Pareto/Profile 仍然全胜该 proxy，说明当前低加权资源优势不只依赖于一个较弱的固定 LUT 参数。
 - 这仍不能写成“已复现 ROS”。官方 ROS 的 LUT decomposition、垃圾管理和 reversible-toolchain 细节没有被实现；本文只能把它写成“ROS-style LUT proxy 外部对比”。
 
+### 2.12.1 ROS-style LUT line-sensitivity：辅助线压力下的稳健性
+
+本轮新增 `analyze_ros_lut_line_sensitivity.py`，复用已经 truth-table 验证通过的 ABC LUT sweep，不重新运行 ABC，而是在同一批 `K=3,4,5` 行上按更严格的辅助线压力重新选择 LUT 结果。它仍然不是官方 ROS：没有 SAT garbage management，也没有 reversible-toolchain 或硬件 mapping；作用是检查“Resource-NMCTS 胜过 LUT proxy”是否依赖 best-score 的 K 选择。
+
+主要产物：
+
+- `analyze_ros_lut_line_sensitivity.py`
+- `results/raw_ros_lut_line_sensitivity.csv`
+- `results/summary_ros_lut_line_sensitivity.csv`
+- `results/analysis_ros_lut_line_sensitivity.md`
+- `results/manifest_ros_lut_line_sensitivity.json`
+- `paper_latex/tables/ros_lut_line_sensitivity.tex`
+
+关键结果：
+
+| 对比 | 指标 | 函数数 | 胜/负/平 | 平均相对变化 |
+|---|---|---:|---:|---:|
+| Pareto-Resource-NMCTS vs min-ancilla LUT selector | score | 309 | 309/0/0 | -85.83% |
+| Pareto-Resource-NMCTS vs min-ancilla LUT selector | peak ancilla | 309 | 301/0/8 | -68.21% |
+| Pareto-Resource-NMCTS vs line-weighted LUT selector, w=10 | score | 309 | 309/0/0 | -84.45% |
+| Pareto-Resource-NMCTS vs K4 line-cap LUT selector | score | 309 | 309/0/0 | -85.02% |
+| min-ancilla LUT selector vs best-score LUT proxy | peak ancilla | 309 | 197/0/112 | -32.47% |
+| min-ancilla LUT selector vs best-score LUT proxy | score | 309 | 0/197/112 | +40.67% |
+
+解释：
+
+- min-ancilla 选择器确实把 LUT proxy 的平均 peak ancilla 从 best-score 选择进一步压低，但代价是自身 score 明显变差。
+- Resource/Pareto 对 line-aware 和 min-ancilla 选择仍保持 309/0/0 score 胜出，因此 LUT proxy 的结论对 K 选择和辅助线压力是稳健的。
+- 该结果应写成“ROS-style LUT proxy sensitivity”，不能写成“官方 ROS 已被复现”。
+
 ## 3. 当前文件交付清单
 
 ### 3.1 核心代码
@@ -1304,6 +1334,7 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 - `analyze_highdim_root_action_oracle.py`：新增高维 root-action teacher 诊断。
 - `analyze_toolchain_readiness.py`：新增外部工具链 readiness 审计。
 - `run_ros_lut_proxy.py`：新增 ROS-style LUT proxy 外部基线。
+- `analyze_ros_lut_line_sensitivity.py`：新增 ROS-style LUT proxy 辅助线压力敏感性分析。
 
 ### 3.2 结果文件
 
@@ -1433,6 +1464,13 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_ros_lut_proxy.py --manifest traditional=benchmark_exports/traditional_resource_external_seed42/manifest.json --manifest n14=benchmark_exports/highdim_resource_external_seed42/manifest.json --manifest n15=benchmark_exports/highdim_scale_resource_external_seed42/manifest.json --manifest n16=benchmark_exports/ultra_highdim_resource_external_seed42/manifest.json --manifest n18=benchmark_exports/mega_highdim_resource_external_seed42/manifest.json --internal traditional=results/raw_traditional_resource.csv --internal n14=results/raw_highdim_resource.csv --internal n15=results/raw_highdim_scale_resource.csv --internal n16=results/raw_ultra_highdim_resource.csv --internal n18=results/raw_mega_highdim_resource.csv --ks 3,4,5 --workers 8 --timeout 45 --raw-out results/raw_ros_lut_proxy_sweep.csv --best-out results/raw_ros_lut_proxy_best.csv --summary results/summary_ros_lut_proxy.csv --analysis results/analysis_ros_lut_proxy.md --latex-out paper_latex/tables/ros_lut_proxy.tex --run-manifest results/manifest_ros_lut_proxy.json
 ```
 
+重新生成 ROS-style LUT line-sensitivity：
+
+```bash
+cd /Users/zhouzixiang/Desktop/tzb/src
+/opt/anaconda3/envs/mcts-qoracle/bin/python resource_nmcts_experiment/analyze_ros_lut_line_sensitivity.py --internal resource_nmcts_experiment/results/raw_traditional_resource.csv --internal resource_nmcts_experiment/results/raw_highdim_resource.csv --internal resource_nmcts_experiment/results/raw_highdim_scale_resource.csv --internal resource_nmcts_experiment/results/raw_ultra_highdim_resource.csv --internal resource_nmcts_experiment/results/raw_mega_highdim_resource.csv --ancilla-weights 10,25
+```
+
 重新生成搜索贡献分解：
 
 ```bash
@@ -1554,7 +1592,7 @@ Git 状态：
 9. 高维 root-action teacher 诊断显示：oracle top-24 相对启发式 top-4 有 3/0/7、-0.18% 的小幅 headroom；pairwise-wide root-action ranker 进一步在 n=16 full synthesis 中相对 deterministic recursive guard 获得 10/0/14、-0.18%，因此高维 AI 贡献已从负向诊断推进到小幅正向证据。
 10. Boolean-ring linear factor 将 quotient 与 linear factor 的变量不相交限制放宽到 Boolean 环 `x_i^2=x_i` 展开；在 n=16 上，Boolean-guard Resource-NMCTS 相对 pairwise-wide Resource-NMCTS 获得 14/0/10、平均 score 降低 0.34%，相对 deterministic recursive guard 获得 18/0/6、平均 score 降低 0.52%。这是当前高维结构搜索中比 pairwise-wide 更明显的正向提升。
 11. 外部工具链 readiness 审计显示：ABC 已可用并支撑当前 AIG/XAG/LUT/ESOP baseline；mockturtle 已推进到 official-header KLUT-to-XAG probe；CirKit 3 shell 已推进到 AIG/multiplicative-complexity probe；RevKit Python API 已形成 `oracle_synth` phase-netlist baseline；legacy RevKit CLI 已形成 exact-oracle reversible-synthesis portfolio；官方 ROS 全流程仍未完整复现。
-12. ROS-style LUT proxy 显示：在 309 个 `n=3..6,14,15,16,18` 函数上，ABC `K=3,4,5` LUT sweep 的 927/927 行均通过 truth-table 检查；best-K proxy 相对固定 K=4 为 219/0/90、平均 score -18.12%，而 Resource-NMCTS 相对该更强 proxy 仍为 309/0/0、平均 score -83.77%。
+12. ROS-style LUT proxy 显示：在 309 个 `n=3..6,14,15,16,18` 函数上，ABC `K=3,4,5` LUT sweep 的 927/927 行均通过 truth-table 检查；best-K proxy 相对固定 K=4 为 219/0/90、平均 score -18.12%，而 Resource-NMCTS 相对该更强 proxy 仍为 309/0/0、平均 score -83.77%。进一步的 line-sensitivity 显示，min-ancilla LUT selector 相对 best-score proxy 可降低 peak ancilla 32.47% 但 score 变差 40.67%；Pareto-Resource-NMCTS 相对 min-ancilla、line-weighted 和 K4 line-cap selectors 仍保持 309/0/0 score 胜出，平均 score 降低 84.45%--85.83%。
 13. `n=20` giga stress 已从纯边界失败推进为边界改善：root-beam 与 fast linear-pair 仍全部 timeout，但 depth-2 recursive Boolean screen 让 Resource-NMCTS 相对旧 Resource-NMCTS 获得 5/0/1、平均 score -7.47%；相对 AND-direct ANF 获得 5/0/1、平均 score -11.80%；相对 direct ANF 获得 5/1/0、平均 score -38.86%。
 14. `n=32,36,40` extended screen-scale 显示：depth policy 相对 single screen 获得 110/0/34、平均 score -5.55%；相对 all-depth adaptive 在 144 个项集上全部 score 持平，并节省 33.14% 平均运行时间；1008/1008 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。
 15. `n=20,28,40` depth-frontier 显示：depth-3 Boolean-ring screen 相对 fixed depth-2 为 49/0/23、平均 score -1.93%；depth-4 相对 fixed depth-2 为 49/0/23、平均 score -3.10%；648/648 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。这是新的高预算质量前沿证据，但运行时间显著增加。
@@ -1615,6 +1653,7 @@ Git 状态：
 | action-width probe | n=20/28/40，每个宽度 72 个项集 | width 6/12/24 各 504/504 plan 与 emitted-circuit 符号验证通过；单纯加宽不改善默认 score 结论，时间显著上升 | 新增负向消融，支持默认 width 6 |
 | schedule proxy | 96 个 n=24/28/32/40 项集 + 30 个 n=21/22/23 bridge/rerun 函数 | frontier policy vs depth-2：项集 T-depth proxy 40/0/56、-1.85%，large n=23 vs old policy 为 1/0/5、-0.45% T-depth proxy；cost n=23 vs large 为 time -56.29%、lifetime -12.62% | 新增逻辑层后端相关指标，非硬件 mapping |
 | ROS-style LUT proxy | 309 个 n=3..6/14/15/16/18 函数 | 927/927 K-sweep truth-table 检查通过；best-K vs fixed K=4 为 219/0/90、-18.12%；Resource vs proxy 为 309/0/0、-83.77% | 新增更强 LUT proxy，但不是官方 ROS 复现 |
+| ROS-style LUT line-sensitivity | 同上 309 个函数 | min-ancilla selector vs best-score proxy：peak ancilla -32.47% 但 score +40.67%；Pareto vs min-ancilla/line-weighted/K4-line-cap selectors score 均为 309/0/0，-84.45% 到 -85.83% | 新增辅助线压力稳健性证据，仍不是官方 ROS |
 | CirKit 3 shell AIG/MC probe | n<=6 traditional 177 个函数 + n=14 highdim 64 个函数 | 传统 177/177、n=14 64/64 Verilog readback truth-table 验证通过；Pareto vs CirKit score 分别为 177/0/0、-62.34% 和 64/0/0、-94.46%；depth 多数输给 CirKit | 新增官方 CirKit shell probe，但不是 legacy RevKit/ROS |
 | RevKit CLI exact-oracle portfolio | n<=6 traditional 177 个函数 | TBS/DBS/RMS 三流 531/531 usable；best-score portfolio 下 Pareto vs RevKit score 为 173/0/4、-67.28%，T 为 173/0/4、-72.59%，peak ancilla 为 0/169/8、+153.11% | 新增 legacy reversible-synthesis CLI probe，但不是 ROS 或硬件 mapping |
 | Affine-FPRM phase search | n<=6 traditional, 177 个函数 | 531/531 selected rows up-to-global-phase 验证通过；`T/Rz=30` vs fixed-polarity FPRM 为 81/0/96、-2.51%；vs phase-parity ANF 为 85/0/92、-2.98%；vs RevKit 为 177/0/0、-65.50% | 当前最强 phase/Rz 搜索证据，仍非旋转序列级综合 |

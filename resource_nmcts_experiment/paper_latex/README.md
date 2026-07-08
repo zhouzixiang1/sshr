@@ -18,9 +18,10 @@ Current English submission draft:
   English manuscript rebuilt from the latest Chinese v39 evidence.  It adds
   the CirKit AIG/MC probe, legacy RevKit CLI exact-oracle portfolio, Affine-FPRM
   phase-search results, rank-trained diversity-reranked phase-candidate
-  pruning, and the current high-dimensional verification boundary.  The claim
-  is explicitly limited to logical-layer synthesis, with CirKit depth and
-  RevKit CLI peak-ancilla trade-offs stated in the abstract and discussion.
+  pruning, ROS-style LUT line-sensitivity analysis, and the current
+  high-dimensional verification boundary.  The claim is explicitly limited to
+  logical-layer synthesis, with CirKit depth and RevKit CLI peak-ancilla
+  trade-offs stated in the abstract and discussion.
 
 Build:
 
@@ -172,6 +173,10 @@ Current source evidence:
   `../results/raw_ros_lut_proxy_best.csv`
 - ROS-style LUT proxy analysis:
   `../results/analysis_ros_lut_proxy.md`
+- ROS-style LUT line-sensitivity CSV:
+  `../results/raw_ros_lut_line_sensitivity.csv`
+- ROS-style LUT line-sensitivity analysis:
+  `../results/analysis_ros_lut_line_sensitivity.md`
 - mockturtle official-header KLUT-to-XAG probe analysis:
   `../results/analysis_mockturtle_xag_probe.md`
 - mockturtle high-dimensional KLUT-to-XAG probe analysis:
@@ -186,6 +191,8 @@ Current source evidence:
   `../results/analysis_phase_affine_policy_rank_diverse.md`
 - external-tool benchmark exporter: `../export_benchmarks.py`
 - ROS-style LUT proxy runner: `../run_ros_lut_proxy.py`
+- ROS-style LUT line-sensitivity analyzer:
+  `../analyze_ros_lut_line_sensitivity.py`
 - LaTeX tables: `tables/runtime_ablation_affine.tex`,
   `tables/resource_ablation_affine.tex`,
   `tables/neural_prior_ablation.tex`,
@@ -226,7 +233,8 @@ Current source evidence:
 	  `tables/frontier_policy_upgrade.tex`,
 	  `tables/schedule_truth_bridge_n23_terms.tex`,
 	  `tables/schedule_metrics.tex`,
-	  `tables/ros_lut_proxy.tex`
+	  `tables/ros_lut_proxy.tex`,
+	  `tables/ros_lut_line_sensitivity.tex`
 - manifests: `../results/manifest_evidence_affine.json`,
   `../results/manifest_traditional_resource_learned_prior.json`,
   `../results/manifest_traditional_resource_no_prior.json`,
@@ -241,6 +249,7 @@ Current source evidence:
   `../results/manifest_external_ultra_highdim_resource.json`,
   `../results/manifest_external_mega_highdim_resource.json`,
   `../results/manifest_ros_lut_proxy.json`,
+  `../results/manifest_ros_lut_line_sensitivity.json`,
   `../results/manifest_revkit_oracle_synth_traditional.json`
 
 Known manuscript gaps:
