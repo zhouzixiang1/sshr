@@ -102,6 +102,17 @@
   interpretation is that naive phase expansion is a verified starting point for
   phase/Rz-aware search, not the final optimized emitter.
 
+- `run_phase_parity_fprm_search.py` adds the first optimized phase/Rz search
+  step on top of the internal emitter.  It exhaustively searches fixed-polarity
+  Reed-Muller forms, translates shifted parity masks back to the original
+  variables, and verifies all selected rows up to an arbitrary global phase
+  (531/531 across three rank metrics).  The lower-bound-score objective improves
+  over phase-parity ANF by 59/0/118 with mean -3.98%; the `T/Rz=30` objective
+  improves by 59/0/118 with mean -0.47% and remains 177/0/0 against RevKit with
+  mean -65.16%.  This is evidence that phase/Rz can be cast as a real search
+  problem, but the average gain over ANF is still too small to be the final
+  paper contribution.
+
 ## AI-guided synthesis references
 
 - Tsaras et al., "ShortCircuit: AlphaZero-Driven Circuit Design",

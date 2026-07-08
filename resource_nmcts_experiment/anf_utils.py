@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import random
+from functools import lru_cache
 from itertools import combinations
 from pathlib import Path
 import sys
@@ -29,22 +30,64 @@ def anf_monomials(bf: BooleanFunction) -> Set[int]:
 
 
 def truth_table_from_anf(n: int, monomials: Iterable[int]) -> int:
-    """Evaluate ANF monomials and return a truth-table integer."""
-    coeff = [0] * (1 << n)
-    for m in monomials:
-        coeff[int(m)] ^= 1
+    """Evaluate ANF monomials and return a truth-table integer.
+
+    The truth table uses bit ``x`` for assignment ``x``.  For high-dimensional
+    bridge tests it is much faster to evaluate each monomial as a large integer
+    bit mask than to run a Python-level zeta transform over all coefficients.
+    """
     size = 1 << n
-    for bit in range(n):
-        step = 1 << bit
-        block = step << 1
-        for start in range(0, size, block):
-            for mask in range(start + step, start + block):
-                coeff[mask] ^= coeff[mask ^ step]
+    all_assignments = (1 << size) - 1
+    variable_masks = _variable_truth_masks(n)
     tt = 0
-    for x, y in enumerate(coeff):
-        if y & 1:
-            tt |= 1 << x
+    valid_variable_mask = (1 << n) - 1
+    for raw in monomials:
+        monomial = int(raw)
+        if monomial & ~valid_variable_mask:
+            raise ValueError(f"monomial mask {monomial:#x} has variables outside n={n}")
+        term_tt = all_assignments
+        remaining = monomial
+        while remaining:
+            bit = (remaining & -remaining).bit_length() - 1
+            term_tt &= variable_masks[bit]
+            remaining &= remaining - 1
+        tt ^= term_tt
     return tt
+
+
+@lru_cache(maxsize=4)
+def _variable_truth_masks(n: int) -> tuple[int, ...]:
+    """Return truth-table masks for variables x_0..x_{n-1}.
+
+    The byte patterns are little-endian because truth-table bit ``x`` stores the
+    value at assignment ``x``.  For example, x_0 is 0xaa, x_1 is 0xcc, and x_2 is
+    0xf0 in every byte.
+    """
+    if n < 0:
+        raise ValueError("n must be nonnegative")
+    size = 1 << n
+    if n < 3:
+        masks: list[int] = []
+        for bit in range(n):
+            mask = 0
+            for x in range(size):
+                if (x >> bit) & 1:
+                    mask |= 1 << x
+            masks.append(mask)
+        return tuple(masks)
+
+    byte_count = 1 << (n - 3)
+    masks = []
+    single_byte_patterns = {0: 0xAA, 1: 0xCC, 2: 0xF0}
+    for bit in range(n):
+        if bit in single_byte_patterns:
+            buf = bytes([single_byte_patterns[bit]]) * byte_count
+        else:
+            run = 1 << (bit - 3)
+            pattern = (b"\x00" * run) + (b"\xff" * run)
+            buf = pattern * (byte_count // len(pattern))
+        masks.append(int.from_bytes(buf, "little"))
+    return tuple(masks)
 
 
 def boolean_from_anf(n: int, monomials: Iterable[int]) -> BooleanFunction:

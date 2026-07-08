@@ -33,7 +33,13 @@ Latest phase/Rz progress:
   RevKit lower-bound score (40/137/0, mean +69.25%), but wins once each
   non-Clifford Rz is charged: `score+1/Rz` is 177/0/0 with mean -48.16%, and
   the `T/Rz=30` synthesis proxy is 177/0/0 with mean -64.98%.
-- This is a useful emitter baseline, not a solved phase/Rz search problem: the
+- `run_phase_parity_fprm_search.py` upgrades this into an exhaustive
+  fixed-polarity phase search.  It verifies 531/531 selected rows across three
+  rank metrics.  The `T/Rz=30` objective chooses nonzero polarity on 59/177
+  functions and improves over phase-parity ANF by 59/0/118, mean -0.47%; it
+  remains 177/0/0 vs RevKit under the same proxy, mean -65.16%.
+- This is useful evidence that phase/Rz can be handled as a search problem, but
+  not a solved phase/Rz method: the average gain over ANF is still small, so the
   next target is learned or optimized phase/Rz-aware search plus actual
   rotation-synthesis sequence auditing.
 
@@ -161,6 +167,7 @@ cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json resul
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_phase_rz_portfolio.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_rz_synthesis_cost.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_phase_parity_baseline.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_phase_parity_fprm_search.py
 ```
 
 The RevKit command is a real Python API baseline (`oracle_synth`) on complete
@@ -206,6 +213,16 @@ non-Clifford Rz is charged one score unit or a `T/Rz=30` synthesis proxy is
 used.  This establishes a concrete internal phase-oracle baseline while
 setting the next target: learned or optimized phase/Rz-aware search, not naive
 parity expansion.
+
+`run_phase_parity_fprm_search.py` makes the first optimization step on top of
+that emitter by searching all fixed-polarity Reed-Muller forms for `n <= 6`.
+For each polarity it synthesizes `g(z)=f(z xor p)`, translates shifted parity
+masks back to `x`, and verifies equivalence up to an arbitrary global phase.
+Across three rank metrics it emits 531 selected rows and verifies 531/531.  The
+best lower-bound polarity improves over phase-parity ANF by 59/0/118 with mean
+score -3.98%; the `T/Rz=30` objective improves by 59/0/118 with mean -0.47%.
+The result should be reported as a real but modest search gain, not as the
+final phase/Rz-aware method.
 
 Current presets:
 

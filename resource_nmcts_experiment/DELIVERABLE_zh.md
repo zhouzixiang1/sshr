@@ -93,6 +93,40 @@
 - 一旦给非 Clifford `Rz` 加入非常保守之前的 1/Rz 符号成本，phase-parity ANF 转为 177/0/0；这说明 RevKit lower-bound 优势高度依赖未计入旋转综合成本。
 - 下一步明显提升目标应是 learned/optimized phase/Rz-aware search 和实际 rotation sequence 审计，而不是继续只做 `T/Rz` 常数 proxy。
 
+### 2.0c fixed-polarity phase-parity search
+
+本轮把 phase/Rz 方向从“单一 ANF emitter”推进为“有搜索变量的 phase-oracle emitter”。新增 `run_phase_parity_fprm_search.py`：对每个传统函数枚举全部 fixed-polarity Reed-Muller 极性 `p`，先综合 `g(z)=f(z xor p)` 的 phase polynomial，再把 shifted parity mask 翻译回原变量。如果极性与 parity mask 的交叠为奇数，旋转角取反并把原角度并入全局相位；验证时检查所有输入上的相位差是否为同一个有理数，而不是只检查整数常数项。
+
+主要产物：
+
+- `run_phase_parity_fprm_search.py`
+- `results/raw_phase_parity_fprm.csv`
+- `results/summary_phase_parity_fprm.csv`
+- `results/analysis_phase_parity_fprm.md`
+- `results/manifest_phase_parity_fprm.json`
+- `paper_latex/tables/phase_parity_fprm.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v32.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v32.pdf`
+
+核心结果：
+
+| 项目 | 口径 | 结果 | 平均变化或均值 |
+|---|---|---:|---:|
+| FPRM phase search 验证 | 3 rank metrics × 177 functions | 531/531 verified | up to global phase |
+| FPRM-score vs phase-parity ANF | lower-bound score | 59/0/118 | -3.98% |
+| FPRM-Rz1 vs phase-parity ANF | score+1/Rz | 59/0/118 | -1.65% |
+| FPRM-`T/Rz=30` vs phase-parity ANF | synthesis proxy | 59/0/118 | -0.47% |
+| FPRM-`T/Rz=30` vs RevKit | synthesis proxy | 177/0/0 | -65.16% |
+| FPRM non-Clifford Rz vs RevKit | count | 171/0/6 | -63.48% |
+| FPRM CNOT vs RevKit | count | 34/140/3 | +34.18% |
+| FPRM-`T/Rz=30` 资源均值 | 177 | - | score 9.57 / CNOT 87.22 / depth 114.42 / total Rz 27.20 / non-Clifford Rz 21.60 |
+
+解释边界：
+
+- 这是真正的 phase/Rz 搜索增量：极性会改变 ANF 单项式集合、parity mask 合并结果和全局相位，而不是只改变计分口径。
+- 结果是正向但幅度小。相对 phase-parity ANF，`T/Rz=30` 目标虽然 59/0/118 不退化，但平均只降低 0.47%。这不足以作为最终论文的主要创新结果。
+- 该结果应写成“phase/Rz-aware search 的第一个可验证极性维度”，并把下一步目标设为 learned/optimized phase search，例如选择极性、线性变量变换、parity gadget 合并和旋转谱代价的联合搜索。
+
 ### 2.0 RevKit API baseline 与工具链边界
 
 本轮已把外部工具链审计从“是否存在命令”升级为“能否真实运行一个可复现 baseline”。当前 `mcts-qoracle` 环境中已安装 `cmake`、`pybind11` 和 RevKit Python API，并新增 `run_revkit_baseline.py` 调用 RevKit 的 `oracle_synth` 对完整 truth-table 函数合成。
