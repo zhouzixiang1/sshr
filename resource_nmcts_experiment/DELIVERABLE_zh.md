@@ -158,7 +158,52 @@
 
 - 这是完整 oracle 验证边界的实质推进：此前主稿的完整 bridge 为 `n=21,22,23` 合计 300/300 方法行，现在加上 `n=24` 后为 360/360。
 - 该结果提升的是验证 harness 和高维语义可信度，不改变 Resource-NMCTS 搜索算法本身。
-- 仍不能写成 `n=25--40` 已完整枚举；这些维度目前仍主要依赖项集级 plan 验证和 emitted-circuit GF(2) 符号验证。
+- 该轮结束时仍不能写成 `n=25--40` 已完整枚举；当前状态见下一节 `n=25` bridge。
+
+### 2.0e n=25 完整 truth-table bridge 与 action-width 消融
+
+本轮在 `n=24` 的基础上继续推进完整 oracle 验证边界。`run_truth_bridge_terms.py` 直接扩展到 `n=25`，仍采用位掩码 truth-table evaluator；同时补充 action-width 6/12/24 的 screen-scale probe，用来判断“继续加宽候选集合”是否是高维收益来源。
+
+主要产物：
+
+- `results/raw_truth_bridge_n25_terms.csv`
+- `results/summary_truth_bridge_n25_terms.csv`
+- `results/analysis_truth_bridge_n25_terms.md`
+- `paper_latex/tables/truth_bridge_n25_terms.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v34.tex`
+- `results/raw_screen_scale_width6_probe_terms.csv`
+- `results/raw_screen_scale_width12_probe_terms.csv`
+- `results/raw_screen_scale_width24_probe_terms.csv`
+- `results/analysis_screen_scale_width6_probe_terms.md`
+- `results/analysis_screen_scale_width12_probe_terms.md`
+- `results/analysis_screen_scale_width24_probe_terms.md`
+- `paper_latex/tables/screen_scale_width6_probe_terms.tex`
+- `paper_latex/tables/screen_scale_width12_probe_terms.tex`
+- `paper_latex/tables/screen_scale_width24_probe_terms.tex`
+
+核心结果：
+
+| 项目 | 结果 |
+|---|---:|
+| n=25 生成式 ANF 函数 | 6 |
+| 完整 truth-table oracle 验证 | 60/60 |
+| ANF plan 验证 | 60/60 |
+| emitted-circuit 符号验证 | 60/60，mismatch=0 |
+| 平均 truth-table 构造时间 | 0.45 s/函数 |
+| adaptive all-depth vs single screen | 6/0/0，score -7.31% |
+| adaptive all-depth vs fixed depth-2 | 4/0/2，score -2.14% |
+| depth-frontier policy vs fixed depth-2 | 4/0/2，score -2.14% |
+| depth-frontier policy vs depth-4 | 0/0/6，score +0.00%，plan time -8.87% |
+| depth-frontier policy vs adaptive all-depth | 0/0/6，score +0.00%，plan time -46.09% |
+| width 6/12/24 probe 验证 | 每组 504/504 plan 与 emitted-circuit 符号验证通过 |
+| width probe 结论 | 单纯加宽 root candidates 没有改善 fixed depth-2/adaptive 的 score 结论，时间成本显著上升 |
+
+解释边界：
+
+- 完整 bridge 从 `n=21,22,23,24` 的 360/360 扩展到 `n=21,22,23,24,25` 的 420/420 方法行。
+- `n=25` 是验证边界和 frontier policy 证据的实质推进：frontier policy 在该切片上与 depth-4/all-depth score 持平，同时降低 plan time。
+- width probe 是一个有用的负向消融：当前高维收益来自递归深度与 frontier 选择，而不是盲目增加 action width；因此论文中继续使用 width 6 作为默认设置是有证据的。
+- 仍不能写成 `n=26--40` 已完整枚举；这些维度目前仍主要依赖项集级 plan 验证和 emitted-circuit GF(2) 符号验证。
 
 ### 2.0 RevKit API baseline 与工具链边界
 
@@ -1449,6 +1494,8 @@ Git 状态：
 | large frontier policy | 48 个 held-out + 96 个独立泛化项集 + 6 个 n=23 bridge 函数 | held-out vs oracle frontier 为 +0.04% score、-51.30% time；独立泛化 vs 旧 policy 为 17/0/79、-0.49%；n=23 bridge vs 旧 policy 为 1/0/5、-0.48% score、-0.45% T-depth proxy | 新增质量增强型结构 AI 证据 |
 | cost-aware frontier policy | 48 个 held-out + 96 个独立泛化项集 + 6 个 n=23 bridge 函数 | scale vs depth-2 为 56/0/40、score -1.39%、time +170.03%；n=23 vs large 为 score +0.92%、time -56.29%、lifetime -12.62% | 新增快速质量折中模式 |
 | n=21/22/23 truth-table bridge | 18 个生成式 ANF 函数 + 12 个 n=23 rerun 函数 | 300/300 完整 truth-table oracle 验证通过，300/300 plan 与 emitted-circuit 符号验证通过，0 mismatch；large/cost 两种 n=23 rerun 均完整验证 | 新增 n>20 完整验证桥接 |
+| n=24/25 truth-table bridge | 12 个生成式 ANF 函数 | 新增 120/120 完整 truth-table oracle 验证通过，120/120 plan 与 emitted-circuit 符号验证通过，0 mismatch；累计 bridge 为 420/420 | 新增 n=24 与 n=25 完整验证边界 |
+| action-width probe | n=20/28/40，每个宽度 72 个项集 | width 6/12/24 各 504/504 plan 与 emitted-circuit 符号验证通过；单纯加宽不改善默认 score 结论，时间显著上升 | 新增负向消融，支持默认 width 6 |
 | schedule proxy | 96 个 n=24/28/32/40 项集 + 30 个 n=21/22/23 bridge/rerun 函数 | frontier policy vs depth-2：项集 T-depth proxy 40/0/56、-1.85%，large n=23 vs old policy 为 1/0/5、-0.45% T-depth proxy；cost n=23 vs large 为 time -56.29%、lifetime -12.62% | 新增逻辑层后端相关指标，非硬件 mapping |
 | ROS-style LUT proxy | 309 个 n=3..6/14/15/16/18 函数 | 927/927 K-sweep truth-table 检查通过；best-K vs fixed K=4 为 219/0/90、-18.12%；Resource vs proxy 为 309/0/0、-83.77% | 新增更强 LUT proxy，但不是官方 ROS 复现 |
 | highdim wide-fast guard | 12 个 n=14 random ANF | wide vs Resource 为 0/0/12，运行时间 +59.80% | 已有但属负向诊断 |
