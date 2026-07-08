@@ -9,6 +9,19 @@ oracle synthesis as a symbolic factorization search over ANF/XAG-style
 compute/uncompute plans, then verifies the generated oracle circuits by
 classical simulation.
 
+Latest external-toolchain progress:
+
+- `run_mockturtle_xag_probe.py` builds a small C++ adapter over the official
+  mockturtle headers, maps exported BLIFs with ABC `if -K 4`, resynthesizes the
+  resulting KLUT networks with mockturtle `xag_npn_resynthesis`, and converts
+  XAG AND/XOR/depth counts into the project's logic-level resource proxy.
+- Traditional `n<=6`: 177/177 mockturtle rows verified; Pareto-Resource-NMCTS
+  vs mockturtle XAG K4 score is 166/11/0, mean -31.50%.
+- High-dimensional `n=14`: 64/64 mockturtle rows verified; Pareto-Resource-NMCTS
+  vs mockturtle XAG K4 score is 64/0/0, mean -91.49%.
+- This is an official-header mockturtle probe, not full ROS, not reversible
+  garbage management, and not hardware mapping.
+
 Core commands:
 
 ```bash
@@ -35,6 +48,8 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260713 --ns 23 --per-n 6 --workers 2 --max-screen-depth 4 --frontier-policy-model models/boolean_screen_depth_frontier_policy_cost_time003.pt --tag truth_bridge_n23_cost_time003_frontier
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_schedule_metrics.py --input schedule_generalization=results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv --input schedule_truth_bridge=results/raw_schedule_truth_bridge_terms.csv --input schedule_truth_bridge_n23=results/raw_schedule_truth_bridge_n23_terms.csv
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_frontier_policy_upgrade.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_mockturtle_xag_probe.py --workers 4 --timeout 20
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_mockturtle_xag_probe.py --manifest highdim=benchmark_exports/highdim_resource_external_seed42/manifest.json --internal highdim=results/raw_highdim_resource.csv --min-n 14 --max-n 14 --workers 4 --timeout 30 --targets and_resource_nmcts,and_profile_resource_nmcts,and_pareto_resource_nmcts,and_direct_anf,direct_anf --out results/raw_mockturtle_xag_highdim_probe.csv --summary results/summary_mockturtle_xag_highdim_probe.csv --analysis results/analysis_mockturtle_xag_highdim_probe.md --latex-out paper_latex/tables/mockturtle_xag_highdim_probe.tex --run-manifest results/manifest_mockturtle_xag_highdim_probe.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset smoke
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_experiments.py --preset evidence_affine --model models/action_scorer_rollout_logical_and.pt
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_results.py --preset evidence_affine

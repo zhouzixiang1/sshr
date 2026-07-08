@@ -82,15 +82,21 @@
     {
       "name": "mockturtle",
       "kind": "cxx_header_library",
-      "role": "future logic-network / reversible-toolchain baseline adapter",
+      "role": "official-header KLUT-to-XAG probe adapter; full ROS flow remains separate",
       "source_url": "https://github.com/lsils/mockturtle",
       "remote": "https://github.com/lsils/mockturtle.git",
       "install": [
         "git clone --recursive https://github.com/lsils/mockturtle.git tmp/mockturtle",
-        "use headers/examples from tmp/mockturtle; no project-specific adapter is implemented yet"
+        "/opt/anaconda3/envs/mcts-qoracle/bin/python resource_nmcts_experiment/run_mockturtle_xag_probe.py --workers 4 --timeout 20"
       ],
-      "available": false,
-      "hits": [],
+      "available": true,
+      "hits": [
+        [
+          "source",
+          "/Users/zhouzixiang/Desktop/tzb/src/tmp/mockturtle",
+          "local source checkout exists"
+        ]
+      ],
       "remote_heads": [
         {
           "branch": "master",

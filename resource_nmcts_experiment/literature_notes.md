@@ -53,11 +53,20 @@
 ## External toolchain sources
 
 - mockturtle is a C++17 logic-network library with AIG, MIG, k-LUT, and generic
-  synthesis/optimization support.  It is a plausible source for a future
-  reproduced logic-network baseline beyond the current ABC estimates.  The
-  current readiness audit treats it as a header/library dependency, not as a
-  command-line executable; upstream is reachable, but this project still lacks a
-  local checkout and adapter.
+  synthesis/optimization support.  It is now locally checked out under
+  `tmp/mockturtle` at commit `25beb0e294e4613bb9fe62319b91d9f2ab764e88`, and
+  the project includes a small official-header adapter
+  (`tools/mockturtle_blif_xag_stats.cpp`) driven by
+  `run_mockturtle_xag_probe.py`.  The adapter maps exported BLIFs through ABC
+  `if -K 4`, reads the mapped BLIF as a mockturtle KLUT network, applies
+  `xag_npn_resynthesis`, and converts XAG AND/XOR/depth counts into the
+  project's logic-layer oracle resource proxy.  Traditional `n<=6` results are
+  177/177 correct, with Pareto-Resource-NMCTS vs mockturtle XAG K4 at 166/11/0
+  and mean score -31.50%.  High-dimensional `n=14` results are 64/64 correct,
+  with Pareto-Resource-NMCTS at 64/0/0 and mean score -91.49%.  This should be
+  described as an official-header KLUT-to-XAG resynthesis probe, not as a full
+  ROS reproduction: it has no SAT garbage management, no reversible circuit
+  emission, no Clifford+T sequence, and no hardware mapping.
   <https://github.com/lsils/mockturtle>
 
 - RevKit is an open-source reversible-logic synthesis framework built around

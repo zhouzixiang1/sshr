@@ -1,0 +1,34 @@
+{
+  "created_at": "2026-07-08T17:13:22+0800",
+  "script": "run_mockturtle_xag_probe.py",
+  "argv": {
+    "manifest": [
+      "highdim=benchmark_exports/highdim_resource_external_seed42/manifest.json"
+    ],
+    "internal": [
+      "highdim=results/raw_highdim_resource.csv"
+    ],
+    "min_n": 14,
+    "max_n": 14,
+    "limit": null,
+    "k": 4,
+    "timeout": 30.0,
+    "workers": 4,
+    "abc_bin": "/Users/zhouzixiang/Desktop/tzb/src/tmp/abc/abc",
+    "mockturtle_root": "/Users/zhouzixiang/Desktop/tzb/src/tmp/mockturtle",
+    "tool_src": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/tools/mockturtle_blif_xag_stats.cpp",
+    "tool_bin": "/Users/zhouzixiang/Desktop/tzb/src/tmp/bin/mockturtle_blif_xag_stats",
+    "cxx": "clang++",
+    "rebuild_tool": false,
+    "targets": "and_resource_nmcts,and_profile_resource_nmcts,and_pareto_resource_nmcts,and_direct_anf,direct_anf",
+    "out": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_mockturtle_xag_highdim_probe.csv",
+    "summary": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/summary_mockturtle_xag_highdim_probe.csv",
+    "analysis": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/analysis_mockturtle_xag_highdim_probe.md",
+    "latex_out": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/paper_latex/tables/mockturtle_xag_highdim_probe.tex",
+    "run_manifest": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/manifest_mockturtle_xag_highdim_probe.json"
+  },
+  "mockturtle_commit": "25beb0e294e4613bb9fe62319b91d9f2ab764e88",
+  "rows": 64,
+  "usable_rows": 64,
+  "summary_rows": 25
+}

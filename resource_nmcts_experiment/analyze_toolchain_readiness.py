@@ -26,6 +26,8 @@ ROOT = THIS_DIR.parent
 RESULTS = THIS_DIR / "results"
 ENV_BIN = Path("/opt/anaconda3/envs/mcts-qoracle/bin")
 ENV_PYTHON = ENV_BIN / "python"
+MOCKTURTLE_ADAPTER_SRC = THIS_DIR / "tools" / "mockturtle_blif_xag_stats.cpp"
+MOCKTURTLE_PROBE_ANALYSIS = RESULTS / "analysis_mockturtle_xag_probe.md"
 
 
 BUILD_PREREQS = [
@@ -74,13 +76,13 @@ TOOLS = [
         "paths": [ROOT / "tmp" / "mockturtle", ROOT / "external" / "mockturtle"],
         "commands": [],
         "modules": [],
-        "role": "future logic-network / reversible-toolchain baseline adapter",
+        "role": "official-header KLUT-to-XAG probe adapter; full ROS flow remains separate",
         "source_url": "https://github.com/lsils/mockturtle",
         "remote": "https://github.com/lsils/mockturtle.git",
         "branches": ["master"],
         "install": [
             "git clone --recursive https://github.com/lsils/mockturtle.git tmp/mockturtle",
-            "use headers/examples from tmp/mockturtle; no project-specific adapter is implemented yet",
+            "/opt/anaconda3/envs/mcts-qoracle/bin/python resource_nmcts_experiment/run_mockturtle_xag_probe.py --workers 4 --timeout 20",
         ],
     },
     {
@@ -228,6 +230,7 @@ def find_tool(tool: dict) -> dict:
 def write_markdown(prereqs: list[dict], results: list[dict], out: Path) -> None:
     missing_prereqs = [item["name"] for item in prereqs if not item["available"]]
     availability = {item["name"]: item["available"] for item in results}
+    mockturtle_adapter_ready = MOCKTURTLE_ADAPTER_SRC.exists() and MOCKTURTLE_PROBE_ANALYSIS.exists()
     lines = [
         "# External Toolchain Readiness",
         "",
@@ -314,9 +317,14 @@ def write_markdown(prereqs: list[dict], results: list[dict], out: Path) -> None:
     )
     lines.append(f"- {blocker}")
     if availability.get("mockturtle"):
-        lines.append(
-            "- mockturtle source is present locally, but a project-specific adapter is still required before claiming a reproduced mockturtle baseline."
-        )
+        if mockturtle_adapter_ready:
+            lines.append(
+                "- mockturtle source and the project KLUT-to-XAG adapter are available; `run_mockturtle_xag_probe.py` has produced a reproducible official-header probe. This is still not the full official ROS flow."
+            )
+        else:
+            lines.append(
+                "- mockturtle source is present locally, but the project KLUT-to-XAG adapter or its probe output is not yet available."
+            )
     else:
         lines.append(
             "- mockturtle upstream is checked as a C++ source dependency rather than a binary; a reproduced mockturtle baseline still requires a local checkout and a project adapter."

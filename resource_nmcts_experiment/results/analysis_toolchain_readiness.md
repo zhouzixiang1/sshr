@@ -22,7 +22,7 @@ RevKit 3.x is a Python package backed by C++ code.
 | tool | kind | local status | role | detected path/module | probe |
 |---|---|---|---|---|---|
 | ABC | binary | available | implemented AIG/XAG/LUT/ESOP external estimates | `file: /Users/zhouzixiang/Desktop/tzb/src/tmp/abc/abc` | usage: /Users/zhouzixiang/Desktop/tzb/src/tmp/abc/abc [-c cmd] [-q cmd] [-C cmd] [-Q cmd] [-f script] [-h] [-o file] [-s] [-t type] [-T type] [-x] [-b] [file] |
-| mockturtle | cxx_header_library | missing | future logic-network / reversible-toolchain baseline adapter |  | not found in configured paths, PATH, or Python modules |
+| mockturtle | cxx_header_library | available | official-header KLUT-to-XAG probe adapter; full ROS flow remains separate | `source: /Users/zhouzixiang/Desktop/tzb/src/tmp/mockturtle` | local source checkout exists |
 | RevKit | binary_or_python | available | Python oracle_synth baseline adapter; legacy CLI flow remains separate | `python: revkit` | /opt/anaconda3/envs/mcts-qoracle/lib/python3.11/site-packages/revkit/__init__.py |
 | RevKit CLI / CirKit legacy | binary_or_source | missing | legacy command-line reversible synthesis flow for RevKit-style baselines |  | not found in configured paths, PATH, or Python modules |
 
@@ -46,7 +46,7 @@ RevKit 3.x is a Python package backed by C++ code.
 ### mockturtle
 
 - `git clone --recursive https://github.com/lsils/mockturtle.git tmp/mockturtle`
-- `use headers/examples from tmp/mockturtle; no project-specific adapter is implemented yet`
+- `/opt/anaconda3/envs/mcts-qoracle/bin/python resource_nmcts_experiment/run_mockturtle_xag_probe.py --workers 4 --timeout 20`
 
 ### RevKit
 
@@ -62,7 +62,7 @@ RevKit 3.x is a Python package backed by C++ code.
 
 - ABC is already usable through the bundled `tmp/abc/abc` binary and is the basis of the current AIG/XAG/LUT/ESOP export baselines.
 - No basic build prerequisite blocker was detected.
-- mockturtle upstream is checked as a C++ source dependency rather than a binary; a reproduced mockturtle baseline still requires a local checkout and a project adapter.
+- mockturtle source and the project KLUT-to-XAG adapter are available; `run_mockturtle_xag_probe.py` has produced a reproducible official-header probe. This is still not the full official ROS flow.
 - RevKit Python API is locally available and can support an API-level `oracle_synth` baseline; this is distinct from the legacy RevKit/CirKit CLI flow.
 - RevKit/CirKit legacy CLI is not yet available, so legacy command-line reversible-synthesis reproduction remains pending.
 - This audit is intentionally environment-specific; rerun it after installing external tools before claiming reproduced external reversible-toolchain results.

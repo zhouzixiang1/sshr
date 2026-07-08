@@ -38,6 +38,7 @@
 - `resource_nmcts_zh_manuscript_v25.tex` / `resource_nmcts_zh_manuscript_v25.pdf`：中文论文稿 v25，近似 Rz 综合成本模型版；在 v23 基础上新增 `analyze_rz_synthesis_cost.py` 结果，把 RevKit 每个非 Clifford `Rz` 按 `ceil(a log2(1/epsilon)+b)` 计入近似 Clifford+T T-count proxy。Ross-Selinger-style `epsilon=1e-3` 时 `T/Rz=30`，Resource-NMCTS family 相对 RevKit 为 177/0/0、平均 score 降低 95.03%；更保守的 `4 log2(1/epsilon)+10` proxy 在 `epsilon=1e-6` 时仍为 177/0/0、平均 score 降低 97.01%。该版本明确声明 proxy 不输出实际 rotation sequence，也不是硬件 mapping。
 - `resource_nmcts_zh_manuscript_v26.tex` / `resource_nmcts_zh_manuscript_v26.pdf`：中文论文稿 v26，RevKit 高维超时边界版；在 v25 基础上新增 `run_revkit_highdim_timeout_probe.py` 的可复现实验，对 `n=14` 前 8 个函数逐行用子进程运行 RevKit `oracle_synth` 并设置 30 s 硬超时。结果为 1/8 返回、7/8 超时；唯一返回行 `anf_n14_10` 含 32767 个非 Clifford `Rz`，RevKit lower-bound score 为 2948.79，`score+1/Rz` 为 35715.79。该版本明确高维 RevKit timeout 行不进入 paired resource 均值，只作为 adapter/scalability boundary。
 - `resource_nmcts_zh_manuscript_v27.tex` / `resource_nmcts_zh_manuscript_v27.pdf`：中文论文稿 v27，投稿主线压缩版；在 v26 的完整项目报告基础上重写为更紧凑的论文文本，聚焦“ANF/FPRM 项集合资源约束搜索 -> Boolean-ring screen -> 神经 MCTS/depth-frontier/guard -> 外部 proxy 和 RevKit phase/Rz 边界 -> 正确性验证”的主线，保留关键定量证据并减少流水账式实验堆叠。
+- `resource_nmcts_zh_manuscript_v28.tex` / `resource_nmcts_zh_manuscript_v28.pdf`：中文论文稿 v28，mockturtle 官方 probe 版；新增 `run_mockturtle_xag_probe.py` 和 `tools/mockturtle_blif_xag_stats.cpp`，把 ABC `K=4` BLIF 映射结果送入官方 mockturtle `blif_reader` 与 `xag_npn_resynthesis`。传统 `n<=6` 的 177 行全部正确，Pareto-Resource-NMCTS 相对 mockturtle XAG K4 为 166/11/0、平均 score -31.50%；高维 `n=14` 的 64 行全部正确，Pareto-Resource-NMCTS 为 64/0/0、平均 score -91.49%。该版本明确这仍是 KLUT-to-XAG probe，不是完整 ROS 或硬件 mapping。
 - `resource_nmcts_zh_research_position.tex` / `resource_nmcts_zh_research_position.pdf`：中文研究定位稿，重新梳理“不从 SSHR 入手”的论文主线、AI 在搜索问题中的角色、当前证据边界和下一步明显提升目标。
 - 最新 v4 稿已补充 `train_screen_depth_policy.py` 的结构级 depth policy 结果：n=14/16/18 训练、held-out n=20 测试，说明 AI 已能学习 screen 深度选择，但尚未超过固定 depth-2 的 score。
 - 最新 v8 稿补充 `train_structure_gate.py` 的 screen-gated Resource-NMCTS 边界验证：原 n=20 切片资源持平且平均运行时间降低 75.58%，held-out n=19/20 合计 16/16 score 持平并平均节省 36.83%，但仍只作为运行时门控证据。
@@ -78,6 +79,7 @@ latexmk -xelatex -g resource_nmcts_zh_manuscript_v23.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v25.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v26.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v27.tex
+latexmk -xelatex -g resource_nmcts_zh_manuscript_v28.tex
 latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 ```
 

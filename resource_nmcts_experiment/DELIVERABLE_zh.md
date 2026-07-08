@@ -18,6 +18,45 @@
 
 ## 2. 当前已完成内容
 
+### 2.0a mockturtle official-header XAG probe
+
+本轮已把 mockturtle 从“源码可达但未适配”推进为“可编译、可运行、可产出统计的外部 probe”。当前流程不是官方 ROS：它先用 ABC 把导出 BLIF 映射为 `K=4` LUT 网络，再用官方 mockturtle `blif_reader` 读入 KLUT，并调用 `xag_npn_resynthesis` 生成 XAG 统计，最后把 XAG AND/XOR/depth 转换为本文的逻辑层 oracle resource proxy。
+
+主要产物：
+
+- `tools/mockturtle_blif_xag_stats.cpp`
+- `run_mockturtle_xag_probe.py`
+- `results/raw_mockturtle_xag_probe.csv`
+- `results/summary_mockturtle_xag_probe.csv`
+- `results/analysis_mockturtle_xag_probe.md`
+- `results/manifest_mockturtle_xag_probe.json`
+- `results/raw_mockturtle_xag_highdim_probe.csv`
+- `results/summary_mockturtle_xag_highdim_probe.csv`
+- `results/analysis_mockturtle_xag_highdim_probe.md`
+- `results/manifest_mockturtle_xag_highdim_probe.json`
+- `paper_latex/tables/mockturtle_xag_probe.tex`
+- `paper_latex/tables/mockturtle_xag_highdim_probe.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v28.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v28.pdf`
+
+核心结果：
+
+| 对比 | 函数数 | 胜/负/平 | 平均 score 变化 |
+|---|---:|---:|---:|
+| Resource-NMCTS vs mockturtle XAG K4 | 177 | 165/12/0 | -28.97% |
+| Pareto-Resource-NMCTS vs mockturtle XAG K4 | 177 | 166/11/0 | -31.50% |
+| FPRM polarity archive vs mockturtle XAG K4 | 177 | 156/21/0 | -25.11% |
+| Resource-NMCTS vs mockturtle XAG K4, `n=14` | 64 | 64/0/0 | -91.41% |
+| Profile-Resource-NMCTS vs mockturtle XAG K4, `n=14` | 64 | 64/0/0 | -91.41% |
+| Pareto-Resource-NMCTS vs mockturtle XAG K4, `n=14` | 64 | 64/0/0 | -91.49% |
+
+解释边界：
+
+- 传统函数 probe 177/177 行 correct，高维 `n=14` probe 64/64 行 correct，均无 error 或 timeout。
+- 本结果调用了官方 mockturtle 头文件库和 `xag_npn_resynthesis`，比单纯 ABC-LUT proxy 更接近 mockturtle 生态。
+- 这仍不是官方 ROS，不包含 SAT garbage management，不输出可逆线路或 Clifford+T gate sequence，也不包含硬件 mapping。
+- 论文中应写成“official-header mockturtle KLUT-to-XAG resynthesis probe”，不能写成“复现完整 ROS”。
+
 ### 2.0 RevKit API baseline 与工具链边界
 
 本轮已把外部工具链审计从“是否存在命令”升级为“能否真实运行一个可复现 baseline”。当前 `mcts-qoracle` 环境中已安装 `cmake`、`pybind11` 和 RevKit Python API，并新增 `run_revkit_baseline.py` 调用 RevKit 的 `oracle_synth` 对完整 truth-table 函数合成。

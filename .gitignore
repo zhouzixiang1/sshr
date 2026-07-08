@@ -22,6 +22,7 @@ rl_mcts_experiment/paper/build/*
 resource_nmcts_experiment/paper_latex/*.pdf
 resource_nmcts_experiment/benchmark_exports/
 tmp/abc/
+tmp/bin/
 tmp/mockturtle/
 
 # Generated visualizations
