@@ -291,6 +291,24 @@ scope boundary used by the manuscript claims.}
 \input{tables/comparison_evidence_matrix}
 \end{table}
 
+The experiments were executed as a reproducible artifact package rather than
+as isolated hand runs.  Table~\ref{tab:reproducibility} records the local
+compute envelope, manifest-level parallelism, artifact counts, and external
+toolchain provenance.  Runtime numbers should be read within this workstation
+context; the logical resource counts are the portable experimental outcome.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.08}
+\caption{Compute and reproducibility audit.  The table documents the
+workstation, parallel-run manifests, artifact coverage, and external-tool
+commits used by the current submission package.}
+\label{tab:reproducibility}
+\input{tables/reproducibility_audit}
+\end{table}
+
 \section{Results}
 
 \subsection{Traditional functions}

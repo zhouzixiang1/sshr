@@ -1,0 +1,11 @@
+{
+  "outputs": {
+    "analysis": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/analysis_reproducibility_audit.md",
+    "summary": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/summary_reproducibility_audit.csv",
+    "table": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/paper_latex/tables/reproducibility_audit.tex"
+  },
+  "platform": "macOS-26.5.1-arm64-arm-64bit",
+  "python": "3.11.15",
+  "rows": 5,
+  "script": "analyze_reproducibility_audit.py"
+}

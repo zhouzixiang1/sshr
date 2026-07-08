@@ -73,6 +73,16 @@
 
 该审计把函数/设置数、方法行数、验证行数和代表性资源均值分开。核心覆盖为：`n=24,28,32,40` large term-set frontier 96 个函数、960/960 symbolic rows；stage-gated frontier 96/96 symbolic rows；`n=20,28,40` action-width probe 216 个 width/function settings、1512/1512 symbolic rows；`n=21--25` complete truth-table bridge 40 个 function/settings、400/400 truth+symbolic rows。对应代表性资源均值约为 score 1090--1130、T 985--1023、CNOT/depth 1593--1648、peak ancilla 5.2--5.3。论文中应把这写成“高维逻辑层验证与资源审计”，不是硬件映射，也不是全体 `n=26--40` 的完整真值表枚举。
 
+本轮还补充 compute/reproducibility audit 层，用于回应“大规模实验是否可复现、是否利用多核/GPU环境”的问题：
+
+- `analyze_reproducibility_audit.py`
+- `results/summary_reproducibility_audit.csv`
+- `results/analysis_reproducibility_audit.md`
+- `results/manifest_reproducibility_audit.json`
+- `paper_latex/tables/reproducibility_audit.tex`
+
+该审计记录当前工作站为 Apple M4 Pro，14 CPU cores，24.0 GiB RAM，20-core Metal GPU；`mcts-qoracle` 环境中 Python 3.11.15、PyTorch 2.12.0、MPS=True、CUDA=False。manifest 层面有 54 个运行记录包含 worker count，最大 workers=10；代表性流程包括 traditional resource 10 workers/1770 rows、RevKit CLI 8 workers/708 rows、ROS-style LUT 8 workers/927 rows、CirKit 8 workers/177 rows、mockturtle 4 workers/177 rows。论文中应把 runtime/time 结果限定在这个工作站上下文；可移植主张仍是逻辑资源数量和验证通过率。
+
 ## 2. 当前已完成内容
 
 ### 2.0a mockturtle official-header XAG probe
