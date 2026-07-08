@@ -5,7 +5,7 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 ## Status counts
 
 - needs author input: 1
-- pass: 13
+- pass: 14
 
 ## Checklist
 
@@ -19,9 +19,10 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 | Reproducibility evidence | pass | Manuscript includes compute, worker, artifact, and external-tool provenance table. | Rerun analyze_reproducibility_audit.py after adding scripts, tables, or figures. |
 | Claim-to-artifact traceability | pass | Manuscript includes a submission traceability audit linking claim families to scripts, data, tables, and figures. | Rerun analyze_submission_traceability_audit.py after adding or moving headline evidence. |
 | Archive package manifest | pass | Manuscript includes an archive-level payload manifest with generated CSV, Markdown, and JSON outputs. | Rerun analyze_submission_archive_manifest.py after adding tables, figures, scripts, models, or result files. |
+| Submission support templates | pass | Cover letter, author declarations, upload checklist, and reviewer-concern brief templates are present. | Fill the author-specific fields before journal upload. |
 | Derived package rebuild command | pass | A lightweight rebuild script is present and cited in Data and Code Availability. | Keep the rebuild script aligned with paper-facing analysis, figure, audit, and PDF outputs. |
 | Limitations and failure modes | pass | Discussion names logical-layer, ROS-proxy, RevKit-derived, and high-dimensional bridge boundaries. | Add any new negative result to Discussion rather than hiding it in tables. |
 | Data and code availability | pass | Manuscript has an availability section pointing to scripts, CSVs, manifests, tables, and figures. | Replace repository-relative wording with an archival DOI or anonymous link at submission time if required. |
 | Clean submission source | pass | 0 TODO/TBD/placeholder markers in submission TeX. | Remove all source placeholders before journal upload. |
 | Compiled PDF artifact | pass | Compiled PDF detected with 26 pages. | Run latexmk and visual spot checks after each table or figure change. |
-| Author-specific declarations | needs author input | Funding, acknowledgements, competing interests, and final archival links are author-specific. | Complete declarations at the target journal's submission step. |
+| Author-specific declarations | needs author input | Funding, acknowledgements, author metadata, competing interests, and final archival links are author-specific even though templates are prepared. | Complete `submission_package/author_declarations_template.md` and replace repository-relative availability links at the target journal's submission step. |

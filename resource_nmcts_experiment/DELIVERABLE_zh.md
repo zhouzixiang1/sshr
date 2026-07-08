@@ -170,7 +170,16 @@
 - `results/manifest_submission_archive_manifest.json`
 - `paper_latex/tables/submission_archive_manifest.tex`
 
-该清单按 manuscript source、paper tables、submission figures、raw measurements、derived summaries、run manifests、scripts/docs、models 和 external adapters 九类统计文件数、缺失数、字节数和类别 SHA256 摘要。为避免自引用哈希，它不把终端 submission audits 和编译出的 PDF 纳入 payload digest；PDF 存在性和页数仍由 readiness audit 单独检查。该表已接入英文投稿稿 Experimental Design，用于降低归档/上传阶段遗漏文件的风险。
+该清单按 manuscript source、paper tables、submission figures、raw measurements、derived summaries、run manifests、scripts/docs、models、external adapters 和 submission support 十类统计文件数、缺失数、字节数和类别 SHA256 摘要。为避免自引用哈希，它不把终端 submission audits 和编译出的 PDF 纳入 payload digest；PDF 存在性和页数仍由 readiness audit 单独检查。该表已接入英文投稿稿 Experimental Design，用于降低归档/上传阶段遗漏文件的风险。
+
+本轮新增投稿支持模板，把最后的作者侧人工输入拆成可填写文件：
+
+- `submission_package/cover_letter_template.md`
+- `submission_package/author_declarations_template.md`
+- `submission_package/submission_checklist.md`
+- `submission_package/reviewer_concern_brief.md`
+
+这些文件已经把论文事实、边界和审稿人可能关切整理好；所有不能从实验产物推断的信息统一标成 `AUTHOR INPUT REQUIRED`，包括作者顺序、单位、ORCID、通信作者、funding、acknowledgements、competing interests、AI-assistance disclosure、最终仓库/归档链接和目标期刊特定字段。它们被纳入 archive manifest，但不把作者声明视为已经完成。
 
 本轮新增投稿完整性层：英文投稿稿末尾加入 `Data and Code Availability`，明确代码、raw/summary CSV、manifest、LaTeX 表、图源数据和 PDF 均位于 `resource_nmcts_experiment/` artifact package，运行入口为 `run_*.py`、`train_*.py`、`analyze_*.py`，环境为 `mcts-qoracle` 和直接解释器路径 `/opt/anaconda3/envs/mcts-qoracle/bin/python`。同时新增自动 submission-readiness audit：
 
@@ -178,7 +187,7 @@
 - `results/summary_submission_readiness_audit.csv`
 - `results/analysis_submission_readiness_audit.md`
 
-当前审计结果为 13 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、contribution-to-evidence chain、executable method workflow、baseline fairness/scope、reproducibility evidence、claim-to-artifact traceability、archive package manifest、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder、compiled PDF。唯一保留项是作者特定的 funding、acknowledgements、competing interests 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
+当前审计结果为 14 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、contribution-to-evidence chain、executable method workflow、baseline fairness/scope、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder、compiled PDF。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
 
 ## 2. 当前已完成内容
 

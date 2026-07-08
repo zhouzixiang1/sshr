@@ -22,6 +22,13 @@ REBUILD_SCRIPT = THIS_DIR / "rebuild_submission_package.sh"
 ARCHIVE_ANALYSIS = RESULTS / "analysis_submission_archive_manifest.md"
 ARCHIVE_SUMMARY = RESULTS / "summary_submission_archive_manifest.csv"
 ARCHIVE_MANIFEST = RESULTS / "manifest_submission_archive_manifest.json"
+SUBMISSION_PACKAGE = THIS_DIR / "submission_package"
+SUPPORT_FILES = [
+    SUBMISSION_PACKAGE / "cover_letter_template.md",
+    SUBMISSION_PACKAGE / "author_declarations_template.md",
+    SUBMISSION_PACKAGE / "submission_checklist.md",
+    SUBMISSION_PACKAGE / "reviewer_concern_brief.md",
+]
 
 
 def read_text(path: Path) -> str:
@@ -127,6 +134,12 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_submission_archive_manifest.py after adding tables, figures, scripts, models, or result files.",
         },
         {
+            "item": "Submission support templates",
+            "status": "pass" if all(path.exists() for path in SUPPORT_FILES) else "needs revision",
+            "evidence": "Cover letter, author declarations, upload checklist, and reviewer-concern brief templates are present.",
+            "next_action": "Fill the author-specific fields before journal upload.",
+        },
+        {
             "item": "Derived package rebuild command",
             "status": "pass" if REBUILD_SCRIPT.exists() and rebuild_cited else "needs revision",
             "evidence": "A lightweight rebuild script is present and cited in Data and Code Availability.",
@@ -161,8 +174,8 @@ def build_rows() -> list[dict[str, str]]:
         {
             "item": "Author-specific declarations",
             "status": "needs author input",
-            "evidence": "Funding, acknowledgements, competing interests, and final archival links are author-specific.",
-            "next_action": "Complete declarations at the target journal's submission step.",
+            "evidence": "Funding, acknowledgements, author metadata, competing interests, and final archival links are author-specific even though templates are prepared.",
+            "next_action": "Complete `submission_package/author_declarations_template.md` and replace repository-relative availability links at the target journal's submission step.",
         },
     ]
     return rows

@@ -42,6 +42,16 @@ audits, and `resource_nmcts_submission_v1.pdf` from existing experiment
 artifacts.  It does not rerun raw benchmark sweeps, external-toolchain probes,
 or neural training.
 
+Submission-support templates are kept in `../submission_package/`:
+
+- `cover_letter_template.md`
+- `author_declarations_template.md`
+- `submission_checklist.md`
+- `reviewer_concern_brief.md`
+
+Fields marked `AUTHOR INPUT REQUIRED` must be filled by the author before
+upload.
+
 Current source evidence:
 
 - contribution-to-evidence map CSV:
@@ -78,6 +88,8 @@ Current source evidence:
   `../results/analysis_submission_archive_manifest.md`
 - submission archive manifest JSON:
   `../results/manifest_submission_archive_manifest.json`
+- submission-support templates:
+  `../submission_package/*.md`
 - submission-readiness audit CSV:
   `../results/summary_submission_readiness_audit.csv`
 - submission-readiness audit analysis:

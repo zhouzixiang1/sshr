@@ -25,6 +25,7 @@ FIGURES = THIS_DIR / "paper_latex" / "figures" / "submission_v36"
 SOURCE_DATA = FIGURES / "source_data"
 MODELS = THIS_DIR / "models"
 TOOLS = THIS_DIR / "tools"
+SUBMISSION_PACKAGE = THIS_DIR / "submission_package"
 
 SELF_OUTPUTS = {
     RESULTS / "summary_submission_archive_manifest.csv",
@@ -165,6 +166,12 @@ def specs() -> list[CategorySpec]:
             explicit=(),
             patterns=((TOOLS, "*"),),
             boundary="Includes local adapter source files used for external toolchain probes, not vendored tool repositories.",
+        ),
+        CategorySpec(
+            category="Submission support",
+            explicit=(),
+            patterns=((SUBMISSION_PACKAGE, "*.md"),),
+            boundary="Includes cover-letter, declaration, checklist, and reviewer-brief templates; author-specific fields remain manual.",
         ),
     ]
 

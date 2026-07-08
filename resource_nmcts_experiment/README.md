@@ -138,6 +138,12 @@ The submission archive manifest is materialized by
 payload groups for the source package while excluding terminal submission
 audits and the compiled PDF from the digest set to avoid self-referential
 checks.
+The submission-support files live in `submission_package/`: a cover-letter
+template, author-declarations template, upload checklist, and reviewer-concern
+brief.  These files are ready to use at upload time, but fields marked
+`AUTHOR INPUT REQUIRED` must be completed by the author because funding,
+affiliations, competing interests, and final archive links cannot be inferred
+from experiment artifacts.
 The lightweight derived submission package can be regenerated with:
 
 ```bash
@@ -157,10 +163,10 @@ The submission-readiness audit is materialized by
 submission draft contains bounded and concise abstract claims,
 contribution/evidence mapping, baseline fairness tables, reproducibility
 evidence, claim-to-artifact traceability, a derived-package rebuild command,
-an archive package manifest, limitations, data/code availability, a compiled
-PDF, and no source TODO markers; it leaves funding,
-acknowledgements, competing interests, and archival links as author-specific
-submission-time items.
+an archive package manifest, submission-support templates, limitations,
+data/code availability, a compiled PDF, and no source TODO markers; it leaves
+funding, acknowledgements, competing interests, author metadata, and archival
+links as author-specific submission-time items.
 
 Latest external-toolchain progress:
 
