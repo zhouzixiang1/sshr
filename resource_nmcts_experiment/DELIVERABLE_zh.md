@@ -795,6 +795,45 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 - 文献上，back-end-aware fault-tolerant oracle synthesis 已经把 XAG oracle synthesis 扩展到后端感知指标；本文目前只做逻辑层，因此不能借用其 mapping/back-end 结论。
 - 本轮还临时探测了两个潜在算法升级方向：高维 affine-linear factor 和局部 polarity 下降。前者在前几个 `n=14` 函数上更慢且 score 更差，后者在高项数函数上选回 polarity 0 且 fast linear-pair 结果更差；因此暂不纳入方法贡献。
 
+### 2.12 ROS-style LUT proxy：资源约束 LUT 路线压力测试
+
+本轮新增 `run_ros_lut_proxy.py`，用于弥补“只有固定 K=4 ABC-LUT baseline，不足以代表 LUT 路线”的缺口。它不是官方 ROS、RevKit 或 mockturtle 复现，而是一个明确标注的外部 proxy：从同一导出 BLIF benchmark 出发，调用 ABC `if -K` 对 `K=3,4,5` 做 sweep；每个映射后 BLIF 都经过 truth-table 检查，再把 LUT 网络估算成 local-ANF compute/action/uncompute 资源，并按当前 score 选择 best-K。
+
+主要产物：
+
+- `run_ros_lut_proxy.py`
+- `results/raw_ros_lut_proxy_sweep.csv`
+- `results/raw_ros_lut_proxy_best.csv`
+- `results/summary_ros_lut_proxy.csv`
+- `results/analysis_ros_lut_proxy.md`
+- `results/manifest_ros_lut_proxy.json`
+- `paper_latex/tables/ros_lut_proxy.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v18.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v18.pdf`
+
+覆盖范围与正确性：
+
+- 函数集：`n=3..6` 传统函数 177 个，加上 `n=14,15,16,18` 高维导出函数 132 个，共 309 个函数。
+- K-sweep 行：927 行。
+- Best-K 行：309 行。
+- truth-table 检查：927/927 通过；无 timeout、error、skipped 或 incorrect 行。
+
+关键结果：
+
+| 对比 | 指标 | 函数数 | 胜/负/平 | 平均相对变化 |
+|---|---|---:|---:|---:|
+| Resource-NMCTS vs ROS-style LUT proxy | score | 309 | 309/0/0 | -83.77% |
+| Profile-Resource-NMCTS vs ROS-style LUT proxy | score | 132 | 132/0/0 | -97.38% |
+| Pareto-Resource-NMCTS vs ROS-style LUT proxy | score | 309 | 309/0/0 | -84.27% |
+| AND-direct ANF vs ROS-style LUT proxy | score | 309 | 307/2/0 | -67.45% |
+| ROS-style LUT proxy vs fixed K=4 LUT | score | 309 | 219/0/90 | -18.12% |
+
+解释：
+
+- Best-K proxy 相比固定 K=4 ABC-LUT 自身有明显提升，因此它是更强的 LUT 压力测试，而不是重复已有 fixed-K 结果。
+- Resource/Pareto/Profile 仍然全胜该 proxy，说明当前低加权资源优势不只依赖于一个较弱的固定 LUT 参数。
+- 这仍不能写成“已复现 ROS”。官方 ROS 的 LUT decomposition、垃圾管理和 reversible-toolchain 细节没有被实现；本文只能把它写成“ROS-style LUT proxy 外部对比”。
+
 ## 3. 当前文件交付清单
 
 ### 3.1 核心代码
@@ -813,6 +852,7 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 - `analyze_exact_xag_mc.py`：新增小规模 exact XAG 乘法复杂度 T 下界。
 - `analyze_highdim_root_action_oracle.py`：新增高维 root-action teacher 诊断。
 - `analyze_toolchain_readiness.py`：新增外部工具链 readiness 审计。
+- `run_ros_lut_proxy.py`：新增 ROS-style LUT proxy 外部基线。
 
 ### 3.2 结果文件
 
@@ -844,6 +884,11 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 - `results/analysis_highdim_root_action_teacher.md`
 - `results/analysis_highdim_guard_upgrade.md`
 - `results/analysis_toolchain_readiness.md`
+- `results/raw_ros_lut_proxy_sweep.csv`
+- `results/raw_ros_lut_proxy_best.csv`
+- `results/summary_ros_lut_proxy.csv`
+- `results/analysis_ros_lut_proxy.md`
+- `results/manifest_ros_lut_proxy.json`
 
 ### 3.3 论文文件
 
@@ -864,6 +909,7 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 - `paper_latex/tables/runtime_mega_highdim_resource.tex`
 - `paper_latex/tables/resource_giga_highdim_resource.tex`
 - `paper_latex/tables/runtime_giga_highdim_resource.tex`
+- `paper_latex/tables/ros_lut_proxy.tex`
 - `paper_latex_zh/resource_nmcts_zh_report.tex`
 - `paper_latex_zh/resource_nmcts_zh_report.pdf`
 - `paper_latex_zh/resource_nmcts_zh_robustness.tex`
@@ -872,6 +918,8 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 - `paper_latex_zh/resource_nmcts_zh_boolean_ring_v3.pdf`
 - `paper_latex_zh/resource_nmcts_zh_stage_delivery.tex`
 - `paper_latex_zh/resource_nmcts_zh_stage_delivery.pdf`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v18.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v18.pdf`
 
 ## 4. 复现命令
 
@@ -923,6 +971,13 @@ latexmk -xelatex -g resource_nmcts_zh_robustness.tex
 ```bash
 cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_toolchain_readiness.py
+```
+
+重新生成 ROS-style LUT proxy：
+
+```bash
+cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_ros_lut_proxy.py --manifest traditional=benchmark_exports/traditional_resource_external_seed42/manifest.json --manifest n14=benchmark_exports/highdim_resource_external_seed42/manifest.json --manifest n15=benchmark_exports/highdim_scale_resource_external_seed42/manifest.json --manifest n16=benchmark_exports/ultra_highdim_resource_external_seed42/manifest.json --manifest n18=benchmark_exports/mega_highdim_resource_external_seed42/manifest.json --internal traditional=results/raw_traditional_resource.csv --internal n14=results/raw_highdim_resource.csv --internal n15=results/raw_highdim_scale_resource.csv --internal n16=results/raw_ultra_highdim_resource.csv --internal n18=results/raw_mega_highdim_resource.csv --ks 3,4,5 --workers 8 --timeout 45 --raw-out results/raw_ros_lut_proxy_sweep.csv --best-out results/raw_ros_lut_proxy_best.csv --summary results/summary_ros_lut_proxy.csv --analysis results/analysis_ros_lut_proxy.md --latex-out paper_latex/tables/ros_lut_proxy.tex --run-manifest results/manifest_ros_lut_proxy.json
 ```
 
 重新生成搜索贡献分解：
@@ -1039,11 +1094,12 @@ Git 状态：
 9. 高维 root-action teacher 诊断显示：oracle top-24 相对启发式 top-4 有 3/0/7、-0.18% 的小幅 headroom；pairwise-wide root-action ranker 进一步在 n=16 full synthesis 中相对 deterministic recursive guard 获得 10/0/14、-0.18%，因此高维 AI 贡献已从负向诊断推进到小幅正向证据。
 10. Boolean-ring linear factor 将 quotient 与 linear factor 的变量不相交限制放宽到 Boolean 环 `x_i^2=x_i` 展开；在 n=16 上，Boolean-guard Resource-NMCTS 相对 pairwise-wide Resource-NMCTS 获得 14/0/10、平均 score 降低 0.34%，相对 deterministic recursive guard 获得 18/0/6、平均 score 降低 0.52%。这是当前高维结构搜索中比 pairwise-wide 更明显的正向提升。
 11. 外部工具链 readiness 审计显示：ABC 已可用并支撑当前 AIG/XAG/LUT/ESOP baseline；mockturtle/RevKit 当前缺失，因此不能声称已完成这类 reversible-toolchain 复现。
-12. `n=20` giga stress 已从纯边界失败推进为边界改善：root-beam 与 fast linear-pair 仍全部 timeout，但 depth-2 recursive Boolean screen 让 Resource-NMCTS 相对旧 Resource-NMCTS 获得 5/0/1、平均 score -7.47%；相对 AND-direct ANF 获得 5/0/1、平均 score -11.80%；相对 direct ANF 获得 5/1/0、平均 score -38.86%。
-13. `n=32,36,40` extended screen-scale 显示：depth policy 相对 single screen 获得 110/0/34、平均 score -5.55%；相对 all-depth adaptive 在 144 个项集上全部 score 持平，并节省 33.14% 平均运行时间；1008/1008 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。
-14. `n=20,28,40` depth-frontier 显示：depth-3 Boolean-ring screen 相对 fixed depth-2 为 49/0/23、平均 score -1.93%；depth-4 相对 fixed depth-2 为 49/0/23、平均 score -3.10%；648/648 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。这是新的高预算质量前沿证据，但运行时间显著增加。
-15. Depth-frontier policy 已把高预算质量前沿学习化：在 `n=20,28,40` scale harness 中，相对 fixed depth-2 获得 35/0/37、平均 score -2.19%；相对 all-depth depth<=4 平均 score +0.97%，但节省 58.69% 时间；720/720 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。
-16. `n=21,22,23` 完整 truth-table bridge 显示：18 个生成式 ANF 函数、180/180 个方法行同时通过完整 truth-table oracle 验证、ANF plan 符号验证和 emitted-circuit ANF 符号验证；新增 n=23 切片中 frontier policy 相对 fixed depth-2 为 4/0/2、平均 score -1.88%，该结果把完整验证边界从 n<=20 主实验推进到 n>20 的桥接切片。
+12. ROS-style LUT proxy 显示：在 309 个 `n=3..6,14,15,16,18` 函数上，ABC `K=3,4,5` LUT sweep 的 927/927 行均通过 truth-table 检查；best-K proxy 相对固定 K=4 为 219/0/90、平均 score -18.12%，而 Resource-NMCTS 相对该更强 proxy 仍为 309/0/0、平均 score -83.77%。
+13. `n=20` giga stress 已从纯边界失败推进为边界改善：root-beam 与 fast linear-pair 仍全部 timeout，但 depth-2 recursive Boolean screen 让 Resource-NMCTS 相对旧 Resource-NMCTS 获得 5/0/1、平均 score -7.47%；相对 AND-direct ANF 获得 5/0/1、平均 score -11.80%；相对 direct ANF 获得 5/1/0、平均 score -38.86%。
+14. `n=32,36,40` extended screen-scale 显示：depth policy 相对 single screen 获得 110/0/34、平均 score -5.55%；相对 all-depth adaptive 在 144 个项集上全部 score 持平，并节省 33.14% 平均运行时间；1008/1008 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。
+15. `n=20,28,40` depth-frontier 显示：depth-3 Boolean-ring screen 相对 fixed depth-2 为 49/0/23、平均 score -1.93%；depth-4 相对 fixed depth-2 为 49/0/23、平均 score -3.10%；648/648 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。这是新的高预算质量前沿证据，但运行时间显著增加。
+16. Depth-frontier policy 已把高预算质量前沿学习化：在 `n=20,28,40` scale harness 中，相对 fixed depth-2 获得 35/0/37、平均 score -2.19%；相对 all-depth depth<=4 平均 score +0.97%，但节省 58.69% 时间；720/720 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。
+17. `n=21,22,23` 完整 truth-table bridge 显示：18 个生成式 ANF 函数、180/180 个方法行同时通过完整 truth-table oracle 验证、ANF plan 符号验证和 emitted-circuit ANF 符号验证；新增 n=23 切片中 frontier policy 相对 fixed depth-2 为 4/0/2、平均 score -1.88%，该结果把完整验证边界从 n<=20 主实验推进到 n>20 的桥接切片。
 
 不应写的主张：
 
@@ -1062,7 +1118,7 @@ Git 状态：
 
 1. 高维 neural guidance 仍需继续改进；当前 pairwise-wide 版本已经把 n=16 full synthesis 推进到 10/0/14、-0.18%，但真正更明显的新收益来自 Boolean-ring linear factor。下一步应把 neural ranker 从“排序旧 pair action”升级为“选择 Boolean-ring factor / recursive depth / polarity 的策略网络”，否则 AI 贡献仍弱于手工结构扩展。
 2. 小规模 exact/exhaustive oracle slice 已完成 bounded FPRM-DP 和 exact XAG 乘法复杂度版本；如果继续加强，可以再补一个更接近全局 reversible circuit 的 exact/SMT/SAT 小规模证书。
-3. 继续补 ROS/mockturtle 或其他外部 reversible-toolchain 对比，减少“估算式 ABC/BDD baseline”的审稿风险；当前 readiness 审计显示 mockturtle/RevKit 尚未安装。
+3. 继续补官方 ROS/mockturtle/RevKit 或其他外部 reversible-toolchain 对比，减少“proxy 式 ABC/BDD/LUT baseline”的审稿风险；当前已有 ROS-style LUT proxy，但 readiness 审计显示 mockturtle/RevKit 尚未安装。
 
 已完成/待补强状态：
 
@@ -1086,6 +1142,7 @@ Git 状态：
 | depth-frontier policy | 32 个 held-out + 72 个 scale 项集 | held-out vs oracle frontier 为 +0.80% score、-58.76% time；scale vs depth-2 为 35/0/37、-2.19%；720/720 emitted-circuit 符号验证通过 | 新增结构级 AI 质量-时间折中 |
 | n=21/22/23 truth-table bridge | 18 个生成式 ANF 函数 | 180/180 完整 truth-table oracle 验证通过，180/180 plan 与 emitted-circuit 符号验证通过，0 mismatch；n=23 frontier policy vs depth-2 为 4/0/2、-1.88% | 新增 n>20 完整验证桥接 |
 | schedule proxy | 96 个 n=24/28/32/40 项集 + 18 个 n=21/22/23 bridge 函数 | frontier policy vs depth-2：项集 T-depth proxy 40/0/56、-1.85%，n=21/22 bridge 为 8/0/4、-3.32%，n=23 bridge 为 4/0/2、-1.69%；相对 depth-4 lifetime area 分别 -5.42%、-4.01%、-5.09% | 新增逻辑层后端相关指标，非硬件 mapping |
+| ROS-style LUT proxy | 309 个 n=3..6/14/15/16/18 函数 | 927/927 K-sweep truth-table 检查通过；best-K vs fixed K=4 为 219/0/90、-18.12%；Resource vs proxy 为 309/0/0、-83.77% | 新增更强 LUT proxy，但不是官方 ROS 复现 |
 | highdim wide-fast guard | 12 个 n=14 random ANF | wide vs Resource 为 0/0/12，运行时间 +59.80% | 已有但属负向诊断 |
 | exact FPRM-DP | n<=4 traditional | Resource vs exact FPRM-DP 51/3/18，-12.18%；Pareto vs exact FPRM-DP 51/0/21，-12.20% | 已有但模型受限 |
 | exact XAG MC | n<=4 traditional | Resource/Pareto 达到 T 下界 12/72，平均 T gap +53.01%；ESOP 为 +120.14%，SSHR-I-T 为 +143.06% | 已有全局 T 下界 |
@@ -1099,4 +1156,4 @@ Git 状态：
 
 但是投稿前还需要继续补强“AI 搜索本身带来的贡献”这一点。否则文章容易被评价为一组 FPRM/ESOP 工程启发的组合，而不是强化学习与 MCTS 方法论文。
 
-本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、pairwise-wide n=16 full synthesis、Boolean-ring linear factor、schedule proxy 和 n=23 完整 truth-table bridge 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照、高维 pairwise-wide root-action ranker、Boolean-ring factor 扩展、emitted-circuit 层 T-depth/辅助生命周期 trade-off，以及 n=21/22/23 共 180/180 方法行的完整 oracle 验证。不过高维 neural guidance 的幅度仍然偏小，更强外部 reversible-toolchain 对比也仍然缺失，所以目标还不能判定完成。
+本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、pairwise-wide n=16 full synthesis、Boolean-ring linear factor、schedule proxy、n=23 完整 truth-table bridge 和 ROS-style LUT proxy 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照、高维 pairwise-wide root-action ranker、Boolean-ring factor 扩展、emitted-circuit 层 T-depth/辅助生命周期 trade-off、n=21/22/23 共 180/180 方法行的完整 oracle 验证，以及相对更强 LUT proxy 的 309/0/0 score 优势。不过高维 neural guidance 的幅度仍然偏小，官方 ROS/RevKit/mockturtle 复现和真实后端 mapping 仍然缺失，所以目标还不能判定完成。

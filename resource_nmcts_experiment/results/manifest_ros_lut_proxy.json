@@ -1,0 +1,31 @@
+{
+  "manifests": [
+    "traditional=benchmark_exports/traditional_resource_external_seed42/manifest.json",
+    "n14=benchmark_exports/highdim_resource_external_seed42/manifest.json",
+    "n15=benchmark_exports/highdim_scale_resource_external_seed42/manifest.json",
+    "n16=benchmark_exports/ultra_highdim_resource_external_seed42/manifest.json",
+    "n18=benchmark_exports/mega_highdim_resource_external_seed42/manifest.json"
+  ],
+  "internal": [
+    "traditional=results/raw_traditional_resource.csv",
+    "n14=results/raw_highdim_resource.csv",
+    "n15=results/raw_highdim_scale_resource.csv",
+    "n16=results/raw_ultra_highdim_resource.csv",
+    "n18=results/raw_mega_highdim_resource.csv"
+  ],
+  "ks": [
+    3,
+    4,
+    5
+  ],
+  "min_n": null,
+  "max_n": null,
+  "timeout": 45.0,
+  "workers": 8,
+  "rows": 309,
+  "sweep_rows": 927,
+  "best_rows": 309,
+  "elapsed_s": 100.45295214653015,
+  "abc_bin": "/Users/zhouzixiang/Desktop/tzb/src/tmp/abc/abc",
+  "claim_boundary": "ABC LUT sweep proxy, not official ROS/RevKit/mockturtle."
+}

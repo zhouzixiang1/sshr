@@ -129,7 +129,14 @@ Current source evidence:
   `../results/analysis_schedule_truth_bridge_n23_terms.md`
 - schedule-proxy combined analysis:
   `../results/analysis_schedule_metrics.md`
+- ROS-style LUT proxy sweep CSV:
+  `../results/raw_ros_lut_proxy_sweep.csv`
+- ROS-style LUT proxy best-K CSV:
+  `../results/raw_ros_lut_proxy_best.csv`
+- ROS-style LUT proxy analysis:
+  `../results/analysis_ros_lut_proxy.md`
 - external-tool benchmark exporter: `../export_benchmarks.py`
+- ROS-style LUT proxy runner: `../run_ros_lut_proxy.py`
 - LaTeX tables: `tables/runtime_ablation_affine.tex`,
   `tables/resource_ablation_affine.tex`,
   `tables/neural_prior_ablation.tex`,
@@ -162,7 +169,8 @@ Current source evidence:
 	  `tables/screen_scale_depth_frontier_policy_generalization_terms.tex`,
 	  `tables/truth_bridge_terms.tex`,
 	  `tables/schedule_truth_bridge_n23_terms.tex`,
-	  `tables/schedule_metrics.tex`
+	  `tables/schedule_metrics.tex`,
+	  `tables/ros_lut_proxy.tex`
 - manifests: `../results/manifest_evidence_affine.json`,
   `../results/manifest_traditional_resource_learned_prior.json`,
   `../results/manifest_traditional_resource_no_prior.json`,
@@ -175,7 +183,8 @@ Current source evidence:
   `../results/manifest_external_highdim_resource.json`,
   `../results/manifest_external_highdim_scale_resource.json`,
   `../results/manifest_external_ultra_highdim_resource.json`,
-  `../results/manifest_external_mega_highdim_resource.json`
+  `../results/manifest_external_mega_highdim_resource.json`,
+  `../results/manifest_ros_lut_proxy.json`
 
 Known manuscript gaps:
 
@@ -184,5 +193,7 @@ Known manuscript gaps:
   high-dimensional examples;
 - extend the external high-dimensional comparison beyond `n=18` only if the
   exported truth-table and ABC/BDD verification path remains practical;
-- add reproduced ROS or mockturtle-style reversible-toolchain results;
+- replace the current ROS-style LUT proxy with reproduced official ROS,
+  mockturtle, or RevKit reversible-toolchain results when those tools are
+  available;
 - decide the target venue and required reference/section style.

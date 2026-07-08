@@ -29,6 +29,7 @@
 - `resource_nmcts_zh_manuscript_v15.tex` / `resource_nmcts_zh_manuscript_v15.pdf`：中文论文稿 v15，中文交付与想法梳理版；在 v14 投稿文本基础上新增“作者想法整理与当前论文定位”，直接写清“强化学习与 MCTS 的量子布尔函数综合搜索问题”主线、SSHR 的 baseline 定位、当前明显提升证据和投稿前最应补强的外部工具链/后端评估缺口。
 - `resource_nmcts_zh_manuscript_v16.tex` / `resource_nmcts_zh_manuscript_v16.pdf`：中文论文稿 v16，逻辑层 schedule proxy 版；在 v15 基础上补充 emitted-circuit 并行逻辑深度、CNOT-depth proxy、T-depth proxy 和显式辅助线 lifetime area 证据，明确这些指标仍属于逻辑层，不是硬件 mapping 结果。
 - `resource_nmcts_zh_manuscript_v17.tex` / `resource_nmcts_zh_manuscript_v17.pdf`：中文论文稿 v17，$n=23$ 完整 bridge 版；在 v16 基础上补充 6 个 $n=23$ 生成式 ANF 函数、60 个方法行的完整 truth-table oracle 验证，并把 n=21/22/23 bridge 合计更新为 180/180 完整验证通过。
+- `resource_nmcts_zh_manuscript_v18.tex` / `resource_nmcts_zh_manuscript_v18.pdf`：中文论文稿 v18，ROS-style LUT proxy 版；在 v17 基础上补充 ABC `K=3,4,5` LUT sweep proxy，覆盖 309 个函数、927/927 truth-table 检查通过，并明确该 proxy 不是官方 ROS/RevKit/mockturtle 复现。
 - `resource_nmcts_zh_research_position.tex` / `resource_nmcts_zh_research_position.pdf`：中文研究定位稿，重新梳理“不从 SSHR 入手”的论文主线、AI 在搜索问题中的角色、当前证据边界和下一步明显提升目标。
 - 最新 v4 稿已补充 `train_screen_depth_policy.py` 的结构级 depth policy 结果：n=14/16/18 训练、held-out n=20 测试，说明 AI 已能学习 screen 深度选择，但尚未超过固定 depth-2 的 score。
 - 最新 v8 稿补充 `train_structure_gate.py` 的 screen-gated Resource-NMCTS 边界验证：原 n=20 切片资源持平且平均运行时间降低 75.58%，held-out n=19/20 合计 16/16 score 持平并平均节省 36.83%，但仍只作为运行时门控证据。
@@ -60,6 +61,7 @@ latexmk -xelatex -g resource_nmcts_zh_manuscript_v14.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v15.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v16.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v17.tex
+latexmk -xelatex -g resource_nmcts_zh_manuscript_v18.tex
 latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 ```
 
@@ -107,6 +109,7 @@ latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 - `../results/analysis_truth_bridge_terms.md`
 - `../results/analysis_schedule_truth_bridge_n23_terms.md`
 - `../results/analysis_schedule_metrics.md`
+- `../results/analysis_ros_lut_proxy.md`
 - `../results/analysis_giga_screen_gate_vs_resource.md`
 - `../results/analysis_structure_gate.md`
 - `../results/analysis_exact_fprm_dp.md`

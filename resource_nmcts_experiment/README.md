@@ -116,6 +116,7 @@ cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json resul
 /opt/anaconda3/envs/mcts-qoracle/bin/python export_benchmarks.py --preset mega_highdim_resource --formats blif,truth --out-dir benchmark_exports/mega_highdim_resource_external_seed42
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_external_baselines.py --manifest benchmark_exports/mega_highdim_resource_external_seed42/manifest.json --methods external_abc_aig,external_abc_xag,external_abc_lut,external_bdd --min-n 18 --max-n 18 --max-abc-n 18 --max-xag-n 18 --max-lut-n 18 --max-bdd-n 18 --bdd-orders 8 --timeout 90 --workers 8 --out results/raw_external_mega_highdim_resource.csv --summary results/summary_external_mega_highdim_resource.csv --run-manifest results/manifest_external_mega_highdim_resource.json
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_external_baselines.py --external-csv results/raw_external_mega_highdim_resource.csv --internal-csv results/raw_mega_highdim_resource.csv --targets and_resource_nmcts,and_profile_resource_nmcts,and_pareto_resource_nmcts,and_fprm_linear_pair_fast,and_fprm_root_beam,direct_anf,and_direct_anf --out results/analysis_external_mega_highdim_resource.md
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_ros_lut_proxy.py --manifest traditional=benchmark_exports/traditional_resource_external_seed42/manifest.json --manifest n14=benchmark_exports/highdim_resource_external_seed42/manifest.json --manifest n15=benchmark_exports/highdim_scale_resource_external_seed42/manifest.json --manifest n16=benchmark_exports/ultra_highdim_resource_external_seed42/manifest.json --manifest n18=benchmark_exports/mega_highdim_resource_external_seed42/manifest.json --internal traditional=results/raw_traditional_resource.csv --internal n14=results/raw_highdim_resource.csv --internal n15=results/raw_highdim_scale_resource.csv --internal n16=results/raw_ultra_highdim_resource.csv --internal n18=results/raw_mega_highdim_resource.csv --ks 3,4,5 --workers 8 --timeout 45 --raw-out results/raw_ros_lut_proxy_sweep.csv --best-out results/raw_ros_lut_proxy_best.csv --summary results/summary_ros_lut_proxy.csv --analysis results/analysis_ros_lut_proxy.md --latex-out paper_latex/tables/ros_lut_proxy.tex --run-manifest results/manifest_ros_lut_proxy.json
 ```
 
 Current presets:
@@ -359,8 +360,13 @@ External-tool benchmark exchange:
   verified ESOP-PLA output, and the same logical-AND cube cost model as the
   internal ESOP baselines.  It also includes a deterministic reduced ordered BDD
   baseline with multiple variable orders, truth-table verification, and a
-  Shannon-network resource estimate.  ROS and mockturtle adapters are still
-  future work.
+  Shannon-network resource estimate.
+- `run_ros_lut_proxy.py` is a deliberately marked ROS-style LUT proxy rather
+  than an official ROS reproduction.  It reuses the exported BLIF benchmarks,
+  runs ABC `if -K` for a configurable K sweep, verifies each mapped BLIF truth
+  table, estimates every LUT network by local-ANF compute/action/uncompute
+  logic, and chooses the best K under the project score.  Official
+  ROS/mockturtle/RevKit adapters are still future work.
 - `analyze_toolchain_readiness.py` records external-tool availability for the
   current workstation.  The current audit finds the bundled ABC binary but no
   mockturtle or RevKit binary/Python module; see
@@ -577,6 +583,12 @@ Time-limited exported SSHR-I, ABC-AIG, ABC-XAG, ABC-LUT, BDD, and ABC-ESOP exten
   reduction.  This baseline uses ABC `&exorcism -q` and verified ESOP-PLA
   output, making it a stronger external XOR-of-products comparison than the
   AIG-only path.
+- The ROS-style LUT proxy sweep covers the same `n=3..6` traditional functions
+  plus exported `n=14`, `n=15`, `n=16`, and `n=18` high-dimensional functions.
+  It produces 927 K-sweep rows and 309 best-K rows, with all truth-table checks
+  passing.  The best-K proxy beats fixed K=4 on weighted score by 219/0/90
+  with an 18.12% mean reduction, and `and_resource_nmcts` still beats this
+  stronger LUT proxy on all 309 functions with an 83.77% mean score reduction.
 
 External toolchain readiness from `results/analysis_toolchain_readiness.md`:
 
