@@ -43,8 +43,8 @@ T-count, CNOT count, logical depth, and peak ancilla.  It writes
 `paper_latex/tables/multimetric_nondominated.tex`.
 The learned-control audit is materialized by
 `analyze_learned_control_audit.py`, which separates promoted learned controls
-(frontier policy, staged frontier, phase shortlist) from limited diagnostics
-(boolean neural guard and root-action neural ranker) in
+(frontier policy, staged frontier, sparse depth-4 gate, phase shortlist) from
+limited diagnostics (boolean neural guard and root-action neural ranker) in
 `paper_latex/tables/learned_control_audit.tex`.
 The Boolean-ring structural audit is materialized by
 `analyze_boolean_ring_structural_evidence.py`, which consolidates the
@@ -58,6 +58,12 @@ screen controller from the measured depth-2/3/4 raw rows.  It writes
 `paper_latex/tables/sparse_depth_frontier.tex` and shows that the sparse
 frontier exactly matches the full measured frontier on the audited scale and
 truth-bridge slices while removing the depth-3 evaluation cost.
+The learned sparse depth-4 gate is materialized by
+`train_sparse_depth4_gate.py`.  It trains a conservative binary controller after
+the depth-2 sparse-frontier state, writes `models/sparse_depth4_gate.pt`,
+`results/analysis_sparse_depth4_gate.md`, and
+`paper_latex/tables/sparse_depth4_gate.tex`, and preserves held-out `n=28,40`
+sparse-frontier score while reducing sparse-frontier evaluation time by 17.39%.
 The high-dimensional scale audit is materialized by
 `analyze_scaling_resource_audit.py`, which separates functions/settings,
 method rows, verified rows, and representative resource means for the large
@@ -194,6 +200,8 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_schedule_metrics.py --input schedule_generalization=results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv --input schedule_truth_bridge=results/raw_schedule_truth_bridge_terms.csv --input schedule_truth_bridge_n23=results/raw_schedule_truth_bridge_n23_terms.csv
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_frontier_policy_upgrade.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_stage_gated_frontier.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python train_sparse_depth4_gate.py --train-n 16,20,24 --test-n 28,40 --train-per-n 32 --valid-per-n 16 --test-per-n 24 --epochs 120 --workers 6
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_learned_control_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_scaling_resource_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_reproducibility_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_mockturtle_xag_probe.py --workers 4 --timeout 20
@@ -488,6 +496,16 @@ all-depth while reducing staged planning time by -25.43%; on the `n=23`
 truth-table bridge it ties all-depth score and saves -11.51% staged time.
 This is a high-quality teacher/guard, not a faster replacement for the large
 single-shot policy.
+The learned sparse depth-4 gate is summarized in
+`results/analysis_sparse_depth4_gate.md`.  It uses the deterministic sparse
+depth-2/4 frontier as the quality reference and predicts whether the depth-4
+screen should run after depth-2 has been evaluated.  The formal run trains on
+`n=16,20,24`, selects a conservative validation threshold, and tests on held-out
+`n=28,40` generated term sets.  On the 48 test pairs it runs depth 4 on 32 rows,
+has 0 false skips, matches the sparse-frontier score on all rows, and saves
+-17.39% sparse-frontier evaluation time.  This is a learned planning-budget
+controller, not a stronger quality frontier than the deterministic sparse
+depth-2/4 audit.
 Term-set scale tests beyond truth-table-feasible sizes are run with
 `run_screen_scale_terms.py`; outputs are written to
 `results/analysis_screen_scale_terms.md`, `results/raw_screen_scale_terms.csv`,
@@ -611,6 +629,11 @@ Current structure-policy evidence:
   depth-2/3/4 rows.  Its validation-selected 1.25% trigger gives +0.04% mean
   score and -25.43% staged time against all-depth on the independent
   `n=24,28,32,40` scale run, with 96/96 selected rows verified.
+- The learned sparse depth-4 gate,
+  `results/analysis_sparse_depth4_gate.md`, trains on `n=16,20,24` generated
+  term sets and tests on held-out `n=28,40`.  It matches the deterministic
+  sparse frontier on all 48 test pairs with 0 false skips while saving -17.39%
+  sparse-frontier evaluation time.
 - Logic-level schedule-proxy evidence is now emitted by `run_screen_scale_terms.py`
   and `run_truth_bridge_terms.py`, then summarized by
   `analyze_schedule_metrics.py`.  The metrics are not hardware mapping results:

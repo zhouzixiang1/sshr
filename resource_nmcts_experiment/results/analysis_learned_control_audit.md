@@ -7,6 +7,7 @@ It is intentionally conservative: small or runtime-negative AI components are la
 |---|---|---|---|---|
 | Depth-frontier policy | held-out n=28,40; 48 rows | vs oracle frontier 0/3/45, +0.04% | -51.30% time vs all-depth frontier | promoted quality/time selector |
 | Stage-gated frontier | independent n=24,28,32,40; 96 rows | vs all-depth 0/4/92, +0.04% | -25.43% staged planning time | promoted validation-calibrated guard |
+| Sparse depth-4 gate | held-out n=28,40; 48 pairs | vs sparse frontier 0/0/48, +0.00%; false skips 0 | -17.39% time vs sparse frontier | promoted budget gate after depth-2 |
 | Rank-diverse phase shortlist | held-out n=6 phase search; 38 rows | vs budget-32 17/0/21, -2.48%; vs wide-128 0/7/31, +0.00% | 512/8192 exact forms per function | promoted phase-search pruning |
 | Boolean neural guard | n=16 high-dimensional guard; 24 rows | vs deterministic 4/0/20, -0.12% | +94.49% runtime | limited quality guard, not runtime claim |
 | Root-action neural ranker | n=14 root-action diagnostic; 10 rows | vs beam4 +0.03%; oracle24 headroom -0.12% | -98.06% ranking time vs beam4 eval | not promoted; future root-ranker target |

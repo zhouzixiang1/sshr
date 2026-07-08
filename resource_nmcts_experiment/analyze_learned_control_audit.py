@@ -52,6 +52,9 @@ def build_rows() -> list[dict[str, str]]:
         baseline="adaptive_all_depth",
     )
 
+    sparse_gate = read_csv(RESULTS / "summary_sparse_depth4_gate.csv")
+    sparse_gate_test = require_row(sparse_gate, split="test")
+
     phase = read_csv(RESULTS / "summary_phase_affine_policy_rank_diverse.csv")
     phase_budget = require_row(
         phase,
@@ -100,6 +103,13 @@ def build_rows() -> list[dict[str, str]]:
             "quality": f"vs all-depth {staged_scale['score_wins']}/{staged_scale['score_losses']}/{staged_scale['score_ties']}, {pct(staged_scale['mean_rel_score'])}",
             "cost": f"{pct(staged_scale['mean_rel_time'])} staged planning time",
             "role": "promoted validation-calibrated guard",
+        },
+        {
+            "component": "Sparse depth-4 gate",
+            "scope": "held-out n=28,40; 48 pairs",
+            "quality": f"vs sparse frontier {sparse_gate_test['score_wlt_vs_sparse']}, {pct(sparse_gate_test['mean_rel_score_vs_sparse'])}; false skips {sparse_gate_test['false_skips']}",
+            "cost": f"{pct(sparse_gate_test['mean_rel_time_vs_sparse'])} time vs sparse frontier",
+            "role": "promoted budget gate after depth-2",
         },
         {
             "component": "Rank-diverse phase shortlist",

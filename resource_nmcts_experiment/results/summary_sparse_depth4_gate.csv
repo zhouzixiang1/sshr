@@ -1,0 +1,4 @@
+split,pairs,run_depth4,true_runs,false_runs,false_skips,score_wlt_vs_sparse,mean_rel_score_vs_sparse,mean_rel_time_vs_sparse,score_wlt_vs_depth2,mean_rel_score_vs_depth2,mean_rel_time_vs_depth2
+train,96,78,75,3,0,0/0/96,0.0,-0.1017433990739983,75/0/21,-0.040791861501042886,8.486067882898531
+valid,48,38,34,4,0,0/0/48,0.0,-0.12007996174111223,34/0/14,-0.03269152303301599,7.805349454535555
+test,48,32,23,9,0,0/0/48,0.0,-0.1738503261895117,23/0/25,-0.01774207741937325,5.914980123846483
