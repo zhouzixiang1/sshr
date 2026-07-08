@@ -994,12 +994,15 @@ submission figures and source data are stored under
 \texttt{paper\_latex/figures/submission\_v36/}.  The lightweight derived
 submission package can be rebuilt with
 \texttt{./rebuild\_submission\_package.sh}; this regenerates paper-facing
-tables, figures, the submission archive manifest, audits, and the English PDF
-from existing experiment artifacts, but does not rerun raw benchmark sweeps,
-external-toolchain probes, or neural training jobs.  The archive manifest
-records category-level hashes for stable payload groups; terminal submission
-audits and the compiled PDF are checked separately to avoid self-referential
-digests.  The experiments use the
+tables, figures, the submission archive manifest, the uploadable payload
+archive, audits, and the English PDF from existing experiment artifacts, but
+does not rerun raw benchmark sweeps, external-toolchain probes, or neural
+training jobs.  The generated payload archive
+\texttt{submission\_package/dist/resource\_nmcts\_submission\_payload.tar.gz}
+is accompanied by a SHA256 sidecar and a JSON file manifest.  The archive
+manifest records category-level hashes for stable payload groups; terminal
+submission audits and the compiled PDF are checked separately to avoid
+self-referential digests.  The experiments use the
 \texttt{mcts-qoracle} Conda environment and the direct interpreter
 \path{/opt/anaconda3/envs/mcts-qoracle/bin/python}.  External-tool rows are
 reported with manifest-level provenance; hardware mapping, routing, and

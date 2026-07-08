@@ -67,6 +67,13 @@ Provide the final repository URL, commit hash, license, environment notes, and a
 ./rebuild_submission_package.sh
 ```
 
+The current generated upload payload is:
+
+```text
+submission_package/dist/resource_nmcts_submission_payload.tar.gz
+submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256
+```
+
 ## AI-Assisted Writing or Coding Statement
 
 AUTHOR INPUT REQUIRED:

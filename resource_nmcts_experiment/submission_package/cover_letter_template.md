@@ -10,7 +10,7 @@ The main contribution is a search-based oracle synthesis workflow with a broad c
 
 We believe the manuscript is suitable for readers interested in quantum compilation, reversible logic synthesis, Boolean function synthesis, and learning-guided combinatorial search.  The paper is framed with explicit comparison boundaries: SSHR is treated as a CNOT-oriented small-function baseline; RevKit oracle_synth is treated as a phase/Rz lower-bound and sensitivity probe rather than a completed Clifford+T comparison; and all large-scale claims remain at the logical layer.
 
-The submission package includes the LaTeX manuscript, generated tables and figures, raw and summary CSV files, manifest JSON files, trained local policy artifacts, tool-adapter source files, and a lightweight rebuild script.  The script `./rebuild_submission_package.sh` regenerates paper-facing analyses, figures, audits, the archive manifest, and the compiled English PDF from existing experiment artifacts.
+The submission package includes the LaTeX manuscript, generated tables and figures, raw and summary CSV files, manifest JSON files, trained local policy artifacts, tool-adapter source files, and a lightweight rebuild script.  The script `./rebuild_submission_package.sh` regenerates paper-facing analyses, figures, audits, the archive manifest, an uploadable payload tarball with SHA256 sidecar, and the compiled English PDF from existing experiment artifacts.
 
 AUTHOR INPUT REQUIRED:
 - Corresponding author name, affiliation, postal address, and email:

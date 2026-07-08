@@ -57,7 +57,7 @@ Manuscript anchors:
 
 ## Is the package reproducible?
 
-The paper-facing package includes raw CSV files, summaries, manifests, generated LaTeX tables, generated figures, source data, local trained policy artifacts, tool adapters, and a rebuild script.  The archive manifest hashes stable payload groups and the readiness audit checks the compiled PDF separately.
+The paper-facing package includes raw CSV files, summaries, manifests, generated LaTeX tables, generated figures, source data, local trained policy artifacts, tool adapters, and a rebuild script.  The archive manifest hashes stable payload groups, the payload tarball packages the uploadable source/data bundle with a SHA256 sidecar, and the readiness audit checks the compiled PDF separately.
 
 Manuscript anchors:
 - Compute and reproducibility audit

@@ -23,6 +23,11 @@ ARCHIVE_ANALYSIS = RESULTS / "analysis_submission_archive_manifest.md"
 ARCHIVE_SUMMARY = RESULTS / "summary_submission_archive_manifest.csv"
 ARCHIVE_MANIFEST = RESULTS / "manifest_submission_archive_manifest.json"
 SUBMISSION_PACKAGE = THIS_DIR / "submission_package"
+PAYLOAD_ARCHIVE = SUBMISSION_PACKAGE / "dist" / "resource_nmcts_submission_payload.tar.gz"
+PAYLOAD_SHA256 = SUBMISSION_PACKAGE / "dist" / "resource_nmcts_submission_payload.tar.gz.sha256"
+PAYLOAD_ANALYSIS = RESULTS / "analysis_submission_payload_archive.md"
+PAYLOAD_SUMMARY = RESULTS / "summary_submission_payload_archive.csv"
+PAYLOAD_MANIFEST = RESULTS / "manifest_submission_payload_archive.json"
 SUPPORT_FILES = [
     SUBMISSION_PACKAGE / "cover_letter_template.md",
     SUBMISSION_PACKAGE / "author_declarations_template.md",
@@ -138,6 +143,18 @@ def build_rows() -> list[dict[str, str]]:
             "status": "pass" if all(path.exists() for path in SUPPORT_FILES) else "needs revision",
             "evidence": "Cover letter, author declarations, upload checklist, and reviewer-concern brief templates are present.",
             "next_action": "Fill the author-specific fields before journal upload.",
+        },
+        {
+            "item": "Uploadable payload archive",
+            "status": "pass"
+            if PAYLOAD_ARCHIVE.exists()
+            and PAYLOAD_SHA256.exists()
+            and PAYLOAD_ANALYSIS.exists()
+            and PAYLOAD_SUMMARY.exists()
+            and PAYLOAD_MANIFEST.exists()
+            else "needs revision",
+            "evidence": "Deterministic submission payload tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.",
+            "next_action": "Rerun make_submission_payload_archive.py after adding or removing upload payload files.",
         },
         {
             "item": "Derived package rebuild command",

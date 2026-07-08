@@ -18,6 +18,8 @@ Use this checklist immediately before uploading the manuscript.
 - Generated tables: `paper_latex/tables/*.tex`
 - Generated figures: `paper_latex/figures/submission_v36/`
 - Figure source data: `paper_latex/figures/submission_v36/source_data/*.csv`
+- Uploadable payload archive: `submission_package/dist/resource_nmcts_submission_payload.tar.gz`
+- Payload archive checksum: `submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256`
 
 ## Reproducibility Files
 
@@ -25,6 +27,7 @@ Use this checklist immediately before uploading the manuscript.
 - Readiness audit: `results/analysis_submission_readiness_audit.md`
 - Traceability audit: `results/analysis_submission_traceability_audit.md`
 - Archive manifest: `results/analysis_submission_archive_manifest.md`
+- Payload archive manifest: `results/analysis_submission_payload_archive.md`
 - Reproducibility audit: `results/analysis_reproducibility_audit.md`
 - Raw data: `results/raw_*.csv`
 - Summary data: `results/summary_*.csv`
@@ -49,6 +52,7 @@ rg -n "Overfull|Underfull|undefined|Undefined|Warning|Error|LaTeX Warning|Rerun"
 Expected current state:
 
 - Archive manifest: all payload groups complete.
+- Payload archive: tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.
 - Traceability audit: all claim families complete.
 - Readiness audit: all paper/package checks pass except author-specific declarations.
 - LaTeX warning status: only the existing `\showhyphens` package warning should remain.
@@ -63,8 +67,8 @@ Expected current state:
 ## Upload Order
 
 1. Upload the main PDF and source archive required by the venue.
-2. Upload generated figure files and source data if requested separately.
-3. Upload or link the reproducibility archive.
+2. Upload `submission_package/dist/resource_nmcts_submission_payload.tar.gz` or a venue-specific source archive assembled from it.
+3. Upload generated figure files and source data separately if the venue requires them outside the payload archive.
 4. Paste author declarations into the submission system.
 5. Paste the cover letter and reviewer suggestions if requested.
 6. Review the generated proof for table placement and figure readability before final approval.

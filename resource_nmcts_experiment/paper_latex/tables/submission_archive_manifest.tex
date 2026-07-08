@@ -2,15 +2,15 @@
 \toprule
 Payload group & Files & Missing & Digest & Boundary \\
 \midrule
-Manuscript source & 3 & 0 & \texttt{2be3b6d2c53b} & Compiled PDF is checked by readiness audit to avoid self-referential hashes. \\
-Paper tables & 149 & 0 & \texttt{fc48c8a05fc3} & Terminal submission audit tables are excluded from the stable payload digest. \\
+Manuscript source & 3 & 0 & \texttt{1d0cbb41ca17} & Compiled PDF is checked by readiness audit to avoid self-referential hashes. \\
+Paper tables & 149 & 0 & \texttt{4b5dc103ab67} & Terminal submission audit tables are excluded from the stable payload digest. \\
 Submission figures & 28 & 0 & \texttt{824254679c95} & Includes generated figure assets and plotted source data, not raw benchmark reruns. \\
 Raw measurements & 144 & 0 & \texttt{87ee477b5c7c} & Raw CSVs are regenerated only by the heavier run scripts, not by the lightweight rebuild. \\
-Derived summaries & 309 & 0 & \texttt{d99e7e6d15e3} & Terminal submission audit outputs are excluded so this manifest remains stable. \\
+Derived summaries & 309 & 0 & \texttt{22aa56c804cd} & Terminal submission/package outputs are excluded so this manifest remains stable. \\
 Run manifests & 65 & 0 & \texttt{6a2272e4e76d} & Submission-level terminal manifests are excluded from this digest group. \\
-Scripts and docs & 64 & 0 & \texttt{86932f3d1f92} & Documents reproducible entry points; raw sweeps still require their individual drivers. \\
+Scripts and docs & 65 & 0 & \texttt{50d9278c0a5e} & Documents reproducible entry points; raw sweeps still require their individual drivers. \\
 Models & 20 & 0 & \texttt{4c5c2a1bfc19} & Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild. \\
 External adapters & 1 & 0 & \texttt{de5aa3b78998} & Includes local adapter source files used for external toolchain probes, not vendored tool repositories. \\
-Submission support & 4 & 0 & \texttt{cb0ad16a2921} & Includes cover-letter, declaration, checklist, and reviewer-brief templates; author-specific fields remain manual. \\
+Submission support & 4 & 0 & \texttt{ddaf89e7f2a5} & Includes cover-letter, declaration, checklist, and reviewer-brief templates; author-specific fields remain manual. \\
 \bottomrule
 \end{tabularx}

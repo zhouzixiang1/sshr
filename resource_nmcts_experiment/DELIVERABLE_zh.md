@@ -144,13 +144,13 @@
 - `results/manifest_reproducibility_audit.json`
 - `paper_latex/tables/reproducibility_audit.tex`
 
-该审计记录当前工作站为 Apple M4 Pro，14 CPU cores，24.0 GiB RAM，20-core Metal GPU；`mcts-qoracle` 环境中 Python 3.11.15、PyTorch 2.12.0、MPS=True、CUDA=False。manifest 层面有 54 个运行记录包含 worker count，最大 workers=10；代表性流程包括 traditional resource 10 workers/1770 rows、RevKit CLI 8 workers/708 rows、ROS-style LUT 8 workers/927 rows、CirKit 8 workers/177 rows、mockturtle 4 workers/177 rows。重新生成后的 artifact coverage 为 60 个顶层 run/train/analyze 脚本、144 个 raw CSV、168 个 summary CSV、67 个 manifest、151 张 paper table 和 7 个 figure panel。论文中应把 runtime/time 结果限定在这个工作站上下文；可移植主张仍是逻辑资源数量和验证通过率。
+该审计记录当前工作站为 Apple M4 Pro，14 CPU cores，24.0 GiB RAM，20-core Metal GPU；`mcts-qoracle` 环境中 Python 3.11.15、PyTorch 2.12.0、MPS=True、CUDA=False。manifest 层面有 54 个运行记录包含 worker count，最大 workers=10；代表性流程包括 traditional resource 10 workers/1770 rows、RevKit CLI 8 workers/708 rows、ROS-style LUT 8 workers/927 rows、CirKit 8 workers/177 rows、mockturtle 4 workers/177 rows。重新生成后的 artifact coverage 为 60 个顶层 run/train/analyze 脚本、144 个 raw CSV、169 个 summary CSV、68 个 manifest、151 张 paper table 和 7 个 figure panel。论文中应把 runtime/time 结果限定在这个工作站上下文；可移植主张仍是逻辑资源数量和验证通过率。
 
 本轮新增轻量投稿包再生成入口：
 
 - `rebuild_submission_package.sh`
 
-该脚本从现有 experiment artifacts 重建 paper-facing analysis tables、submission figures/source data、archive manifest、traceability/readiness audits 和英文投稿 PDF；实测连续运行两次后 22 个当前变更/新增文件 hash 完全一致，第二次 `latexmk` 显示 PDF up-to-date。它不重跑 raw benchmark sweeps、external-toolchain probes 或 neural training jobs，这些仍由各自 `run_*.py` 和 `train_*.py` 入口负责。
+该脚本从现有 experiment artifacts 重建 paper-facing analysis tables、submission figures/source data、archive manifest、uploadable payload archive、traceability/readiness audits 和英文投稿 PDF；实测连续运行两次后当前变更/新增文件 hash 完全一致，第二次 `latexmk` 显示 PDF up-to-date。它不重跑 raw benchmark sweeps、external-toolchain probes 或 neural training jobs，这些仍由各自 `run_*.py` 和 `train_*.py` 入口负责。
 
 本轮新增 submission traceability audit，用于把投稿稿中的核心主张连接到实际脚本、CSV、表格、图和正文位置：
 
@@ -181,13 +181,24 @@
 
 这些文件已经把论文事实、边界和审稿人可能关切整理好；所有不能从实验产物推断的信息统一标成 `AUTHOR INPUT REQUIRED`，包括作者顺序、单位、ORCID、通信作者、funding、acknowledgements、competing interests、AI-assistance disclosure、最终仓库/归档链接和目标期刊特定字段。它们被纳入 archive manifest，但不把作者声明视为已经完成。
 
+本轮新增可上传 payload archive 生成器，把归档清单进一步转成实际上传包：
+
+- `make_submission_payload_archive.py`
+- `submission_package/dist/resource_nmcts_submission_payload.tar.gz`
+- `submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256`
+- `results/summary_submission_payload_archive.csv`
+- `results/analysis_submission_payload_archive.md`
+- `results/manifest_submission_payload_archive.json`
+
+该 tarball 打包稳定源码/数据载荷、最终 PDF、archive/traceability 审计和投稿支持文件；为避免归档自引用，它不把 tarball 自身、SHA256 sidecar 和 readiness audit 放进包内。readiness audit 在 tarball 生成之后运行，负责检查 tarball、SHA256 sidecar、CSV/Markdown/JSON manifest 是否存在。
+
 本轮新增投稿完整性层：英文投稿稿末尾加入 `Data and Code Availability`，明确代码、raw/summary CSV、manifest、LaTeX 表、图源数据和 PDF 均位于 `resource_nmcts_experiment/` artifact package，运行入口为 `run_*.py`、`train_*.py`、`analyze_*.py`，环境为 `mcts-qoracle` 和直接解释器路径 `/opt/anaconda3/envs/mcts-qoracle/bin/python`。同时新增自动 submission-readiness audit：
 
 - `analyze_submission_readiness_audit.py`
 - `results/summary_submission_readiness_audit.csv`
 - `results/analysis_submission_readiness_audit.md`
 
-当前审计结果为 14 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、contribution-to-evidence chain、executable method workflow、baseline fairness/scope、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder、compiled PDF。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
+当前审计结果为 15 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、contribution-to-evidence chain、executable method workflow、baseline fairness/scope、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、uploadable payload archive、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder、compiled PDF。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
 
 ## 2. 当前已完成内容
 

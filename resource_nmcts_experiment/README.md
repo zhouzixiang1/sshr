@@ -144,6 +144,16 @@ brief.  These files are ready to use at upload time, but fields marked
 `AUTHOR INPUT REQUIRED` must be completed by the author because funding,
 affiliations, competing interests, and final archive links cannot be inferred
 from experiment artifacts.
+The uploadable payload archive is materialized by
+`make_submission_payload_archive.py`, which writes
+`submission_package/dist/resource_nmcts_submission_payload.tar.gz`,
+`submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256`,
+`results/summary_submission_payload_archive.csv`,
+`results/analysis_submission_payload_archive.md`, and
+`results/manifest_submission_payload_archive.json`.  The tarball packages the
+stable source/data payload, compiled PDF, and package audits, while excluding
+itself and the readiness audit to avoid changing the archive after the final
+readiness pass.
 The lightweight derived submission package can be regenerated with:
 
 ```bash
@@ -151,7 +161,7 @@ The lightweight derived submission package can be regenerated with:
 ```
 
 This command rebuilds paper-facing analysis tables, figures, the archive
-manifest, traceability and readiness audits, and
+manifest, uploadable payload archive, traceability and readiness audits, and
 `paper_latex/resource_nmcts_submission_v1.pdf` from the existing experiment
 artifacts.  It does not rerun raw benchmark sweeps, external-toolchain probes,
 or neural training jobs; those remain under the individual `run_*.py` and
@@ -163,10 +173,10 @@ The submission-readiness audit is materialized by
 submission draft contains bounded and concise abstract claims,
 contribution/evidence mapping, baseline fairness tables, reproducibility
 evidence, claim-to-artifact traceability, a derived-package rebuild command,
-an archive package manifest, submission-support templates, limitations,
-data/code availability, a compiled PDF, and no source TODO markers; it leaves
-funding, acknowledgements, competing interests, author metadata, and archival
-links as author-specific submission-time items.
+an archive package manifest, submission-support templates, an uploadable
+payload archive, limitations, data/code availability, a compiled PDF, and no
+source TODO markers; it leaves funding, acknowledgements, competing interests,
+author metadata, and archival links as author-specific submission-time items.
 
 Latest external-toolchain progress:
 

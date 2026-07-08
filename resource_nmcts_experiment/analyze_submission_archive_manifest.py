@@ -3,10 +3,10 @@
 
 The archive manifest is a packaging audit, not a scientific result.  It hashes
 the stable submission payload groups that a reviewer or archive maintainer
-would need to reconstruct the paper-facing evidence.  Terminal audit outputs
-and the compiled manuscript PDF are intentionally excluded from the digest set
-to avoid self-referential hashes: the PDF contains this table, and the readiness
-audit checks the PDF separately.
+would need to reconstruct the paper-facing evidence.  Terminal package/audit
+outputs and the compiled manuscript PDF are intentionally excluded from the
+digest set to avoid self-referential hashes: the PDF contains this table, and
+the readiness audit checks the PDF and uploadable tarball separately.
 """
 from __future__ import annotations
 
@@ -34,12 +34,15 @@ SELF_OUTPUTS = {
     TABLES / "submission_archive_manifest.tex",
 }
 
-TERMINAL_AUDIT_OUTPUTS = {
+TERMINAL_PACKAGE_OUTPUTS = {
     RESULTS / "summary_submission_readiness_audit.csv",
     RESULTS / "analysis_submission_readiness_audit.md",
     RESULTS / "summary_submission_traceability_audit.csv",
     RESULTS / "analysis_submission_traceability_audit.md",
     RESULTS / "manifest_submission_traceability_audit.json",
+    RESULTS / "summary_submission_payload_archive.csv",
+    RESULTS / "analysis_submission_payload_archive.md",
+    RESULTS / "manifest_submission_payload_archive.json",
     TABLES / "submission_traceability_audit.tex",
 }
 
@@ -50,7 +53,7 @@ class CategorySpec:
     explicit: tuple[Path, ...]
     patterns: tuple[tuple[Path, str], ...]
     boundary: str
-    exclude_terminal_audits: bool = False
+    exclude_terminal_outputs: bool = False
 
 
 def rel(path: Path) -> str:
@@ -82,8 +85,8 @@ def collect(spec: CategorySpec) -> tuple[list[Path], list[Path]]:
             found.extend(path for path in root.glob(pattern) if path.is_file())
 
     exclusions = set(SELF_OUTPUTS)
-    if spec.exclude_terminal_audits:
-        exclusions |= TERMINAL_AUDIT_OUTPUTS
+    if spec.exclude_terminal_outputs:
+        exclusions |= TERMINAL_PACKAGE_OUTPUTS
     found = [path for path in found if path not in exclusions]
     return unique_sorted(found), unique_sorted(missing)
 
@@ -121,7 +124,7 @@ def specs() -> list[CategorySpec]:
             explicit=(),
             patterns=((TABLES, "*.tex"),),
             boundary="Terminal submission audit tables are excluded from the stable payload digest.",
-            exclude_terminal_audits=True,
+            exclude_terminal_outputs=True,
         ),
         CategorySpec(
             category="Submission figures",
@@ -139,15 +142,15 @@ def specs() -> list[CategorySpec]:
             category="Derived summaries",
             explicit=(),
             patterns=((RESULTS, "summary_*.csv"), (RESULTS, "analysis_*.md")),
-            boundary="Terminal submission audit outputs are excluded so this manifest remains stable.",
-            exclude_terminal_audits=True,
+            boundary="Terminal submission/package outputs are excluded so this manifest remains stable.",
+            exclude_terminal_outputs=True,
         ),
         CategorySpec(
             category="Run manifests",
             explicit=(),
             patterns=((RESULTS, "manifest_*.json"),),
             boundary="Submission-level terminal manifests are excluded from this digest group.",
-            exclude_terminal_audits=True,
+            exclude_terminal_outputs=True,
         ),
         CategorySpec(
             category="Scripts and docs",
@@ -232,7 +235,7 @@ def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
     lines = [
         "# Submission Archive Manifest",
         "",
-        "This audit hashes stable submission payload groups while excluding terminal submission audits and the compiled PDF.",
+        "This audit hashes stable submission payload groups while excluding terminal submission package/audit outputs and the compiled PDF.",
         "",
         "## Status counts",
         "",
@@ -296,7 +299,7 @@ def write_manifest(path: Path, entries: list[dict[str, object]]) -> None:
         "script": Path(__file__).name,
         "python": sys.version.split()[0],
         "note": (
-            "Compiled PDF and terminal submission audit outputs are excluded "
+            "Compiled PDF and terminal submission/package outputs are excluded "
             "from payload hashes to avoid self-referential digests."
         ),
         "outputs": {
