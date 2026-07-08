@@ -521,7 +521,11 @@ after the depth-2 screen.  Table~\ref{tab:sparse-depth4-gate-generalization}
 then audits the same trained gate without retraining on three independent seeds
 over $n=24,28,32,40$.  Across 144 additional pairs it records zero false skips,
 matches the deterministic sparse frontier on every row, and saves 13.43\% of
-sparse-frontier evaluation time.  Table~\ref{tab:stage-frontier} adds the
+sparse-frontier evaluation time.  Figure~\ref{fig:sparse-gate-sensitivity}
+then sweeps the deployment threshold on the same audit.  The selected threshold
+lies inside a zero-false-skip plateau; the best zero-false-skip point in the
+sweep saves 14.92\%, while allowing one false skip saves 15.49\% with a 0.01\%
+mean score gap.  Table~\ref{tab:stage-frontier} adds the
 earlier staged teacher/guard.  Its depth-4 trigger is selected only on the
 large-policy validation split; on the independent $n=24,28,32,40$ scale rows it
 remains within 0.04\% of all-depth score while reducing staged planning time by
@@ -585,6 +589,16 @@ sparse depth-2/4 frontier.}
 \label{tab:sparse-depth4-gate-generalization}
 \input{tables/sparse_depth4_gate_generalization}
 \end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.94\linewidth]{fig6_sparse_gate_sensitivity.pdf}
+\caption{\textbf{Sparse depth-4 gate threshold sensitivity.} The sweep reuses
+the trained gate on the 144-pair independent-seed audit.  The validation-selected
+threshold lies inside a zero-false-skip plateau, showing that the gate acts as a
+calibrated search-budget controller rather than as an unguarded depth-4 skip.}
+\label{fig:sparse-gate-sensitivity}
+\end{figure}
 
 \begin{table}[H]
 \centering

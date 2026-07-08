@@ -67,7 +67,10 @@ materialized by `audit_sparse_depth4_gate_generalization.py`, which writes
 `results/analysis_sparse_depth4_gate_generalization.md` and
 `paper_latex/tables/sparse_depth4_gate_generalization.tex`; on 144 multi-seed
 `n=24,28,32,40` pairs it preserves sparse-frontier score with 0 false skips and
-reduces sparse-frontier evaluation time by 13.43%.
+reduces sparse-frontier evaluation time by 13.43%.  Threshold sensitivity is
+materialized by `analyze_sparse_depth4_gate_sensitivity.py` and visualized by
+`paper_latex/figures/submission_v36/fig6_sparse_gate_sensitivity.pdf`; it shows
+a zero-false-skip plateau up to 14.92% time saving on the same audit.
 The high-dimensional scale audit is materialized by
 `analyze_scaling_resource_audit.py`, which separates functions/settings,
 method rows, verified rows, and representative resource means for the large
@@ -206,7 +209,13 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_stage_gated_frontier.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python train_sparse_depth4_gate.py --train-n 16,20,24 --test-n 28,40 --train-per-n 32 --valid-per-n 16 --test-per-n 24 --epochs 120 --workers 6
 /opt/anaconda3/envs/mcts-qoracle/bin/python audit_sparse_depth4_gate_generalization.py --seeds 20260801,20260802,20260803 --ns 24,28,32,40 --per-n 12 --workers 6
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_sparse_depth4_gate_sensitivity.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_learned_control_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python - <<'PY'
+import make_submission_figures as m
+m.configure()
+m.fig_sparse_gate_sensitivity()
+PY
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_scaling_resource_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_reproducibility_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_mockturtle_xag_probe.py --workers 4 --timeout 20
@@ -511,8 +520,12 @@ and tests on held-out `n=28,40` generated term sets: 48/48 rows match the sparse
 frontier, false skips are 0, and time falls by -17.39%.  The independent audit
 then reuses the same gate on three new seeds over `n=24,28,32,40`: 144/144 rows
 match the sparse frontier with 0 false skips while saving -13.43%
-sparse-frontier evaluation time.  This is a learned planning-budget controller,
-not a stronger quality frontier than the deterministic sparse depth-2/4 audit.
+sparse-frontier evaluation time.  `analyze_sparse_depth4_gate_sensitivity.py`
+sweeps deployment thresholds on the same 144-pair audit: the selected threshold
+has 0 false skips and -13.43% time, the best zero-false-skip threshold reaches
+-14.92% time, and allowing one false skip reaches -15.49% time with a +0.01%
+mean score gap.  This is a learned planning-budget controller, not a stronger
+quality frontier than the deterministic sparse depth-2/4 audit.
 Term-set scale tests beyond truth-table-feasible sizes are run with
 `run_screen_scale_terms.py`; outputs are written to
 `results/analysis_screen_scale_terms.md`, `results/raw_screen_scale_terms.csv`,

@@ -1,0 +1,11 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.24\linewidth}rrrr>{\raggedright\arraybackslash}p{0.14\linewidth}>{\raggedright\arraybackslash}X}
+\toprule
+Operating point & Threshold & Run d4 & False skips & Score W/L/T vs sparse & Mean $\Delta$ score & Mean $\Delta$ time \\
+\midrule
+eager sparse & 0.0000 & 144 & 0 & 0/0/144 & +0.00\% & +0.00\% \\
+selected & 0.0053 & 106 & 0 & 0/0/144 & +0.00\% & -13.43\% \\
+max zero-skip saving & 0.0307 & 102 & 0 & 0/0/144 & +0.00\% & -14.92\% \\
+max one-skip saving & 0.0397 & 101 & 1 & 0/1/143 & +0.01\% & -15.49\% \\
+depth-2 only & 1.0000 & 0 & 94 & 0/94/50 & +2.84\% & -77.99\% \\
+\bottomrule
+\end{tabularx}

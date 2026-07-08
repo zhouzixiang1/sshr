@@ -513,6 +513,124 @@ def fig_validation() -> None:
     save(fig, "fig5_validation")
 
 
+def sparse_gate_sensitivity_rows() -> tuple[list[dict[str, object]], list[dict[str, object]]]:
+    curve = []
+    for row in read_csv(RESULTS / "summary_sparse_depth4_gate_threshold_sensitivity.csv"):
+        curve.append(
+            {
+                "threshold": float(row["threshold"]),
+                "time_saving_pct": -100.0 * float(row["mean_rel_time_vs_sparse"]),
+                "score_gap_pct": 100.0 * float(row["mean_rel_score_vs_sparse"]),
+                "false_skips": int(row["false_skips"]),
+                "run_depth4": int(row["run_depth4"]),
+            }
+        )
+    operating = []
+    for row in read_csv(RESULTS / "summary_sparse_depth4_gate_threshold_operating_points.csv"):
+        operating.append(
+            {
+                "label": row["label"],
+                "threshold": float(row["threshold"]),
+                "time_saving_pct": -100.0 * float(row["mean_rel_time_vs_sparse"]),
+                "score_gap_pct": 100.0 * float(row["mean_rel_score_vs_sparse"]),
+                "false_skips": int(row["false_skips"]),
+                "run_depth4": int(row["run_depth4"]),
+            }
+        )
+    return curve, operating
+
+
+def fig_sparse_gate_sensitivity() -> None:
+    curve, operating = sparse_gate_sensitivity_rows()
+    source_rows = [
+        {"kind": "curve", "label": "", **row}
+        for row in curve
+    ] + [
+        {"kind": "operating", **row}
+        for row in operating
+    ]
+    write_source(
+        "fig6_sparse_gate_sensitivity",
+        source_rows,
+        ["kind", "label", "threshold", "time_saving_pct", "score_gap_pct", "false_skips", "run_depth4"],
+    )
+
+    selected = next(row for row in operating if row["label"] == "selected")
+    max_zero = next(row for row in operating if row["label"] == "max zero-skip saving")
+    one_skip = next(row for row in operating if row["label"] == "max one-skip saving")
+
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.9))
+
+    ax = axes[0]
+    x = [max(float(r["threshold"]), 1e-6) for r in curve]
+    time_saving = [float(r["time_saving_pct"]) for r in curve]
+    false_skips = [int(r["false_skips"]) for r in curve]
+    ax.plot(x, time_saving, color=PALETTE["resource"], linewidth=1.3, label="time saved")
+    ax.axvline(max(float(selected["threshold"]), 1e-6), color=PALETTE["gain"], linestyle="--", linewidth=0.9)
+    ax.axvline(max(float(max_zero["threshold"]), 1e-6), color=PALETTE["warn"], linestyle=":", linewidth=0.9)
+    ax.set_xscale("log")
+    ax.set_xlabel("Gate threshold")
+    ax.set_ylabel("Time saved vs sparse frontier (%)", color=PALETTE["resource"])
+    ax.tick_params(axis="y", labelcolor=PALETTE["resource"])
+    ax.grid(axis="both", color="#E3E6EA", linewidth=0.6)
+    ax.set_axisbelow(True)
+    ax2 = ax.twinx()
+    ax2.plot(x, false_skips, color=PALETTE["warn"], linewidth=1.0, label="false skips")
+    ax2.set_ylabel("False skips", color=PALETTE["warn"])
+    ax2.tick_params(axis="y", labelcolor=PALETTE["warn"])
+    ax.set_title("Conservative threshold keeps false skips at zero.", loc="left", weight="bold")
+    ax.text(
+        max(float(selected["threshold"]), 1e-6),
+        float(selected["time_saving_pct"]) + 4,
+        "selected",
+        ha="left",
+        va="bottom",
+        fontsize=6.4,
+        color=PALETTE["gain"],
+    )
+
+    ax = axes[1]
+    scatter = ax.scatter(
+        [float(r["time_saving_pct"]) for r in curve],
+        [float(r["score_gap_pct"]) for r in curve],
+        c=[int(r["false_skips"]) for r in curve],
+        cmap="Oranges",
+        s=18,
+        alpha=0.70,
+        edgecolors="none",
+    )
+    for row, marker, color, label in [
+        (selected, "o", PALETTE["gain"], "selected"),
+        (max_zero, "s", PALETTE["resource"], "max zero-skip"),
+        (one_skip, "^", PALETTE["warn"], "one-skip"),
+    ]:
+        ax.scatter(
+            [float(row["time_saving_pct"])],
+            [float(row["score_gap_pct"])],
+            marker=marker,
+            s=42,
+            color=color,
+            edgecolors="#1E2329",
+            linewidths=0.4,
+            label=label,
+            zorder=3,
+        )
+    ax.axhline(0, color="#30343B", linewidth=0.7)
+    ax.set_xlabel("Time saved vs sparse frontier (%)")
+    ax.set_ylabel("Mean score gap vs sparse frontier (%)")
+    ax.set_title("Risk appears only after the zero-skip plateau.", loc="left", weight="bold")
+    ax.grid(axis="both", color="#E3E6EA", linewidth=0.6)
+    ax.set_axisbelow(True)
+    ax.legend(loc="upper left", fontsize=6)
+    cbar = fig.colorbar(scatter, ax=ax, shrink=0.82, pad=0.02)
+    cbar.set_label("False skips")
+
+    fig.text(0.01, 0.96, "f", fontsize=10, weight="bold")
+    fig.suptitle("Sparse depth-4 gate threshold sensitivity on the 144-pair independent-seed audit.", x=0.53, y=1.02, fontsize=8.5, weight="bold")
+    fig.tight_layout()
+    save(fig, "fig6_sparse_gate_sensitivity")
+
+
 def main() -> None:
     configure()
     OUT.mkdir(parents=True, exist_ok=True)
@@ -522,6 +640,7 @@ def main() -> None:
     fig_baseline_comparisons()
     fig_phase_affine()
     fig_validation()
+    fig_sparse_gate_sensitivity()
     print(f"wrote figures to {OUT}")
     print(f"wrote source data to {SOURCE}")
 
