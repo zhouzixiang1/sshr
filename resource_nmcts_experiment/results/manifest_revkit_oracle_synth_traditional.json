@@ -6,7 +6,7 @@
   "usable_rows": 177,
   "ct_supported_rows": 6,
   "rows_with_non_clifford_rz": 171,
-  "elapsed_s": 0.2210066318511963,
+  "elapsed_s": 0.23038697242736816,
   "method": "external_revkit_oracle_synth",
   "claim_boundary": "RevKit Python oracle_synth API, Rz-phase netlist lower-bound proxy, no hardware mapping."
 }

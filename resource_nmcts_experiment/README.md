@@ -136,9 +136,11 @@ Rz-phase netlists are not directly exact Clifford+T: 171/177 rows contain
 non-Clifford `Rz` rotations, with 9242 such rotations in total and maximum
 angle/pi denominator 64.  Resource-NMCTS vs RevKit is therefore a lower-bound
 proxy comparison: 6/171/0 on score, mean score +751.69%, and T-like count
-+4060.08%.  This result should be presented as a phase-rotation
-representation-boundary finding, not as a hardware-mapping or exact
-Clifford+T T-count claim.
++4060.08%.  As a sensitivity check, adding a symbolic cost of 1 score unit per
+non-Clifford Rz changes Resource-NMCTS vs RevKit to 140/37/0 with mean score
+-14.52%, and adding 2 units changes it to 177/0/0 with mean score -53.48%.
+This result should be presented as a phase-rotation representation-boundary
+finding, not as a hardware-mapping or exact Clifford+T T-count claim.
 
 Current presets:
 

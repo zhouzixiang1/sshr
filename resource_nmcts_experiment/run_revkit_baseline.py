@@ -378,6 +378,80 @@ def compare(joined: dict[str, dict[str, dict[str, object]]], target: str, baseli
     }
 
 
+def rotation_summary(rows: list[dict[str, object]]) -> dict[str, object]:
+    usable_rows = [row for row in rows if usable(row)]
+    by_n: dict[int, list[dict[str, object]]] = {}
+    for row in usable_rows:
+        by_n.setdefault(int(row["n"]), []).append(row)
+
+    def vals(key: str, subset: list[dict[str, object]] | None = None) -> list[float]:
+        data = usable_rows if subset is None else subset
+        return [float(row[key]) for row in data if row.get(key) not in {"", None}]
+
+    arbitrary = vals("rz_non_clifford")
+    exact_t = vals("T")
+    rotation_z = vals("rz_total")
+    return {
+        "rows": len(usable_rows),
+        "total_non_clifford_rz": int(sum(arbitrary)),
+        "mean_non_clifford_rz": statistics.mean(arbitrary) if arbitrary else 0.0,
+        "median_non_clifford_rz": statistics.median(arbitrary) if arbitrary else 0.0,
+        "max_non_clifford_rz": int(max(arbitrary, default=0)),
+        "total_exact_t": int(sum(exact_t)),
+        "mean_exact_t": statistics.mean(exact_t) if exact_t else 0.0,
+        "total_rotation_z": int(sum(rotation_z)),
+        "by_n": {
+            n: {
+                "rows": len(subset),
+                "mean_exact_t": statistics.mean(vals("T", subset)),
+                "mean_non_clifford_rz": statistics.mean(vals("rz_non_clifford", subset)),
+                "mean_rotation_z": statistics.mean(vals("rz_total", subset)),
+            }
+            for n, subset in sorted(by_n.items())
+        },
+    }
+
+
+def break_even_rows(
+    joined: dict[str, dict[str, dict[str, object]]],
+    target: str,
+    baseline: str = "external_revkit_oracle_synth",
+) -> dict[str, object] | None:
+    thresholds: list[float] = []
+    impossible = 0
+    already_wins = 0
+    total = 0
+    for methods in joined.values():
+        if target not in methods or baseline not in methods:
+            continue
+        total += 1
+        target_score = metric_value(methods[target], "score")
+        base_score = metric_value(methods[baseline], "score")
+        non_clifford = float(methods[baseline].get("rz_non_clifford", 0) or 0)
+        if target_score <= base_score:
+            already_wins += 1
+            thresholds.append(0.0)
+        elif non_clifford > 0:
+            thresholds.append((target_score - base_score) / non_clifford)
+        else:
+            impossible += 1
+    if not thresholds and not impossible:
+        return None
+    return {
+        "target": target,
+        "items": total,
+        "finite_items": len(thresholds),
+        "impossible_items": impossible,
+        "already_wins": already_wins,
+        "mean_break_even": statistics.mean(thresholds) if thresholds else float("nan"),
+        "median_break_even": statistics.median(thresholds) if thresholds else float("nan"),
+        "covered_by_rz1": sum(1 for value in thresholds if value <= 1.0),
+        "covered_by_rz2": sum(1 for value in thresholds if value <= 2.0),
+        "covered_by_rz4": sum(1 for value in thresholds if value <= 4.0),
+        "covered_by_rz10": sum(1 for value in thresholds if value <= 10.0),
+    }
+
+
 def format_pct(value: float) -> str:
     return f"{value:+.2%}"
 
@@ -420,6 +494,12 @@ def write_analysis(
     non_clifford_rows = len(usable_rows) - len(ct_supported_rows)
     non_clifford_rz = sum(int(row.get("rz_non_clifford") or 0) for row in usable_rows)
     max_rz_den = max((int(row.get("rz_max_denominator") or 1) for row in usable_rows), default=1)
+    rot = rotation_summary(revkit_rows)
+    break_evens = [
+        item
+        for target in ["and_resource_nmcts", "and_pareto_resource_nmcts", "and_fprm_polarity_archive", "direct_anf"]
+        if (item := break_even_rows(joined, target)) is not None
+    ]
     lines = [
         "# RevKit Oracle Synth Baseline",
         "",
@@ -436,12 +516,50 @@ def write_analysis(
         "The pairwise `score` and `T` comparisons below are lower-bound comparisons",
         "for RevKit whenever `rz_non_clifford > 0`, because the cost of synthesizing",
         "non-Clifford Rz rotations into Clifford+T is not included.",
+        "`score_rz1`, `score_rz2`, `score_rz4`, and `score_rz10` add a symbolic",
+        "cost of 1, 2, 4, or 10 score units per non-Clifford Rz rotation.",
+        "",
+        "## Rotation Spectrum",
+        "",
+        f"- total exact T-like gates: {rot['total_exact_t']} (mean {rot['mean_exact_t']:.2f})",
+        f"- total non-Clifford Rz rotations: {rot['total_non_clifford_rz']} (mean {rot['mean_non_clifford_rz']:.2f}, median {rot['median_non_clifford_rz']:.2f}, max {rot['max_non_clifford_rz']})",
+        f"- total Rz rotations: {rot['total_rotation_z']}",
+        "",
+        "| n | rows | mean exact T-like | mean non-Clifford Rz | mean total Rz |",
+        "|---:|---:|---:|---:|---:|",
+    ]
+    for n, item in rot["by_n"].items():
+        lines.append(
+            f"| {n} | {item['rows']} | {item['mean_exact_t']:.2f} | "
+            f"{item['mean_non_clifford_rz']:.2f} | {item['mean_rotation_z']:.2f} |"
+        )
+    lines.extend(
+        [
+            "",
+            "## Break-even Rz Proxy",
+            "",
+            "Break-even is the per-Rz score charge needed for the target method's",
+            "ordinary score to match the RevKit lower-bound score on each row.",
+            "",
+            "| target | items | already wins | finite thresholds | impossible without Rz cost | median break-even | mean break-even | covered by Rz=1/2/4/10 |",
+            "|---|---:|---:|---:|---:|---:|---:|---:|",
+        ]
+    )
+    for item in break_evens:
+        lines.append(
+            f"| {item['target']} | {item['items']} | {item['already_wins']} | {item['finite_items']} | "
+            f"{item['impossible_items']} | {item['median_break_even']:.2f} | {item['mean_break_even']:.2f} | "
+            f"{item['covered_by_rz1']}/{item['covered_by_rz2']}/{item['covered_by_rz4']}/{item['covered_by_rz10']} |"
+        )
+    lines.extend(
+        [
         "",
         "## Pairwise Comparisons",
         "",
         "| target | baseline | metric | items | W/L/T | mean relative |",
         "|---|---|---|---:|---:|---:|",
-    ]
+        ]
+    )
     for row in comparisons:
         lines.append(
             f"| {row['target']} | {row['baseline']} | {row['metric']} | {row['items']} | "
@@ -455,6 +573,7 @@ def write_analysis(
             "- Correctness is delegated to RevKit `oracle_synth` accepting the exact truth table.",
             "- RevKit `oracle_synth` returns Rz-phase netlists that often contain rotations outside Clifford+T, such as pi/8 or pi/16 multiples.",
             "- The reported `score` is therefore a lower-bound netlist proxy when `rz_non_clifford > 0`; it must not be described as an exact Clifford+T T-count.",
+            "- The rotation-aware scores are not hardware mapping results; they are sensitivity checks for non-Clifford phase cost.",
             "- These results should be presented as an external RevKit API / phase-rotation boundary, not as a claim about hardware mapping.",
         ]
     )
@@ -463,10 +582,12 @@ def write_analysis(
     latex_out.parent.mkdir(parents=True, exist_ok=True)
     focus = [
         ("and_resource_nmcts", "score", "lower-bound score"),
-        ("and_pareto_resource_nmcts", "score", "lower-bound score"),
-        ("and_fprm_polarity_archive", "score", "lower-bound score"),
-        ("sshr_h", "CNOT", "CNOT"),
-        ("and_resource_nmcts", "T", "T-like count"),
+        ("and_resource_nmcts", "score_rz1", "score + 1/Rz"),
+        ("and_resource_nmcts", "score_rz2", "score + 2/Rz"),
+        ("and_resource_nmcts", "score_rz4", "score + 4/Rz"),
+        ("and_pareto_resource_nmcts", "score_rz1", "score + 1/Rz"),
+        ("and_pareto_resource_nmcts", "score_rz2", "score + 2/Rz"),
+        ("and_resource_nmcts", "phase_ops", "T + Rz"),
     ]
     with latex_out.open("w", encoding="utf-8") as f:
         f.write("\\begin{tabular}{llrrr}\n")

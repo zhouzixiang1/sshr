@@ -68,8 +68,11 @@
   emitter.  However, 171/177 rows contain non-Clifford Rz rotations, so this
   must not be described as an exact Clifford+T T-count comparison.  RevKit
   should be discussed as a representation-boundary result rather than as a
-  missing tool.  The legacy RevKit/CirKit command-line flow is still not
-  reproduced locally.
+  missing tool.  A symbolic sensitivity check shows that adding 1 score unit
+  per non-Clifford Rz changes Resource-NMCTS vs RevKit to 140/37/0, and adding
+  2 units changes it to 177/0/0; this is not a substitute for exact or
+  approximate rotation synthesis.  The legacy RevKit/CirKit command-line flow
+  is still not reproduced locally.
   <https://github.com/msoeken/revkit>
 
 ## AI-guided synthesis references
