@@ -106,7 +106,7 @@
       "status": "needs author input"
     },
     {
-      "evidence": "7 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/submission_checklist.md.",
+      "evidence": "8 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/submission_checklist.md.",
       "item": "Target-venue policy check",
       "next_action": "Check the target venue guide and update manuscript or support files accordingly.",
       "reason": "Venue-specific policies can only be finalized after the target venue is chosen.",

@@ -7,6 +7,9 @@ For a single structured intake path, copy `submission_metadata_template.json` to
 `./rebuild_submission_package.sh`.  The filled JSON file is ignored by Git so
 private author metadata is not committed accidentally.
 
+Use `target_venue_brief.md` to pick the venue-specific declaration style before
+filling author contributions, AI assistance, and policy fields.
+
 ## Manuscript
 
 - Title: Resource-Constrained Neural Monte Carlo Tree Search for Quantum Boolean Oracle Synthesis

@@ -185,11 +185,12 @@
 
 - `analyze_submission_metadata_audit.py`
 - `submission_package/submission_metadata_template.json`
+- `submission_package/target_venue_brief.md`
 - `results/summary_submission_metadata_audit.csv`
 - `results/analysis_submission_metadata_audit.md`
 - `results/manifest_submission_metadata_audit.json`
 
-该审计逐项列出 author identity、CRediT contribution、funding、acknowledgements、competing interests、data/code availability archive link、license/repository metadata、AI-assistance disclosure、preprint/prior submission、cover-letter routing fields 和 target-venue policy check。当前这些项仍保持 `needs author input`，但已经从模糊“还差作者信息”变成可填写、可复查、可归档的最终投稿元数据清单。后续只需把 `submission_metadata_template.json` 复制为被 Git 忽略的 `submission_metadata.json`，填完所有 `AUTHOR INPUT REQUIRED` 值后重跑 `./rebuild_submission_package.sh`，审计就会指出剩余未填路径或转为 pass。
+该审计逐项列出 author identity、CRediT contribution、funding、acknowledgements、competing interests、data/code availability archive link、license/repository metadata、AI-assistance disclosure、preprint/prior submission、cover-letter routing fields 和 target-venue policy check。当前这些项仍保持 `needs author input`，但已经从模糊“还差作者信息”变成可填写、可复查、可归档的最终投稿元数据清单。新增 `target_venue_brief.md` 把 ACM TQC、Quantum、IEEE TQE、TCAD 和 QST 的适配口径与投稿前动作列成选刊简报。后续只需先确定目标期刊，再把 `submission_metadata_template.json` 复制为被 Git 忽略的 `submission_metadata.json`，填完所有 `AUTHOR INPUT REQUIRED` 值后重跑 `./rebuild_submission_package.sh`，审计就会指出剩余未填路径或转为 pass。
 
 本轮新增 goal-completion audit，把最初目标拆成目标级证据矩阵：
 

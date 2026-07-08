@@ -174,7 +174,7 @@ def specs() -> list[CategorySpec]:
             category="Submission support",
             explicit=(),
             patterns=((SUBMISSION_PACKAGE, "*.md"), (SUBMISSION_PACKAGE, "*_template.json")),
-            boundary="Includes cover-letter, declaration, checklist, reviewer-brief, and structured metadata templates; author-specific fields remain manual.",
+            boundary="Includes cover-letter, declaration, checklist, reviewer-brief, venue-selection, and structured metadata templates; author-specific fields remain manual.",
         ),
     ]
 

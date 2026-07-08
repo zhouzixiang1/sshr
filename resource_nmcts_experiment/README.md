@@ -139,8 +139,8 @@ payload groups for the source package while excluding terminal submission
 package/audit outputs and the compiled PDF from the digest set to avoid
 self-referential checks.
 The submission-support files live in `submission_package/`: a cover-letter
-template, author-declarations template, upload checklist, and reviewer-concern
-brief.  These files are ready to use at upload time, but fields marked
+template, author-declarations template, upload checklist, reviewer-concern
+brief, and target-venue brief.  These files are ready to use at upload time, but fields marked
 `AUTHOR INPUT REQUIRED` must be completed by the author because funding,
 affiliations, competing interests, and final archive links cannot be inferred
 from experiment artifacts.
@@ -157,6 +157,9 @@ intake template is `submission_package/submission_metadata_template.json`;
 copy it to `submission_package/submission_metadata.json`, fill every
 `AUTHOR INPUT REQUIRED` value, and rerun the rebuild script.  The filled file
 is ignored by Git to avoid accidental commits of author-private metadata.
+The venue-selection helper `submission_package/target_venue_brief.md` records
+the current venue-fit shortlist and should be used before filling the target
+venue fields in `submission_metadata.json`.
 The goal-completion audit is materialized by
 `analyze_goal_completion_audit.py`, which writes
 `results/summary_goal_completion_audit.csv`,

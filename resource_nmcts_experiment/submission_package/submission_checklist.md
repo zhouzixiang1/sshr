@@ -4,6 +4,7 @@ Use this checklist immediately before uploading the manuscript.
 
 ## Required Author Input
 
+- AUTHOR INPUT REQUIRED: Choose the target venue using `submission_package/target_venue_brief.md` as a planning aid, then copy the final choice into `submission_package/submission_metadata.json`.
 - AUTHOR INPUT REQUIRED: Copy `submission_package/submission_metadata_template.json` to `submission_package/submission_metadata.json` and fill every `AUTHOR INPUT REQUIRED` value.
 - AUTHOR INPUT REQUIRED: Confirm author order, affiliations, ORCID IDs, and corresponding author details.
 - AUTHOR INPUT REQUIRED: Complete funding, acknowledgements, author contributions, and competing-interest statements.
@@ -28,6 +29,7 @@ Use this checklist immediately before uploading the manuscript.
 - Readiness audit: `results/analysis_submission_readiness_audit.md`
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
 - Goal-completion audit: `results/analysis_goal_completion_audit.md`
+- Target venue brief: `submission_package/target_venue_brief.md`
 - Structured metadata template: `submission_package/submission_metadata_template.json`
 - Traceability audit: `results/analysis_submission_traceability_audit.md`
 - Archive manifest: `results/analysis_submission_archive_manifest.md`
