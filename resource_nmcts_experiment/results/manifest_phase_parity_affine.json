@@ -1,0 +1,22 @@
+{
+  "input": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_traditional_resource.csv",
+  "anf_baseline": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_phase_parity_anf.csv",
+  "fprm_baseline": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_phase_parity_fprm.csv",
+  "revkit": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_revkit_oracle_synth_traditional.csv",
+  "raw_out": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_phase_parity_affine.csv",
+  "summary": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/summary_phase_parity_affine.csv",
+  "analysis": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/analysis_phase_parity_affine.md",
+  "latex_out": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/paper_latex/tables/phase_parity_affine.tex",
+  "max_n": 6,
+  "seed": 20260708,
+  "transform_budget": 32,
+  "rank_metrics": [
+    "score",
+    "score_rz1",
+    "score_synth_tperrz30"
+  ],
+  "rows": 531,
+  "verified_rows": 531,
+  "elapsed_s": 54.15105676651001,
+  "claim_boundary": "Bounded affine-linear plus fixed-polarity phase-oracle search; logic-layer Rz resource model; not hardware mapping."
+}

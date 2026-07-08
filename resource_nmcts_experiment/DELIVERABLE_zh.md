@@ -127,7 +127,41 @@
 - 结果是正向但幅度小。相对 phase-parity ANF，`T/Rz=30` 目标虽然 59/0/118 不退化，但平均只降低 0.47%。这不足以作为最终论文的主要创新结果。
 - 该结果应写成“phase/Rz-aware search 的第一个可验证极性维度”，并把下一步目标设为 learned/optimized phase search，例如选择极性、线性变量变换、parity gadget 合并和旋转谱代价的联合搜索。
 
-### 2.0d n=24 完整 truth-table bridge
+### 2.0d Affine-FPRM phase-parity search
+
+本轮把 phase/Rz 搜索从“只枚举 FPRM 输入极性”推进为“有界可逆线性预条件 + FPRM 极性”的联合代数搜索。新增 `run_phase_parity_affine_search.py`：对每个候选可逆 GF(2) 线性变换 `B`，先构造 `h(y)=f(B^{-1}y)`，再枚举极性 `p` 得到 `g(z)=h(z xor p)` 的 phase polynomial；选中的 parity mask 通过 `m_x=B^T m_z` 翻译回原变量，如果 `m_z dot p=1` 则旋转角取反并把原角度并入全局相位。该变换不作为硬件 mapping 或 CNOT wrap 计入，而是逻辑层 phase-polynomial 代数重写。
+
+主要产物：
+
+- `run_phase_parity_affine_search.py`
+- `results/raw_phase_parity_affine.csv`
+- `results/summary_phase_parity_affine.csv`
+- `results/analysis_phase_parity_affine.md`
+- `results/manifest_phase_parity_affine.json`
+- `paper_latex/tables/phase_parity_affine.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v35.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v35.pdf`
+
+核心结果：
+
+| 项目 | 口径 | 结果 | 平均变化或均值 |
+|---|---|---:|---:|
+| Affine-FPRM phase search 验证 | 3 rank metrics × 177 functions | 531/531 verified | up to global phase |
+| Affine-FPRM-`T/Rz=30` vs fixed-polarity FPRM | synthesis proxy | 81/0/96 | -2.51% |
+| Affine-FPRM-`T/Rz=30` vs phase-parity ANF | synthesis proxy | 85/0/92 | -2.98% |
+| Affine-FPRM-`T/Rz=30` vs RevKit | synthesis proxy | 177/0/0 | -65.50% |
+| Affine-FPRM-score vs fixed-polarity FPRM | lower-bound score | 80/0/97 | -5.77% |
+| Affine-FPRM non-Clifford Rz vs fixed-polarity FPRM | count | 20/0/157 | -0.73% |
+| Affine-FPRM-`T/Rz=30` 资源均值 | 177 | - | score 8.92 / CNOT 85.32 / depth 111.46 / total Rz 26.14 / non-Clifford Rz 21.45 |
+
+解释边界：
+
+- identity transform 被纳入搜索，因此在同一 rank metric 下 Affine-FPRM 相对 fixed-polarity FPRM 不退化。
+- `T/Rz=30` 目标有 81/177 个函数选择非 identity 线性变换，说明收益来自 parity gadget 合并结构改变，而不是单纯 tie-breaking。
+- 该结果比 fixed-polarity phase search 明显强，但仍是逻辑层 phase-oracle emitter：没有输出近似旋转序列，没有进行硬件 mapping，也没有声明 phase/Rz 全局最优。
+- 论文中应把它写成当前 phase/Rz 分支最强证据：phase 搜索空间已经从 polarity 扩展到 affine algebraic preconditioning，下一步才是 learned/optimized phase policy 和 rotation-sequence audit。
+
+### 2.0e n=24 完整 truth-table bridge
 
 本轮把高维完整验证边界从 `n=23` 推进到 `n=24`。新增结果复用 `run_truth_bridge_terms.py`，并依赖当前 `anf_utils.truth_table_from_anf` 的位掩码 truth-table evaluator：对每个变量预先构造赋值位集，单项式用大整数 AND 计算，完整 ANF 用 XOR 合并。该实现已与原 zeta 实现做小规模随机等价测试；在 `n=24` bridge 首样本上，truth-table 构造从中断前 10 min 未完成降到约 0.10 s。
 
@@ -160,7 +194,7 @@
 - 该结果提升的是验证 harness 和高维语义可信度，不改变 Resource-NMCTS 搜索算法本身。
 - 该轮结束时仍不能写成 `n=25--40` 已完整枚举；当前状态见下一节 `n=25` bridge。
 
-### 2.0e n=25 完整 truth-table bridge 与 action-width 消融
+### 2.0f n=25 完整 truth-table bridge 与 action-width 消融
 
 本轮在 `n=24` 的基础上继续推进完整 oracle 验证边界。`run_truth_bridge_terms.py` 直接扩展到 `n=25`，仍采用位掩码 truth-table evaluator；同时补充 action-width 6/12/24 的 screen-scale probe，用来判断“继续加宽候选集合”是否是高维收益来源。
 
@@ -1451,6 +1485,7 @@ Git 状态：
 17. Large frontier policy 进一步压缩质量 gap：held-out 相对 oracle frontier 从旧模型 +0.80% 降到 +0.04%；独立 seed `n=24,28,32,40` 相对旧 policy 为 17/0/79、平均 score -0.49%，相对 all-depth 仅 +0.10% 且节省 53.50% 时间；代价是比旧 policy 更慢。
 18. Cost-aware frontier policy 给出更符合“资源约束”的快速质量模式：独立 seed `n=24,28,32,40` 相对 fixed depth-2 仍为 56/0/40、平均 score -1.39%，但相对 depth-2 的 plan time 增幅为 +170.03%，显著低于 large policy 的 +563.80%；在 n=23 bridge 上相对 large policy 节省 56.29% plan time 和 12.62% lifetime area，代价是 score +0.92%。
 19. `n=21,22,23` 完整 truth-table bridge 加 large-policy 与 cost-aware `n=23` rerun 显示：300/300 个方法行同时通过完整 truth-table oracle 验证、ANF plan 符号验证和 emitted-circuit ANF 符号验证；该结果把完整验证边界从 n<=20 主实验推进到 n>20 的桥接切片。
+20. phase/Rz 分支已经从 RevKit 成本敏感性推进到可验证内部 emitter 和 Affine-FPRM 搜索：phase-parity ANF、fixed-polarity FPRM 与 Affine-FPRM 三组 selected rows 均为 531/531 或 177/177 up-to-global-phase 验证通过；Affine-FPRM 在 `T/Rz=30` 口径下相对 fixed-polarity FPRM 为 81/0/96、平均 score -2.51%，相对 phase-parity ANF 为 85/0/92、平均 score -2.98%，相对 RevKit 为 177/0/0、平均 score -65.50%。
 
 不应写的主张：
 
@@ -1468,8 +1503,9 @@ Git 状态：
 当前已经完成第一版“搜索贡献分解”，并新增了 `search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、`highdim_root_action_teacher` 和 `highdim_guard_upgrade` 等 dedicated ablation/diagnostic。投稿前仍建议继续补强：
 
 1. 高维 neural guidance 仍需继续改进；当前 pairwise-wide 版本已经把 n=16 full synthesis 推进到 10/0/14、-0.18%，但真正更明显的新收益来自 Boolean-ring linear factor。下一步应把 neural ranker 从“排序旧 pair action”升级为“选择 Boolean-ring factor / recursive depth / polarity 的策略网络”，否则 AI 贡献仍弱于手工结构扩展。
-2. 小规模 exact/exhaustive oracle slice 已完成 bounded FPRM-DP 和 exact XAG 乘法复杂度版本；如果继续加强，可以再补一个更接近全局 reversible circuit 的 exact/SMT/SAT 小规模证书。
-3. 继续补官方 ROS/mockturtle/RevKit 或其他外部 reversible-toolchain 对比，减少“proxy 式 ABC/BDD/LUT baseline”的审稿风险；当前已有 ROS-style LUT proxy，但 readiness 审计显示 mockturtle/RevKit 尚未安装。
+2. phase/Rz 分支需要继续从 Affine-FPRM 的 bounded algebraic search 推进到 learned/optimized phase policy，并补 rotation-sequence audit；当前结果已经明显强于 polarity-only search，但还不能声明 phase/Rz 全局最优。
+3. 小规模 exact/exhaustive oracle slice 已完成 bounded FPRM-DP 和 exact XAG 乘法复杂度版本；如果继续加强，可以再补一个更接近全局 reversible circuit 的 exact/SMT/SAT 小规模证书。
+4. 继续补官方 ROS 或 legacy RevKit/CirKit 等外部 reversible-toolchain 对比，减少“proxy 式 ABC/BDD/LUT baseline”的审稿风险；当前已有 ROS-style LUT proxy、official-header mockturtle probe 和 RevKit Python API baseline，但官方 ROS 与 legacy RevKit/CirKit CLI 仍未完整复现。
 
 已完成/待补强状态：
 
@@ -1498,6 +1534,7 @@ Git 状态：
 | action-width probe | n=20/28/40，每个宽度 72 个项集 | width 6/12/24 各 504/504 plan 与 emitted-circuit 符号验证通过；单纯加宽不改善默认 score 结论，时间显著上升 | 新增负向消融，支持默认 width 6 |
 | schedule proxy | 96 个 n=24/28/32/40 项集 + 30 个 n=21/22/23 bridge/rerun 函数 | frontier policy vs depth-2：项集 T-depth proxy 40/0/56、-1.85%，large n=23 vs old policy 为 1/0/5、-0.45% T-depth proxy；cost n=23 vs large 为 time -56.29%、lifetime -12.62% | 新增逻辑层后端相关指标，非硬件 mapping |
 | ROS-style LUT proxy | 309 个 n=3..6/14/15/16/18 函数 | 927/927 K-sweep truth-table 检查通过；best-K vs fixed K=4 为 219/0/90、-18.12%；Resource vs proxy 为 309/0/0、-83.77% | 新增更强 LUT proxy，但不是官方 ROS 复现 |
+| Affine-FPRM phase search | n<=6 traditional, 177 个函数 | 531/531 selected rows up-to-global-phase 验证通过；`T/Rz=30` vs fixed-polarity FPRM 为 81/0/96、-2.51%；vs phase-parity ANF 为 85/0/92、-2.98%；vs RevKit 为 177/0/0、-65.50% | 当前最强 phase/Rz 搜索证据，仍非旋转序列级综合 |
 | highdim wide-fast guard | 12 个 n=14 random ANF | wide vs Resource 为 0/0/12，运行时间 +59.80% | 已有但属负向诊断 |
 | exact FPRM-DP | n<=4 traditional | Resource vs exact FPRM-DP 51/3/18，-12.18%；Pareto vs exact FPRM-DP 51/0/21，-12.20% | 已有但模型受限 |
 | exact XAG MC | n<=4 traditional | Resource/Pareto 达到 T 下界 12/72，平均 T gap +53.01%；ESOP 为 +120.14%，SSHR-I-T 为 +143.06% | 已有全局 T 下界 |
@@ -1511,4 +1548,4 @@ Git 状态：
 
 但是投稿前还需要继续补强“AI 搜索本身带来的贡献”这一点。否则文章容易被评价为一组 FPRM/ESOP 工程启发的组合，而不是强化学习与 MCTS 方法论文。
 
-本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、pairwise-wide n=16 full synthesis、Boolean-ring linear factor、schedule proxy、n=23 完整 truth-table bridge、ROS-style LUT proxy、large frontier policy 和 cost-aware frontier policy 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照、高维 pairwise-wide root-action ranker、Boolean-ring factor 扩展、emitted-circuit 层 T-depth/辅助生命周期 trade-off、n=21/22/23 加 large/cost n=23 rerun 共 300/300 方法行的完整 oracle 验证、large frontier policy 相对旧 policy 的质量提升、cost-aware frontier policy 的快速质量折中，以及相对更强 LUT proxy 的 309/0/0 score 优势。不过官方 ROS/RevKit/mockturtle 复现和真实后端 mapping 仍然缺失，所以目标还不能判定完成。
+本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、pairwise-wide n=16 full synthesis、Boolean-ring linear factor、schedule proxy、n=23/24/25 完整 truth-table bridge、ROS-style LUT proxy、large frontier policy、cost-aware frontier policy 和 Affine-FPRM phase search 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照、高维 pairwise-wide root-action ranker、Boolean-ring factor 扩展、emitted-circuit 层 T-depth/辅助生命周期 trade-off、n=21/22/23/24/25 共 420/420 方法行的完整 oracle 验证、large frontier policy 相对旧 policy 的质量提升、cost-aware frontier policy 的快速质量折中、相对更强 LUT proxy 的 309/0/0 score 优势，以及 Affine-FPRM 相对 fixed-polarity FPRM 的 81/0/96 phase-search 增益。不过官方 ROS 与 legacy RevKit/CirKit 完整复现、learned phase/Rz policy、以及更强的投稿级图表组织仍需继续推进，所以目标还不能判定完成。

@@ -38,10 +38,20 @@ Latest phase/Rz progress:
   rank metrics.  The `T/Rz=30` objective chooses nonzero polarity on 59/177
   functions and improves over phase-parity ANF by 59/0/118, mean -0.47%; it
   remains 177/0/0 vs RevKit under the same proxy, mean -65.16%.
+- `run_phase_parity_affine_search.py` extends the phase search with bounded
+  invertible linear preconditioning before the FPRM polarity sweep.  The
+  selected parity polynomial is translated back to original input masks, so
+  this is still a logic-layer algebraic rewrite rather than hardware mapping.
+  It verifies 531/531 selected rows.  Under the `T/Rz=30` objective,
+  Affine-FPRM chooses a nonidentity transform on 81/177 functions and improves
+  over fixed-polarity FPRM by 81/0/96, mean -2.51%; versus phase-parity ANF it
+  is 85/0/92, mean -2.98%; versus RevKit under the same proxy it is 177/0/0,
+  mean -65.50%.
 - This is useful evidence that phase/Rz can be handled as a search problem, but
-  not a solved phase/Rz method: the average gain over ANF is still small, so the
-  next target is learned or optimized phase/Rz-aware search plus actual
-  rotation-synthesis sequence auditing.
+  not a solved phase/Rz method: affine preconditioning gives a stronger and
+  non-degrading search dimension, but the next target is still learned or
+  optimized phase/Rz-aware search plus actual rotation-synthesis sequence
+  auditing.
 
 Latest high-dimensional verification progress:
 
@@ -198,6 +208,7 @@ cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json resul
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_rz_synthesis_cost.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_phase_parity_baseline.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_phase_parity_fprm_search.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_phase_parity_affine_search.py --max-n 6 --transform-budget 32
 ```
 
 The RevKit command is a real Python API baseline (`oracle_synth`) on complete
@@ -253,6 +264,20 @@ best lower-bound polarity improves over phase-parity ANF by 59/0/118 with mean
 score -3.98%; the `T/Rz=30` objective improves by 59/0/118 with mean -0.47%.
 The result should be reported as a real but modest search gain, not as the
 final phase/Rz-aware method.
+
+`run_phase_parity_affine_search.py` strengthens this step by searching bounded
+invertible linear transforms before the FPRM polarity sweep.  For a transform
+`B`, it synthesizes `h(y)=f(B^{-1}y)` and `g(z)=h(z xor p)`, then maps each
+selected parity mask back to the original variables by `m_x=B^T m_z` and flips
+the rotation sign when `m_z dot p=1`.  The identity transform is included, so
+Affine-FPRM is non-degrading relative to fixed-polarity FPRM under the same
+rank metric.  The run verifies 531/531 selected rows; under `T/Rz=30`,
+nonidentity transforms are selected on 81/177 functions and the method improves
+over fixed-polarity FPRM by 81/0/96 with mean score -2.51%, over phase-parity
+ANF by 85/0/92 with mean score -2.98%, and over RevKit by 177/0/0 with mean
+score -65.50%.  This moves the phase/Rz branch from polarity-only search to
+affine algebraic preconditioning, while remaining a logic-layer phase-oracle
+emitter with no approximate rotation sequences or hardware mapping.
 
 Current presets:
 
