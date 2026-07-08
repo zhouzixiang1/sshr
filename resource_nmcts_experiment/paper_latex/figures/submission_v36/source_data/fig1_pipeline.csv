@@ -1,0 +1,8 @@
+step,module,claim
+1,Input,Truth table or ANF terms
+2,State,ANF/FPRM term set
+3,Actions,"Boolean-ring, affine, parity factors"
+4,Search,Neural prior + MCTS + frontier policy
+5,Selection,Guarded Pareto portfolio
+6,Output,Logic-layer reversible oracle
+7,Verification,"Plan, circuit, and truth-table checks"

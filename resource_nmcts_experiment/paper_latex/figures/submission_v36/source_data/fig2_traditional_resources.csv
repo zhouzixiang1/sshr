@@ -1,0 +1,31 @@
+method,label,metric,functions,mean
+direct_anf,Direct ANF,T,177,184.090395480226
+direct_anf,Direct ANF,CNOT,177,134.19209039548022
+direct_anf,Direct ANF,depth,177,134.6497175141243
+direct_anf,Direct ANF,score,177,194.28759887005654
+direct_anf,Direct ANF,peak_ancilla,177,1.3276836158192091
+and_direct_anf,AND-direct,T,177,100.99435028248588
+and_direct_anf,AND-direct,CNOT,177,166.47457627118644
+and_direct_anf,AND-direct,depth,177,166.9322033898305
+and_direct_anf,AND-direct,score,177,115.16697740112984
+and_direct_anf,AND-direct,peak_ancilla,177,2.175141242937853
+and_esop_milp,ESOP-MILP,T,177,83.59322033898304
+and_esop_milp,ESOP-MILP,CNOT,177,133.5084745762712
+and_esop_milp,ESOP-MILP,depth,177,159.5593220338983
+and_esop_milp,ESOP-MILP,score,177,96.73067796610171
+and_esop_milp,ESOP-MILP,peak_ancilla,177,2.3220338983050848
+sshr_h,SSHR-H,T,177,81.03954802259886
+sshr_h,SSHR-H,CNOT,177,67.55932203389831
+sshr_h,SSHR-H,depth,177,88.70056497175142
+sshr_h,SSHR-H,score,177,88.19146892655365
+sshr_h,SSHR-H,peak_ancilla,177,1.3559322033898304
+and_resource_nmcts,Resource,T,177,43.909604519774014
+and_resource_nmcts,Resource,CNOT,177,89.85310734463278
+and_resource_nmcts,Resource,depth,177,94.50847457627118
+and_resource_nmcts,Resource,score,177,53.21581920903955
+and_resource_nmcts,Resource,peak_ancilla,177,1.92090395480226
+and_pareto_resource_nmcts,Pareto-Resource,T,177,40.429378531073446
+and_pareto_resource_nmcts,Pareto-Resource,CNOT,177,83.03954802259886
+and_pareto_resource_nmcts,Pareto-Resource,depth,177,88.0
+and_pareto_resource_nmcts,Pareto-Resource,score,177,49.55649717514123
+and_pareto_resource_nmcts,Pareto-Resource,peak_ancilla,177,2.0282485875706215

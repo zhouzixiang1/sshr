@@ -1,0 +1,8 @@
+comparison,baseline,metric,items,wins,losses,ties,mean_relative_pct
+Affine vs fixed FPRM,phase_parity_fprm_opt_tperrz30,score_synth_tperrz30,177,81,0,96,-2.5117931418424133
+Affine vs ANF,phase_parity_anf,score_synth_tperrz30,177,85,0,92,-2.978783409442098
+Affine vs RevKit,external_revkit_oracle_synth,score_synth_tperrz30,177,177,0,0,-65.49827211340516
+Affine-score vs FPRM,phase_parity_fprm_opt_score,score,177,80,0,97,-5.772748790917817
+non-Clifford Rz,phase_parity_fprm_opt_tperrz30,rz_non_clifford,177,20,0,157,-0.7317586248347158
+nonidentity transform selections,metadata,count,177,81,0,96,45.76271186440678
+nonzero polarity selections,metadata,count,177,43,0,134,24.293785310734464

@@ -1,0 +1,8 @@
+target,baseline,metric,wins,losses,ties,mean_relative_pct
+and_pareto_resource_nmcts,Direct ANF,score,172,1,4,-67.8
+and_pareto_resource_nmcts,ESOP beam,score,174,0,3,-36.09
+and_pareto_resource_nmcts,ESOP-MILP,score,167,3,7,-29.84
+and_pareto_resource_nmcts,SSHR-H (T),T,173,0,4,-47.93
+and_pareto_resource_nmcts,ROS-style LUT proxy,score,309,0,0,-84.2694563643699
+and_pareto_resource_nmcts,mockturtle XAG n<=6,score,166,11,0,-31.499030566816323
+and_pareto_resource_nmcts,mockturtle XAG n=14,score,64,0,0,-91.48727332722439
