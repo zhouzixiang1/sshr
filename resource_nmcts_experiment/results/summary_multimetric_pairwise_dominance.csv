@@ -1,0 +1,10 @@
+baseline,pairs,target_dominates,baseline_dominates,incomparable,equal,score_wins,score_losses,score_ties
+Direct ANF,177,69,1,103,4,172,1,4
+ESOP beam,177,165,0,9,3,174,0,3
+ESOP-MILP,177,123,2,45,7,167,3,7
+SSHR-H,177,33,4,140,0,173,4,0
+SSHR-I CNOT,177,9,3,165,0,173,4,0
+ABC-XAG,177,33,0,144,0,177,0,0
+mockturtle XAG,177,11,0,166,0,166,11,0
+CirKit AIG/MC,177,21,0,156,0,177,0,0
+RevKit CLI exact oracle,177,3,0,170,4,173,0,4

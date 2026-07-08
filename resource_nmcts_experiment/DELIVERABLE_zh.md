@@ -44,6 +44,17 @@
 
 该分析直接从 correct、non-skipped 的 raw CSV 行按 item name 重算核心 score 对比，给出胜/负/平、平均相对变化、中位相对变化和 two-sided exact sign test。核心现象是：传统、外部工具链和高维 root-beam/fast-pair 对比的中位数变化也为负，说明主要优势不是少数 outlier 拉动；但 `n=16`、`n=18` 高维内部 guard 的幅度明显小于外部工具链 probe，应写成稳定小幅增益而不是大幅碾压。
 
+本轮还补充了 raw multi-resource dominance 层，避免把 weighted score 优势误写成所有资源维度的全面支配：
+
+- `analyze_multimetric_pareto_tradeoff.py`
+- `results/summary_multimetric_pairwise_dominance.csv`
+- `results/summary_multimetric_nondominated.csv`
+- `results/analysis_multimetric_pareto_tradeoff.md`
+- `paper_latex/tables/multimetric_pairwise_dominance.tex`
+- `paper_latex/tables/multimetric_nondominated.tex`
+
+该分析只用 T-count、CNOT、depth、peak ancilla 判断 Pareto 支配，不把 weighted score 放进支配谓词。核心结果是：Pareto-Resource-NMCTS 在 12-method `n<=6` 方法池中 170/177 个函数非支配；它对 ESOP beam 是 165/0/9/3（目标支配/基线支配/不可比/相同），对 ESOP-MILP 是 123/2/45/7。但对 SSHR-H、SSHR-I CNOT、mockturtle、CirKit、RevKit CLI 多数行是不可比，这反而更适合投稿：说明本文的优势是 T-count 和 weighted-score 方向的资源搜索优势，同时承认 SSHR 的 CNOT、CirKit 的 depth、RevKit 的 line-count 等真实 trade-off。
+
 ## 2. 当前已完成内容
 
 ### 2.0a mockturtle official-header XAG probe

@@ -427,6 +427,47 @@ a two-sided exact sign test over wins and losses, ignoring ties.}
 \input{tables/paired_statistical_evidence}
 \end{table}
 
+\subsection{Raw multi-resource dominance}
+
+Because Eq.~\eqref{eq:score} is only a ranking objective, we also test
+dominance without using the weighted score.  A method is said to dominate
+another row only if it is no worse in T-count, CNOT count, logical depth, and
+peak ancilla, and is strictly better in at least one of them.  Table
+\ref{tab:multimetric-dominance} shows the resulting four-resource dominance
+counts for Pareto-\method{} on the traditional slice.  The method strongly
+dominates ESOP beam and many ESOP-MILP rows, but most comparisons against
+SSHR, CirKit, mockturtle, and RevKit are incomparable.  This confirms that
+those baselines occupy real CNOT, depth, or line-count tradeoff points even
+when their weighted scores are worse.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.06}
+\caption{Raw four-resource dominance of Pareto-\method{} on $n\leq6$
+functions.  Dominance uses only T-count, CNOT count, logical depth, and peak
+ancilla; weighted score is not part of the predicate.}
+\label{tab:multimetric-dominance}
+\input{tables/multimetric_pairwise_dominance}
+\end{table}
+
+The same predicate can be applied to the whole method pool.  Table
+\ref{tab:multimetric-nondominated} counts how often each method remains
+non-dominated by any other listed method on the same function.  Pareto-\method{}
+is non-dominated on 170/177 functions, while SSHR-I, mockturtle, and RevKit
+remain frequently non-dominated because they keep distinct resource tradeoffs.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.06}
+\caption{Non-dominated counts in the 12-method $n\leq6$ pool.}
+\label{tab:multimetric-nondominated}
+\input{tables/multimetric_nondominated}
+\end{table}
+
 \subsection{Search contribution and ablation}
 
 Table~\ref{tab:contribution} consolidates the contribution analysis.  The

@@ -35,6 +35,12 @@ The paired statistical layer is materialized by
 comparisons from usable raw CSV rows, reports mean and median relative effects,
 and adds an exact two-sided sign test for the paper table
 `paper_latex/tables/paired_statistical_evidence.tex`.
+The raw multi-resource trade-off layer is materialized by
+`analyze_multimetric_pareto_tradeoff.py`, which tests dominance using only
+T-count, CNOT count, logical depth, and peak ancilla.  It writes
+`results/analysis_multimetric_pareto_tradeoff.md` plus the paper tables
+`paper_latex/tables/multimetric_pairwise_dominance.tex` and
+`paper_latex/tables/multimetric_nondominated.tex`.
 
 Latest external-toolchain progress:
 
