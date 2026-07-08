@@ -50,6 +50,7 @@ echo "==> Building English submission PDF"
 )
 
 run_py make_submission_payload_archive.py
+run_py analyze_submission_package_verifier.py
 run_py analyze_submission_readiness_audit.py
 
 echo "==> Submission package rebuilt"

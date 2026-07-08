@@ -76,6 +76,7 @@ Run these from `resource_nmcts_experiment/`:
 
 ```bash
 git diff --check
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
 pdfinfo paper_latex/resource_nmcts_submission_v1.pdf | sed -n '1,20p'
 rg -n "Warning|Overfull|Underfull|LaTeX Error|Undefined|Rerun" \
   paper_latex/resource_nmcts_submission_v1.log
@@ -113,6 +114,8 @@ layout warnings.
   `results/analysis_submission_traceability_audit.md`
 - Payload manifest:
   `results/analysis_submission_payload_archive.md`
+- Terminal package verifier:
+  `results/analysis_submission_package_verifier.md`
 
 ## Raw Rerun Entry Points
 

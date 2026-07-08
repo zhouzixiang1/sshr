@@ -28,6 +28,9 @@ PAYLOAD_SHA256 = SUBMISSION_PACKAGE / "dist" / "resource_nmcts_submission_payloa
 PAYLOAD_ANALYSIS = RESULTS / "analysis_submission_payload_archive.md"
 PAYLOAD_SUMMARY = RESULTS / "summary_submission_payload_archive.csv"
 PAYLOAD_MANIFEST = RESULTS / "manifest_submission_payload_archive.json"
+VERIFIER_ANALYSIS = RESULTS / "analysis_submission_package_verifier.md"
+VERIFIER_SUMMARY = RESULTS / "summary_submission_package_verifier.csv"
+VERIFIER_MANIFEST = RESULTS / "manifest_submission_package_verifier.json"
 METADATA_ANALYSIS = RESULTS / "analysis_submission_metadata_audit.md"
 METADATA_SUMMARY = RESULTS / "summary_submission_metadata_audit.csv"
 METADATA_MANIFEST = RESULTS / "manifest_submission_metadata_audit.json"
@@ -213,6 +216,14 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": "Deterministic submission payload tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.",
             "next_action": "Rerun make_submission_payload_archive.py after adding or removing upload payload files.",
+        },
+        {
+            "item": "Terminal package verifier",
+            "status": "pass"
+            if VERIFIER_ANALYSIS.exists() and VERIFIER_SUMMARY.exists() and VERIFIER_MANIFEST.exists()
+            else "needs revision",
+            "evidence": "Read-only verifier checks PDF availability, payload SHA consistency, readiness state, raw registry coverage, and LaTeX log boundaries.",
+            "next_action": "Run analyze_submission_package_verifier.py after rebuilding the payload archive.",
         },
         {
             "item": "Derived package rebuild command",

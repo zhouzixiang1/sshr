@@ -37,6 +37,9 @@ SELF_OUTPUTS = {
 TERMINAL_PACKAGE_OUTPUTS = {
     RESULTS / "summary_submission_readiness_audit.csv",
     RESULTS / "analysis_submission_readiness_audit.md",
+    RESULTS / "summary_submission_package_verifier.csv",
+    RESULTS / "analysis_submission_package_verifier.md",
+    RESULTS / "manifest_submission_package_verifier.json",
     RESULTS / "summary_submission_traceability_audit.csv",
     RESULTS / "analysis_submission_traceability_audit.md",
     RESULTS / "manifest_submission_traceability_audit.json",

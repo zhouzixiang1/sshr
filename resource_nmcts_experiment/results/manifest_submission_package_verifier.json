@@ -1,0 +1,13 @@
+{
+  "outputs": {
+    "analysis": "results/analysis_submission_package_verifier.md",
+    "manifest": "results/manifest_submission_package_verifier.json",
+    "summary": "results/summary_submission_package_verifier.csv"
+  },
+  "python": "3.11.15",
+  "rows": 6,
+  "script": "analyze_submission_package_verifier.py",
+  "status_counts": {
+    "pass": 6
+  }
+}
