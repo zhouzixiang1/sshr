@@ -348,7 +348,16 @@ def write_markdown(rows: list[dict[str, str]], path: Path) -> None:
 
 
 def tex_escape(text: str) -> str:
-    return text.replace("_", r"\_").replace("%", r"\%")
+    escaped = text.replace("_", r"\_").replace("%", r"\%")
+    replacements = [
+        ("n<=6", r"$n\leq6$"),
+        ("n=14", r"$n=14$"),
+        ("n=16", r"$n=16$"),
+        ("n=18", r"$n=18$"),
+    ]
+    for old, new in replacements:
+        escaped = escaped.replace(old, new)
+    return escaped
 
 
 def write_latex(rows: list[dict[str, str]], path: Path) -> None:
@@ -359,7 +368,7 @@ def write_latex(rows: list[dict[str, str]], path: Path) -> None:
         for baseline, label in spec.comparisons
     }
     lines = [
-        r"\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}Xrrrr}",
+        r"\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}}",
         r"\toprule",
         r"Comparison & Paper score & T-only & CNOT-depth & Ancilla-tight \\",
         r"\midrule",

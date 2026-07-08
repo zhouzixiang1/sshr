@@ -432,6 +432,29 @@ on validation data and applied unchanged to scale and truth-bridge rows.}
 \input{tables/stage_gated_frontier}
 \end{table}
 
+\subsection{Score-weight robustness}
+
+The active score in Eq.~\eqref{eq:score} is intentionally a logical-resource
+ranking objective rather than a physical cost model.  To check that the main
+comparisons are not artifacts of one coefficient choice, we recompute scores
+post hoc on verified rows under T-only, CNOT/depth-heavy, and ancilla-tight
+profiles.  Table~\ref{tab:weight-robustness} shows that the small-function
+advantages over ESOP and SSHR-H and the high-dimensional advantages over
+root-beam or fast-pair guards survive these alternative profiles, while the
+CNOT/depth and ancilla-tight profiles expose the expected narrower margins.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.08}
+\caption{Post-hoc robustness to alternative logical-resource weights.  Each
+cell reports score win/loss/tie counts and mean relative score change; negative
+values favor \method{} or Pareto-\method{}.}
+\label{tab:weight-robustness}
+\input{tables/weight_robustness_compact}
+\end{table}
+
 \subsection{Phase/Rz search}
 
 RevKit Python \texttt{oracle\_synth} returns on all 177 traditional functions,
