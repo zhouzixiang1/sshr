@@ -46,11 +46,22 @@ def contains_all(text: str, needles: list[str]) -> bool:
     return all(needle in text for needle in needles)
 
 
+def abstract_word_count(text: str) -> int:
+    match = re.search(r"\\begin\{abstract\}(.*?)\\end\{abstract\}", text, flags=re.DOTALL)
+    if not match:
+        return 0
+    abstract = match.group(1)
+    abstract = re.sub(r"\\[a-zA-Z]+(?:\{[^{}]*\})?", " ", abstract)
+    abstract = re.sub(r"[^A-Za-z0-9.%/-]+", " ", abstract)
+    return len([word for word in abstract.split() if word])
+
+
 def build_rows() -> list[dict[str, str]]:
     text = read_text(PAPER)
     pages = pdf_pages(PDF)
     lower = text.lower()
     todo_hits = re.findall(r"\b(?:todo|tbd|placeholder)\b", lower)
+    abstract_words = abstract_word_count(text)
 
     rows = [
         {
@@ -60,6 +71,12 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": "Abstract states logical-layer scope and excludes hardware-mapped/depth-only claims.",
             "next_action": "Keep hardware and mapping claims out of the abstract unless new evidence is added.",
+        },
+        {
+            "item": "Abstract concision",
+            "status": "pass" if 180 <= abstract_words <= 320 else "needs revision",
+            "evidence": f"Abstract word count is {abstract_words}.",
+            "next_action": "Keep the abstract compact; detailed per-baseline numbers belong in Results tables.",
         },
         {
             "item": "Contribution-to-evidence chain",

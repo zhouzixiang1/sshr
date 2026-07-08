@@ -152,7 +152,7 @@
 - `results/summary_submission_readiness_audit.csv`
 - `results/analysis_submission_readiness_audit.md`
 
-当前审计结果为 9 项 pass、1 项 needs author input。已通过项包括 bounded abstract claim、contribution-to-evidence chain、executable method workflow、baseline fairness/scope、reproducibility evidence、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder、compiled PDF。唯一保留项是作者特定的 funding、acknowledgements、competing interests 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
+当前审计结果为 10 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、contribution-to-evidence chain、executable method workflow、baseline fairness/scope、reproducibility evidence、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder、compiled PDF。唯一保留项是作者特定的 funding、acknowledgements、competing interests 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
 
 ## 2. 当前已完成内容
 

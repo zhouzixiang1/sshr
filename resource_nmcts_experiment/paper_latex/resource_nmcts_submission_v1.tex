@@ -42,43 +42,30 @@ Boolean oracle synthesis embeds classical predicates into quantum algorithms,
 but direct algebraic-normal-form constructions can be costly in non-Clifford
 gates, CNOTs, logical depth, and temporary workspace.  We formulate bit-flip
 Boolean oracle synthesis as a resource-constrained search problem over
-\anf{}/\fprm{} term sets and introduce \method{}, a logical-layer synthesis
-framework combining neural action priors, Monte Carlo tree search, Boolean-ring
-linear-factor screening, depth-frontier policies, Pareto archives, and
-baseline-preserving guards.  The method does not use the SSHR parallelotope
-candidate space; SSHR is used only as a CNOT-oriented small-function baseline.
-On 177 traditional functions with $n\leq 6$, Pareto-\method{} reduces mean
-T-count by 72.25\% and mean weighted score by 67.80\% relative to direct
-\anf{} synthesis.  Against ESOP beam, weighted ESOP-MILP, and SSHR-H, its
-score win/loss/tie counts are 174/0/3, 167/3/7, and 173/4/0, respectively.
-External probes strengthen this comparison.  Against a ROS-style LUT proxy over
-309 functions, Pareto-\method{} obtains 309/0/0 score wins with a mean
-84.27\% reduction; line-aware and minimum-ancilla reselections of the same
-verified LUT sweep preserve 309/0/0 score wins with 84.45--85.83\% reductions.
-Against an official-header mockturtle KLUT-to-XAG probe,
-it obtains 166/11/0 wins on the traditional set and 64/0/0 wins on an
-$n=14$ high-dimensional set.  A CirKit 3 AIG/multiplicative-complexity probe
-returns verified rows for 177 traditional and 64 high-dimensional functions;
-Pareto-\method{} wins all score comparisons, with mean reductions of 62.34\%
-and 94.46\%, but loses most depth comparisons.  A legacy RevKit CLI probe
-embeds each function as the exact reversible oracle permutation
-$(x,y)\mapsto(x,y\xor f(x))$ and runs TBS/DBS/RMS synthesis flows.  All 531
-direct flow rows return; against the per-function RevKit best-score portfolio,
-Pareto-\method{} has 173/0/4 score wins and a mean score reduction of 67.28\%,
-but uses more peak ancilla on 169/177 functions.  In the phase-search branch,
-a rank-trained diverse policy exact-scores 512 of 8192 affine candidates per
-held-out $n=6$ function and matches the wide-search mean within 0.01\% under
-the $T/R_z=30$ proxy.  A sparse depth-2/4 frontier exactly matches the measured
-depth-2/3/4 frontier on 186 scale and truth-bridge instances while reducing
-frontier evaluation time by 24.94--28.88\%.  A learned sparse depth-4 gate
-preserves this sparse frontier score on a 144-pair multi-seed $n=24,28,32,40$
-audit while reducing its evaluation time by 13.43\%.  High-dimensional
-correctness is supported by 5640/5640 item-level symbolic runs, 1512/1512 width-probe
-symbolic runs, 531/531 exact phase-search rows, 7611/7611 policy-pruning rows,
-and 400/400 complete \ttable{}-bridge method rows for $n=21$--$25$.  The
-contribution is therefore a verified logical-layer search method with strong
-T-count and weighted-score advantages, not a hardware-mapped or depth-only
-synthesis claim.
+\anf{}/\fprm{} term sets and introduce \method{}, a logical-layer workflow that
+combines neural action priors, Monte Carlo tree search, Boolean-ring actions,
+frontier controllers, Pareto archives, and baseline-preserving guards.  Unlike
+SSHR, the method does not search
+parallelotope candidates; SSHR is used only as a CNOT-oriented small-function
+baseline.  On 177 traditional functions with $n\leq6$, Pareto-\method{}
+reduces mean T-count by 72.25\% and mean weighted score by 67.80\% relative to
+direct \anf{} synthesis, and its score win/loss/tie counts against ESOP beam,
+weighted ESOP-MILP, and SSHR-H are 174/0/3, 167/3/7, and 173/4/0.  External
+probes show corresponding score wins against ROS-style LUT (309/0/0),
+mockturtle (166/11/0 and 64/0/0), CirKit (177/0/0 and 64/0/0), and legacy
+RevKit CLI exact-oracle synthesis (173/0/4).  These comparisons also expose
+the expected tradeoffs: CirKit is often shallower, and RevKit uses fewer
+auxiliary lines on most small functions.  In the phase branch, a rank-trained shortlist
+scores 512 of 8192 affine forms per held-out $n=6$ function and matches the
+wide-search mean within 0.01\% under the $T/R_z=30$ proxy.  For larger term-set
+instances, a sparse depth-2/4 frontier matches the measured depth-2/3/4
+frontier while reducing evaluation time by 24.94--28.88\%, and a learned
+depth-4 gate preserves sparse-frontier score on a 144-pair multi-seed
+$n=24,28,32,40$ audit while saving 13.43\%.  Correctness is supported by
+15,294 symbolic, phase-search, and policy-pruning rows, plus 400/400 complete
+\ttable{}-bridge rows for $n=21$--$25$.  The contribution is a verified
+logical-layer search method with strong T-count and weighted-score advantages,
+not a hardware-mapped, depth-only, or universal-dominance claim.
 \end{abstract}
 
 \section{Introduction}

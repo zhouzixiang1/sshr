@@ -125,11 +125,11 @@ The submission-readiness audit is materialized by
 `analyze_submission_readiness_audit.py`, which writes
 `results/summary_submission_readiness_audit.csv` and
 `results/analysis_submission_readiness_audit.md`.  It checks that the
-submission draft contains bounded abstract claims, contribution/evidence
-mapping, baseline fairness tables, reproducibility evidence, limitations,
-data/code availability, a compiled PDF, and no source TODO markers; it leaves
-funding, acknowledgements, competing interests, and archival links as
-author-specific submission-time items.
+submission draft contains bounded and concise abstract claims,
+contribution/evidence mapping, baseline fairness tables, reproducibility
+evidence, limitations, data/code availability, a compiled PDF, and no source
+TODO markers; it leaves funding, acknowledgements, competing interests, and
+archival links as author-specific submission-time items.
 
 Latest external-toolchain progress:
 
