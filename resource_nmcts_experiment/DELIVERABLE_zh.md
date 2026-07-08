@@ -35,22 +35,25 @@
 - `paper_latex/tables/revkit_oracle_synth_traditional.tex`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v21.tex`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v21.pdf`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v22.tex`
+- `paper_latex_zh/resource_nmcts_zh_manuscript_v22.pdf`
 
 核心结果：
 
 | 对比 | 指标 | 函数数 | 胜/负/平 | 平均变化 |
 |---|---|---:|---:|---:|
-| Resource-NMCTS vs RevKit `oracle_synth` | score | 177 | 6/171/0 | +751.69% |
-| Pareto-Resource-NMCTS vs RevKit `oracle_synth` | score | 177 | 6/171/0 | +711.60% |
-| FPRM polarity archive vs RevKit `oracle_synth` | score | 177 | 4/173/0 | +774.83% |
+| Resource-NMCTS vs RevKit `oracle_synth` | lower-bound score | 177 | 6/171/0 | +751.69% |
+| Pareto-Resource-NMCTS vs RevKit `oracle_synth` | lower-bound score | 177 | 6/171/0 | +711.60% |
+| FPRM polarity archive vs RevKit `oracle_synth` | lower-bound score | 177 | 4/173/0 | +774.83% |
 | SSHR-H vs RevKit `oracle_synth` | CNOT | 177 | 34/141/2 | +34.23% |
-| Resource-NMCTS vs RevKit `oracle_synth` | T-count | 177 | 2/171/4 | +4060.08% |
+| Resource-NMCTS vs RevKit `oracle_synth` | T-like count | 177 | 2/171/4 | +4060.08% |
 
 解释边界：
 
 - 这是一个真实 RevKit Python API baseline，不是 ABC-only 的 ROS-style LUT proxy。
-- RevKit 返回的是 Clifford+T netlist；当前 Resource-NMCTS emitter 是 X/CNOT/MCT bit-flip compute/action/uncompute 路线，两者资源口径不同。
-- 该结果不是坏消息，而是新的强基线：投稿前要么新增 phase-oracle / Clifford+T-aware emitter，要么把论文主张严格限定为 bit-flip oracle 的逻辑层资源综合。
+- RevKit 返回的是 Rz-phase netlist，不是可以直接按 T/Tdg 完整计数的 Clifford+T netlist；171/177 行包含非 Clifford `Rz`，总数 9242，角度除以 pi 的最大分母为 64。
+- 当前 `score` 是 RevKit lower-bound proxy，没有包含非 Clifford rotation synthesis 成本；因此不能写成精确 Clifford+T T-count 对比。
+- 该结果不是坏消息，而是新的强基线：投稿前要么新增 phase/Rz-aware emitter 并处理 rotation synthesis 成本，要么把论文主张严格限定为 bit-flip oracle 的逻辑层资源综合。
 - 当前仍未打通官方 ROS、mockturtle 和 legacy RevKit/CirKit CLI 流程。
 
 ### 2.1 ESOP baseline 对比

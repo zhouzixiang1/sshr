@@ -63,10 +63,12 @@
 - RevKit is an open-source reversible-logic synthesis framework built around
   tweedledum and mockturtle.  The Python API is now installed in the local
   `mcts-qoracle` environment and has been used through `oracle_synth` on the
-  `n <= 6` traditional truth-table benchmark.  The resulting Clifford+T netlist
-  proxy is an adverse baseline for the current X/CNOT/MCT bit-flip emitter, so
-  RevKit should be discussed as a representation-boundary result rather than as
-  a missing tool.  The legacy RevKit/CirKit command-line flow is still not
+  `n <= 6` traditional truth-table benchmark.  The resulting Rz-phase netlist
+  proxy is an adverse lower-bound baseline for the current X/CNOT/MCT bit-flip
+  emitter.  However, 171/177 rows contain non-Clifford Rz rotations, so this
+  must not be described as an exact Clifford+T T-count comparison.  RevKit
+  should be discussed as a representation-boundary result rather than as a
+  missing tool.  The legacy RevKit/CirKit command-line flow is still not
   reproduced locally.
   <https://github.com/msoeken/revkit>
 

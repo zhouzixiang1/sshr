@@ -131,11 +131,14 @@ cp /tmp/resource_nmcts_highdim_no_prior/manifest_highdim_neural_prior.json resul
 
 The RevKit command is a real Python API baseline (`oracle_synth`) on complete
 truth-table rows, not the ABC-only ROS-style LUT proxy.  On the 177 usable
-`n <= 6` traditional functions it succeeds on all rows, but it is an adverse
-baseline under the returned Clifford+T netlist accounting: Resource-NMCTS vs
-RevKit is 6/171/0 on score, with mean score +751.69% and T-count +4060.08%.
-This result should be presented as a representation-boundary finding, not as a
-hardware-mapping claim.
+`n <= 6` traditional functions it succeeds on all rows, but the returned
+Rz-phase netlists are not directly exact Clifford+T: 171/177 rows contain
+non-Clifford `Rz` rotations, with 9242 such rotations in total and maximum
+angle/pi denominator 64.  Resource-NMCTS vs RevKit is therefore a lower-bound
+proxy comparison: 6/171/0 on score, mean score +751.69%, and T-like count
++4060.08%.  This result should be presented as a phase-rotation
+representation-boundary finding, not as a hardware-mapping or exact
+Clifford+T T-count claim.
 
 Current presets:
 

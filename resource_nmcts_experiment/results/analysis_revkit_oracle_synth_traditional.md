@@ -2,11 +2,17 @@
 
 This run uses the installed RevKit Python API (`oracle_synth`) on
 complete truth-table benchmark rows and estimates the returned
-Clifford+T netlist at the logic layer.  It is a real RevKit API
+Rz-phase netlist at the logic layer.  It is a real RevKit API
 baseline, not the ABC-only ROS-style LUT proxy, but it is still not
 hardware mapping and not the legacy CirKit CLI flow.
 
 Rows: 177; usable: 177.
+Exact Clifford+T-supported rows under this audit: 6; rows with non-Clifford Rz rotations: 171.
+Total non-Clifford Rz rotations: 9242; maximum observed denominator in angle/pi: 64.
+
+The pairwise `score` and `T` comparisons below are lower-bound comparisons
+for RevKit whenever `rz_non_clifford > 0`, because the cost of synthesizing
+non-Clifford Rz rotations into Clifford+T is not included.
 
 ## Pairwise Comparisons
 
@@ -58,5 +64,6 @@ Rows: 177; usable: 177.
 ## Boundary
 
 - Correctness is delegated to RevKit `oracle_synth` accepting the exact truth table.
-- The resource model counts Clifford+T netlist gates returned by RevKit; it is not the same MCT-level accounting used by the internal ANF/FPRM emitters.
-- These results should be presented as an external RevKit API baseline, not as a claim about hardware mapping.
+- RevKit `oracle_synth` returns Rz-phase netlists that often contain rotations outside Clifford+T, such as pi/8 or pi/16 multiples.
+- The reported `score` is therefore a lower-bound netlist proxy when `rz_non_clifford > 0`; it must not be described as an exact Clifford+T T-count.
+- These results should be presented as an external RevKit API / phase-rotation boundary, not as a claim about hardware mapping.

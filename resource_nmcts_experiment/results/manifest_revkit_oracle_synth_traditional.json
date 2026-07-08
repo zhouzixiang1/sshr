@@ -4,7 +4,9 @@
   "workers": 8,
   "rows": 177,
   "usable_rows": 177,
-  "elapsed_s": 0.22434306144714355,
+  "ct_supported_rows": 6,
+  "rows_with_non_clifford_rz": 171,
+  "elapsed_s": 0.2210066318511963,
   "method": "external_revkit_oracle_synth",
-  "claim_boundary": "RevKit Python oracle_synth API, Clifford+T netlist proxy, no hardware mapping."
+  "claim_boundary": "RevKit Python oracle_synth API, Rz-phase netlist lower-bound proxy, no hardware mapping."
 }

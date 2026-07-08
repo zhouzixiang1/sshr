@@ -3,12 +3,15 @@
 
 This is the first real RevKit-backed baseline in this project.  It deliberately
 starts with complete truth-table rows (n <= 6 in the traditional benchmark),
-because RevKit's Python API accepts truth tables directly and returns a
-Clifford+T-style netlist.
+because RevKit's Python API accepts truth tables directly and returns an
+Rz-phase netlist.
 
 The resource accounting is a logic-level netlist proxy:
 
 - T counts explicit T/Tdg gates and odd multiples of Rz(pi/4).
+- Non-Clifford Rz angles, e.g. pi/8 or pi/16 rotations, are reported
+  separately.  When such rotations are present, ``score`` is only a lower bound
+  that does not include exact or approximate synthesis cost for those rotations.
 - CNOT counts CX gates.
 - depth is a qubit-conflict parallel layer count over the returned netlist.
 - explicit/peak ancilla is num_qubits - n - 1 when RevKit allocates more than
@@ -28,6 +31,7 @@ import statistics
 import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import dataclass
+from fractions import Fraction
 from pathlib import Path
 from typing import Iterable
 
@@ -38,7 +42,20 @@ THIS_DIR = Path(__file__).resolve().parent
 RESULTS = THIS_DIR / "results"
 TABLES = THIS_DIR / "paper_latex" / "tables"
 
-METRICS = ["T", "CNOT", "depth", "gates", "peak_ancilla", "score"]
+RZ_PROXY_WEIGHTS = [1, 2, 4, 10]
+METRICS = [
+    "T",
+    "phase_ops",
+    "CNOT",
+    "depth",
+    "gates",
+    "peak_ancilla",
+    "score",
+    "score_rz1",
+    "score_rz2",
+    "score_rz4",
+    "score_rz10",
+]
 DEFAULT_TARGETS = [
     "and_resource_nmcts",
     "and_pareto_resource_nmcts",
@@ -98,6 +115,10 @@ def score(row: dict[str, object]) -> float:
     )
 
 
+def score_with_rz_proxy(row: dict[str, object], rz_weight: float) -> float:
+    return score(row) + rz_weight * float(row.get("rz_non_clifford", 0) or 0)
+
+
 def gate_kind(gate) -> str:
     return str(gate.kind).split(".")[-1]
 
@@ -117,19 +138,44 @@ def is_t_angle(angle: float) -> bool:
     return abs(k) % 2 == 1
 
 
+def is_clifford_z_angle(angle: float) -> bool:
+    unit = math.pi / 2.0
+    k = round(angle / unit)
+    return abs(angle - k * unit) <= 1e-5
+
+
+def angle_pi_fraction(angle: float) -> Fraction:
+    return Fraction(float(angle) / math.pi).limit_denominator(4096)
+
+
 def estimate_netlist(circuit, n: int) -> dict[str, int]:
     t_count = 0
     cnot = 0
     gate_count = 0
     line_ready: dict[int, int] = {}
     max_depth = 0
+    rz_total = 0
+    rz_clifford = 0
+    rz_t_like = 0
+    rz_non_clifford = 0
+    rz_max_denominator = 1
     for gate in circuit.gates:
         kind = gate_kind(gate)
         lines = gate_lines(gate)
         if kind in {"t", "t_dagger"}:
             t_count += 1
-        elif kind == "rotation_z" and is_t_angle(float(gate.angle)):
-            t_count += 1
+        elif kind == "rotation_z":
+            rz_total += 1
+            angle = float(gate.angle)
+            fraction = angle_pi_fraction(angle)
+            rz_max_denominator = max(rz_max_denominator, int(fraction.denominator))
+            if is_clifford_z_angle(angle):
+                rz_clifford += 1
+            elif is_t_angle(angle):
+                t_count += 1
+                rz_t_like += 1
+            else:
+                rz_non_clifford += 1
         if kind == "cx":
             cnot += 1
         elif kind == "swap":
@@ -158,6 +204,13 @@ def estimate_netlist(circuit, n: int) -> dict[str, int]:
         "explicit_ancilla": explicit_ancilla,
         "peak_ancilla": explicit_ancilla,
         "n_qubits": num_qubits,
+        "rz_total": rz_total,
+        "rz_clifford": rz_clifford,
+        "rz_t_like": rz_t_like,
+        "rz_non_clifford": rz_non_clifford,
+        "rz_max_denominator": rz_max_denominator,
+        "phase_ops": t_count + rz_non_clifford,
+        "ct_supported": int(rz_non_clifford == 0),
     }
 
 
@@ -185,6 +238,9 @@ def synthesize_task(task: RevKitTask) -> dict[str, object]:
         circuit = oracle_synth(function)
         out: dict[str, object] = {**base, **estimate_netlist(circuit, task.n)}
         out["score"] = score(out)
+        out["score_lower_bound"] = out["score"]
+        for weight in RZ_PROXY_WEIGHTS:
+            out[f"score_rz{weight:g}"] = score_with_rz_proxy(out, weight)
         out["time_s"] = time.time() - started
         out["revkit_num_gates"] = int(circuit.num_gates)
         out["revkit_num_qubits"] = int(circuit.num_qubits)
@@ -200,9 +256,18 @@ def synthesize_task(task: RevKitTask) -> dict[str, object]:
             "peak_ancilla": "",
             "n_qubits": "",
             "score": "",
+            "score_lower_bound": "",
             "time_s": time.time() - started,
             "revkit_num_gates": "",
             "revkit_num_qubits": "",
+            "rz_total": "",
+            "rz_clifford": "",
+            "rz_t_like": "",
+            "rz_non_clifford": "",
+            "rz_max_denominator": "",
+            "phase_ops": "",
+            "ct_supported": "",
+            **{f"score_rz{weight:g}": "" for weight in RZ_PROXY_WEIGHTS},
             "error": repr(exc),
         }
 
@@ -221,9 +286,18 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
         "peak_ancilla",
         "n_qubits",
         "score",
+        "score_lower_bound",
+        *[f"score_rz{weight:g}" for weight in RZ_PROXY_WEIGHTS],
         "time_s",
         "revkit_num_gates",
         "revkit_num_qubits",
+        "rz_total",
+        "rz_clifford",
+        "rz_t_like",
+        "rz_non_clifford",
+        "rz_max_denominator",
+        "phase_ops",
+        "ct_supported",
         "correct",
         "skipped",
         "error",
@@ -251,6 +325,19 @@ def by_name_method(rows: Iterable[dict[str, object]]) -> dict[str, dict[str, dic
     return out
 
 
+def metric_value(row: dict[str, object], metric: str) -> float:
+    """Return a comparable value for internal and RevKit rows.
+
+    Internal rows contain no arbitrary Rz rotations.  For rotation-aware RevKit
+    metrics, the internal fallback is therefore the ordinary score or T count.
+    """
+    if metric.startswith("score_rz") and row.get(metric) in {"", None}:
+        return float(row["score"])
+    if metric == "phase_ops" and row.get(metric) in {"", None}:
+        return float(row["T"])
+    return float(row[metric])
+
+
 def rel(new: float, base: float) -> float:
     return (new - base) / max(abs(base), 1.0)
 
@@ -263,8 +350,8 @@ def compare(joined: dict[str, dict[str, dict[str, object]]], target: str, baseli
         if target not in methods or baseline not in methods:
             continue
         try:
-            new = float(methods[target][metric])
-            old = float(methods[baseline][metric])
+            new = metric_value(methods[target], metric)
+            old = metric_value(methods[baseline], metric)
         except (KeyError, TypeError, ValueError):
             continue
         if new < old:
@@ -329,16 +416,26 @@ def write_analysis(
         writer.writerows(comparisons)
 
     usable_rows = [row for row in revkit_rows if usable(row)]
+    ct_supported_rows = [row for row in usable_rows if int(row.get("rz_non_clifford") or 0) == 0]
+    non_clifford_rows = len(usable_rows) - len(ct_supported_rows)
+    non_clifford_rz = sum(int(row.get("rz_non_clifford") or 0) for row in usable_rows)
+    max_rz_den = max((int(row.get("rz_max_denominator") or 1) for row in usable_rows), default=1)
     lines = [
         "# RevKit Oracle Synth Baseline",
         "",
         "This run uses the installed RevKit Python API (`oracle_synth`) on",
         "complete truth-table benchmark rows and estimates the returned",
-        "Clifford+T netlist at the logic layer.  It is a real RevKit API",
+        "Rz-phase netlist at the logic layer.  It is a real RevKit API",
         "baseline, not the ABC-only ROS-style LUT proxy, but it is still not",
         "hardware mapping and not the legacy CirKit CLI flow.",
         "",
         f"Rows: {len(revkit_rows)}; usable: {len(usable_rows)}.",
+        f"Exact Clifford+T-supported rows under this audit: {len(ct_supported_rows)}; rows with non-Clifford Rz rotations: {non_clifford_rows}.",
+        f"Total non-Clifford Rz rotations: {non_clifford_rz}; maximum observed denominator in angle/pi: {max_rz_den}.",
+        "",
+        "The pairwise `score` and `T` comparisons below are lower-bound comparisons",
+        "for RevKit whenever `rz_non_clifford > 0`, because the cost of synthesizing",
+        "non-Clifford Rz rotations into Clifford+T is not included.",
         "",
         "## Pairwise Comparisons",
         "",
@@ -356,32 +453,33 @@ def write_analysis(
             "## Boundary",
             "",
             "- Correctness is delegated to RevKit `oracle_synth` accepting the exact truth table.",
-            "- The resource model counts Clifford+T netlist gates returned by RevKit; it is not the same MCT-level accounting used by the internal ANF/FPRM emitters.",
-            "- These results should be presented as an external RevKit API baseline, not as a claim about hardware mapping.",
+            "- RevKit `oracle_synth` returns Rz-phase netlists that often contain rotations outside Clifford+T, such as pi/8 or pi/16 multiples.",
+            "- The reported `score` is therefore a lower-bound netlist proxy when `rz_non_clifford > 0`; it must not be described as an exact Clifford+T T-count.",
+            "- These results should be presented as an external RevKit API / phase-rotation boundary, not as a claim about hardware mapping.",
         ]
     )
     analysis.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     latex_out.parent.mkdir(parents=True, exist_ok=True)
     focus = [
-        ("and_resource_nmcts", "score"),
-        ("and_pareto_resource_nmcts", "score"),
-        ("and_fprm_polarity_archive", "score"),
-        ("sshr_h", "CNOT"),
-        ("and_resource_nmcts", "T"),
+        ("and_resource_nmcts", "score", "lower-bound score"),
+        ("and_pareto_resource_nmcts", "score", "lower-bound score"),
+        ("and_fprm_polarity_archive", "score", "lower-bound score"),
+        ("sshr_h", "CNOT", "CNOT"),
+        ("and_resource_nmcts", "T", "T-like count"),
     ]
     with latex_out.open("w", encoding="utf-8") as f:
         f.write("\\begin{tabular}{llrrr}\n")
         f.write("\\toprule\n")
         f.write("Comparison & Metric & Items & W/L/T & Mean $\\Delta$ \\\\\n")
         f.write("\\midrule\n")
-        for target, metric in focus:
+        for target, metric, metric_label in focus:
             row = compare(joined, target, "external_revkit_oracle_synth", metric)
             if row is None:
                 continue
             comparison = f"{target} vs RevKit oracle_synth".replace("_", r"\_")
             f.write(
-                f"{comparison} & {metric} & {row['items']} & "
+                f"{comparison} & {metric_label} & {row['items']} & "
                 f"{row['wins']}/{row['losses']}/{row['ties']} & "
                 f"{format_latex_pct(float(row['mean_relative']))} \\\\\n"
             )
@@ -433,9 +531,15 @@ def main(argv: Iterable[str] | None = None) -> int:
                 "workers": args.workers,
                 "rows": len(rows),
                 "usable_rows": sum(1 for row in rows if usable(row)),
+                "ct_supported_rows": sum(
+                    1 for row in rows if usable(row) and int(row.get("rz_non_clifford") or 0) == 0
+                ),
+                "rows_with_non_clifford_rz": sum(
+                    1 for row in rows if usable(row) and int(row.get("rz_non_clifford") or 0) > 0
+                ),
                 "elapsed_s": time.time() - started,
                 "method": "external_revkit_oracle_synth",
-                "claim_boundary": "RevKit Python oracle_synth API, Clifford+T netlist proxy, no hardware mapping.",
+                "claim_boundary": "RevKit Python oracle_synth API, Rz-phase netlist lower-bound proxy, no hardware mapping.",
             },
             indent=2,
             ensure_ascii=False,
