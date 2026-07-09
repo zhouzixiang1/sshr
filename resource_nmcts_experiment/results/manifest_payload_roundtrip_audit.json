@@ -6,6 +6,13 @@
     "results/manifest_author_input_closure_audit.json",
     "results/summary_author_input_closure_audit.csv"
   ],
+  "author_minimal_form_coverage_paths": [
+    "analyze_author_minimal_form_coverage.py",
+    "results/analysis_author_minimal_form_coverage.md",
+    "results/manifest_author_minimal_form_coverage.json",
+    "results/summary_author_minimal_form_coverage.csv",
+    "submission_package/AUTHOR_MINIMAL_RESPONSE_FORM_zh.md"
+  ],
   "author_questionnaire_coverage_paths": [
     "analyze_author_questionnaire_coverage.py",
     "results/analysis_author_questionnaire_coverage.md",
@@ -231,19 +238,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1155; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1164; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=1155; archive_files=1155; missing=none; extra=none.",
+      "evidence": "manifest_files=1164; archive_files=1164; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=1155; mismatches=none.",
+      "evidence": "checked=1164; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -435,6 +442,12 @@
       "status": "pass"
     },
     {
+      "evidence": "author_minimal_form_files=5; missing=none.",
+      "item": "Payload minimal response-form coverage evidence",
+      "next_action": "Ensure the uploadable archive includes the minimal response-form coverage audit, generated evidence, and Chinese short intake form.",
+      "status": "pass"
+    },
+    {
       "evidence": "metadata_closure_files=4; missing=none.",
       "item": "Payload metadata closure-path evidence",
       "next_action": "Ensure the uploadable archive includes the final metadata closure-path audit script and generated evidence.",
@@ -465,7 +478,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=1155; metadata_issues=none.",
+      "evidence": "members_checked=1164; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -513,7 +526,7 @@
     "results/summary_sshr_reproduction_scope_audit.csv"
   ],
   "status_counts": {
-    "pass": 40
+    "pass": 41
   },
   "stg_benchmark_paths": [
     "analyze_stg_published_benchmark.py",

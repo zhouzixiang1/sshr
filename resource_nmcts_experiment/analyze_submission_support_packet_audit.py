@@ -53,6 +53,7 @@ ANONYMOUS_REVIEW = RESULTS / "manifest_anonymous_review_readiness.json"
 TARGET_VENUE_DECISION = RESULTS / "manifest_target_venue_decision_audit.json"
 TARGET_VENUE_POLICY = RESULTS / "manifest_target_venue_policy_checklist.json"
 AUTHOR_QUESTIONNAIRE_COVERAGE = RESULTS / "manifest_author_questionnaire_coverage.json"
+AUTHOR_MINIMAL_FORM_COVERAGE = RESULTS / "manifest_author_minimal_form_coverage.json"
 
 
 @dataclass(frozen=True)
@@ -284,6 +285,30 @@ def specs() -> list[PacketSpec]:
             expected=0,
             supported_use="The author can answer a Chinese field-by-field questionnaire and transfer the answers to the ignored private metadata JSON.",
             boundary="The questionnaire is an intake guide only; it does not contain, infer, or commit private author values.",
+        ),
+        PacketSpec(
+            item="Minimal response form covers required metadata fields",
+            upload_risk="The author may use only the short response form and accidentally omit a required private field.",
+            files=(AUTHOR_MINIMAL_FORM_ZH, README, CHECKLIST, AUTHOR_PACKET),
+            tokens=(
+                "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md",
+                "target_venue.*",
+                "authors[]",
+                "corresponding_author.*",
+                "author_contributions.*",
+                "funding.*",
+                "data_availability.*",
+                "code_availability.*",
+                "preprint_and_prior_submission.*",
+                "cover_letter.*",
+                "permissions.*",
+                "validate_submission_metadata.py",
+            ),
+            manifest_path=AUTHOR_MINIMAL_FORM_COVERAGE,
+            manifest_key="needs_revision_count",
+            expected=0,
+            supported_use="The concise Chinese response form is machine-checked against every required metadata path before authors transfer answers to ignored private JSON.",
+            boundary="The short form still contains prompts only; real author and venue values remain private and human-provided.",
         ),
         PacketSpec(
             item="Short answer template covers metadata fields",

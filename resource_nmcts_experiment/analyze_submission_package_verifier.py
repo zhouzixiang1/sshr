@@ -6,6 +6,7 @@ terminal package invariants that are easy to regress during final polishing:
 compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, comparison-protocol coverage,
 comparison-target validity,
+benchmark-suite composition,
 score-weight robustness,
 rerun CNOT-constraint profile,
 SSHR reproduction-scope support,
@@ -82,6 +83,8 @@ COMPARISON_TARGET_VALIDITY_MANIFEST = RESULTS / "manifest_comparison_target_vali
 COMPARISON_TARGET_VALIDITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_target_validity_audit.tex"
 COMPARISON_ANSWER_SCORECARD_MANIFEST = RESULTS / "manifest_comparison_answer_scorecard.json"
 COMPARISON_ANSWER_SCORECARD_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_answer_scorecard.tex"
+BENCHMARK_SUITE_MANIFEST = RESULTS / "manifest_benchmark_suite_audit.json"
+BENCHMARK_SUITE_TABLE = THIS_DIR / "paper_latex" / "tables" / "benchmark_suite_audit.tex"
 WEIGHT_ROBUSTNESS_MANIFEST = RESULTS / "manifest_weight_robustness.json"
 WEIGHT_ROBUSTNESS_TABLE = THIS_DIR / "paper_latex" / "tables" / "weight_robustness_compact.tex"
 RESOURCE_WEIGHT_SENSITIVITY_MANIFEST = RESULTS / "manifest_resource_weight_sensitivity_audit.json"
@@ -170,6 +173,7 @@ METADATA_PIPELINE_SELFTEST_MANIFEST = RESULTS / "manifest_submission_metadata_pi
 ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 AUTHOR_INPUT_CLOSURE_MANIFEST = RESULTS / "manifest_author_input_closure_audit.json"
 AUTHOR_QUESTIONNAIRE_COVERAGE_MANIFEST = RESULTS / "manifest_author_questionnaire_coverage.json"
+AUTHOR_MINIMAL_FORM_COVERAGE_MANIFEST = RESULTS / "manifest_author_minimal_form_coverage.json"
 METADATA_ANSWER_TEMPLATE_MANIFEST = RESULTS / "manifest_metadata_answer_template_coverage.json"
 METADATA_CLOSURE_MANIFEST = RESULTS / "manifest_submission_metadata_closure_path.json"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
@@ -433,6 +437,37 @@ def verify_comparison_answer_scorecard() -> dict[str, str]:
         status,
         f"rows={rows}; questions={questions}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
         "Run analyze_comparison_answer_scorecard.py and restore comparison-answer rows, generated table, or manuscript anchor.",
+    )
+
+
+def verify_benchmark_suite_audit() -> dict[str, str]:
+    manifest = read_json(BENCHMARK_SUITE_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = int(manifest.get("rows", -1)) if manifest else -1
+    raw_rows = int(manifest.get("raw_rows", -1)) if manifest else -1
+    verified_rows = int(manifest.get("verified_rows", -1)) if manifest else -1
+    scopes = manifest.get("n_scopes", []) if manifest else []
+    table_exists = BENCHMARK_SUITE_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and rows >= 7
+        and raw_rows >= 30000
+        and verified_rows >= 30000
+        and "n=20--64" in scopes
+        and "n=21--30" in scopes
+        and table_exists
+        and anchor
+        else "needs revision"
+    )
+    return row(
+        "Benchmark suite composition audit",
+        status,
+        f"rows={rows}; raw_rows={raw_rows}; verified_rows={verified_rows}; scopes={scopes}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_benchmark_suite_audit.py and restore benchmark coverage rows, generated table, or manuscript anchor.",
     )
 
 
@@ -1691,6 +1726,22 @@ def verify_author_questionnaire_coverage() -> dict[str, str]:
     )
 
 
+def verify_author_minimal_form_coverage() -> dict[str, str]:
+    manifest = read_json(AUTHOR_MINIMAL_FORM_COVERAGE_MANIFEST)
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    required_paths = manifest.get("required_paths", "missing") if manifest else "missing"
+    missing_required = manifest.get("missing_required_paths", "missing") if manifest else "missing"
+    missing_template = manifest.get("missing_template_paths", "missing") if manifest else "missing"
+    status = "pass" if manifest and needs_revision == 0 and not missing_required and not missing_template else "needs revision"
+    return row(
+        "Author minimal response-form coverage audit",
+        status,
+        f"required_paths={required_paths}; missing_required_paths={missing_required}; missing_template_paths={missing_template}; status_counts={counts}.",
+        "Run analyze_author_minimal_form_coverage.py and align the short Chinese response form with every private metadata template field.",
+    )
+
+
 def verify_metadata_answer_template_coverage() -> dict[str, str]:
     manifest = read_json(METADATA_ANSWER_TEMPLATE_MANIFEST)
     counts = manifest.get("status_counts", {}) if manifest else {}
@@ -1920,6 +1971,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_comparison_protocol(),
             verify_comparison_target_validity(),
             verify_comparison_answer_scorecard(),
+            verify_benchmark_suite_audit(),
             verify_weight_robustness(),
             verify_resource_weight_sensitivity(),
             verify_cnot_constraint_profile(),
@@ -1973,6 +2025,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_anonymous_review_audit(),
             verify_author_input_closure(),
             verify_author_questionnaire_coverage(),
+            verify_author_minimal_form_coverage(),
             verify_metadata_answer_template_coverage(),
             verify_metadata_closure_path(),
             verify_text_preview(),

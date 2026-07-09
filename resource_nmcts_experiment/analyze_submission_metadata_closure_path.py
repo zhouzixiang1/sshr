@@ -50,6 +50,7 @@ ANONYMOUS_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 AUTHOR_INPUT_CLOSURE_MANIFEST = RESULTS / "manifest_author_input_closure_audit.json"
 GOAL_MANIFEST = RESULTS / "manifest_goal_completion_audit.json"
 ANSWER_TEMPLATE_COVERAGE_MANIFEST = RESULTS / "manifest_metadata_answer_template_coverage.json"
+MINIMAL_FORM_COVERAGE_MANIFEST = RESULTS / "manifest_author_minimal_form_coverage.json"
 
 PRIVATE_PATHS = (METADATA_ANSWERS_FILE, METADATA_FILE, *PRIVATE_OUTPUTS)
 
@@ -174,6 +175,21 @@ def check_answer_template_coverage() -> dict[str, str]:
         "pass" if manifest and revisions == 0 and not missing and not unknown else "needs revision",
         f"status_counts={counts}; required_paths={len(REQUIRED_METADATA_PATHS)}; starter_only={starter_only}; missing={missing}; unknown_answer_paths={unknown}; needs_revision_count={revisions}.",
         "Keep the public short-answer template aligned with REQUIRED_METADATA_PATHS and the safe public starter fields.",
+    )
+
+
+def check_minimal_form_coverage() -> dict[str, str]:
+    manifest = read_manifest(MINIMAL_FORM_COVERAGE_MANIFEST)
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    revisions = manifest_int(MINIMAL_FORM_COVERAGE_MANIFEST, "needs_revision_count")
+    required = manifest.get("required_paths", "missing") if manifest else "missing"
+    missing = manifest.get("missing_required_paths", "missing") if manifest else "missing"
+    missing_template = manifest.get("missing_template_paths", "missing") if manifest else "missing"
+    return row(
+        "Minimal author response-form coverage",
+        "pass" if manifest and revisions == 0 and not missing and not missing_template else "needs revision",
+        f"status_counts={counts}; required_paths={required}; missing={missing}; missing_template_paths={missing_template}; needs_revision_count={revisions}.",
+        "Keep AUTHOR_MINIMAL_RESPONSE_FORM_zh.md aligned with REQUIRED_METADATA_PATHS and the structured metadata template.",
     )
 
 
@@ -347,6 +363,7 @@ def build_rows() -> list[dict[str, str]]:
     return [
         check_required_inventory(),
         check_answer_template_coverage(),
+        check_minimal_form_coverage(),
         check_starter_prefill(),
         check_private_git_protection(),
         check_validator_and_preview_gates(),
@@ -385,7 +402,7 @@ def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
             "",
             "## Closure Sequence",
             "",
-            "1. Use `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md` to collect field-by-field author and venue answers.",
+            "1. Use `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md` or the checked short form `submission_package/AUTHOR_MINIMAL_RESPONSE_FORM_zh.md` to collect author and venue answers.",
             "2. Create ignored private short answers with `make_submission_metadata_from_answers.py --init-private-answers`.",
             "3. Fill every `AUTHOR INPUT REQUIRED` value in `submission_package/submission_metadata_answers.json`.",
             "4. Generate ignored private metadata with `make_submission_metadata_from_answers.py --write-private`.",

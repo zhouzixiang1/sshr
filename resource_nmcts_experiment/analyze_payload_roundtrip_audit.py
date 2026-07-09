@@ -354,6 +354,13 @@ AUTHOR_QUESTIONNAIRE_COVERAGE_PATHS = {
     "results/summary_author_questionnaire_coverage.csv",
     "results/manifest_author_questionnaire_coverage.json",
 }
+AUTHOR_MINIMAL_FORM_COVERAGE_PATHS = {
+    "analyze_author_minimal_form_coverage.py",
+    "submission_package/AUTHOR_MINIMAL_RESPONSE_FORM_zh.md",
+    "results/analysis_author_minimal_form_coverage.md",
+    "results/summary_author_minimal_form_coverage.csv",
+    "results/manifest_author_minimal_form_coverage.json",
+}
 METADATA_CLOSURE_PATHS = {
     "analyze_submission_metadata_closure_path.py",
     "results/analysis_submission_metadata_closure_path.md",
@@ -786,6 +793,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    minimal_form_missing = sorted(AUTHOR_MINIMAL_FORM_COVERAGE_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload minimal response-form coverage evidence",
+            "pass" if not minimal_form_missing else "needs revision",
+            f"author_minimal_form_files={len(AUTHOR_MINIMAL_FORM_COVERAGE_PATHS)}; missing={minimal_form_missing or 'none'}.",
+            "Ensure the uploadable archive includes the minimal response-form coverage audit, generated evidence, and Chinese short intake form.",
+        )
+    )
+
     metadata_closure_missing = sorted(METADATA_CLOSURE_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -933,6 +950,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "support_packet_paths": sorted(SUPPORT_PACKET_PATHS),
         "author_input_closure_paths": sorted(AUTHOR_INPUT_CLOSURE_PATHS),
         "author_questionnaire_coverage_paths": sorted(AUTHOR_QUESTIONNAIRE_COVERAGE_PATHS),
+        "author_minimal_form_coverage_paths": sorted(AUTHOR_MINIMAL_FORM_COVERAGE_PATHS),
         "payload_extraction_smoke_paths": sorted(PAYLOAD_EXTRACTION_SMOKE_PATHS),
         "payload_verifier_smoke_paths": sorted(PAYLOAD_VERIFIER_SMOKE_PATHS),
         "private_basenames": sorted(PRIVATE_BASENAMES),

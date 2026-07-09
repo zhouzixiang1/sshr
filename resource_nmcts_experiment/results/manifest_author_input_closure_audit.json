@@ -17,7 +17,7 @@
   ],
   "python": "3.11.15",
   "required_metadata_paths": 50,
-  "rows": 8,
+  "rows": 9,
   "rows_detail": [
     {
       "evidence": "placeholders=53; required_paths=50; uncovered=none.",
@@ -29,6 +29,12 @@
       "evidence": "required_paths=50; starter_only=['code_availability.commit_hash', 'code_availability.environment_notes', 'code_availability.repository_url']; missing=[]; unknown_answer_paths=[]; status_counts={'pass': 5}; needs_revision_count=0.",
       "item": "Answer-template required-field coverage",
       "next_action": "Rerun analyze_metadata_answer_template_coverage.py after changing required metadata paths, starter prefill fields, or submission_metadata_answers_template.json.",
+      "status": "pass"
+    },
+    {
+      "evidence": "required_paths=50; missing=[]; missing_template_paths=[]; status_counts={'pass': 6}; needs_revision_count=0.",
+      "item": "Minimal response-form required-field coverage",
+      "next_action": "Rerun analyze_author_minimal_form_coverage.py after changing required metadata paths or AUTHOR_MINIMAL_RESPONSE_FORM_zh.md.",
       "status": "pass"
     },
     {
@@ -70,6 +76,6 @@
   ],
   "script": "analyze_author_input_closure_audit.py",
   "status_counts": {
-    "pass": 8
+    "pass": 9
   }
 }

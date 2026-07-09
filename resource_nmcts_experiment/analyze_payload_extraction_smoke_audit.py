@@ -418,6 +418,15 @@ SMOKE_SPECS = (
         minimum_rows=6,
     ),
     SmokeSpec(
+        name="Author minimal response-form coverage audit",
+        script="analyze_author_minimal_form_coverage.py",
+        manifest="results/manifest_author_minimal_form_coverage.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=6,
+    ),
+    SmokeSpec(
         name="Submission metadata closure path",
         script="analyze_submission_metadata_closure_path.py",
         manifest="results/manifest_submission_metadata_closure_path.json",

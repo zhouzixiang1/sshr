@@ -7,7 +7,7 @@
     "table": "paper_latex/tables/submission_support_packet_audit.tex"
   },
   "python": "3.11.15",
-  "rows": 16,
+  "rows": 17,
   "rows_detail": [
     {
       "boundary": "The cover letter still needs author, editor, reviewer, and prior-dissemination fields before upload.",
@@ -91,6 +91,15 @@
       "upload_risk": "The final author/venue gate could remain too abstract for the author to fill in one pass."
     },
     {
+      "boundary": "The short form still contains prompts only; real author and venue values remain private and human-provided.",
+      "evidence": "files_missing=none; tokens=12/12; missing_tokens=none; manifest=results/manifest_author_minimal_form_coverage.json::needs_revision_count=0",
+      "item": "Minimal response form covers required metadata fields",
+      "next_action": "No action needed.",
+      "status": "pass",
+      "supported_use": "The concise Chinese response form is machine-checked against every required metadata path before authors transfer answers to ignored private JSON.",
+      "upload_risk": "The author may use only the short response form and accidentally omit a required private field."
+    },
+    {
       "boundary": "The template contains placeholders only; real author and venue values remain private and human-provided.",
       "evidence": "files_missing=none; tokens=10/10; missing_tokens=none; manifest=results/manifest_metadata_answer_template_coverage.json::needs_revision_count=0",
       "item": "Short answer template covers metadata fields",
@@ -156,6 +165,6 @@
   ],
   "script": "analyze_submission_support_packet_audit.py",
   "status_counts": {
-    "pass": 16
+    "pass": 17
   }
 }

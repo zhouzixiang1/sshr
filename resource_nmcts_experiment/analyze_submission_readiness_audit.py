@@ -57,6 +57,9 @@ AUTHOR_INPUT_CLOSURE_MANIFEST = RESULTS / "manifest_author_input_closure_audit.j
 AUTHOR_QUESTIONNAIRE_COVERAGE_ANALYSIS = RESULTS / "analysis_author_questionnaire_coverage.md"
 AUTHOR_QUESTIONNAIRE_COVERAGE_SUMMARY = RESULTS / "summary_author_questionnaire_coverage.csv"
 AUTHOR_QUESTIONNAIRE_COVERAGE_MANIFEST = RESULTS / "manifest_author_questionnaire_coverage.json"
+AUTHOR_MINIMAL_FORM_COVERAGE_ANALYSIS = RESULTS / "analysis_author_minimal_form_coverage.md"
+AUTHOR_MINIMAL_FORM_COVERAGE_SUMMARY = RESULTS / "summary_author_minimal_form_coverage.csv"
+AUTHOR_MINIMAL_FORM_COVERAGE_MANIFEST = RESULTS / "manifest_author_minimal_form_coverage.json"
 METADATA_ANSWER_TEMPLATE_ANALYSIS = RESULTS / "analysis_metadata_answer_template_coverage.md"
 METADATA_ANSWER_TEMPLATE_SUMMARY = RESULTS / "summary_metadata_answer_template_coverage.csv"
 METADATA_ANSWER_TEMPLATE_MANIFEST = RESULTS / "manifest_metadata_answer_template_coverage.json"
@@ -96,6 +99,10 @@ COMPARISON_ANSWER_ANALYSIS = RESULTS / "analysis_comparison_answer_scorecard.md"
 COMPARISON_ANSWER_SUMMARY = RESULTS / "summary_comparison_answer_scorecard.csv"
 COMPARISON_ANSWER_MANIFEST = RESULTS / "manifest_comparison_answer_scorecard.json"
 COMPARISON_ANSWER_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_answer_scorecard.tex"
+BENCHMARK_SUITE_ANALYSIS = RESULTS / "analysis_benchmark_suite_audit.md"
+BENCHMARK_SUITE_SUMMARY = RESULTS / "summary_benchmark_suite_audit.csv"
+BENCHMARK_SUITE_MANIFEST = RESULTS / "manifest_benchmark_suite_audit.json"
+BENCHMARK_SUITE_TABLE = THIS_DIR / "paper_latex" / "tables" / "benchmark_suite_audit.tex"
 RESOURCE_WEIGHT_SENSITIVITY_ANALYSIS = RESULTS / "analysis_resource_weight_sensitivity_audit.md"
 RESOURCE_WEIGHT_SENSITIVITY_SUMMARY = RESULTS / "summary_resource_weight_sensitivity_audit.csv"
 RESOURCE_WEIGHT_SENSITIVITY_RAW = RESULTS / "raw_resource_weight_sensitivity_audit.csv"
@@ -350,6 +357,20 @@ def build_rows() -> list[dict[str, str]]:
     )
     comparison_answer_anchor = (
         bool(comparison_answer_manifest.get("table_anchor_present", False)) if comparison_answer_manifest else False
+    )
+    benchmark_suite_manifest = read_json(BENCHMARK_SUITE_MANIFEST)
+    benchmark_suite_revisions = (
+        int(benchmark_suite_manifest.get("needs_revision_count", -1)) if benchmark_suite_manifest else -1
+    )
+    benchmark_suite_counts = benchmark_suite_manifest.get("status_counts", {}) if benchmark_suite_manifest else {}
+    benchmark_suite_rows = benchmark_suite_manifest.get("rows", "missing") if benchmark_suite_manifest else "missing"
+    benchmark_suite_raw_rows = benchmark_suite_manifest.get("raw_rows", "missing") if benchmark_suite_manifest else "missing"
+    benchmark_suite_verified_rows = (
+        benchmark_suite_manifest.get("verified_rows", "missing") if benchmark_suite_manifest else "missing"
+    )
+    benchmark_suite_scopes = benchmark_suite_manifest.get("n_scopes", []) if benchmark_suite_manifest else []
+    benchmark_suite_anchor = (
+        bool(benchmark_suite_manifest.get("table_anchor_present", False)) if benchmark_suite_manifest else False
     )
     resource_weight_manifest = read_json(RESOURCE_WEIGHT_SENSITIVITY_MANIFEST)
     resource_weight_revisions = (
@@ -708,6 +729,18 @@ def build_rows() -> list[dict[str, str]]:
     author_questionnaire_missing = (
         author_questionnaire_manifest.get("missing_required_paths", "missing") if author_questionnaire_manifest else "missing"
     )
+    author_minimal_manifest = read_json(AUTHOR_MINIMAL_FORM_COVERAGE_MANIFEST)
+    author_minimal_counts = author_minimal_manifest.get("status_counts", {}) if author_minimal_manifest else {}
+    author_minimal_revisions = (
+        int(author_minimal_manifest.get("needs_revision_count", -1)) if author_minimal_manifest else -1
+    )
+    author_minimal_required = author_minimal_manifest.get("required_paths", "missing") if author_minimal_manifest else "missing"
+    author_minimal_missing = (
+        author_minimal_manifest.get("missing_required_paths", "missing") if author_minimal_manifest else "missing"
+    )
+    author_minimal_missing_template = (
+        author_minimal_manifest.get("missing_template_paths", "missing") if author_minimal_manifest else "missing"
+    )
     metadata_answer_manifest = read_json(METADATA_ANSWER_TEMPLATE_MANIFEST)
     metadata_answer_counts = metadata_answer_manifest.get("status_counts", {}) if metadata_answer_manifest else {}
     metadata_answer_revisions = (
@@ -956,6 +989,28 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Comparison answer scorecard gives reviewer-facing quantitative answers for comparison targets, evidence rows, outcomes, and excluded claims; rows={comparison_answer_rows}; questions={comparison_answer_questions}; status_counts={comparison_answer_counts}; needs_revision_count={comparison_answer_revisions}; table_anchor_present={comparison_answer_anchor}.",
             "next_action": "Rerun analyze_comparison_answer_scorecard.py after changing comparison outcomes, search-control rows, dominance rows, or comparison-scope manuscript text.",
+        },
+        {
+            "item": "Benchmark suite composition audit",
+            "status": "pass"
+            if "tab:benchmark-suite-audit" in text
+            and BENCHMARK_SUITE_ANALYSIS.exists()
+            and BENCHMARK_SUITE_SUMMARY.exists()
+            and BENCHMARK_SUITE_MANIFEST.exists()
+            and BENCHMARK_SUITE_TABLE.exists()
+            and benchmark_suite_revisions == 0
+            and isinstance(benchmark_suite_rows, int)
+            and benchmark_suite_rows >= 7
+            and isinstance(benchmark_suite_raw_rows, int)
+            and benchmark_suite_raw_rows >= 30000
+            and isinstance(benchmark_suite_verified_rows, int)
+            and benchmark_suite_verified_rows >= 30000
+            and "n=20--64" in benchmark_suite_scopes
+            and "n=21--30" in benchmark_suite_scopes
+            and benchmark_suite_anchor
+            else "needs revision",
+            "evidence": f"Benchmark suite audit records suite roles, n scopes, item counts, raw rows, checked rows, verification routes, and representativeness boundaries; rows={benchmark_suite_rows}; raw_rows={benchmark_suite_raw_rows}; verified_rows={benchmark_suite_verified_rows}; scopes={benchmark_suite_scopes}; status_counts={benchmark_suite_counts}; needs_revision_count={benchmark_suite_revisions}; table_anchor_present={benchmark_suite_anchor}.",
+            "next_action": "Rerun analyze_benchmark_suite_audit.py after changing benchmark generators, raw CSV families, large-scale bridge rows, or representativeness wording.",
         },
         {
             "item": "Resource-weight sensitivity audit",
@@ -1611,6 +1666,19 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Questionnaire coverage audit checks every private metadata path against AUTHOR_METADATA_QUESTIONNAIRE_zh.md; required_paths={author_questionnaire_required}; missing_required_paths={author_questionnaire_missing}; status_counts={author_questionnaire_counts}; needs_revision_count={author_questionnaire_revisions}.",
             "next_action": "Rerun analyze_author_questionnaire_coverage.py after changing submission_metadata_template.json or AUTHOR_METADATA_QUESTIONNAIRE_zh.md.",
+        },
+        {
+            "item": "Author minimal response-form coverage audit",
+            "status": "pass"
+            if AUTHOR_MINIMAL_FORM_COVERAGE_ANALYSIS.exists()
+            and AUTHOR_MINIMAL_FORM_COVERAGE_SUMMARY.exists()
+            and AUTHOR_MINIMAL_FORM_COVERAGE_MANIFEST.exists()
+            and author_minimal_revisions == 0
+            and not author_minimal_missing
+            and not author_minimal_missing_template
+            else "needs revision",
+            "evidence": f"Minimal response-form coverage audit checks every private metadata path against grouped prompts in AUTHOR_MINIMAL_RESPONSE_FORM_zh.md; required_paths={author_minimal_required}; missing_required_paths={author_minimal_missing}; missing_template_paths={author_minimal_missing_template}; status_counts={author_minimal_counts}; needs_revision_count={author_minimal_revisions}.",
+            "next_action": "Rerun analyze_author_minimal_form_coverage.py after changing submission_metadata_template.json or AUTHOR_MINIMAL_RESPONSE_FORM_zh.md.",
         },
         {
             "item": "Metadata answer-template coverage audit",

@@ -6,6 +6,7 @@ author,tex_input,tables/related_work_positioning,paper_latex/tables/related_work
 author,tex_input,tables/method_workflow,paper_latex/tables/method_workflow.tex,True,True,pass,No action needed.
 author,tex_input,tables/algorithm_contract,paper_latex/tables/algorithm_contract.tex,True,True,pass,No action needed.
 author,tex_input,tables/search_budget_contract,paper_latex/tables/search_budget_contract.tex,True,True,pass,No action needed.
+author,tex_input,tables/benchmark_suite_audit,paper_latex/tables/benchmark_suite_audit.tex,True,True,pass,No action needed.
 author,tex_input,tables/baseline_claim_matrix,paper_latex/tables/baseline_claim_matrix.tex,True,True,pass,No action needed.
 author,tex_input,tables/comparison_evidence_matrix,paper_latex/tables/comparison_evidence_matrix.tex,True,True,pass,No action needed.
 author,tex_input,tables/comparison_protocol_audit,paper_latex/tables/comparison_protocol_audit.tex,True,True,pass,No action needed.
@@ -76,6 +77,7 @@ anonymous,tex_input,tables/related_work_positioning,paper_latex/tables/related_w
 anonymous,tex_input,tables/method_workflow,paper_latex/tables/method_workflow.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/algorithm_contract,paper_latex/tables/algorithm_contract.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/search_budget_contract,paper_latex/tables/search_budget_contract.tex,True,True,pass,No action needed.
+anonymous,tex_input,tables/benchmark_suite_audit,paper_latex/tables/benchmark_suite_audit.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/baseline_claim_matrix,paper_latex/tables/baseline_claim_matrix.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/comparison_evidence_matrix,paper_latex/tables/comparison_evidence_matrix.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/comparison_protocol_audit,paper_latex/tables/comparison_protocol_audit.tex,True,True,pass,No action needed.
@@ -146,6 +148,7 @@ acm_tqc,tex_input,tables/related_work_positioning,paper_latex/tables/related_wor
 acm_tqc,tex_input,tables/method_workflow,paper_latex/tables/method_workflow.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/algorithm_contract,paper_latex/tables/algorithm_contract.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/search_budget_contract,paper_latex/tables/search_budget_contract.tex,True,True,pass,No action needed.
+acm_tqc,tex_input,tables/benchmark_suite_audit,paper_latex/tables/benchmark_suite_audit.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/baseline_claim_matrix,paper_latex/tables/baseline_claim_matrix.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/comparison_evidence_matrix,paper_latex/tables/comparison_evidence_matrix.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/comparison_protocol_audit,paper_latex/tables/comparison_protocol_audit.tex,True,True,pass,No action needed.

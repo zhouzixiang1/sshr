@@ -1,0 +1,90 @@
+{
+  "group_coverage_tokens": {
+    "author_contributions": [
+      "author_contributions.*"
+    ],
+    "authors": [
+      "authors[]",
+      "\u4f5c\u8005\u987a\u5e8f"
+    ],
+    "code_availability": [
+      "code_availability.*"
+    ],
+    "corresponding_author": [
+      "corresponding_author.*"
+    ],
+    "cover_letter": [
+      "cover_letter.*"
+    ],
+    "data_availability": [
+      "data_availability.*"
+    ],
+    "funding": [
+      "funding.*"
+    ],
+    "permissions": [
+      "permissions.*"
+    ],
+    "preprint_and_prior_submission": [
+      "preprint_and_prior_submission.*"
+    ],
+    "target_venue": [
+      "target_venue.*"
+    ]
+  },
+  "minimal_form": "submission_package/AUTHOR_MINIMAL_RESPONSE_FORM_zh.md",
+  "missing_required_paths": [],
+  "missing_template_paths": [],
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_author_minimal_form_coverage.md",
+    "manifest": "results/manifest_author_minimal_form_coverage.json",
+    "summary": "results/summary_author_minimal_form_coverage.csv"
+  },
+  "python": "3.11.15",
+  "required_paths": 50,
+  "rows": 6,
+  "rows_detail": [
+    {
+      "evidence": "minimal_form_exists=True; missing_tokens=none.",
+      "item": "Minimal form file and private workflow",
+      "next_action": "Keep the minimal form as a public intake checklist; store real values only in ignored private metadata files.",
+      "status": "pass"
+    },
+    {
+      "evidence": "required_paths=50; missing_paths=none.",
+      "item": "Required metadata path coverage",
+      "next_action": "Add exact path prompts or grouped wildcard prompts to AUTHOR_MINIMAL_RESPONSE_FORM_zh.md.",
+      "status": "pass"
+    },
+    {
+      "evidence": "required_paths=50; missing_in_template=none.",
+      "item": "Template path parity",
+      "next_action": "Keep REQUIRED_METADATA_PATHS aligned with submission_metadata_template.json.",
+      "status": "pass"
+    },
+    {
+      "evidence": "missing_tokens=none.",
+      "item": "One-pass answerability cues",
+      "next_action": "Keep explicit placeholder wording so the author can answer every field without guessing how to mark absent values.",
+      "status": "pass"
+    },
+    {
+      "evidence": "missing_tokens=none.",
+      "item": "Claim-boundary reminders",
+      "next_action": "Keep comparison and overclaim boundaries visible in the short author-intake path.",
+      "status": "pass"
+    },
+    {
+      "evidence": "missing_tokens=none.",
+      "item": "Anonymous-review prompts",
+      "next_action": "Keep double-blind data/code-link prompts visible until the target venue is selected.",
+      "status": "pass"
+    }
+  ],
+  "script": "analyze_author_minimal_form_coverage.py",
+  "status_counts": {
+    "pass": 6
+  },
+  "template": "submission_package/submission_metadata_template.json"
+}

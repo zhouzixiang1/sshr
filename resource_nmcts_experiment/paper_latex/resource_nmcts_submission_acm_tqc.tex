@@ -400,8 +400,30 @@ logic-network probes include exported $n=14$, $n=15$, $n=16$, and $n=18$
 random-ANF sets for ABC/BDD, and $n=14$ sets for mockturtle and CirKit.  Scale
 and bridge experiments cover item-level $n=20,24,28,32,40$ term sets, an
 $n=48,56,64$ ultra-scale symbolic stress slice, and complete \ttable{} bridge
-functions at $n=21$--$25$.  Paired comparisons include only
+functions at $n=21$--$30$.  Paired comparisons include only
 matching functions or items with successful semantic checks and no timeout.
+Table~\ref{tab:benchmark-suite-audit} summarizes this benchmark-suite
+composition before any leaderboard-style result is reported.  It separates
+enumerable small Boolean oracles, published tiny-function optima, external
+logic-network probes, reversible/phase probes, symbolic large-$n$ stress
+tests, complete \ttable{} bridges, and learned-control rows.  This table is
+included to make the benchmark representativeness boundary auditable: the
+package contains broad logical-layer evidence, but no row is allowed to stand
+for exhaustive coverage of all Boolean functions or for hardware-mapped
+performance.
+
+\begin{table}[H]
+\centering
+\tiny
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{0.94}
+\caption{Benchmark-suite composition audit.  Each row reports the role,
+variable range, item count, raw row count, checked row count, verification
+route, and residual representativeness boundary for one benchmark family.}
+\label{tab:benchmark-suite-audit}
+\input{tables/benchmark_suite_audit}
+\end{table}
+
 Because these baselines operate at different abstraction levels,
 Table~\ref{tab:baseline-claim-matrix} first separates their role in the
 argument from the claims they cannot support.  Table~\ref{tab:evidence-matrix}

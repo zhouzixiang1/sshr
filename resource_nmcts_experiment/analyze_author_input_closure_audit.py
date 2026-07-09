@@ -44,6 +44,7 @@ VALIDATOR_MANIFEST = RESULTS / "manifest_submission_metadata_validator.json"
 TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
 ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 ANSWER_TEMPLATE_COVERAGE_MANIFEST = RESULTS / "manifest_metadata_answer_template_coverage.json"
+MINIMAL_FORM_COVERAGE_MANIFEST = RESULTS / "manifest_author_minimal_form_coverage.json"
 
 PRIVATE_OUTPUTS = (
     METADATA_ANSWERS_FILE,
@@ -177,6 +178,21 @@ def check_answer_template_coverage() -> dict[str, str]:
     )
 
 
+def check_minimal_form_coverage() -> dict[str, str]:
+    manifest = read_json(MINIMAL_FORM_COVERAGE_MANIFEST)
+    counts = manifest.get("status_counts", {}) if isinstance(manifest, dict) else {}
+    revisions = int(manifest.get("needs_revision_count", -1)) if isinstance(manifest, dict) else -1
+    missing = manifest.get("missing_required_paths", "missing") if isinstance(manifest, dict) else "missing"
+    missing_template = manifest.get("missing_template_paths", "missing") if isinstance(manifest, dict) else "missing"
+    status = "pass" if manifest and revisions == 0 and not missing and not missing_template else "needs revision"
+    return row(
+        "Minimal response-form required-field coverage",
+        status,
+        f"required_paths={len(REQUIRED_METADATA_PATHS)}; missing={missing}; missing_template_paths={missing_template}; status_counts={counts}; needs_revision_count={revisions}.",
+        "Rerun analyze_author_minimal_form_coverage.py after changing required metadata paths or AUTHOR_MINIMAL_RESPONSE_FORM_zh.md.",
+    )
+
+
 def check_support_document_visibility() -> dict[str, str]:
     required_docs = (
         FINAL_HANDOFF,
@@ -287,6 +303,7 @@ def build_rows() -> list[dict[str, str]]:
     return [
         check_template_placeholder_coverage(),
         check_answer_template_coverage(),
+        check_minimal_form_coverage(),
         check_author_packet_coverage(),
         check_support_document_visibility(),
         check_private_git_protection(),

@@ -93,6 +93,7 @@ run_py analyze_learned_control_audit.py
 run_py analyze_ultra_scale64_stress.py
 run_py analyze_ultra_scale64_resource_profile.py
 run_py analyze_scaling_resource_audit.py
+run_py analyze_benchmark_suite_audit.py
 run_py analyze_weight_robustness.py
 run_py analyze_resource_weight_sensitivity_audit.py
 run_py analyze_cnot_constraint_profile_audit.py
@@ -102,6 +103,7 @@ run_py analyze_submission_metadata_audit.py
 run_py validate_submission_metadata.py
 run_py make_author_input_packet.py
 run_py analyze_author_questionnaire_coverage.py
+run_py analyze_author_minimal_form_coverage.py
 run_py analyze_metadata_answer_template_coverage.py
 run_py make_submission_text_preview.py
 run_py selftest_submission_metadata_pipeline.py
