@@ -1,0 +1,14 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedleft\arraybackslash}p{0.11\linewidth}>{\raggedleft\arraybackslash}p{0.10\linewidth}>{\raggedleft\arraybackslash}X}
+\toprule
+Scope & Target & Baseline & W/L/T & $\Delta$ score & $\Delta$ time \\
+\midrule
+$n=48,56,64$ & depth-4 screen & depth-2 screen & 24/0/24 & -1.81\% & +488.77\% \\
+$n=48,56,64$ & all-depth frontier & depth-2 screen & 24/0/24 & -1.81\% & +809.95\% \\
+$n=48,56,64$ & learned frontier & depth-2 screen & 10/0/38 & -0.84\% & +244.67\% \\
+$n=48,56,64$ & learned frontier & depth-4 screen & 0/14/34 & +1.02\% & -35.99\% \\
+$n=48,56,64$ & learned frontier & all-depth frontier & 0/14/34 & +1.02\% & -61.61\% \\
+$n=48$ & learned frontier & all-depth frontier & 0/1/15 & +0.07\% & -53.13\% \\
+$n=56$ & learned frontier & all-depth frontier & 0/6/10 & +1.14\% & -60.06\% \\
+$n=64$ & learned frontier & all-depth frontier & 0/7/9 & +1.85\% & -71.64\% \\
+\bottomrule
+\end{tabularx}

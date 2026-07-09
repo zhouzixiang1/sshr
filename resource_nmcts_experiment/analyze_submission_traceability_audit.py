@@ -194,11 +194,16 @@ def build_rows() -> list[dict[str, str]]:
         ),
         row(
             "High-dimensional verification",
-            "Traces large symbolic checks, phase checks, and complete truth-table bridge slices.",
+            "Traces large symbolic checks through n=64, phase checks, and complete truth-table bridge slices.",
             [
                 THIS_DIR / "analyze_scaling_resource_audit.py",
+                THIS_DIR / "analyze_ultra_scale64_stress.py",
                 RESULTS / "analysis_scaling_resource_audit.md",
+                RESULTS / "analysis_screen_scale_ultra_scale64_stress.md",
+                RESULTS / "manifest_screen_scale_ultra_scale64_stress.json",
                 TABLES / "scaling_resource_audit.tex",
+                TABLES / "screen_scale_ultra_scale64_stress.tex",
+                RESULTS / "raw_screen_scale_ultra_scale64_terms.csv",
                 RESULTS / "raw_truth_bridge_terms.csv",
                 RESULTS / "raw_truth_bridge_n24_terms.csv",
                 RESULTS / "raw_truth_bridge_n25_terms.csv",

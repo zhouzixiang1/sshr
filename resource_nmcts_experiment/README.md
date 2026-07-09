@@ -311,7 +311,7 @@ Latest high-dimensional verification progress:
   width 6 remains the paper-facing default because gains come from recursive
   depth/frontier selection rather than wider root candidates.
 - This is a verification-boundary improvement, not a hardware-mapping claim;
-  `n=26--40` remain covered by plan/circuit symbolic verification rather than
+  `n=26--64` remain covered by plan/circuit symbolic verification rather than
   full truth-table enumeration.
 
 Core commands:
@@ -343,6 +343,8 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 20,28,40 --per-n 24 --workers 6 --action-width 6 --max-screen-depth 4 --tag screen_scale_width6_probe
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 20,28,40 --per-n 24 --workers 6 --action-width 12 --max-screen-depth 4 --tag screen_scale_width12_probe
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 20,28,40 --per-n 24 --workers 6 --action-width 24 --max-screen-depth 4 --tag screen_scale_width24_probe
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --tag ultra_scale64 --ns 48,56,64 --per-n 16 --workers 10 --action-width 6 --max-screen-depth 4
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_ultra_scale64_stress.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_schedule_metrics.py --input schedule_generalization=results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv --input schedule_truth_bridge=results/raw_schedule_truth_bridge_terms.csv --input schedule_truth_bridge_n23=results/raw_schedule_truth_bridge_n23_terms.csv
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_frontier_policy_upgrade.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_stage_gated_frontier.py
@@ -784,6 +786,15 @@ Current structure-policy evidence:
   `n=23` bridge rerun,
   `results/analysis_truth_bridge_n23_cost_time003_frontier_terms.md`, passes
   60/60 complete truth-table, plan, and emitted-circuit checks.
+- The ultra-scale symbolic stress run,
+  `results/analysis_screen_scale_ultra_scale64_stress.md`, extends the same
+  term-set protocol to 48 generated functions at `n=48,56,64`.  All 480 method
+  rows pass plan-level ANF and emitted-circuit ANF verification with zero
+  mismatches and maximum wire-polynomial size 282.  Depth-4 screening improves
+  over fixed depth-2 by 24/0/24 with -1.81% mean score, while the learned
+  depth-frontier policy improves over depth-2 by 10/0/38 with -0.84% mean score
+  and reduces planning time by 61.61% relative to the full measured frontier.  This
+  is ultra-scale symbolic evidence, not a complete truth-table benchmark.
 - The staged frontier analysis,
   `results/analysis_stage_gated_frontier.md`, reuses measured and verified
   depth-2/3/4 rows.  Its validation-selected 1.25% trigger gives +0.04% mean

@@ -7,8 +7,10 @@ compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, comparison-protocol coverage,
 comparison-target validity,
 novelty/comparison scorecard coverage,
+public handoff freshness,
 search-control baseline coverage,
 frontier random-depth control coverage,
+ultra-scale n=48--64 stress coverage,
 editorial screening support,
 target-venue decision support,
 submission support packet coverage,
@@ -63,11 +65,14 @@ COMPARISON_TARGET_VALIDITY_MANIFEST = RESULTS / "manifest_comparison_target_vali
 COMPARISON_TARGET_VALIDITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_target_validity_audit.tex"
 NOVELTY_SCORECARD_MANIFEST = RESULTS / "manifest_novelty_comparison_scorecard.json"
 NOVELTY_SCORECARD_TABLE = THIS_DIR / "paper_latex" / "tables" / "novelty_comparison_scorecard.tex"
+PUBLIC_HANDOFF_MANIFEST = RESULTS / "manifest_public_handoff_freshness_audit.json"
 ROS_GAP_MANIFEST = RESULTS / "manifest_ros_reproduction_gap_audit.json"
 SEARCH_BUDGET_MANIFEST = RESULTS / "manifest_search_budget_contract.json"
 SEARCH_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "search_budget_contract.tex"
 SCHEDULE_PROXY_MANIFEST = RESULTS / "manifest_schedule_proxy_audit.json"
 SCHEDULE_PROXY_TABLE = THIS_DIR / "paper_latex" / "tables" / "schedule_proxy_audit.tex"
+ULTRA_SCALE64_MANIFEST = RESULTS / "manifest_screen_scale_ultra_scale64_stress.json"
+ULTRA_SCALE64_TABLE = THIS_DIR / "paper_latex" / "tables" / "screen_scale_ultra_scale64_stress.tex"
 SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
 BITFLIP_RANDOM_PRIOR_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control.json"
 BITFLIP_RANDOM_PRIOR_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_random_prior_control.tex"
@@ -320,6 +325,21 @@ def verify_novelty_scorecard() -> dict[str, str]:
     )
 
 
+def verify_public_handoff_freshness() -> dict[str, str]:
+    manifest = read_json(PUBLIC_HANDOFF_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    snapshot = manifest.get("snapshot", {}) if manifest else {}
+    status = "pass" if manifest and revisions == 0 else "needs revision"
+    return row(
+        "Public handoff freshness audit",
+        status,
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; snapshot={snapshot}.",
+        "Run analyze_public_handoff_freshness_audit.py and refresh public current-snapshot tokens in DELIVERABLE_zh.md, FINAL_SUBMISSION_HANDOFF_zh.md, or submission_checklist.md.",
+    )
+
+
 def verify_ros_gap() -> dict[str, str]:
     manifest = read_json(ROS_GAP_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -349,6 +369,35 @@ def verify_schedule_proxy() -> dict[str, str]:
         status,
         f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
         "Run analyze_schedule_metrics.py and analyze_schedule_proxy_audit.py and restore schedule-proxy table anchors.",
+    )
+
+
+def verify_ultra_scale64() -> dict[str, str]:
+    manifest = read_json(ULTRA_SCALE64_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    raw_rows = manifest.get("raw_rows", "missing") if manifest else "missing"
+    plan_rows = manifest.get("plan_verified_rows", "missing") if manifest else "missing"
+    circuit_rows = manifest.get("circuit_verified_rows", "missing") if manifest else "missing"
+    mismatch = manifest.get("max_circuit_mismatches", "missing") if manifest else "missing"
+    n_values = manifest.get("n_values", []) if manifest else []
+    table_exists = ULTRA_SCALE64_TABLE.exists()
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and raw_rows == 480
+        and plan_rows == 480
+        and circuit_rows == 480
+        and mismatch == 0
+        and table_exists
+        else "needs revision"
+    )
+    return row(
+        "Ultra-scale n=48--64 stress audit",
+        status,
+        f"raw_rows={raw_rows}; plan_verified={plan_rows}; circuit_verified={circuit_rows}; max_circuit_mismatches={mismatch}; n_values={n_values}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
+        "Run analyze_ultra_scale64_stress.py and restore the n=48--64 stress manifest and manuscript table.",
     )
 
 
@@ -905,9 +954,11 @@ def build_rows() -> list[dict[str, str]]:
             verify_comparison_protocol(),
             verify_comparison_target_validity(),
             verify_novelty_scorecard(),
+            verify_public_handoff_freshness(),
             verify_ros_gap(),
             verify_search_budget_contract(),
             verify_schedule_proxy(),
+            verify_ultra_scale64(),
             verify_search_control(),
             verify_bitflip_random_prior(),
             verify_frontier_random_depth(),

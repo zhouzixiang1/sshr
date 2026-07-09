@@ -1,5 +1,5 @@
 {
-  "complete_rows": 23,
+  "complete_rows": 24,
   "families": [
     {
       "analysis_files": "12",
@@ -80,6 +80,22 @@
       "scripts_present": "2",
       "status": "complete",
       "summary_files": "2"
+    },
+    {
+      "analysis_files": "1",
+      "claim_use": "Verifies that public Chinese handoff, deliverable, and upload-checklist snapshots match current terminal audit counts.",
+      "dependency_boundary": "Does not change scientific results; checks that public handoff counters are refreshed after rebuilds.",
+      "driver_scripts": "analyze_public_handoff_freshness_audit.py",
+      "evidence_family": "Public handoff freshness",
+      "manifest_files": "1",
+      "raw_files": "0",
+      "raw_rows": "0",
+      "representative_raw": "",
+      "rerun_tier": "quick submission-support audit",
+      "scripts_missing": "",
+      "scripts_present": "1",
+      "status": "complete",
+      "summary_files": "1"
     },
     {
       "analysis_files": "3",
@@ -290,20 +306,20 @@
       "summary_files": "2"
     },
     {
-      "analysis_files": "58",
-      "claim_use": "Tests scaling behavior on n=20-40 generated term-set instances with symbolic emitted-circuit checks.",
+      "analysis_files": "60",
+      "claim_use": "Tests scaling behavior on n=20-64 generated term-set instances with symbolic emitted-circuit checks.",
       "dependency_boundary": "Symbolic or generated-instance verification; not exhaustive truth-table enumeration for all large n.",
-      "driver_scripts": "run_screen_scale_terms.py",
+      "driver_scripts": "run_screen_scale_terms.py; analyze_ultra_scale64_stress.py",
       "evidence_family": "High-dimensional symbolic screen-scale runs",
-      "manifest_files": "24",
-      "raw_files": "76",
-      "raw_rows": "11480",
-      "representative_raw": "results/raw_giga_adaptive_resource_vs_and_direct.csv; results/raw_giga_adaptive_screen_resource.csv; results/raw_giga_adaptive_screen_vs_single.csv; results/raw_giga_boolean_neural_resource.csv; +72 more",
+      "manifest_files": "25",
+      "raw_files": "77",
+      "raw_rows": "11960",
+      "representative_raw": "results/raw_giga_adaptive_resource_vs_and_direct.csv; results/raw_giga_adaptive_screen_resource.csv; results/raw_giga_adaptive_screen_vs_single.csv; results/raw_giga_boolean_neural_resource.csv; +73 more",
       "rerun_tier": "large raw rerun",
       "scripts_missing": "",
-      "scripts_present": "1",
+      "scripts_present": "2",
       "status": "complete",
-      "summary_files": "76"
+      "summary_files": "78"
     },
     {
       "analysis_files": "4",
@@ -491,6 +507,7 @@
     "results/raw_screen_scale_extended_terms.csv",
     "results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv",
     "results/raw_screen_scale_terms.csv",
+    "results/raw_screen_scale_ultra_scale64_terms.csv",
     "results/raw_screen_scale_width12_probe_terms.csv",
     "results/raw_screen_scale_width24_probe_terms.csv",
     "results/raw_screen_scale_width6_probe_terms.csv",
@@ -523,8 +540,8 @@
     "results/raw_ultra_pairwise_wide_vs_recursive.csv",
     "results/raw_ultra_root_action_pairwise_widths.csv"
   ],
-  "rows": 23,
+  "rows": 24,
   "script": "analyze_artifact_rerun_registry.py",
-  "unique_raw_files": 145,
-  "unique_raw_rows": 59556
+  "unique_raw_files": 146,
+  "unique_raw_rows": 60036
 }

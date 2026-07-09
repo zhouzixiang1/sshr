@@ -85,6 +85,15 @@ SMOKE_SPECS = (
         minimum_rows=8,
     ),
     SmokeSpec(
+        name="Ultra-scale n=48--64 stress audit",
+        script="analyze_ultra_scale64_stress.py",
+        manifest="results/manifest_screen_scale_ultra_scale64_stress.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="raw_rows",
+        minimum_rows=480,
+    ),
+    SmokeSpec(
         name="Search-budget contract audit",
         script="analyze_search_budget_contract.py",
         manifest="results/manifest_search_budget_contract.json",

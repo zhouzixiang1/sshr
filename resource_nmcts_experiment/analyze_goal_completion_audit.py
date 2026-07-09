@@ -266,23 +266,31 @@ def build_items() -> list[GoalItem]:
             status=status_if(
                 (
                     RESULTS / "analysis_scaling_resource_audit.md",
+                    RESULTS / "analysis_screen_scale_ultra_scale64_stress.md",
+                    RESULTS / "manifest_screen_scale_ultra_scale64_stress.json",
                     TABLES / "scaling_resource_audit.tex",
+                    TABLES / "screen_scale_ultra_scale64_stress.tex",
+                    RESULTS / "raw_screen_scale_ultra_scale64_terms.csv",
                     RESULTS / "raw_truth_bridge_terms.csv",
                     RESULTS / "raw_truth_bridge_n24_terms.csv",
                     RESULTS / "raw_truth_bridge_n25_terms.csv",
                     FIGURES / "fig5_validation.pdf",
                 )
             ),
-            evidence="Scaling audit covers n=20,24,28,32,40 term-set/symbolic slices and complete truth-table bridge checks for n=21--25 generated functions.",
+            evidence="Scaling audit covers n=20,24,28,32,40 plus an n=48,56,64 ultra-scale symbolic stress slice and complete truth-table bridge checks for n=21--25 generated functions.",
             evidence_files=(
                 RESULTS / "analysis_scaling_resource_audit.md",
+                RESULTS / "analysis_screen_scale_ultra_scale64_stress.md",
+                RESULTS / "manifest_screen_scale_ultra_scale64_stress.json",
                 TABLES / "scaling_resource_audit.tex",
+                TABLES / "screen_scale_ultra_scale64_stress.tex",
+                RESULTS / "raw_screen_scale_ultra_scale64_terms.csv",
                 RESULTS / "raw_truth_bridge_terms.csv",
                 RESULTS / "raw_truth_bridge_n24_terms.csv",
                 RESULTS / "raw_truth_bridge_n25_terms.csv",
                 FIGURES / "fig5_validation.pdf",
             ),
-            boundary="High-dimensional rows are symbolic or generated bridge checks, not exhaustive truth-table enumeration for all n=26--40 functions.",
+            boundary="High-dimensional rows are symbolic or generated bridge checks, not exhaustive truth-table enumeration for all n=26--64 functions.",
             next_action="Keep large-scale claims tied to the scaling audit and bridge scope.",
         ),
         GoalItem(

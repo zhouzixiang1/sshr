@@ -53,6 +53,9 @@ SELF_OUTPUTS = {
     RESULTS / "summary_payload_git_policy_audit.csv",
     RESULTS / "analysis_payload_git_policy_audit.md",
     RESULTS / "manifest_payload_git_policy_audit.json",
+    RESULTS / "summary_public_handoff_freshness_audit.csv",
+    RESULTS / "analysis_public_handoff_freshness_audit.md",
+    RESULTS / "manifest_public_handoff_freshness_audit.json",
 }
 
 
@@ -175,6 +178,9 @@ def write_manifest(path: Path, files: list[Path], missing: list[Path], archive_d
             rel(RESULTS / "summary_payload_git_policy_audit.csv"),
             rel(RESULTS / "analysis_payload_git_policy_audit.md"),
             rel(RESULTS / "manifest_payload_git_policy_audit.json"),
+            rel(RESULTS / "summary_public_handoff_freshness_audit.csv"),
+            rel(RESULTS / "analysis_public_handoff_freshness_audit.md"),
+            rel(RESULTS / "manifest_public_handoff_freshness_audit.json"),
             rel(RESULTS / "summary_payload_verifier_smoke_audit.csv"),
             rel(RESULTS / "analysis_payload_verifier_smoke_audit.md"),
             rel(RESULTS / "manifest_payload_verifier_smoke_audit.json"),

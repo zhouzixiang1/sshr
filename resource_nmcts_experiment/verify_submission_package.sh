@@ -26,7 +26,9 @@ fi
 "$PYTHON_BIN" analyze_ros_reproduction_gap_audit.py
 "$PYTHON_BIN" analyze_novelty_comparison_scorecard.py
 "$PYTHON_BIN" analyze_comparison_target_validity_audit.py
+"$PYTHON_BIN" analyze_ultra_scale64_stress.py
 "$PYTHON_BIN" analyze_payload_git_policy_audit.py
+"$PYTHON_BIN" analyze_public_handoff_freshness_audit.py
 "$PYTHON_BIN" analyze_submission_package_verifier.py
 
 if command -v git >/dev/null 2>&1 && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
@@ -44,6 +46,7 @@ if command -v rg >/dev/null 2>&1; then
     results/analysis_submission_support_packet_audit.md
     results/analysis_ros_reproduction_gap_audit.md
     results/analysis_novelty_comparison_scorecard.md
+    results/analysis_screen_scale_ultra_scale64_stress.md
     results/analysis_citation_support_audit.md
     results/analysis_author_input_closure_audit.md
     results/analysis_submission_metadata_closure_path.md
@@ -64,6 +67,7 @@ if command -v rg >/dev/null 2>&1; then
     results/analysis_payload_latex_compile_audit.md
     results/analysis_submission_text_preview.md
     results/analysis_submission_payload_archive.md
+    results/analysis_public_handoff_freshness_audit.md
   )
   existing_reports=()
   for report in "${reports[@]}"; do
@@ -72,7 +76,7 @@ if command -v rg >/dev/null 2>&1; then
     fi
   done
   if (( ${#existing_reports[@]} > 0 )); then
-    rg -n "pass:|needs author input|Payload SHA|Payload Git|Generated payload|tracked=|ignored=|registry_raw|unresolved_count|needs_revision_count|needs_author_input_count|synthetic_only|private_outputs_are_git_ignored|private_payload_hits|manifest_files|archive_files|metadata_issues|reviewer_entries|comparison_protocol_files|comparison target|target family|roles=|novelty|scorecard|reviewer question|editorial screening|screening|support_packet_files|support-packet|target venue|recommended_first_choice|strong_fit_count|ros_gap_files|ROS Reproduction|official_ros_fully_reproduced|full_ros_boundary_is_explicit|headline_numeric_files|citation_support_files|author_input_closure_files|metadata_closure_files|required_metadata_paths|closure_path_ready|extracted_files|verifier_returncode|extracted_payload_mode|smoke_scripts|compiled_manuscripts|compile seconds|figures=|source rows|claims=|computed|verified_total|dependency_count|Dependency types|tex_input|bibliography|cited_keys|bib_keys|locator|dimensions|ink range|rendered|characters|missing anchors|forbidden hits|identity anchors|encrypted|javascript|forbidden metadata|local_path_files|strict_local_path_files|private_members|old_workspace_path_files|file count|archive sha256|comparison layer|layers=" "${existing_reports[@]}" || true
+    rg -n "pass:|needs author input|Payload SHA|Payload Git|Generated payload|tracked=|ignored=|registry_raw|unresolved_count|needs_revision_count|needs_author_input_count|synthetic_only|private_outputs_are_git_ignored|private_payload_hits|manifest_files|archive_files|metadata_issues|reviewer_entries|comparison_protocol_files|comparison target|target family|roles=|novelty|scorecard|reviewer question|ultra-scale|raw rows|plan ANF verified|emitted-circuit ANF verified|public handoff|handoff|snapshot|PDF pages=|payload_files=|artifact_registry=|source_privacy=|goal_gate=|editorial screening|screening|support_packet_files|support-packet|target venue|recommended_first_choice|strong_fit_count|ros_gap_files|ROS Reproduction|official_ros_fully_reproduced|full_ros_boundary_is_explicit|headline_numeric_files|citation_support_files|author_input_closure_files|metadata_closure_files|required_metadata_paths|closure_path_ready|extracted_files|verifier_returncode|extracted_payload_mode|smoke_scripts|compiled_manuscripts|compile seconds|figures=|source rows|claims=|computed|verified_total|dependency_count|Dependency types|tex_input|bibliography|cited_keys|bib_keys|locator|dimensions|ink range|rendered|characters|missing anchors|forbidden hits|identity anchors|encrypted|javascript|forbidden metadata|local_path_files|strict_local_path_files|private_members|old_workspace_path_files|file count|archive sha256|comparison layer|layers=" "${existing_reports[@]}" || true
   fi
 fi
 

@@ -115,19 +115,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=963; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=973; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=963; archive_files=963; missing=none; extra=none.",
+      "evidence": "manifest_files=973; archive_files=973; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=963; mismatches=none.",
+      "evidence": "checked=973; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -178,6 +178,12 @@
       "evidence": "schedule_proxy_files=8; missing=none.",
       "item": "Payload schedule-proxy evidence",
       "next_action": "Ensure the uploadable archive includes the schedule metrics scripts, compact audit outputs, and manuscript schedule-proxy table.",
+      "status": "pass"
+    },
+    {
+      "evidence": "ultra_scale64_files=10; missing=none.",
+      "item": "Payload ultra-scale n=48--64 evidence",
+      "next_action": "Ensure the uploadable archive includes the n=48--64 raw term-set stress rows, compact audit, and manuscript tables.",
       "status": "pass"
     },
     {
@@ -265,7 +271,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=963; metadata_issues=none.",
+      "evidence": "members_checked=973; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -290,7 +296,7 @@
     "results/summary_search_budget_contract.csv"
   ],
   "status_counts": {
-    "pass": 26
+    "pass": 27
   },
   "support_packet_paths": [
     "analyze_submission_support_packet_audit.py",

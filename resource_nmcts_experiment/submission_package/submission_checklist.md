@@ -98,6 +98,7 @@ Run these from `resource_nmcts_experiment/`:
   analyze_ros_reproduction_gap_audit.py \
   analyze_frontier_random_depth_control.py \
   analyze_search_control_baseline_audit.py \
+  analyze_ultra_scale64_stress.py \
   analyze_editorial_screening_audit.py \
   analyze_target_venue_decision_audit.py \
   analyze_submission_support_packet_audit.py \
@@ -133,6 +134,12 @@ rg -n "Overfull|Underfull|undefined|Undefined|Warning|Error|LaTeX Warning|Rerun"
 
 Expected current state:
 
+- Machine snapshot tokens checked by `analyze_public_handoff_freshness_audit.py`:
+  PDF pages=35/35; readiness=56 pass + 1 needs author input;
+  payload_files=973; artifact_registry=24 families / 146 raw CSV / 60036 raw rows;
+  source_privacy=0 strict leaks / 53 provenance files / 931 payload text files;
+  comparison_validity=7/7 pass; novelty_scorecard=6/6 pass;
+  goal_gate=author/venue metadata remains open.
 - Archive manifest: all payload groups complete.
 - Payload archive: tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.
 - Payload round-trip audit: archive contents match manifest paths and hashes, required files, reviewer entrypoints, comparison-protocol evidence files, comparison-target validity files, novelty/comparison scorecard files, ROS reproduction-boundary evidence files, editorial-screening evidence files, support-packet evidence files, citation-support evidence files, author-input closure evidence files, source/path privacy audit code, and headline-numeric evidence files are present, private files are absent, and tar metadata is deterministic.
@@ -145,6 +152,7 @@ Expected current state:
 - Novelty/comparison scorecard: reviewer-facing method identity, baseline meaning, external probe, tradeoff, AI/MCTS, and scale-boundary questions all pass with manuscript and support-brief anchors.
 - ROS reproduction gap audit: ROS-style LUT and line-sensitivity are proxy evidence; the official ROS SAT garbage-management component is not reproduced and must not be claimed.
 - Search-control baseline audit: heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, bit-flip random-prior, frontier random-depth, and phase random-control rows all pass.
+- Ultra-scale n=48/56/64 stress audit: 480/480 plan ANF rows and 480/480 emitted-circuit ANF rows pass with zero mismatches; this is symbolic scaling evidence, not full truth-table enumeration.
 - Frontier random-depth control: same-candidate depth-2/3/4 random controls pass on held-out, scale, and truth-table bridge slices; the result is a quality/budget-allocation claim, not a runtime claim.
 - Editorial screening audit: scope, novelty, comparison route, negative-result visibility, AI-boundary, large-scale boundary, reproducibility path, and author/venue gate all pass.
 - Target-venue decision audit: source-backed venue fit, recommended order, metadata gate, anonymous-review policy gate, and AI-disclosure policy gate all pass while the final target venue remains author input.

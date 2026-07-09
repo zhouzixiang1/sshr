@@ -81,6 +81,8 @@ def compact_scope_tex(text: str) -> str:
         return r"$24,28,32,40$"
     if text == "n=20,28,40":
         return r"$20,28,40$"
+    if text == "n=48,56,64":
+        return r"$48,56,64$"
     if text == "n=21--25":
         return r"$21$--$25$"
     return tex_escape(text)
@@ -116,6 +118,9 @@ def build_rows() -> list[dict[str, str]]:
         truth_rows.extend(read_csv(RESULTS / filename))
     truth_rep = [row for row in truth_rows if row["method"] == "depth_frontier_policy"]
     truth_settings = len(truth_rows) // len({row["method"] for row in truth_rows})
+
+    ultra_rows = read_csv(RESULTS / "raw_screen_scale_ultra_scale64_terms.csv")
+    ultra_rep = [row for row in ultra_rows if row["method"] == "depth_frontier_policy"]
 
     return [
         {
@@ -174,6 +179,25 @@ def build_rows() -> list[dict[str, str]]:
             "resource_text": resource_summary(width6_rows),
             "extra": "widths 6/12/24; 72 functions per width",
             "boundary": "Sensitivity check; wider root screens are not claimed as better.",
+        },
+        {
+            "slice": "Ultra-scale term-set stress",
+            "n_scope": "n=48,56,64",
+            "function_or_setting_count": str(len({row["name"] for row in ultra_rows})),
+            "method_rows": str(len(ultra_rows)),
+            "verified_rows": str(verified_count(ultra_rows, ("anf_verified", "circuit_anf_verified"))),
+            "verification": "symbolic plan+circuit ANF",
+            "representative": "depth_frontier_policy",
+            "representative_rows": str(len(ultra_rep)),
+            "mean_score": fmt_float(mean(ultra_rep, "score")),
+            "mean_T": fmt_float(mean(ultra_rep, "T"), 0),
+            "mean_CNOT": fmt_float(mean(ultra_rep, "CNOT"), 0),
+            "mean_depth": fmt_float(mean(ultra_rep, "depth"), 0),
+            "mean_peak_ancilla": fmt_float(mean(ultra_rep, "peak_ancilla"), 1),
+            "mean_time_s": fmt_float(mean(ultra_rep, "time_s"), 2),
+            "resource_text": resource_summary(ultra_rep),
+            "extra": "48 functions x 10 methods",
+            "boundary": "Ultra-scale symbolic stress; no truth-table enumeration.",
         },
         {
             "slice": "Complete truth-table bridge",

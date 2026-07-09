@@ -596,13 +596,14 @@ def fig_learned_control_summary() -> None:
 
 def validation_rows() -> list[dict[str, object]]:
     groups = [
-        ("n=20-40 item symbolic", "circuit_verified_rows", [
+        ("n=20-64 item symbolic", "circuit_verified_rows", [
             "summary_screen_scale_terms.csv",
             "summary_screen_scale_extended_terms.csv",
             "summary_screen_scale_depth_frontier_terms.csv",
             "summary_screen_scale_depth_frontier_policy_terms.csv",
             "summary_screen_scale_depth_frontier_policy_large_generalization_terms.csv",
             "summary_screen_scale_depth_frontier_policy_cost_time003_generalization_terms.csv",
+            "summary_screen_scale_ultra_scale64_terms.csv",
         ]),
         ("width probe symbolic", "circuit_verified_rows", [
             "summary_screen_scale_width6_probe_terms.csv",

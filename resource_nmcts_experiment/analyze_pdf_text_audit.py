@@ -45,7 +45,7 @@ REQUIRED_ANCHORS = (
     AnchorSpec("traditional baseline count", ("177-function", "177 function", "177 functions")),
     AnchorSpec("abstract headline 72.25", ("72.25",)),
     AnchorSpec("abstract headline 67.80", ("67.80",)),
-    AnchorSpec("large external evidence count", ("15,294", "15294")),
+    AnchorSpec("large external evidence count", ("15,774", "15774")),
     AnchorSpec("truth-table bridge count", ("400/400", "400 / 400")),
     AnchorSpec("SSHR baseline", ("sshr",)),
     AnchorSpec("ABC baseline", ("abc-aig", "abc aig", "abc-xag", "abc xag")),

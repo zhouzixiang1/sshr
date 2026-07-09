@@ -4,14 +4,14 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 
 ## Status counts
 
-- pass: 98
+- pass: 100
 
 ## Dependency types
 
 - bibliography: 2
 - figure: 14
 - main_source: 2
-- tex_input: 80
+- tex_input: 82
 
 ## Missing dependencies
 
@@ -62,6 +62,7 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 | author | tex_input | `tables/phase_affine_policy_rank_diverse` | `paper_latex/tables/phase_affine_policy_rank_diverse.tex` | True | True | pass |
 | author | tex_input | `tables/phase_policy_random_control` | `paper_latex/tables/phase_policy_random_control.tex` | True | True | pass |
 | author | tex_input | `tables/scaling_resource_audit` | `paper_latex/tables/scaling_resource_audit.tex` | True | True | pass |
+| author | tex_input | `tables/screen_scale_ultra_scale64_stress` | `paper_latex/tables/screen_scale_ultra_scale64_stress.tex` | True | True | pass |
 | author | figure | `fig1_pipeline.pdf` | `paper_latex/figures/submission_v36/fig1_pipeline.pdf` | True | True | pass |
 | author | figure | `fig2_traditional_resources.pdf` | `paper_latex/figures/submission_v36/fig2_traditional_resources.pdf` | True | True | pass |
 | author | figure | `fig3_baseline_comparisons.pdf` | `paper_latex/figures/submission_v36/fig3_baseline_comparisons.pdf` | True | True | pass |
@@ -111,6 +112,7 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 | anonymous | tex_input | `tables/phase_affine_policy_rank_diverse` | `paper_latex/tables/phase_affine_policy_rank_diverse.tex` | True | True | pass |
 | anonymous | tex_input | `tables/phase_policy_random_control` | `paper_latex/tables/phase_policy_random_control.tex` | True | True | pass |
 | anonymous | tex_input | `tables/scaling_resource_audit` | `paper_latex/tables/scaling_resource_audit.tex` | True | True | pass |
+| anonymous | tex_input | `tables/screen_scale_ultra_scale64_stress` | `paper_latex/tables/screen_scale_ultra_scale64_stress.tex` | True | True | pass |
 | anonymous | figure | `fig1_pipeline.pdf` | `paper_latex/figures/submission_v36/fig1_pipeline.pdf` | True | True | pass |
 | anonymous | figure | `fig2_traditional_resources.pdf` | `paper_latex/figures/submission_v36/fig2_traditional_resources.pdf` | True | True | pass |
 | anonymous | figure | `fig3_baseline_comparisons.pdf` | `paper_latex/figures/submission_v36/fig3_baseline_comparisons.pdf` | True | True | pass |

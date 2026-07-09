@@ -106,6 +106,10 @@ SCHEDULE_PROXY_ANALYSIS = RESULTS / "analysis_schedule_proxy_audit.md"
 SCHEDULE_PROXY_SUMMARY = RESULTS / "summary_schedule_proxy_audit.csv"
 SCHEDULE_PROXY_MANIFEST = RESULTS / "manifest_schedule_proxy_audit.json"
 SCHEDULE_PROXY_TABLE = THIS_DIR / "paper_latex" / "tables" / "schedule_proxy_audit.tex"
+ULTRA_SCALE64_ANALYSIS = RESULTS / "analysis_screen_scale_ultra_scale64_stress.md"
+ULTRA_SCALE64_SUMMARY = RESULTS / "summary_screen_scale_ultra_scale64_stress.csv"
+ULTRA_SCALE64_MANIFEST = RESULTS / "manifest_screen_scale_ultra_scale64_stress.json"
+ULTRA_SCALE64_TABLE = THIS_DIR / "paper_latex" / "tables" / "screen_scale_ultra_scale64_stress.tex"
 CITATION_SUPPORT_ANALYSIS = RESULTS / "analysis_citation_support_audit.md"
 CITATION_SUPPORT_SUMMARY = RESULTS / "summary_citation_support_audit.csv"
 CITATION_SUPPORT_MANIFEST = RESULTS / "manifest_citation_support_audit.json"
@@ -278,6 +282,19 @@ def build_rows() -> list[dict[str, str]]:
     schedule_proxy_revisions = int(schedule_proxy_manifest.get("needs_revision_count", -1)) if schedule_proxy_manifest else -1
     schedule_proxy_counts = schedule_proxy_manifest.get("status_counts", {}) if schedule_proxy_manifest else {}
     schedule_proxy_rows = schedule_proxy_manifest.get("rows", "missing") if schedule_proxy_manifest else "missing"
+    ultra_scale64_manifest = read_json(ULTRA_SCALE64_MANIFEST)
+    ultra_scale64_revisions = (
+        int(ultra_scale64_manifest.get("needs_revision_count", -1)) if ultra_scale64_manifest else -1
+    )
+    ultra_scale64_counts = ultra_scale64_manifest.get("status_counts", {}) if ultra_scale64_manifest else {}
+    ultra_scale64_rows = ultra_scale64_manifest.get("raw_rows", "missing") if ultra_scale64_manifest else "missing"
+    ultra_scale64_plan = ultra_scale64_manifest.get("plan_verified_rows", "missing") if ultra_scale64_manifest else "missing"
+    ultra_scale64_circuit = (
+        ultra_scale64_manifest.get("circuit_verified_rows", "missing") if ultra_scale64_manifest else "missing"
+    )
+    ultra_scale64_mismatch = (
+        ultra_scale64_manifest.get("max_circuit_mismatches", "missing") if ultra_scale64_manifest else "missing"
+    )
     citation_support_manifest = read_json(CITATION_SUPPORT_MANIFEST)
     citation_support_revisions = (
         int(citation_support_manifest.get("needs_revision_count", -1)) if citation_support_manifest else -1
@@ -580,6 +597,23 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Schedule-proxy audit checks score, T-depth proxy, and explicit auxiliary lifetime tradeoffs before hardware mapping; rows={schedule_proxy_rows}; status_counts={schedule_proxy_counts}; needs_revision_count={schedule_proxy_revisions}.",
             "next_action": "Rerun analyze_schedule_metrics.py and analyze_schedule_proxy_audit.py after changing high-dimensional frontier, truth-bridge, schedule-proxy, or auxiliary-lifetime claims.",
+        },
+        {
+            "item": "Ultra-scale n=48--64 stress audit",
+            "status": "pass"
+            if "tab:ultra-scale64-stress" in text
+            and ULTRA_SCALE64_ANALYSIS.exists()
+            and ULTRA_SCALE64_SUMMARY.exists()
+            and ULTRA_SCALE64_MANIFEST.exists()
+            and ULTRA_SCALE64_TABLE.exists()
+            and ultra_scale64_revisions == 0
+            and ultra_scale64_rows == 480
+            and ultra_scale64_plan == 480
+            and ultra_scale64_circuit == 480
+            and ultra_scale64_mismatch == 0
+            else "needs revision",
+            "evidence": f"Ultra-scale term-set stress covers n=48,56,64 with raw_rows={ultra_scale64_rows}; plan_verified={ultra_scale64_plan}; circuit_verified={ultra_scale64_circuit}; max_circuit_mismatches={ultra_scale64_mismatch}; status_counts={ultra_scale64_counts}; needs_revision_count={ultra_scale64_revisions}.",
+            "next_action": "Rerun run_screen_scale_terms.py with --tag ultra_scale64, then analyze_ultra_scale64_stress.py after changing ultra-scale term-set evidence or manuscript anchors.",
         },
         {
             "item": "Search-control baseline audit",

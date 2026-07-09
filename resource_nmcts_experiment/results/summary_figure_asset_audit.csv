@@ -3,6 +3,6 @@ fig1_pipeline,pass,True,True,True,True,1,40867,98748,13275,7,none,Regenerate fig
 fig2_traditional_resources,pass,True,True,True,True,1,37494,139484,32585,30,none,Regenerate figures with make_submission_figures.py and keep TeX references aligned with source_data CSVs.
 fig3_baseline_comparisons,pass,True,True,True,True,1,41636,88775,12973,7,none,Regenerate figures with make_submission_figures.py and keep TeX references aligned with source_data CSVs.
 fig4_phase_affine,pass,True,True,True,True,1,41717,102608,18341,7,none,Regenerate figures with make_submission_figures.py and keep TeX references aligned with source_data CSVs.
-fig5_validation,pass,True,True,True,True,1,35604,68811,12236,5,none,Regenerate figures with make_submission_figures.py and keep TeX references aligned with source_data CSVs.
+fig5_validation,pass,True,True,True,True,1,35601,68978,12220,5,none,Regenerate figures with make_submission_figures.py and keep TeX references aligned with source_data CSVs.
 fig6_sparse_gate_sensitivity,pass,True,True,True,True,1,45480,163341,79801,201,none,Regenerate figures with make_submission_figures.py and keep TeX references aligned with source_data CSVs.
 fig7_learned_control_summary,pass,True,True,True,True,1,40260,121888,25112,8,none,Regenerate figures with make_submission_figures.py and keep TeX references aligned with source_data CSVs.

@@ -1,0 +1,37 @@
+{
+  "documents": [
+    "DELIVERABLE_zh.md",
+    "submission_package/FINAL_SUBMISSION_HANDOFF_zh.md",
+    "submission_package/submission_checklist.md"
+  ],
+  "extracted_payload_mode": false,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_public_handoff_freshness_audit.md",
+    "manifest": "results/manifest_public_handoff_freshness_audit.json",
+    "summary": "results/summary_public_handoff_freshness_audit.csv"
+  },
+  "python": "3.11.15",
+  "rows": 4,
+  "script": "analyze_public_handoff_freshness_audit.py",
+  "snapshot": {
+    "anonymous_pages": 35,
+    "author_pages": 35,
+    "comparison_needs_revision": 0,
+    "comparison_rows": 7,
+    "novelty_needs_revision": 0,
+    "novelty_rows": 6,
+    "payload_files": 973,
+    "payload_text_files": 931,
+    "provenance_local_path_files": 53,
+    "raw_files": 146,
+    "raw_rows": 60036,
+    "readiness_author_input": 1,
+    "readiness_pass": 56,
+    "registry_families": 24,
+    "strict_local_path_leaks": 0
+  },
+  "status_counts": {
+    "pass": 4
+  }
+}

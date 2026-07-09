@@ -8,5 +8,5 @@ This terminal audit renders every page of the author and anonymous PDFs with Pop
 
 | manuscript | status | pages | rendered | dimensions | ink range | failures |
 |---|---|---:|---:|---|---|---|
-| author | pass | 35 | 35 | 596x842 | 0.052344--0.153898 | none |
-| anonymous | pass | 35 | 35 | 596x842 | 0.027894--0.153898 | none |
+| author | pass | 35 | 35 | 596x842 | 0.062242--0.158647 | none |
+| anonymous | pass | 35 | 35 | 596x842 | 0.061303--0.158647 | none |

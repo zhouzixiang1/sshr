@@ -17,6 +17,19 @@
 - 最终数据和代码归档 DOI、仓库 URL、commit hash、license。
 - AI assistance disclosure、预印本和既往投稿说明。
 
+## 机器审计快照
+
+以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，代表当前公开交接状态：
+
+- PDF pages=35/35
+- readiness=56 pass + 1 needs author input
+- payload_files=973
+- artifact_registry=24 families / 146 raw CSV / 60036 raw rows
+- source_privacy=0 strict leaks / 53 provenance files / 931 payload text files
+- comparison_validity=7/7 pass
+- novelty_scorecard=6/6 pass
+- goal_gate=author/venue metadata remains open
+
 ## 推荐执行顺序
 
 1. 先读 `target_venue_brief.md`，确定一个目标期刊和一个备选期刊。

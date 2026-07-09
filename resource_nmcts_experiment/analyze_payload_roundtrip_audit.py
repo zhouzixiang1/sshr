@@ -93,6 +93,18 @@ SCHEDULE_PROXY_PATHS = {
     "results/manifest_schedule_proxy_audit.json",
     "paper_latex/tables/schedule_proxy_audit.tex",
 }
+ULTRA_SCALE64_PATHS = {
+    "run_screen_scale_terms.py",
+    "analyze_ultra_scale64_stress.py",
+    "results/raw_screen_scale_ultra_scale64_terms.csv",
+    "results/summary_screen_scale_ultra_scale64_terms.csv",
+    "results/analysis_screen_scale_ultra_scale64_terms.md",
+    "results/summary_screen_scale_ultra_scale64_stress.csv",
+    "results/analysis_screen_scale_ultra_scale64_stress.md",
+    "results/manifest_screen_scale_ultra_scale64_stress.json",
+    "paper_latex/tables/screen_scale_ultra_scale64_terms.tex",
+    "paper_latex/tables/screen_scale_ultra_scale64_stress.tex",
+}
 SEARCH_BUDGET_PATHS = {
     "analyze_search_budget_contract.py",
     "results/analysis_search_budget_contract.md",
@@ -356,6 +368,16 @@ def build_rows() -> list[dict[str, str]]:
             "pass" if not schedule_proxy_missing else "needs revision",
             f"schedule_proxy_files={len(SCHEDULE_PROXY_PATHS)}; missing={schedule_proxy_missing or 'none'}.",
             "Ensure the uploadable archive includes the schedule metrics scripts, compact audit outputs, and manuscript schedule-proxy table.",
+        )
+    )
+
+    ultra_scale64_missing = sorted(ULTRA_SCALE64_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload ultra-scale n=48--64 evidence",
+            "pass" if not ultra_scale64_missing else "needs revision",
+            f"ultra_scale64_files={len(ULTRA_SCALE64_PATHS)}; missing={ultra_scale64_missing or 'none'}.",
+            "Ensure the uploadable archive includes the n=48--64 raw term-set stress rows, compact audit, and manuscript tables.",
         )
     )
 

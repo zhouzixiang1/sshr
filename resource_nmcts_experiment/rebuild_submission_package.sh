@@ -63,6 +63,7 @@ echo "==> ${PYTHON_BIN} analyze_schedule_metrics.py"
   --latex-out paper_latex/tables/schedule_metrics.tex
 run_py analyze_schedule_proxy_audit.py
 run_py analyze_learned_control_audit.py
+run_py analyze_ultra_scale64_stress.py
 run_py analyze_scaling_resource_audit.py
 run_py analyze_weight_robustness.py
 run_py analyze_artifact_rerun_registry.py
@@ -105,6 +106,7 @@ run_py analyze_payload_extraction_smoke_audit.py
 run_py analyze_payload_latex_compile_audit.py
 run_py analyze_payload_verifier_smoke_audit.py
 run_py analyze_submission_readiness_audit.py
+run_py analyze_public_handoff_freshness_audit.py
 run_py analyze_submission_package_verifier.py
 
 echo "==> Submission package rebuilt"

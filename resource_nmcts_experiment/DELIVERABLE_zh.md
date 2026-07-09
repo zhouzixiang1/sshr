@@ -16,6 +16,19 @@
 
 论文主张应限定为：资源约束、低 T-count、低加权 score 的量子布尔函数 oracle 综合方法。不能写成 CNOT-only 最优，也不能写成硬件映射优势。
 
+### 当前权威快照（自动审计锚点）
+
+以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，用于防止交付说明和机器审计结果漂移：
+
+- PDF pages=35/35
+- readiness=56 pass + 1 needs author input
+- payload_files=973
+- artifact_registry=24 families / 146 raw CSV / 60036 raw rows
+- source_privacy=0 strict leaks / 53 provenance files / 931 payload text files
+- comparison_validity=7/7 pass
+- novelty_scorecard=6/6 pass
+- goal_gate=author/venue metadata remains open
+
 ### 1.1 对比对象与论文意义
 
 当前方法的对比对象分三层，而不是只和 SSHR 比：
@@ -213,7 +226,7 @@
 - `results/analysis_scaling_resource_audit.md`
 - `paper_latex/tables/scaling_resource_audit.tex`
 
-该审计把函数/设置数、方法行数、验证行数和代表性资源均值分开。核心覆盖为：`n=24,28,32,40` large term-set frontier 96 个函数、960/960 symbolic rows；stage-gated frontier 96/96 symbolic rows；`n=20,28,40` action-width probe 216 个 width/function settings、1512/1512 symbolic rows；`n=21--25` complete truth-table bridge 40 个 function/settings、400/400 truth+symbolic rows。对应代表性资源均值约为 score 1090--1130、T 985--1023、CNOT/depth 1593--1648、peak ancilla 5.2--5.3。论文中应把这写成“高维逻辑层验证与资源审计”，不是硬件映射，也不是全体 `n=26--40` 的完整真值表枚举。
+该审计把函数/设置数、方法行数、验证行数和代表性资源均值分开。核心覆盖为：`n=24,28,32,40` large term-set frontier 96 个函数、960/960 symbolic rows；stage-gated frontier 96/96 symbolic rows；`n=20,28,40` action-width probe 216 个 width/function settings、1512/1512 symbolic rows；新增 `n=48,56,64` ultra-scale symbolic stress 48 个函数、480/480 plan+emitted-circuit symbolic rows；`n=21--25` complete truth-table bridge 40 个 function/settings、400/400 truth+symbolic rows。对应代表性资源均值约为 score 1090--1183、T 985--1070、CNOT/depth 1593--1728、peak ancilla 5.2--5.4。论文中应把这写成“高维逻辑层验证与资源审计”，不是硬件映射，也不是全体 `n=26--64` 的完整真值表枚举。
 
 本轮还补充 compute/reproducibility audit 层，用于回应“大规模实验是否可复现、是否利用多核/GPU环境”的问题：
 
@@ -349,7 +362,7 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/analysis_pdf_metadata_audit.md`
 - `results/manifest_pdf_metadata_audit.json`
 
-该审计调用 Poppler `pdfinfo` 检查作者版和匿名版投稿 PDF 的 Title/Author/Creator/Producer 等元数据、页数、A4 页面尺寸、加密状态、JavaScript、Form 字段和隐私敏感字符串。当前作者版和匿名版均为 33 页、未加密、无 JavaScript、A4，metadata 中没有作者身份、路径、TODO/TBD/placeholder 或 `AUTHOR INPUT REQUIRED` 泄漏。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；与 visual/text 审计一样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包。
+该审计调用 Poppler `pdfinfo` 检查作者版和匿名版投稿 PDF 的 Title/Author/Creator/Producer 等元数据、页数、A4 页面尺寸、加密状态、JavaScript、Form 字段和隐私敏感字符串。当前作者版和匿名版均为 35 页、未加密、无 JavaScript、A4，metadata 中没有作者身份、路径、TODO/TBD/placeholder 或 `AUTHOR INPUT REQUIRED` 泄漏。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；与 visual/text 审计一样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包。
 
 本轮新增 source/path privacy audit，把源码和 payload 中的本机路径分成“严格禁止”和“可复现 provenance”两类：
 
@@ -358,7 +371,7 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/analysis_source_path_privacy_audit.md`
 - `results/manifest_source_path_privacy_audit.json`
 
-该审计检查主稿/匿名稿 TeX、`references.bib`、生成表格输入和 11 个公开 submission support Markdown/JSON 文件中是否出现 `/Users/...`、`Desktop/tzb` 或旧 `claude` 路径；同时检查匿名稿 source 是否保留 `Anonymous Authors` 且不含 `Zixiang Zhou` 作者字段，payload manifest 中是否混入 private metadata/previews。当前严格区为 0 个本机路径、0 个旧 `claude` 路径、0 个私有 payload 成员；主稿/匿名稿、bibliography 和表格输入共 168 个文件通过严格检查；payload 的 910 个文本文件中有 53 个文件含本机路径、213 个路径命中，均归类为 `results/`、`README.md` 或 `DELIVERABLE_zh.md` 中的工具链/实验 provenance，而不是主稿或投稿支持文件泄漏；payload manifest 当前含 952 个成员。该审计已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke。
+该审计检查主稿/匿名稿 TeX、`references.bib`、生成表格输入和 11 个公开 submission support Markdown/JSON 文件中是否出现 `/Users/...`、`Desktop/tzb` 或旧 `claude` 路径；同时检查匿名稿 source 是否保留 `Anonymous Authors` 且不含 `Zixiang Zhou` 作者字段，payload manifest 中是否混入 private metadata/previews。当前严格区为 0 个本机路径、0 个旧 `claude` 路径、0 个私有 payload 成员；主稿/匿名稿、bibliography 和表格输入共 172 个文件通过严格检查；payload 的 931 个文本文件中有 53 个文件含本机路径、213 个路径命中，均归类为 `results/`、`README.md` 或 `DELIVERABLE_zh.md` 中的工具链/实验 provenance，而不是主稿或投稿支持文件泄漏；payload manifest 当前含 973 个成员。该审计已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke。
 
 本轮新增投稿完整性层：英文投稿稿末尾加入 `Data and Code Availability`，明确代码、raw/summary CSV、manifest、LaTeX 表、图源数据和 PDF 均位于 `resource_nmcts_experiment/` artifact package，运行入口为 `run_*.py`、`train_*.py`、`analyze_*.py`，环境为 `mcts-qoracle` 和直接解释器路径 `/opt/anaconda3/envs/mcts-qoracle/bin/python`。同时新增自动 submission-readiness audit：
 
@@ -374,9 +387,9 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/manifest_editorial_screening_audit.json`
 - `paper_latex/tables/editorial_screening_audit.tex`
 
-该审计逐项检查 logical-layer scope、novelty/comparison route、counterpoint/negative-result visibility、AI/MCTS claim boundary、large-scale verification boundary、reproducibility path、author/venue gate 和 editorial reading path。当前 8/8 项 pass；它已接入 rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke 和 artifact rerun registry。artifact registry 现在覆盖 21 个 evidence family、156 个 raw-file references、63228 行 raw-row references；按文件唯一计数，当前 payload/reproducibility 侧有 145 个 raw CSV。
+该审计逐项检查 logical-layer scope、novelty/comparison route、comparison target roles、counterpoint/negative-result visibility、AI/MCTS claim boundary、large-scale verification boundary、reproducibility path、author/venue gate 和 editorial reading path。当前 9/9 项 pass；它已接入 rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke 和 artifact rerun registry。artifact registry 现在覆盖 23 个 evidence family、145 个 raw CSV、59556 行 unique raw-row references。
 
-当前 submission-readiness 审计结果为 52 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、algorithm contract、search-budget contract、baseline fairness/scope、comparison/search-control/citation/editorial screening/target-venue/ROS reproduction-boundary/schedule-proxy/submission support-packet audits、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、uploadable payload archive、payload round-trip/extraction/verifier/LaTeX compile checks、terminal package verifier、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder 和 compiled PDF 检查。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
+当前 submission-readiness 审计结果为 56 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、algorithm contract、search-budget contract、baseline fairness/scope、comparison/search-control/citation/editorial screening/target-venue/ROS reproduction-boundary/schedule-proxy/submission support-packet audits、ultra-scale symbolic stress audit、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、uploadable payload archive、payload round-trip/extraction/verifier/LaTeX compile checks、terminal package verifier、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder 和 compiled PDF 检查。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
 
 ## 2. 当前已完成内容
 
@@ -672,7 +685,7 @@ payload 后可以从解包目录运行一键 verifier。
 - 完整 bridge 从 `n=21,22,23,24` 的 340/340 扩展到 `n=21,22,23,24,25` 的 400/400 方法行。
 - `n=25` 是验证边界和 frontier policy 证据的实质推进：frontier policy 在该切片上与 depth-4/all-depth score 持平，同时降低 plan time。
 - width probe 是一个有用的负向消融：当前高维收益来自递归深度与 frontier 选择，而不是盲目增加 action width；因此论文中继续使用 width 6 作为默认设置是有证据的。
-- 仍不能写成 `n=26--40` 已完整枚举；这些维度目前仍主要依赖项集级 plan 验证和 emitted-circuit GF(2) 符号验证。
+- 仍不能写成 `n=26--64` 已完整枚举；这些维度目前仍主要依赖项集级 plan 验证和 emitted-circuit GF(2) 符号验证。
 
 ### 2.0 RevKit API baseline 与工具链边界
 
@@ -2024,6 +2037,7 @@ Git 状态：
 15. `n=20,28,40` depth-frontier 显示：depth-3 Boolean-ring screen 相对 fixed depth-2 为 49/0/23、平均 score -1.93%；depth-4 相对 fixed depth-2 为 49/0/23、平均 score -3.10%；648/648 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。这是新的高预算质量前沿证据，但运行时间显著增加。
 16. Depth-frontier policy 已把高预算质量前沿学习化：在 `n=20,28,40` scale harness 中，相对 fixed depth-2 获得 35/0/37、平均 score -2.19%；相对 all-depth depth<=4 平均 score +0.97%，但节省 58.69% 时间；720/720 个方法行通过 plan 和 emitted-circuit 两层 ANF 符号验证。
 17. Large frontier policy 进一步压缩质量 gap：held-out 相对 oracle frontier 从旧模型 +0.80% 降到 +0.04%；独立 seed `n=24,28,32,40` 相对旧 policy 为 17/0/79、平均 score -0.49%，相对 all-depth 仅 +0.10% 且节省 53.50% 时间；代价是比旧 policy 更慢。
+17a. `n=48,56,64` ultra-scale symbolic stress 将 term-set 验证边界推进到 64 变量：48 个函数、480/480 plan ANF 与 emitted-circuit ANF 符号验证通过，0 mismatch，最大 wire-polynomial size 为 282。depth-4 screen 相对 fixed depth-2 为 24/0/24、平均 score -1.81%；learned depth-frontier policy 相对 depth-2 为 10/0/38、平均 score -0.84%，相对 all-depth frontier 节省 61.61% plan time 但有 +1.02% score gap。该结果只能写成超高维逻辑层 symbolic stress，不能写成完整真值表 benchmark。
 18. Cost-aware frontier policy 给出更符合“资源约束”的快速质量模式：独立 seed `n=24,28,32,40` 相对 fixed depth-2 仍为 56/0/40、平均 score -1.39%，但相对 depth-2 的 plan time 增幅为 +170.03%，显著低于 large policy 的 +563.80%；在 n=23 bridge 上相对 large policy 节省 56.29% plan time 和 12.62% lifetime area，代价是 score +0.92%。
 19. Stage-gated frontier 把 depth-frontier 进一步变成 validation-calibrated 搜索预算控制：在 large frontier validation 上选出 `1.25%` depth-4 触发阈值后，独立 seed `n=24,28,32,40` 相对 all-depth 为 0/4/92、平均 score +0.04%、staged time -25.43%；n=23 bridge 与 all-depth score 持平且 staged time -11.51%。该证据是接近 all-depth 的 teacher/guard，不应写成比 large policy 同时更快更优。
 20. Learned sparse depth-4 gate 把 sparse frontier 继续学习化：在 `n=16,20,24` 训练、`n=28,40` held-out 测试，保守阈值下 48 个测试 pair 中只运行 32 个 depth-4，false skip 为 0，相对 deterministic sparse depth-2/4 frontier score 为 0/0/48、平均 +0.00%，同时 sparse-frontier evaluation time -17.39%；进一步在三组独立 seed 的 `n=24,28,32,40` 共 144 个 pair 上不重训审计，运行 106 个 depth-4，false skip 仍为 0，相对 sparse frontier 为 0/0/144、平均 +0.00%，time -13.43%。阈值敏感性分析显示 selected threshold 位于 zero-false-skip plateau 内：最优 0-false-skip operating point 为 -14.92% time；允许 1 个 false skip 时为 -15.49% time、score gap +0.01%；纯 depth-2-only 则有 94 false skips、score gap +2.84%。该证据应写成可校准搜索预算控制器，而不是比 deterministic sparse frontier 更强的质量前沿。
@@ -2075,6 +2089,7 @@ Git 状态：
 | n=20/28/40 depth-frontier | 72 个高维 ANF 项集 | depth-3 vs depth-2 为 49/0/23，-1.93%；depth-4 vs depth-2 为 49/0/23，-3.10%；648/648 emitted-circuit 符号验证通过 | 新增高预算质量前沿 |
 | depth-frontier policy | 32 个 held-out + 72 个 scale 项集 | held-out vs oracle frontier 为 +0.80% score、-58.76% time；scale vs depth-2 为 35/0/37、-2.19%；720/720 emitted-circuit 符号验证通过 | 新增结构级 AI 质量-时间折中 |
 | large frontier policy | 48 个 held-out + 96 个独立泛化项集 + 6 个 n=23 bridge 函数 | held-out vs oracle frontier 为 +0.04% score、-51.30% time；独立泛化 vs 旧 policy 为 17/0/79、-0.49%；n=23 bridge vs 旧 policy 为 1/0/5、-0.48% score、-0.45% T-depth proxy | 新增质量增强型结构 AI 证据 |
+| n=48/56/64 ultra-scale symbolic stress | 48 个高维 ANF 项集，480 个方法行 | 480/480 plan ANF 与 emitted-circuit ANF 符号验证通过；depth-4 vs depth-2 为 24/0/24、score -1.81%；learned frontier vs depth-2 为 10/0/38、score -0.84%，相对 all-depth 省时 -61.61% | 新增 64 变量 symbolic scaling 边界，非完整真值表 |
 | cost-aware frontier policy | 48 个 held-out + 96 个独立泛化项集 + 6 个 n=23 bridge 函数 | scale vs depth-2 为 56/0/40、score -1.39%、time +170.03%；n=23 vs large 为 score +0.92%、time -56.29%、lifetime -12.62% | 新增快速质量折中模式 |
 | stage-gated frontier | 72 个 validation 项集 + 96 个独立泛化项集 + 6 个 n=23 bridge 函数 | validation 选阈值 1.25%；scale vs all-depth 为 +0.04% score、staged time -25.43%；n=23 vs all-depth 为 +0.00% score、staged time -11.51% | 新增接近 all-depth 的 teacher/guard |
 | learned sparse depth-4 gate | train `n=16,20,24`；三组独立 seed 审计 `n=24,28,32,40`，144 个 pair | vs sparse frontier 为 0/0/144、score +0.00%、false skip 0；只运行 106/144 个 depth-4，time -13.43%；阈值扫描 zero-false-skip 最优为 -14.92% time | 新增 sparse frontier 内部学习预算控制 |

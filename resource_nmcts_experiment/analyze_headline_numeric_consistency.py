@@ -236,7 +236,7 @@ def validation_scale_claim() -> Claim:
     rows = read_csv(VALIDATION_SOURCE)
     by_group = {row.get("group", ""): row for row in rows}
     headline_groups = [
-        "n=20-40 item symbolic",
+        "n=20-64 item symbolic",
         "width probe symbolic",
         "phase exact search",
         "phase policy pruning",
@@ -246,13 +246,13 @@ def validation_scale_claim() -> Claim:
     bridge = by_group.get("truth bridge n=21-25", {})
     bridge_ok = bridge.get("verified") == "400" and bridge.get("total") == "400"
     all_exact = verified_total == total_total and bridge_ok
-    numeric_ok = verified_total == 15294 and all_exact
+    numeric_ok = verified_total == 15774 and all_exact
     return Claim(
         claim="headline verification row count",
         computed=f"verified_total={verified_total:,}; bridge_400_400={bridge_ok}; all_exact={all_exact}",
-        expected="verified_total=15,294; bridge_400_400=True; all_exact=True",
+        expected="verified_total=15,774; bridge_400_400=True; all_exact=True",
         source="paper_latex/figures/submission_v36/source_data/fig5_validation.csv",
-        tokens=("15,294", "400/400"),
+        tokens=("15,774", "400/400"),
         numeric_ok=numeric_ok,
         evidence_note="Sums symbolic and phase-policy validation rows in Fig.5 source data; bridge rows are reported separately.",
     )

@@ -89,6 +89,8 @@ After the quick rebuild, the current package should report:
   `results/analysis_submission_payload_archive.md`
 - payload extraction smoke status in
   `results/analysis_payload_extraction_smoke_audit.md`
+- ultra-scale n=48/56/64 symbolic stress state in
+  `results/analysis_screen_scale_ultra_scale64_stress.md`
 - payload verifier smoke status in
   `results/analysis_payload_verifier_smoke_audit.md`
 - extracted-payload LaTeX compile status in
@@ -108,6 +110,7 @@ Run these from `resource_nmcts_experiment/`:
 git diff --check
 ./verify_submission_package.sh
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_ultra_scale64_stress.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_extraction_smoke_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_verifier_smoke_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_latex_compile_audit.py
@@ -172,6 +175,8 @@ layout warnings.
   `results/analysis_learned_control_audit.md`
 - Scaling and bridge verification:
   `results/analysis_scaling_resource_audit.md`
+- Ultra-scale n=48/56/64 symbolic stress:
+  `results/analysis_screen_scale_ultra_scale64_stress.md`
 - Compute and artifact audit:
   `results/analysis_reproducibility_audit.md`
 - Raw rerun registry:
@@ -206,6 +211,9 @@ manifest coverage, rerun tier, and dependency boundary.
 - Phase/Rz searches: `run_phase_parity_baseline.py`,
   `run_phase_parity_affine_search.py`, `run_phase_parity_fprm_search.py`
 - High-dimensional screen-scale term runs: `run_screen_scale_terms.py`
+- Ultra-scale n=48/56/64 stress rerun:
+  `run_screen_scale_terms.py --tag ultra_scale64 --ns 48,56,64 --per-n 16 --workers 10 --action-width 6 --max-screen-depth 4`,
+  followed by `analyze_ultra_scale64_stress.py`
 - Complete truth-table bridge runs: `run_truth_bridge_terms.py`
 - Neural policy training: `train_neural_policy.py`,
   `train_phase_affine_policy.py`, `train_screen_depth_policy.py`,

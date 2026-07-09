@@ -1,0 +1,36 @@
+{
+  "analysis": "results/analysis_screen_scale_ultra_scale64_stress.md",
+  "circuit_verified_rows": 480,
+  "functions": 48,
+  "max_circuit_max_wire_terms": 282,
+  "max_circuit_mismatches": 0,
+  "max_plan_mismatches": 0,
+  "methods": [
+    "adaptive_all_depth",
+    "depth2_guard_direct",
+    "depth_frontier_policy",
+    "depth_policy",
+    "direct_logical_and",
+    "screen_depth1",
+    "screen_depth2",
+    "screen_depth3",
+    "screen_depth4",
+    "screen_single"
+  ],
+  "n_values": [
+    "48",
+    "56",
+    "64"
+  ],
+  "needs_revision_count": 0,
+  "plan_verified_rows": 480,
+  "raw": "results/raw_screen_scale_ultra_scale64_terms.csv",
+  "raw_rows": 480,
+  "rows": 11,
+  "script": "analyze_ultra_scale64_stress.py",
+  "status_counts": {
+    "pass": 11
+  },
+  "summary": "results/summary_screen_scale_ultra_scale64_stress.csv",
+  "table": "paper_latex/tables/screen_scale_ultra_scale64_stress.tex"
+}
