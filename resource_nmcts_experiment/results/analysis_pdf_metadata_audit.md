@@ -9,4 +9,4 @@ This terminal audit checks author and anonymous PDF metadata with Poppler pdfinf
 | manuscript | status | pages | encrypted | javascript | page size | title | author | forbidden metadata | identity metadata | failures |
 |---|---|---:|---|---|---|---|---|---|---|---|
 | author | pass | 48 | no | no | 595.276 x 841.89 pts (A4) |  |  | none | none | none |
-| anonymous | pass | 47 | no | no | 595.276 x 841.89 pts (A4) |  |  | none | none | none |
+| anonymous | pass | 48 | no | no | 595.276 x 841.89 pts (A4) |  |  | none | none | none |

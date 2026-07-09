@@ -13,6 +13,7 @@ threats-to-validity coverage,
 novelty/comparison scorecard coverage,
 public handoff freshness,
 published STG counterpoint,
+traditional structure-mechanism support,
 search-control baseline coverage,
 learned-control audit coverage,
 neural/MCTS claim-calibration coverage,
@@ -104,6 +105,8 @@ ROS_CHECKPOINT_MANIFEST = RESULTS / "manifest_ros_lut_checkpoint_optimizer.json"
 ROS_CHECKPOINT_TABLE = THIS_DIR / "paper_latex" / "tables" / "ros_lut_checkpoint_optimizer.tex"
 STG_BENCHMARK_MANIFEST = RESULTS / "manifest_stg_published_benchmark.json"
 STG_BENCHMARK_TABLE = THIS_DIR / "paper_latex" / "tables" / "stg_published_benchmark.tex"
+TRADITIONAL_STRUCTURE_MANIFEST = RESULTS / "manifest_traditional_structure_mechanism.json"
+TRADITIONAL_STRUCTURE_TABLE = THIS_DIR / "paper_latex" / "tables" / "traditional_structure_mechanism.tex"
 SEARCH_BUDGET_MANIFEST = RESULTS / "manifest_search_budget_contract.json"
 SEARCH_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "search_budget_contract.tex"
 SCHEDULE_PROXY_MANIFEST = RESULTS / "manifest_schedule_proxy_audit.json"
@@ -778,6 +781,34 @@ def verify_stg_benchmark() -> dict[str, str]:
         status,
         f"benchmark_rows={benchmark_rows}; raw_rows={raw_rows}; usable_rows={usable_rows}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
         "Run analyze_stg_published_benchmark.py and restore the STG counterpoint raw rows, manifest, and manuscript table.",
+    )
+
+
+def verify_traditional_structure_mechanism() -> dict[str, str]:
+    manifest = read_json(TRADITIONAL_STRUCTURE_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    functions = manifest.get("functions", "missing") if manifest else "missing"
+    raw_rows = manifest.get("raw_rows", "missing") if manifest else "missing"
+    summary_rows = manifest.get("summary_rows", "missing") if manifest else "missing"
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    table_exists = TRADITIONAL_STRUCTURE_TABLE.exists()
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and functions == 177
+        and raw_rows == 177
+        and summary_rows == 11
+        and table_exists
+        and anchor
+        else "needs revision"
+    )
+    return row(
+        "Traditional structure mechanism audit",
+        status,
+        f"functions={functions}; raw_rows={raw_rows}; summary_rows={summary_rows}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_traditional_structure_mechanism.py and restore the manuscript table anchor if structure-mechanism evidence changes.",
     )
 
 
@@ -1680,6 +1711,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_caterpillar_api_probe(),
             verify_ros_gap(),
             verify_stg_benchmark(),
+            verify_traditional_structure_mechanism(),
             verify_search_budget_contract(),
             verify_schedule_proxy(),
             verify_ultra_scale64(),

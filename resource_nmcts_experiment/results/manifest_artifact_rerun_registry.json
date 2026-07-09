@@ -178,20 +178,20 @@
       "summary_files": "2"
     },
     {
-      "analysis_files": "3",
+      "analysis_files": "4",
       "claim_use": "Primary n<=6 same-task resource comparison against direct, AND-direct, ESOP, SSHR, affine, MCTS, and Pareto variants.",
       "dependency_boundary": "Python rerun; ILP-based subbaselines need Gurobi where enabled.",
-      "driver_scripts": "run_experiments.py",
+      "driver_scripts": "run_experiments.py; analyze_traditional_structure_mechanism.py",
       "evidence_family": "Traditional logical baselines",
-      "manifest_files": "4",
-      "raw_files": "5",
-      "raw_rows": "4341",
-      "representative_raw": "results/raw_stg_published_benchmark.csv; results/raw_traditional_resource.csv; results/raw_traditional_resource_learned_prior.csv; results/raw_traditional_resource_no_prior.csv; +1 more",
+      "manifest_files": "5",
+      "raw_files": "6",
+      "raw_rows": "4518",
+      "representative_raw": "results/raw_stg_published_benchmark.csv; results/raw_traditional_resource.csv; results/raw_traditional_resource_learned_prior.csv; results/raw_traditional_resource_no_prior.csv; +2 more",
       "rerun_tier": "raw Python rerun",
       "scripts_missing": "",
-      "scripts_present": "1",
+      "scripts_present": "2",
       "status": "complete",
-      "summary_files": "5"
+      "summary_files": "6"
     },
     {
       "analysis_files": "3",
@@ -578,6 +578,7 @@
     "results/raw_traditional_resource_learned_prior.csv",
     "results/raw_traditional_resource_no_prior.csv",
     "results/raw_traditional_small.csv",
+    "results/raw_traditional_structure_mechanism.csv",
     "results/raw_truth_bridge_n23_cost_time003_frontier_terms.csv",
     "results/raw_truth_bridge_n23_large_frontier_terms.csv",
     "results/raw_truth_bridge_n23_terms.csv",
@@ -604,6 +605,6 @@
   ],
   "rows": 27,
   "script": "analyze_artifact_rerun_registry.py",
-  "unique_raw_files": 160,
-  "unique_raw_rows": 80135
+  "unique_raw_files": 161,
+  "unique_raw_rows": 80312
 }

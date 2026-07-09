@@ -44,6 +44,7 @@ Use this checklist immediately before uploading the manuscript.
 - Comparison protocol audit: `results/analysis_comparison_protocol_audit.md`
 - Comparison target validity audit: `results/analysis_comparison_target_validity_audit.md`
 - Novelty/comparison scorecard: `results/analysis_novelty_comparison_scorecard.md`
+- Traditional structure mechanism audit: `results/analysis_traditional_structure_mechanism.md`
 - Caterpillar ROS-family source probe: `results/analysis_caterpillar_ros_family_probe.md`
 - Caterpillar XAG API performance probe: `results/analysis_caterpillar_xag_api_probe.md`
 - ROS reproduction gap audit: `results/analysis_ros_reproduction_gap_audit.md`
@@ -140,9 +141,9 @@ rg -n "Overfull|Underfull|undefined|Undefined|Warning|Error|LaTeX Warning|Rerun"
 Expected current state:
 
 - Machine snapshot tokens checked by `analyze_public_handoff_freshness_audit.py`:
-  PDF pages=48/47; readiness=72 pass + 1 needs author input;
-  payload_files=1117; artifact_registry=27 families / 160 raw CSV / 80135 raw rows;
-  source_privacy=0 strict leaks / 57 provenance files / 1074 payload text files;
+  PDF pages=48/48; readiness=72 pass + 1 needs author input;
+  payload_files=1123; artifact_registry=27 families / 161 raw CSV / 80312 raw rows;
+  source_privacy=0 strict leaks / 57 provenance files / 1080 payload text files;
   comparison_validity=8/8 pass; novelty_scorecard=6/6 pass;
   goal_gate=author/venue metadata remains open.
 - Archive manifest: all payload groups complete.

@@ -5,8 +5,8 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 ## Status counts
 
 - complete: 27
-- unique raw files covered by registry: 160
-- unique raw CSV rows covered by registry: 80135
+- unique raw files covered by registry: 161
+- unique raw CSV rows covered by registry: 80312
 
 | evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |
 |---|---|---:|---:|---:|---|---|
@@ -21,7 +21,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | Novelty and comparison scorecard | quick comparison audit | 0 | 0 | 1 | complete | Quick derived audit; it strengthens reviewer-facing positioning without rerunning raw experiments. |
 | SSHR reproduction-scope audit | quick comparison audit | 3 | 3402 | 4 | complete | Quick scope audit over existing SSHR-facing rows and references; it does not rerun heavy SSHR-I/Gurobi or every published random table. |
 | Resource-weight sensitivity and robustness | quick derived audit | 12 | 20630 | 2 | complete | Post-hoc logical-resource rescoring only; it does not rerun synthesis and is not a hardware cost model. |
-| Traditional logical baselines | raw Python rerun | 5 | 4341 | 4 | complete | Python rerun; ILP-based subbaselines need Gurobi where enabled. |
+| Traditional logical baselines | raw Python rerun | 6 | 4518 | 5 | complete | Python rerun; ILP-based subbaselines need Gurobi where enabled. |
 | External logical baseline extension | raw Python plus optional solvers | 3 | 2049 | 3 | complete | Python with optional Gurobi/logic-tool components; rows with skips/errors remain explicit. |
 | ROS-style LUT proxy | raw proxy rerun | 6 | 4932 | 5 | complete | Proxy-level LUT and garbage-pressure analysis only; not a full ROS SAT garbage-management rerun. |
 | ROS reproduction boundary audit | quick audit | 8 | 5640 | 8 | complete | Checks scope and evidence boundaries; Caterpillar API rows are bounded ANF-XAG implementation-family probes, and full official ROS is not reproduced. |
@@ -86,8 +86,8 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - representative raw: `results/raw_cirkit_aig_probe.csv; results/raw_external_traditional_resource_n6.csv; results/raw_highdim_resource.csv; results/raw_highdim_scale_resource.csv; +8 more`
 - **Traditional logical baselines**
   - claim use: Primary n<=6 same-task resource comparison against direct, AND-direct, ESOP, SSHR, affine, MCTS, and Pareto variants.
-  - scripts: `run_experiments.py`
-  - representative raw: `results/raw_stg_published_benchmark.csv; results/raw_traditional_resource.csv; results/raw_traditional_resource_learned_prior.csv; results/raw_traditional_resource_no_prior.csv; +1 more`
+  - scripts: `run_experiments.py; analyze_traditional_structure_mechanism.py`
+  - representative raw: `results/raw_stg_published_benchmark.csv; results/raw_traditional_resource.csv; results/raw_traditional_resource_learned_prior.csv; results/raw_traditional_resource_no_prior.csv; +2 more`
 - **External logical baseline extension**
   - claim use: Matched exported-function comparisons against SSHR-I, ABC/BDD, and related logical estimates.
   - scripts: `run_external_baselines.py`

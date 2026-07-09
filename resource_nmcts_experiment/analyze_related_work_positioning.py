@@ -54,10 +54,10 @@ ROWS = [
     },
     {
         "line": "Learning-guided circuit synthesis",
-        "representative_plain": "AlphaZero, reinforcement learning, MCTS, and ZX-guided synthesis",
-        "representative_latex": r"AlphaZero, reinforcement learning, MCTS, and ZX-guided synthesis~\cite{tsaras2024shortcircuit,rietsch2024unitary,kremer2025nonclifford,riu2025rlzx,zhou2022qctmcts,machiya2026monteq}",
-        "main_lever": "Learns or searches over circuit-design and circuit-transformation actions.",
-        "gap": "Most targets are classical circuits, unitary synthesis, routing/transformation, ZX rewriting, or Hamiltonian simulation rather than Boolean-oracle ANF/FPRM term search.",
+        "representative_plain": "AlphaZero, diffusion, reinforcement learning, supervised search, MCTS, and ZX-guided synthesis",
+        "representative_latex": r"AlphaZero, diffusion, reinforcement learning, supervised search, MCTS, and ZX-guided synthesis~\cite{tsaras2024shortcircuit,wang2023nestedmcts,weiden2023qseed,furrutter2024diffusion,rietsch2024unitary,valcarce2025dynamic,kremer2025nonclifford,dubal2025paulinetwork,riu2025rlzx,theissinger2026beyondrl,zhou2022qctmcts,machiya2026monteq}",
+        "main_lever": "Learns or searches over circuit-design, unitary-synthesis, block-resynthesis, and circuit-transformation actions.",
+        "gap": "Most targets are classical circuits, ansatz design, unitary synthesis, transpilation/block resynthesis, ZX rewriting, or Hamiltonian simulation rather than Boolean-oracle ANF/FPRM term search.",
         "paper_use": "Motivates neural/MCTS control while keeping actions verifiable at the Boolean-algebraic oracle layer.",
     },
 ]

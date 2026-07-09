@@ -1,0 +1,31 @@
+{
+  "baseline_methods": [
+    "direct_anf",
+    "and_esop_milp",
+    "sshr_h",
+    "external_abc_xag",
+    "external_caterpillar_xag_api_best"
+  ],
+  "functions": 177,
+  "input_files": [
+    "results/raw_traditional_resource.csv",
+    "results/raw_external_traditional_resource_n6.csv",
+    "results/raw_caterpillar_xag_api_best.csv"
+  ],
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_traditional_structure_mechanism.md",
+    "manifest": "results/manifest_traditional_structure_mechanism.json",
+    "raw": "results/raw_traditional_structure_mechanism.csv",
+    "summary": "results/summary_traditional_structure_mechanism.csv",
+    "table": "paper_latex/tables/traditional_structure_mechanism.tex"
+  },
+  "raw_rows": 177,
+  "script": "analyze_traditional_structure_mechanism.py",
+  "status_counts": {
+    "pass": 11
+  },
+  "summary_rows": 11,
+  "table_anchor_present": true,
+  "target_method": "and_pareto_resource_nmcts"
+}

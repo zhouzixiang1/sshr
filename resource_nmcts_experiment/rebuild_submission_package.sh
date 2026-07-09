@@ -46,6 +46,7 @@ run_py analyze_comparison_answer_scorecard.py
 run_py analyze_sshr_reproduction_scope_audit.py
 run_py analyze_claim_scope_lint.py
 run_py analyze_stg_published_benchmark.py
+run_py analyze_traditional_structure_mechanism.py
 echo "==> ${PYTHON_BIN} analyze_ros_lut_line_sensitivity.py"
 "$PYTHON_BIN" analyze_ros_lut_line_sensitivity.py \
   --internal results/raw_traditional_resource.csv \

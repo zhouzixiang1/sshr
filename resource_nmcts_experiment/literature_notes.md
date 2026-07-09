@@ -155,17 +155,66 @@
   oracle synthesis, not merely "RL + MCTS for Boolean circuits".
   <https://arxiv.org/abs/2408.09858>
 
+- Wang, Usman, Parampalli, Hollenberg, and Myers, "Automated Quantum Circuit
+  Design With Nested Monte Carlo Tree Search", IEEE Transactions on Quantum
+  Engineering 4:1-20 (2023), doi:10.1109/TQE.2023.3265709.  Nested MCTS is
+  already used for automated quantum ansatz and circuit design across several
+  variational-style tasks.  This supports the MCTS-search motivation but keeps
+  our novelty at the Boolean-oracle algebraic action layer rather than generic
+  ansatz discovery.
+  <https://arxiv.org/abs/2207.00132>
+
+- Weiden, Younis, Kalloor, Kubiatowicz, and Iancu, "Improving Quantum Circuit
+  Synthesis with Machine Learning", IEEE QCE 2023, doi:10.1109/QCE57702.2023.00093.
+  QSeed uses a learned model to seed unitary synthesis and reports a 3.7x
+  synthesis-time speedup while preserving low gate counts.  It is a useful
+  learned-search comparison point, but it targets unitary synthesis rather than
+  Boolean oracle term/factor search.
+  <https://arxiv.org/abs/2306.05622>
+
+- Fürrutter, Muñoz-Gil, and Briegel, "Quantum circuit synthesis with diffusion
+  models", Nature Machine Intelligence 6:515-524 (2024),
+  doi:10.1038/s42256-024-00831-9.  Diffusion models can generate or edit gate
+  circuits from text-conditioned specifications.  This broadens the
+  learning-guided synthesis landscape, while our paper remains a verified
+  symbolic oracle synthesizer rather than a generative circuit model.
+  <https://arxiv.org/abs/2311.02041>
+
 - Rietsch et al., "Unitary Synthesis of Clifford+T Circuits with Reinforcement
   Learning", IEEE QCE 2024, doi:10.1109/QCE60285.2024.00102.  Uses Gumbel
   AlphaZero for exact Clifford+T unitary synthesis.  It validates tree-search RL
   for synthesis, but targets general unitaries rather than Boolean oracles.
   <https://arxiv.org/abs/2404.14865>
 
+- Valcarce, Grivet, and Sangouard, "Unitary Synthesis with AlphaZero via
+  Dynamic Circuits", arXiv:2508.21217.  Uses an AlphaZero-inspired agent for
+  exact unitary synthesis over discrete gate sets and extends the setting to
+  dynamic circuits.  It is close on search style, but it synthesizes small
+  unitary subroutines rather than resource-constrained Boolean oracles.
+  <https://arxiv.org/abs/2508.21217>
+
 - Kremer, Javadi-Abhari, and Mukhopadhyay, "Optimizing the non-Clifford-count
   in unitary synthesis using Reinforcement Learning", arXiv:2509.21709.  Uses
   RL to optimize T-count / CS-count for exactly implementable unitaries with
   pruning and canonicalization.
   <https://arxiv.org/abs/2509.21709>
+
+- Dubal, Kremer, Martiel, Villar, Wang, and Cruz-Benito, "Pauli Network Circuit
+  Synthesis with Reinforcement Learning", arXiv:2503.14448.  Uses RL to
+  resynthesize Pauli-network blocks in transpilation-oriented workflows with
+  two-qubit gate-count and depth improvements.  It is important boundary work:
+  it operates after circuits and Pauli blocks are present, while our action
+  space starts from Boolean functions and verified oracle semantics.
+  <https://arxiv.org/abs/2503.14448>
+
+- Theißinger, Gerlach, Berghaus, and Bauckhage, "Beyond Reinforcement Learning:
+  Fast and Scalable Quantum Circuit Synthesis", arXiv:2602.15146.  This work
+  combines supervised residual-unitary estimates with stochastic beam search and
+  explicitly argues that pure RL may be too costly or poorly generalized for
+  some unitary-synthesis settings.  It strengthens our need to present the
+  neural component as a bounded search controller, not as a generic RL-only
+  compiler claim.
+  <https://arxiv.org/abs/2602.15146>
 
 - Machiya, Menickelly, Hovland, and Liu, "MonteQ: A Monte Carlo Tree Search
   Based Quantum Circuit Synthesis Framework", arXiv:2604.19029.  Uses MCTS as

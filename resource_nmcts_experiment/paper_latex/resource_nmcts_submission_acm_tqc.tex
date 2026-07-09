@@ -196,18 +196,24 @@ comparison backends.
 
 Learning-guided synthesis has been explored for both classical and quantum
 circuits.  ShortCircuit uses AlphaZero-style search for classical Boolean
-circuit design~\cite{tsaras2024shortcircuit}.  Gumbel AlphaZero has been used
-for Clifford+T unitary synthesis~\cite{rietsch2024unitary}; reinforcement
-learning has been used for non-Clifford-count optimization and ZX-calculus
-rewriting~\cite{kremer2025nonclifford,riu2025rlzx}; \mcts{} has been used for
-quantum circuit transformation under connectivity constraints~\cite{zhou2022qctmcts};
-and MonteQ uses \mcts{} for Hamiltonian-simulation circuit
-synthesis~\cite{machiya2026monteq}.  The present work is different in scope:
-it is a logical-layer Boolean-oracle synthesizer, not a hardware-routing
-method, not a Hamiltonian-simulation scheduler, not a gate-by-gate unitary
-generator, and not an SSHR parallelotope search.  Its learned component ranks
-verifiable Boolean-algebraic actions, while ESOP, BDD, XAG/LUT, ROS-style,
-SSHR, RevKit, mockturtle, Caterpillar, CirKit, and ABC flows define the comparison set.
+circuit design~\cite{tsaras2024shortcircuit}.  Nested \mcts{} has been used for
+automated ansatz and circuit design~\cite{wang2023nestedmcts}; QSeed and
+diffusion models learn unitary or circuit generators~\cite{weiden2023qseed,furrutter2024diffusion};
+Gumbel AlphaZero and dynamic-circuit AlphaZero target Clifford+T or discrete
+unitary synthesis~\cite{rietsch2024unitary,valcarce2025dynamic}; and recent
+reinforcement-learning or supervised-search systems optimize non-Clifford
+counts, Pauli-network blocks, ZX rewrites, and residual unitary
+synthesis~\cite{kremer2025nonclifford,dubal2025paulinetwork,riu2025rlzx,theissinger2026beyondrl}.
+\mcts{} has also been used for quantum circuit transformation under
+connectivity constraints~\cite{zhou2022qctmcts}, and MonteQ uses \mcts{} for
+Hamiltonian-simulation circuit synthesis~\cite{machiya2026monteq}.  The
+present work is different in scope: it is a logical-layer Boolean-oracle
+synthesizer, not a hardware-routing or transpilation method, not a
+Hamiltonian-simulation scheduler, not a gate-by-gate unitary generator, not a
+generic learned unitary compiler, and not an SSHR parallelotope search.  Its
+learned component ranks verifiable Boolean-algebraic actions, while ESOP, BDD,
+XAG/LUT, ROS-style, SSHR, RevKit, mockturtle, Caterpillar, CirKit, and ABC flows
+define the comparison set.
 
 Table~\ref{tab:related-positioning} summarizes this positioning.  It is used
 to keep the manuscript's contribution narrow and testable: existing tools and
@@ -650,6 +656,29 @@ SSHR-H & 81.0 & \textbf{67.6} & 88.7 & 1.36 & 88.2 \\
 Pareto-\method{} & \textbf{40.4} & 83.0 & \textbf{88.0} & 2.03 & \textbf{49.6} \\
 \bottomrule
 \end{tabular}
+\end{table}
+
+The average improvements are not uniform across Boolean structure.
+Table~\ref{tab:traditional-structure-mechanism} stratifies the same 177
+verified functions by named family, algebraic degree, and ANF term density.
+The audit shows that the method should not claim an algebraic score gain on
+affine/parity rows, where direct ANF and ESOP already match the selected
+candidate.  The main reductions instead concentrate on high-degree and
+ANF-dense rows, where factor generation, guarded candidate selection, and
+Pareto archiving have room to reuse nonlinear structure.  Low-degree sparse
+rows remain a useful boundary because SSHR can still be competitive on some of
+them.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.04}
+\caption{Traditional-slice structure mechanism audit.  Rows report paired score
+win/loss/tie counts and mean relative score changes for Pareto-\method{} within
+structural buckets of the same verified $n\leq6$ functions.}
+\label{tab:traditional-structure-mechanism}
+\input{tables/traditional_structure_mechanism}
 \end{table}
 
 \subsection{External logic-network and reversible-synthesis probes}
