@@ -4,13 +4,14 @@ This terminal audit extracts the reviewer/upload payload into a temporary direct
 
 ## Status counts
 
-- pass: 13
+- pass: 14
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Payload extraction | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=889; error=none. | Regenerate the payload archive if it cannot be safely extracted. |
+| Payload extraction | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=894; error=none. | Regenerate the payload archive if it cannot be safely extracted. |
 | Comparison protocol audit | pass | returncode=0; manifest=results/manifest_comparison_protocol_audit.json; needs_revision_count=0; layers=7; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Search-control baseline audit | pass | returncode=0; manifest=results/manifest_search_control_baseline_audit.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
+| Editorial screening audit | pass | returncode=0; manifest=results/manifest_editorial_screening_audit.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Headline numeric consistency | pass | returncode=0; manifest=results/manifest_headline_numeric_consistency.json; needs_revision_count=0; claims=15; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Citation support audit | pass | returncode=0; manifest=results/manifest_citation_support_audit.json; needs_revision_count=0; rows=10; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | PDF visual audit | pass | returncode=0; manifest=results/manifest_pdf_visual_audit.json; needs_revision_count=0; rows=2; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
@@ -20,4 +21,4 @@ This terminal audit extracts the reviewer/upload payload into a temporary direct
 | Author-input closure audit | pass | returncode=0; manifest=results/manifest_author_input_closure_audit.json; needs_revision_count=0; rows=7; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Submission metadata closure path | pass | returncode=0; manifest=results/manifest_submission_metadata_closure_path.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Claim-scope lint | pass | returncode=0; manifest=results/manifest_claim_scope_lint.json; unresolved_count=0; required_boundary_count=5; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
-| Artifact rerun registry | pass | returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=15; rows=15; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
+| Artifact rerun registry | pass | returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=16; rows=16; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |

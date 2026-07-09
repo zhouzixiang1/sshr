@@ -1,0 +1,89 @@
+{
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_editorial_screening_audit.md",
+    "manifest": "results/manifest_editorial_screening_audit.json",
+    "summary": "results/summary_editorial_screening_audit.csv",
+    "table": "paper_latex/tables/editorial_screening_audit.tex"
+  },
+  "python": "3.11.15",
+  "rows": 8,
+  "rows_detail": [
+    {
+      "boundary": "Do not imply hardware routing, native-gate scheduling, noise modeling, or device execution.",
+      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; manifest=results/manifest_claim_scope_lint.json::unresolved_count=0",
+      "item": "Logical-layer scope visible at first screening",
+      "next_action": "No action needed.",
+      "risk": "Editor may reject the manuscript as an overbroad hardware compiler claim.",
+      "status": "pass",
+      "supported_decision": "The manuscript can be sent to reviewers as a logical-layer oracle-synthesis paper."
+    },
+    {
+      "boundary": "The claim is not universal superiority over every synthesis method.",
+      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; manifest=results/manifest_comparison_protocol_audit.json::needs_revision_count=0",
+      "item": "Novelty and comparison route visible",
+      "next_action": "No action needed.",
+      "risk": "Editor may see the work as only an SSHR variant or as a weak-baseline comparison.",
+      "status": "pass",
+      "supported_decision": "The screening package explains why SSHR is a baseline and why comparisons are layered."
+    },
+    {
+      "boundary": "Weighted-score wins must stay separated from raw resource dominance.",
+      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; manifest=results/manifest_claim_scope_lint.json::unresolved_count=0",
+      "item": "Counterpoint and negative-result visibility",
+      "next_action": "No action needed.",
+      "risk": "Reviewer may object that weighted-score wins hide CNOT, depth, or ancilla losses.",
+      "status": "pass",
+      "supported_decision": "Unfavorable metric evidence is visible before review rather than hidden in raw tables."
+    },
+    {
+      "boundary": "The largest gains remain tied to algebraic action space and guarded/Pareto selection.",
+      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; manifest=results/manifest_search_control_baseline_audit.json::needs_revision_count=0",
+      "item": "AI and MCTS contribution bounded",
+      "next_action": "No action needed.",
+      "risk": "Reviewer may reject an overclaim that deep learning alone explains the gains.",
+      "status": "pass",
+      "supported_decision": "The manuscript can claim neural/MCTS search-control support without overclaiming deep RL."
+    },
+    {
+      "boundary": "Do not claim exhaustive high-dimensional truth-table benchmarking.",
+      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; manifest=not_applicable",
+      "item": "Large-scale verification boundary visible",
+      "next_action": "No action needed.",
+      "risk": "Reviewer may object that n=20--40 rows are not exhaustive truth-table checks.",
+      "status": "pass",
+      "supported_decision": "Large-scale evidence is framed as symbolic verification plus bounded truth-table bridges."
+    },
+    {
+      "boundary": "The lightweight rebuild verifies paper-facing outputs; raw sweeps remain heavier rerun tiers.",
+      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; manifest=results/manifest_citation_support_audit.json::needs_revision_count=0",
+      "item": "Reproducibility path visible",
+      "next_action": "No action needed.",
+      "risk": "Editor may desk-reject if the manuscript cannot be audited from submitted artifacts.",
+      "status": "pass",
+      "supported_decision": "The submission package exposes a clear reviewer path from claims to files and scripts."
+    },
+    {
+      "boundary": "Author order, affiliations, funding, conflicts, venue choice, and archive links still require author input.",
+      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; manifest=results/manifest_submission_metadata_closure_path.json::needs_revision_count=0",
+      "item": "Author and venue gate explicit",
+      "next_action": "No action needed.",
+      "risk": "Submission may be blocked by missing declarations, anonymous-review policy, or archive links.",
+      "status": "pass",
+      "supported_decision": "The remaining nontechnical submission gate is explicit and private rather than implicit."
+    },
+    {
+      "boundary": "This is a navigation aid, not an acceptance guarantee.",
+      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; manifest=not_applicable",
+      "item": "Editorial reading path present",
+      "next_action": "No action needed.",
+      "risk": "Editor may miss the comparison boundary if the package lacks a short triage route.",
+      "status": "pass",
+      "supported_decision": "The support package gives editors a concise route to judge fit before full review."
+    }
+  ],
+  "script": "analyze_editorial_screening_audit.py",
+  "status_counts": {
+    "pass": 8
+  }
+}

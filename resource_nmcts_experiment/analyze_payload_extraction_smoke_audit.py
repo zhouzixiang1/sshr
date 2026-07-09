@@ -57,6 +57,15 @@ SMOKE_SPECS = (
         minimum_rows=8,
     ),
     SmokeSpec(
+        name="Editorial screening audit",
+        script="analyze_editorial_screening_audit.py",
+        manifest="results/manifest_editorial_screening_audit.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=8,
+    ),
+    SmokeSpec(
         name="Headline numeric consistency",
         script="analyze_headline_numeric_consistency.py",
         manifest="results/manifest_headline_numeric_consistency.json",

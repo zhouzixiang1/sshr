@@ -65,6 +65,8 @@ After the quick rebuild, the current package should report:
 - readiness state in `results/analysis_submission_readiness_audit.md`
 - comparison protocol state in
   `results/analysis_comparison_protocol_audit.md`
+- editorial screening state in
+  `results/analysis_editorial_screening_audit.md`
 - citation support state in
   `results/analysis_citation_support_audit.md`
 - author-input closure state in
@@ -103,6 +105,7 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_extraction_smoke_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_verifier_smoke_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_latex_compile_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_editorial_screening_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_citation_support_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_author_input_closure_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_headline_numeric_consistency.py

@@ -114,6 +114,10 @@ SEARCH_CONTROL_ANALYSIS = RESULTS / "analysis_search_control_baseline_audit.md"
 SEARCH_CONTROL_SUMMARY = RESULTS / "summary_search_control_baseline_audit.csv"
 SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
 SEARCH_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "search_control_baseline_audit.tex"
+EDITORIAL_SCREENING_ANALYSIS = RESULTS / "analysis_editorial_screening_audit.md"
+EDITORIAL_SCREENING_SUMMARY = RESULTS / "summary_editorial_screening_audit.csv"
+EDITORIAL_SCREENING_MANIFEST = RESULTS / "manifest_editorial_screening_audit.json"
+EDITORIAL_SCREENING_TABLE = THIS_DIR / "paper_latex" / "tables" / "editorial_screening_audit.tex"
 SUPPORT_FILES = [
     SUBMISSION_PACKAGE / "README.md",
     AUTHOR_INPUT_PACKET,
@@ -266,6 +270,14 @@ def build_rows() -> list[dict[str, str]]:
     metadata_closure_paths = (
         metadata_closure_manifest.get("required_metadata_paths", "missing") if metadata_closure_manifest else "missing"
     )
+    editorial_screening_manifest = read_json(EDITORIAL_SCREENING_MANIFEST)
+    editorial_screening_counts = (
+        editorial_screening_manifest.get("status_counts", {}) if editorial_screening_manifest else {}
+    )
+    editorial_screening_revisions = (
+        int(editorial_screening_manifest.get("needs_revision_count", -1)) if editorial_screening_manifest else -1
+    )
+    editorial_screening_rows = editorial_screening_manifest.get("rows", "missing") if editorial_screening_manifest else "missing"
     payload_roundtrip_manifest = read_json(PAYLOAD_ROUNDTRIP_MANIFEST)
     payload_roundtrip_counts = payload_roundtrip_manifest.get("status_counts", {}) if payload_roundtrip_manifest else {}
     payload_roundtrip_revisions = int(payload_roundtrip_manifest.get("needs_revision_count", -1)) if payload_roundtrip_manifest else -1
@@ -515,6 +527,18 @@ def build_rows() -> list[dict[str, str]]:
             "status": "pass" if all(path.exists() for path in SUPPORT_FILES) else "needs revision",
             "evidence": "Package README, author-input packet, Chinese final handoff, artifact guide, cover letter, author declarations, upload checklist, reviewer-concern brief, editor-screening brief, and target-venue brief are present.",
             "next_action": "Fill the author-specific fields before journal upload.",
+        },
+        {
+            "item": "Editorial screening audit",
+            "status": "pass"
+            if EDITORIAL_SCREENING_ANALYSIS.exists()
+            and EDITORIAL_SCREENING_SUMMARY.exists()
+            and EDITORIAL_SCREENING_MANIFEST.exists()
+            and EDITORIAL_SCREENING_TABLE.exists()
+            and editorial_screening_revisions == 0
+            else "needs revision",
+            "evidence": f"Editorial screening audit checks scope, novelty, comparison route, counterpoints, AI-claim boundary, large-scale verification boundary, reproducibility path, author/venue gate, and editor reading path; rows={editorial_screening_rows}; status_counts={editorial_screening_counts}; needs_revision_count={editorial_screening_revisions}.",
+            "next_action": "Rerun analyze_editorial_screening_audit.py after changing editor/reviewer briefs, claim-scope text, comparison protocol, metadata closure, or submission support docs.",
         },
         {
             "item": "Submission metadata audit",

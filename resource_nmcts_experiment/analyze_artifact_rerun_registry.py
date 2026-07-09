@@ -109,6 +109,17 @@ def specs() -> list[EvidenceFamily]:
             dependency_boundary="Does not require private author metadata; filled metadata remains ignored and untracked until author approval.",
         ),
         EvidenceFamily(
+            family="Editorial screening and reviewer-risk support",
+            claim_use="Verifies that the editor/reviewer support package exposes scope, novelty, comparison, counterpoint, AI, scale, reproducibility, and author-gate boundaries.",
+            rerun_tier="quick submission-support audit",
+            scripts=("analyze_editorial_screening_audit.py",),
+            raw_patterns=(),
+            manifest_patterns=("manifest_editorial_screening_audit.json",),
+            summary_patterns=("summary_editorial_screening_audit.csv",),
+            analysis_patterns=("analysis_editorial_screening_audit.md",),
+            dependency_boundary="Does not change scientific results; checks public submission-support consistency against existing audit outputs.",
+        ),
+        EvidenceFamily(
             family="Traditional logical baselines",
             claim_use="Primary n<=6 same-task resource comparison against direct, AND-direct, ESOP, SSHR, affine, MCTS, and Pareto variants.",
             rerun_tier="raw Python rerun",

@@ -73,6 +73,13 @@ CITATION_SUPPORT_PATHS = {
     "results/summary_citation_support_audit.csv",
     "results/manifest_citation_support_audit.json",
 }
+EDITORIAL_SCREENING_PATHS = {
+    "analyze_editorial_screening_audit.py",
+    "results/analysis_editorial_screening_audit.md",
+    "results/summary_editorial_screening_audit.csv",
+    "results/manifest_editorial_screening_audit.json",
+    "paper_latex/tables/editorial_screening_audit.tex",
+}
 AUTHOR_INPUT_CLOSURE_PATHS = {
     "analyze_author_input_closure_audit.py",
     "results/analysis_author_input_closure_audit.md",
@@ -258,6 +265,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    editorial_missing = sorted(EDITORIAL_SCREENING_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload editorial screening evidence",
+            "pass" if not editorial_missing else "needs revision",
+            f"editorial_screening_files={len(EDITORIAL_SCREENING_PATHS)}; missing={editorial_missing or 'none'}.",
+            "Ensure the uploadable archive includes the editorial screening audit script, generated evidence, and support table.",
+        )
+    )
+
     author_input_missing = sorted(AUTHOR_INPUT_CLOSURE_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -382,6 +399,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "comparison_protocol_paths": sorted(COMPARISON_PROTOCOL_PATHS),
         "headline_numeric_paths": sorted(HEADLINE_NUMERIC_PATHS),
         "citation_support_paths": sorted(CITATION_SUPPORT_PATHS),
+        "editorial_screening_paths": sorted(EDITORIAL_SCREENING_PATHS),
         "author_input_closure_paths": sorted(AUTHOR_INPUT_CLOSURE_PATHS),
         "payload_extraction_smoke_paths": sorted(PAYLOAD_EXTRACTION_SMOKE_PATHS),
         "payload_verifier_smoke_paths": sorted(PAYLOAD_VERIFIER_SMOKE_PATHS),

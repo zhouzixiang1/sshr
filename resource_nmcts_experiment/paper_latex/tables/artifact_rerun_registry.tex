@@ -4,6 +4,7 @@ Evidence family & Rerun tier & Raw files & Raw rows & Dependency boundary \\
 \midrule
 Lightweight paper-facing rebuild & quick rebuild & 0 & 0 & Python, latexmk, and existing raw artifacts; does not rerun raw sweeps or external probes. \\
 Submission metadata closure path & quick metadata audit & 0 & 0 & Does not require private author metadata; filled metadata remains ignored and untracked until author approval. \\
+Editorial screening and reviewer-risk support & quick submission-support audit & 0 & 0 & Does not change scientific results; checks public submission-support consistency against existing audit outputs. \\
 Traditional logical baselines & raw Python rerun & 4 & 4071 & Python rerun; ILP-based subbaselines need Gurobi where enabled. \\
 External logical baseline extension & raw Python plus optional solvers & 3 & 2049 & Python with optional Gurobi/logic-tool components; rows with skips/errors remain explicit. \\
 ROS-style LUT proxy & raw proxy rerun & 3 & 2472 & Proxy-level LUT analysis only; not a full ROS SAT garbage-management rerun. \\

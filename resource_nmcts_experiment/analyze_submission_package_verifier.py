@@ -6,6 +6,7 @@ terminal package invariants that are easy to regress during final polishing:
 compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, comparison-protocol coverage,
 search-control baseline coverage,
+editorial screening support,
 citation support,
 headline-numeric consistency,
 figure-asset coverage,
@@ -52,6 +53,7 @@ PAYLOAD_MANIFEST = RESULTS / "manifest_submission_payload_archive.json"
 CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
 COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.json"
 SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
+EDITORIAL_SCREENING_MANIFEST = RESULTS / "manifest_editorial_screening_audit.json"
 CITATION_SUPPORT_MANIFEST = RESULTS / "manifest_citation_support_audit.json"
 HEADLINE_NUMERIC_MANIFEST = RESULTS / "manifest_headline_numeric_consistency.json"
 FIGURE_ASSET_MANIFEST = RESULTS / "manifest_figure_asset_audit.json"
@@ -272,6 +274,20 @@ def verify_search_control() -> dict[str, str]:
         status,
         f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}.",
         "Run analyze_search_control_baseline_audit.py and restore heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, and phase random-control evidence rows.",
+    )
+
+
+def verify_editorial_screening() -> dict[str, str]:
+    manifest = read_json(EDITORIAL_SCREENING_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    status = "pass" if manifest and revisions == 0 else "needs revision"
+    return row(
+        "Editorial screening audit",
+        status,
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}.",
+        "Run analyze_editorial_screening_audit.py and restore scope, novelty, comparison, counterpoint, AI-boundary, scale-boundary, reproducibility, author-gate, or editor-reading anchors.",
     )
 
 
@@ -701,6 +717,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_claim_scope(),
             verify_comparison_protocol(),
             verify_search_control(),
+            verify_editorial_screening(),
             verify_citation_support(),
             verify_headline_numeric(),
             verify_figure_assets(),

@@ -24,6 +24,13 @@
     "results/manifest_comparison_protocol_audit.json",
     "results/summary_comparison_protocol_audit.csv"
   ],
+  "editorial_screening_paths": [
+    "analyze_editorial_screening_audit.py",
+    "paper_latex/tables/editorial_screening_audit.tex",
+    "results/analysis_editorial_screening_audit.md",
+    "results/manifest_editorial_screening_audit.json",
+    "results/summary_editorial_screening_audit.csv"
+  ],
   "headline_numeric_paths": [
     "analyze_headline_numeric_consistency.py",
     "results/analysis_headline_numeric_consistency.md",
@@ -75,19 +82,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=889; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=894; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=889; archive_files=889; missing=none; extra=none.",
+      "evidence": "manifest_files=894; archive_files=894; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=889; mismatches=none.",
+      "evidence": "checked=894; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -129,6 +136,12 @@
       "status": "pass"
     },
     {
+      "evidence": "editorial_screening_files=5; missing=none.",
+      "item": "Payload editorial screening evidence",
+      "next_action": "Ensure the uploadable archive includes the editorial screening audit script, generated evidence, and support table.",
+      "status": "pass"
+    },
+    {
       "evidence": "author_input_closure_files=4; missing=none.",
       "item": "Payload author-input closure evidence",
       "next_action": "Ensure the uploadable archive includes the author-input closure audit script and generated CSV/Markdown/JSON evidence.",
@@ -159,7 +172,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=889; metadata_issues=none.",
+      "evidence": "members_checked=894; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -167,6 +180,6 @@
   ],
   "script": "analyze_payload_roundtrip_audit.py",
   "status_counts": {
-    "pass": 15
+    "pass": 16
   }
 }

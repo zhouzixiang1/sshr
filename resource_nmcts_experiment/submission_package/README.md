@@ -56,6 +56,10 @@ noise modeling, or magic-state-factory accounting.
   the final author/venue metadata closure path, including safe starter prefill,
   private-file Git protection, validator/preview gates, synthetic rehearsal,
   anonymous-review gate, and handoff document coverage.
+- `../results/analysis_editorial_screening_audit.md`: audit that checks the
+  editor-facing path for scope, novelty, comparison fairness, counterpoints,
+  AI-claim boundaries, large-scale verification boundaries, reproducibility,
+  and remaining author/venue gates.
 - `../results/analysis_submission_metadata_pipeline_selftest.md`: synthetic,
   non-private self-test for the metadata validator and private-preview
   renderers.
@@ -186,6 +190,7 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_claim_scope_lint.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_comparison_protocol_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_editorial_screening_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_citation_support_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_headline_numeric_consistency.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_figure_asset_audit.py
@@ -211,6 +216,7 @@ rg -n "needs author input|pass:|file count|archive sha256|Submission support|unr
   results/analysis_submission_readiness_audit.md \
   results/analysis_claim_scope_lint.md \
   results/analysis_comparison_protocol_audit.md \
+  results/analysis_editorial_screening_audit.md \
   results/analysis_citation_support_audit.md \
   results/analysis_headline_numeric_consistency.md \
   results/analysis_figure_asset_audit.md \
@@ -235,4 +241,6 @@ rg -n "needs author input|pass:|file count|archive sha256|Submission support|unr
 ```
 
 Expected current boundary: the readiness audit should pass all paper/package
-checks except author-specific declarations.
+checks except author-specific declarations; the editorial screening audit
+should pass all editor-facing scope, novelty, comparison, counterpoint,
+AI-boundary, scale-boundary, reproducibility, and author-gate rows.

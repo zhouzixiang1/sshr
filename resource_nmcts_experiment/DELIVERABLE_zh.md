@@ -277,7 +277,7 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/analysis_source_path_privacy_audit.md`
 - `results/manifest_source_path_privacy_audit.json`
 
-该审计检查主稿/匿名稿 TeX、`references.bib`、157 个 LaTeX 表格输入和 11 个公开 submission support Markdown/JSON 文件中是否出现 `/Users/...`、`Desktop/tzb` 或旧 `claude` 路径；同时检查匿名稿 source 是否保留 `Anonymous Authors` 且不含 `Zixiang Zhou` 作者字段，payload manifest 中是否混入 private metadata/previews。当前严格区为 0 个本机路径、0 个旧 `claude` 路径、0 个私有 payload 成员；payload 的 835 个文本文件中有 53 个文件含本机路径、213 个路径命中，均归类为 `results/`、`README.md` 或 `DELIVERABLE_zh.md` 中的工具链/实验 provenance，而不是主稿或投稿支持文件泄漏。该审计已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke。
+该审计检查主稿/匿名稿 TeX、`references.bib`、生成表格输入和 11 个公开 submission support Markdown/JSON 文件中是否出现 `/Users/...`、`Desktop/tzb` 或旧 `claude` 路径；同时检查匿名稿 source 是否保留 `Anonymous Authors` 且不含 `Zixiang Zhou` 作者字段，payload manifest 中是否混入 private metadata/previews。当前严格区为 0 个本机路径、0 个旧 `claude` 路径、0 个私有 payload 成员；主稿/匿名稿、bibliography 和表格输入共 159 个文件通过严格检查；payload 的 852 个文本文件中有 53 个文件含本机路径、213 个路径命中，均归类为 `results/`、`README.md` 或 `DELIVERABLE_zh.md` 中的工具链/实验 provenance，而不是主稿或投稿支持文件泄漏。该审计已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke。
 
 本轮新增投稿完整性层：英文投稿稿末尾加入 `Data and Code Availability`，明确代码、raw/summary CSV、manifest、LaTeX 表、图源数据和 PDF 均位于 `resource_nmcts_experiment/` artifact package，运行入口为 `run_*.py`、`train_*.py`、`analyze_*.py`，环境为 `mcts-qoracle` 和直接解释器路径 `/opt/anaconda3/envs/mcts-qoracle/bin/python`。同时新增自动 submission-readiness audit：
 
@@ -285,7 +285,17 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/summary_submission_readiness_audit.csv`
 - `results/analysis_submission_readiness_audit.md`
 
-当前审计结果为 18 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、baseline fairness/scope、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、uploadable payload archive、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder、compiled PDF。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
+本轮进一步新增 editorial screening audit，把投稿包从“能复现”推进到“能解释给编辑/审稿人为什么可审”：
+
+- `analyze_editorial_screening_audit.py`
+- `results/summary_editorial_screening_audit.csv`
+- `results/analysis_editorial_screening_audit.md`
+- `results/manifest_editorial_screening_audit.json`
+- `paper_latex/tables/editorial_screening_audit.tex`
+
+该审计逐项检查 logical-layer scope、novelty/comparison route、counterpoint/negative-result visibility、AI/MCTS claim boundary、large-scale verification boundary、reproducibility path、author/venue gate 和 editorial reading path。当前 8/8 项 pass；它已接入 rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke 和 artifact rerun registry。artifact registry 现在覆盖 16 个 evidence family、144 个 raw CSV、55308 行 raw CSV。
+
+当前 submission-readiness 审计结果为 44 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、baseline fairness/scope、comparison/search-control/citation/editorial screening audits、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、uploadable payload archive、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder、compiled PDF 和 payload smoke/compile/verifier 检查。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
 
 ## 2. 当前已完成内容
 
