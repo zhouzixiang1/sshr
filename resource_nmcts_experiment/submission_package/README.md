@@ -29,6 +29,8 @@ noise modeling, or magic-state-factory accounting.
 
 - `AUTHOR_INPUT_REQUIRED.md`: consolidated author and target-venue fields that
   must be supplied before final upload.
+- `FINAL_SUBMISSION_HANDOFF_zh.md`: Chinese final-upload handoff that turns the
+  remaining author/venue gates into an execution order.
 - `cover_letter_template.md`: editor-facing cover-letter draft with author
   fields left blank.
 - `artifact_reproduction_guide.md`: reviewer-facing quick rebuild path,
@@ -65,6 +67,8 @@ Do not infer these fields from the experiment artifacts.  They must be supplied
 by the author or selected target venue.
 
 - Choose the target venue and manuscript type.
+- Use `FINAL_SUBMISSION_HANDOFF_zh.md` as the final Chinese execution checklist
+  if working through the upload process in Chinese.
 - Copy `submission_metadata_template.json` to `submission_metadata.json`, then
   fill every `AUTHOR INPUT REQUIRED` value.
 - Confirm author order, affiliations, ORCID IDs, and corresponding-author

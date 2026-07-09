@@ -71,6 +71,7 @@ PAIRED_EFFECT_TABLE = THIS_DIR / "paper_latex" / "tables" / "paired_effect_uncer
 SUPPORT_FILES = [
     SUBMISSION_PACKAGE / "README.md",
     AUTHOR_INPUT_PACKET,
+    SUBMISSION_PACKAGE / "FINAL_SUBMISSION_HANDOFF_zh.md",
     SUBMISSION_PACKAGE / "artifact_reproduction_guide.md",
     SUBMISSION_PACKAGE / "cover_letter_template.md",
     SUBMISSION_PACKAGE / "author_declarations_template.md",
@@ -268,7 +269,7 @@ def build_rows() -> list[dict[str, str]]:
         {
             "item": "Submission support templates",
             "status": "pass" if all(path.exists() for path in SUPPORT_FILES) else "needs revision",
-            "evidence": "Package README, author-input packet, artifact guide, cover letter, author declarations, upload checklist, reviewer-concern brief, editor-screening brief, and target-venue brief are present.",
+            "evidence": "Package README, author-input packet, Chinese final handoff, artifact guide, cover letter, author declarations, upload checklist, reviewer-concern brief, editor-screening brief, and target-venue brief are present.",
             "next_action": "Fill the author-specific fields before journal upload.",
         },
         {
