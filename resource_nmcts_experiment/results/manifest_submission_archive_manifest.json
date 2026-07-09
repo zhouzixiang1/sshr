@@ -2779,7 +2779,7 @@
         {
           "bytes": 1309,
           "path": "results/analysis_target_venue_format_smoke.md",
-          "sha256": "f70134099eba71bf0c86708921ce03875a4f7847dd534248d02c1ab5fda95c68"
+          "sha256": "5046e91f769878a4f5f21a99e6a399e4e3b3348527f1c9be4a0a58d4c477c2a4"
         },
         {
           "bytes": 3057,
@@ -3849,7 +3849,7 @@
         {
           "bytes": 1099,
           "path": "results/summary_target_venue_format_smoke.csv",
-          "sha256": "93cf79d8fd57701927ef2c92b065b769a7d6823f0ab8de686cce9c9fd5fd03d2"
+          "sha256": "b55513e5343293ede32c85f82b36a9e51c2f8e9f9517a5c623057efa14b8fc0b"
         },
         {
           "bytes": 4802,
@@ -3998,7 +3998,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "cfb5943a31f133434c4e0d87ce926977ccec12179e49546b7fb9c65024b7e8f3"
+      "sha256_digest": "0c262caef9c7da8d3a07f416dafd5d3c770700d2bfd20c641e1c1e6765ea3bb1"
     },
     {
       "boundary": "Submission-level terminal manifests are excluded from this digest group.",
@@ -4409,7 +4409,7 @@
         {
           "bytes": 588,
           "path": "results/manifest_ros_lut_line_sensitivity.json",
-          "sha256": "7363b9c7e8a08afae357fd99c7118874ccdf4f1327608683ca3074e8a2fd65da"
+          "sha256": "198abe1203b4eca9eb0c19070e3785ccc36154b79e73cb44ce25a44c039f281d"
         },
         {
           "bytes": 1040,
@@ -4519,7 +4519,7 @@
         {
           "bytes": 2094,
           "path": "results/manifest_target_venue_format_smoke.json",
-          "sha256": "16dba9e8bc7c20696021191f758bfafd4d18e190096490246447ec0b88248e7e"
+          "sha256": "48e6479c39927674623886f6ecfb71710755c5194205bdb2f50b52a5f3bd7078"
         },
         {
           "bytes": 1927,
@@ -4573,7 +4573,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "95340e766a37b97ff0356ba5f95fc83e296cbf5578abf32d6479dba64fe08871"
+      "sha256_digest": "8c8693e2ae435150245b90742ca211d5ae372432c0cb92a86ae3fe9c71aaf344"
     },
     {
       "boundary": "Includes reproducible entry points and top-level core implementation modules; raw sweeps still require their individual drivers.",
@@ -4584,7 +4584,7 @@
         {
           "bytes": 194295,
           "path": "DELIVERABLE_zh.md",
-          "sha256": "46620321cad07db83935f4c951f08a32ccdf54076f7402e56716a5b3b1511a41"
+          "sha256": "b0fd72d47cf9d84e7e92e1a5499b63d4b544ec19db1e185e6fff8721b51b6911"
         },
         {
           "bytes": 106750,
@@ -5298,7 +5298,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "8155fb24c422c727bc9d495f2bafc28b929459f0da92326ddd177046427fbaf6"
+      "sha256_digest": "27b8440b4b3c49d83abe57442a64564cf92af40307764ac1213b7bb8d6aab808"
     },
     {
       "boundary": "Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild.",
@@ -5449,7 +5449,7 @@
         {
           "bytes": 5801,
           "path": "submission_package/FINAL_SUBMISSION_HANDOFF_zh.md",
-          "sha256": "c162aa5804389aeba219b9b7d1019b77f057b244e939915507cb92b96f03e54d"
+          "sha256": "26dc6608abf58f80a7b3a59976b654df5d65010b680e61808446c2639b4710df"
         },
         {
           "bytes": 15862,
@@ -5484,7 +5484,7 @@
         {
           "bytes": 16523,
           "path": "submission_package/submission_checklist.md",
-          "sha256": "47f8d6f7e570967ab5fb2a2b12af3f6635d126a3cddba29b8d40041ec3103773"
+          "sha256": "0f8a35e7799eb5b49950b0bb44084ffb9461302c8a25ce01d2f4128754084394"
         },
         {
           "bytes": 4069,
@@ -5498,7 +5498,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "58a6539c2464431bacb6694ecf49dd3573afa26ef2bd5bdbafb034aa468b99ca"
+      "sha256_digest": "9e98c982ebb57fa291f8e7ad3254649be5cecbd33b248c0bf1ed2393ba908fcb"
     }
   ],
   "note": "Compiled PDF and terminal submission/package outputs are excluded from payload hashes to avoid self-referential digests.",
