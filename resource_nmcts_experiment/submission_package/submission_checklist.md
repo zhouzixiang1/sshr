@@ -47,6 +47,7 @@ Use this checklist immediately before uploading the manuscript.
 - Traceability audit: `results/analysis_submission_traceability_audit.md`
 - Archive manifest: `results/analysis_submission_archive_manifest.md`
 - Payload archive manifest: `results/analysis_submission_payload_archive.md`
+- Payload round-trip audit: `results/analysis_payload_roundtrip_audit.md`
 - Reproducibility audit: `results/analysis_reproducibility_audit.md`
 - Raw data: `results/raw_*.csv`
 - Summary data: `results/summary_*.csv`
@@ -69,6 +70,7 @@ Run these from `resource_nmcts_experiment/`:
   analyze_submission_traceability_audit.py \
   validate_submission_metadata.py \
   selftest_submission_metadata_pipeline.py \
+  analyze_payload_roundtrip_audit.py \
   make_submission_text_preview.py
 ./rebuild_submission_package.sh
 ./verify_submission_package.sh
@@ -81,6 +83,7 @@ Expected current state:
 
 - Archive manifest: all payload groups complete.
 - Payload archive: tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.
+- Payload round-trip audit: archive contents match manifest paths and hashes, required files are present, private files are absent, and tar metadata is deterministic.
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
 - Metadata audit: all author- and venue-specific fields are enumerated before upload, and any filled `submission_metadata.json` is checked.
 - Metadata validator: no `needs revision` rows; missing private metadata remains an author-input gate until filled.

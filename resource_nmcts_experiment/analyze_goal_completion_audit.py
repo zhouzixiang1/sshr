@@ -272,22 +272,26 @@ def build_items() -> list[GoalItem]:
                 (
                     THIS_DIR / "rebuild_submission_package.sh",
                     THIS_DIR / "make_submission_payload_archive.py",
+                    THIS_DIR / "analyze_payload_roundtrip_audit.py",
                     RESULTS / "analysis_submission_archive_manifest.md",
                     RESULTS / "analysis_submission_payload_archive.md",
+                    RESULTS / "analysis_payload_roundtrip_audit.md",
                     PAYLOAD,
                     PAYLOAD_SHA256,
                 )
             ),
-            evidence="Rebuild script regenerates paper-facing outputs and the payload archive; archive and SHA256 sidecar are present.",
+            evidence="Rebuild script regenerates paper-facing outputs and the payload archive; archive, SHA256 sidecar, and payload round-trip integrity audit are present.",
             evidence_files=(
                 THIS_DIR / "rebuild_submission_package.sh",
                 THIS_DIR / "make_submission_payload_archive.py",
+                THIS_DIR / "analyze_payload_roundtrip_audit.py",
                 RESULTS / "analysis_submission_archive_manifest.md",
                 RESULTS / "analysis_submission_payload_archive.md",
+                RESULTS / "analysis_payload_roundtrip_audit.md",
                 PAYLOAD,
                 PAYLOAD_SHA256,
             ),
-            boundary="The lightweight rebuild does not rerun raw sweeps, external probes, or neural training jobs.",
+            boundary="The lightweight rebuild does not rerun raw sweeps, external probes, or neural training jobs; round-trip audit verifies packaging integrity, not scientific correctness.",
             next_action="Rerun the rebuild script after any payload-affecting edit.",
         ),
         GoalItem(

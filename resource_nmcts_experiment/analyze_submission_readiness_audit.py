@@ -49,6 +49,9 @@ METADATA_PIPELINE_SELFTEST_MANIFEST = RESULTS / "manifest_submission_metadata_pi
 ANONYMOUS_REVIEW_ANALYSIS = RESULTS / "analysis_anonymous_review_readiness.md"
 ANONYMOUS_REVIEW_SUMMARY = RESULTS / "summary_anonymous_review_readiness.csv"
 ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
+PAYLOAD_ROUNDTRIP_ANALYSIS = RESULTS / "analysis_payload_roundtrip_audit.md"
+PAYLOAD_ROUNDTRIP_SUMMARY = RESULTS / "summary_payload_roundtrip_audit.csv"
+PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
 GOAL_ANALYSIS = RESULTS / "analysis_goal_completion_audit.md"
 GOAL_SUMMARY = RESULTS / "summary_goal_completion_audit.csv"
 GOAL_MANIFEST = RESULTS / "manifest_goal_completion_audit.json"
@@ -139,6 +142,9 @@ def build_rows() -> list[dict[str, str]]:
     anonymous_counts = anonymous_manifest.get("status_counts", {}) if anonymous_manifest else {}
     anonymous_revisions = int(anonymous_manifest.get("needs_revision_count", -1)) if anonymous_manifest else -1
     anonymous_author_input = int(anonymous_manifest.get("needs_author_input_count", -1)) if anonymous_manifest else -1
+    payload_roundtrip_manifest = read_json(PAYLOAD_ROUNDTRIP_MANIFEST)
+    payload_roundtrip_counts = payload_roundtrip_manifest.get("status_counts", {}) if payload_roundtrip_manifest else {}
+    payload_roundtrip_revisions = int(payload_roundtrip_manifest.get("needs_revision_count", -1)) if payload_roundtrip_manifest else -1
     lower = text.lower()
     todo_hits = re.findall(r"\b(?:todo|tbd|placeholder)\b", lower)
     abstract_words = abstract_word_count(text)
@@ -322,6 +328,17 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun make_submission_payload_archive.py after adding or removing upload payload files.",
         },
         {
+            "item": "Payload round-trip integrity",
+            "status": "pass"
+            if PAYLOAD_ROUNDTRIP_ANALYSIS.exists()
+            and PAYLOAD_ROUNDTRIP_SUMMARY.exists()
+            and PAYLOAD_ROUNDTRIP_MANIFEST.exists()
+            and payload_roundtrip_revisions == 0
+            else "needs revision",
+            "evidence": f"Payload round-trip audit exists; status_counts={payload_roundtrip_counts}; needs_revision_count={payload_roundtrip_revisions}.",
+            "next_action": "Rerun analyze_payload_roundtrip_audit.py after payload creation and fix any archive/manifest/path/hash issues.",
+        },
+        {
             "item": "Terminal package verifier",
             "status": "pass"
             if VERIFY_SCRIPT.exists()
@@ -329,7 +346,7 @@ def build_rows() -> list[dict[str, str]]:
             and VERIFIER_SUMMARY.exists()
             and VERIFIER_MANIFEST.exists()
             else "needs revision",
-            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, private-preview protection, private payload exclusion, and LaTeX log boundaries.",
+            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, private-preview protection, private payload exclusion, payload round-trip integrity, and LaTeX log boundaries.",
             "next_action": "Run verify_submission_package.sh after rebuilding the payload archive.",
         },
         {

@@ -1,0 +1,71 @@
+{
+  "archive": "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_payload_roundtrip_audit.md",
+    "manifest": "results/manifest_payload_roundtrip_audit.json",
+    "summary": "results/summary_payload_roundtrip_audit.csv"
+  },
+  "private_basenames": [
+    "generated_author_declarations.md",
+    "generated_availability_statements.md",
+    "generated_cover_letter.md",
+    "generated_submission_text.md",
+    "submission_metadata.json"
+  ],
+  "python": "3.11.15",
+  "required_payload_paths": [
+    "paper_latex/references.bib",
+    "paper_latex/resource_nmcts_submission_v1.pdf",
+    "paper_latex/resource_nmcts_submission_v1.tex",
+    "rebuild_submission_package.sh",
+    "results/analysis_submission_archive_manifest.md",
+    "results/analysis_submission_traceability_audit.md",
+    "submission_package/AUTHOR_INPUT_REQUIRED.md",
+    "submission_package/README.md",
+    "submission_package/submission_checklist.md",
+    "verify_submission_package.sh"
+  ],
+  "rows": [
+    {
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=839; error=none.",
+      "item": "Payload archive readable",
+      "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
+      "status": "pass"
+    },
+    {
+      "evidence": "manifest_files=839; archive_files=839; missing=none; extra=none.",
+      "item": "Payload manifest round-trip",
+      "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
+      "status": "pass"
+    },
+    {
+      "evidence": "checked=839; mismatches=none.",
+      "item": "Payload per-file SHA256",
+      "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
+      "status": "pass"
+    },
+    {
+      "evidence": "unsafe_paths=none; private_hits=none.",
+      "item": "Payload path hygiene",
+      "next_action": "Remove unsafe, platform-generated, or private files from the payload inputs.",
+      "status": "pass"
+    },
+    {
+      "evidence": "required=10; missing=none.",
+      "item": "Payload required artifacts",
+      "next_action": "Ensure the uploadable archive includes manuscript, bibliography, rebuild/verify scripts, handoff docs, and submission audits.",
+      "status": "pass"
+    },
+    {
+      "evidence": "members_checked=839; metadata_issues=none.",
+      "item": "Payload deterministic tar metadata",
+      "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
+      "status": "pass"
+    }
+  ],
+  "script": "analyze_payload_roundtrip_audit.py",
+  "status_counts": {
+    "pass": 6
+  }
+}

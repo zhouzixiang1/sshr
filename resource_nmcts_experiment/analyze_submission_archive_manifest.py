@@ -46,6 +46,9 @@ TERMINAL_PACKAGE_OUTPUTS = {
     RESULTS / "summary_submission_payload_archive.csv",
     RESULTS / "analysis_submission_payload_archive.md",
     RESULTS / "manifest_submission_payload_archive.json",
+    RESULTS / "summary_payload_roundtrip_audit.csv",
+    RESULTS / "analysis_payload_roundtrip_audit.md",
+    RESULTS / "manifest_payload_roundtrip_audit.json",
     TABLES / "submission_traceability_audit.tex",
 }
 

@@ -96,9 +96,9 @@
       "status": "pass"
     },
     {
-      "boundary": "The lightweight rebuild does not rerun raw sweeps, external probes, or neural training jobs.",
-      "evidence": "Rebuild script regenerates paper-facing outputs and the payload archive; archive and SHA256 sidecar are present.",
-      "evidence_files": "rebuild_submission_package.sh; make_submission_payload_archive.py; results/analysis_submission_archive_manifest.md; results/analysis_submission_payload_archive.md; submission_package/dist/resource_nmcts_submission_payload.tar.gz; submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256",
+      "boundary": "The lightweight rebuild does not rerun raw sweeps, external probes, or neural training jobs; round-trip audit verifies packaging integrity, not scientific correctness.",
+      "evidence": "Rebuild script regenerates paper-facing outputs and the payload archive; archive, SHA256 sidecar, and payload round-trip integrity audit are present.",
+      "evidence_files": "rebuild_submission_package.sh; make_submission_payload_archive.py; analyze_payload_roundtrip_audit.py; results/analysis_submission_archive_manifest.md; results/analysis_submission_payload_archive.md; results/analysis_payload_roundtrip_audit.md; submission_package/dist/resource_nmcts_submission_payload.tar.gz; submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256",
       "next_action": "Rerun the rebuild script after any payload-affecting edit.",
       "requirement": "Reproducible submission payload",
       "status": "pass"

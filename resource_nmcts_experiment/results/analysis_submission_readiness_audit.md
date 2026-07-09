@@ -5,7 +5,7 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 ## Status counts
 
 - needs author input: 1
-- pass: 25
+- pass: 26
 
 ## Checklist
 
@@ -30,7 +30,8 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 | Anonymous-review readiness path | pass | Anonymous-review audit exists; status_counts={'needs author input': 3, 'pass': 2}; needs_revision_count=0; needs_author_input_count=3. | If the selected venue requires double-blind review, produce an anonymized manuscript copy and anonymous artifact links before upload. |
 | Goal completion audit | pass | The original project objective is mapped to concrete evidence files, boundaries, and remaining author-gated items. | Rerun analyze_goal_completion_audit.py after adding major evidence or filling author/venue metadata. |
 | Uploadable payload archive | pass | Deterministic submission payload tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present. | Rerun make_submission_payload_archive.py after adding or removing upload payload files. |
-| Terminal package verifier | pass | Fast pre-upload verifier script and read-only verifier outputs check PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, private-preview protection, private payload exclusion, and LaTeX log boundaries. | Run verify_submission_package.sh after rebuilding the payload archive. |
+| Payload round-trip integrity | pass | Payload round-trip audit exists; status_counts={'pass': 6}; needs_revision_count=0. | Rerun analyze_payload_roundtrip_audit.py after payload creation and fix any archive/manifest/path/hash issues. |
+| Terminal package verifier | pass | Fast pre-upload verifier script and read-only verifier outputs check PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, private-preview protection, private payload exclusion, payload round-trip integrity, and LaTeX log boundaries. | Run verify_submission_package.sh after rebuilding the payload archive. |
 | Derived package rebuild command | pass | A lightweight rebuild script is present and cited in Data and Code Availability. | Keep the rebuild script aligned with paper-facing analysis, figure, audit, and PDF outputs. |
 | Limitations and failure modes | pass | Discussion names logical-layer, ROS-proxy, RevKit-derived, and high-dimensional bridge boundaries. | Add any new negative result to Discussion rather than hiding it in tables. |
 | Data and code availability | pass | Manuscript has an availability section pointing to scripts, CSVs, manifests, tables, and figures. | Replace repository-relative wording with an archival DOI or anonymous link at submission time if required. |

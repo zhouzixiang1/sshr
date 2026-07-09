@@ -6,9 +6,9 @@ terminal package invariants that are easy to regress during final polishing:
 compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, private-metadata validation,
 synthetic metadata-pipeline self-testing, anonymous-review decision support,
-private-preview protection, private payload exclusion, and LaTeX log
-cleanliness.  It writes a small audit report but does not rerun experiments or
-alter manuscript sources.
+private-preview protection, private payload exclusion, payload round-trip
+integrity, and LaTeX log cleanliness.  It writes a small audit report but does
+not rerun experiments or alter manuscript sources.
 """
 from __future__ import annotations
 
@@ -37,6 +37,7 @@ METADATA_VALIDATOR_MANIFEST = RESULTS / "manifest_submission_metadata_validator.
 TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
 METADATA_PIPELINE_SELFTEST_MANIFEST = RESULTS / "manifest_submission_metadata_pipeline_selftest.json"
 ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
+PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
 
 PRIVATE_PAYLOAD_BASENAMES = {
     "submission_metadata.json",
@@ -279,6 +280,19 @@ def verify_private_payload_exclusion() -> dict[str, str]:
     )
 
 
+def verify_payload_roundtrip() -> dict[str, str]:
+    manifest = read_json(PAYLOAD_ROUNDTRIP_MANIFEST)
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    status = "pass" if manifest and needs_revision == 0 else "needs revision"
+    return row(
+        "Payload round-trip audit",
+        status,
+        f"needs_revision_count={needs_revision}; status_counts={counts}.",
+        "Run analyze_payload_roundtrip_audit.py after payload creation and fix any archive/manifest/path/hash issues.",
+    )
+
+
 def verify_latex_log() -> dict[str, str]:
     if not LOG.exists():
         return row("LaTeX log boundary", "needs revision", "LaTeX log is missing.", "Rebuild the PDF with latexmk.")
@@ -315,6 +329,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_anonymous_review_audit(),
             verify_text_preview(),
             verify_private_payload_exclusion(),
+            verify_payload_roundtrip(),
             verify_latex_log(),
         ]
     )
