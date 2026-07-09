@@ -1101,6 +1101,12 @@ random-depth mean on held-out, independent scale, and $n=23$ truth-bridge rows,
 but it spends more planning time because it selects deeper screens more often.
 We therefore use this control as quality-oriented evidence for learned budget
 allocation, not as a runtime claim.
+Table~\ref{tab:stochastic-control-stability} then consolidates the repeated
+random-control and independent-seed evidence across the learned/search-control
+components.  It is intentionally conservative: bit-flip prior margins remain
+small and runtime-positive, while the stronger stability evidence comes from
+frontier budget allocation, the sparse depth-4 gate, and the phase shortlist
+within their logical-proxy boundaries.
 
 \begin{table}[H]
 \centering
@@ -1113,6 +1119,19 @@ per-function mean over eight deterministic random depth choices among the
 already verified depth-2/3/4 candidates.}
 \label{tab:frontier-random-depth}
 \input{tables/frontier_random_depth_control}
+\end{table}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.06}
+\caption{Stochastic learned-control stability summary.  Rows consolidate
+same-budget random-prior, same-candidate random-depth, random shortlist, and
+independent-seed sparse-gate checks.  Negative score changes favor the learned
+or guarded controller.}
+\label{tab:stochastic-control-stability}
+\input{tables/stochastic_control_stability}
 \end{table}
 
 \begin{table}[H]

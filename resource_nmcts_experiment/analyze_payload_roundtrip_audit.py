@@ -290,6 +290,13 @@ FRONTIER_RANDOM_DEPTH_PATHS = {
     "results/manifest_frontier_random_depth_control.json",
     "paper_latex/tables/frontier_random_depth_control.tex",
 }
+STOCHASTIC_CONTROL_STABILITY_PATHS = {
+    "analyze_stochastic_control_stability.py",
+    "results/summary_stochastic_control_stability.csv",
+    "results/analysis_stochastic_control_stability.md",
+    "results/manifest_stochastic_control_stability.json",
+    "paper_latex/tables/stochastic_control_stability.tex",
+}
 HEADLINE_NUMERIC_PATHS = {
     "analyze_headline_numeric_consistency.py",
     "results/analysis_headline_numeric_consistency.md",
@@ -689,6 +696,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    stochastic_missing = sorted(STOCHASTIC_CONTROL_STABILITY_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload stochastic-control stability evidence",
+            "pass" if not stochastic_missing else "needs revision",
+            f"stochastic_control_files={len(STOCHASTIC_CONTROL_STABILITY_PATHS)}; missing={stochastic_missing or 'none'}.",
+            "Ensure the uploadable archive includes the stochastic learned-control stability script, generated evidence, and manuscript table.",
+        )
+    )
+
     headline_missing = sorted(HEADLINE_NUMERIC_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -907,6 +924,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "bitflip_random_prior_paths": sorted(BITFLIP_RANDOM_PRIOR_PATHS),
         "bitflip_neural_budget_paths": sorted(BITFLIP_NEURAL_BUDGET_PATHS),
         "frontier_random_depth_paths": sorted(FRONTIER_RANDOM_DEPTH_PATHS),
+        "stochastic_control_stability_paths": sorted(STOCHASTIC_CONTROL_STABILITY_PATHS),
         "headline_numeric_paths": sorted(HEADLINE_NUMERIC_PATHS),
         "citation_support_paths": sorted(CITATION_SUPPORT_PATHS),
         "editorial_screening_paths": sorted(EDITORIAL_SCREENING_PATHS),

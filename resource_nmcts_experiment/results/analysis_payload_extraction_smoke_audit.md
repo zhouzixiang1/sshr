@@ -4,11 +4,11 @@ This terminal audit extracts the reviewer/upload payload into a temporary direct
 
 ## Status counts
 
-- pass: 46
+- pass: 47
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Payload extraction | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1142; error=none. | Regenerate the payload archive if it cannot be safely extracted. |
+| Payload extraction | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1147; error=none. | Regenerate the payload archive if it cannot be safely extracted. |
 | Comparison protocol audit | pass | returncode=0; manifest=results/manifest_comparison_protocol_audit.json; needs_revision_count=0; layers=7; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Comparison target validity audit | pass | returncode=0; manifest=results/manifest_comparison_target_validity_audit.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Comparison answer scorecard | pass | returncode=0; manifest=results/manifest_comparison_answer_scorecard.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
@@ -38,6 +38,7 @@ This terminal audit extracts the reviewer/upload payload into a temporary direct
 | Neural/MCTS claim calibration | pass | returncode=0; manifest=results/manifest_neural_mcts_claim_calibration.json; needs_revision_count=0; rows=7; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Bit-flip random-prior control | pass | returncode=0; manifest=results/manifest_bitflip_random_prior_control.json; needs_revision_count=0; rows=18; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Frontier random-depth control | pass | returncode=0; manifest=results/manifest_frontier_random_depth_control.json; needs_revision_count=0; rows=3; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
+| Stochastic-control stability | pass | returncode=0; manifest=results/manifest_stochastic_control_stability.json; needs_revision_count=0; rows=6; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Editorial screening audit | pass | returncode=0; manifest=results/manifest_editorial_screening_audit.json; needs_revision_count=0; rows=9; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Target venue decision audit | pass | returncode=0; manifest=results/manifest_target_venue_decision_audit.json; needs_revision_count=0; rows=5; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Target venue ACM/TQC format smoke | pass | returncode=0; manifest=results/manifest_target_venue_format_smoke.json; needs_revision_count=0; rows=5; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |

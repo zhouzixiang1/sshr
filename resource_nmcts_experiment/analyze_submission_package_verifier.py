@@ -140,6 +140,8 @@ BITFLIP_NEURAL_BUDGET_MANIFEST = RESULTS / "manifest_bitflip_neural_budget_sweep
 BITFLIP_NEURAL_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_neural_budget_sweep.tex"
 FRONTIER_RANDOM_DEPTH_MANIFEST = RESULTS / "manifest_frontier_random_depth_control.json"
 FRONTIER_RANDOM_DEPTH_TABLE = THIS_DIR / "paper_latex" / "tables" / "frontier_random_depth_control.tex"
+STOCHASTIC_CONTROL_STABILITY_MANIFEST = RESULTS / "manifest_stochastic_control_stability.json"
+STOCHASTIC_CONTROL_STABILITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "stochastic_control_stability.tex"
 EDITORIAL_SCREENING_MANIFEST = RESULTS / "manifest_editorial_screening_audit.json"
 TARGET_VENUE_DECISION_MANIFEST = RESULTS / "manifest_target_venue_decision_audit.json"
 TARGET_VENUE_DECISION_TABLE = THIS_DIR / "paper_latex" / "tables" / "target_venue_decision_audit.tex"
@@ -1190,6 +1192,30 @@ def verify_frontier_random_depth() -> dict[str, str]:
     )
 
 
+def verify_stochastic_control_stability() -> dict[str, str]:
+    manifest = read_json(STOCHASTIC_CONTROL_STABILITY_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    components = manifest.get("components", []) if manifest else []
+    table_exists = STOCHASTIC_CONTROL_STABILITY_TABLE.exists()
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and rows == 6
+        and table_exists
+        and counts.get("pass", 0) == 6
+        else "needs revision"
+    )
+    return row(
+        "Stochastic-control stability audit",
+        status,
+        f"rows={rows}; components={components}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
+        "Run analyze_stochastic_control_stability.py and restore the stochastic learned-control stability table.",
+    )
+
+
 def verify_editorial_screening() -> dict[str, str]:
     manifest = read_json(EDITORIAL_SCREENING_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -1867,6 +1893,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_runtime_envelope(),
             verify_bitflip_random_prior(),
             verify_frontier_random_depth(),
+            verify_stochastic_control_stability(),
             verify_editorial_screening(),
             verify_target_venue_decision(),
             verify_target_venue_policy_checklist(),

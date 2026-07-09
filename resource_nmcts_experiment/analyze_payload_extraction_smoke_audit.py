@@ -301,6 +301,15 @@ SMOKE_SPECS = (
         minimum_rows=3,
     ),
     SmokeSpec(
+        name="Stochastic-control stability",
+        script="analyze_stochastic_control_stability.py",
+        manifest="results/manifest_stochastic_control_stability.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=6,
+    ),
+    SmokeSpec(
         name="Editorial screening audit",
         script="analyze_editorial_screening_audit.py",
         manifest="results/manifest_editorial_screening_audit.json",

@@ -1,0 +1,29 @@
+{
+  "components": [
+    "Bit-flip learned prior",
+    "Pareto learned prior",
+    "Depth-frontier policy",
+    "Depth-frontier truth bridge",
+    "Phase diverse shortlist",
+    "Sparse depth-4 gate"
+  ],
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_stochastic_control_stability.md",
+    "manifest": "results/manifest_stochastic_control_stability.json",
+    "summary": "results/summary_stochastic_control_stability.csv",
+    "table": "paper_latex/tables/stochastic_control_stability.tex"
+  },
+  "python": "3.11.15",
+  "rows": 6,
+  "script": "analyze_stochastic_control_stability.py",
+  "sources": [
+    "results/summary_bitflip_random_prior_control.csv",
+    "results/summary_frontier_random_depth_control.csv",
+    "results/summary_phase_policy_random_control.csv",
+    "results/summary_sparse_depth4_gate_generalization.csv"
+  ],
+  "status_counts": {
+    "pass": 6
+  }
+}

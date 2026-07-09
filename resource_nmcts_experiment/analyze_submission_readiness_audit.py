@@ -221,6 +221,10 @@ FRONTIER_RANDOM_DEPTH_ANALYSIS = RESULTS / "analysis_frontier_random_depth_contr
 FRONTIER_RANDOM_DEPTH_SUMMARY = RESULTS / "summary_frontier_random_depth_control.csv"
 FRONTIER_RANDOM_DEPTH_MANIFEST = RESULTS / "manifest_frontier_random_depth_control.json"
 FRONTIER_RANDOM_DEPTH_TABLE = THIS_DIR / "paper_latex" / "tables" / "frontier_random_depth_control.tex"
+STOCHASTIC_CONTROL_ANALYSIS = RESULTS / "analysis_stochastic_control_stability.md"
+STOCHASTIC_CONTROL_SUMMARY = RESULTS / "summary_stochastic_control_stability.csv"
+STOCHASTIC_CONTROL_MANIFEST = RESULTS / "manifest_stochastic_control_stability.json"
+STOCHASTIC_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "stochastic_control_stability.tex"
 EDITORIAL_SCREENING_ANALYSIS = RESULTS / "analysis_editorial_screening_audit.md"
 EDITORIAL_SCREENING_SUMMARY = RESULTS / "summary_editorial_screening_audit.csv"
 EDITORIAL_SCREENING_MANIFEST = RESULTS / "manifest_editorial_screening_audit.json"
@@ -626,6 +630,11 @@ def build_rows() -> list[dict[str, str]]:
     )
     frontier_random_counts = frontier_random_manifest.get("status_counts", {}) if frontier_random_manifest else {}
     frontier_random_rows = frontier_random_manifest.get("rows", "missing") if frontier_random_manifest else "missing"
+    stochastic_manifest = read_json(STOCHASTIC_CONTROL_MANIFEST)
+    stochastic_revisions = int(stochastic_manifest.get("needs_revision_count", -1)) if stochastic_manifest else -1
+    stochastic_counts = stochastic_manifest.get("status_counts", {}) if stochastic_manifest else {}
+    stochastic_rows = stochastic_manifest.get("rows", "missing") if stochastic_manifest else "missing"
+    stochastic_components = stochastic_manifest.get("components", []) if stochastic_manifest else []
     figure_asset_manifest = read_json(FIGURE_ASSET_MANIFEST)
     figure_asset_revisions = int(figure_asset_manifest.get("needs_revision_count", -1)) if figure_asset_manifest else -1
     figure_asset_counts = figure_asset_manifest.get("status_counts", {}) if figure_asset_manifest else {}
@@ -1262,6 +1271,21 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Same-candidate frontier random-depth control is manuscript-visible; rows={frontier_random_rows}; status_counts={frontier_random_counts}; needs_revision_count={frontier_random_revisions}.",
             "next_action": "Rerun analyze_frontier_random_depth_control.py after changing frontier policy rows, depth-2/3/4 screen candidates, or learned budget-allocation claims.",
+        },
+        {
+            "item": "Stochastic-control stability summary",
+            "status": "pass"
+            if "tab:stochastic-control-stability" in text
+            and STOCHASTIC_CONTROL_ANALYSIS.exists()
+            and STOCHASTIC_CONTROL_SUMMARY.exists()
+            and STOCHASTIC_CONTROL_MANIFEST.exists()
+            and STOCHASTIC_CONTROL_TABLE.exists()
+            and stochastic_revisions == 0
+            and stochastic_rows == 6
+            and stochastic_counts.get("pass", 0) == 6
+            else "needs revision",
+            "evidence": f"Stochastic-control stability summary consolidates random-prior, random-depth, phase-shortlist, and independent-seed sparse-gate checks; rows={stochastic_rows}; components={stochastic_components}; status_counts={stochastic_counts}; needs_revision_count={stochastic_revisions}.",
+            "next_action": "Rerun analyze_stochastic_control_stability.py after changing random-control, phase shortlist, sparse-gate, or learned-control stability claims.",
         },
         {
             "item": "Citation support audit",

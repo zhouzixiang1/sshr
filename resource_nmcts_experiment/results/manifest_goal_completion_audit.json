@@ -33,8 +33,8 @@
     },
     {
       "boundary": "The evidence supports bounded neural/search-control contributions, not a claim that deep RL alone explains all gains.",
-      "evidence": "Search-control, bit-flip random-prior, frontier random-depth, and learned-control audits separate heuristic/beam/no-MCTS/MCTS/Pareto/prior comparisons, same-budget random-prior controls, same-candidate frontier budget controls, promoted frontier/gating/phase-pruning controls, and limited diagnostics.",
-      "evidence_files": "results/analysis_search_control_baseline_audit.md; paper_latex/tables/search_control_baseline_audit.tex; results/analysis_bitflip_random_prior_control.md; paper_latex/tables/bitflip_random_prior_control.tex; results/analysis_frontier_random_depth_control.md; paper_latex/tables/frontier_random_depth_control.tex; results/analysis_learned_control_audit.md; paper_latex/tables/learned_control_audit.tex; paper_latex/figures/submission_v36/fig7_learned_control_summary.pdf",
+      "evidence": "Search-control, bit-flip random-prior, frontier random-depth, stochastic-control stability, and learned-control audits separate heuristic/beam/no-MCTS/MCTS/Pareto/prior comparisons, same-budget random-prior controls, same-candidate frontier budget controls, independent-seed checks, promoted frontier/gating/phase-pruning controls, and limited diagnostics.",
+      "evidence_files": "results/analysis_search_control_baseline_audit.md; paper_latex/tables/search_control_baseline_audit.tex; results/analysis_bitflip_random_prior_control.md; paper_latex/tables/bitflip_random_prior_control.tex; results/analysis_frontier_random_depth_control.md; paper_latex/tables/frontier_random_depth_control.tex; results/analysis_stochastic_control_stability.md; paper_latex/tables/stochastic_control_stability.tex; results/analysis_learned_control_audit.md; paper_latex/tables/learned_control_audit.tex; paper_latex/figures/submission_v36/fig7_learned_control_summary.pdf",
       "next_action": "Do not promote runtime-negative or quality-weak neural diagnostics as main contributions.",
       "requirement": "Neural/MCTS and learned-control evidence",
       "status": "pass"
@@ -81,7 +81,7 @@
     },
     {
       "boundary": "Counts describe manuscript artifacts, not independent experimental datasets.",
-      "evidence": "Current package has 7 submitted figure panels and 196 generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
+      "evidence": "Current package has 7 submitted figure panels and 197 generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
       "evidence_files": "paper_latex/figures/submission_v36; paper_latex/tables; results/analysis_figure_asset_audit.md; results/analysis_reproducibility_audit.md; results/analysis_runtime_envelope_audit.md",
       "next_action": "Spot-check figure/table readability after every layout or data update.",
       "requirement": "Rich paper figures and tables",

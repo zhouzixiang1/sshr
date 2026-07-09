@@ -4,13 +4,13 @@ This terminal audit opens the reviewer/upload tarball and checks manifest agreem
 
 ## Status counts
 
-- pass: 39
+- pass: 40
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Payload archive readable | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1142; error=none. | Regenerate the payload archive if it cannot be opened by Python tarfile. |
-| Payload manifest round-trip | pass | manifest_files=1142; archive_files=1142; missing=none; extra=none. | Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge. |
-| Payload per-file SHA256 | pass | checked=1142; mismatches=none. | Regenerate the payload archive and manifest if any archived file digest differs from the manifest. |
+| Payload archive readable | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1147; error=none. | Regenerate the payload archive if it cannot be opened by Python tarfile. |
+| Payload manifest round-trip | pass | manifest_files=1147; archive_files=1147; missing=none; extra=none. | Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge. |
+| Payload per-file SHA256 | pass | checked=1147; mismatches=none. | Regenerate the payload archive and manifest if any archived file digest differs from the manifest. |
 | Payload path hygiene | pass | unsafe_paths=none; private_hits=none. | Remove unsafe, platform-generated, or private files from the payload inputs. |
 | Payload required artifacts | pass | required=15; missing=none. | Ensure the uploadable archive includes manuscript, bibliography, rebuild/verify scripts, handoff docs, and submission audits. |
 | Payload reviewer entrypoints | pass | reviewer_entries=7; missing=none. | Ensure the uploadable archive includes reviewer-facing guide, editor/reviewer briefs, venue brief, registry, and reproducibility audit. |
@@ -33,6 +33,7 @@ This terminal audit opens the reviewer/upload tarball and checks manifest agreem
 | Payload bit-flip random-prior evidence | pass | bitflip_random_prior_files=9; missing=none. | Ensure the uploadable archive includes the bit-flip random-prior run script, analysis outputs, raw CSV, and manuscript table. |
 | Payload bit-flip low-budget learned-prior evidence | pass | bitflip_neural_budget_files=9; missing=none. | Ensure the uploadable archive includes the low-budget learned-prior run script, raw rows, analysis outputs, and manuscript table. |
 | Payload frontier random-depth evidence | pass | frontier_random_depth_files=5; missing=none. | Ensure the uploadable archive includes the frontier random-depth analysis script, generated evidence, and manuscript table. |
+| Payload stochastic-control stability evidence | pass | stochastic_control_files=5; missing=none. | Ensure the uploadable archive includes the stochastic learned-control stability script, generated evidence, and manuscript table. |
 | Payload headline numeric evidence | pass | headline_numeric_files=4; missing=none. | Ensure the uploadable archive includes the headline numeric audit script and generated CSV/Markdown/JSON evidence. |
 | Payload citation support evidence | pass | citation_support_files=4; missing=none. | Ensure the uploadable archive includes the citation support audit script and generated CSV/Markdown/JSON evidence. |
 | Payload editorial screening evidence | pass | editorial_screening_files=5; missing=none. | Ensure the uploadable archive includes the editorial screening audit script, generated evidence, and support table. |
@@ -46,4 +47,4 @@ This terminal audit opens the reviewer/upload tarball and checks manifest agreem
 | Payload Git-policy executable | pass | payload_git_policy_scripts=1; missing=none; terminal_outputs_excluded=3. | Ensure the uploadable archive includes payload Git-policy audit code; generated terminal outputs are intentionally excluded and regenerated from the source tree. |
 | Payload extraction smoke executable | pass | payload_extraction_smoke_scripts=1; missing=none; terminal_outputs_excluded=3. | Ensure the uploadable archive includes the extraction smoke audit code; generated terminal outputs are intentionally excluded and regenerated from the source tree. |
 | Payload verifier smoke executable | pass | payload_verifier_smoke_scripts=1; missing=none; terminal_outputs_excluded=3. | Ensure the uploadable archive includes the verifier smoke audit code; generated terminal outputs are intentionally excluded and regenerated from the source tree. |
-| Payload deterministic tar metadata | pass | members_checked=1142; metadata_issues=none. | Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads. |
+| Payload deterministic tar metadata | pass | members_checked=1147; metadata_issues=none. | Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads. |

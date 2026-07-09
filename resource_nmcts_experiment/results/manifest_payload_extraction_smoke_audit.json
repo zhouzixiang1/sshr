@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1142; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1147; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -185,6 +185,12 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_frontier_random_depth_control.json; needs_revision_count=0; rows=3; stderr=none",
       "item": "Frontier random-depth control",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_stochastic_control_stability.json; needs_revision_count=0; rows=6; stderr=none",
+      "item": "Stochastic-control stability",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -492,6 +498,13 @@
     },
     {
       "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_stochastic_control_stability.json",
+      "minimum_rows_key": "rows",
+      "name": "Stochastic-control stability",
+      "script": "analyze_stochastic_control_stability.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
       "manifest": "results/manifest_editorial_screening_audit.json",
       "minimum_rows_key": "rows",
       "name": "Editorial screening audit",
@@ -604,6 +617,6 @@
     }
   ],
   "status_counts": {
-    "pass": 46
+    "pass": 47
   }
 }
