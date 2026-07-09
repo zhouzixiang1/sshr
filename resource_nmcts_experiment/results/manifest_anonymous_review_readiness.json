@@ -1,0 +1,48 @@
+{
+  "current_manuscript_is_double_blind_ready": false,
+  "needs_author_input_count": 3,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_anonymous_review_readiness.md",
+    "manifest": "results/manifest_anonymous_review_readiness.json",
+    "summary": "results/summary_anonymous_review_readiness.csv"
+  },
+  "python": "3.11.15",
+  "rows": [
+    {
+      "evidence": "target_venue.anonymous_review_required is not finalized.",
+      "item": "Target anonymous-review decision",
+      "next_action": "Set target_venue.anonymous_review_required after choosing the venue, then rerun the rebuild.",
+      "status": "needs author input"
+    },
+    {
+      "evidence": "author_field=present; double_blind_ready=False.",
+      "item": "Current manuscript author field",
+      "next_action": "For double-blind review, create a venue-specific anonymous copy with an anonymized author field; keep this author-labeled source for non-anonymous venues.",
+      "status": "needs author input"
+    },
+    {
+      "evidence": "data_code_section_present=True; repo_relative_link=True; anonymous_wording=False.",
+      "item": "Anonymous artifact-link boundary",
+      "next_action": "If double-blind review is required, replace repository-relative availability wording with an anonymous review archive/link before upload.",
+      "status": "needs author input"
+    },
+    {
+      "evidence": "private_files_absent=True; gitignore_covers_private_paths=True; missing_gitignore_entries=none.",
+      "item": "Private file boundary for anonymous review",
+      "next_action": "Keep submission_metadata.json and generated private previews ignored and out of public payloads.",
+      "status": "pass"
+    },
+    {
+      "evidence": "missing_template_paths=none; support_docs_mention_anonymous_review=True.",
+      "item": "Anonymous-review metadata fields",
+      "next_action": "Keep anonymous-review metadata fields and support-document instructions in sync.",
+      "status": "pass"
+    }
+  ],
+  "script": "analyze_anonymous_review_readiness.py",
+  "status_counts": {
+    "needs author input": 3,
+    "pass": 2
+  }
+}

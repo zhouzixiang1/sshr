@@ -19,6 +19,7 @@ RESULTS = THIS_DIR / "results"
 SUBMISSION_PACKAGE = THIS_DIR / "submission_package"
 SUMMARY = RESULTS / "summary_submission_metadata_audit.csv"
 VALIDATOR_SUMMARY = RESULTS / "summary_submission_metadata_validator.csv"
+ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 OUTPUT = SUBMISSION_PACKAGE / "AUTHOR_INPUT_REQUIRED.md"
 MANIFEST = RESULTS / "manifest_author_input_packet.json"
 
@@ -34,11 +35,22 @@ def read_rows(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(f))
 
 
+def read_json(path: Path) -> dict[str, object]:
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
 def write_packet(rows: list[dict[str, str]]) -> None:
     needs = [row for row in rows if row.get("status") != "pass"]
     validator_rows = read_rows(VALIDATOR_SUMMARY)
     validator_revisions = [row for row in validator_rows if row.get("status") == "needs revision"]
     validator_author_input = [row for row in validator_rows if row.get("status") == "needs author input"]
+    anonymous_manifest = read_json(ANONYMOUS_REVIEW_MANIFEST)
+    anonymous_counts = anonymous_manifest.get("status_counts", {}) if anonymous_manifest else {}
     lines = [
         "# Author Input Required",
         "",
@@ -65,6 +77,8 @@ def write_packet(rows: list[dict[str, str]]) -> None:
         f"- metadata rows needing author input: {len(needs)}",
         f"- metadata validator rows needing author input: {len(validator_author_input)}",
         f"- metadata validator rows needing revision: {len(validator_revisions)}",
+        f"- anonymous-review rows needing author input: {anonymous_counts.get('needs author input', 0)}",
+        f"- anonymous-review rows needing revision: {anonymous_counts.get('needs revision', 0)}",
         "- research, experiment, manuscript, archive, payload, and verifier checks are handled by the generated audits.",
         "- final goal closure should not be marked complete until these fields are filled and the rebuild/verifier pass again.",
         "",
@@ -100,6 +114,7 @@ def write_packet(rows: list[dict[str, str]]) -> None:
             "- `submission_package/cover_letter_template.md` after the target venue and routing details are known.",
             "- `submission_package/submission_checklist.md` after venue formatting, reference style, word limit, supplementary-material policy, and AI-disclosure policy are confirmed.",
             "- `paper_latex/resource_nmcts_submission_v1.tex` only if the selected venue requires author names, declarations, formatting conversion, or final availability links inside the manuscript source.",
+            "- A venue-specific anonymous manuscript copy and anonymous artifact links if `target_venue.anonymous_review_required` is yes.",
             "",
             "## Final Checks After Filling Metadata",
             "",

@@ -44,6 +44,8 @@ noise modeling, or magic-state-factory accounting.
 - `../results/analysis_submission_metadata_pipeline_selftest.md`: synthetic,
   non-private self-test for the metadata validator and private-preview
   renderers.
+- `../results/analysis_anonymous_review_readiness.md`: public audit that
+  separates the author-labeled manuscript from double-blind review actions.
 - `../results/analysis_submission_text_preview.md`: public audit for the
   private generated submission-system text previews.
 - `submission_checklist.md`: final upload checklist and verification commands.
@@ -66,6 +68,9 @@ by the author or selected target venue.
   repository URL, or anonymous review link if the venue requires it.
 - Confirm venue template, reference style, word limit, supplementary-material
   policy, data/code policy, and anonymous-review policy.
+- If the venue requires double-blind review, produce a venue-specific anonymous
+  manuscript copy and anonymous artifact links; the current source is
+  author-labeled.
 
 `submission_metadata.json` is intentionally ignored by Git so private author
 metadata is not committed accidentally.
@@ -122,6 +127,7 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_claim_scope_lint.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python validate_submission_metadata.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python selftest_submission_metadata_pipeline.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_anonymous_review_readiness.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_text_preview.py
 pdfinfo paper_latex/resource_nmcts_submission_v1.pdf | sed -n '1,20p'
 rg -n "Warning|Overfull|Underfull|LaTeX Error|Undefined|Rerun" \
@@ -132,6 +138,7 @@ rg -n "needs author input|pass:|file count|archive sha256|Submission support|unr
   results/manifest_claim_scope_lint.json \
   results/analysis_submission_metadata_validator.md \
   results/analysis_submission_metadata_pipeline_selftest.md \
+  results/analysis_anonymous_review_readiness.md \
   results/analysis_submission_text_preview.md \
   results/analysis_submission_payload_archive.md \
   results/analysis_submission_archive_manifest.md

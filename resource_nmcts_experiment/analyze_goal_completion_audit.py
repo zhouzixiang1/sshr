@@ -291,6 +291,24 @@ def build_items() -> list[GoalItem]:
             next_action="Rerun the rebuild script after any payload-affecting edit.",
         ),
         GoalItem(
+            requirement="Anonymous-review submission path",
+            status=status_if(
+                (
+                    RESULTS / "analysis_anonymous_review_readiness.md",
+                    RESULTS / "summary_anonymous_review_readiness.csv",
+                    RESULTS / "manifest_anonymous_review_readiness.json",
+                )
+            ),
+            evidence="Anonymous-review audit separates the current author-labeled draft from the extra double-blind steps: venue decision, anonymized author field, and anonymous artifact links.",
+            evidence_files=(
+                RESULTS / "analysis_anonymous_review_readiness.md",
+                RESULTS / "summary_anonymous_review_readiness.csv",
+                RESULTS / "manifest_anonymous_review_readiness.json",
+            ),
+            boundary="This prepares the double-blind path but does not make the current author-labeled manuscript itself double-blind ready.",
+            next_action="If the target venue requires double-blind review, create an anonymized manuscript copy and anonymous archive/repository links before upload.",
+        ),
+        GoalItem(
             requirement="Final author and venue metadata",
             status="needs author input" if metadata_needs else "pass",
             evidence=f"Submission metadata audit reports {metadata_needs} author/venue field group(s) needing author input; private metadata validation, synthetic metadata-pipeline self-testing, and text-preview generation are prepared for filled metadata.",
@@ -299,6 +317,7 @@ def build_items() -> list[GoalItem]:
                 RESULTS / "analysis_submission_metadata_validator.md",
                 RESULTS / "analysis_submission_metadata_pipeline_selftest.md",
                 RESULTS / "analysis_submission_text_preview.md",
+                RESULTS / "analysis_anonymous_review_readiness.md",
                 THIS_DIR / "submission_package" / "author_declarations_template.md",
                 THIS_DIR / "submission_package" / "cover_letter_template.md",
                 THIS_DIR / "submission_package" / "submission_checklist.md",
@@ -316,6 +335,7 @@ def build_items() -> list[GoalItem]:
                 RESULTS / "analysis_submission_metadata_validator.md",
                 RESULTS / "analysis_submission_metadata_pipeline_selftest.md",
                 RESULTS / "analysis_submission_text_preview.md",
+                RESULTS / "analysis_anonymous_review_readiness.md",
             ),
             boundary="The research/package side is audit-complete, but the full objective is not closed until author and target-venue metadata are supplied.",
             next_action="Do not mark the objective complete until the author-specific declarations and final archive/venue links are filled and audits rerun.",

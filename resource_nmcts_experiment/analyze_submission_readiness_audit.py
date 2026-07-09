@@ -46,6 +46,9 @@ TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
 METADATA_PIPELINE_SELFTEST_ANALYSIS = RESULTS / "analysis_submission_metadata_pipeline_selftest.md"
 METADATA_PIPELINE_SELFTEST_SUMMARY = RESULTS / "summary_submission_metadata_pipeline_selftest.csv"
 METADATA_PIPELINE_SELFTEST_MANIFEST = RESULTS / "manifest_submission_metadata_pipeline_selftest.json"
+ANONYMOUS_REVIEW_ANALYSIS = RESULTS / "analysis_anonymous_review_readiness.md"
+ANONYMOUS_REVIEW_SUMMARY = RESULTS / "summary_anonymous_review_readiness.csv"
+ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 GOAL_ANALYSIS = RESULTS / "analysis_goal_completion_audit.md"
 GOAL_SUMMARY = RESULTS / "summary_goal_completion_audit.csv"
 GOAL_MANIFEST = RESULTS / "manifest_goal_completion_audit.json"
@@ -132,6 +135,10 @@ def build_rows() -> list[dict[str, str]]:
     metadata_selftest_writes_private = bool(metadata_selftest_manifest.get("writes_private_metadata", True)) or bool(
         metadata_selftest_manifest.get("writes_private_preview_files", True)
     )
+    anonymous_manifest = read_json(ANONYMOUS_REVIEW_MANIFEST)
+    anonymous_counts = anonymous_manifest.get("status_counts", {}) if anonymous_manifest else {}
+    anonymous_revisions = int(anonymous_manifest.get("needs_revision_count", -1)) if anonymous_manifest else -1
+    anonymous_author_input = int(anonymous_manifest.get("needs_author_input_count", -1)) if anonymous_manifest else -1
     lower = text.lower()
     todo_hits = re.findall(r"\b(?:todo|tbd|placeholder)\b", lower)
     abstract_words = abstract_word_count(text)
@@ -284,6 +291,17 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun make_submission_text_preview.py after filling private metadata; generated_*.md files must remain ignored by Git.",
         },
         {
+            "item": "Anonymous-review readiness path",
+            "status": "pass"
+            if ANONYMOUS_REVIEW_ANALYSIS.exists()
+            and ANONYMOUS_REVIEW_SUMMARY.exists()
+            and ANONYMOUS_REVIEW_MANIFEST.exists()
+            and anonymous_revisions == 0
+            else "needs revision",
+            "evidence": f"Anonymous-review audit exists; status_counts={anonymous_counts}; needs_revision_count={anonymous_revisions}; needs_author_input_count={anonymous_author_input}.",
+            "next_action": "If the selected venue requires double-blind review, produce an anonymized manuscript copy and anonymous artifact links before upload.",
+        },
+        {
             "item": "Goal completion audit",
             "status": "pass"
             if GOAL_ANALYSIS.exists() and GOAL_SUMMARY.exists() and GOAL_MANIFEST.exists()
@@ -311,7 +329,7 @@ def build_rows() -> list[dict[str, str]]:
             and VERIFIER_SUMMARY.exists()
             and VERIFIER_MANIFEST.exists()
             else "needs revision",
-            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private metadata validation, metadata-pipeline self-test, private-preview protection, and LaTeX log boundaries.",
+            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, private-preview protection, private payload exclusion, and LaTeX log boundaries.",
             "next_action": "Run verify_submission_package.sh after rebuilding the payload archive.",
         },
         {

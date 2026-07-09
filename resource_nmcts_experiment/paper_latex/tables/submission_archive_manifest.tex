@@ -3,14 +3,14 @@
 Payload group & Files & Missing & Digest & Boundary \\
 \midrule
 Manuscript source & 3 & 0 & \texttt{be1f55c9d835} & Compiled PDF is checked by readiness audit to avoid self-referential hashes. \\
-Paper tables & 150 & 0 & \texttt{7447a1b5028f} & Terminal submission audit tables are excluded from the stable payload digest. \\
+Paper tables & 150 & 0 & \texttt{3881ccff4866} & Terminal submission audit tables are excluded from the stable payload digest. \\
 Submission figures & 28 & 0 & \texttt{824254679c95} & Includes generated figure assets and plotted source data, not raw benchmark reruns. \\
 Raw measurements & 144 & 0 & \texttt{87ee477b5c7c} & Raw CSVs are regenerated only by the heavier run scripts, not by the lightweight rebuild. \\
-Derived summaries & 323 & 0 & \texttt{804c71c2b303} & Terminal submission/package outputs are excluded so this manifest remains stable. \\
-Run manifests & 73 & 0 & \texttt{88f61773fbbe} & Submission-level terminal manifests are excluded from this digest group. \\
-Scripts and docs & 73 & 0 & \texttt{df12073868a6} & Documents reproducible entry points; raw sweeps still require their individual drivers. \\
+Derived summaries & 325 & 0 & \texttt{de7696267fde} & Terminal submission/package outputs are excluded so this manifest remains stable. \\
+Run manifests & 74 & 0 & \texttt{d908c30c3d66} & Submission-level terminal manifests are excluded from this digest group. \\
+Scripts and docs & 74 & 0 & \texttt{95fcf1f3c0ca} & Documents reproducible entry points; raw sweeps still require their individual drivers. \\
 Models & 20 & 0 & \texttt{4c5c2a1bfc19} & Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild. \\
 External adapters & 1 & 0 & \texttt{de5aa3b78998} & Includes local adapter source files used for external toolchain probes, not vendored tool repositories. \\
-Submission support & 10 & 0 & \texttt{b49351e5fccd} & Includes public package README, author-input packet, artifact guide, cover-letter, declaration, checklist, reviewer-brief, editor-screening, venue-selection, and structured metadata templates; ignored generated private submission text is excluded. \\
+Submission support & 10 & 0 & \texttt{a087633d8e78} & Includes public package README, author-input packet, artifact guide, cover-letter, declaration, checklist, reviewer-brief, editor-screening, venue-selection, and structured metadata templates; ignored generated private submission text is excluded. \\
 \bottomrule
 \end{tabularx}

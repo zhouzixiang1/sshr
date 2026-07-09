@@ -5,9 +5,10 @@ The verifier runs after the payload archive has been created.  It checks the
 terminal package invariants that are easy to regress during final polishing:
 compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, private-metadata validation,
-synthetic metadata-pipeline self-testing, private-preview protection, and
-LaTeX log cleanliness.  It writes a small audit report but does not rerun
-experiments or alter manuscript sources.
+synthetic metadata-pipeline self-testing, anonymous-review decision support,
+private-preview protection, private payload exclusion, and LaTeX log
+cleanliness.  It writes a small audit report but does not rerun experiments or
+alter manuscript sources.
 """
 from __future__ import annotations
 
@@ -35,6 +36,15 @@ CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
 METADATA_VALIDATOR_MANIFEST = RESULTS / "manifest_submission_metadata_validator.json"
 TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
 METADATA_PIPELINE_SELFTEST_MANIFEST = RESULTS / "manifest_submission_metadata_pipeline_selftest.json"
+ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
+
+PRIVATE_PAYLOAD_BASENAMES = {
+    "submission_metadata.json",
+    "generated_author_declarations.md",
+    "generated_availability_statements.md",
+    "generated_cover_letter.md",
+    "generated_submission_text.md",
+}
 
 
 def rel(path: Path) -> str:
@@ -234,6 +244,41 @@ def verify_metadata_pipeline_selftest() -> dict[str, str]:
     )
 
 
+def verify_anonymous_review_audit() -> dict[str, str]:
+    manifest = read_json(ANONYMOUS_REVIEW_MANIFEST)
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    needs_author_input = int(manifest.get("needs_author_input_count", -1)) if manifest else -1
+    status = "pass" if manifest and needs_revision == 0 else "needs revision"
+    return row(
+        "Anonymous-review readiness audit",
+        status,
+        f"needs_revision_count={needs_revision}; needs_author_input_count={needs_author_input}; status_counts={counts}.",
+        "Run analyze_anonymous_review_readiness.py and resolve needs-revision rows; double-blind conversion remains venue-dependent author input.",
+    )
+
+
+def verify_private_payload_exclusion() -> dict[str, str]:
+    manifest = read_json(PAYLOAD_MANIFEST)
+    files = manifest.get("files", []) if manifest else []
+    leaked: list[str] = []
+    if isinstance(files, list):
+        for item in files:
+            if not isinstance(item, dict):
+                continue
+            path = str(item.get("path", ""))
+            if Path(path).name in PRIVATE_PAYLOAD_BASENAMES:
+                leaked.append(path)
+    else:
+        leaked.append("<payload manifest has invalid files list>")
+    return row(
+        "Private metadata payload exclusion",
+        "pass" if manifest and not leaked else "needs revision",
+        f"private_payload_hits={leaked or 'none'}; checked_basenames={sorted(PRIVATE_PAYLOAD_BASENAMES)}.",
+        "Regenerate the payload after removing ignored private metadata or preview files from package inputs.",
+    )
+
+
 def verify_latex_log() -> dict[str, str]:
     if not LOG.exists():
         return row("LaTeX log boundary", "needs revision", "LaTeX log is missing.", "Rebuild the PDF with latexmk.")
@@ -267,7 +312,9 @@ def build_rows() -> list[dict[str, str]]:
             verify_claim_scope(),
             verify_metadata_validator(),
             verify_metadata_pipeline_selftest(),
+            verify_anonymous_review_audit(),
             verify_text_preview(),
+            verify_private_payload_exclusion(),
             verify_latex_log(),
         ]
     )

@@ -23,6 +23,8 @@ format issues without writing private values to tracked files.
 - metadata rows needing author input: 12
 - metadata validator rows needing author input: 1
 - metadata validator rows needing revision: 0
+- anonymous-review rows needing author input: 3
+- anonymous-review rows needing revision: 0
 - research, experiment, manuscript, archive, payload, and verifier checks are handled by the generated audits.
 - final goal closure should not be marked complete until these fields are filled and the rebuild/verifier pass again.
 
@@ -108,6 +110,7 @@ format issues without writing private values to tracked files.
 - `submission_package/cover_letter_template.md` after the target venue and routing details are known.
 - `submission_package/submission_checklist.md` after venue formatting, reference style, word limit, supplementary-material policy, and AI-disclosure policy are confirmed.
 - `paper_latex/resource_nmcts_submission_v1.tex` only if the selected venue requires author names, declarations, formatting conversion, or final availability links inside the manuscript source.
+- A venue-specific anonymous manuscript copy and anonymous artifact links if `target_venue.anonymous_review_required` is yes.
 
 ## Final Checks After Filling Metadata
 
