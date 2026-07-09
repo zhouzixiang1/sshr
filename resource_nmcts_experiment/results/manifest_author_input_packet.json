@@ -2,7 +2,7 @@
   "items": [
     {
       "item": "Structured metadata intake file",
-      "next_action": "Create `submission_package/submission_metadata.json` from the template, fill it, then rerun the rebuild script.",
+      "next_action": "Run `make_submission_metadata_from_answers.py --init-private-answers`, fill `submission_package/submission_metadata_answers.json`, then run `make_submission_metadata_from_answers.py --write-private` and rerun the rebuild script.",
       "source": "submission_package/submission_metadata_template.json",
       "status": "needs author input"
     },

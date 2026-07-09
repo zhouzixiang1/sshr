@@ -1,0 +1,91 @@
+{
+  "instructions": {
+    "usage": "Copy this file to submission_metadata_answers.json, fill AUTHOR INPUT REQUIRED values, then run make_submission_metadata_from_answers.py --write-private.",
+    "privacy": "submission_metadata_answers.json is ignored by Git and should contain private author and venue answers only.",
+    "autofill": "Repository URL, current commit hash, and environment notes are filled from the current checkout by the conversion script."
+  },
+  "target_venue": {
+    "name": "AUTHOR INPUT REQUIRED",
+    "manuscript_type": "AUTHOR INPUT REQUIRED",
+    "formatting_policy_checked": "AUTHOR INPUT REQUIRED",
+    "reference_style_checked": "AUTHOR INPUT REQUIRED",
+    "word_limit_checked": "AUTHOR INPUT REQUIRED",
+    "supplementary_material_policy_checked": "AUTHOR INPUT REQUIRED",
+    "ai_disclosure_policy_checked": "AUTHOR INPUT REQUIRED",
+    "anonymous_review_required": "AUTHOR INPUT REQUIRED"
+  },
+  "authors": [
+    {
+      "order": "AUTHOR INPUT REQUIRED",
+      "name": "AUTHOR INPUT REQUIRED",
+      "orcid": "AUTHOR INPUT REQUIRED",
+      "affiliations": [
+        "AUTHOR INPUT REQUIRED"
+      ],
+      "email": "AUTHOR INPUT REQUIRED",
+      "corresponding": "AUTHOR INPUT REQUIRED"
+    }
+  ],
+  "corresponding_author": {
+    "name": "AUTHOR INPUT REQUIRED",
+    "email": "AUTHOR INPUT REQUIRED",
+    "affiliation": "AUTHOR INPUT REQUIRED",
+    "postal_address": "AUTHOR INPUT REQUIRED"
+  },
+  "author_contributions": {
+    "conceptualization": "AUTHOR INPUT REQUIRED",
+    "methodology": "AUTHOR INPUT REQUIRED",
+    "software": "AUTHOR INPUT REQUIRED",
+    "validation": "AUTHOR INPUT REQUIRED",
+    "formal_analysis": "AUTHOR INPUT REQUIRED",
+    "investigation": "AUTHOR INPUT REQUIRED",
+    "data_curation": "AUTHOR INPUT REQUIRED",
+    "writing_original_draft": "AUTHOR INPUT REQUIRED",
+    "writing_review_editing": "AUTHOR INPUT REQUIRED",
+    "visualization": "AUTHOR INPUT REQUIRED",
+    "supervision": "AUTHOR INPUT REQUIRED",
+    "funding_acquisition": "AUTHOR INPUT REQUIRED"
+  },
+  "funding": {
+    "statement": "AUTHOR INPUT REQUIRED",
+    "grant_numbers": [
+      "AUTHOR INPUT REQUIRED"
+    ]
+  },
+  "acknowledgements": {
+    "statement": "AUTHOR INPUT REQUIRED"
+  },
+  "competing_interests": {
+    "statement": "AUTHOR INPUT REQUIRED"
+  },
+  "data_availability": {
+    "archive_link_or_doi": "AUTHOR INPUT REQUIRED",
+    "anonymous_review_link": "AUTHOR INPUT REQUIRED",
+    "access_restrictions": "AUTHOR INPUT REQUIRED",
+    "statement": "AUTHOR INPUT REQUIRED"
+  },
+  "code_availability": {
+    "license": "AUTHOR INPUT REQUIRED",
+    "anonymous_review_link": "AUTHOR INPUT REQUIRED",
+    "statement": "AUTHOR INPUT REQUIRED"
+  },
+  "ai_assistance": {
+    "statement": "AUTHOR INPUT REQUIRED"
+  },
+  "preprint_and_prior_submission": {
+    "preprint_url_or_doi": "AUTHOR INPUT REQUIRED",
+    "prior_submission_history": "AUTHOR INPUT REQUIRED",
+    "related_manuscripts": "AUTHOR INPUT REQUIRED",
+    "statement": "AUTHOR INPUT REQUIRED"
+  },
+  "cover_letter": {
+    "target_editor": "AUTHOR INPUT REQUIRED",
+    "suggested_reviewers": "AUTHOR INPUT REQUIRED",
+    "excluded_reviewers": "AUTHOR INPUT REQUIRED",
+    "editorial_routing_statement": "AUTHOR INPUT REQUIRED"
+  },
+  "permissions": {
+    "third_party_material_confirmed": "AUTHOR INPUT REQUIRED",
+    "statement": "AUTHOR INPUT REQUIRED"
+  }
+}

@@ -30,9 +30,12 @@ from analyze_submission_metadata_audit import (
 AUTHOR_PACKET = SUBMISSION_PACKAGE / "AUTHOR_INPUT_REQUIRED.md"
 AUTHOR_QUESTIONNAIRE_ZH = SUBMISSION_PACKAGE / "AUTHOR_METADATA_QUESTIONNAIRE_zh.md"
 AUTHOR_MINIMAL_FORM_ZH = SUBMISSION_PACKAGE / "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md"
+METADATA_ANSWERS_TEMPLATE = SUBMISSION_PACKAGE / "submission_metadata_answers_template.json"
+METADATA_ANSWERS_FILE = SUBMISSION_PACKAGE / "submission_metadata_answers.json"
 FINAL_HANDOFF = SUBMISSION_PACKAGE / "FINAL_SUBMISSION_HANDOFF_zh.md"
 README = SUBMISSION_PACKAGE / "README.md"
 CHECKLIST = SUBMISSION_PACKAGE / "submission_checklist.md"
+TARGET_POLICY_CHECKLIST_ZH = SUBMISSION_PACKAGE / "TARGET_VENUE_POLICY_CHECKLIST_zh.md"
 AUTHOR_TEMPLATE = SUBMISSION_PACKAGE / "author_declarations_template.md"
 COVER_TEMPLATE = SUBMISSION_PACKAGE / "cover_letter_template.md"
 METADATA_AUDIT_MANIFEST = RESULTS / "manifest_submission_metadata_audit.json"
@@ -42,6 +45,7 @@ TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
 ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 
 PRIVATE_OUTPUTS = (
+    METADATA_ANSWERS_FILE,
     METADATA_FILE,
     SUBMISSION_PACKAGE / "generated_author_declarations.md",
     SUBMISSION_PACKAGE / "generated_availability_statements.md",
@@ -165,6 +169,8 @@ def check_support_document_visibility() -> dict[str, str]:
         COVER_TEMPLATE,
         AUTHOR_QUESTIONNAIRE_ZH,
         AUTHOR_MINIMAL_FORM_ZH,
+        TARGET_POLICY_CHECKLIST_ZH,
+        METADATA_ANSWERS_TEMPLATE,
     )
     missing_docs = [rel(path) for path in required_docs if not path.exists()]
     tokens = {
@@ -175,6 +181,8 @@ def check_support_document_visibility() -> dict[str, str]:
         rel(COVER_TEMPLATE): ("AUTHOR INPUT REQUIRED", "logical-layer", "SSHR"),
         rel(AUTHOR_QUESTIONNAIRE_ZH): ("target_venue.name", "authors[].name", "validate_submission_metadata.py"),
         rel(AUTHOR_MINIMAL_FORM_ZH): ("target_venue.*", "authors[]", "code_availability.*", "validate_submission_metadata.py"),
+        rel(TARGET_POLICY_CHECKLIST_ZH): ("目标期刊政策核对表", "target_venue.ai_disclosure_policy_checked", "data_availability.*", "code_availability.*"),
+        rel(METADATA_ANSWERS_TEMPLATE): ("target_venue", "authors", "code_availability", "AUTHOR INPUT REQUIRED"),
     }
     missing_tokens: list[str] = []
     for doc_rel, doc_tokens in tokens.items():
@@ -187,7 +195,7 @@ def check_support_document_visibility() -> dict[str, str]:
         "Support document author-gate visibility",
         status,
         f"missing_docs={missing_docs or 'none'}; missing_tokens={missing_tokens or 'none'}.",
-        "Keep README, checklist, handoff, declaration template, cover-letter template, questionnaire, and minimal response form aligned with the private metadata workflow.",
+        "Keep README, checklist, handoff, declaration template, cover-letter template, questionnaire, minimal response form, target-venue policy checklist, and answer template aligned with the private metadata workflow.",
     )
 
 
@@ -207,7 +215,7 @@ def check_private_git_protection() -> dict[str, str]:
         "Private author metadata git protection",
         "pass" if not not_ignored and not tracked else "needs revision",
         f"ignored={len(PRIVATE_OUTPUTS) - len(not_ignored)}/{len(PRIVATE_OUTPUTS)}; tracked={tracked or 'none'}; existing_private={existing_private or 'none'}.",
-        "Keep submission_metadata.json and generated private previews ignored and untracked.",
+        "Keep submission_metadata_answers.json, submission_metadata.json, and generated private previews ignored and untracked.",
     )
 
 

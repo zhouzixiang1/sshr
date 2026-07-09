@@ -130,6 +130,7 @@ run_py analyze_goal_completion_audit.py
 run_py analyze_submission_metadata_closure_path.py
 run_py analyze_editorial_screening_audit.py
 run_py analyze_target_venue_decision_audit.py
+run_py analyze_target_venue_policy_checklist.py
 run_py analyze_target_venue_format_smoke.py
 run_py analyze_submission_support_packet_audit.py
 run_py make_submission_payload_archive.py

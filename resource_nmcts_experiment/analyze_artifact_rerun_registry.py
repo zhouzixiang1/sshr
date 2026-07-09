@@ -98,6 +98,7 @@ def specs() -> list[EvidenceFamily]:
             rerun_tier="quick metadata audit",
             scripts=(
                 "analyze_submission_metadata_closure_path.py",
+                "make_submission_metadata_from_answers.py",
                 "make_submission_metadata_starter.py",
                 "validate_submission_metadata.py",
                 "make_submission_text_preview.py",

@@ -2,10 +2,12 @@
 
 This file collects author-specific statements that cannot be inferred from the code or experiment artifacts.  Complete these fields before journal upload.
 
-For a single structured intake path, copy `submission_metadata_template.json` to
-`submission_metadata.json`, fill every `AUTHOR INPUT REQUIRED` value, and rerun
-`./rebuild_submission_package.sh`.  The filled JSON file is ignored by Git so
-private author metadata is not committed accidentally.
+For the structured intake path, run
+`make_submission_metadata_from_answers.py --init-private-answers`, fill the
+ignored `submission_metadata_answers.json`, then run
+`make_submission_metadata_from_answers.py --write-private`.  The filled private
+answer and metadata files are ignored by Git so private author metadata is not
+committed accidentally.
 
 When the JSON file is complete, the rebuild writes ignored private previews:
 `generated_author_declarations.md`, `generated_availability_statements.md`,

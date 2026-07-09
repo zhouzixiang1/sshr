@@ -20,6 +20,7 @@ from make_submission_payload_archive import ARCHIVE, PAYLOAD_ROOT, THIS_DIR
 RESULTS = THIS_DIR / "results"
 PAYLOAD_MANIFEST = RESULTS / "manifest_submission_payload_archive.json"
 PRIVATE_BASENAMES = {
+    "submission_metadata_answers.json",
     "submission_metadata.json",
     "generated_author_declarations.md",
     "generated_availability_statements.md",

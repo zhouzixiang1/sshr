@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Audit that the public author metadata questionnaire covers every private field.
 
-The actual author and venue metadata stay in the ignored
-submission_package/submission_metadata.json file.  This audit checks only the
-tracked questionnaire and template so the remaining human gate is explicit,
+The actual author and venue answers stay in ignored private files
+submission_package/submission_metadata_answers.json and
+submission_package/submission_metadata.json.  This audit checks only the
+tracked questionnaire and templates so the remaining human gate is explicit,
 complete, and safe to ship in the reviewer payload.
 """
 from __future__ import annotations
@@ -63,8 +64,10 @@ def missing_template_paths(template: object) -> list[str]:
 
 def check_file_and_private_workflow(text: str) -> dict[str, str]:
     tokens = (
+        "submission_metadata_answers.json",
         "submission_metadata.json",
         "AUTHOR INPUT REQUIRED",
+        "make_submission_metadata_from_answers.py",
         "validate_submission_metadata.py",
         "make_submission_text_preview.py",
         "Git 忽略",
@@ -75,7 +78,7 @@ def check_file_and_private_workflow(text: str) -> dict[str, str]:
         "Questionnaire file and private workflow",
         "pass" if QUESTIONNAIRE.exists() and not missing else "needs revision",
         f"questionnaire_exists={QUESTIONNAIRE.exists()}; missing_tokens={missing or 'none'}.",
-        "Keep the questionnaire as a public checklist and store real values only in the ignored submission_metadata.json file.",
+        "Keep the questionnaire as a public checklist and store real values only in ignored private metadata answer/metadata files.",
     )
 
 
@@ -143,7 +146,8 @@ def check_anonymous_link_prompts(text: str) -> dict[str, str]:
 
 def check_post_fill_commands(text: str) -> dict[str, str]:
     tokens = (
-        "make_submission_metadata_starter.py --write-private",
+        "make_submission_metadata_from_answers.py --init-private-answers",
+        "make_submission_metadata_from_answers.py --write-private",
         "validate_submission_metadata.py",
         "make_submission_text_preview.py",
         "./rebuild_submission_package.sh",

@@ -7,8 +7,9 @@ Use this checklist immediately before uploading the manuscript.
 - AUTHOR INPUT REQUIRED: Work through `submission_package/AUTHOR_INPUT_REQUIRED.md` before uploading.
 - AUTHOR INPUT REQUIRED: Use `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md` as the Chinese field-by-field guide before filling private metadata.
 - If working in Chinese, follow `submission_package/FINAL_SUBMISSION_HANDOFF_zh.md` for the final execution order.
-- AUTHOR INPUT REQUIRED: Choose the target venue using `submission_package/target_venue_brief.md` as a planning aid, then copy the final choice into `submission_package/submission_metadata.json`.
-- AUTHOR INPUT REQUIRED: Run `/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py --write-private`, or copy `submission_package/submission_metadata_template.json` manually, then fill every `AUTHOR INPUT REQUIRED` value in `submission_package/submission_metadata.json`.
+- AUTHOR INPUT REQUIRED: Choose the target venue using `submission_package/target_venue_brief.md` as a planning aid, then copy the final choice into `submission_package/submission_metadata_answers.json`.
+- AUTHOR INPUT REQUIRED: Run `/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_from_answers.py --init-private-answers`, fill every `AUTHOR INPUT REQUIRED` value in the ignored private `submission_package/submission_metadata_answers.json`, then run `/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_from_answers.py --write-private` to create `submission_package/submission_metadata.json`.
+- Optional non-private intake aid: use `submission_package/submission_metadata_answers_template.json` as an answer-form template and keep any filled `submission_package/submission_metadata_answers.json` untracked.
 - AUTHOR INPUT REQUIRED: Confirm author order, affiliations, ORCID IDs, and corresponding author details.
 - AUTHOR INPUT REQUIRED: Complete funding, acknowledgements, author contributions, and competing-interest statements.
 - AUTHOR INPUT REQUIRED: Replace repository-relative availability wording with the target venue's required archive DOI, repository URL, or anonymous review link.
@@ -38,6 +39,7 @@ Use this checklist immediately before uploading the manuscript.
 - Readiness audit: `results/analysis_submission_readiness_audit.md`
 - Author input packet: `submission_package/AUTHOR_INPUT_REQUIRED.md`
 - Chinese metadata questionnaire: `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md`
+- Target venue policy checklist: `submission_package/TARGET_VENUE_POLICY_CHECKLIST_zh.md`
 - Chinese final handoff: `submission_package/FINAL_SUBMISSION_HANDOFF_zh.md`
 - Chinese comparison significance matrix: `submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md`
 - Terminal package verifier: `results/analysis_submission_package_verifier.md`
@@ -75,6 +77,7 @@ Use this checklist immediately before uploading the manuscript.
 - Editor screening brief: `submission_package/editor_screening_brief.md`
 - Target venue brief: `submission_package/target_venue_brief.md`
 - Structured metadata template: `submission_package/submission_metadata_template.json`
+- Short metadata answer template: `submission_package/submission_metadata_answers_template.json`
 - Traceability audit: `results/analysis_submission_traceability_audit.md`
 - Archive manifest: `results/analysis_submission_archive_manifest.md`
 - Payload archive manifest: `results/analysis_submission_payload_archive.md`
@@ -120,9 +123,11 @@ Run these from `resource_nmcts_experiment/`:
   analyze_submission_metadata_audit.py \
   analyze_author_input_closure_audit.py \
   analyze_anonymous_review_readiness.py \
+  analyze_target_venue_policy_checklist.py \
   analyze_submission_readiness_audit.py \
   analyze_submission_traceability_audit.py \
   validate_submission_metadata.py \
+  make_submission_metadata_from_answers.py \
   make_submission_metadata_starter.py \
   selftest_submission_metadata_pipeline.py \
   analyze_payload_roundtrip_audit.py \
@@ -133,6 +138,7 @@ Run these from `resource_nmcts_experiment/`:
   make_submission_text_preview.py
 ./rebuild_submission_package.sh
 ./verify_submission_package.sh
+/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_from_answers.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
 rg -n "Overfull|Underfull|undefined|Undefined|Warning|Error|LaTeX Warning|Rerun" \
@@ -142,9 +148,9 @@ rg -n "Overfull|Underfull|undefined|Undefined|Warning|Error|LaTeX Warning|Rerun"
 Expected current state:
 
 - Machine snapshot tokens checked by `analyze_public_handoff_freshness_audit.py`:
-  PDF pages=49/49; readiness=73 pass + 1 needs author input;
-  payload_files=1135; artifact_registry=30 families / 161 raw CSV / 80312 raw rows;
-  source_privacy=0 strict leaks / 57 provenance files / 1092 payload text files;
+  PDF pages=49/49; readiness=74 pass + 1 needs author input;
+  payload_files=1142; artifact_registry=30 families / 161 raw CSV / 80312 raw rows;
+  source_privacy=0 strict leaks / 57 provenance files / 1099 payload text files;
   comparison_validity=8/8 pass; novelty_scorecard=6/6 pass;
   goal_gate=author/venue metadata remains open.
 - Archive manifest: all payload groups complete.

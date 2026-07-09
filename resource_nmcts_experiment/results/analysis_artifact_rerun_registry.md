@@ -49,7 +49,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - representative raw: not applicable for this tier
 - **Submission metadata closure path**
   - claim use: Verifies that the remaining author/venue metadata step is explicit, private, ignored by Git, and machine-checkable.
-  - scripts: `analyze_submission_metadata_closure_path.py; make_submission_metadata_starter.py; validate_submission_metadata.py; make_submission_text_preview.py`
+  - scripts: `analyze_submission_metadata_closure_path.py; make_submission_metadata_from_answers.py; make_submission_metadata_starter.py; validate_submission_metadata.py; make_submission_text_preview.py`
   - representative raw: not applicable for this tier
 - **Generated payload Git policy**
   - claim use: Verifies that the upload tarball is generated and SHA-checked locally while remaining ignored and untracked in Git.

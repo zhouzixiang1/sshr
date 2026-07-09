@@ -8,6 +8,7 @@
     "summary": "results/summary_submission_metadata_closure_path.csv"
   },
   "private_paths": [
+    "submission_package/submission_metadata_answers.json",
     "submission_package/submission_metadata.json",
     "submission_package/generated_author_declarations.md",
     "submission_package/generated_availability_statements.md",
@@ -30,7 +31,7 @@
       "status": "pass"
     },
     {
-      "evidence": "private_paths=5; not_ignored=none; tracked=none; metadata_present=False.",
+      "evidence": "private_paths=6; not_ignored=none; tracked=none; metadata_present=False.",
       "item": "Private metadata Git protection",
       "next_action": "Keep submission_metadata.json and generated private previews ignored and untracked.",
       "status": "pass"
@@ -54,9 +55,9 @@
       "status": "pass"
     },
     {
-      "evidence": "docs=7; missing=none; token_misses=none.",
+      "evidence": "docs=9; missing=none; token_misses=none.",
       "item": "Human handoff document coverage",
-      "next_action": "Keep README, checklist, target-venue brief, handoff, questionnaire, minimal response form, and author packet aligned with the private metadata workflow.",
+      "next_action": "Keep README, checklist, target-venue brief, target-venue policy checklist, handoff, questionnaire, minimal response form, answer template, and author packet aligned with the private metadata workflow.",
       "status": "pass"
     },
     {

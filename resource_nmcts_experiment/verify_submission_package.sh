@@ -23,6 +23,7 @@ fi
 "$PYTHON_BIN" analyze_author_questionnaire_coverage.py
 "$PYTHON_BIN" analyze_editorial_screening_audit.py
 "$PYTHON_BIN" analyze_target_venue_decision_audit.py
+"$PYTHON_BIN" analyze_target_venue_policy_checklist.py
 "$PYTHON_BIN" analyze_target_venue_format_smoke.py
 "$PYTHON_BIN" analyze_submission_support_packet_audit.py
 "$PYTHON_BIN" analyze_learning_citation_verification.py
@@ -85,6 +86,7 @@ if command -v rg >/dev/null 2>&1; then
     results/analysis_neural_mcts_claim_calibration.md
     results/analysis_editorial_screening_audit.md
     results/analysis_target_venue_decision_audit.md
+    results/analysis_target_venue_policy_checklist.md
     results/analysis_target_venue_format_smoke.md
 	    results/analysis_submission_support_packet_audit.md
 	    results/analysis_ros_lut_garbage_proxy.md

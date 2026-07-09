@@ -1,12 +1,13 @@
 # 最小作者回复表
 
-用途：把最终投稿前仍需作者确认的信息压缩成一张可回复清单。请不要把真实私人信息写进 tracked 文件；把答案填入被 Git 忽略的 `submission_package/submission_metadata.json`，或直接把本表答案发回后再由工具写入私有 JSON。
+用途：把最终投稿前仍需作者确认的信息压缩成一张可回复清单。请不要把真实私人信息写进 tracked 文件；把答案填入被 Git 忽略的 `submission_package/submission_metadata_answers.json`，再由工具生成私有 `submission_metadata.json`。
 
 推荐流程：
 
 ```bash
-/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py --write-private
-$EDITOR submission_package/submission_metadata.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_from_answers.py --init-private-answers
+$EDITOR submission_package/submission_metadata_answers.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_from_answers.py --write-private
 ./rebuild_submission_package.sh
 ./verify_submission_package.sh
 ```
@@ -15,6 +16,7 @@ $EDITOR submission_package/submission_metadata.json
 
 - JSON path: `target_venue.*`
 - 请回答：目标期刊/会议、稿件类型、是否双盲、是否已核对格式/参考文献/字数/补充材料/AI disclosure 政策。
+- 先读：`TARGET_VENUE_POLICY_CHECKLIST_zh.md`，逐项确认 ACM TQC、Quantum 或最终目标 venue 的政策字段。
 - 可接受简答：`ACM Transactions on Quantum Computing; regular article; anonymous review: no/yes; all policies checked: yes/no/not applicable`。
 
 ## 2. 作者与通讯作者

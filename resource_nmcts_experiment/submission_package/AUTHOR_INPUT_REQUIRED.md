@@ -5,11 +5,17 @@ This packet lists the remaining author- and venue-specific fields that cannot be
 Do not fill private author metadata into tracked files unless the target venue requires it.  The preferred private intake path is:
 
 ```bash
-/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py --write-private
-$EDITOR submission_package/submission_metadata.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_from_answers.py --init-private-answers
+$EDITOR submission_package/submission_metadata_answers.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_from_answers.py --write-private
 ./rebuild_submission_package.sh
 ./verify_submission_package.sh
 ```
+
+This path copies the short public answer template to the ignored private
+`submission_metadata_answers.json`, merges those answers with the current
+repository URL/commit/environment metadata, and writes the ignored private
+`submission_metadata.json` consumed by validators and private previews.
 
 Use `cp submission_package/submission_metadata_template.json submission_package/submission_metadata.json`
 instead if you prefer a completely blank template.  `submission_metadata.json`
@@ -34,6 +40,9 @@ human answer to the corresponding JSON path and does not contain private values.
 For the shortest possible reply format, use
 `submission_package/AUTHOR_MINIMAL_RESPONSE_FORM_zh.md`; it compresses the same
 remaining author/venue gate into ten answer groups.
+For venue-policy checks, use
+`submission_package/TARGET_VENUE_POLICY_CHECKLIST_zh.md`; it maps ACM TQC,
+Quantum, and archive/license gates to the private metadata fields.
 
 ## Current Gate
 
@@ -50,8 +59,8 @@ remaining author/venue gate into ten answer groups.
 1. **Structured metadata intake file**
    - source: `submission_package/submission_metadata_template.json`
    - required fields: target_venue.name; target_venue.manuscript_type; target_venue.formatting_policy_checked; target_venue.reference_style_checked; target_venue.word_limit_checked; target_venue.supplementary_material_policy_checked; target_venue.ai_disclosure_policy_checked; target_venue.anonymous_review_required; authors; corresponding_author.name; corresponding_author.email; corresponding_author.affiliation; corresponding_author.postal_address; author_contributions.conceptualization; author_contributions.methodology; author_contributions.software; author_contributions.validation; author_contributions.formal_analysis; author_contributions.investigation; author_contributions.data_curation; author_contributions.writing_original_draft; author_contributions.writing_review_editing; author_contributions.visualization; author_contributions.supervision; author_contributions.funding_acquisition; funding.statement; funding.grant_numbers; acknowledgements.statement; competing_interests.statement; data_availability.archive_link_or_doi; data_availability.anonymous_review_link; data_availability.access_restrictions; data_availability.statement; code_availability.repository_url; code_availability.commit_hash; code_availability.license; code_availability.environment_notes; code_availability.anonymous_review_link; code_availability.statement; ai_assistance.statement; preprint_and_prior_submission.preprint_url_or_doi; preprint_and_prior_submission.prior_submission_history; preprint_and_prior_submission.related_manuscripts; preprint_and_prior_submission.statement; cover_letter.target_editor; cover_letter.suggested_reviewers; cover_letter.excluded_reviewers; cover_letter.editorial_routing_statement; permissions.third_party_material_confirmed; permissions.statement
-   - evidence: Template exists; copy it to submission_package/submission_metadata.json and fill every AUTHOR INPUT REQUIRED value.
-   - next action: Create `submission_package/submission_metadata.json` from the template, fill it, then rerun the rebuild script.
+   - evidence: Answer template and metadata template exist; create ignored submission_metadata_answers.json, fill every AUTHOR INPUT REQUIRED value, then generate submission_metadata.json.
+   - next action: Run `make_submission_metadata_from_answers.py --init-private-answers`, fill `submission_package/submission_metadata_answers.json`, then run `make_submission_metadata_from_answers.py --write-private` and rerun the rebuild script.
 
 2. **Author identity and affiliations**
    - source: `submission_package/author_declarations_template.md`
@@ -122,7 +131,9 @@ remaining author/venue gate into ten answer groups.
 ## Files To Update After Author Decisions
 
 - `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md` as the Chinese field-by-field intake guide.
+- `submission_package/TARGET_VENUE_POLICY_CHECKLIST_zh.md` as the venue-policy checklist before filling `target_venue.*` fields.
 - `submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md` as the Chinese comparison-role matrix before editing cover-letter, response, or venue-system claim text.
+- `submission_package/submission_metadata_answers.json` for the short ignored private answer file generated from `submission_metadata_answers_template.json`.
 - `submission_package/submission_metadata.json` for the private structured intake.
 - `submission_package/generated_*.md` private previews, generated automatically from the structured intake and intentionally ignored by Git.
 - `submission_package/author_declarations_template.md` if the venue wants declarations in prose form.

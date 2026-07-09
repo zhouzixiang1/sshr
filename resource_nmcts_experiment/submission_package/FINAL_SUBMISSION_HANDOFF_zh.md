@@ -22,35 +22,40 @@
 以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，代表当前公开交接状态：
 
 - PDF pages=49/49
-- readiness=73 pass + 1 needs author input
-- payload_files=1135
+- readiness=74 pass + 1 needs author input
+- payload_files=1142
 - artifact_registry=30 families / 161 raw CSV / 80312 raw rows
-- source_privacy=0 strict leaks / 57 provenance files / 1092 payload text files
+- source_privacy=0 strict leaks / 57 provenance files / 1099 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open
 
 ## 推荐执行顺序
 
-1. 先读 `target_venue_brief.md`，确定一个目标期刊和一个备选期刊。
+1. 先读 `target_venue_brief.md` 和 `TARGET_VENUE_POLICY_CHECKLIST_zh.md`，
+   确定一个目标期刊、一个备选期刊，并记录需要填写的 `target_venue.*`
+   与 availability/license/AI-disclosure 字段。
 2. 再读 `COMPARISON_HANDOFF_zh.md` 和 `COMPARISON_SIGNIFICANCE_MATRIX_zh.md`，
    确认投稿系统、cover letter 或回复审稿意见时不会把 weighted-score 胜利写成
    CNOT/depth/ancilla 全胜，也不会扩展成硬件映射结论。
-3. 生成结构化元数据私有 starter。该命令会预填当前仓库 URL、commit hash 和环境说明，
-   但仍保留作者/期刊字段为 `AUTHOR INPUT REQUIRED`：
+3. 生成私有短答案文件。该文件只收集作者和期刊需要人工确认的字段：
 
 ```bash
-/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py --write-private
+/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_from_answers.py --init-private-answers
 ```
 
-   如果你想从完全空白的模板开始，也可以改用：
+   填写短答案后生成结构化元数据；生成器会同时预填当前仓库 URL、commit hash 和环境说明：
 
 ```bash
-cp submission_package/submission_metadata_template.json submission_package/submission_metadata.json
+$EDITOR submission_package/submission_metadata_answers.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_from_answers.py --write-private
 ```
 
-4. 填写 `submission_package/submission_metadata.json` 中所有
-   `AUTHOR INPUT REQUIRED` 字段。这个文件被 Git 忽略，适合存放私有作者信息。
+   如果你想直接编辑完整模板，仍可使用 `make_submission_metadata_starter.py --write-private`
+   或复制 `submission_metadata_template.json`，但推荐优先使用短答案流程。
+4. 确认 `submission_package/submission_metadata_answers.json` 和
+   `submission_package/submission_metadata.json` 中没有未处理的
+   `AUTHOR INPUT REQUIRED` 字段。这两个文件都被 Git 忽略，适合存放私有作者信息。
 5. 从 `resource_nmcts_experiment/` 目录运行：
 
 ```bash
@@ -94,6 +99,7 @@ rg -n "needs author input|needs revision|closure_path_ready" results/analysis_su
 支撑材料：
 
 - `submission_package/AUTHOR_INPUT_REQUIRED.md`
+- `submission_package/TARGET_VENUE_POLICY_CHECKLIST_zh.md`
 - `submission_package/submission_checklist.md`
 - `submission_package/COMPARISON_HANDOFF_zh.md`
 - `submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md`

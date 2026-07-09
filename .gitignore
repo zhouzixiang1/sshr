@@ -21,6 +21,7 @@ rl_mcts_experiment/paper/build/*
 *.fdb_latexmk
 resource_nmcts_experiment/paper_latex/*.pdf
 resource_nmcts_experiment/benchmark_exports/
+resource_nmcts_experiment/submission_package/submission_metadata_answers.json
 resource_nmcts_experiment/submission_package/submission_metadata.json
 resource_nmcts_experiment/submission_package/generated_author_declarations.md
 resource_nmcts_experiment/submission_package/generated_availability_statements.md

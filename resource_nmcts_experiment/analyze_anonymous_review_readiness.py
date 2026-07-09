@@ -28,6 +28,7 @@ AUTHOR_PACKET = SUBMISSION_PACKAGE / "AUTHOR_INPUT_REQUIRED.md"
 AUTHOR_TEMPLATE = SUBMISSION_PACKAGE / "author_declarations_template.md"
 
 PRIVATE_PATHS = (
+    SUBMISSION_PACKAGE / "submission_metadata_answers.json",
     SUBMISSION_PACKAGE / "submission_metadata.json",
     SUBMISSION_PACKAGE / "generated_author_declarations.md",
     SUBMISSION_PACKAGE / "generated_availability_statements.md",

@@ -3,13 +3,14 @@
 这份问卷用于一次性收集最终投稿前必须由作者确认的信息。请不要把真实私人信息直接写进本文件；推荐把答案填入被 Git 忽略的私有文件：
 
 ```bash
-/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py --write-private
-$EDITOR submission_package/submission_metadata.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_from_answers.py --init-private-answers
+$EDITOR submission_package/submission_metadata_answers.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_from_answers.py --write-private
 ./rebuild_submission_package.sh
 ./verify_submission_package.sh
 ```
 
-私有文件 `submission_package/submission_metadata.json` 会由 `validate_submission_metadata.py` 校验，并生成同样被 Git 忽略的 `generated_author_declarations.md`、`generated_availability_statements.md`、`generated_cover_letter.md` 和 `generated_submission_text.md` 供投稿系统复制粘贴。
+私有短答案文件 `submission_package/submission_metadata_answers.json` 和生成后的 `submission_package/submission_metadata.json` 都被 Git 忽略。生成后的元数据会由 `validate_submission_metadata.py` 校验，并生成同样被 Git 忽略的 `generated_author_declarations.md`、`generated_availability_statements.md`、`generated_cover_letter.md` 和 `generated_submission_text.md` 供投稿系统复制粘贴。
 
 ## 0. 不要改动的论文边界
 
@@ -31,7 +32,7 @@ $EDITOR submission_package/submission_metadata.json
 - `target_venue.ai_disclosure_policy_checked`：是否需要 AI assistance disclosure。
 - `target_venue.anonymous_review_required`：是否双盲；若是，必须准备 anonymous review link。
 
-建议先看 `submission_package/target_venue_brief.md`，再把最终选择填入私有 JSON。
+建议先看 `submission_package/target_venue_brief.md` 和 `TARGET_VENUE_POLICY_CHECKLIST_zh.md`，再把最终选择填入私有短答案 JSON。
 
 ## 2. 作者身份与通讯作者
 
@@ -127,7 +128,7 @@ $EDITOR submission_package/submission_metadata.json
 
 ## 9. 填完后的闭环检查
 
-填完私有 JSON 后运行：
+填完私有短答案 JSON 并生成私有元数据后运行：
 
 ```bash
 /opt/anaconda3/envs/mcts-qoracle/bin/python validate_submission_metadata.py

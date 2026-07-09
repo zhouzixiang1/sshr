@@ -229,6 +229,10 @@ TARGET_VENUE_DECISION_ANALYSIS = RESULTS / "analysis_target_venue_decision_audit
 TARGET_VENUE_DECISION_SUMMARY = RESULTS / "summary_target_venue_decision_audit.csv"
 TARGET_VENUE_DECISION_MANIFEST = RESULTS / "manifest_target_venue_decision_audit.json"
 TARGET_VENUE_DECISION_TABLE = THIS_DIR / "paper_latex" / "tables" / "target_venue_decision_audit.tex"
+TARGET_VENUE_POLICY_ANALYSIS = RESULTS / "analysis_target_venue_policy_checklist.md"
+TARGET_VENUE_POLICY_SUMMARY = RESULTS / "summary_target_venue_policy_checklist.csv"
+TARGET_VENUE_POLICY_MANIFEST = RESULTS / "manifest_target_venue_policy_checklist.json"
+TARGET_VENUE_POLICY_CHECKLIST = SUBMISSION_PACKAGE / "TARGET_VENUE_POLICY_CHECKLIST_zh.md"
 TARGET_VENUE_FORMAT_ANALYSIS = RESULTS / "analysis_target_venue_format_smoke.md"
 TARGET_VENUE_FORMAT_SUMMARY = RESULTS / "summary_target_venue_format_smoke.csv"
 TARGET_VENUE_FORMAT_MANIFEST = RESULTS / "manifest_target_venue_format_smoke.json"
@@ -249,6 +253,7 @@ SUPPORT_FILES = [
     SUBMISSION_PACKAGE / "reviewer_concern_brief.md",
     SUBMISSION_PACKAGE / "editor_screening_brief.md",
     SUBMISSION_PACKAGE / "target_venue_brief.md",
+    TARGET_VENUE_POLICY_CHECKLIST,
 ]
 
 
@@ -720,6 +725,13 @@ def build_rows() -> list[dict[str, str]]:
         target_venue_manifest.get("recommended_first_choice", "missing") if target_venue_manifest else "missing"
     )
     target_venue_strong = target_venue_manifest.get("strong_fit_count", "missing") if target_venue_manifest else "missing"
+    target_policy_manifest = read_json(TARGET_VENUE_POLICY_MANIFEST)
+    target_policy_counts = target_policy_manifest.get("status_counts", {}) if target_policy_manifest else {}
+    target_policy_revisions = (
+        int(target_policy_manifest.get("needs_revision_count", -1)) if target_policy_manifest else -1
+    )
+    target_policy_rows = target_policy_manifest.get("rows", "missing") if target_policy_manifest else "missing"
+    target_policy_venues = target_policy_manifest.get("venues", "missing") if target_policy_manifest else "missing"
     target_format_manifest = read_json(TARGET_VENUE_FORMAT_MANIFEST)
     target_format_counts = target_format_manifest.get("status_counts", {}) if target_format_manifest else {}
     target_format_revisions = (
@@ -1416,6 +1428,18 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_target_venue_decision_audit.py after changing target_venue_brief.md, metadata template fields, or venue shortlist/order.",
         },
         {
+            "item": "Target-venue policy checklist",
+            "status": "pass"
+            if TARGET_VENUE_POLICY_ANALYSIS.exists()
+            and TARGET_VENUE_POLICY_SUMMARY.exists()
+            and TARGET_VENUE_POLICY_MANIFEST.exists()
+            and TARGET_VENUE_POLICY_CHECKLIST.exists()
+            and target_policy_revisions == 0
+            else "needs revision",
+            "evidence": f"Target-venue policy checklist maps ACM TQC, Quantum, and generic archive/license gates to private metadata fields; rows={target_policy_rows}; venues={target_policy_venues}; status_counts={target_policy_counts}; needs_revision_count={target_policy_revisions}.",
+            "next_action": "Rerun analyze_target_venue_policy_checklist.py after changing target venue policy sources, metadata paths, or author-facing upload instructions.",
+        },
+        {
             "item": "Target-venue ACM/TQC format smoke",
             "status": "pass"
             if TARGET_VENUE_FORMAT_ANALYSIS.exists()
@@ -1440,8 +1464,8 @@ def build_rows() -> list[dict[str, str]]:
             and SUPPORT_PACKET_TABLE.exists()
             and support_packet_revisions == 0
             else "needs revision",
-            "evidence": f"Support packet audit checks cover letter, declarations, target-venue brief, checklist, handoff, comparison matrix, minimal author form, private-preview gate, anonymous-review fork, and editor/reviewer triage; rows={support_packet_rows}; status_counts={support_packet_counts}; needs_revision_count={support_packet_revisions}.",
-            "next_action": "Rerun analyze_submission_support_packet_audit.py after changing cover letter, declarations, venue brief, upload checklist, comparison docs, handoff docs, metadata template, or editor/reviewer support docs.",
+            "evidence": f"Support packet audit checks cover letter, declarations, target-venue brief, venue policy checklist, upload checklist, handoff, comparison matrix, minimal author form, private-preview gate, anonymous-review fork, and editor/reviewer triage; rows={support_packet_rows}; status_counts={support_packet_counts}; needs_revision_count={support_packet_revisions}.",
+            "next_action": "Rerun analyze_submission_support_packet_audit.py after changing cover letter, declarations, venue brief, venue-policy checklist, upload checklist, comparison docs, handoff docs, metadata template, or editor/reviewer support docs.",
         },
         {
             "item": "Submission metadata audit",

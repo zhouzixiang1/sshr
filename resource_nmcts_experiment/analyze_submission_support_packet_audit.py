@@ -25,12 +25,14 @@ SUBMISSION_PACKAGE = THIS_DIR / "submission_package"
 COVER = SUBMISSION_PACKAGE / "cover_letter_template.md"
 DECLARATIONS = SUBMISSION_PACKAGE / "author_declarations_template.md"
 VENUE = SUBMISSION_PACKAGE / "target_venue_brief.md"
+TARGET_POLICY_CHECKLIST_ZH = SUBMISSION_PACKAGE / "TARGET_VENUE_POLICY_CHECKLIST_zh.md"
 CHECKLIST = SUBMISSION_PACKAGE / "submission_checklist.md"
 FINAL_HANDOFF = SUBMISSION_PACKAGE / "FINAL_SUBMISSION_HANDOFF_zh.md"
 README = SUBMISSION_PACKAGE / "README.md"
 AUTHOR_PACKET = SUBMISSION_PACKAGE / "AUTHOR_INPUT_REQUIRED.md"
 AUTHOR_QUESTIONNAIRE_ZH = SUBMISSION_PACKAGE / "AUTHOR_METADATA_QUESTIONNAIRE_zh.md"
 AUTHOR_MINIMAL_FORM_ZH = SUBMISSION_PACKAGE / "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md"
+METADATA_ANSWERS_TEMPLATE = SUBMISSION_PACKAGE / "submission_metadata_answers_template.json"
 METADATA_TEMPLATE = SUBMISSION_PACKAGE / "submission_metadata_template.json"
 EDITOR_BRIEF = SUBMISSION_PACKAGE / "editor_screening_brief.md"
 REVIEWER_BRIEF = SUBMISSION_PACKAGE / "reviewer_concern_brief.md"
@@ -47,6 +49,7 @@ METADATA_CLOSURE = RESULTS / "manifest_submission_metadata_closure_path.json"
 TEXT_PREVIEW = RESULTS / "manifest_submission_text_preview.json"
 ANONYMOUS_REVIEW = RESULTS / "manifest_anonymous_review_readiness.json"
 TARGET_VENUE_DECISION = RESULTS / "manifest_target_venue_decision_audit.json"
+TARGET_VENUE_POLICY = RESULTS / "manifest_target_venue_policy_checklist.json"
 AUTHOR_QUESTIONNAIRE_COVERAGE = RESULTS / "manifest_author_questionnaire_coverage.json"
 
 
@@ -216,11 +219,12 @@ def specs() -> list[PacketSpec]:
         PacketSpec(
             item="Author declarations keep private fields explicit",
             upload_risk="Declarations could be mistaken as complete or private author metadata could be committed.",
-            files=(DECLARATIONS, AUTHOR_PACKET, AUTHOR_QUESTIONNAIRE_ZH, AUTHOR_MINIMAL_FORM_ZH, METADATA_TEMPLATE),
+            files=(DECLARATIONS, AUTHOR_PACKET, AUTHOR_QUESTIONNAIRE_ZH, AUTHOR_MINIMAL_FORM_ZH, METADATA_ANSWERS_TEMPLATE, METADATA_TEMPLATE),
             tokens=(
                 "AUTHOR INPUT REQUIRED",
                 "AUTHOR_METADATA_QUESTIONNAIRE_zh.md",
                 "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md",
+                "submission_metadata_answers.json",
                 "submission_metadata.json",
                 "generated_author_declarations.md",
                 "Competing Interests",
@@ -231,16 +235,18 @@ def specs() -> list[PacketSpec]:
             manifest_path=METADATA_CLOSURE,
             manifest_key="needs_revision_count",
             expected=0,
-            supported_use="The declarations packet is a structured intake path rather than a hidden or implicit author task.",
+            supported_use="The declarations packet is a structured intake path with a short answer file rather than a hidden or implicit author task.",
             boundary="Final authorship, funding, conflicts, archive links, and AI disclosure remain human-gated.",
         ),
         PacketSpec(
             item="Chinese metadata questionnaire maps human inputs",
             upload_risk="The final author/venue gate could remain too abstract for the author to fill in one pass.",
-            files=(AUTHOR_QUESTIONNAIRE_ZH, AUTHOR_MINIMAL_FORM_ZH, README, CHECKLIST, AUTHOR_PACKET),
+            files=(AUTHOR_QUESTIONNAIRE_ZH, AUTHOR_MINIMAL_FORM_ZH, METADATA_ANSWERS_TEMPLATE, README, CHECKLIST, AUTHOR_PACKET),
             tokens=(
                 "AUTHOR_METADATA_QUESTIONNAIRE_zh.md",
                 "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md",
+                "submission_metadata_answers_template.json",
+                "make_submission_metadata_from_answers.py",
                 "target_venue.name",
                 "authors[].name",
                 "corresponding_author.email",
@@ -264,13 +270,14 @@ def specs() -> list[PacketSpec]:
         PacketSpec(
             item="Venue policy gate is visible before upload",
             upload_risk="Target venue style, anonymous review, AI disclosure, or archive policy could be missed.",
-            files=(VENUE, CHECKLIST, AUTHOR_PACKET),
+            files=(VENUE, TARGET_POLICY_CHECKLIST_ZH, CHECKLIST, AUTHOR_PACKET),
             tokens=(
                 "target_venue.name",
                 "target_venue.manuscript_type",
                 "anonymous_review_required",
                 "ai_disclosure_policy_checked",
                 "Target venue decision audit",
+                "TARGET_VENUE_POLICY_CHECKLIST_zh.md",
                 "recommended_first_choice",
                 "fit_score",
                 "source_url",
@@ -284,6 +291,28 @@ def specs() -> list[PacketSpec]:
             expected=0,
             supported_use="The venue-choice step is concrete enough for the author to fill the private metadata file.",
             boundary="The audit does not choose the journal; it only checks that the choice is explicit and policy-gated.",
+        ),
+        PacketSpec(
+            item="Target-venue policy checklist is actionable",
+            upload_risk="The author could choose a venue but miss the specific metadata fields implied by the venue policy.",
+            files=(TARGET_POLICY_CHECKLIST_ZH, README, FINAL_HANDOFF, CHECKLIST),
+            tokens=(
+                "目标期刊政策核对表",
+                "ACM TQC",
+                "Quantum",
+                "target_venue.formatting_policy_checked",
+                "target_venue.ai_disclosure_policy_checked",
+                "authors[]",
+                "author_contributions.*",
+                "data_availability.*",
+                "code_availability.*",
+                "validate_submission_metadata.py",
+            ),
+            manifest_path=TARGET_VENUE_POLICY,
+            manifest_key="needs_revision_count",
+            expected=0,
+            supported_use="The policy checklist maps public ACM TQC, Quantum, and archive/license gates to the private metadata fields that must be filled before upload.",
+            boundary="It records public policy entry points and author actions; it does not fill private metadata or guarantee a venue decision.",
         ),
         PacketSpec(
             item="Private preview path remains safe",

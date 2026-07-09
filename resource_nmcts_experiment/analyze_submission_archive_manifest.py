@@ -86,6 +86,7 @@ TERMINAL_PACKAGE_OUTPUTS = {
 }
 
 PRIVATE_SUBMISSION_TEXT_OUTPUTS = {
+    SUBMISSION_PACKAGE / "submission_metadata_answers.json",
     SUBMISSION_PACKAGE / "generated_author_declarations.md",
     SUBMISSION_PACKAGE / "generated_availability_statements.md",
     SUBMISSION_PACKAGE / "generated_cover_letter.md",

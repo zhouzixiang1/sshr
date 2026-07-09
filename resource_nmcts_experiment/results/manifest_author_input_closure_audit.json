@@ -8,6 +8,7 @@
     "summary": "results/summary_author_input_closure_audit.csv"
   },
   "private_outputs": [
+    "submission_package/submission_metadata_answers.json",
     "submission_package/submission_metadata.json",
     "submission_package/generated_author_declarations.md",
     "submission_package/generated_availability_statements.md",
@@ -33,13 +34,13 @@
     {
       "evidence": "missing_docs=none; missing_tokens=none.",
       "item": "Support document author-gate visibility",
-      "next_action": "Keep README, checklist, handoff, declaration template, cover-letter template, questionnaire, and minimal response form aligned with the private metadata workflow.",
+      "next_action": "Keep README, checklist, handoff, declaration template, cover-letter template, questionnaire, minimal response form, target-venue policy checklist, and answer template aligned with the private metadata workflow.",
       "status": "pass"
     },
     {
-      "evidence": "ignored=5/5; tracked=none; existing_private=none.",
+      "evidence": "ignored=6/6; tracked=none; existing_private=none.",
       "item": "Private author metadata git protection",
-      "next_action": "Keep submission_metadata.json and generated private previews ignored and untracked.",
+      "next_action": "Keep submission_metadata_answers.json, submission_metadata.json, and generated private previews ignored and untracked.",
       "status": "pass"
     },
     {

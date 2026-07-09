@@ -21,10 +21,10 @@
 以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，用于防止交付说明和机器审计结果漂移：
 
 - PDF pages=49/49
-- readiness=73 pass + 1 needs author input
-- payload_files=1135
+- readiness=74 pass + 1 needs author input
+- payload_files=1142
 - artifact_registry=30 families / 161 raw CSV / 80312 raw rows
-- source_privacy=0 strict leaks / 57 provenance files / 1092 payload text files
+- source_privacy=0 strict leaks / 57 provenance files / 1099 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open
@@ -486,7 +486,7 @@ payload 后可以从解包目录运行一键 verifier。
 
 该审计逐项检查 logical-layer scope、novelty/comparison route、comparison target roles、counterpoint/negative-result visibility、AI/MCTS claim boundary、large-scale verification boundary、reproducibility path、author/venue gate 和 editorial reading path。当前 9/9 项 pass；它已接入 rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke 和 artifact rerun registry。artifact registry 现在覆盖 30 个 evidence family、161 个 raw CSV、80312 行 unique raw-row references。
 
-当前 submission-readiness 审计结果为 73 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、algorithm contract、search-budget contract、baseline fairness/scope、comparison answer/resource-weight sensitivity/CNOT constraint/SSHR reproduction/threats-to-validity/search-control/learned-control/neural-MCTS claim-calibration/citation/editorial screening/target-venue/ROS reproduction-boundary/schedule-proxy/runtime-envelope/submission support-packet audits、ACM/TQC target-format smoke、ultra-scale symbolic stress/resource-profile audits、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、uploadable payload archive、payload round-trip/extraction/verifier/LaTeX compile checks、terminal package verifier、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder 和 compiled PDF 检查。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
+当前 submission-readiness 审计结果为 74 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、algorithm contract、search-budget contract、baseline fairness/scope、comparison answer/resource-weight sensitivity/CNOT constraint/SSHR reproduction/threats-to-validity/search-control/learned-control/neural-MCTS claim-calibration/citation/editorial screening/target-venue/ROS reproduction-boundary/schedule-proxy/runtime-envelope/submission support-packet audits、ACM/TQC target-format smoke、ultra-scale symbolic stress/resource-profile audits、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、uploadable payload archive、payload round-trip/extraction/verifier/LaTeX compile checks、terminal package verifier、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder 和 compiled PDF 检查。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
 
 ## 2. 当前已完成内容
 

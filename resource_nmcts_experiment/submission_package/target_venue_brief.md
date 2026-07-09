@@ -11,6 +11,8 @@ be copied into `submission_metadata.json` before upload.
 Machine-checkable support files:
 
 - Target venue decision audit: `results/analysis_target_venue_decision_audit.md`
+- Target venue policy checklist: `submission_package/TARGET_VENUE_POLICY_CHECKLIST_zh.md`
+- Policy checklist audit: `results/analysis_target_venue_policy_checklist.md`
 - Summary CSV: `results/summary_target_venue_decision_audit.csv`
 - Manifest: `results/manifest_target_venue_decision_audit.json`
 - ACM/TQC format smoke audit: `results/analysis_target_venue_format_smoke.md`

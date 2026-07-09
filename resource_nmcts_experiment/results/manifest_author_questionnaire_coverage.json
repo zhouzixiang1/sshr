@@ -15,7 +15,7 @@
     {
       "evidence": "questionnaire_exists=True; missing_tokens=none.",
       "item": "Questionnaire file and private workflow",
-      "next_action": "Keep the questionnaire as a public checklist and store real values only in the ignored submission_metadata.json file.",
+      "next_action": "Keep the questionnaire as a public checklist and store real values only in ignored private metadata answer/metadata files.",
       "status": "pass"
     },
     {

@@ -7,7 +7,7 @@
     "table": "paper_latex/tables/submission_support_packet_audit.tex"
   },
   "python": "3.11.15",
-  "rows": 13,
+  "rows": 14,
   "rows_detail": [
     {
       "boundary": "The cover letter still needs author, editor, reviewer, and prior-dissemination fields before upload.",
@@ -65,16 +65,16 @@
     },
     {
       "boundary": "Final authorship, funding, conflicts, archive links, and AI disclosure remain human-gated.",
-      "evidence": "files_missing=none; tokens=9/9; missing_tokens=none; manifest=results/manifest_submission_metadata_closure_path.json::needs_revision_count=0",
+      "evidence": "files_missing=none; tokens=10/10; missing_tokens=none; manifest=results/manifest_submission_metadata_closure_path.json::needs_revision_count=0",
       "item": "Author declarations keep private fields explicit",
       "next_action": "No action needed.",
       "status": "pass",
-      "supported_use": "The declarations packet is a structured intake path rather than a hidden or implicit author task.",
+      "supported_use": "The declarations packet is a structured intake path with a short answer file rather than a hidden or implicit author task.",
       "upload_risk": "Declarations could be mistaken as complete or private author metadata could be committed."
     },
     {
       "boundary": "The questionnaire is an intake guide only; it does not contain, infer, or commit private author values.",
-      "evidence": "files_missing=none; tokens=15/15; missing_tokens=none; manifest=results/manifest_author_questionnaire_coverage.json::needs_revision_count=0",
+      "evidence": "files_missing=none; tokens=17/17; missing_tokens=none; manifest=results/manifest_author_questionnaire_coverage.json::needs_revision_count=0",
       "item": "Chinese metadata questionnaire maps human inputs",
       "next_action": "No action needed.",
       "status": "pass",
@@ -83,12 +83,21 @@
     },
     {
       "boundary": "The audit does not choose the journal; it only checks that the choice is explicit and policy-gated.",
-      "evidence": "files_missing=none; tokens=12/12; missing_tokens=none; manifest=results/manifest_target_venue_decision_audit.json::needs_revision_count=0",
+      "evidence": "files_missing=none; tokens=13/13; missing_tokens=none; manifest=results/manifest_target_venue_decision_audit.json::needs_revision_count=0",
       "item": "Venue policy gate is visible before upload",
       "next_action": "No action needed.",
       "status": "pass",
       "supported_use": "The venue-choice step is concrete enough for the author to fill the private metadata file.",
       "upload_risk": "Target venue style, anonymous review, AI disclosure, or archive policy could be missed."
+    },
+    {
+      "boundary": "It records public policy entry points and author actions; it does not fill private metadata or guarantee a venue decision.",
+      "evidence": "files_missing=none; tokens=10/10; missing_tokens=none; manifest=results/manifest_target_venue_policy_checklist.json::needs_revision_count=0",
+      "item": "Target-venue policy checklist is actionable",
+      "next_action": "No action needed.",
+      "status": "pass",
+      "supported_use": "The policy checklist maps public ACM TQC, Quantum, and archive/license gates to the private metadata fields that must be filled before upload.",
+      "upload_risk": "The author could choose a venue but miss the specific metadata fields implied by the venue policy."
     },
     {
       "boundary": "Tracked audit outputs remain public and redacted; private generated Markdown files stay ignored.",
@@ -129,6 +138,6 @@
   ],
   "script": "analyze_submission_support_packet_audit.py",
   "status_counts": {
-    "pass": 13
+    "pass": 14
   }
 }

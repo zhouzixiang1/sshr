@@ -143,6 +143,8 @@ FRONTIER_RANDOM_DEPTH_TABLE = THIS_DIR / "paper_latex" / "tables" / "frontier_ra
 EDITORIAL_SCREENING_MANIFEST = RESULTS / "manifest_editorial_screening_audit.json"
 TARGET_VENUE_DECISION_MANIFEST = RESULTS / "manifest_target_venue_decision_audit.json"
 TARGET_VENUE_DECISION_TABLE = THIS_DIR / "paper_latex" / "tables" / "target_venue_decision_audit.tex"
+TARGET_VENUE_POLICY_MANIFEST = RESULTS / "manifest_target_venue_policy_checklist.json"
+TARGET_VENUE_POLICY_CHECKLIST = THIS_DIR / "submission_package" / "TARGET_VENUE_POLICY_CHECKLIST_zh.md"
 TARGET_VENUE_FORMAT_MANIFEST = RESULTS / "manifest_target_venue_format_smoke.json"
 TARGET_VENUE_FORMAT_SOURCE = THIS_DIR / "paper_latex" / "resource_nmcts_submission_acm_tqc.tex"
 TARGET_VENUE_FORMAT_PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_acm_tqc.pdf"
@@ -169,10 +171,13 @@ PAYLOAD_GIT_POLICY_MANIFEST = RESULTS / "manifest_payload_git_policy_audit.json"
 PAYLOAD_EXTRACTION_SMOKE_MANIFEST = RESULTS / "manifest_payload_extraction_smoke_audit.json"
 PAYLOAD_VERIFIER_SMOKE_MANIFEST = RESULTS / "manifest_payload_verifier_smoke_audit.json"
 PAYLOAD_LATEX_COMPILE_MANIFEST = RESULTS / "manifest_payload_latex_compile_audit.json"
+METADATA_FROM_ANSWERS = THIS_DIR / "make_submission_metadata_from_answers.py"
 METADATA_STARTER = THIS_DIR / "make_submission_metadata_starter.py"
+METADATA_ANSWERS_FILE = THIS_DIR / "submission_package" / "submission_metadata_answers.json"
 METADATA_FILE = THIS_DIR / "submission_package" / "submission_metadata.json"
 
 PRIVATE_PAYLOAD_BASENAMES = {
+    "submission_metadata_answers.json",
     "submission_metadata.json",
     "generated_author_declarations.md",
     "generated_availability_statements.md",
@@ -1216,6 +1221,33 @@ def verify_target_venue_decision() -> dict[str, str]:
     )
 
 
+def verify_target_venue_policy_checklist() -> dict[str, str]:
+    manifest = read_json(TARGET_VENUE_POLICY_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    venues = manifest.get("venues", []) if manifest else []
+    checklist_exists = TARGET_VENUE_POLICY_CHECKLIST.exists()
+    required_venues = {"ACM Transactions on Quantum Computing", "Quantum", "Any selected venue"}
+    venue_set = set(venues) if isinstance(venues, list) else set()
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and isinstance(rows, int)
+        and rows >= 8
+        and required_venues.issubset(venue_set)
+        and checklist_exists
+        else "needs revision"
+    )
+    return row(
+        "Target-venue policy checklist",
+        status,
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; venues={venues}; checklist_exists={checklist_exists}.",
+        "Run analyze_target_venue_policy_checklist.py and restore the author-facing venue-policy checklist.",
+    )
+
+
 def verify_target_venue_format() -> dict[str, str]:
     manifest = read_json(TARGET_VENUE_FORMAT_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -1469,6 +1501,70 @@ def verify_metadata_starter_dry_run() -> dict[str, str]:
         status,
         f"returncode={proc.returncode}; missing_tokens={missing_tokens or 'none'}; private_preexisting={before_exists}; private_created={private_created}; private_modified={private_modified}.",
         "Run make_submission_metadata_starter.py without --write-private and keep it read-only until author input is explicit.",
+    )
+
+
+def verify_metadata_answers_dry_run() -> dict[str, str]:
+    before_answers_exists = METADATA_ANSWERS_FILE.exists()
+    before_answers_stat = METADATA_ANSWERS_FILE.stat() if before_answers_exists else None
+    before_metadata_exists = METADATA_FILE.exists()
+    before_metadata_stat = METADATA_FILE.stat() if before_metadata_exists else None
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(METADATA_FROM_ANSWERS)],
+            cwd=THIS_DIR,
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            timeout=20,
+        )
+    except Exception as exc:
+        return row(
+            "Metadata answer converter dry-run",
+            "needs revision",
+            f"converter execution failed: {exc}.",
+            "Run make_submission_metadata_from_answers.py without --write-private and fix the exception.",
+        )
+    after_answers_exists = METADATA_ANSWERS_FILE.exists()
+    after_answers_stat = METADATA_ANSWERS_FILE.stat() if after_answers_exists else None
+    after_metadata_exists = METADATA_FILE.exists()
+    after_metadata_stat = METADATA_FILE.stat() if after_metadata_exists else None
+    answers_created = after_answers_exists and not before_answers_exists
+    metadata_created = after_metadata_exists and not before_metadata_exists
+    answers_modified = (
+        before_answers_stat is not None
+        and after_answers_stat is not None
+        and (before_answers_stat.st_mtime_ns, before_answers_stat.st_size)
+        != (after_answers_stat.st_mtime_ns, after_answers_stat.st_size)
+    )
+    metadata_modified = (
+        before_metadata_stat is not None
+        and after_metadata_stat is not None
+        and (before_metadata_stat.st_mtime_ns, before_metadata_stat.st_size)
+        != (after_metadata_stat.st_mtime_ns, after_metadata_stat.st_size)
+    )
+    expected_tokens = (
+        ("private answers missing",)
+        if not before_answers_exists
+        else ("filled metadata paths:", "dry run only")
+    )
+    missing_tokens = [token for token in expected_tokens if token not in proc.stdout]
+    status = (
+        "pass"
+        if proc.returncode == 0
+        and not missing_tokens
+        and not answers_created
+        and not metadata_created
+        and not answers_modified
+        and not metadata_modified
+        else "needs revision"
+    )
+    return row(
+        "Metadata answer converter dry-run",
+        status,
+        f"returncode={proc.returncode}; missing_tokens={missing_tokens or 'none'}; answers_preexisting={before_answers_exists}; answers_created={answers_created}; answers_modified={answers_modified}; metadata_preexisting={before_metadata_exists}; metadata_created={metadata_created}; metadata_modified={metadata_modified}.",
+        "Run make_submission_metadata_from_answers.py without --write-private and keep both private answer and metadata files read-only until author input is explicit.",
     )
 
 
@@ -1773,6 +1869,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_frontier_random_depth(),
             verify_editorial_screening(),
             verify_target_venue_decision(),
+            verify_target_venue_policy_checklist(),
             verify_target_venue_format(),
             verify_support_packet(),
             verify_citation_support(),
@@ -1784,6 +1881,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_pdf_text(),
             verify_pdf_metadata(),
             verify_source_path_privacy(),
+            verify_metadata_answers_dry_run(),
             verify_metadata_starter_dry_run(),
             verify_metadata_validator(),
             verify_metadata_pipeline_selftest(),

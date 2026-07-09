@@ -24,6 +24,7 @@ SUBMISSION_PACKAGE = THIS_DIR / "submission_package"
 PAYLOAD_MANIFEST = RESULTS / "manifest_submission_payload_archive.json"
 
 PRIVATE_BASENAMES = {
+    "submission_metadata_answers.json",
     "submission_metadata.json",
     "generated_author_declarations.md",
     "generated_availability_statements.md",

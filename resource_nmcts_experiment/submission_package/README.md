@@ -39,6 +39,8 @@ noise modeling, or magic-state-factory accounting.
 - `AUTHOR_MINIMAL_RESPONSE_FORM_zh.md`: shortest Chinese response form for
   collecting the final author/venue answers in one pass before filling the
   ignored private metadata JSON.
+- `TARGET_VENUE_POLICY_CHECKLIST_zh.md`: Chinese upload-policy checklist that
+  maps ACM TQC, Quantum, and archive/license gates to private metadata fields.
 - `FINAL_SUBMISSION_HANDOFF_zh.md`: Chinese final-upload handoff that turns the
   remaining author/venue gates into an execution order.
 - `COMPARISON_HANDOFF_zh.md`: Chinese comparison-positioning handoff that
@@ -59,6 +61,8 @@ noise modeling, or magic-state-factory accounting.
 - `target_venue_brief.md`: venue-fit shortlist and pre-upload action list.
 - `author_declarations_template.md`: author, funding, acknowledgement,
   competing-interest, data, code, AI-disclosure, and prior-submission intake.
+- `submission_metadata_answers_template.json`: short machine-readable answer
+  template for producing ignored private metadata from author/venue answers.
 - `submission_metadata_template.json`: structured version of the author and
   venue fields that must be filled before upload.
 - `../results/analysis_submission_metadata_validator.md`: public, redacted
@@ -96,6 +100,9 @@ noise modeling, or magic-state-factory accounting.
   separates the author-labeled manuscript from double-blind review actions.
 - `../results/analysis_submission_text_preview.md`: public audit for the
   private generated submission-system text previews.
+- `../results/analysis_target_venue_policy_checklist.md`: public policy-source
+  checklist that maps ACM TQC, Quantum, and archive/license gates to private
+  metadata fields before upload.
 - `../results/analysis_payload_roundtrip_audit.md`: terminal check that opens
   the upload tarball and verifies internal paths, hashes, required artifacts,
   reviewer entrypoints, comparison-protocol, editorial-screening,
@@ -154,12 +161,14 @@ by the author or selected target venue.
 - Choose the target venue and manuscript type.
 - Use `FINAL_SUBMISSION_HANDOFF_zh.md` as the final Chinese execution checklist
   if working through the upload process in Chinese.
-- Run `/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py --write-private`
-  to create an ignored private `submission_metadata.json` with public
-  repository fields prefilled, then fill every remaining `AUTHOR INPUT
-  REQUIRED` value.  Use `AUTHOR_METADATA_QUESTIONNAIRE_zh.md` as the Chinese
-  field-by-field guide, or copy the template manually if you prefer a blank
-  file.
+- Run `/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_from_answers.py --init-private-answers`
+  to create an ignored private `submission_metadata_answers.json`, fill the
+  short answer file, then run `/opt/anaconda3/envs/mcts-qoracle/bin/python
+  make_submission_metadata_from_answers.py --write-private` to produce the
+  ignored private `submission_metadata.json` with current repository fields
+  prefilled.  Use `AUTHOR_METADATA_QUESTIONNAIRE_zh.md` as the Chinese
+  field-by-field guide, or copy `submission_metadata_template.json` manually if
+  you prefer the full blank metadata file.
 - Confirm author order, affiliations, ORCID IDs, and corresponding-author
   details.
 - Complete funding, acknowledgements, author contributions, competing
@@ -172,8 +181,9 @@ by the author or selected target venue.
   manuscript copy and anonymous artifact links; the rebuild generates an
   anonymous review draft, while the current source remains author-labeled.
 
-`submission_metadata.json` is intentionally ignored by Git so private author
-metadata is not committed accidentally.
+`submission_metadata_answers.json` and `submission_metadata.json` are
+intentionally ignored by Git so private author metadata is not committed
+accidentally.
 After it is complete, `./rebuild_submission_package.sh` generates ignored
 generated private previews:
 

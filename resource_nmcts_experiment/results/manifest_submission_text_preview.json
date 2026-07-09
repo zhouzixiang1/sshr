@@ -16,7 +16,7 @@
     {
       "evidence": "submission_package/submission_metadata.json is missing; removed stale private output files=0.",
       "item": "Private submission text preview",
-      "next_action": "Run /opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py --write-private, or copy submission_metadata_template.json manually, fill every AUTHOR INPUT REQUIRED value, then rerun the rebuild script.",
+      "next_action": "Run /opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_from_answers.py --init-private-answers, fill submission_metadata_answers.json, run make_submission_metadata_from_answers.py --write-private, then rerun the rebuild script.",
       "private_outputs": "submission_package/generated_author_declarations.md; submission_package/generated_availability_statements.md; submission_package/generated_cover_letter.md; submission_package/generated_submission_text.md",
       "source": "submission_package/submission_metadata_template.json",
       "status": "needs author input"

@@ -150,7 +150,7 @@ def structured_metadata_row() -> dict[str, str]:
             "status": "missing source",
             "source": rel(METADATA_TEMPLATE),
             "required_fields": required,
-            "reason": "A single structured intake file keeps author and venue metadata from being scattered across templates.",
+            "reason": "A structured private metadata path keeps author and venue metadata from being scattered across templates.",
             "evidence": f"{rel(METADATA_TEMPLATE)} is missing.",
             "next_action": "Restore the metadata template.",
         }
@@ -160,9 +160,9 @@ def structured_metadata_row() -> dict[str, str]:
             "status": "needs author input",
             "source": rel(METADATA_TEMPLATE),
             "required_fields": required,
-            "reason": "A single structured intake file keeps author and venue metadata from being scattered across templates.",
-            "evidence": f"Template exists; copy it to {rel(METADATA_FILE)} and fill every AUTHOR INPUT REQUIRED value.",
-            "next_action": "Create `submission_package/submission_metadata.json` from the template, fill it, then rerun the rebuild script.",
+            "reason": "A structured private metadata path keeps author and venue metadata from being scattered across templates.",
+            "evidence": "Answer template and metadata template exist; create ignored submission_metadata_answers.json, fill every AUTHOR INPUT REQUIRED value, then generate submission_metadata.json.",
+            "next_action": "Run `make_submission_metadata_from_answers.py --init-private-answers`, fill `submission_package/submission_metadata_answers.json`, then run `make_submission_metadata_from_answers.py --write-private` and rerun the rebuild script.",
         }
     data = read_json(METADATA_FILE)
     if data is None:
@@ -171,7 +171,7 @@ def structured_metadata_row() -> dict[str, str]:
             "status": "needs author input",
             "source": rel(METADATA_FILE),
             "required_fields": required,
-            "reason": "A single structured intake file keeps author and venue metadata from being scattered across templates.",
+            "reason": "A structured private metadata path keeps author and venue metadata from being scattered across templates.",
             "evidence": f"{rel(METADATA_FILE)} exists but is not valid JSON.",
             "next_action": "Fix the JSON syntax and rerun the rebuild script.",
         }

@@ -34,9 +34,12 @@ RESULTS = THIS_DIR / "results"
 AUTHOR_PACKET = SUBMISSION_PACKAGE / "AUTHOR_INPUT_REQUIRED.md"
 AUTHOR_QUESTIONNAIRE_ZH = SUBMISSION_PACKAGE / "AUTHOR_METADATA_QUESTIONNAIRE_zh.md"
 AUTHOR_MINIMAL_FORM_ZH = SUBMISSION_PACKAGE / "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md"
+METADATA_ANSWERS_TEMPLATE = SUBMISSION_PACKAGE / "submission_metadata_answers_template.json"
+METADATA_ANSWERS_FILE = SUBMISSION_PACKAGE / "submission_metadata_answers.json"
 README = SUBMISSION_PACKAGE / "README.md"
 CHECKLIST = SUBMISSION_PACKAGE / "submission_checklist.md"
 TARGET_VENUE_BRIEF = SUBMISSION_PACKAGE / "target_venue_brief.md"
+TARGET_POLICY_CHECKLIST_ZH = SUBMISSION_PACKAGE / "TARGET_VENUE_POLICY_CHECKLIST_zh.md"
 FINAL_HANDOFF = SUBMISSION_PACKAGE / "FINAL_SUBMISSION_HANDOFF_zh.md"
 
 METADATA_AUDIT_MANIFEST = RESULTS / "manifest_submission_metadata_audit.json"
@@ -47,7 +50,7 @@ ANONYMOUS_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 AUTHOR_INPUT_CLOSURE_MANIFEST = RESULTS / "manifest_author_input_closure_audit.json"
 GOAL_MANIFEST = RESULTS / "manifest_goal_completion_audit.json"
 
-PRIVATE_PATHS = (METADATA_FILE, *PRIVATE_OUTPUTS)
+PRIVATE_PATHS = (METADATA_ANSWERS_FILE, METADATA_FILE, *PRIVATE_OUTPUTS)
 
 
 def run_git(args: list[str]) -> subprocess.CompletedProcess[str]:
@@ -270,9 +273,11 @@ def check_support_docs() -> dict[str, str]:
         AUTHOR_PACKET,
         AUTHOR_QUESTIONNAIRE_ZH,
         AUTHOR_MINIMAL_FORM_ZH,
+        METADATA_ANSWERS_TEMPLATE,
         README,
         CHECKLIST,
         TARGET_VENUE_BRIEF,
+        TARGET_POLICY_CHECKLIST_ZH,
         FINAL_HANDOFF,
     )
     missing = [rel(path) for path in required_docs if not path.exists()]
@@ -280,9 +285,11 @@ def check_support_docs() -> dict[str, str]:
         rel(AUTHOR_PACKET): ("AUTHOR_METADATA_QUESTIONNAIRE_zh.md", "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md", "submission_metadata.json", "generated_", "verify_submission_package.sh"),
         rel(AUTHOR_QUESTIONNAIRE_ZH): ("target_venue.name", "authors[].name", "code_availability.commit_hash", "validate_submission_metadata.py"),
         rel(AUTHOR_MINIMAL_FORM_ZH): ("target_venue.*", "authors[]", "code_availability.*", "validate_submission_metadata.py", "不要把真实私人信息写进 tracked 文件"),
-        rel(README): ("AUTHOR_METADATA_QUESTIONNAIRE_zh.md", "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md", "submission_metadata.json", "generated_", "validate_submission_metadata.py"),
-        rel(CHECKLIST): ("AUTHOR_METADATA_QUESTIONNAIRE_zh.md", "AUTHOR INPUT REQUIRED", "submission_metadata.json", "generated_*.md"),
+        rel(METADATA_ANSWERS_TEMPLATE): ("target_venue", "authors", "code_availability", "AUTHOR INPUT REQUIRED"),
+        rel(README): ("AUTHOR_METADATA_QUESTIONNAIRE_zh.md", "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md", "submission_metadata_answers.json", "submission_metadata.json", "generated_", "validate_submission_metadata.py"),
+        rel(CHECKLIST): ("AUTHOR_METADATA_QUESTIONNAIRE_zh.md", "AUTHOR INPUT REQUIRED", "submission_metadata_answers.json", "submission_metadata.json", "generated_*.md"),
         rel(TARGET_VENUE_BRIEF): ("target_venue.name", "anonymous_review_required"),
+        rel(TARGET_POLICY_CHECKLIST_ZH): ("目标期刊政策核对表", "target_venue.ai_disclosure_policy_checked", "data_availability.*", "code_availability.*"),
         rel(FINAL_HANDOFF): ("submission_metadata.json", "generated_", "needs author input"),
     }
     token_misses: list[str] = []
@@ -295,7 +302,7 @@ def check_support_docs() -> dict[str, str]:
         "Human handoff document coverage",
         "pass" if not missing and not token_misses else "needs revision",
         f"docs={len(required_docs)}; missing={missing or 'none'}; token_misses={token_misses[:5] or 'none'}.",
-        "Keep README, checklist, target-venue brief, handoff, questionnaire, minimal response form, and author packet aligned with the private metadata workflow.",
+        "Keep README, checklist, target-venue brief, target-venue policy checklist, handoff, questionnaire, minimal response form, answer template, and author packet aligned with the private metadata workflow.",
     )
 
 
@@ -362,11 +369,12 @@ def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
             "## Closure Sequence",
             "",
             "1. Use `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md` to collect field-by-field author and venue answers.",
-            "2. Create ignored private metadata with `make_submission_metadata_starter.py --write-private`.",
-            "3. Fill every `AUTHOR INPUT REQUIRED` value in `submission_package/submission_metadata.json`.",
-            "4. Rerun `./rebuild_submission_package.sh` and `./verify_submission_package.sh`.",
-            "5. Review ignored `submission_package/generated_*.md` previews against the target venue.",
-            "6. Replace repository-relative availability text with final archive, repository, or anonymous-review links before upload.",
+            "2. Create ignored private short answers with `make_submission_metadata_from_answers.py --init-private-answers`.",
+            "3. Fill every `AUTHOR INPUT REQUIRED` value in `submission_package/submission_metadata_answers.json`.",
+            "4. Generate ignored private metadata with `make_submission_metadata_from_answers.py --write-private`.",
+            "5. Rerun `./rebuild_submission_package.sh` and `./verify_submission_package.sh`.",
+            "6. Review ignored `submission_package/generated_*.md` previews against the target venue.",
+            "7. Replace repository-relative availability text with final archive, repository, or anonymous-review links before upload.",
             "",
             "| item | status | evidence | next action |",
             "|---|---|---|---|",
