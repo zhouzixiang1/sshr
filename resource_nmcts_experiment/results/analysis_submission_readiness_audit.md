@@ -5,7 +5,7 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 ## Status counts
 
 - needs author input: 1
-- pass: 29
+- pass: 31
 
 ## Checklist
 
@@ -21,6 +21,7 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 | Paired effect uncertainty | pass | Manuscript includes bootstrap uncertainty intervals for paired score-effect estimates. | Rerun analyze_paired_effect_uncertainty.py after changing paired comparisons or score fields. |
 | Claim-scope lint | pass | Claim-scope lint scans manuscript and handoff files; unresolved_count=0. | Rerun analyze_claim_scope_lint.py and revise unguarded hardware-mapping, universal-dominance, optimality, or full-tool-reproduction claims. |
 | Reproducibility evidence | pass | Manuscript includes compute, worker, artifact, and external-tool provenance table. | Rerun analyze_reproducibility_audit.py after adding scripts, tables, or figures. |
+| Figure asset audit | pass | Figure asset audit checks manuscript figure references, generated PDF/PNG/SVG assets, and source-data CSVs; figures=7; status_counts={'pass': 7}; needs_revision_count=0. | Rerun make_submission_figures.py and analyze_figure_asset_audit.py after changing figure code, source data, or TeX figure references. |
 | Raw rerun registry | pass | Artifact rerun registry maps evidence families to driver scripts, raw CSV coverage, manifests, rerun tiers, and dependency boundaries. | Rerun analyze_artifact_rerun_registry.py after adding raw data families, run scripts, or external-tool probes. |
 | Claim-to-artifact traceability | pass | Manuscript includes a submission traceability audit linking claim families to scripts, data, tables, and figures. | Rerun analyze_submission_traceability_audit.py after adding or moving headline evidence. |
 | Archive package manifest | pass | Manuscript includes an archive-level payload manifest with generated CSV, Markdown, and JSON outputs. | Rerun analyze_submission_archive_manifest.py after adding tables, figures, scripts, models, or result files. |
@@ -34,6 +35,7 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 | Goal completion audit | pass | The original project objective is mapped to concrete evidence files, boundaries, and remaining author-gated items. | Rerun analyze_goal_completion_audit.py after adding major evidence or filling author/venue metadata. |
 | Uploadable payload archive | pass | Deterministic submission payload tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present. | Rerun make_submission_payload_archive.py after adding or removing upload payload files. |
 | Payload round-trip integrity | pass | Payload round-trip audit exists; status_counts={'pass': 8}; needs_revision_count=0. | Rerun analyze_payload_roundtrip_audit.py after payload creation and fix any archive/manifest/path/hash issues. |
+| Payload extraction smoke test | pass | Payload extraction smoke audit runs lightweight checks from an extracted payload tree; status_counts={'pass': 4}; needs_revision_count=0. | Rerun analyze_payload_extraction_smoke_audit.py after payload creation and fix extraction or in-payload script execution failures. |
 | Terminal package verifier | pass | Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, private-preview protection, private payload exclusion, payload round-trip integrity, and LaTeX log boundaries. | Run verify_submission_package.sh after rebuilding the payload archive. |
 | Derived package rebuild command | pass | A lightweight rebuild script is present and cited in Data and Code Availability. | Keep the rebuild script aligned with paper-facing analysis, figure, audit, and PDF outputs. |
 | Limitations and failure modes | pass | Discussion names logical-layer, ROS-proxy, RevKit-derived, and high-dimensional bridge boundaries. | Add any new negative result to Discussion rather than hiding it in tables. |

@@ -47,6 +47,7 @@ REVIEWER_ENTRYPOINT_PATHS = {
     "submission_package/target_venue_brief.md",
     "results/analysis_artifact_rerun_registry.md",
     "results/analysis_reproducibility_audit.md",
+    "results/analysis_figure_asset_audit.md",
 }
 COMPARISON_PROTOCOL_PATHS = {
     "analyze_comparison_protocol_audit.py",

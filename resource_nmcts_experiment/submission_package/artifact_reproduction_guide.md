@@ -65,8 +65,11 @@ After the quick rebuild, the current package should report:
 - readiness state in `results/analysis_submission_readiness_audit.md`
 - comparison protocol state in
   `results/analysis_comparison_protocol_audit.md`
+- figure asset state in `results/analysis_figure_asset_audit.md`
 - payload file count and SHA256 in
   `results/analysis_submission_payload_archive.md`
+- payload extraction smoke status in
+  `results/analysis_payload_extraction_smoke_audit.md`
 - submission support-file count in
   `results/analysis_submission_archive_manifest.md`
 - raw rerun registry in `results/analysis_artifact_rerun_registry.md`
@@ -82,6 +85,7 @@ Run these from `resource_nmcts_experiment/`:
 git diff --check
 ./verify_submission_package.sh
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_extraction_smoke_audit.py
 pdfinfo paper_latex/resource_nmcts_submission_v1.pdf | sed -n '1,20p'
 rg -n "Warning|Overfull|Underfull|LaTeX Error|Undefined|Rerun" \
   paper_latex/resource_nmcts_submission_v1.log
@@ -105,6 +109,8 @@ layout warnings.
   `results/analysis_baseline_comparability_audit.md`
 - Comparison protocol audit:
   `results/analysis_comparison_protocol_audit.md`
+- Figure asset audit:
+  `results/analysis_figure_asset_audit.md`
 - Paired statistics:
   `results/analysis_paired_statistical_evidence.md`
 - Raw multi-resource tradeoff:

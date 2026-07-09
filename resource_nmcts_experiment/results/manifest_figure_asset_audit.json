@@ -1,0 +1,27 @@
+{
+  "figures": 7,
+  "formats_required": [
+    "pdf",
+    "png",
+    "svg",
+    "source_csv"
+  ],
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_figure_asset_audit.md",
+    "manifest": "results/manifest_figure_asset_audit.json",
+    "summary": "results/summary_figure_asset_audit.csv"
+  },
+  "python": "3.11.15",
+  "script": "analyze_figure_asset_audit.py",
+  "source_files": {
+    "anonymous_tex": "paper_latex/resource_nmcts_submission_anonymous.tex",
+    "author_tex": "paper_latex/resource_nmcts_submission_v1.tex",
+    "figure_dir": "paper_latex/figures/submission_v36",
+    "figure_script": "make_submission_figures.py",
+    "source_data_dir": "paper_latex/figures/submission_v36/source_data"
+  },
+  "status_counts": {
+    "pass": 7
+  }
+}

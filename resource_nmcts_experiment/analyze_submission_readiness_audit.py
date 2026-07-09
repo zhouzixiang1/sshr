@@ -54,6 +54,9 @@ ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 PAYLOAD_ROUNDTRIP_ANALYSIS = RESULTS / "analysis_payload_roundtrip_audit.md"
 PAYLOAD_ROUNDTRIP_SUMMARY = RESULTS / "summary_payload_roundtrip_audit.csv"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
+PAYLOAD_EXTRACTION_SMOKE_ANALYSIS = RESULTS / "analysis_payload_extraction_smoke_audit.md"
+PAYLOAD_EXTRACTION_SMOKE_SUMMARY = RESULTS / "summary_payload_extraction_smoke_audit.csv"
+PAYLOAD_EXTRACTION_SMOKE_MANIFEST = RESULTS / "manifest_payload_extraction_smoke_audit.json"
 GOAL_ANALYSIS = RESULTS / "analysis_goal_completion_audit.md"
 GOAL_SUMMARY = RESULTS / "summary_goal_completion_audit.csv"
 GOAL_MANIFEST = RESULTS / "manifest_goal_completion_audit.json"
@@ -67,6 +70,9 @@ RERUN_REGISTRY_ANALYSIS = RESULTS / "analysis_artifact_rerun_registry.md"
 RERUN_REGISTRY_SUMMARY = RESULTS / "summary_artifact_rerun_registry.csv"
 RERUN_REGISTRY_MANIFEST = RESULTS / "manifest_artifact_rerun_registry.json"
 RERUN_REGISTRY_TABLE = THIS_DIR / "paper_latex" / "tables" / "artifact_rerun_registry.tex"
+FIGURE_ASSET_ANALYSIS = RESULTS / "analysis_figure_asset_audit.md"
+FIGURE_ASSET_SUMMARY = RESULTS / "summary_figure_asset_audit.csv"
+FIGURE_ASSET_MANIFEST = RESULTS / "manifest_figure_asset_audit.json"
 PAIRED_EFFECT_ANALYSIS = RESULTS / "analysis_paired_effect_uncertainty.md"
 PAIRED_EFFECT_SUMMARY = RESULTS / "summary_paired_effect_uncertainty.csv"
 PAIRED_EFFECT_MANIFEST = RESULTS / "manifest_paired_effect_uncertainty.json"
@@ -140,6 +146,10 @@ def build_rows() -> list[dict[str, str]]:
         int(comparison_protocol_manifest.get("needs_revision_count", -1)) if comparison_protocol_manifest else -1
     )
     comparison_protocol_counts = comparison_protocol_manifest.get("status_counts", {}) if comparison_protocol_manifest else {}
+    figure_asset_manifest = read_json(FIGURE_ASSET_MANIFEST)
+    figure_asset_revisions = int(figure_asset_manifest.get("needs_revision_count", -1)) if figure_asset_manifest else -1
+    figure_asset_counts = figure_asset_manifest.get("status_counts", {}) if figure_asset_manifest else {}
+    figure_count = figure_asset_manifest.get("figures", "missing") if figure_asset_manifest else "missing"
     text_preview_manifest = read_json(TEXT_PREVIEW_MANIFEST)
     text_preview_counts = text_preview_manifest.get("status_counts", {}) if text_preview_manifest else {}
     private_outputs_ignored = bool(text_preview_manifest.get("private_outputs_are_git_ignored", False))
@@ -160,6 +170,9 @@ def build_rows() -> list[dict[str, str]]:
     payload_roundtrip_manifest = read_json(PAYLOAD_ROUNDTRIP_MANIFEST)
     payload_roundtrip_counts = payload_roundtrip_manifest.get("status_counts", {}) if payload_roundtrip_manifest else {}
     payload_roundtrip_revisions = int(payload_roundtrip_manifest.get("needs_revision_count", -1)) if payload_roundtrip_manifest else -1
+    payload_smoke_manifest = read_json(PAYLOAD_EXTRACTION_SMOKE_MANIFEST)
+    payload_smoke_counts = payload_smoke_manifest.get("status_counts", {}) if payload_smoke_manifest else {}
+    payload_smoke_revisions = int(payload_smoke_manifest.get("needs_revision_count", -1)) if payload_smoke_manifest else -1
     lower = text.lower()
     todo_hits = re.findall(r"\b(?:todo|tbd|placeholder)\b", lower)
     abstract_words = abstract_word_count(text)
@@ -256,6 +269,17 @@ def build_rows() -> list[dict[str, str]]:
             "status": "pass" if "tab:reproducibility" in text else "needs revision",
             "evidence": "Manuscript includes compute, worker, artifact, and external-tool provenance table.",
             "next_action": "Rerun analyze_reproducibility_audit.py after adding scripts, tables, or figures.",
+        },
+        {
+            "item": "Figure asset audit",
+            "status": "pass"
+            if FIGURE_ASSET_ANALYSIS.exists()
+            and FIGURE_ASSET_SUMMARY.exists()
+            and FIGURE_ASSET_MANIFEST.exists()
+            and figure_asset_revisions == 0
+            else "needs revision",
+            "evidence": f"Figure asset audit checks manuscript figure references, generated PDF/PNG/SVG assets, and source-data CSVs; figures={figure_count}; status_counts={figure_asset_counts}; needs_revision_count={figure_asset_revisions}.",
+            "next_action": "Rerun make_submission_figures.py and analyze_figure_asset_audit.py after changing figure code, source data, or TeX figure references.",
         },
         {
             "item": "Raw rerun registry",
@@ -381,6 +405,17 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Payload round-trip audit exists; status_counts={payload_roundtrip_counts}; needs_revision_count={payload_roundtrip_revisions}.",
             "next_action": "Rerun analyze_payload_roundtrip_audit.py after payload creation and fix any archive/manifest/path/hash issues.",
+        },
+        {
+            "item": "Payload extraction smoke test",
+            "status": "pass"
+            if PAYLOAD_EXTRACTION_SMOKE_ANALYSIS.exists()
+            and PAYLOAD_EXTRACTION_SMOKE_SUMMARY.exists()
+            and PAYLOAD_EXTRACTION_SMOKE_MANIFEST.exists()
+            and payload_smoke_revisions == 0
+            else "needs revision",
+            "evidence": f"Payload extraction smoke audit runs lightweight checks from an extracted payload tree; status_counts={payload_smoke_counts}; needs_revision_count={payload_smoke_revisions}.",
+            "next_action": "Rerun analyze_payload_extraction_smoke_audit.py after payload creation and fix extraction or in-payload script execution failures.",
         },
         {
             "item": "Terminal package verifier",

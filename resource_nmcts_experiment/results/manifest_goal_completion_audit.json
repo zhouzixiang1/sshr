@@ -81,8 +81,8 @@
     },
     {
       "boundary": "Counts describe manuscript artifacts, not independent experimental datasets.",
-      "evidence": "Current package has 7 submitted figure panels and 154 generated paper tables.",
-      "evidence_files": "paper_latex/figures/submission_v36; paper_latex/tables; results/analysis_reproducibility_audit.md",
+      "evidence": "Current package has 7 submitted figure panels and 154 generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
+      "evidence_files": "paper_latex/figures/submission_v36; paper_latex/tables; results/analysis_figure_asset_audit.md; results/analysis_reproducibility_audit.md",
       "next_action": "Spot-check figure/table readability after every layout or data update.",
       "requirement": "Rich paper figures and tables",
       "status": "pass"

@@ -1,0 +1,63 @@
+{
+  "archive": "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_payload_extraction_smoke_audit.md",
+    "manifest": "results/manifest_payload_extraction_smoke_audit.json",
+    "summary": "results/summary_payload_extraction_smoke_audit.csv"
+  },
+  "python": "3.11.15",
+  "rows": [
+    {
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=859; error=none.",
+      "item": "Payload extraction",
+      "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_comparison_protocol_audit.json; needs_revision_count=0; layers=7; stderr=none",
+      "item": "Comparison protocol audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_claim_scope_lint.json; unresolved_count=0; required_boundary_count=5; stderr=none",
+      "item": "Claim-scope lint",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=14; rows=14; stderr=none",
+      "item": "Artifact rerun registry",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    }
+  ],
+  "script": "analyze_payload_extraction_smoke_audit.py",
+  "smoke_scripts": [
+    {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_comparison_protocol_audit.json",
+      "minimum_rows_key": "layers",
+      "name": "Comparison protocol audit",
+      "script": "analyze_comparison_protocol_audit.py"
+    },
+    {
+      "expected_key": "unresolved_count",
+      "manifest": "results/manifest_claim_scope_lint.json",
+      "minimum_rows_key": "required_boundary_count",
+      "name": "Claim-scope lint",
+      "script": "analyze_claim_scope_lint.py"
+    },
+    {
+      "expected_key": "complete_rows",
+      "manifest": "results/manifest_artifact_rerun_registry.json",
+      "minimum_rows_key": "rows",
+      "name": "Artifact rerun registry",
+      "script": "analyze_artifact_rerun_registry.py"
+    }
+  ],
+  "status_counts": {
+    "pass": 4
+  }
+}

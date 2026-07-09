@@ -4,18 +4,19 @@ This read-only verifier checks the terminal package invariants after the payload
 
 ## Status counts
 
-- pass: 17
+- pass: 19
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Compiled author PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=27, bytes=601116. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
-| Compiled anonymous PDF | pass | paper_latex/resource_nmcts_submission_anonymous.pdf pages=27, bytes=597775. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
-| Payload SHA sidecar | pass | actual=06c1bb0f6acce189990fa3e37cf14c09689d74313881251c4be31072fb7364df; sidecar=06c1bb0f6acce189990fa3e37cf14c09689d74313881251c4be31072fb7364df. | Regenerate the payload archive if the digests differ. |
-| Payload manifest consistency | pass | summary=06c1bb0f6acce189990fa3e37cf14c09689d74313881251c4be31072fb7364df; manifest=06c1bb0f6acce189990fa3e37cf14c09689d74313881251c4be31072fb7364df; file_count=854. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
-| Readiness audit terminal state | pass | status_counts={'pass': 28, 'needs author input': 1}. | Resolve any needs-revision rows; author-specific declarations remain manual. |
+| Compiled author PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=27, bytes=601125. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
+| Compiled anonymous PDF | pass | paper_latex/resource_nmcts_submission_anonymous.pdf pages=27, bytes=597770. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
+| Payload SHA sidecar | pass | actual=99cda22bbf39afbc4fe70662aae364b17d18119b28dfeb9fdb9388a9ba9572d6; sidecar=99cda22bbf39afbc4fe70662aae364b17d18119b28dfeb9fdb9388a9ba9572d6. | Regenerate the payload archive if the digests differ. |
+| Payload manifest consistency | pass | summary=99cda22bbf39afbc4fe70662aae364b17d18119b28dfeb9fdb9388a9ba9572d6; manifest=99cda22bbf39afbc4fe70662aae364b17d18119b28dfeb9fdb9388a9ba9572d6; file_count=859. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
+| Readiness audit terminal state | pass | status_counts={'pass': 30, 'needs author input': 1}. | Resolve any needs-revision rows; author-specific declarations remain manual. |
 | Artifact rerun registry coverage | pass | families=14; registry_raw=144; actual_raw=144. | Rerun analyze_artifact_rerun_registry.py after adding raw CSVs or driver scripts. |
 | Claim-scope lint | pass | unresolved_count=0; status_counts={'guarded': 59, 'pass': 5}. | Run analyze_claim_scope_lint.py and revise unguarded hardware-mapping, universal-dominance, optimality, or full-tool-reproduction claims. |
 | Comparison protocol audit | pass | layers=7; needs_revision_count=0; status_counts={'pass': 7}. | Run analyze_comparison_protocol_audit.py and restore missing baseline-role, evidence, comparability, counterpoint, or manuscript anchors. |
+| Figure asset audit | pass | figures=7; needs_revision_count=0; status_counts={'pass': 7}. | Run make_submission_figures.py and analyze_figure_asset_audit.py to restore referenced PDF/PNG/SVG assets and source-data CSVs. |
 | Metadata starter dry-run | pass | returncode=0; missing_tokens=none; private_preexisting=False; private_created=False; private_modified=False. | Run make_submission_metadata_starter.py without --write-private and keep it read-only until author input is explicit. |
 | Private metadata validator | pass | needs_revision_count=0; status_counts={'needs author input': 1}. | Run validate_submission_metadata.py and fix metadata format or consistency rows before upload. |
 | Metadata pipeline self-test | pass | needs_revision_count=0; status_counts={'pass': 14}; synthetic_only=True; writes_private_metadata=False; writes_private_preview_files=False. | Run selftest_submission_metadata_pipeline.py and keep the fixture synthetic and non-private. |
@@ -23,5 +24,6 @@ This read-only verifier checks the terminal package invariants after the payload
 | Private submission text preview | pass | status_counts={'needs author input': 1}; private_outputs_are_git_ignored=True. | Run make_submission_text_preview.py and keep generated private Markdown files ignored by Git. |
 | Private metadata payload exclusion | pass | private_payload_hits=none; checked_basenames=['generated_author_declarations.md', 'generated_availability_statements.md', 'generated_cover_letter.md', 'generated_submission_text.md', 'submission_metadata.json']. | Regenerate the payload after removing ignored private metadata or preview files from package inputs. |
 | Payload round-trip audit | pass | needs_revision_count=0; status_counts={'pass': 8}. | Run analyze_payload_roundtrip_audit.py after payload creation and fix any archive/manifest/path/hash issues. |
+| Payload extraction smoke audit | pass | needs_revision_count=0; status_counts={'pass': 4}; smoke_scripts=3. | Run analyze_payload_extraction_smoke_audit.py after payload creation and fix extracted-payload script failures. |
 | Author LaTeX log boundary | pass | Only allowed rerunfilecheck/showhyphens log lines found. | Inspect the LaTeX log and fix unexpected warnings or errors. |
 | Anonymous LaTeX log boundary | pass | Only allowed rerunfilecheck/showhyphens log lines found. | Inspect the LaTeX log and fix unexpected warnings or errors. |

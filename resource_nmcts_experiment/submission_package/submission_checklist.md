@@ -40,6 +40,7 @@ Use this checklist immediately before uploading the manuscript.
 - Terminal package verifier: `results/analysis_submission_package_verifier.md`
 - Claim-scope lint: `results/analysis_claim_scope_lint.md`
 - Comparison protocol audit: `results/analysis_comparison_protocol_audit.md`
+- Figure asset audit: `results/analysis_figure_asset_audit.md`
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
 - Metadata validator: `results/analysis_submission_metadata_validator.md`
 - Metadata pipeline self-test: `results/analysis_submission_metadata_pipeline_selftest.md`
@@ -55,6 +56,7 @@ Use this checklist immediately before uploading the manuscript.
 - Archive manifest: `results/analysis_submission_archive_manifest.md`
 - Payload archive manifest: `results/analysis_submission_payload_archive.md`
 - Payload round-trip audit: `results/analysis_payload_roundtrip_audit.md`
+- Payload extraction smoke audit: `results/analysis_payload_extraction_smoke_audit.md`
 - Reproducibility audit: `results/analysis_reproducibility_audit.md`
 - Raw data: `results/raw_*.csv`
 - Summary data: `results/summary_*.csv`
@@ -72,6 +74,7 @@ Run these from `resource_nmcts_experiment/`:
   analyze_submission_archive_manifest.py \
   analyze_claim_scope_lint.py \
   analyze_comparison_protocol_audit.py \
+  analyze_figure_asset_audit.py \
   analyze_submission_metadata_audit.py \
   analyze_anonymous_review_readiness.py \
   analyze_submission_readiness_audit.py \
@@ -80,6 +83,7 @@ Run these from `resource_nmcts_experiment/`:
   make_submission_metadata_starter.py \
   selftest_submission_metadata_pipeline.py \
   analyze_payload_roundtrip_audit.py \
+  analyze_payload_extraction_smoke_audit.py \
   make_anonymous_review_draft.py \
   make_submission_text_preview.py
 ./rebuild_submission_package.sh
@@ -95,8 +99,10 @@ Expected current state:
 - Archive manifest: all payload groups complete.
 - Payload archive: tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.
 - Payload round-trip audit: archive contents match manifest paths and hashes, required files, reviewer entrypoints, and comparison-protocol evidence files are present, private files are absent, and tar metadata is deterministic.
+- Payload extraction smoke audit: the upload tarball extracts safely and runs comparison protocol, claim-scope lint, and artifact-rerun registry checks from the extracted tree.
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
 - Comparison protocol audit: all baseline layers have role, evidence, comparability, counterpoint, artifact, and manuscript-anchor coverage.
+- Figure asset audit: every manuscript figure has generated PDF/PNG/SVG assets and non-empty source-data CSV.
 - Metadata audit: all author- and venue-specific fields are enumerated before upload, and any filled `submission_metadata.json` is checked.
 - Metadata validator: no `needs revision` rows; missing private metadata remains an author-input gate until filled.
 - Metadata pipeline self-test: synthetic non-private metadata exercises validator and preview renderers with no `needs revision` rows.

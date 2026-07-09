@@ -5,11 +5,13 @@ The verifier runs after the payload archive has been created.  It checks the
 terminal package invariants that are easy to regress during final polishing:
 compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, comparison-protocol coverage,
+figure-asset coverage,
 private-metadata starter dry-run, private-metadata validation,
 synthetic metadata-pipeline self-testing, anonymous-review decision support,
 private-preview protection, private payload exclusion, payload round-trip
-integrity, and LaTeX log cleanliness.  It writes a small audit report but does
-not rerun experiments or alter manuscript sources.
+integrity, extracted-payload smoke checks, and LaTeX log cleanliness.  It
+writes a small audit report but does not rerun experiments or alter manuscript
+sources.
 """
 from __future__ import annotations
 
@@ -37,11 +39,13 @@ PAYLOAD_SUMMARY = RESULTS / "summary_submission_payload_archive.csv"
 PAYLOAD_MANIFEST = RESULTS / "manifest_submission_payload_archive.json"
 CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
 COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.json"
+FIGURE_ASSET_MANIFEST = RESULTS / "manifest_figure_asset_audit.json"
 METADATA_VALIDATOR_MANIFEST = RESULTS / "manifest_submission_metadata_validator.json"
 TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
 METADATA_PIPELINE_SELFTEST_MANIFEST = RESULTS / "manifest_submission_metadata_pipeline_selftest.json"
 ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
+PAYLOAD_EXTRACTION_SMOKE_MANIFEST = RESULTS / "manifest_payload_extraction_smoke_audit.json"
 METADATA_STARTER = THIS_DIR / "make_submission_metadata_starter.py"
 METADATA_FILE = THIS_DIR / "submission_package" / "submission_metadata.json"
 
@@ -215,6 +219,20 @@ def verify_comparison_protocol() -> dict[str, str]:
     )
 
 
+def verify_figure_assets() -> dict[str, str]:
+    manifest = read_json(FIGURE_ASSET_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    figures = manifest.get("figures", "missing") if manifest else "missing"
+    status = "pass" if manifest and revisions == 0 else "needs revision"
+    return row(
+        "Figure asset audit",
+        status,
+        f"figures={figures}; needs_revision_count={revisions}; status_counts={counts}.",
+        "Run make_submission_figures.py and analyze_figure_asset_audit.py to restore referenced PDF/PNG/SVG assets and source-data CSVs.",
+    )
+
+
 def verify_text_preview() -> dict[str, str]:
     manifest = read_json(TEXT_PREVIEW_MANIFEST)
     counts = manifest.get("status_counts", {}) if manifest else {}
@@ -360,6 +378,21 @@ def verify_payload_roundtrip() -> dict[str, str]:
     )
 
 
+def verify_payload_extraction_smoke() -> dict[str, str]:
+    manifest = read_json(PAYLOAD_EXTRACTION_SMOKE_MANIFEST)
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    smoke_scripts = manifest.get("smoke_scripts", []) if manifest else []
+    script_count = len(smoke_scripts) if isinstance(smoke_scripts, list) else "invalid"
+    status = "pass" if manifest and needs_revision == 0 else "needs revision"
+    return row(
+        "Payload extraction smoke audit",
+        status,
+        f"needs_revision_count={needs_revision}; status_counts={counts}; smoke_scripts={script_count}.",
+        "Run analyze_payload_extraction_smoke_audit.py after payload creation and fix extracted-payload script failures.",
+    )
+
+
 def verify_latex_log(path: Path, label: str) -> dict[str, str]:
     if not path.exists():
         return row(label, "needs revision", "LaTeX log is missing.", "Rebuild the PDF with latexmk.")
@@ -395,6 +428,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_registry(),
             verify_claim_scope(),
             verify_comparison_protocol(),
+            verify_figure_assets(),
             verify_metadata_starter_dry_run(),
             verify_metadata_validator(),
             verify_metadata_pipeline_selftest(),
@@ -402,6 +436,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_text_preview(),
             verify_private_payload_exclusion(),
             verify_payload_roundtrip(),
+            verify_payload_extraction_smoke(),
             verify_latex_log(LOG, "Author LaTeX log boundary"),
             verify_latex_log(ANONYMOUS_LOG, "Anonymous LaTeX log boundary"),
         ]
