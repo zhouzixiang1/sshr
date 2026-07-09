@@ -709,6 +709,28 @@ favor the first method in each comparison.}
 \input{tables/search_contribution_decomposition}
 \end{table}
 
+Table~\ref{tab:search-control-baseline-audit} restates the search-control
+comparisons in the form used for claim interpretation.  The bit-flip branch is
+compared against heuristic-only, beam-only, strengthened no-\mcts{} portfolio,
+\mcts{}, Pareto archive, and learned-prior/no-prior controls.  The only random
+control in the current package is the same-budget phase/\rz{} shortlist audit;
+it is therefore not used as a bit-flip random baseline.  This keeps the
+learning claim narrow: search control adds measured quality or budget-control
+evidence, but the largest gains also depend on the algebraic action space and
+baseline-preserving guards.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.08}
+\caption{Search-control baseline audit.  Rows state which search/control
+baseline is being tested and which stronger claim remains outside the evidence
+for that comparison.}
+\label{tab:search-control-baseline-audit}
+\input{tables/search_control_baseline_audit}
+\end{table}
+
 \begin{table}[H]
 \centering
 \scriptsize

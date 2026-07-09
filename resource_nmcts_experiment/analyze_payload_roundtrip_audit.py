@@ -82,6 +82,12 @@ AUTHOR_INPUT_CLOSURE_PATHS = {
 SOURCE_PATH_PRIVACY_PATHS = {
     "analyze_source_path_privacy_audit.py",
 }
+PAYLOAD_EXTRACTION_SMOKE_PATHS = {
+    "analyze_payload_extraction_smoke_audit.py",
+}
+PAYLOAD_VERIFIER_SMOKE_PATHS = {
+    "analyze_payload_verifier_smoke_audit.py",
+}
 
 
 def rel(path: Path) -> str:
@@ -266,6 +272,26 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    extraction_smoke_missing = sorted(PAYLOAD_EXTRACTION_SMOKE_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload extraction smoke executable",
+            "pass" if not extraction_smoke_missing else "needs revision",
+            f"payload_extraction_smoke_scripts={len(PAYLOAD_EXTRACTION_SMOKE_PATHS)}; missing={extraction_smoke_missing or 'none'}; terminal_outputs_excluded=3.",
+            "Ensure the uploadable archive includes the extraction smoke audit code; generated terminal outputs are intentionally excluded and regenerated from the source tree.",
+        )
+    )
+
+    verifier_smoke_missing = sorted(PAYLOAD_VERIFIER_SMOKE_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload verifier smoke executable",
+            "pass" if not verifier_smoke_missing else "needs revision",
+            f"payload_verifier_smoke_scripts={len(PAYLOAD_VERIFIER_SMOKE_PATHS)}; missing={verifier_smoke_missing or 'none'}; terminal_outputs_excluded=3.",
+            "Ensure the uploadable archive includes the verifier smoke audit code; generated terminal outputs are intentionally excluded and regenerated from the source tree.",
+        )
+    )
+
     metadata_bad: list[str] = []
     for member in members:
         if not member.name.startswith(f"{PAYLOAD_ROOT}/"):
@@ -341,6 +367,8 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "headline_numeric_paths": sorted(HEADLINE_NUMERIC_PATHS),
         "citation_support_paths": sorted(CITATION_SUPPORT_PATHS),
         "author_input_closure_paths": sorted(AUTHOR_INPUT_CLOSURE_PATHS),
+        "payload_extraction_smoke_paths": sorted(PAYLOAD_EXTRACTION_SMOKE_PATHS),
+        "payload_verifier_smoke_paths": sorted(PAYLOAD_VERIFIER_SMOKE_PATHS),
         "private_basenames": sorted(PRIVATE_BASENAMES),
         "rows": rows,
         "outputs": {

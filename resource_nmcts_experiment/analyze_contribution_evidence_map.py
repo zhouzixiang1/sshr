@@ -22,8 +22,8 @@ ROWS = [
     {
         "contribution": "Neural/MCTS resource-search workflow",
         "implementation": "Neural action priors, MCTS/beam/portfolio search, Pareto archive, frontier policies, staged and sparse learned gates.",
-        "evidence_latex": r"Tables~\ref{tab:contribution}, \ref{tab:learned-control-audit}; Fig.~\ref{fig:learned-control-summary}",
-        "evidence_plain": "contribution decomposition, learned-control audit, learned-control figure",
+        "evidence_latex": r"Tables~\ref{tab:contribution}, \ref{tab:search-control-baseline-audit}, \ref{tab:learned-control-audit}; Fig.~\ref{fig:learned-control-summary}",
+        "evidence_plain": "contribution decomposition, search-control baseline audit, learned-control audit, learned-control figure",
         "boundary": "The largest gains come from searchable algebraic actions plus guarded selection; the paper does not claim deep RL alone explains all gains.",
     },
     {

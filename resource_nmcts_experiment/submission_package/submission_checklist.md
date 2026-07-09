@@ -65,6 +65,7 @@ Use this checklist immediately before uploading the manuscript.
 - Payload archive manifest: `results/analysis_submission_payload_archive.md`
 - Payload round-trip audit: `results/analysis_payload_roundtrip_audit.md`
 - Payload extraction smoke audit: `results/analysis_payload_extraction_smoke_audit.md`
+- Payload verifier smoke audit: `results/analysis_payload_verifier_smoke_audit.md`
 - Payload LaTeX compile audit: `results/analysis_payload_latex_compile_audit.md`
 - Reproducibility audit: `results/analysis_reproducibility_audit.md`
 - Raw data: `results/raw_*.csv`
@@ -101,6 +102,7 @@ Run these from `resource_nmcts_experiment/`:
   selftest_submission_metadata_pipeline.py \
   analyze_payload_roundtrip_audit.py \
   analyze_payload_extraction_smoke_audit.py \
+  analyze_payload_verifier_smoke_audit.py \
   analyze_payload_latex_compile_audit.py \
   make_anonymous_review_draft.py \
   make_submission_text_preview.py
@@ -118,6 +120,7 @@ Expected current state:
 - Payload archive: tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.
 - Payload round-trip audit: archive contents match manifest paths and hashes, required files, reviewer entrypoints, comparison-protocol evidence files, citation-support evidence files, author-input closure evidence files, source/path privacy audit code, and headline-numeric evidence files are present, private files are absent, and tar metadata is deterministic.
 - Payload extraction smoke audit: the upload tarball extracts safely and runs comparison protocol, citation support, source/path privacy, author-input closure, headline numeric consistency, claim-scope lint, and artifact-rerun registry checks from the extracted tree.
+- Payload verifier smoke audit: the upload tarball extracts safely and `verify_submission_package.sh` passes from inside the extracted payload tree.
 - Payload LaTeX compile audit: the upload tarball extracts safely and rebuilds both author and anonymous PDFs from the extracted LaTeX source tree.
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
 - Comparison protocol audit: all baseline layers have role, evidence, comparability, counterpoint, artifact, and manuscript-anchor coverage.

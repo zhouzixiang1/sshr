@@ -19,6 +19,7 @@ author,tex_input,tables/paired_effect_uncertainty,paper_latex/tables/paired_effe
 author,tex_input,tables/multimetric_pairwise_dominance,paper_latex/tables/multimetric_pairwise_dominance.tex,True,True,pass,No action needed.
 author,tex_input,tables/multimetric_nondominated,paper_latex/tables/multimetric_nondominated.tex,True,True,pass,No action needed.
 author,tex_input,tables/search_contribution_decomposition,paper_latex/tables/search_contribution_decomposition.tex,True,True,pass,No action needed.
+author,tex_input,tables/search_control_baseline_audit,paper_latex/tables/search_control_baseline_audit.tex,True,True,pass,No action needed.
 author,tex_input,tables/boolean_ring_structural_evidence,paper_latex/tables/boolean_ring_structural_evidence.tex,True,True,pass,No action needed.
 author,tex_input,tables/sparse_depth_frontier,paper_latex/tables/sparse_depth_frontier.tex,True,True,pass,No action needed.
 author,tex_input,tables/sparse_depth4_gate,paper_latex/tables/sparse_depth4_gate.tex,True,True,pass,No action needed.
@@ -59,6 +60,7 @@ anonymous,tex_input,tables/paired_effect_uncertainty,paper_latex/tables/paired_e
 anonymous,tex_input,tables/multimetric_pairwise_dominance,paper_latex/tables/multimetric_pairwise_dominance.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/multimetric_nondominated,paper_latex/tables/multimetric_nondominated.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/search_contribution_decomposition,paper_latex/tables/search_contribution_decomposition.tex,True,True,pass,No action needed.
+anonymous,tex_input,tables/search_control_baseline_audit,paper_latex/tables/search_control_baseline_audit.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/boolean_ring_structural_evidence,paper_latex/tables/boolean_ring_structural_evidence.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/sparse_depth_frontier,paper_latex/tables/sparse_depth_frontier.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/sparse_depth4_gate,paper_latex/tables/sparse_depth4_gate.tex,True,True,pass,No action needed.

@@ -125,6 +125,14 @@
 
 本轮新增 learned-control audit 层，用于校准题目中“neural/MCTS”的贡献强度：
 
+- `analyze_search_control_baseline_audit.py`
+- `results/summary_search_control_baseline_audit.csv`
+- `results/analysis_search_control_baseline_audit.md`
+- `results/manifest_search_control_baseline_audit.json`
+- `paper_latex/tables/search_control_baseline_audit.tex`
+
+该审计把“我的方法到底和什么搜索策略比”压缩成审稿人可读表：bit-flip 主线明确对比 heuristic-only、beam-only、no-MCTS portfolio、Resource-NMCTS、Pareto-Resource-NMCTS 和 learned-prior/no-prior；phase/Rz 分支单独保留 same-budget random shortlist control。关键结论是：Resource-NMCTS 相对强化 no-MCTS portfolio 为 54/0/123、score -1.44%，Pareto-Resource-NMCTS 相对 no-MCTS 为 106/0/71、score -4.69%，learned prior 相对 no-prior 为 39/0/138、score -1.10% 但 runtime 增加，因此不能写成速度主张；phase diverse top-512 相对 8 组 random mean 为 17/0/21、score -0.012%。这张表已接入英文投稿稿，用来直接回答“AI/MCTS 有什么增量、哪些只是确定性结构搜索、random control 在哪个分支有效”。
+
 - `analyze_learned_control_audit.py`
 - `results/summary_learned_control_audit.csv`
 - `results/analysis_learned_control_audit.md`
@@ -209,6 +217,20 @@
 - `results/manifest_goal_completion_audit.json`
 
 该审计逐项检查设计与文献定位、逻辑层边界、Resource-NMCTS 实现、神经/MCTS/learned-control 证据、baseline 复现覆盖、显著改进证据、多资源 trade-off、大规模与 bridge 实验、多核/GPU 复现、图表丰富度、LaTeX 稿件、可复现 payload 和最终作者/期刊元数据。它的作用是防止把“研究和投稿包已经完成”误写成“总目标已闭环”：当前研究/package 侧证据为 pass，但 overall closure 仍因作者与期刊字段保持 open。
+
+本轮新增 payload verifier smoke audit：
+
+- `analyze_payload_verifier_smoke_audit.py`
+- `results/summary_payload_verifier_smoke_audit.csv`
+- `results/analysis_payload_verifier_smoke_audit.md`
+- `results/manifest_payload_verifier_smoke_audit.json`
+
+该审计会把上传 tarball 解到临时目录，然后在解包后的 payload 根目录直接运行
+`verify_submission_package.sh`。由于上传包不自带自身 tarball 和终端自审计输出，
+verifier 在 extracted-payload mode 下跳过自引用 archive 检查，但仍执行 PDF、
+文本、元数据、source/path privacy、private metadata、claim/citation/baseline
+和 package invariant 检查。当前结果为 `verifier_returncode=0`，证明审稿人拿到
+payload 后可以从解包目录运行一键 verifier。
 
 本轮新增可上传 payload archive 生成器，把归档清单进一步转成实际上传包：
 

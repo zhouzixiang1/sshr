@@ -1,0 +1,14 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}rcc>{\raggedright\arraybackslash}X}
+\toprule
+Layer & Comparison & Pairs & Score W/L/T & Mean $\Delta$ score & Claim boundary \\
+\midrule
+search-space baseline & Affine greedy vs fixed-coordinate MCTS & 321 & 165/88/68 & -12.12\% & This is not a neural-only effect. \\
+deterministic search controls & No-MCTS portfolio over heuristic-only & 177 & 54/0/123 & -2.51\% & This row does not isolate MCTS. \\
+deterministic search controls & No-MCTS portfolio over beam-only & 177 & 106/1/70 & -8.36\% & Beam is a child/search baseline, not the full method. \\
+MCTS over deterministic portfolio & Resource-NMCTS over no-MCTS portfolio & 177 & 54/0/123 & -1.44\% & The magnitude is incremental, not the whole resource drop. \\
+Pareto search control & Pareto Resource-NMCTS over no-MCTS portfolio & 177 & 106/0/71 & -4.69\% & Ancilla tradeoffs still need separate reporting. \\
+learned prior & Learned prior for Resource-NMCTS & 177 & 39/0/138 & -1.10\% & It is not a runtime claim and should not be promoted as the main source of improvement. \\
+high-dimensional deterministic control & Highdim no-MCTS portfolio over root beam & 16 & 14/0/2 & -6.25\% & This is symbolic/high-dimensional evidence, not exhaustive truth-table optimality. \\
+phase random control & Diverse phase shortlist top-512 vs same-budget random mean & 38 & 17/0/21 & -0.012\% & This is a phase/Rz proxy control, not a bit-flip random baseline or rotation synthesis. \\
+\bottomrule
+\end{tabularx}

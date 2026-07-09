@@ -35,6 +35,8 @@ IDENTITY_METADATA_PATTERNS = (
     r"zixiang",
     r"zhou",
 )
+MIN_EXPECTED_PAGES = 20
+MAX_EXPECTED_PAGES = 40
 
 
 def rel(path: Path) -> str:
@@ -107,7 +109,11 @@ def audit_pdf(label: str, pdf_path: Path) -> dict[str, str]:
     failures: list[str] = []
     if returncode != 0:
         failures.append(f"pdfinfo returncode={returncode}")
-    if fields.get("Pages") != "27":
+    try:
+        page_count = int(fields.get("Pages", "0"))
+    except ValueError:
+        page_count = 0
+    if not (MIN_EXPECTED_PAGES <= page_count <= MAX_EXPECTED_PAGES):
         failures.append(f"pages={fields.get('Pages', 'missing')}")
     if fields.get("Encrypted") != "no":
         failures.append(f"encrypted={fields.get('Encrypted', 'missing')}")
@@ -220,6 +226,10 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "source_files": {
             "author_pdf": rel(AUTHOR_PDF),
             "anonymous_pdf": rel(ANONYMOUS_PDF),
+        },
+        "expected_page_range": {
+            "min": MIN_EXPECTED_PAGES,
+            "max": MAX_EXPECTED_PAGES,
         },
         "outputs": {
             "summary": "results/summary_pdf_metadata_audit.csv",

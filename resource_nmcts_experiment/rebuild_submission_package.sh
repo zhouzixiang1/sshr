@@ -34,6 +34,7 @@ run_py analyze_paired_statistical_evidence.py
 run_py analyze_paired_effect_uncertainty.py
 run_py analyze_multimetric_pareto_tradeoff.py
 run_py analyze_search_contribution.py
+run_py analyze_search_control_baseline_audit.py
 run_py analyze_boolean_ring_structural_evidence.py
 run_py analyze_sparse_depth_frontier.py
 run_py analyze_sparse_depth4_gate_sensitivity.py
@@ -73,6 +74,7 @@ run_py analyze_payload_roundtrip_audit.py
 run_py analyze_source_path_privacy_audit.py
 run_py analyze_payload_extraction_smoke_audit.py
 run_py analyze_payload_latex_compile_audit.py
+run_py analyze_payload_verifier_smoke_audit.py
 run_py analyze_submission_readiness_audit.py
 run_py analyze_submission_package_verifier.py
 

@@ -1,7 +1,7 @@
 item,status,evidence,next_action
-Payload archive readable,pass,archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=877; error=none.,Regenerate the payload archive if it cannot be opened by Python tarfile.
-Payload manifest round-trip,pass,manifest_files=877; archive_files=877; missing=none; extra=none.,Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.
-Payload per-file SHA256,pass,checked=877; mismatches=none.,Regenerate the payload archive and manifest if any archived file digest differs from the manifest.
+Payload archive readable,pass,archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=883; error=none.,Regenerate the payload archive if it cannot be opened by Python tarfile.
+Payload manifest round-trip,pass,manifest_files=883; archive_files=883; missing=none; extra=none.,Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.
+Payload per-file SHA256,pass,checked=883; mismatches=none.,Regenerate the payload archive and manifest if any archived file digest differs from the manifest.
 Payload path hygiene,pass,unsafe_paths=none; private_hits=none.,"Remove unsafe, platform-generated, or private files from the payload inputs."
 Payload required artifacts,pass,required=12; missing=none.,"Ensure the uploadable archive includes manuscript, bibliography, rebuild/verify scripts, handoff docs, and submission audits."
 Payload reviewer entrypoints,pass,reviewer_entries=7; missing=none.,"Ensure the uploadable archive includes reviewer-facing guide, editor/reviewer briefs, venue brief, registry, and reproducibility audit."
@@ -10,4 +10,6 @@ Payload headline numeric evidence,pass,headline_numeric_files=4; missing=none.,E
 Payload citation support evidence,pass,citation_support_files=4; missing=none.,Ensure the uploadable archive includes the citation support audit script and generated CSV/Markdown/JSON evidence.
 Payload author-input closure evidence,pass,author_input_closure_files=4; missing=none.,Ensure the uploadable archive includes the author-input closure audit script and generated CSV/Markdown/JSON evidence.
 Payload source/path privacy executable,pass,source_path_privacy_scripts=1; missing=none; terminal_outputs_excluded=3.,Ensure the uploadable archive includes source/path privacy audit code; generated terminal outputs are intentionally excluded and reproduced by the extracted-payload smoke test.
-Payload deterministic tar metadata,pass,members_checked=877; metadata_issues=none.,Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.
+Payload extraction smoke executable,pass,payload_extraction_smoke_scripts=1; missing=none; terminal_outputs_excluded=3.,Ensure the uploadable archive includes the extraction smoke audit code; generated terminal outputs are intentionally excluded and regenerated from the source tree.
+Payload verifier smoke executable,pass,payload_verifier_smoke_scripts=1; missing=none; terminal_outputs_excluded=3.,Ensure the uploadable archive includes the verifier smoke audit code; generated terminal outputs are intentionally excluded and regenerated from the source tree.
+Payload deterministic tar metadata,pass,members_checked=883; metadata_issues=none.,Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.

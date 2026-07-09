@@ -63,6 +63,9 @@ PAYLOAD_EXTRACTION_SMOKE_MANIFEST = RESULTS / "manifest_payload_extraction_smoke
 PAYLOAD_LATEX_COMPILE_ANALYSIS = RESULTS / "analysis_payload_latex_compile_audit.md"
 PAYLOAD_LATEX_COMPILE_SUMMARY = RESULTS / "summary_payload_latex_compile_audit.csv"
 PAYLOAD_LATEX_COMPILE_MANIFEST = RESULTS / "manifest_payload_latex_compile_audit.json"
+PAYLOAD_VERIFIER_SMOKE_ANALYSIS = RESULTS / "analysis_payload_verifier_smoke_audit.md"
+PAYLOAD_VERIFIER_SMOKE_SUMMARY = RESULTS / "summary_payload_verifier_smoke_audit.csv"
+PAYLOAD_VERIFIER_SMOKE_MANIFEST = RESULTS / "manifest_payload_verifier_smoke_audit.json"
 GOAL_ANALYSIS = RESULTS / "analysis_goal_completion_audit.md"
 GOAL_SUMMARY = RESULTS / "summary_goal_completion_audit.csv"
 GOAL_MANIFEST = RESULTS / "manifest_goal_completion_audit.json"
@@ -104,6 +107,10 @@ PAIRED_EFFECT_ANALYSIS = RESULTS / "analysis_paired_effect_uncertainty.md"
 PAIRED_EFFECT_SUMMARY = RESULTS / "summary_paired_effect_uncertainty.csv"
 PAIRED_EFFECT_MANIFEST = RESULTS / "manifest_paired_effect_uncertainty.json"
 PAIRED_EFFECT_TABLE = THIS_DIR / "paper_latex" / "tables" / "paired_effect_uncertainty.tex"
+SEARCH_CONTROL_ANALYSIS = RESULTS / "analysis_search_control_baseline_audit.md"
+SEARCH_CONTROL_SUMMARY = RESULTS / "summary_search_control_baseline_audit.csv"
+SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
+SEARCH_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "search_control_baseline_audit.tex"
 SUPPORT_FILES = [
     SUBMISSION_PACKAGE / "README.md",
     AUTHOR_INPUT_PACKET,
@@ -180,6 +187,12 @@ def build_rows() -> list[dict[str, str]]:
     citation_support_counts = citation_support_manifest.get("status_counts", {}) if citation_support_manifest else {}
     citation_support_rows = citation_support_manifest.get("rows", "missing") if citation_support_manifest else "missing"
     citation_support_keys = citation_support_manifest.get("cited_key_count", "missing") if citation_support_manifest else "missing"
+    search_control_manifest = read_json(SEARCH_CONTROL_MANIFEST)
+    search_control_revisions = (
+        int(search_control_manifest.get("needs_revision_count", -1)) if search_control_manifest else -1
+    )
+    search_control_counts = search_control_manifest.get("status_counts", {}) if search_control_manifest else {}
+    search_control_rows = search_control_manifest.get("rows", "missing") if search_control_manifest else "missing"
     figure_asset_manifest = read_json(FIGURE_ASSET_MANIFEST)
     figure_asset_revisions = int(figure_asset_manifest.get("needs_revision_count", -1)) if figure_asset_manifest else -1
     figure_asset_counts = figure_asset_manifest.get("status_counts", {}) if figure_asset_manifest else {}
@@ -260,6 +273,14 @@ def build_rows() -> list[dict[str, str]]:
     payload_latex_counts = payload_latex_manifest.get("status_counts", {}) if payload_latex_manifest else {}
     payload_latex_revisions = int(payload_latex_manifest.get("needs_revision_count", -1)) if payload_latex_manifest else -1
     payload_latex_compiled = payload_latex_manifest.get("compiled_manuscripts", "missing") if payload_latex_manifest else "missing"
+    payload_verifier_manifest = read_json(PAYLOAD_VERIFIER_SMOKE_MANIFEST)
+    payload_verifier_counts = payload_verifier_manifest.get("status_counts", {}) if payload_verifier_manifest else {}
+    payload_verifier_revisions = (
+        int(payload_verifier_manifest.get("needs_revision_count", -1)) if payload_verifier_manifest else -1
+    )
+    payload_verifier_returncode = (
+        payload_verifier_manifest.get("verifier_returncode", "missing") if payload_verifier_manifest else "missing"
+    )
     lower = text.lower()
     todo_hits = re.findall(r"\b(?:todo|tbd|placeholder)\b", lower)
     abstract_words = abstract_word_count(text)
@@ -327,6 +348,19 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Comparison protocol audit checks layered baseline roles, evidence, comparability, counterpoints, and manuscript anchors; status_counts={comparison_protocol_counts}; needs_revision_count={comparison_protocol_revisions}.",
             "next_action": "Rerun analyze_comparison_protocol_audit.py after changing baseline claims, evidence matrices, counterpoint wording, or comparison-scope text.",
+        },
+        {
+            "item": "Search-control baseline audit",
+            "status": "pass"
+            if "tab:search-control-baseline-audit" in text
+            and SEARCH_CONTROL_ANALYSIS.exists()
+            and SEARCH_CONTROL_SUMMARY.exists()
+            and SEARCH_CONTROL_MANIFEST.exists()
+            and SEARCH_CONTROL_TABLE.exists()
+            and search_control_revisions == 0
+            else "needs revision",
+            "evidence": f"Search-control audit separates heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, high-dimensional guard, and phase random-control evidence; rows={search_control_rows}; status_counts={search_control_counts}; needs_revision_count={search_control_revisions}.",
+            "next_action": "Rerun analyze_search_control_baseline_audit.py after changing search ablations, learned-prior rows, phase random controls, or search-control manuscript claims.",
         },
         {
             "item": "Citation support audit",
@@ -593,6 +627,17 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_payload_extraction_smoke_audit.py after payload creation and fix extraction or in-payload script execution failures.",
         },
         {
+            "item": "Payload verifier smoke audit",
+            "status": "pass"
+            if PAYLOAD_VERIFIER_SMOKE_ANALYSIS.exists()
+            and PAYLOAD_VERIFIER_SMOKE_SUMMARY.exists()
+            and PAYLOAD_VERIFIER_SMOKE_MANIFEST.exists()
+            and payload_verifier_revisions == 0
+            else "needs revision",
+            "evidence": f"Payload verifier smoke audit extracts the upload tarball and runs verify_submission_package.sh inside the extracted payload tree; verifier_returncode={payload_verifier_returncode}; status_counts={payload_verifier_counts}; needs_revision_count={payload_verifier_revisions}.",
+            "next_action": "Rerun analyze_payload_verifier_smoke_audit.py after payload creation and fix extracted one-command verifier failures.",
+        },
+        {
             "item": "Payload LaTeX compile audit",
             "status": "pass"
             if PAYLOAD_LATEX_COMPILE_ANALYSIS.exists()
@@ -611,7 +656,7 @@ def build_rows() -> list[dict[str, str]]:
             and VERIFIER_SUMMARY.exists()
             and VERIFIER_MANIFEST.exists()
             else "needs revision",
-            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, PDF visual rendering, PDF text/searchability, PDF metadata/privacy, source/path privacy, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, citation support, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, author-input closure, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, extracted-payload LaTeX compilation, and LaTeX log boundaries.",
+            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, PDF visual rendering, PDF text/searchability, PDF metadata/privacy, source/path privacy, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, citation support, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, author-input closure, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, extracted-payload LaTeX compilation, extracted-payload verifier smoke, and LaTeX log boundaries.",
             "next_action": "Run verify_submission_package.sh after rebuilding the payload archive.",
         },
         {

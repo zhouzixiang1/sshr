@@ -18,7 +18,6 @@ import subprocess
 import sys
 import tarfile
 import tempfile
-import time
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
@@ -168,7 +167,6 @@ def compile_one(payload_dir: Path, spec: CompileSpec, latexmk: str) -> dict[str,
             f"missing TeX source={spec.tex_path}.",
             "Regenerate the payload archive with manuscript TeX sources included.",
         )
-    start = time.time()
     proc = subprocess.run(
         [latexmk, "-pdf", "-g", "-interaction=nonstopmode", "-halt-on-error", tex.name],
         cwd=tex.parent,
@@ -178,7 +176,6 @@ def compile_one(payload_dir: Path, spec: CompileSpec, latexmk: str) -> dict[str,
         text=True,
         timeout=180,
     )
-    elapsed = time.time() - start
     pages = pdf_pages(pdf)
     pdf_bytes = pdf.stat().st_size if pdf.exists() else 0
     log_unexpected = unexpected_log_lines(log)
@@ -203,7 +200,7 @@ def compile_one(payload_dir: Path, spec: CompileSpec, latexmk: str) -> dict[str,
         proc.returncode,
         pages,
         pdf_bytes,
-        elapsed,
+        "not_recorded",
         evidence,
         "Inspect the extracted payload LaTeX log and restore missing table, figure, bibliography, or style dependencies.",
     )

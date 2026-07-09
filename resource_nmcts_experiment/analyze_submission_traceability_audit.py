@@ -139,12 +139,15 @@ def build_rows() -> list[dict[str, str]]:
         ),
         row(
             "Learned-control contribution",
-            "Separates promoted neural/search controllers from limited diagnostics.",
+            "Separates search-control baselines and promoted learned controllers from limited diagnostics.",
             [
+                THIS_DIR / "analyze_search_control_baseline_audit.py",
                 THIS_DIR / "analyze_learned_control_audit.py",
                 THIS_DIR / "train_sparse_depth4_gate.py",
+                RESULTS / "analysis_search_control_baseline_audit.md",
                 RESULTS / "analysis_learned_control_audit.md",
                 RESULTS / "analysis_sparse_depth4_gate_generalization.md",
+                TABLES / "search_control_baseline_audit.tex",
                 TABLES / "learned_control_audit.tex",
                 TABLES / "sparse_depth4_gate_generalization.tex",
                 FIGURES / "fig7_learned_control_summary.pdf",

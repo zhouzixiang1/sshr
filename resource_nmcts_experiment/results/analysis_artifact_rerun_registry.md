@@ -61,7 +61,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - representative raw: `results/raw_phase_affine_policy.csv; results/raw_phase_affine_policy_rank_diverse.csv; results/raw_phase_parity_affine.csv; results/raw_phase_parity_affine_wide128.csv; +3 more`
 - **Learned-control and ablations**
   - claim use: Separates neural/search-control effects from deterministic algebraic construction and guarded portfolio selection.
-  - scripts: `train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; analyze_learned_control_audit.py`
+  - scripts: `train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py`
   - representative raw: `results/raw_highdim_neural_prior_boolean_guard.csv; results/raw_highdim_neural_prior_learned_prior.csv; results/raw_highdim_neural_prior_no_prior.csv; results/raw_highdim_neural_prior_pairwise.csv; +9 more`
 - **High-dimensional symbolic screen-scale runs**
   - claim use: Tests scaling behavior on n=20-40 generated term-set instances with symbolic emitted-circuit checks.

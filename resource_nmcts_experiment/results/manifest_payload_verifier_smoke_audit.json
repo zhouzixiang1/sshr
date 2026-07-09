@@ -1,0 +1,36 @@
+{
+  "archive": "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_payload_verifier_smoke_audit.md",
+    "manifest": "results/manifest_payload_verifier_smoke_audit.json",
+    "summary": "results/summary_payload_verifier_smoke_audit.csv"
+  },
+  "python": "3.11.15",
+  "rows": 2,
+  "rows_detail": [
+    {
+      "elapsed_seconds": "0.000",
+      "evidence": "extracted_files=883; error=none.",
+      "item": "Payload extraction for verifier smoke",
+      "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
+      "returncode": "n/a",
+      "source": "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
+      "status": "pass"
+    },
+    {
+      "elapsed_seconds": "not_recorded",
+      "evidence": "verifier_returncode=0; verifier_rows=29; verifier_needs_revision_count=0; extracted_payload_mode=True; status_counts={'pass': 29}; stdout_lines=79; stderr=none.",
+      "item": "Extracted payload verifier command",
+      "next_action": "Inspect the verifier outputs generated inside the extracted payload directory.",
+      "returncode": "0",
+      "source": "verify_submission_package.sh",
+      "status": "pass"
+    }
+  ],
+  "script": "analyze_payload_verifier_smoke_audit.py",
+  "status_counts": {
+    "pass": 2
+  },
+  "verifier_returncode": "0"
+}

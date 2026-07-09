@@ -130,10 +130,10 @@
       "summary_files": "9"
     },
     {
-      "analysis_files": "11",
+      "analysis_files": "12",
       "claim_use": "Separates neural/search-control effects from deterministic algebraic construction and guarded portfolio selection.",
       "dependency_boundary": "Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only.",
-      "driver_scripts": "train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; analyze_learned_control_audit.py",
+      "driver_scripts": "train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py",
       "evidence_family": "Learned-control and ablations",
       "manifest_files": "9",
       "raw_files": "13",
@@ -141,9 +141,9 @@
       "representative_raw": "results/raw_highdim_neural_prior_boolean_guard.csv; results/raw_highdim_neural_prior_learned_prior.csv; results/raw_highdim_neural_prior_no_prior.csv; results/raw_highdim_neural_prior_pairwise.csv; +9 more",
       "rerun_tier": "training plus ablation rerun",
       "scripts_missing": "",
-      "scripts_present": "5",
+      "scripts_present": "6",
       "status": "complete",
-      "summary_files": "18"
+      "summary_files": "19"
     },
     {
       "analysis_files": "58",

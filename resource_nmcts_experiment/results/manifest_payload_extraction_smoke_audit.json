@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=877; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=883; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -17,6 +17,12 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_comparison_protocol_audit.json; needs_revision_count=0; layers=7; stderr=none",
       "item": "Comparison protocol audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_search_control_baseline_audit.json; needs_revision_count=0; rows=8; stderr=none",
+      "item": "Search-control baseline audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -86,6 +92,13 @@
     },
     {
       "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_search_control_baseline_audit.json",
+      "minimum_rows_key": "rows",
+      "name": "Search-control baseline audit",
+      "script": "analyze_search_control_baseline_audit.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
       "manifest": "results/manifest_headline_numeric_consistency.json",
       "minimum_rows_key": "claims",
       "name": "Headline numeric consistency",
@@ -149,6 +162,6 @@
     }
   ],
   "status_counts": {
-    "pass": 11
+    "pass": 12
   }
 }

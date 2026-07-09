@@ -1,0 +1,19 @@
+{
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_search_control_baseline_audit.md",
+    "manifest": "results/manifest_search_control_baseline_audit.json",
+    "summary": "results/summary_search_control_baseline_audit.csv",
+    "table": "paper_latex/tables/search_control_baseline_audit.tex"
+  },
+  "rows": 8,
+  "script": "analyze_search_control_baseline_audit.py",
+  "sources": [
+    "results/summary_search_contribution.csv",
+    "results/raw_neural_prior_ablation.csv",
+    "results/summary_phase_policy_random_control.csv"
+  ],
+  "status_counts": {
+    "pass": 8
+  }
+}

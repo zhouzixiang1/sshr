@@ -36,6 +36,12 @@
     "manifest": "results/manifest_payload_roundtrip_audit.json",
     "summary": "results/summary_payload_roundtrip_audit.csv"
   },
+  "payload_extraction_smoke_paths": [
+    "analyze_payload_extraction_smoke_audit.py"
+  ],
+  "payload_verifier_smoke_paths": [
+    "analyze_payload_verifier_smoke_audit.py"
+  ],
   "private_basenames": [
     "generated_author_declarations.md",
     "generated_availability_statements.md",
@@ -69,19 +75,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=877; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=883; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=877; archive_files=877; missing=none; extra=none.",
+      "evidence": "manifest_files=883; archive_files=883; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=877; mismatches=none.",
+      "evidence": "checked=883; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -135,7 +141,19 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=877; metadata_issues=none.",
+      "evidence": "payload_extraction_smoke_scripts=1; missing=none; terminal_outputs_excluded=3.",
+      "item": "Payload extraction smoke executable",
+      "next_action": "Ensure the uploadable archive includes the extraction smoke audit code; generated terminal outputs are intentionally excluded and regenerated from the source tree.",
+      "status": "pass"
+    },
+    {
+      "evidence": "payload_verifier_smoke_scripts=1; missing=none; terminal_outputs_excluded=3.",
+      "item": "Payload verifier smoke executable",
+      "next_action": "Ensure the uploadable archive includes the verifier smoke audit code; generated terminal outputs are intentionally excluded and regenerated from the source tree.",
+      "status": "pass"
+    },
+    {
+      "evidence": "members_checked=883; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -143,6 +161,6 @@
   ],
   "script": "analyze_payload_roundtrip_audit.py",
   "status_counts": {
-    "pass": 12
+    "pass": 14
   }
 }

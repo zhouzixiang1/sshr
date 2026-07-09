@@ -1,0 +1,345 @@
+#!/usr/bin/env python3
+"""Build a reviewer-facing audit of search-control baselines.
+
+The full search-contribution table is intentionally broad.  This audit
+compresses the same verified raw evidence into the specific question a reviewer
+is likely to ask: what search strategies are compared, and what conclusion can
+each comparison support?
+"""
+from __future__ import annotations
+
+import csv
+import json
+from collections import Counter
+from pathlib import Path
+
+
+THIS_DIR = Path(__file__).resolve().parent
+RESULTS = THIS_DIR / "results"
+TABLES = THIS_DIR / "paper_latex" / "tables"
+
+
+def read_csv(path: Path) -> list[dict[str, str]]:
+    with path.open(newline="", encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+
+def require_row(rows: list[dict[str, str]], **keys: str) -> dict[str, str]:
+    for row in rows:
+        if all(row.get(key) == value for key, value in keys.items()):
+            return row
+    raise KeyError(f"missing row {keys}")
+
+
+def pct(value: str | float, digits: int = 2) -> str:
+    return f"{float(value):+.{digits}f}%"
+
+
+def pass_status(row: dict[str, str]) -> str:
+    wlt = row["score_wlt"].split("/")
+    wins, losses = int(wlt[0]), int(wlt[1])
+    rel = float(row["score_relative_pct"])
+    return "pass" if wins > 0 and losses <= wins and rel <= 0.0 else "needs revision"
+
+
+def paired_variant_stats(
+    rows: list[dict[str, str]],
+    *,
+    method: str,
+    target_variant: str,
+    baseline_variant: str,
+    metric: str,
+) -> dict[str, str]:
+    by_name: dict[str, dict[str, dict[str, str]]] = {}
+    for row in rows:
+        if row.get("method") == method and str(row.get("correct", "True")) != "False" and not row.get("skipped"):
+            by_name.setdefault(row["name"], {})[row["variant"]] = row
+    wins = losses = ties = 0
+    rels: list[float] = []
+    target_values: list[float] = []
+    baseline_values: list[float] = []
+    for table in by_name.values():
+        if target_variant not in table or baseline_variant not in table:
+            continue
+        target = float(table[target_variant][metric])
+        baseline = float(table[baseline_variant][metric])
+        target_values.append(target)
+        baseline_values.append(baseline)
+        rels.append((target - baseline) / max(baseline, 1e-9) * 100.0)
+        if target < baseline:
+            wins += 1
+        elif target > baseline:
+            losses += 1
+        else:
+            ties += 1
+    return {
+        "pairs": str(len(rels)),
+        "wlt": f"{wins}/{losses}/{ties}",
+        "mean_target": f"{sum(target_values) / len(target_values):.6g}" if target_values else "",
+        "mean_baseline": f"{sum(baseline_values) / len(baseline_values):.6g}" if baseline_values else "",
+        "mean_relative": f"{sum(rels) / len(rels):.6g}" if rels else "",
+        "wins": str(wins),
+        "losses": str(losses),
+        "ties": str(ties),
+    }
+
+
+def build_rows() -> list[dict[str, str]]:
+    search = read_csv(RESULTS / "summary_search_contribution.csv")
+    prior_raw = read_csv(RESULTS / "raw_neural_prior_ablation.csv")
+    phase_random = read_csv(RESULTS / "summary_phase_policy_random_control.csv")
+
+    def search_row(
+        *,
+        comparison: str,
+        layer: str,
+        scope: str,
+        conclusion: str,
+        boundary: str,
+    ) -> dict[str, str]:
+        row = require_row(search, comparison=comparison)
+        return {
+            "layer": layer,
+            "evidence_source": row["dataset"],
+            "comparison": comparison,
+            "scope": scope,
+            "pairs": row["pairs"],
+            "score_wlt": row["score_wlt"],
+            "mean_score_change": pct(row["score_relative_pct"]),
+            "cost_or_runtime": "not the claimed dimension",
+            "supported_conclusion": conclusion,
+            "boundary": boundary,
+            "status": pass_status(row),
+        }
+
+    prior_score = paired_variant_stats(
+        prior_raw,
+        method="and_resource_nmcts",
+        target_variant="learned_prior",
+        baseline_variant="no_prior",
+        metric="score",
+    )
+    prior_time = paired_variant_stats(
+        prior_raw,
+        method="and_resource_nmcts",
+        target_variant="learned_prior",
+        baseline_variant="no_prior",
+        metric="time_s",
+    )
+    phase = require_row(phase_random, policy="diverse", topk="512")
+
+    rows = [
+        search_row(
+            comparison="Affine greedy vs fixed-coordinate MCTS",
+            layer="search-space baseline",
+            scope="321 matched affine pairs",
+            conclusion="Changing the algebraic action space is a major source of score improvement.",
+            boundary="This is not a neural-only effect.",
+        ),
+        search_row(
+            comparison="No-MCTS portfolio over heuristic-only",
+            layer="deterministic search controls",
+            scope="177 n<=6 functions",
+            conclusion="A deterministic portfolio improves over a single heuristic baseline.",
+            boundary="This row does not isolate MCTS.",
+        ),
+        search_row(
+            comparison="No-MCTS portfolio over beam-only",
+            layer="deterministic search controls",
+            scope="177 n<=6 functions",
+            conclusion="The no-MCTS portfolio is stronger than the beam-only child in the same slice.",
+            boundary="Beam is a child/search baseline, not the full method.",
+        ),
+        search_row(
+            comparison="Resource-NMCTS over no-MCTS portfolio",
+            layer="MCTS over deterministic portfolio",
+            scope="177 n<=6 functions",
+            conclusion="MCTS adds a small but non-degrading score gain over the strengthened no-MCTS portfolio.",
+            boundary="The magnitude is incremental, not the whole resource drop.",
+        ),
+        search_row(
+            comparison="Pareto Resource-NMCTS over no-MCTS portfolio",
+            layer="Pareto search control",
+            scope="177 n<=6 functions",
+            conclusion="The Pareto archive makes the search-control gain clearer than base Resource-NMCTS alone.",
+            boundary="Ancilla tradeoffs still need separate reporting.",
+        ),
+        {
+            "layer": "learned prior",
+            "evidence_source": "traditional_resource no-prior rerun",
+            "comparison": "Learned prior for Resource-NMCTS",
+            "scope": "177 n<=6 functions",
+            "pairs": prior_score["pairs"],
+            "score_wlt": prior_score["wlt"],
+            "mean_score_change": pct(prior_score["mean_relative"]),
+            "cost_or_runtime": f"time {pct(prior_time['mean_relative'])}",
+            "supported_conclusion": "The learned scorer is a quality signal under the same functions and methods.",
+            "boundary": "It is not a runtime claim and should not be promoted as the main source of improvement.",
+            "status": "pass" if prior_score["losses"] == "0" and float(prior_score["mean_relative"]) < 0 else "needs revision",
+        },
+        search_row(
+            comparison="Highdim no-MCTS portfolio over root beam",
+            layer="high-dimensional deterministic control",
+            scope="16 n=14 ANF instances",
+            conclusion="High-dimensional gains also need strong deterministic guards, not only MCTS.",
+            boundary="This is symbolic/high-dimensional evidence, not exhaustive truth-table optimality.",
+        ),
+        {
+            "layer": "phase random control",
+            "evidence_source": "phase affine policy random-control audit",
+            "comparison": "Diverse phase shortlist top-512 vs same-budget random mean",
+            "scope": "38 held-out n=6 phase functions; eight random repeats",
+            "pairs": phase["functions"],
+            "score_wlt": f"{phase['wins']}/{phase['losses']}/{phase['ties']}",
+            "mean_score_change": pct(100.0 * float(phase["mean_relative"]), digits=3),
+            "cost_or_runtime": "512/8192 exact forms",
+            "supported_conclusion": "The phase shortlist is better than same-budget random controls on this proxy.",
+            "boundary": "This is a phase/Rz proxy control, not a bit-flip random baseline or rotation synthesis.",
+            "status": "pass" if phase["losses"] == "0" and phase["seed_means_beaten"] == phase["random_seed_means"] else "needs revision",
+        },
+    ]
+    return rows
+
+
+def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fields = [
+        "layer",
+        "evidence_source",
+        "comparison",
+        "scope",
+        "pairs",
+        "score_wlt",
+        "mean_score_change",
+        "cost_or_runtime",
+        "supported_conclusion",
+        "boundary",
+        "status",
+    ]
+    with path.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
+    counts = Counter(row["status"] for row in rows)
+    lines = [
+        "# Search-Control Baseline Audit",
+        "",
+        "This audit answers the reviewer-facing question: which search/control baselines are compared, and what does each comparison mean?",
+        "",
+        "## Status counts",
+        "",
+    ]
+    for status in sorted(counts):
+        lines.append(f"- {status}: {counts[status]}")
+    lines.extend(
+        [
+            "",
+            "| layer | comparison | scope | score W/L/T | mean score change | supported conclusion | boundary | status |",
+            "|---|---|---|---:|---:|---|---|---|",
+        ]
+    )
+    for row in rows:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    row["layer"],
+                    row["comparison"],
+                    row["scope"],
+                    row["score_wlt"],
+                    row["mean_score_change"],
+                    row["supported_conclusion"],
+                    row["boundary"],
+                    row["status"],
+                ]
+            )
+            + " |"
+        )
+    lines.extend(
+        [
+            "",
+            "## Interpretation",
+            "",
+            "- The bit-flip branch compares against heuristic-only, beam-only, no-MCTS, MCTS, Pareto, and learned-prior/no-prior controls.",
+            "- The random-control row belongs to the phase/Rz shortlist branch, where same-budget random shortlists are well defined.",
+            "- The evidence supports resource-aware search control, not a claim that reinforcement learning alone causes the full improvement.",
+        ]
+    )
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def tex_escape(text: str) -> str:
+    escaped = (
+        text.replace("\\", r"\textbackslash{}")
+        .replace("&", r"\&")
+        .replace("%", r"\%")
+        .replace("_", r"\_")
+    )
+    for token in ["n<=6", "n=14", "n=6"]:
+        escaped = escaped.replace(token, f"${token}$")
+    return escaped
+
+
+def write_latex(path: Path, rows: list[dict[str, str]]) -> None:
+    lines = [
+        r"\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}rcc>{\raggedright\arraybackslash}X}",
+        r"\toprule",
+        r"Layer & Comparison & Pairs & Score W/L/T & Mean $\Delta$ score & Claim boundary \\",
+        r"\midrule",
+    ]
+    for row in rows:
+        lines.append(
+            " & ".join(
+                [
+                    tex_escape(row["layer"]),
+                    tex_escape(row["comparison"]),
+                    row["pairs"],
+                    row["score_wlt"],
+                    row["mean_score_change"].replace("%", r"\%"),
+                    tex_escape(row["boundary"]),
+                ]
+            )
+            + r" \\"
+        )
+    lines.extend([r"\bottomrule", r"\end{tabularx}"])
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
+    counts = Counter(row["status"] for row in rows)
+    data = {
+        "script": Path(__file__).name,
+        "rows": len(rows),
+        "status_counts": dict(sorted(counts.items())),
+        "needs_revision_count": counts.get("needs revision", 0),
+        "sources": [
+            "results/summary_search_contribution.csv",
+            "results/raw_neural_prior_ablation.csv",
+            "results/summary_phase_policy_random_control.csv",
+        ],
+        "outputs": {
+            "summary": "results/summary_search_control_baseline_audit.csv",
+            "analysis": "results/analysis_search_control_baseline_audit.md",
+            "manifest": "results/manifest_search_control_baseline_audit.json",
+            "table": "paper_latex/tables/search_control_baseline_audit.tex",
+        },
+    }
+    path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def main() -> int:
+    rows = build_rows()
+    write_csv(RESULTS / "summary_search_control_baseline_audit.csv", rows)
+    write_markdown(RESULTS / "analysis_search_control_baseline_audit.md", rows)
+    write_latex(TABLES / "search_control_baseline_audit.tex", rows)
+    write_manifest(RESULTS / "manifest_search_control_baseline_audit.json", rows)
+    print(f"wrote {len(rows)} search-control baseline audit rows")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

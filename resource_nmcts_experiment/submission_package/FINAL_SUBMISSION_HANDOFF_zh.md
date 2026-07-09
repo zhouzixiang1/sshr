@@ -82,6 +82,7 @@ rg -n "needs author input|needs revision" results/analysis_submission_readiness_
 - `submission_package/artifact_reproduction_guide.md`
 - `submission_package/editor_screening_brief.md`
 - `submission_package/reviewer_concern_brief.md`
+- `results/analysis_payload_verifier_smoke_audit.md`
 - `results/analysis_submission_package_verifier.md`
 
 ## 不能改坏的论文边界

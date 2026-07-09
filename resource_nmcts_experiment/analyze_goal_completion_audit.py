@@ -145,13 +145,17 @@ def build_items() -> list[GoalItem]:
             requirement="Neural/MCTS and learned-control evidence",
             status=status_if(
                 (
+                    RESULTS / "analysis_search_control_baseline_audit.md",
+                    TABLES / "search_control_baseline_audit.tex",
                     RESULTS / "analysis_learned_control_audit.md",
                     TABLES / "learned_control_audit.tex",
                     FIGURES / "fig7_learned_control_summary.pdf",
                 )
             ),
-            evidence="Learned-control audit separates promoted frontier/gating/phase-pruning controls from limited diagnostics and reports held-out quality/time tradeoffs.",
+            evidence="Search-control and learned-control audits separate heuristic/beam/no-MCTS/MCTS/Pareto/prior comparisons, promoted frontier/gating/phase-pruning controls, and limited diagnostics.",
             evidence_files=(
+                RESULTS / "analysis_search_control_baseline_audit.md",
+                TABLES / "search_control_baseline_audit.tex",
                 RESULTS / "analysis_learned_control_audit.md",
                 TABLES / "learned_control_audit.tex",
                 FIGURES / "fig7_learned_control_summary.pdf",
