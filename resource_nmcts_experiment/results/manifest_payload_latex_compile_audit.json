@@ -22,7 +22,7 @@
       "status": "pass"
     },
     {
-      "bytes": "606528",
+      "bytes": "606524",
       "compile_seconds": "not_recorded",
       "evidence": "stdout_lines=1092; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "author payload LaTeX compile",
@@ -33,7 +33,7 @@
       "status": "pass"
     },
     {
-      "bytes": "603182",
+      "bytes": "603167",
       "compile_seconds": "not_recorded",
       "evidence": "stdout_lines=1100; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "anonymous payload LaTeX compile",
