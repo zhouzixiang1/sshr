@@ -5,8 +5,8 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 ## Status counts
 
 - complete: 25
-- unique raw files covered by registry: 149
-- unique raw CSV rows covered by registry: 63357
+- unique raw files covered by registry: 151
+- unique raw CSV rows covered by registry: 64422
 
 | evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |
 |---|---|---:|---:|---:|---|---|
@@ -21,13 +21,13 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | Novelty and comparison scorecard | quick comparison audit | 0 | 0 | 1 | complete | Quick derived audit; it strengthens reviewer-facing positioning without rerunning raw experiments. |
 | Traditional logical baselines | raw Python rerun | 5 | 4341 | 4 | complete | Python rerun; ILP-based subbaselines need Gurobi where enabled. |
 | External logical baseline extension | raw Python plus optional solvers | 3 | 2049 | 3 | complete | Python with optional Gurobi/logic-tool components; rows with skips/errors remain explicit. |
-| ROS-style LUT proxy | raw proxy rerun | 4 | 3399 | 3 | complete | Proxy-level LUT and garbage-pressure analysis only; not a full ROS SAT garbage-management rerun. |
-| ROS reproduction boundary audit | quick audit | 4 | 3399 | 4 | complete | Checks scope and evidence boundaries; it deliberately records that full official ROS is not reproduced. |
+| ROS-style LUT proxy | raw proxy rerun | 5 | 4458 | 4 | complete | Proxy-level LUT and garbage-pressure analysis only; not a full ROS SAT garbage-management rerun. |
+| ROS reproduction boundary audit | quick audit | 5 | 4458 | 5 | complete | Checks scope and evidence boundaries; it deliberately records that full official ROS is not reproduced. |
 | Published STG optimum-library counterpoint | raw Python rerun | 1 | 270 | 1 | complete | Published small-function optimum-library counterpoint; not full ROS SAT garbage management and not hardware mapping. |
 | mockturtle KLUT-to-XAG probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded mockturtle checkout/header path; still a logical proxy, not reversible mapping. |
 | CirKit AIG/MC probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded CirKit executable/commit; results are logical estimates, not hardware mapping. |
 | RevKit exact and Rz probes | external toolchain rerun | 5 | 3194 | 5 | complete | Requires RevKit CLI/API availability; Rz rows are phase/sensitivity probes, not final Clifford+T decomposition. |
-| Phase and affine FPRM branch | raw phase rerun and training | 7 | 11859 | 9 | complete | Logical phase verification up to global phase; not approximate rotation synthesis. |
+| Phase and affine FPRM branch | raw phase rerun and training | 8 | 11865 | 10 | complete | Logical phase verification up to global phase; sequence smoke is coarse and not optimal Ross--Selinger synthesis. |
 | Learned-control and ablations | training plus ablation rerun | 20 | 10883 | 17 | complete | Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only. |
 | Schedule proxy and lifetime tradeoffs | quick derived audit | 3 | 1140 | 1 | complete | Emitted-circuit logical schedule proxies only; not hardware routing, native-gate scheduling, or device execution. |
 | High-dimensional symbolic screen-scale runs | large raw rerun | 77 | 11960 | 26 | complete | Symbolic or generated-instance verification; not exhaustive truth-table enumeration for all large n. |
@@ -84,12 +84,12 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - representative raw: `results/raw_external_traditional_resource_n4.csv; results/raw_external_traditional_resource_n5.csv; results/raw_external_traditional_resource_n6.csv`
 - **ROS-style LUT proxy**
   - claim use: Tests whether the score advantage survives LUT-style oracle-synthesis proxies, line-aware reselection, and executable garbage-pressure schedules.
-  - scripts: `run_ros_lut_proxy.py; analyze_ros_lut_line_sensitivity.py; analyze_ros_lut_garbage_proxy.py`
-  - representative raw: `results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; results/raw_ros_lut_proxy_sweep.csv`
+  - scripts: `run_ros_lut_proxy.py; analyze_ros_lut_line_sensitivity.py; analyze_ros_lut_garbage_proxy.py; analyze_ros_lut_garbage_budget_frontier.py`
+  - representative raw: `results/raw_ros_lut_garbage_budget_frontier.csv; results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; +1 more`
 - **ROS reproduction boundary audit**
   - claim use: Makes the distinction between ROS-style proxy evidence and unreproduced full ROS/SAT garbage management machine-checkable.
   - scripts: `analyze_ros_reproduction_gap_audit.py`
-  - representative raw: `results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; results/raw_ros_lut_proxy_sweep.csv`
+  - representative raw: `results/raw_ros_lut_garbage_budget_frontier.csv; results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; +1 more`
 - **Published STG optimum-library counterpoint**
   - claim use: Compares the current logical methods on the public n=4/5 STG spectral-representative truth-table table and exposes the small-function optimum boundary.
   - scripts: `analyze_stg_published_benchmark.py`
@@ -108,11 +108,11 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - representative raw: `results/raw_revkit_cli_multiflow_traditional.csv; results/raw_revkit_cli_tbs_traditional.csv; results/raw_revkit_highdim_timeout_probe.csv; results/raw_revkit_oracle_synth_traditional.csv; +1 more`
 - **Phase and affine FPRM branch**
   - claim use: Checks whether the search framing extends to phase-oracle/Rz proxy objectives and affine shortlist policies.
-  - scripts: `run_phase_parity_baseline.py; run_phase_parity_affine_search.py; run_phase_parity_fprm_search.py; train_phase_affine_policy.py; analyze_phase_rotation_precision_audit.py; analyze_phase_policy_budget_frontier.py`
-  - representative raw: `results/raw_phase_affine_policy.csv; results/raw_phase_affine_policy_rank_diverse.csv; results/raw_phase_parity_affine.csv; results/raw_phase_parity_affine_wide128.csv; +3 more`
+  - scripts: `run_phase_parity_baseline.py; run_phase_parity_affine_search.py; run_phase_parity_fprm_search.py; train_phase_affine_policy.py; analyze_phase_rotation_precision_audit.py; analyze_phase_rotation_sequence_smoke_audit.py; analyze_phase_policy_budget_frontier.py`
+  - representative raw: `results/raw_phase_affine_policy.csv; results/raw_phase_affine_policy_rank_diverse.csv; results/raw_phase_parity_affine.csv; results/raw_phase_parity_affine_wide128.csv; +4 more`
 - **Learned-control and ablations**
   - claim use: Separates neural/search-control effects from deterministic algebraic construction and guarded portfolio selection.
-  - scripts: `train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; run_bitflip_random_prior_control.py; analyze_bitflip_random_prior_control.py; run_bitflip_neural_budget_sweep.py; analyze_bitflip_neural_budget_sweep.py; analyze_frontier_random_depth_control.py; analyze_phase_rotation_precision_audit.py; analyze_phase_policy_budget_frontier.py; analyze_root_action_ranker_audit.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py; analyze_neural_mcts_claim_calibration.py`
+  - scripts: `train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; run_bitflip_random_prior_control.py; analyze_bitflip_random_prior_control.py; run_bitflip_neural_budget_sweep.py; analyze_bitflip_neural_budget_sweep.py; analyze_frontier_random_depth_control.py; analyze_phase_rotation_precision_audit.py; analyze_phase_rotation_sequence_smoke_audit.py; analyze_phase_policy_budget_frontier.py; analyze_root_action_ranker_audit.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py; analyze_neural_mcts_claim_calibration.py`
   - representative raw: `results/raw_bitflip_neural_budget_sweep.csv; results/raw_bitflip_random_prior_control.csv; results/raw_highdim_neural_prior_boolean_guard.csv; results/raw_highdim_neural_prior_learned_prior.csv; +16 more`
 - **Schedule proxy and lifetime tradeoffs**
   - claim use: Checks logic-level T-depth proxy and explicit auxiliary-lifetime tradeoffs for the high-dimensional frontier controllers.

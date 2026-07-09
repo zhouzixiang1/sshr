@@ -78,6 +78,8 @@ PUBLIC_HANDOFF_MANIFEST = RESULTS / "manifest_public_handoff_freshness_audit.jso
 ROS_GAP_MANIFEST = RESULTS / "manifest_ros_reproduction_gap_audit.json"
 ROS_GARBAGE_MANIFEST = RESULTS / "manifest_ros_lut_garbage_proxy.json"
 ROS_GARBAGE_TABLE = THIS_DIR / "paper_latex" / "tables" / "ros_lut_garbage_proxy.tex"
+ROS_GARBAGE_BUDGET_MANIFEST = RESULTS / "manifest_ros_lut_garbage_budget_frontier.json"
+ROS_GARBAGE_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "ros_lut_garbage_budget_frontier.tex"
 STG_BENCHMARK_MANIFEST = RESULTS / "manifest_stg_published_benchmark.json"
 STG_BENCHMARK_TABLE = THIS_DIR / "paper_latex" / "tables" / "stg_published_benchmark.tex"
 SEARCH_BUDGET_MANIFEST = RESULTS / "manifest_search_budget_contract.json"
@@ -95,6 +97,8 @@ ROOT_ACTION_RANKER_MANIFEST = RESULTS / "manifest_root_action_ranker_audit.json"
 ROOT_ACTION_RANKER_TABLE = THIS_DIR / "paper_latex" / "tables" / "root_action_ranker_audit.tex"
 PHASE_ROTATION_PRECISION_MANIFEST = RESULTS / "manifest_phase_rotation_precision_audit.json"
 PHASE_ROTATION_PRECISION_TABLE = THIS_DIR / "paper_latex" / "tables" / "phase_rotation_precision_audit.tex"
+PHASE_ROTATION_SEQUENCE_MANIFEST = RESULTS / "manifest_phase_rotation_sequence_smoke_audit.json"
+PHASE_ROTATION_SEQUENCE_TABLE = THIS_DIR / "paper_latex" / "tables" / "phase_rotation_sequence_smoke_audit.tex"
 PHASE_POLICY_BUDGET_MANIFEST = RESULTS / "manifest_phase_policy_budget_frontier.json"
 PHASE_POLICY_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "phase_policy_budget_frontier.tex"
 NEURAL_MCTS_CLAIM_MANIFEST = RESULTS / "manifest_neural_mcts_claim_calibration.json"
@@ -452,6 +456,39 @@ def verify_ros_garbage_proxy() -> dict[str, str]:
     )
 
 
+def verify_ros_garbage_budget_frontier() -> dict[str, str]:
+    manifest = read_json(ROS_GARBAGE_BUDGET_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    raw_rows = manifest.get("raw_rows", "missing") if manifest else "missing"
+    summary_rows = manifest.get("summary_rows", "missing") if manifest else "missing"
+    frontier_rows = manifest.get("frontier_rows", "missing") if manifest else "missing"
+    functions = manifest.get("functions", "missing") if manifest else "missing"
+    budgets = manifest.get("budgets", []) if manifest else []
+    full_ros = manifest.get("official_ros_fully_reproduced", "missing") if manifest else "missing"
+    table_exists = ROS_GARBAGE_BUDGET_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and raw_rows == 1059
+        and summary_rows == 35
+        and frontier_rows == 5
+        and functions == 309
+        and full_ros is False
+        and table_exists
+        and anchor
+        else "needs revision"
+    )
+    return row(
+        "ROS-style LUT garbage budget frontier",
+        status,
+        f"raw_rows={raw_rows}; summary_rows={summary_rows}; frontier_rows={frontier_rows}; functions={functions}; budgets={budgets}; needs_revision_count={revisions}; status_counts={counts}; official_ros_fully_reproduced={full_ros}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_ros_lut_garbage_budget_frontier.py after changing ROS-style LUT garbage schedules, budget-frontier wording, or table anchors.",
+    )
+
+
 def verify_stg_benchmark() -> dict[str, str]:
     manifest = read_json(STG_BENCHMARK_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -687,6 +724,38 @@ def verify_phase_rotation_precision() -> dict[str, str]:
         status,
         f"rows={rows}; traditional_items={traditional}; policy_items={policy}; epsilons={epsilons}; critical_wide128_wlt={critical_wlt}; critical_wide128_mean_relative={critical_rel:.6g}; needs_revision_count={revisions}; table_exists={table_exists}.",
         "Run analyze_phase_rotation_precision_audit.py and restore the precision-sensitive phase/Rz cost table.",
+    )
+
+
+def verify_phase_rotation_sequence_smoke() -> dict[str, str]:
+    manifest = read_json(PHASE_ROTATION_SEQUENCE_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    rows = int(manifest.get("rows", -1)) if manifest else -1
+    smoke_pass = int(manifest.get("smoke_pass_count", -1)) if manifest else -1
+    tight_pass = int(manifest.get("tight_pass_count", -1)) if manifest else -1
+    max_error = float(manifest.get("max_achieved_error", 1.0)) if manifest else 1.0
+    denominators = set(manifest.get("target_denominators", [])) if manifest else set()
+    backend = manifest.get("backend", "missing") if manifest else "missing"
+    allowed_backend = "packaged_raw_sequence_verification" if EXTRACTED_PAYLOAD_MODE else "internal_matrix_beam"
+    table_exists = PHASE_ROTATION_SEQUENCE_TABLE.exists()
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and rows == 6
+        and smoke_pass == 6
+        and tight_pass == 2
+        and max_error <= 0.125
+        and denominators >= {8, 16, 32}
+        and backend == allowed_backend
+        and table_exists
+        else "needs revision"
+    )
+    return row(
+        "Phase rotation-sequence smoke audit",
+        status,
+        f"rows={rows}; smoke_pass_count={smoke_pass}; tight_pass_count={tight_pass}; max_achieved_error={max_error:.6g}; target_denominators={sorted(denominators)}; backend={backend}; needs_revision_count={revisions}; table_exists={table_exists}.",
+        "Run analyze_phase_rotation_sequence_smoke_audit.py and restore the source-derived Clifford+T sequence smoke table.",
     )
 
 
@@ -1292,6 +1361,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_novelty_scorecard(),
             verify_public_handoff_freshness(),
             verify_ros_garbage_proxy(),
+            verify_ros_garbage_budget_frontier(),
             verify_ros_gap(),
             verify_stg_benchmark(),
             verify_search_budget_contract(),
@@ -1302,6 +1372,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_bitflip_neural_budget(),
             verify_root_action_ranker(),
             verify_phase_rotation_precision(),
+            verify_phase_rotation_sequence_smoke(),
             verify_phase_policy_budget_frontier(),
             verify_learned_control(),
             verify_neural_mcts_claim_calibration(),

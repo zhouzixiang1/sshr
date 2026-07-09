@@ -4,18 +4,19 @@ This terminal audit extracts the reviewer/upload payload into a temporary direct
 
 ## Status counts
 
-- pass: 37
+- pass: 39
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Payload extraction | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1039; error=none. | Regenerate the payload archive if it cannot be safely extracted. |
+| Payload extraction | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1052; error=none. | Regenerate the payload archive if it cannot be safely extracted. |
 | Comparison protocol audit | pass | returncode=0; manifest=results/manifest_comparison_protocol_audit.json; needs_revision_count=0; layers=7; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Comparison target validity audit | pass | returncode=0; manifest=results/manifest_comparison_target_validity_audit.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Comparison answer scorecard | pass | returncode=0; manifest=results/manifest_comparison_answer_scorecard.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Novelty/comparison scorecard | pass | returncode=0; manifest=results/manifest_novelty_comparison_scorecard.json; needs_revision_count=0; rows=6; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Threats-to-validity audit | pass | returncode=0; manifest=results/manifest_threats_to_validity_audit.json; needs_revision_count=0; rows=7; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
-| ROS reproduction gap audit | pass | returncode=0; manifest=results/manifest_ros_reproduction_gap_audit.json; needs_revision_count=0; rows=11; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
+| ROS reproduction gap audit | pass | returncode=0; manifest=results/manifest_ros_reproduction_gap_audit.json; needs_revision_count=0; rows=12; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | ROS-style LUT garbage proxy | pass | returncode=0; manifest=results/manifest_ros_lut_garbage_proxy.json; needs_revision_count=0; raw_rows=927; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
+| ROS-style LUT garbage budget frontier | pass | returncode=0; manifest=results/manifest_ros_lut_garbage_budget_frontier.json; needs_revision_count=0; raw_rows=1059; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Published STG counterpoint | pass | returncode=0; manifest=results/manifest_stg_published_benchmark.json; needs_revision_count=0; raw_rows=270; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Schedule-proxy tradeoff audit | pass | returncode=0; manifest=results/manifest_schedule_proxy_audit.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Ultra-scale n=48--64 stress audit | pass | returncode=0; manifest=results/manifest_screen_scale_ultra_scale64_stress.json; needs_revision_count=0; raw_rows=480; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
@@ -25,6 +26,7 @@ This terminal audit extracts the reviewer/upload payload into a temporary direct
 | Bit-flip low-budget learned-prior sweep | pass | returncode=0; manifest=results/manifest_bitflip_neural_budget_sweep.json; needs_revision_count=0; raw_rows=2124; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Root-action ranker audit | pass | returncode=0; manifest=results/manifest_root_action_ranker_audit.json; needs_revision_count=0; rows=5; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Phase rotation-precision audit | pass | returncode=0; manifest=results/manifest_phase_rotation_precision_audit.json; needs_revision_count=0; rows=28; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
+| Phase rotation-sequence smoke audit | pass | returncode=0; manifest=results/manifest_phase_rotation_sequence_smoke_audit.json; needs_revision_count=0; smoke_pass_count=6; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Phase policy budget frontier | pass | returncode=0; manifest=results/manifest_phase_policy_budget_frontier.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Learned-control audit | pass | returncode=0; manifest=results/manifest_learned_control_audit.json; needs_revision_count=0; rows=9; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Neural/MCTS claim calibration | pass | returncode=0; manifest=results/manifest_neural_mcts_claim_calibration.json; needs_revision_count=0; rows=7; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |

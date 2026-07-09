@@ -96,7 +96,7 @@ def specs() -> list[TargetSpec]:
         TargetSpec(
             family="External logic-network probes",
             role="external stress test",
-            compared_against="ABC AIG/XAG/LUT, ROS-style LUT proxy, mockturtle KLUT-to-XAG, CirKit AIG/MC",
+            compared_against="ABC AIG/XAG/LUT, ROS-style LUT and garbage-budget proxy, mockturtle KLUT-to-XAG, CirKit AIG/MC",
             meaning_test="These probes test whether mature Boolean-network and LUT/XAG/AIG optimization already removes the apparent advantage.",
             required_claim_tokens=("External logic-network probes",),
             required_evidence_tokens=("ROS-style LUT proxy", "mockturtle KLUT-to-XAG probe", "CirKit AIG/MC probe"),
@@ -106,12 +106,13 @@ def specs() -> list[TargetSpec]:
             required_control_tokens=(),
             required_artifacts=(
                 RESULTS / "raw_ros_lut_proxy_best.csv",
+                RESULTS / "raw_ros_lut_garbage_budget_frontier.csv",
                 RESULTS / "raw_mockturtle_xag_probe.csv",
                 RESULTS / "raw_cirkit_aig_probe.csv",
                 RESULTS / "analysis_ros_reproduction_gap_audit.md",
             ),
             supported_statement="Secondary evidence that the score/T-count advantage survives external logical toolchain probes.",
-            invalid_statement="Not a full ROS SAT garbage-management, reversible-emission, routing, or hardware-mapped comparison.",
+            invalid_statement="Not a full ROS SAT garbage-management optimizer, reversible-emission, routing, or hardware-mapped comparison.",
         ),
         TargetSpec(
             family="Published STG optimum-library counterpoint",

@@ -178,6 +178,7 @@ def build_matrix() -> list[dict[str, str]]:
     ros_best = [RESULTS / "raw_ros_lut_proxy_best.csv"]
     ros_sweep = [RESULTS / "raw_ros_lut_proxy_sweep.csv"]
     ros_garbage = [RESULTS / "raw_ros_lut_garbage_proxy.csv"]
+    ros_garbage_budget = [RESULTS / "raw_ros_lut_garbage_budget_frontier.csv"]
     stg_published = [RESULTS / "raw_stg_published_benchmark.csv"]
     stg_summary = RESULTS / "summary_stg_published_benchmark.csv"
     mockturtle = [RESULTS / "raw_mockturtle_xag_probe.csv", RESULTS / "raw_mockturtle_xag_highdim_probe.csv"]
@@ -238,11 +239,12 @@ def build_matrix() -> list[dict[str, str]]:
     total_best, usable_best, scope = raw_count(ros_best)
     total_sweep, usable_sweep, _ = raw_count(ros_sweep)
     total_garbage, usable_garbage, _ = raw_count(ros_garbage)
+    total_garbage_budget, usable_garbage_budget, _ = raw_count(ros_garbage_budget)
     rows.append(
         {
             "evidence_block": "ROS-style LUT proxy",
             "scope": scope,
-            "verified_rows": f"{usable_best}/{total_best} best rows; {usable_sweep}/{total_sweep} K-sweep rows; {usable_garbage}/{total_garbage} garbage-proxy rows",
+            "verified_rows": f"{usable_best}/{total_best} best rows; {usable_sweep}/{total_sweep} K-sweep rows; {usable_garbage}/{total_garbage} garbage-proxy rows; {usable_garbage_budget}/{total_garbage_budget} garbage-budget rows",
             "main_result": "Pareto vs best-K proxy "
             + result_from_summary(
                 RESULTS / "summary_ros_lut_proxy.csv",
@@ -250,7 +252,7 @@ def build_matrix() -> list[dict[str, str]]:
                 "external_ros_lut_proxy",
             ),
             "boundary": "Verified LUT and executable garbage-pressure proxies only; no official ROS SAT garbage management, reversible emission, or hardware mapping.",
-            "sources": csv_join(ros_best + ros_sweep + ros_garbage),
+            "sources": csv_join(ros_best + ros_sweep + ros_garbage + ros_garbage_budget),
         }
     )
 
@@ -347,7 +349,7 @@ def build_matrix() -> list[dict[str, str]]:
                 "external_revkit_oracle_synth",
                 "score_synth_tperrz30",
             ),
-            "boundary": "Logical phase/Rz proxy verified up to global phase; not an approximate-rotation or final Clifford+T sequence.",
+            "boundary": "Logical phase/Rz proxy verified up to global phase; sequence evidence is a coarse smoke check, not optimal Clifford+T synthesis.",
             "sources": csv_join(phase),
         }
     )

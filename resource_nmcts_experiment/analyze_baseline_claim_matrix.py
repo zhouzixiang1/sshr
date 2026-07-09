@@ -26,7 +26,7 @@ ROWS = [
     },
     {
         "comparison_role": "External logic-network probes",
-        "methods": "ABC AIG/XAG/LUT, ROS-style LUT proxy, mockturtle KLUT-to-XAG, CirKit AIG/MC",
+        "methods": "ABC AIG/XAG/LUT, ROS-style LUT and garbage-budget proxy, mockturtle KLUT-to-XAG, CirKit AIG/MC",
         "why_it_matters": "They test whether mature Boolean-network optimization already removes the apparent advantage over direct algebraic baselines.",
         "supported_claim": "The score advantage persists against stronger exported-network and official-header tool probes.",
         "excluded_claim": "Does not reproduce full ROS SAT garbage management or reversible/hardware mapping.",
@@ -43,7 +43,7 @@ ROWS = [
         "methods": "RevKit oracle_synth, phase-parity ANF, fixed-polarity FPRM, affine FPRM, learned phase shortlist",
         "why_it_matters": "It tests whether the same search framing extends to phase-oracle and affine-preconditioned Rz cost proxies.",
         "supported_claim": "Affine and learned candidate pruning improve verified logical phase/Rz proxy objectives.",
-        "excluded_claim": "Does not output approximate rotation sequences or a final Clifford+T decomposition.",
+        "excluded_claim": "Not a final Clifford+T decomposition; only a coarse sequence-smoke audit emits bounded single-qubit strings.",
     },
     {
         "comparison_role": "Internal search ablations",

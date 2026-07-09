@@ -8,18 +8,18 @@ This terminal audit checks that the public handoff documents expose the current 
 
 ## Current snapshot tokens
 
-- `PDF pages=41/41`
-- `readiness=66 pass + 1 needs author input`
-- `payload_files=1039`
-- `artifact_registry=25 families / 149 raw CSV / 63357 raw rows`
-- `source_privacy=0 strict leaks / 55 provenance files / 996 payload text files`
+- `PDF pages=42/42`
+- `readiness=67 pass + 1 needs author input`
+- `payload_files=1052`
+- `artifact_registry=25 families / 151 raw CSV / 64422 raw rows`
+- `source_privacy=0 strict leaks / 55 provenance files / 1009 payload text files`
 - `comparison_validity=8/8 pass`
 - `novelty_scorecard=6/6 pass`
 - `goal_gate=author/venue metadata remains open`
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Current audit outputs are readable | pass | missing_files=none; snapshot={'author_pages': 41, 'anonymous_pages': 41, 'readiness_pass': 66, 'readiness_author_input': 1, 'payload_files': 1039, 'registry_families': 25, 'raw_files': 149, 'raw_rows': 63357, 'strict_local_path_leaks': 0, 'payload_text_files': 996, 'provenance_local_path_files': 55, 'comparison_pass': 8, 'comparison_rows': 8, 'comparison_needs_revision': 0, 'novelty_pass': 6, 'novelty_rows': 6, 'novelty_needs_revision': 0}. | Regenerate the terminal audits before refreshing public handoff docs. |
+| Current audit outputs are readable | pass | missing_files=none; snapshot={'author_pages': 42, 'anonymous_pages': 42, 'readiness_pass': 67, 'readiness_author_input': 1, 'payload_files': 1052, 'registry_families': 25, 'raw_files': 151, 'raw_rows': 64422, 'strict_local_path_leaks': 0, 'payload_text_files': 1009, 'provenance_local_path_files': 55, 'comparison_pass': 8, 'comparison_rows': 8, 'comparison_needs_revision': 0, 'novelty_pass': 6, 'novelty_rows': 6, 'novelty_needs_revision': 0}. | Regenerate the terminal audits before refreshing public handoff docs. |
 | Deliverable current snapshot | pass | file=DELIVERABLE_zh.md; missing_tokens=none. | Refresh the public current-snapshot block from generated audit outputs. |
 | Final handoff current snapshot | pass | file=submission_package/FINAL_SUBMISSION_HANDOFF_zh.md; missing_tokens=none. | Refresh the public current-snapshot block from generated audit outputs. |
 | Submission checklist current snapshot | pass | file=submission_package/submission_checklist.md; missing_tokens=none. | Refresh the public current-snapshot block from generated audit outputs. |

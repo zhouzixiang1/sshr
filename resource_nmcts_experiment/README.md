@@ -535,7 +535,10 @@ over fixed-polarity FPRM by 81/0/96 with mean score -2.51%, over phase-parity
 ANF by 85/0/92 with mean score -2.98%, and over RevKit by 177/0/0 with mean
 score -65.50%.  This moves the phase/Rz branch from polarity-only search to
 affine algebraic preconditioning, while remaining a logic-layer phase-oracle
-emitter with no approximate rotation sequences or hardware mapping.
+emitter rather than a final Clifford+T compiler.  The separate
+`analyze_phase_rotation_sequence_smoke_audit.py` script adds only a coarse
+single-qubit sequence smoke check for representative Rz angles; it is not
+hardware mapping or optimal rotation synthesis.
 
 Current presets:
 

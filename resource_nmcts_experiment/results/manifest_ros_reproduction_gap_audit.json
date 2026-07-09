@@ -2,7 +2,7 @@
   "coverage_counts": {
     "covered": 5,
     "not reproduced": 2,
-    "partial": 4
+    "partial": 5
   },
   "full_ros_boundary_is_explicit": true,
   "needs_revision_count": 0,
@@ -14,7 +14,7 @@
     "table": "paper_latex/tables/ros_reproduction_gap_audit.tex"
   },
   "python": "3.11.15",
-  "rows": 11,
+  "rows": 12,
   "rows_detail": [
     {
       "audit_status": "pass",
@@ -70,6 +70,17 @@
       "next_reproduction_step": "Replace the proxy with the official SAT garbage-management formulation if executable ROS artifacts or a faithful reimplementation become available.",
       "official_requirement": "Full ROS uses a dedicated SAT garbage-management stage to trade lines against operations after LUT decomposition.",
       "supported_claim": "The paper can report an executable garbage-pressure proxy showing the line-operation trade-off over verified LUT DAGs."
+    },
+    {
+      "audit_status": "pass",
+      "coverage_status": "partial",
+      "current_coverage": "The budget-frontier audit selects the lowest-score feasible schedule among keep-all, fanout-checkpoint, and zero-checkpoint policies under keep100, line75, line50, line25, and minline peak-ancilla budgets.",
+      "evidence": "files_missing=none; tokens=5/5; missing_tokens=none; csv=results/raw_ros_lut_garbage_budget_frontier.csv rows=1059/1059; json=results/manifest_ros_lut_garbage_budget_frontier.json::raw_rows=1059; results/manifest_ros_lut_garbage_budget_frontier.json::frontier_rows=5; results/manifest_ros_lut_garbage_budget_frontier.json::functions=309; results/manifest_ros_lut_garbage_budget_frontier.json::official_ros_fully_reproduced=False",
+      "excluded_claim": "This frontier is not an official ROS SAT optimization, reversible-emission, routing, or hardware-mapped result.",
+      "item": "Executable LUT garbage budget frontier",
+      "next_reproduction_step": "Replace the schedule portfolio with the official SAT garbage-management optimizer if executable ROS artifacts or a faithful reimplementation become available.",
+      "official_requirement": "A ROS-facing garbage-management comparison should expose line/operation trade-offs across feasible auxiliary-line budgets, not just isolated schedules.",
+      "supported_claim": "The paper can report a budgeted LUT garbage-pressure frontier over verified DAGs."
     },
     {
       "audit_status": "pass",
@@ -140,6 +151,6 @@
   ],
   "script": "analyze_ros_reproduction_gap_audit.py",
   "status_counts": {
-    "pass": 11
+    "pass": 12
   }
 }

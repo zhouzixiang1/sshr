@@ -147,7 +147,7 @@ def build_rows() -> list[dict[str, str]]:
         },
         {
             "reviewer_question": "Does the advantage survive external logic synthesis?",
-            "comparison_target": "ROS-style LUT, mockturtle XAG, CirKit AIG/MC",
+            "comparison_target": "ROS-style LUT/garbage-budget, mockturtle XAG, CirKit AIG/MC",
             "role": "external logical-toolchain stress test",
             "verified_evidence": verified(
                 "ROS-style LUT proxy",
@@ -163,7 +163,7 @@ def build_rows() -> list[dict[str, str]]:
                 + paired("CirKit AIG/MC n<=6")
             ),
             "usable_claim": "The score/T-count advantage is not an artifact of comparing only against local hand-written baselines.",
-            "excluded_claim": "Not a full ROS SAT garbage-management, reversible-emission, routing, or hardware-mapped comparison.",
+            "excluded_claim": "Not a full ROS SAT garbage-management optimizer, reversible-emission, routing, or hardware-mapped comparison.",
             "sources": "summary_comparison_evidence_matrix.csv; summary_paired_statistical_evidence.csv",
         },
         {

@@ -20,11 +20,11 @@
 
 以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，用于防止交付说明和机器审计结果漂移：
 
-- PDF pages=41/41
-- readiness=66 pass + 1 needs author input
-- payload_files=1039
-- artifact_registry=25 families / 149 raw CSV / 63357 raw rows
-- source_privacy=0 strict leaks / 55 provenance files / 996 payload text files
+- PDF pages=42/42
+- readiness=67 pass + 1 needs author input
+- payload_files=1052
+- artifact_registry=25 families / 151 raw CSV / 64422 raw rows
+- source_privacy=0 strict leaks / 55 provenance files / 1009 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open
@@ -169,6 +169,17 @@
 - `paper_latex/tables/comparison_answer_scorecard.tex`
 
 该表已接入英文投稿稿 Experimental Design，并被 rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke 和 artifact rerun registry 覆盖。它按八个 reviewer question 汇总对比目标、验证行数、headline outcome 和 excluded claim：同任务 direct/ESOP/ABC/BDD/SSHR 对比、SSHR 是否为唯一对比目标、外部 ROS-style/mockturtle/CirKit probe、published STG 小函数最优库反例、RevKit exact/phase proxy、AI/MCTS search-control、`n=20--64` scaling/bridge、以及 weighted-score 是否隐藏 trade-off。当前 8/8 行 pass；核心答案是本文的主对比是 same-task Boolean-oracle resource baselines，SSHR 是 CNOT-oriented counterpoint，published STG optimum 是诚实的 non-win boundary，外部工具链是 logical stress test，AI/MCTS 消融是因果控制，不能把任一行写成硬件映射或全指标支配。
+
+本轮新增 ROS-style LUT garbage budget frontier，把已有 3 种 executable garbage schedule 从单点 proxy 扩展成辅助线预算前沿：
+
+- `analyze_ros_lut_garbage_budget_frontier.py`
+- `results/raw_ros_lut_garbage_budget_frontier.csv`
+- `results/summary_ros_lut_garbage_budget_frontier.csv`
+- `results/analysis_ros_lut_garbage_budget_frontier.md`
+- `results/manifest_ros_lut_garbage_budget_frontier.json`
+- `paper_latex/tables/ros_lut_garbage_budget_frontier.tex`
+
+该审计在同一批 truth-table verified best-K LUT DAG 上，对 keep100、line75、line50、line25 和 minline 五种 peak-ancilla 预算逐函数选择 keep-all Bennett、fanout-checkpoint、zero-checkpoint 中 score 最低的可行 schedule。当前生成 1059 行预算前沿、覆盖 309 个函数；keep100 和 minline 均覆盖 309/309，minline 平均 peak ancilla 降低 45.41%，但 mean log10(score+1) 相对 keep-all 增加 +2.61。Pareto-Resource-NMCTS 相对 keep100 和 minline 均为 309/0/0 score 胜出，相对 minline peak ancilla 为 303/0/6。它已接入 author/anonymous/ACM 三套英文稿、rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke、traceability、artifact rerun registry 和 ROS reproduction gap audit；边界仍是 ROS-style proxy，不是官方 ROS SAT garbage-management optimizer。
 
 本轮进一步补充了 paired statistical evidence 层，避免论文只依赖均值叙述：
 
@@ -2159,6 +2170,7 @@ Git 状态：
 | schedule proxy | 96 个 n=24/28/32/40 项集 + 30 个 n=21/22/23 bridge/rerun 函数 | frontier policy vs depth-2：项集 T-depth proxy 40/0/56、-1.85%，large n=23 vs old policy 为 1/0/5、-0.45% T-depth proxy；cost n=23 vs large 为 time -56.29%、lifetime -12.62% | 新增逻辑层后端相关指标，非硬件 mapping |
 | ROS-style LUT proxy | 309 个 n=3..6/14/15/16/18 函数 | 927/927 K-sweep truth-table 检查通过；best-K vs fixed K=4 为 219/0/90、-18.12%；Resource vs proxy 为 309/0/0、-83.77% | 新增更强 LUT proxy，但不是官方 ROS 复现 |
 | ROS-style LUT line-sensitivity | 同上 309 个函数 | min-ancilla selector vs best-score proxy：peak ancilla -32.47% 但 score +40.67%；Pareto vs min-ancilla/line-weighted/K4-line-cap selectors score 均为 309/0/0，-84.45% 到 -85.83% | 新增辅助线压力稳健性证据，仍不是官方 ROS |
+| ROS-style LUT garbage budget frontier | 同上 309 个函数，1059 行预算前沿 | keep100/minline 均覆盖 309/309；minline peak ancilla -45.41%，mean log10(score+1) shift +2.61；Pareto vs keep100/minline score 均为 309/0/0，vs minline peak ancilla 为 303/0/6 | 新增 executable garbage schedule 预算前沿，仍不是官方 ROS SAT garbage-management optimizer |
 | CirKit 3 shell AIG/MC probe | n<=6 traditional 177 个函数 + n=14 highdim 64 个函数 | 传统 177/177、n=14 64/64 Verilog readback truth-table 验证通过；Pareto vs CirKit score 分别为 177/0/0、-62.34% 和 64/0/0、-94.46%；depth 多数输给 CirKit | 新增官方 CirKit shell probe，但不是 legacy RevKit/ROS |
 | RevKit CLI exact-oracle portfolio | n<=6 traditional 177 个函数 | TBS/DBS/RMS 三流 531/531 usable；best-score portfolio 下 Pareto vs RevKit score 为 173/0/4、-67.28%，T 为 173/0/4、-72.59%，peak ancilla 为 0/169/8、+153.11% | 新增 legacy reversible-synthesis CLI probe，但不是 ROS 或硬件 mapping |
 | Affine-FPRM phase search | n<=6 traditional, 177 个函数 | 531/531 selected rows up-to-global-phase 验证通过；`T/Rz=30` vs fixed-polarity FPRM 为 81/0/96、-2.51%；vs phase-parity ANF 为 85/0/92、-2.98%；vs RevKit 为 177/0/0、-65.50% | 当前最强 phase/Rz 搜索证据，仍非旋转序列级综合 |

@@ -114,6 +114,10 @@ ROS_GARBAGE_ANALYSIS = RESULTS / "analysis_ros_lut_garbage_proxy.md"
 ROS_GARBAGE_SUMMARY = RESULTS / "summary_ros_lut_garbage_proxy.csv"
 ROS_GARBAGE_MANIFEST = RESULTS / "manifest_ros_lut_garbage_proxy.json"
 ROS_GARBAGE_TABLE = THIS_DIR / "paper_latex" / "tables" / "ros_lut_garbage_proxy.tex"
+ROS_GARBAGE_BUDGET_ANALYSIS = RESULTS / "analysis_ros_lut_garbage_budget_frontier.md"
+ROS_GARBAGE_BUDGET_SUMMARY = RESULTS / "summary_ros_lut_garbage_budget_frontier.csv"
+ROS_GARBAGE_BUDGET_MANIFEST = RESULTS / "manifest_ros_lut_garbage_budget_frontier.json"
+ROS_GARBAGE_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "ros_lut_garbage_budget_frontier.tex"
 STG_BENCHMARK_ANALYSIS = RESULTS / "analysis_stg_published_benchmark.md"
 STG_BENCHMARK_SUMMARY = RESULTS / "summary_stg_published_benchmark.csv"
 STG_BENCHMARK_MANIFEST = RESULTS / "manifest_stg_published_benchmark.json"
@@ -348,6 +352,14 @@ def build_rows() -> list[dict[str, str]]:
     ros_garbage_raw_rows = ros_garbage_manifest.get("raw_rows", "missing") if ros_garbage_manifest else "missing"
     ros_garbage_functions = ros_garbage_manifest.get("functions", "missing") if ros_garbage_manifest else "missing"
     ros_garbage_anchor = bool(ros_garbage_manifest.get("table_anchor_present", False)) if ros_garbage_manifest else False
+    ros_garbage_budget_manifest = read_json(ROS_GARBAGE_BUDGET_MANIFEST)
+    ros_garbage_budget_revisions = int(ros_garbage_budget_manifest.get("needs_revision_count", -1)) if ros_garbage_budget_manifest else -1
+    ros_garbage_budget_counts = ros_garbage_budget_manifest.get("status_counts", {}) if ros_garbage_budget_manifest else {}
+    ros_garbage_budget_raw_rows = ros_garbage_budget_manifest.get("raw_rows", "missing") if ros_garbage_budget_manifest else "missing"
+    ros_garbage_budget_summary_rows = ros_garbage_budget_manifest.get("summary_rows", "missing") if ros_garbage_budget_manifest else "missing"
+    ros_garbage_budget_functions = ros_garbage_budget_manifest.get("functions", "missing") if ros_garbage_budget_manifest else "missing"
+    ros_garbage_budget_frontier_rows = ros_garbage_budget_manifest.get("frontier_rows", "missing") if ros_garbage_budget_manifest else "missing"
+    ros_garbage_budget_anchor = bool(ros_garbage_budget_manifest.get("table_anchor_present", False)) if ros_garbage_budget_manifest else False
     stg_manifest = read_json(STG_BENCHMARK_MANIFEST)
     stg_revisions = int(stg_manifest.get("needs_revision_count", -1)) if stg_manifest else -1
     stg_counts = stg_manifest.get("status_counts", {}) if stg_manifest else {}
@@ -808,6 +820,24 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"ROS-style garbage proxy re-runs verified best-K LUT DAGs under keep-all, fanout-checkpoint, and zero-checkpoint policies; raw_rows={ros_garbage_raw_rows}; functions={ros_garbage_functions}; status_counts={ros_garbage_counts}; needs_revision_count={ros_garbage_revisions}; table_anchor_present={ros_garbage_anchor}.",
             "next_action": "Rerun analyze_ros_lut_garbage_proxy.py after changing ROS-style LUT best-K rows, table anchors, or garbage-management wording.",
+        },
+        {
+            "item": "ROS-style LUT garbage budget frontier",
+            "status": "pass"
+            if "tab:ros-garbage-budget-frontier" in text
+            and ROS_GARBAGE_BUDGET_ANALYSIS.exists()
+            and ROS_GARBAGE_BUDGET_SUMMARY.exists()
+            and ROS_GARBAGE_BUDGET_MANIFEST.exists()
+            and ROS_GARBAGE_BUDGET_TABLE.exists()
+            and ros_garbage_budget_revisions == 0
+            and ros_garbage_budget_raw_rows == 1059
+            and ros_garbage_budget_summary_rows == 35
+            and ros_garbage_budget_functions == 309
+            and ros_garbage_budget_frontier_rows == 5
+            and ros_garbage_budget_anchor
+            else "needs revision",
+            "evidence": f"ROS-style garbage budget frontier selects executable proxy schedules under relative line budgets; raw_rows={ros_garbage_budget_raw_rows}; summary_rows={ros_garbage_budget_summary_rows}; frontier_rows={ros_garbage_budget_frontier_rows}; functions={ros_garbage_budget_functions}; status_counts={ros_garbage_budget_counts}; needs_revision_count={ros_garbage_budget_revisions}; table_anchor_present={ros_garbage_budget_anchor}.",
+            "next_action": "Rerun analyze_ros_lut_garbage_budget_frontier.py after changing ROS-style LUT garbage schedules, budget-frontier wording, or table anchors.",
         },
         {
             "item": "Published STG counterpoint",

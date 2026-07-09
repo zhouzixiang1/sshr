@@ -42,8 +42,8 @@ ROWS = [
     {
         "baseline_family": "ROS-style LUT, mockturtle, and CirKit probes",
         "task_alignment": "Same benchmark functions are passed through LUT/XAG/AIG toolchain probes and verified after export/readback when available.",
-        "fairness_control": "The LUT proxy includes best-K and line-aware reselection; mockturtle and CirKit use official toolchain paths and row-level correctness checks.",
-        "residual_risk": "These are not full ROS SAT garbage-management or hardware-mapped reversible flows.",
+        "fairness_control": "The LUT proxy includes best-K, line-aware reselection, and an executable garbage-budget frontier; mockturtle and CirKit use official toolchain paths and row-level correctness checks.",
+        "residual_risk": "These are not full ROS SAT garbage-management optimizers or hardware-mapped reversible flows.",
         "usable_claim": "The advantage persists beyond self-written baselines, with CirKit exposing a real depth tradeoff.",
     },
     {

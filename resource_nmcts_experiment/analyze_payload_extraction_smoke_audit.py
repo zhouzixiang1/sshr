@@ -103,6 +103,15 @@ SMOKE_SPECS = (
         minimum_rows=927,
     ),
     SmokeSpec(
+        name="ROS-style LUT garbage budget frontier",
+        script="analyze_ros_lut_garbage_budget_frontier.py",
+        manifest="results/manifest_ros_lut_garbage_budget_frontier.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="raw_rows",
+        minimum_rows=1059,
+    ),
+    SmokeSpec(
         name="Published STG counterpoint",
         script="analyze_stg_published_benchmark.py",
         manifest="results/manifest_stg_published_benchmark.json",
@@ -182,6 +191,15 @@ SMOKE_SPECS = (
         expected_value=0,
         minimum_rows_key="rows",
         minimum_rows=28,
+    ),
+    SmokeSpec(
+        name="Phase rotation-sequence smoke audit",
+        script="analyze_phase_rotation_sequence_smoke_audit.py",
+        manifest="results/manifest_phase_rotation_sequence_smoke_audit.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="smoke_pass_count",
+        minimum_rows=6,
     ),
     SmokeSpec(
         name="Phase policy budget frontier",

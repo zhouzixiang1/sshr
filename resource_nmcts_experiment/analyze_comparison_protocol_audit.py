@@ -123,8 +123,8 @@ def spec_rows() -> list[ProtocolSpec]:
                 RESULTS / "raw_phase_affine_policy_rank_diverse.csv",
                 RESULTS / "analysis_rz_synthesis_cost.md",
             ),
-            manuscript_tokens=("phase/Rz", "global phase", "does not output approximate rotation sequences"),
-            usable_conclusion="The phase branch supports a logical Rz/phase proxy and learned affine shortlist result.",
+            manuscript_tokens=("phase/Rz", "global phase", "coarse sequence"),
+            usable_conclusion="The phase branch supports a logical Rz/phase proxy, learned affine shortlist result, and bounded sequence-smoke check.",
             excluded_conclusion="It is not a final approximate-rotation sequence or Clifford+T decomposition.",
         ),
         ProtocolSpec(

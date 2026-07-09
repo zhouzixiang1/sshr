@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1039; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1052; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -45,7 +45,7 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_ros_reproduction_gap_audit.json; needs_revision_count=0; rows=11; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_ros_reproduction_gap_audit.json; needs_revision_count=0; rows=12; stderr=none",
       "item": "ROS reproduction gap audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -53,6 +53,12 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_ros_lut_garbage_proxy.json; needs_revision_count=0; raw_rows=927; stderr=none",
       "item": "ROS-style LUT garbage proxy",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_ros_lut_garbage_budget_frontier.json; needs_revision_count=0; raw_rows=1059; stderr=none",
+      "item": "ROS-style LUT garbage budget frontier",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -107,6 +113,12 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_phase_rotation_precision_audit.json; needs_revision_count=0; rows=28; stderr=none",
       "item": "Phase rotation-precision audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_phase_rotation_sequence_smoke_audit.json; needs_revision_count=0; smoke_pass_count=6; stderr=none",
+      "item": "Phase rotation-sequence smoke audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -284,6 +296,13 @@
     },
     {
       "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_ros_lut_garbage_budget_frontier.json",
+      "minimum_rows_key": "raw_rows",
+      "name": "ROS-style LUT garbage budget frontier",
+      "script": "analyze_ros_lut_garbage_budget_frontier.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
       "manifest": "results/manifest_stg_published_benchmark.json",
       "minimum_rows_key": "raw_rows",
       "name": "Published STG counterpoint",
@@ -344,6 +363,13 @@
       "minimum_rows_key": "rows",
       "name": "Phase rotation-precision audit",
       "script": "analyze_phase_rotation_precision_audit.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_phase_rotation_sequence_smoke_audit.json",
+      "minimum_rows_key": "smoke_pass_count",
+      "name": "Phase rotation-sequence smoke audit",
+      "script": "analyze_phase_rotation_sequence_smoke_audit.py"
     },
     {
       "expected_key": "needs_revision_count",
@@ -487,6 +513,6 @@
     }
   ],
   "status_counts": {
-    "pass": 37
+    "pass": 39
   }
 }

@@ -1,0 +1,54 @@
+{
+  "backend": "internal_matrix_beam",
+  "beam_width": 2500,
+  "boundary": "Coarse internal sequence smoke only; not Ross-Selinger gridsynth, optimal T-count synthesis, hardware mapping, routing, or native-gate scheduling.",
+  "gate_set": [
+    "H",
+    "S",
+    "Sd",
+    "T",
+    "Td",
+    "X",
+    "Z"
+  ],
+  "max_achieved_error": 0.11185337158122222,
+  "max_sequence_length": 24,
+  "mean_achieved_error": 0.0719840267678534,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_phase_rotation_sequence_smoke_audit.md",
+    "manifest": "results/manifest_phase_rotation_sequence_smoke_audit.json",
+    "raw": "results/raw_phase_rotation_sequence_smoke_audit.csv",
+    "summary": "results/summary_phase_rotation_sequence_smoke_audit.csv",
+    "table": "paper_latex/tables/phase_rotation_sequence_smoke_audit.tex"
+  },
+  "phase_reconstruction_import_error": "",
+  "python": "3.11.15",
+  "rows": 6,
+  "script": "analyze_phase_rotation_sequence_smoke_audit.py",
+  "smoke_epsilon": 0.125,
+  "smoke_pass_count": 6,
+  "sources": [
+    "results/raw_phase_parity_affine.csv",
+    "results/raw_phase_parity_affine_wide128.csv",
+    "results/raw_phase_affine_policy_rank_diverse.csv"
+  ],
+  "status_counts": {
+    "pass": 6
+  },
+  "target_angles": [
+    "1/8",
+    "3/8",
+    "3/16",
+    "5/16",
+    "1/32",
+    "57/32"
+  ],
+  "target_denominators": [
+    8,
+    16,
+    32
+  ],
+  "tight_epsilon": 0.05,
+  "tight_pass_count": 2
+}

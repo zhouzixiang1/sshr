@@ -370,7 +370,9 @@ sensitivity, we also implement a phase-parity emitter: each \anf{} monomial is
 expanded into merged parity-phase gadgets and verified up to global phase.
 Fixed-polarity \fprm{} search and bounded affine preconditioning are then added
 as phase-search actions.  This branch is reported as a logical phase/Rz proxy;
-it does not output approximate rotation sequences or mapped hardware circuits.
+it is not a final Clifford+T compiler or mapped hardware circuit, although a
+separate coarse sequence-smoke audit checks representative single-qubit
+rotations.
 
 \section{Experimental Design}
 
@@ -665,6 +667,26 @@ DAGs.  Logarithms are row-wise means over 309 functions; lower peak ancilla is
 reported together with the operation blow-up.}
 \label{tab:ros-garbage}
 \input{tables/ros_lut_garbage_proxy}
+\end{table}
+
+Finally, we convert the same three executable garbage schedules into a
+budget-frontier view.  For each verified LUT DAG and each relative line budget,
+we select the lowest-score feasible schedule among keep-all, fanout checkpoint,
+and zero checkpoint.  The keep100 and minline frontiers both cover all 309
+functions; minline reduces mean peak ancilla by 45.4\% but shifts the mean
+logarithmic score by +2.61.  Pareto-\method{} still obtains 309/0/0 score wins
+against both keep100 and minline, and 303/0/6 peak-ancilla wins/ties against
+minline.  This table is a ROS-facing garbage-budget stress test, not an
+implementation of the official ROS SAT garbage-management optimizer.
+
+\begin{table}[H]
+\centering
+\small
+\caption{ROS-style LUT garbage budget frontier over verified best-K LUT DAGs.
+The frontier selects among executable proxy schedules under relative
+peak-ancilla budgets; it is not the official ROS SAT garbage-management flow.}
+\label{tab:ros-garbage-budget-frontier}
+\input{tables/ros_lut_garbage_budget_frontier}
 \end{table}
 
 The public STG benchmark suite is a different, deliberately stronger
@@ -1182,7 +1204,19 @@ $\epsilon=10^{-6}$, Affine-128 remains 177/0/0 against RevKit
 \texttt{oracle\_synth} with a 66.12\% mean score reduction; diverse top-512
 remains 17/0/21 against budget-32 with a 2.38\% mean score reduction and stays
 within 0.002\% of wide-128.  This is a stronger sensitivity check than a single
-constant proxy, but it still does not output approximate rotation sequences.
+constant proxy, but it is still a cost model rather than a high-precision
+rotation-synthesis result.  To make this boundary executable rather than only
+verbal, Table~\ref{tab:phase-rotation-sequence-smoke} extracts six
+non-Clifford \rz{} angles that occur in the verified affine phase spectra and
+runs a bounded internal matrix beam search over
+$\{H,S,S^\dagger,T,T^\dagger,X,Z\}$.  The emitted strings are checked with the
+global-phase-invariant error
+$\sqrt{1-\lvert\mathrm{Tr}(U_{\mathrm{seq}}^\dagger U_{\mathrm{target}})\rvert/2}$.
+All six source-derived targets pass a coarse
+$\epsilon_{\mathrm{smoke}}=0.125$ sequence test, while two pass
+$\epsilon=0.05$.  This closes part of the Rz evidence gap, but the bounded beam
+is not Ross--Selinger gridsynth, does not certify optimal T count, and is not
+used for the headline resource claims.
 
 \begin{table}[H]
 \centering
@@ -1215,6 +1249,20 @@ target method.  This table is a sensitivity model, not rotation-sequence
 synthesis.}
 \label{tab:phase-rotation-precision}
 \input{tables/phase_rotation_precision_audit}
+\end{table}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Source-derived Clifford+T rotation-sequence smoke audit.  Support is
+the number of occurrences of the target angle in the verified affine phase
+spectra inspected by the audit.  Error is measured up to global phase for the
+emitted one-qubit sequence.  These rows demonstrate coarse sequence
+availability only; they are not optimal rotation synthesis.}
+\label{tab:phase-rotation-sequence-smoke}
+\input{tables/phase_rotation_sequence_smoke_audit}
 \end{table}
 
 \begin{table}[H]

@@ -38,6 +38,11 @@ ROS_GARBAGE_SUMMARY = RESULTS / "summary_ros_lut_garbage_proxy.csv"
 ROS_GARBAGE_MANIFEST = RESULTS / "manifest_ros_lut_garbage_proxy.json"
 ROS_GARBAGE_RAW = RESULTS / "raw_ros_lut_garbage_proxy.csv"
 ROS_GARBAGE_TABLE = TABLES / "ros_lut_garbage_proxy.tex"
+ROS_GARBAGE_BUDGET_ANALYSIS = RESULTS / "analysis_ros_lut_garbage_budget_frontier.md"
+ROS_GARBAGE_BUDGET_SUMMARY = RESULTS / "summary_ros_lut_garbage_budget_frontier.csv"
+ROS_GARBAGE_BUDGET_MANIFEST = RESULTS / "manifest_ros_lut_garbage_budget_frontier.json"
+ROS_GARBAGE_BUDGET_RAW = RESULTS / "raw_ros_lut_garbage_budget_frontier.csv"
+ROS_GARBAGE_BUDGET_TABLE = TABLES / "ros_lut_garbage_budget_frontier.tex"
 STG_ANALYSIS = RESULTS / "analysis_stg_published_benchmark.md"
 STG_SUMMARY = RESULTS / "summary_stg_published_benchmark.csv"
 STG_MANIFEST = RESULTS / "manifest_stg_published_benchmark.json"
@@ -237,6 +242,24 @@ def specs() -> list[RosSpec]:
             supported_claim="The paper can report an executable garbage-pressure proxy showing the line-operation trade-off over verified LUT DAGs.",
             excluded_claim="This is still not the official ROS SAT garbage-management algorithm or a reproduced full ROS compiler flow.",
             next_reproduction_step="Replace the proxy with the official SAT garbage-management formulation if executable ROS artifacts or a faithful reimplementation become available.",
+        ),
+        RosSpec(
+            item="Executable LUT garbage budget frontier",
+            coverage_status="partial",
+            official_requirement="A ROS-facing garbage-management comparison should expose line/operation trade-offs across feasible auxiliary-line budgets, not just isolated schedules.",
+            current_coverage="The budget-frontier audit selects the lowest-score feasible schedule among keep-all, fanout-checkpoint, and zero-checkpoint policies under keep100, line75, line50, line25, and minline peak-ancilla budgets.",
+            files=(ROS_GARBAGE_BUDGET_ANALYSIS, ROS_GARBAGE_BUDGET_SUMMARY, ROS_GARBAGE_BUDGET_MANIFEST, ROS_GARBAGE_BUDGET_RAW, ROS_GARBAGE_BUDGET_TABLE, PAPER),
+            tokens=("budget frontier", "keep100", "minline", "tab:ros-garbage-budget-frontier", "not the official ROS SAT garbage-management"),
+            csv_expectations=(CsvExpectation(ROS_GARBAGE_BUDGET_RAW, 1059),),
+            json_expectations=(
+                JsonExpectation(ROS_GARBAGE_BUDGET_MANIFEST, "raw_rows", 1059),
+                JsonExpectation(ROS_GARBAGE_BUDGET_MANIFEST, "frontier_rows", 5),
+                JsonExpectation(ROS_GARBAGE_BUDGET_MANIFEST, "functions", 309),
+                JsonExpectation(ROS_GARBAGE_BUDGET_MANIFEST, "official_ros_fully_reproduced", False),
+            ),
+            supported_claim="The paper can report a budgeted LUT garbage-pressure frontier over verified DAGs.",
+            excluded_claim="This frontier is not an official ROS SAT optimization, reversible-emission, routing, or hardware-mapped result.",
+            next_reproduction_step="Replace the schedule portfolio with the official SAT garbage-management optimizer if executable ROS artifacts or a faithful reimplementation become available.",
         ),
         RosSpec(
             item="Published STG optimum-library counterpoint",

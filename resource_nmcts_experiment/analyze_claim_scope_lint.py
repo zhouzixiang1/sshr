@@ -56,8 +56,8 @@ REQUIRED_BOUNDARIES = [
     },
     {
         "item": "phase/Rz branch bounded",
-        "needles": ["phase/Rz", "not a final Clifford+T", "does not output approximate rotation sequences"],
-        "evidence": "The phase/Rz branch is framed as a logical proxy rather than a final Clifford+T compiler.",
+        "needles": ["phase/Rz", "not a final Clifford+T", "coarse sequence"],
+        "evidence": "The phase/Rz branch is framed as a logical proxy with only a bounded sequence-smoke audit, not a final Clifford+T compiler.",
     },
 ]
 

@@ -1,0 +1,17 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.15\linewidth}rrr>{\raggedright\arraybackslash}X}
+\toprule
+Budget & Functions & Peak cut & log$_{10}$ score shift & Selected policies \\
+\midrule
+keep100 & 309 & +0.0\% & +0.00 & fanout\_checkpoint:92; keep\_all\_bennett:217 \\
+line75 & 173 & +71.5\% & +4.38 & fanout\_checkpoint:173 \\
+line50 & 142 & +79.9\% & +5.23 & fanout\_checkpoint:138; zero\_checkpoint:4 \\
+line25 & 126 & +84.2\% & +5.83 & fanout\_checkpoint:118; zero\_checkpoint:8 \\
+minline & 309 & +45.4\% & +2.61 & fanout\_checkpoint:148; keep\_all\_bennett:31; zero\_checkpoint:130 \\
+\midrule
+Comparison & Items & Score/T/lines & Mean $\Delta$ & Boundary \\
+Pareto vs keep100 & 309 & 309/0/0 & -84.3\% & proxy, not official ROS \\
+Pareto vs line50 & 142 & 142/0/0 & -98.7\% & proxy, not official ROS \\
+Pareto vs minline & 309 & 309/0/0 & -87.9\% & proxy, not official ROS \\
+Pareto vs minline lines & 309 & 303/0/6 & -69.4\% & proxy, not official ROS \\
+\bottomrule
+\end{tabularx}

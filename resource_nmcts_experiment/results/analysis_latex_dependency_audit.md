@@ -4,14 +4,14 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 
 ## Status counts
 
-- pass: 174
+- pass: 180
 
 ## Dependency types
 
 - bibliography: 3
 - figure: 21
 - main_source: 3
-- tex_input: 147
+- tex_input: 153
 
 ## Missing dependencies
 
@@ -40,6 +40,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/submission_archive_manifest` | `paper_latex/tables/submission_archive_manifest.tex` | True | True | pass |
 | author | tex_input | `tables/ros_lut_line_sensitivity` | `paper_latex/tables/ros_lut_line_sensitivity.tex` | True | True | pass |
 | author | tex_input | `tables/ros_lut_garbage_proxy` | `paper_latex/tables/ros_lut_garbage_proxy.tex` | True | True | pass |
+| author | tex_input | `tables/ros_lut_garbage_budget_frontier` | `paper_latex/tables/ros_lut_garbage_budget_frontier.tex` | True | True | pass |
 | author | tex_input | `tables/stg_published_benchmark` | `paper_latex/tables/stg_published_benchmark.tex` | True | True | pass |
 | author | tex_input | `tables/cirkit_aig_probe` | `paper_latex/tables/cirkit_aig_probe.tex` | True | True | pass |
 | author | tex_input | `tables/cirkit_aig_highdim_probe` | `paper_latex/tables/cirkit_aig_highdim_probe.tex` | True | True | pass |
@@ -66,6 +67,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/phase_affine_budget_wide128_vs_32` | `paper_latex/tables/phase_affine_budget_wide128_vs_32.tex` | True | True | pass |
 | author | tex_input | `tables/phase_policy_budget_frontier` | `paper_latex/tables/phase_policy_budget_frontier.tex` | True | True | pass |
 | author | tex_input | `tables/phase_rotation_precision_audit` | `paper_latex/tables/phase_rotation_precision_audit.tex` | True | True | pass |
+| author | tex_input | `tables/phase_rotation_sequence_smoke_audit` | `paper_latex/tables/phase_rotation_sequence_smoke_audit.tex` | True | True | pass |
 | author | tex_input | `tables/phase_policy_random_control` | `paper_latex/tables/phase_policy_random_control.tex` | True | True | pass |
 | author | tex_input | `tables/scaling_resource_audit` | `paper_latex/tables/scaling_resource_audit.tex` | True | True | pass |
 | author | tex_input | `tables/screen_scale_ultra_scale64_stress` | `paper_latex/tables/screen_scale_ultra_scale64_stress.tex` | True | True | pass |
@@ -98,6 +100,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/submission_archive_manifest` | `paper_latex/tables/submission_archive_manifest.tex` | True | True | pass |
 | anonymous | tex_input | `tables/ros_lut_line_sensitivity` | `paper_latex/tables/ros_lut_line_sensitivity.tex` | True | True | pass |
 | anonymous | tex_input | `tables/ros_lut_garbage_proxy` | `paper_latex/tables/ros_lut_garbage_proxy.tex` | True | True | pass |
+| anonymous | tex_input | `tables/ros_lut_garbage_budget_frontier` | `paper_latex/tables/ros_lut_garbage_budget_frontier.tex` | True | True | pass |
 | anonymous | tex_input | `tables/stg_published_benchmark` | `paper_latex/tables/stg_published_benchmark.tex` | True | True | pass |
 | anonymous | tex_input | `tables/cirkit_aig_probe` | `paper_latex/tables/cirkit_aig_probe.tex` | True | True | pass |
 | anonymous | tex_input | `tables/cirkit_aig_highdim_probe` | `paper_latex/tables/cirkit_aig_highdim_probe.tex` | True | True | pass |
@@ -124,6 +127,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/phase_affine_budget_wide128_vs_32` | `paper_latex/tables/phase_affine_budget_wide128_vs_32.tex` | True | True | pass |
 | anonymous | tex_input | `tables/phase_policy_budget_frontier` | `paper_latex/tables/phase_policy_budget_frontier.tex` | True | True | pass |
 | anonymous | tex_input | `tables/phase_rotation_precision_audit` | `paper_latex/tables/phase_rotation_precision_audit.tex` | True | True | pass |
+| anonymous | tex_input | `tables/phase_rotation_sequence_smoke_audit` | `paper_latex/tables/phase_rotation_sequence_smoke_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/phase_policy_random_control` | `paper_latex/tables/phase_policy_random_control.tex` | True | True | pass |
 | anonymous | tex_input | `tables/scaling_resource_audit` | `paper_latex/tables/scaling_resource_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/screen_scale_ultra_scale64_stress` | `paper_latex/tables/screen_scale_ultra_scale64_stress.tex` | True | True | pass |
@@ -156,6 +160,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/submission_archive_manifest` | `paper_latex/tables/submission_archive_manifest.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/ros_lut_line_sensitivity` | `paper_latex/tables/ros_lut_line_sensitivity.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/ros_lut_garbage_proxy` | `paper_latex/tables/ros_lut_garbage_proxy.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/ros_lut_garbage_budget_frontier` | `paper_latex/tables/ros_lut_garbage_budget_frontier.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/stg_published_benchmark` | `paper_latex/tables/stg_published_benchmark.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/cirkit_aig_probe` | `paper_latex/tables/cirkit_aig_probe.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/cirkit_aig_highdim_probe` | `paper_latex/tables/cirkit_aig_highdim_probe.tex` | True | True | pass |
@@ -182,6 +187,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/phase_affine_budget_wide128_vs_32` | `paper_latex/tables/phase_affine_budget_wide128_vs_32.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/phase_policy_budget_frontier` | `paper_latex/tables/phase_policy_budget_frontier.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/phase_rotation_precision_audit` | `paper_latex/tables/phase_rotation_precision_audit.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/phase_rotation_sequence_smoke_audit` | `paper_latex/tables/phase_rotation_sequence_smoke_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/phase_policy_random_control` | `paper_latex/tables/phase_policy_random_control.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/scaling_resource_audit` | `paper_latex/tables/scaling_resource_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/screen_scale_ultra_scale64_stress` | `paper_latex/tables/screen_scale_ultra_scale64_stress.tex` | True | True | pass |
