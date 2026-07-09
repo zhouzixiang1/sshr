@@ -40,6 +40,7 @@ author,tex_input,tables/search_contribution_decomposition,paper_latex/tables/sea
 author,tex_input,tables/search_control_baseline_audit,paper_latex/tables/search_control_baseline_audit.tex,True,True,pass,No action needed.
 author,tex_input,tables/bitflip_random_prior_control,paper_latex/tables/bitflip_random_prior_control.tex,True,True,pass,No action needed.
 author,tex_input,tables/bitflip_neural_budget_sweep,paper_latex/tables/bitflip_neural_budget_sweep.tex,True,True,pass,No action needed.
+author,tex_input,tables/bitflip_prior_difficulty_slices,paper_latex/tables/bitflip_prior_difficulty_slices.tex,True,True,pass,No action needed.
 author,tex_input,tables/frontier_random_depth_control,paper_latex/tables/frontier_random_depth_control.tex,True,True,pass,No action needed.
 author,tex_input,tables/stochastic_control_stability,paper_latex/tables/stochastic_control_stability.tex,True,True,pass,No action needed.
 author,tex_input,tables/boolean_ring_structural_evidence,paper_latex/tables/boolean_ring_structural_evidence.tex,True,True,pass,No action needed.
@@ -113,6 +114,7 @@ anonymous,tex_input,tables/search_contribution_decomposition,paper_latex/tables/
 anonymous,tex_input,tables/search_control_baseline_audit,paper_latex/tables/search_control_baseline_audit.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/bitflip_random_prior_control,paper_latex/tables/bitflip_random_prior_control.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/bitflip_neural_budget_sweep,paper_latex/tables/bitflip_neural_budget_sweep.tex,True,True,pass,No action needed.
+anonymous,tex_input,tables/bitflip_prior_difficulty_slices,paper_latex/tables/bitflip_prior_difficulty_slices.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/frontier_random_depth_control,paper_latex/tables/frontier_random_depth_control.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/stochastic_control_stability,paper_latex/tables/stochastic_control_stability.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/boolean_ring_structural_evidence,paper_latex/tables/boolean_ring_structural_evidence.tex,True,True,pass,No action needed.
@@ -186,6 +188,7 @@ acm_tqc,tex_input,tables/search_contribution_decomposition,paper_latex/tables/se
 acm_tqc,tex_input,tables/search_control_baseline_audit,paper_latex/tables/search_control_baseline_audit.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/bitflip_random_prior_control,paper_latex/tables/bitflip_random_prior_control.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/bitflip_neural_budget_sweep,paper_latex/tables/bitflip_neural_budget_sweep.tex,True,True,pass,No action needed.
+acm_tqc,tex_input,tables/bitflip_prior_difficulty_slices,paper_latex/tables/bitflip_prior_difficulty_slices.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/frontier_random_depth_control,paper_latex/tables/frontier_random_depth_control.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/stochastic_control_stability,paper_latex/tables/stochastic_control_stability.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/boolean_ring_structural_evidence,paper_latex/tables/boolean_ring_structural_evidence.tex,True,True,pass,No action needed.

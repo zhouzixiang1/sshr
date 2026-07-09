@@ -26,6 +26,7 @@ PRIVATE_BASENAMES = {
     "generated_availability_statements.md",
     "generated_cover_letter.md",
     "generated_submission_text.md",
+    "generated_upload_plan.md",
 }
 REQUIRED_PAYLOAD_PATHS = {
     "paper_latex/resource_nmcts_submission_v1.tex",

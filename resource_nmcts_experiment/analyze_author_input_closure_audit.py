@@ -54,6 +54,7 @@ PRIVATE_OUTPUTS = (
     SUBMISSION_PACKAGE / "generated_availability_statements.md",
     SUBMISSION_PACKAGE / "generated_cover_letter.md",
     SUBMISSION_PACKAGE / "generated_submission_text.md",
+    SUBMISSION_PACKAGE / "generated_upload_plan.md",
 )
 
 

@@ -1,0 +1,2 @@
+item,status,route,private_output,evidence,next_action
+Final upload plan,needs author input,missing_metadata,submission_package/generated_upload_plan.md,metadata_missing=True; removed_stale_private_output=0; output_ignored=True.,"Fill ignored submission_metadata.json, then rerun make_final_upload_plan.py."

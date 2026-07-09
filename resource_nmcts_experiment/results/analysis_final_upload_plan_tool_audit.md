@@ -1,0 +1,17 @@
+# Final Upload Plan Tool Audit
+
+This audit tests the private upload-plan generator using synthetic metadata only.
+
+It verifies author-labeled, generic anonymous, and ACM/TQC anonymous upload routes without reading real author metadata.
+
+## Status counts
+
+- pass: 5
+
+| item | status | evidence | next action |
+|---|---|---|---|
+| Private upload-plan Git protection | pass | generator_exists=True; output_ignored=True; output_tracked=False; private_output=submission_package/generated_upload_plan.md. | Keep generated_upload_plan.md ignored and untracked. |
+| Synthetic route: author_labeled_submission | pass | returncode=0; actual_route=author_labeled_submission; output_exists=True; needs_revision_count=0; status_counts={'pass': 1}; stdout_lines=1; stderr=none. | Fix make_final_upload_plan.py route selection or required upload-file checks. |
+| Synthetic route: generic_anonymous_review | pass | returncode=0; actual_route=generic_anonymous_review; output_exists=True; needs_revision_count=0; status_counts={'pass': 1}; stdout_lines=1; stderr=none. | Fix make_final_upload_plan.py route selection or required upload-file checks. |
+| Synthetic route: acm_tqc_anonymous_review | pass | returncode=0; actual_route=acm_tqc_anonymous_review; output_exists=True; needs_revision_count=0; status_counts={'pass': 1}; stdout_lines=1; stderr=none. | Fix make_final_upload_plan.py route selection or required upload-file checks. |
+| Current private upload-plan gate | pass | route=missing_metadata; status_counts={'needs author input': 1}; needs_revision_count=0; private_output_is_git_ignored=True. | Run make_final_upload_plan.py after filling private metadata; missing metadata may remain needs author input, but needs revision must be zero. |

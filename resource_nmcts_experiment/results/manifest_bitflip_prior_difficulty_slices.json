@@ -1,0 +1,23 @@
+{
+  "aggregate_rows": 9,
+  "aggregate_score_losses": 0,
+  "detail_rows": 27,
+  "input_rows": 3186,
+  "inputs": [
+    "results/raw_bitflip_neural_budget_sweep.csv",
+    "results/raw_traditional_resource_learned_prior.csv",
+    "results/raw_traditional_resource_no_prior.csv"
+  ],
+  "middle_best_budget_count": 3,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_bitflip_prior_difficulty_slices.md",
+    "manifest": "results/manifest_bitflip_prior_difficulty_slices.json",
+    "summary": "results/summary_bitflip_prior_difficulty_slices.csv",
+    "table": "paper_latex/tables/bitflip_prior_difficulty_slices.tex"
+  },
+  "rows": 36,
+  "script": "analyze_bitflip_prior_difficulty_slices.py",
+  "table": "paper_latex/tables/bitflip_prior_difficulty_slices.tex",
+  "table_anchor_present": true
+}

@@ -65,6 +65,7 @@ PRIVATE_BASENAMES = {
     "generated_availability_statements.md",
     "generated_cover_letter.md",
     "generated_submission_text.md",
+    "generated_upload_plan.md",
 }
 
 SUMMARY = RESULTS / "summary_upload_bundle_matrix_audit.csv"

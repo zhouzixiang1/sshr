@@ -1,0 +1,28 @@
+{
+  "generated_private_upload_plan": false,
+  "needs_author_input_count": 1,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_final_upload_plan.md",
+    "manifest": "results/manifest_final_upload_plan.json",
+    "summary": "results/summary_final_upload_plan.csv"
+  },
+  "private_output_is_git_ignored": true,
+  "private_output_path": "submission_package/generated_upload_plan.md",
+  "python": "3.11.15",
+  "route": "missing_metadata",
+  "rows": [
+    {
+      "evidence": "metadata_missing=True; removed_stale_private_output=0; output_ignored=True.",
+      "item": "Final upload plan",
+      "next_action": "Fill ignored submission_metadata.json, then rerun make_final_upload_plan.py.",
+      "private_output": "submission_package/generated_upload_plan.md",
+      "route": "missing_metadata",
+      "status": "needs author input"
+    }
+  ],
+  "script": "make_final_upload_plan.py",
+  "status_counts": {
+    "needs author input": 1
+  }
+}

@@ -1112,7 +1112,13 @@ expansion and 8/12 or 12/16 \mcts{} simulations, the learned prior has 6/6
 positive score rows across Affine-\method{}, \method{}, and Pareto-\method{}
 against matched no-prior searches.  This supports a bounded quality claim for
 neural budget allocation under tight search budgets, while the reported runtime
-overhead prevents interpreting the scorer as a speedup.
+overhead prevents interpreting the scorer as a speedup.  Table
+\ref{tab:bitflip-prior-difficulty} localizes the same effect by no-prior score
+terciles inside each budget and method.  The learned prior has zero score
+losses in all aggregate slices, and the largest score/T-count reductions occur
+in the middle tercile.  This pattern is useful for interpretation: learned
+ranking is most helpful when deterministic search has enough ambiguity for
+candidate ordering to matter, while trivial and very hard rows more often tie.
 
 \begin{table}[H]
 \centering
@@ -1148,6 +1154,18 @@ no-prior rows use the same functions, methods, candidate legality checks, and
 verification route; only the action-prior scorer and search budget differ.}
 \label{tab:bitflip-budget-sweep}
 \input{tables/bitflip_neural_budget_sweep}
+\end{table}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.06}
+\caption{Difficulty-sliced localization of the bit-flip learned-prior effect.
+Each row aggregates the three bit-flip \method{} variants after splitting
+functions into no-prior score terciles within each budget and method.}
+\label{tab:bitflip-prior-difficulty}
+\input{tables/bitflip_prior_difficulty_slices}
 \end{table}
 
 Table~\ref{tab:frontier-random-depth} applies the same random-control idea to

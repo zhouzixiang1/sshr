@@ -43,6 +43,7 @@ CHECKLIST = SUBMISSION_PACKAGE / "submission_checklist.md"
 TARGET_VENUE_BRIEF = SUBMISSION_PACKAGE / "target_venue_brief.md"
 TARGET_POLICY_CHECKLIST_ZH = SUBMISSION_PACKAGE / "TARGET_VENUE_POLICY_CHECKLIST_zh.md"
 FINAL_HANDOFF = SUBMISSION_PACKAGE / "FINAL_SUBMISSION_HANDOFF_zh.md"
+GENERATED_UPLOAD_PLAN = SUBMISSION_PACKAGE / "generated_upload_plan.md"
 
 METADATA_AUDIT_MANIFEST = RESULTS / "manifest_submission_metadata_audit.json"
 VALIDATOR_MANIFEST = RESULTS / "manifest_submission_metadata_validator.json"
@@ -54,7 +55,7 @@ GOAL_MANIFEST = RESULTS / "manifest_goal_completion_audit.json"
 ANSWER_TEMPLATE_COVERAGE_MANIFEST = RESULTS / "manifest_metadata_answer_template_coverage.json"
 MINIMAL_FORM_COVERAGE_MANIFEST = RESULTS / "manifest_author_minimal_form_coverage.json"
 
-PRIVATE_PATHS = (METADATA_ANSWERS_FILE, METADATA_FILE, *PRIVATE_OUTPUTS)
+PRIVATE_PATHS = (METADATA_ANSWERS_FILE, METADATA_FILE, *PRIVATE_OUTPUTS, GENERATED_UPLOAD_PLAN)
 
 
 def run_git(args: list[str]) -> subprocess.CompletedProcess[str]:

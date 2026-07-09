@@ -1,0 +1,22 @@
+{
+  "current_plan_manifest": "results/manifest_final_upload_plan.json",
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_final_upload_plan_tool_audit.md",
+    "manifest": "results/manifest_final_upload_plan_tool_audit.json",
+    "summary": "results/summary_final_upload_plan_tool_audit.csv"
+  },
+  "private_output_path": "submission_package/generated_upload_plan.md",
+  "python": "3.11.15",
+  "rows": 5,
+  "script": "analyze_final_upload_plan_tool_audit.py",
+  "status_counts": {
+    "pass": 5
+  },
+  "synthetic_routes": [
+    "author_labeled_submission",
+    "generic_anonymous_review",
+    "acm_tqc_anonymous_review"
+  ],
+  "uses_private_metadata": false
+}

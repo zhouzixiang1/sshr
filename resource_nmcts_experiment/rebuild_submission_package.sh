@@ -69,6 +69,7 @@ run_py analyze_multimetric_pareto_tradeoff.py
 run_py analyze_search_contribution.py
 run_py analyze_bitflip_random_prior_control.py
 run_py analyze_bitflip_neural_budget_sweep.py
+run_py analyze_bitflip_prior_difficulty_slices.py
 run_py analyze_frontier_random_depth_control.py
 run_py analyze_phase_policy_random_control.py
 run_py analyze_stochastic_control_stability.py
@@ -108,6 +109,8 @@ run_py analyze_author_questionnaire_coverage.py
 run_py analyze_author_minimal_form_coverage.py
 run_py analyze_metadata_answer_template_coverage.py
 run_py make_submission_text_preview.py
+run_py make_final_upload_plan.py
+run_py analyze_final_upload_plan_tool_audit.py
 run_py selftest_submission_metadata_pipeline.py
 run_py make_anonymous_review_draft.py
 run_py make_acm_tqc_review_draft.py

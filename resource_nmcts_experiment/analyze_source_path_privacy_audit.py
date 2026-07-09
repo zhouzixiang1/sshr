@@ -30,6 +30,7 @@ PRIVATE_BASENAMES = {
     "generated_availability_statements.md",
     "generated_cover_letter.md",
     "generated_submission_text.md",
+    "generated_upload_plan.md",
 }
 
 LOCAL_PATH_PATTERNS = (

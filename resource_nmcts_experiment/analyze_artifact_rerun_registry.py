@@ -512,6 +512,7 @@ def specs() -> list[EvidenceFamily]:
                 "analyze_bitflip_random_prior_control.py",
                 "run_bitflip_neural_budget_sweep.py",
                 "analyze_bitflip_neural_budget_sweep.py",
+                "analyze_bitflip_prior_difficulty_slices.py",
                 "analyze_frontier_random_depth_control.py",
                 "analyze_phase_rotation_precision_audit.py",
                 "analyze_phase_rotation_sequence_smoke_audit.py",

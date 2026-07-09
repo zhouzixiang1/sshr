@@ -14,7 +14,7 @@
   "rows_detail": [
     {
       "elapsed_seconds": "0.000",
-      "evidence": "extracted_files=1178; error=none.",
+      "evidence": "extracted_files=1191; error=none.",
       "item": "Payload extraction for verifier smoke",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "returncode": "n/a",
@@ -23,7 +23,7 @@
     },
     {
       "elapsed_seconds": "not_recorded",
-      "evidence": "verifier_returncode=0; verifier_rows=81; source_verifier_rows=82; row_delta=1; expected_row_delta=1; row_delta_reason=archive_absent_by_design; verifier_needs_revision_count=0; extracted_payload_mode=True; source_needs_revision_count=0; status_counts={'pass': 81}; stdout_lines=480; stderr=none.",
+      "evidence": "verifier_returncode=0; verifier_rows=84; source_verifier_rows=85; row_delta=1; expected_row_delta=1; row_delta_reason=archive_absent_by_design; verifier_needs_revision_count=0; extracted_payload_mode=True; source_needs_revision_count=1; status_counts={'pass': 84}; stdout_lines=510; stderr=none.",
       "item": "Extracted payload verifier command",
       "next_action": "Inspect the verifier outputs generated inside the extracted payload directory.",
       "returncode": "0",
@@ -32,10 +32,10 @@
     }
   ],
   "script": "analyze_payload_verifier_smoke_audit.py",
-  "source_verifier_rows": "82",
+  "source_verifier_rows": "85",
   "status_counts": {
     "pass": 2
   },
   "verifier_returncode": "0",
-  "verifier_rows": "81"
+  "verifier_rows": "84"
 }

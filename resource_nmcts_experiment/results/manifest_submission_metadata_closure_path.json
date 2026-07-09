@@ -13,7 +13,8 @@
     "submission_package/generated_author_declarations.md",
     "submission_package/generated_availability_statements.md",
     "submission_package/generated_cover_letter.md",
-    "submission_package/generated_submission_text.md"
+    "submission_package/generated_submission_text.md",
+    "submission_package/generated_upload_plan.md"
   ],
   "python": "3.11.15",
   "required_metadata_paths": 50,
@@ -43,7 +44,7 @@
       "status": "pass"
     },
     {
-      "evidence": "private_paths=6; not_ignored=none; tracked=none; metadata_present=False.",
+      "evidence": "private_paths=7; not_ignored=none; tracked=none; metadata_present=False.",
       "item": "Private metadata Git protection",
       "next_action": "Keep submission_metadata.json and generated private previews ignored and untracked.",
       "status": "pass"

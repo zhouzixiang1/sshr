@@ -18,6 +18,7 @@ published STG counterpoint,
 traditional structure-mechanism support,
 search-control baseline coverage,
 learned-control audit coverage,
+learned-prior difficulty-slice localization,
 neural/MCTS claim-calibration coverage,
 runtime-envelope feasibility coverage,
 frontier random-depth control coverage,
@@ -42,6 +43,7 @@ author-input closure,
 final human-gate closure,
 final upload sequence closure,
 upload bundle matrix closure,
+final upload-plan generation closure,
 private-preview protection, private payload exclusion, payload round-trip
 integrity, generated-payload Git policy, extracted-payload smoke checks,
 extracted-payload LaTeX compilation, extracted-payload verifier smoke,
@@ -152,6 +154,8 @@ BITFLIP_RANDOM_PRIOR_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control
 BITFLIP_RANDOM_PRIOR_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_random_prior_control.tex"
 BITFLIP_NEURAL_BUDGET_MANIFEST = RESULTS / "manifest_bitflip_neural_budget_sweep.json"
 BITFLIP_NEURAL_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_neural_budget_sweep.tex"
+BITFLIP_PRIOR_DIFFICULTY_MANIFEST = RESULTS / "manifest_bitflip_prior_difficulty_slices.json"
+BITFLIP_PRIOR_DIFFICULTY_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_prior_difficulty_slices.tex"
 FRONTIER_RANDOM_DEPTH_MANIFEST = RESULTS / "manifest_frontier_random_depth_control.json"
 FRONTIER_RANDOM_DEPTH_TABLE = THIS_DIR / "paper_latex" / "tables" / "frontier_random_depth_control.tex"
 STOCHASTIC_CONTROL_STABILITY_MANIFEST = RESULTS / "manifest_stochastic_control_stability.json"
@@ -187,6 +191,8 @@ METADATA_CLOSURE_MANIFEST = RESULTS / "manifest_submission_metadata_closure_path
 FINAL_HUMAN_GATE_MANIFEST = RESULTS / "manifest_final_human_gate_audit.json"
 FINAL_UPLOAD_SEQUENCE_MANIFEST = RESULTS / "manifest_final_upload_sequence_audit.json"
 UPLOAD_BUNDLE_MATRIX_MANIFEST = RESULTS / "manifest_upload_bundle_matrix_audit.json"
+FINAL_UPLOAD_PLAN_MANIFEST = RESULTS / "manifest_final_upload_plan.json"
+FINAL_UPLOAD_PLAN_TOOL_MANIFEST = RESULTS / "manifest_final_upload_plan_tool_audit.json"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
 PAYLOAD_GIT_POLICY_MANIFEST = RESULTS / "manifest_payload_git_policy_audit.json"
 PAYLOAD_EXTRACTION_SMOKE_MANIFEST = RESULTS / "manifest_payload_extraction_smoke_audit.json"
@@ -204,6 +210,7 @@ PRIVATE_PAYLOAD_BASENAMES = {
     "generated_availability_statements.md",
     "generated_cover_letter.md",
     "generated_submission_text.md",
+    "generated_upload_plan.md",
 }
 EXTRACTED_PAYLOAD_MODE = os.environ.get("RESOURCE_NMCTS_EXTRACTED_PAYLOAD") == "1"
 
@@ -1297,6 +1304,35 @@ def verify_bitflip_neural_budget() -> dict[str, str]:
     )
 
 
+def verify_bitflip_prior_difficulty() -> dict[str, str]:
+    manifest = read_json(BITFLIP_PRIOR_DIFFICULTY_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    rows = int(manifest.get("rows", -1)) if manifest else -1
+    aggregate_rows = int(manifest.get("aggregate_rows", -1)) if manifest else -1
+    losses = int(manifest.get("aggregate_score_losses", -1)) if manifest else -1
+    middle_best = int(manifest.get("middle_best_budget_count", -1)) if manifest else -1
+    table_exists = BITFLIP_PRIOR_DIFFICULTY_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and rows >= 36
+        and aggregate_rows == 9
+        and losses == 0
+        and middle_best == 3
+        and table_exists
+        and anchor
+        else "needs revision"
+    )
+    return row(
+        "Bit-flip learned-prior difficulty slices",
+        status,
+        f"rows={rows}; aggregate_rows={aggregate_rows}; aggregate_score_losses={losses}; middle_best_budget_count={middle_best}; needs_revision_count={revisions}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_bitflip_prior_difficulty_slices.py and restore the difficulty-sliced learned-prior table and manuscript anchor.",
+    )
+
+
 def verify_frontier_random_depth() -> dict[str, str]:
     manifest = read_json(FRONTIER_RANDOM_DEPTH_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -1910,6 +1946,57 @@ def verify_upload_bundle_matrix() -> dict[str, str]:
     )
 
 
+def verify_final_upload_plan() -> dict[str, str]:
+    manifest = read_json(FINAL_UPLOAD_PLAN_MANIFEST)
+    if EXTRACTED_PAYLOAD_MODE and not manifest:
+        return row(
+            "Final upload plan generator",
+            "pass",
+            "extracted_payload_mode=1; final upload-plan manifest is allowed to be absent from extracted payloads.",
+            "Run make_final_upload_plan.py in the source worktree after private metadata, final previews, or upload-route files change.",
+        )
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    needs_author = int(manifest.get("needs_author_input_count", -1)) if manifest else -1
+    route = manifest.get("route", "missing") if manifest else "missing"
+    generated = bool(manifest.get("generated_private_upload_plan", False)) if manifest else False
+    ignored = bool(manifest.get("private_output_is_git_ignored", False)) if manifest else False
+    status = "pass" if manifest and needs_revision == 0 and ignored else "needs revision"
+    return row(
+        "Final upload plan generator",
+        status,
+        f"route={route}; generated_private_upload_plan={generated}; needs_author_input_count={needs_author}; needs_revision_count={needs_revision}; private_output_is_git_ignored={ignored}; status_counts={counts}.",
+        "Run make_final_upload_plan.py after filling private metadata; missing metadata may remain author input, but needs revision must stay zero.",
+    )
+
+
+def verify_final_upload_plan_tool_audit() -> dict[str, str]:
+    manifest = read_json(FINAL_UPLOAD_PLAN_TOOL_MANIFEST)
+    if EXTRACTED_PAYLOAD_MODE and not manifest:
+        return row(
+            "Final upload plan tool audit",
+            "pass",
+            "extracted_payload_mode=1; final upload-plan tool manifest is allowed to be absent from extracted payloads.",
+            "Run analyze_final_upload_plan_tool_audit.py in the source worktree after changing the upload-plan generator, private output ignore rule, or route choices.",
+        )
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    routes = manifest.get("synthetic_routes", []) if manifest else []
+    uses_private = bool(manifest.get("uses_private_metadata", True)) if manifest else True
+    status = (
+        "pass"
+        if manifest and needs_revision == 0 and not uses_private and counts.get("pass", 0) == rows
+        else "needs revision"
+    )
+    return row(
+        "Final upload plan tool audit",
+        status,
+        f"rows={rows}; needs_revision_count={needs_revision}; synthetic_routes={routes}; uses_private_metadata={uses_private}; status_counts={counts}.",
+        "Run analyze_final_upload_plan_tool_audit.py and restore author, anonymous, and ACM/TQC synthetic route coverage.",
+    )
+
+
 def verify_private_payload_exclusion() -> dict[str, str]:
     manifest = read_json(PAYLOAD_MANIFEST)
     if EXTRACTED_PAYLOAD_MODE and not manifest:
@@ -2123,6 +2210,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_ultra_scale64_resource_profile(),
             verify_search_control(),
             verify_bitflip_neural_budget(),
+            verify_bitflip_prior_difficulty(),
             verify_root_action_ranker(),
             verify_phase_rotation_precision(),
             verify_phase_rotation_sequence_smoke(),
@@ -2161,6 +2249,8 @@ def build_rows() -> list[dict[str, str]]:
             verify_final_human_gate(),
             verify_final_upload_sequence(),
             verify_upload_bundle_matrix(),
+            verify_final_upload_plan(),
+            verify_final_upload_plan_tool_audit(),
             verify_text_preview(),
             verify_private_payload_exclusion(),
             verify_payload_roundtrip(),
