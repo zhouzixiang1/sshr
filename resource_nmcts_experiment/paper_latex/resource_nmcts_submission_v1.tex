@@ -579,6 +579,24 @@ commits used by the current submission package.}
 \input{tables/reproducibility_audit}
 \end{table}
 
+Table~\ref{tab:runtime-envelope-audit} summarizes the wall-clock envelope
+behind the current artifact package.  It is included to make feasibility and
+reviewer reruns easier to judge.  These timings are workstation-context
+measurements; they are not used as portable speedup claims, and the portable
+claims remain the logical resources and verification status.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.06}
+\caption{Runtime-envelope audit over existing raw CSV artifacts.  Rows report
+the checked subset, successful rows, and workstation wall-clock summaries used
+to bound the feasibility of the submitted experiments.}
+\label{tab:runtime-envelope-audit}
+\input{tables/runtime_envelope_audit}
+\end{table}
+
 Table~\ref{tab:traceability-audit} records the claim-to-artifact chain for the
 submission package.  It is not a new result table; its role is to make each
 headline claim auditable by pointing to the scripts, CSVs, tables, figures, and

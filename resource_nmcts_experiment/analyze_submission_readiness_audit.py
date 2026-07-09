@@ -148,6 +148,10 @@ SCHEDULE_PROXY_ANALYSIS = RESULTS / "analysis_schedule_proxy_audit.md"
 SCHEDULE_PROXY_SUMMARY = RESULTS / "summary_schedule_proxy_audit.csv"
 SCHEDULE_PROXY_MANIFEST = RESULTS / "manifest_schedule_proxy_audit.json"
 SCHEDULE_PROXY_TABLE = THIS_DIR / "paper_latex" / "tables" / "schedule_proxy_audit.tex"
+RUNTIME_ENVELOPE_ANALYSIS = RESULTS / "analysis_runtime_envelope_audit.md"
+RUNTIME_ENVELOPE_SUMMARY = RESULTS / "summary_runtime_envelope_audit.csv"
+RUNTIME_ENVELOPE_MANIFEST = RESULTS / "manifest_runtime_envelope_audit.json"
+RUNTIME_ENVELOPE_TABLE = THIS_DIR / "paper_latex" / "tables" / "runtime_envelope_audit.tex"
 ULTRA_SCALE64_ANALYSIS = RESULTS / "analysis_screen_scale_ultra_scale64_stress.md"
 ULTRA_SCALE64_SUMMARY = RESULTS / "summary_screen_scale_ultra_scale64_stress.csv"
 ULTRA_SCALE64_MANIFEST = RESULTS / "manifest_screen_scale_ultra_scale64_stress.json"
@@ -466,6 +470,23 @@ def build_rows() -> list[dict[str, str]]:
     schedule_proxy_revisions = int(schedule_proxy_manifest.get("needs_revision_count", -1)) if schedule_proxy_manifest else -1
     schedule_proxy_counts = schedule_proxy_manifest.get("status_counts", {}) if schedule_proxy_manifest else {}
     schedule_proxy_rows = schedule_proxy_manifest.get("rows", "missing") if schedule_proxy_manifest else "missing"
+    runtime_envelope_manifest = read_json(RUNTIME_ENVELOPE_MANIFEST)
+    runtime_envelope_revisions = (
+        int(runtime_envelope_manifest.get("needs_revision_count", -1)) if runtime_envelope_manifest else -1
+    )
+    runtime_envelope_counts = runtime_envelope_manifest.get("status_counts", {}) if runtime_envelope_manifest else {}
+    runtime_envelope_rows = runtime_envelope_manifest.get("rows", "missing") if runtime_envelope_manifest else "missing"
+    runtime_envelope_anchor = (
+        bool(runtime_envelope_manifest.get("table_anchor_present", False)) if runtime_envelope_manifest else False
+    )
+    runtime_envelope_anonymous_anchor = (
+        bool(runtime_envelope_manifest.get("anonymous_table_anchor_present", False))
+        if runtime_envelope_manifest
+        else False
+    )
+    runtime_envelope_acm_anchor = (
+        bool(runtime_envelope_manifest.get("acm_table_anchor_present", False)) if runtime_envelope_manifest else False
+    )
     ultra_scale64_manifest = read_json(ULTRA_SCALE64_MANIFEST)
     ultra_scale64_revisions = (
         int(ultra_scale64_manifest.get("needs_revision_count", -1)) if ultra_scale64_manifest else -1
@@ -1059,6 +1080,24 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Schedule-proxy audit checks score, T-depth proxy, and explicit auxiliary lifetime tradeoffs before hardware mapping; rows={schedule_proxy_rows}; status_counts={schedule_proxy_counts}; needs_revision_count={schedule_proxy_revisions}.",
             "next_action": "Rerun analyze_schedule_metrics.py and analyze_schedule_proxy_audit.py after changing high-dimensional frontier, truth-bridge, schedule-proxy, or auxiliary-lifetime claims.",
+        },
+        {
+            "item": "Runtime-envelope audit",
+            "status": "pass"
+            if "tab:runtime-envelope-audit" in text
+            and RUNTIME_ENVELOPE_ANALYSIS.exists()
+            and RUNTIME_ENVELOPE_SUMMARY.exists()
+            and RUNTIME_ENVELOPE_MANIFEST.exists()
+            and RUNTIME_ENVELOPE_TABLE.exists()
+            and runtime_envelope_revisions == 0
+            and runtime_envelope_rows == 5
+            and runtime_envelope_counts.get("pass", 0) == 5
+            and runtime_envelope_anchor
+            and runtime_envelope_anonymous_anchor
+            and runtime_envelope_acm_anchor
+            else "needs revision",
+            "evidence": f"Runtime-envelope audit consolidates workstation wall-clock evidence for traditional, external-tool, symbolic-scale, truth-bridge, and learned-control slices; rows={runtime_envelope_rows}; status_counts={runtime_envelope_counts}; needs_revision_count={runtime_envelope_revisions}; author_anchor={runtime_envelope_anchor}; anonymous_anchor={runtime_envelope_anonymous_anchor}; acm_anchor={runtime_envelope_acm_anchor}.",
+            "next_action": "Rerun analyze_runtime_envelope_audit.py after changing runtime-bearing raw CSVs, compute/reproducibility wording, or runtime-envelope table anchors.",
         },
         {
             "item": "Ultra-scale n=48--64 stress audit",

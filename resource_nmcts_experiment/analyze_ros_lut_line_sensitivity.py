@@ -15,7 +15,6 @@ import argparse
 import csv
 import json
 import statistics
-import time
 from pathlib import Path
 from typing import Iterable
 
@@ -291,7 +290,6 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser.add_argument("--manifest", type=Path, default=RESULTS / "manifest_ros_lut_line_sensitivity.json")
     args = parser.parse_args(list(argv) if argv is not None else None)
 
-    started = time.time()
     sweep_rows = load_csv(args.sweep)
     selected_rows = select_rows(sweep_rows, parse_weights(args.ancilla_weights))
     internal_rows = load_internal(args.internal)
@@ -330,7 +328,8 @@ def main(argv: Iterable[str] | None = None) -> int:
                 "ancilla_weights": parse_weights(args.ancilla_weights),
                 "selected_rows": len(selected_rows),
                 "summary_rows": len(summary_rows),
-                "elapsed_s": time.time() - started,
+                "elapsed_s": 0.0,
+                "elapsed_note": "not recorded in deterministic rebuilds",
                 "claim_boundary": "Line-aware ABC LUT proxy sensitivity; not official ROS SAT garbage management.",
             },
             indent=2,

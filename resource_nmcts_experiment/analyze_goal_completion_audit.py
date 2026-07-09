@@ -313,17 +313,29 @@ def build_items() -> list[GoalItem]:
         ),
         GoalItem(
             requirement="Multicore/GPU-aware reproducibility",
-            status=status_if((RESULTS / "analysis_reproducibility_audit.md", TABLES / "reproducibility_audit.tex")),
-            evidence="Compute audit records Apple M4 Pro CPU/GPU/MPS availability, worker counts up to 10, and external tool commit provenance.",
-            evidence_files=(RESULTS / "analysis_reproducibility_audit.md", TABLES / "reproducibility_audit.tex"),
+            status=status_if(
+                (
+                    RESULTS / "analysis_reproducibility_audit.md",
+                    RESULTS / "analysis_runtime_envelope_audit.md",
+                    TABLES / "reproducibility_audit.tex",
+                    TABLES / "runtime_envelope_audit.tex",
+                )
+            ),
+            evidence="Compute audit records Apple M4 Pro CPU/GPU/MPS availability, worker counts up to 10, external tool commit provenance, and a workstation runtime envelope across small, external, high-dimensional, bridge, and learned-control slices.",
+            evidence_files=(
+                RESULTS / "analysis_reproducibility_audit.md",
+                RESULTS / "analysis_runtime_envelope_audit.md",
+                TABLES / "reproducibility_audit.tex",
+                TABLES / "runtime_envelope_audit.tex",
+            ),
             boundary="Wall-clock timings are workstation context; portable claims remain logical resources and verification status.",
-            next_action="Rerun reproducibility audit after adding scripts, raw data, summaries, manifests, tables, or figures.",
+            next_action="Rerun reproducibility and runtime-envelope audits after adding scripts, raw data, summaries, manifests, tables, or figures.",
         ),
         GoalItem(
             requirement="Rich paper figures and tables",
             status="pass" if figure_panels >= 7 and table_count >= 100 and FIGURE_ASSET_ANALYSIS.exists() else "needs evidence",
             evidence=f"Current package has {figure_panels} submitted figure panels and {table_count} generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
-            evidence_files=(FIGURES, TABLES, FIGURE_ASSET_ANALYSIS, RESULTS / "analysis_reproducibility_audit.md"),
+            evidence_files=(FIGURES, TABLES, FIGURE_ASSET_ANALYSIS, RESULTS / "analysis_reproducibility_audit.md", RESULTS / "analysis_runtime_envelope_audit.md"),
             boundary="Counts describe manuscript artifacts, not independent experimental datasets.",
             next_action="Spot-check figure/table readability after every layout or data update.",
         ),

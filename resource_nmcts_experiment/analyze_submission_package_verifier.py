@@ -17,6 +17,7 @@ traditional structure-mechanism support,
 search-control baseline coverage,
 learned-control audit coverage,
 neural/MCTS claim-calibration coverage,
+runtime-envelope feasibility coverage,
 frontier random-depth control coverage,
 ultra-scale n=48--64 stress coverage,
 ultra-scale n=48--64 resource-profile coverage,
@@ -25,6 +26,7 @@ target-venue decision support,
 submission support packet coverage,
 ROS reproduction-boundary support,
 citation support,
+learning-guided citation verification,
 headline-numeric consistency,
 figure-asset coverage,
 LaTeX dependency closure,
@@ -118,6 +120,8 @@ ULTRA_SCALE64_PROFILE_TABLE = THIS_DIR / "paper_latex" / "tables" / "screen_scal
 SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
 LEARNED_CONTROL_MANIFEST = RESULTS / "manifest_learned_control_audit.json"
 LEARNED_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "learned_control_audit.tex"
+RUNTIME_ENVELOPE_MANIFEST = RESULTS / "manifest_runtime_envelope_audit.json"
+RUNTIME_ENVELOPE_TABLE = THIS_DIR / "paper_latex" / "tables" / "runtime_envelope_audit.tex"
 ROOT_ACTION_RANKER_MANIFEST = RESULTS / "manifest_root_action_ranker_audit.json"
 ROOT_ACTION_RANKER_TABLE = THIS_DIR / "paper_latex" / "tables" / "root_action_ranker_audit.tex"
 PHASE_ROTATION_PRECISION_MANIFEST = RESULTS / "manifest_phase_rotation_precision_audit.json"
@@ -144,6 +148,8 @@ TARGET_VENUE_FORMAT_SOURCE = THIS_DIR / "paper_latex" / "resource_nmcts_submissi
 TARGET_VENUE_FORMAT_PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_acm_tqc.pdf"
 SUPPORT_PACKET_MANIFEST = RESULTS / "manifest_submission_support_packet_audit.json"
 CITATION_SUPPORT_MANIFEST = RESULTS / "manifest_citation_support_audit.json"
+LEARNING_CITATION_MANIFEST = RESULTS / "manifest_learning_citation_verification.json"
+LEARNING_CITATION_TABLE = THIS_DIR / "paper_latex" / "tables" / "learning_citation_verification.tex"
 HEADLINE_NUMERIC_MANIFEST = RESULTS / "manifest_headline_numeric_consistency.json"
 FIGURE_ASSET_MANIFEST = RESULTS / "manifest_figure_asset_audit.json"
 LATEX_DEPENDENCY_MANIFEST = RESULTS / "manifest_latex_dependency_audit.json"
@@ -1100,6 +1106,26 @@ def verify_neural_mcts_claim_calibration() -> dict[str, str]:
     )
 
 
+def verify_runtime_envelope() -> dict[str, str]:
+    manifest = read_json(RUNTIME_ENVELOPE_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    table_exists = RUNTIME_ENVELOPE_TABLE.exists()
+    anchors = {
+        "author": bool(manifest.get("table_anchor_present")) if manifest else False,
+        "anonymous": bool(manifest.get("anonymous_table_anchor_present")) if manifest else False,
+        "acm": bool(manifest.get("acm_table_anchor_present")) if manifest else False,
+    }
+    status = "pass" if manifest and revisions == 0 and rows == 5 and table_exists and all(anchors.values()) else "needs revision"
+    return row(
+        "Runtime-envelope audit",
+        status,
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; anchors={anchors}.",
+        "Run analyze_runtime_envelope_audit.py after author/anonymous/ACM sources are generated and restore runtime-envelope table anchors.",
+    )
+
+
 def verify_bitflip_random_prior() -> dict[str, str]:
     manifest = read_json(BITFLIP_RANDOM_PRIOR_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -1245,6 +1271,23 @@ def verify_citation_support() -> dict[str, str]:
         status,
         f"rows={rows}; cited_keys={cited_keys}; bib_keys={bib_keys}; needs_revision_count={revisions}; status_counts={counts}.",
         "Run analyze_citation_support_audit.py and restore missing citations, BibTeX entries, or reference locators.",
+    )
+
+
+def verify_learning_citation_verification() -> dict[str, str]:
+    manifest = read_json(LEARNING_CITATION_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    citation_rows = manifest.get("citation_rows", "missing") if manifest else "missing"
+    sources = manifest.get("primary_sources", []) if manifest else []
+    table_exists = LEARNING_CITATION_TABLE.exists()
+    status = "pass" if manifest and revisions == 0 and rows == 13 and citation_rows == 12 and table_exists else "needs revision"
+    return row(
+        "Learning-citation verification audit",
+        status,
+        f"rows={rows}; citation_rows={citation_rows}; primary_sources={len(sources) if isinstance(sources, list) else 'missing'}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
+        "Run analyze_learning_citation_verification.py and restore learning-related DOI/arXiv locators or scope-boundary wording.",
     )
 
 
@@ -1725,6 +1768,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_phase_policy_budget_frontier(),
             verify_learned_control(),
             verify_neural_mcts_claim_calibration(),
+            verify_runtime_envelope(),
             verify_bitflip_random_prior(),
             verify_frontier_random_depth(),
             verify_editorial_screening(),
@@ -1732,6 +1776,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_target_venue_format(),
             verify_support_packet(),
             verify_citation_support(),
+            verify_learning_citation_verification(),
             verify_headline_numeric(),
             verify_figure_assets(),
             verify_latex_dependencies(),

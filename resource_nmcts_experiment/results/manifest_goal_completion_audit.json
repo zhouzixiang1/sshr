@@ -73,23 +73,23 @@
     },
     {
       "boundary": "Wall-clock timings are workstation context; portable claims remain logical resources and verification status.",
-      "evidence": "Compute audit records Apple M4 Pro CPU/GPU/MPS availability, worker counts up to 10, and external tool commit provenance.",
-      "evidence_files": "results/analysis_reproducibility_audit.md; paper_latex/tables/reproducibility_audit.tex",
-      "next_action": "Rerun reproducibility audit after adding scripts, raw data, summaries, manifests, tables, or figures.",
+      "evidence": "Compute audit records Apple M4 Pro CPU/GPU/MPS availability, worker counts up to 10, external tool commit provenance, and a workstation runtime envelope across small, external, high-dimensional, bridge, and learned-control slices.",
+      "evidence_files": "results/analysis_reproducibility_audit.md; results/analysis_runtime_envelope_audit.md; paper_latex/tables/reproducibility_audit.tex; paper_latex/tables/runtime_envelope_audit.tex",
+      "next_action": "Rerun reproducibility and runtime-envelope audits after adding scripts, raw data, summaries, manifests, tables, or figures.",
       "requirement": "Multicore/GPU-aware reproducibility",
       "status": "pass"
     },
     {
       "boundary": "Counts describe manuscript artifacts, not independent experimental datasets.",
-      "evidence": "Current package has 7 submitted figure panels and 194 generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
-      "evidence_files": "paper_latex/figures/submission_v36; paper_latex/tables; results/analysis_figure_asset_audit.md; results/analysis_reproducibility_audit.md",
+      "evidence": "Current package has 7 submitted figure panels and 196 generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
+      "evidence_files": "paper_latex/figures/submission_v36; paper_latex/tables; results/analysis_figure_asset_audit.md; results/analysis_reproducibility_audit.md; results/analysis_runtime_envelope_audit.md",
       "next_action": "Spot-check figure/table readability after every layout or data update.",
       "requirement": "Rich paper figures and tables",
       "status": "pass"
     },
     {
       "boundary": "Author names, ACM CCS/rights metadata, target-venue final policy choices, and final declarations remain external author inputs.",
-      "evidence": "Compiled submission PDF exists with 48 pages and the TeX source is present; an ACM/TQC anonymous review-format smoke draft is generated and audited separately.",
+      "evidence": "Compiled submission PDF exists with 49 pages and the TeX source is present; an ACM/TQC anonymous review-format smoke draft is generated and audited separately.",
       "evidence_files": "paper_latex/resource_nmcts_submission_v1.tex; paper_latex/resource_nmcts_submission_v1.pdf; paper_latex/resource_nmcts_submission_acm_tqc.tex; paper_latex/resource_nmcts_submission_acm_tqc.pdf; results/analysis_target_venue_format_smoke.md; results/analysis_submission_readiness_audit.md",
       "next_action": "After author metadata is supplied, recompile the author, anonymous, and ACM/TQC drafts and rerun readiness checks.",
       "requirement": "Complete LaTeX manuscript draft",

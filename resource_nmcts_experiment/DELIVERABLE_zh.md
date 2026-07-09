@@ -20,11 +20,11 @@
 
 以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，用于防止交付说明和机器审计结果漂移：
 
-- PDF pages=48/48
-- readiness=72 pass + 1 needs author input
-- payload_files=1123
-- artifact_registry=27 families / 161 raw CSV / 80312 raw rows
-- source_privacy=0 strict leaks / 57 provenance files / 1080 payload text files
+- PDF pages=49/49
+- readiness=73 pass + 1 needs author input
+- payload_files=1133
+- artifact_registry=30 families / 161 raw CSV / 80312 raw rows
+- source_privacy=0 strict leaks / 57 provenance files / 1090 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open
@@ -321,7 +321,7 @@
 - `results/manifest_reproducibility_audit.json`
 - `paper_latex/tables/reproducibility_audit.tex`
 
-该审计记录当前工作站为 Apple M4 Pro，14 CPU cores，24.0 GiB RAM，20-core Metal GPU；`mcts-qoracle` 环境中 Python 3.11.15、PyTorch 2.12.0、MPS=True、CUDA=False。manifest 层面有 56 个运行记录包含 worker count，最大 workers=10；代表性流程包括 traditional resource 10 workers/1770 rows、RevKit CLI 8 workers/708 rows、ROS-style LUT 8 workers/927 rows、CirKit 8 workers/177 rows、mockturtle 4 workers/177 rows。重新生成后的 artifact coverage 为 121 个顶层 run/train/analyze 脚本、160 个 raw CSV、240 个 summary CSV、134 个 manifest、193 张 paper table 和 7 个 figure panel。论文中应把 runtime/time 结果限定在这个工作站上下文；可移植主张仍是逻辑资源数量和验证通过率。
+该审计记录当前工作站为 Apple M4 Pro，14 CPU cores，24.0 GiB RAM，20-core Metal GPU；`mcts-qoracle` 环境中 Python 3.11.15、PyTorch 2.12.0、MPS=True、CUDA=False。manifest 层面有 56 个运行记录包含 worker count，最大 workers=10；代表性流程包括 traditional resource 10 workers/1770 rows、RevKit CLI 8 workers/708 rows、ROS-style LUT 8 workers/927 rows、CirKit 8 workers/177 rows、mockturtle 4 workers/177 rows。重新生成后的 artifact coverage 为 124 个顶层 run/train/analyze 脚本、161 个 raw CSV、243 个 summary CSV、137 个 manifest、196 张 paper table 和 7 个 figure panel。新增 `analyze_runtime_envelope_audit.py` 汇总已有 raw CSV 的 wall-clock 包络：traditional 小函数、外部工具 probe、高维 symbolic frontier、complete truth-table bridge 和 learned-control runtime boundary 共 5/5 项 pass。论文中应把 runtime/time 结果限定在这个工作站上下文；可移植主张仍是逻辑资源数量和验证通过率。
 
 本轮新增轻量投稿包再生成入口：
 
@@ -484,9 +484,9 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/manifest_editorial_screening_audit.json`
 - `paper_latex/tables/editorial_screening_audit.tex`
 
-该审计逐项检查 logical-layer scope、novelty/comparison route、comparison target roles、counterpoint/negative-result visibility、AI/MCTS claim boundary、large-scale verification boundary、reproducibility path、author/venue gate 和 editorial reading path。当前 9/9 项 pass；它已接入 rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke 和 artifact rerun registry。artifact registry 现在覆盖 27 个 evidence family、160 个 raw CSV、80135 行 unique raw-row references。
+该审计逐项检查 logical-layer scope、novelty/comparison route、comparison target roles、counterpoint/negative-result visibility、AI/MCTS claim boundary、large-scale verification boundary、reproducibility path、author/venue gate 和 editorial reading path。当前 9/9 项 pass；它已接入 rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke 和 artifact rerun registry。artifact registry 现在覆盖 30 个 evidence family、161 个 raw CSV、80312 行 unique raw-row references。
 
-当前 submission-readiness 审计结果为 72 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、algorithm contract、search-budget contract、baseline fairness/scope、comparison answer/resource-weight sensitivity/CNOT constraint/SSHR reproduction/threats-to-validity/search-control/learned-control/neural-MCTS claim-calibration/citation/editorial screening/target-venue/ROS reproduction-boundary/schedule-proxy/submission support-packet audits、ACM/TQC target-format smoke、ultra-scale symbolic stress/resource-profile audits、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、uploadable payload archive、payload round-trip/extraction/verifier/LaTeX compile checks、terminal package verifier、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder 和 compiled PDF 检查。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
+当前 submission-readiness 审计结果为 73 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、algorithm contract、search-budget contract、baseline fairness/scope、comparison answer/resource-weight sensitivity/CNOT constraint/SSHR reproduction/threats-to-validity/search-control/learned-control/neural-MCTS claim-calibration/citation/editorial screening/target-venue/ROS reproduction-boundary/schedule-proxy/runtime-envelope/submission support-packet audits、ACM/TQC target-format smoke、ultra-scale symbolic stress/resource-profile audits、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、uploadable payload archive、payload round-trip/extraction/verifier/LaTeX compile checks、terminal package verifier、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder 和 compiled PDF 检查。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
 
 ## 2. 当前已完成内容
 

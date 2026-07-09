@@ -8,9 +8,11 @@ Generated payload Git policy & quick package audit & 0 & 0 & Requires a freshly 
 Editorial screening and reviewer-risk support & quick submission-support audit & 0 & 0 & Does not change scientific results; checks public submission-support consistency against existing audit outputs. \\
 Cover-letter and venue support packet & quick submission-support audit & 0 & 0 & Does not choose a venue or fill private metadata; checks public upload-support consistency and ACM/TQC template smoke compilation against existing audits. \\
 Public handoff freshness & quick submission-support audit & 0 & 0 & Does not change scientific results; checks that public handoff counters are refreshed after rebuilds. \\
+Runtime envelope and execution cost & quick derived audit & 20 & 7582 & Derived from existing raw timing columns; it records workstation feasibility and does not claim portable runtime speedups. \\
 Method workflow, algorithm, and budget contracts & quick method audit & 0 & 0 & Quick derived audit; checks implementation anchors and manuscript method exposition, not raw benchmark outcomes. \\
 Comparison protocol and claim boundaries & quick comparison audit & 0 & 0 & Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps. \\
 Novelty and comparison scorecard & quick comparison audit & 0 & 0 & Quick derived audit; it strengthens reviewer-facing positioning without rerunning raw experiments. \\
+Related-work and citation verification & quick literature audit & 0 & 0 & Offline locator and scope-boundary audit; it records source-backed related-work positioning but does not claim that adjacent AI/MCTS systems are same-task baselines. \\
 SSHR reproduction-scope audit & quick comparison audit & 3 & 3402 & Quick scope audit over existing SSHR-facing rows and references; it does not rerun heavy SSHR-I/Gurobi or every published random table. \\
 Resource-weight sensitivity and robustness & quick derived audit & 12 & 20630 & Post-hoc logical-resource rescoring only; it does not rerun synthesis and is not a hardware cost model. \\
 Traditional logical baselines & raw Python rerun & 6 & 4518 & Python rerun; ILP-based subbaselines need Gurobi where enabled. \\
@@ -24,6 +26,7 @@ RevKit exact and Rz probes & external toolchain rerun & 5 & 3194 & Requires RevK
 Phase and affine FPRM branch & raw phase rerun and training & 8 & 11879 & Logical phase verification up to global phase; sequence smoke is coarse; backend audit records that no high-precision gridsynth-style backend is present. \\
 Learned-control and ablations & training plus ablation rerun & 20 & 10883 & Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only. \\
 Schedule proxy and lifetime tradeoffs & quick derived audit & 3 & 1140 & Emitted-circuit logical schedule proxies only; not hardware routing, native-gate scheduling, or device execution. \\
+Runtime envelope and rerun feasibility & quick runtime audit & 20 & 7582 & Descriptive workstation timing envelope over existing raw artifacts; supports rerun feasibility, not portable runtime-speedup claims. \\
 High-dimensional symbolic screen-scale runs & large raw rerun & 77 & 11960 & Symbolic or generated-instance verification; not exhaustive truth-table enumeration for all large n. \\
 External high-dimensional resource extensions & large raw rerun & 4 & 528 & Generated large-instance comparisons; external availability and timeout behavior are recorded in manifests. \\
 Boolean screen, frontier, and gate auxiliaries & training plus ablation rerun & 11 & 2170 & Auxiliary policy-selection evidence; not all rows are promoted as final-quality gains. \\

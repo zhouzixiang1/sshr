@@ -1,0 +1,11 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}r>{\raggedright\arraybackslash}X}
+\toprule
+Slice & Scope & Rows ok & Runtime evidence and boundary \\
+\midrule
+Traditional $n\leq6$ Resource-NMCTS & 177 matched benchmark functions & 177/177 & median=4.15s; p95=9.78s; max=15.44s. Small-function timing context only; headline claims are paired logical-resource improvements. \\
+External logic-tool probes & ROS-style LUT, Caterpillar, mockturtle, CirKit, RevKit & 1548/1548 & median=0.08s; p95=0.51s; max=19.06s. Tool rows are bounded logic-level probes or exact-oracle probes, not hardware-mapped baselines. \\
+High-dimensional symbolic frontier & $n=24,28,32,40$ plus $n=48,56,64$ & 144/144 & median=3.30s; p95=52.14s; max=117.72s. Symbolic emitted-circuit checks; no exhaustive truth tables outside bridge slices. \\
+Complete truth-table bridge & $n=21$--$30$ generated bridge slices & 70/70 & median=2.85s; p95=14.87s; max=17.02s; truth\_verify median=0.19s. Complete checking is limited to generated bridge slices and is not global high-dimensional enumeration. \\
+Learned-control runtime boundary & compressed bit-flip budgets plus promoted learned controls & 708/708 & median=2.12s; p95=6.41s; max=7.72s. Learned controls are quality/budget evidence with explicit overhead or savings, not a blanket speedup claim. \\
+\bottomrule
+\end{tabularx}

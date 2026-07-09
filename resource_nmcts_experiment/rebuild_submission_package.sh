@@ -35,6 +35,7 @@ run_py analyze_algorithm_contract_table.py
 run_py analyze_search_budget_contract.py
 run_py analyze_related_work_positioning.py
 run_py analyze_citation_support_audit.py
+run_py analyze_learning_citation_verification.py
 run_py analyze_baseline_claim_matrix.py
 run_py run_caterpillar_xag_api_probe.py
 run_py analyze_comparison_evidence_matrix.py
@@ -102,6 +103,7 @@ run_py make_submission_text_preview.py
 run_py selftest_submission_metadata_pipeline.py
 run_py make_anonymous_review_draft.py
 run_py make_acm_tqc_review_draft.py
+run_py analyze_runtime_envelope_audit.py
 run_py analyze_anonymous_review_readiness.py
 run_py analyze_author_input_closure_audit.py
 run_py make_submission_figures.py

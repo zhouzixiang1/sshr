@@ -1,0 +1,51 @@
+{
+  "checked_keys": [
+    "tsaras2024shortcircuit",
+    "wang2023nestedmcts",
+    "weiden2023qseed",
+    "furrutter2024diffusion",
+    "rietsch2024unitary",
+    "valcarce2025dynamic",
+    "kremer2025nonclifford",
+    "dubal2025paulinetwork",
+    "riu2025rlzx",
+    "theissinger2026beyondrl",
+    "zhou2022qctmcts",
+    "machiya2026monteq"
+  ],
+  "citation_rows": 12,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_learning_citation_verification.md",
+    "manifest": "results/manifest_learning_citation_verification.json",
+    "summary": "results/summary_learning_citation_verification.csv",
+    "table": "paper_latex/tables/learning_citation_verification.tex"
+  },
+  "primary_sources": [
+    "ACM TODAES 27(6)",
+    "IEEE QCE / arXiv:2306.05622",
+    "IEEE QCE / arXiv:2404.14865",
+    "IEEE TQE / arXiv:2207.00132",
+    "Nature Machine Intelligence / arXiv:2311.02041",
+    "Quantum 9, 1758",
+    "arXiv:2408.09858",
+    "arXiv:2503.14448",
+    "arXiv:2508.21217",
+    "arXiv:2509.21709",
+    "arXiv:2602.15146",
+    "arXiv:2604.19029"
+  ],
+  "python": "3.11.15",
+  "rows": 13,
+  "script": "analyze_learning_citation_verification.py",
+  "source_files": {
+    "acm_tex": "paper_latex/resource_nmcts_submission_acm_tqc.tex",
+    "anonymous_tex": "paper_latex/resource_nmcts_submission_anonymous.tex",
+    "author_tex": "paper_latex/resource_nmcts_submission_v1.tex",
+    "references": "paper_latex/references.bib",
+    "related_table": "paper_latex/tables/related_work_positioning.tex"
+  },
+  "status_counts": {
+    "pass": 13
+  }
+}

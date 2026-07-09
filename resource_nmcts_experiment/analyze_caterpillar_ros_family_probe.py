@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import csv
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -80,6 +81,14 @@ def run_command(args: list[str], cwd: Path | None = None, timeout: int = 20) -> 
     except Exception as exc:
         return 999, f"{type(exc).__name__}: {exc}"
     return proc.returncode, proc.stdout.strip()
+
+
+def stable_compile_excerpt(output: str) -> str:
+    """Keep compile smoke evidence without recording per-run temp directory names."""
+    excerpt = "\n".join(output.splitlines()[:8])
+    excerpt = re.sub(r"/private/var/[^\s:]*/caterpillar_ros_probe_[^/\s:]+", "<tmp>/caterpillar_ros_probe", excerpt)
+    excerpt = re.sub(r"/var/[^\s:]*/caterpillar_ros_probe_[^/\s:]+", "<tmp>/caterpillar_ros_probe", excerpt)
+    return excerpt
 
 
 def git_info() -> dict[str, str]:
@@ -229,7 +238,7 @@ int main() {
             "compile_returncode": rc_compile,
             "run_returncode": run_rc,
             "warnings": warnings,
-            "compile_output_excerpt": "\n".join(compile_out.splitlines()[:8]),
+            "compile_output_excerpt": stable_compile_excerpt(compile_out),
             "run_output_excerpt": run_out[:240],
         }
 

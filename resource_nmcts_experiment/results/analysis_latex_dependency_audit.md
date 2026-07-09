@@ -4,14 +4,14 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 
 ## Status counts
 
-- pass: 204
+- pass: 207
 
 ## Dependency types
 
 - bibliography: 3
 - figure: 21
 - main_source: 3
-- tex_input: 177
+- tex_input: 180
 
 ## Missing dependencies
 
@@ -37,6 +37,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/baseline_comparability_audit` | `paper_latex/tables/baseline_comparability_audit.tex` | True | True | pass |
 | author | tex_input | `tables/counterpoint_claim_boundary` | `paper_latex/tables/counterpoint_claim_boundary.tex` | True | True | pass |
 | author | tex_input | `tables/reproducibility_audit` | `paper_latex/tables/reproducibility_audit.tex` | True | True | pass |
+| author | tex_input | `tables/runtime_envelope_audit` | `paper_latex/tables/runtime_envelope_audit.tex` | True | True | pass |
 | author | tex_input | `tables/submission_traceability_audit` | `paper_latex/tables/submission_traceability_audit.tex` | True | True | pass |
 | author | tex_input | `tables/submission_archive_manifest` | `paper_latex/tables/submission_archive_manifest.tex` | True | True | pass |
 | author | tex_input | `tables/traditional_structure_mechanism` | `paper_latex/tables/traditional_structure_mechanism.tex` | True | True | pass |
@@ -105,6 +106,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/baseline_comparability_audit` | `paper_latex/tables/baseline_comparability_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/counterpoint_claim_boundary` | `paper_latex/tables/counterpoint_claim_boundary.tex` | True | True | pass |
 | anonymous | tex_input | `tables/reproducibility_audit` | `paper_latex/tables/reproducibility_audit.tex` | True | True | pass |
+| anonymous | tex_input | `tables/runtime_envelope_audit` | `paper_latex/tables/runtime_envelope_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/submission_traceability_audit` | `paper_latex/tables/submission_traceability_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/submission_archive_manifest` | `paper_latex/tables/submission_archive_manifest.tex` | True | True | pass |
 | anonymous | tex_input | `tables/traditional_structure_mechanism` | `paper_latex/tables/traditional_structure_mechanism.tex` | True | True | pass |
@@ -173,6 +175,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/baseline_comparability_audit` | `paper_latex/tables/baseline_comparability_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/counterpoint_claim_boundary` | `paper_latex/tables/counterpoint_claim_boundary.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/reproducibility_audit` | `paper_latex/tables/reproducibility_audit.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/runtime_envelope_audit` | `paper_latex/tables/runtime_envelope_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/submission_traceability_audit` | `paper_latex/tables/submission_traceability_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/submission_archive_manifest` | `paper_latex/tables/submission_archive_manifest.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/traditional_structure_mechanism` | `paper_latex/tables/traditional_structure_mechanism.tex` | True | True | pass |

@@ -4,7 +4,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 
 ## Status counts
 
-- complete: 27
+- complete: 30
 - unique raw files covered by registry: 161
 - unique raw CSV rows covered by registry: 80312
 
@@ -16,9 +16,11 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | Editorial screening and reviewer-risk support | quick submission-support audit | 0 | 0 | 2 | complete | Does not change scientific results; checks public submission-support consistency against existing audit outputs. |
 | Cover-letter and venue support packet | quick submission-support audit | 0 | 0 | 3 | complete | Does not choose a venue or fill private metadata; checks public upload-support consistency and ACM/TQC template smoke compilation against existing audits. |
 | Public handoff freshness | quick submission-support audit | 0 | 0 | 1 | complete | Does not change scientific results; checks that public handoff counters are refreshed after rebuilds. |
+| Runtime envelope and execution cost | quick derived audit | 20 | 7582 | 1 | complete | Derived from existing raw timing columns; it records workstation feasibility and does not claim portable runtime speedups. |
 | Method workflow, algorithm, and budget contracts | quick method audit | 0 | 0 | 2 | complete | Quick derived audit; checks implementation anchors and manuscript method exposition, not raw benchmark outcomes. |
 | Comparison protocol and claim boundaries | quick comparison audit | 0 | 0 | 3 | complete | Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps. |
 | Novelty and comparison scorecard | quick comparison audit | 0 | 0 | 1 | complete | Quick derived audit; it strengthens reviewer-facing positioning without rerunning raw experiments. |
+| Related-work and citation verification | quick literature audit | 0 | 0 | 2 | complete | Offline locator and scope-boundary audit; it records source-backed related-work positioning but does not claim that adjacent AI/MCTS systems are same-task baselines. |
 | SSHR reproduction-scope audit | quick comparison audit | 3 | 3402 | 4 | complete | Quick scope audit over existing SSHR-facing rows and references; it does not rerun heavy SSHR-I/Gurobi or every published random table. |
 | Resource-weight sensitivity and robustness | quick derived audit | 12 | 20630 | 2 | complete | Post-hoc logical-resource rescoring only; it does not rerun synthesis and is not a hardware cost model. |
 | Traditional logical baselines | raw Python rerun | 6 | 4518 | 5 | complete | Python rerun; ILP-based subbaselines need Gurobi where enabled. |
@@ -32,6 +34,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | Phase and affine FPRM branch | raw phase rerun and training | 8 | 11879 | 10 | complete | Logical phase verification up to global phase; sequence smoke is coarse; backend audit records that no high-precision gridsynth-style backend is present. |
 | Learned-control and ablations | training plus ablation rerun | 20 | 10883 | 17 | complete | Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only. |
 | Schedule proxy and lifetime tradeoffs | quick derived audit | 3 | 1140 | 1 | complete | Emitted-circuit logical schedule proxies only; not hardware routing, native-gate scheduling, or device execution. |
+| Runtime envelope and rerun feasibility | quick runtime audit | 20 | 7582 | 1 | complete | Descriptive workstation timing envelope over existing raw artifacts; supports rerun feasibility, not portable runtime-speedup claims. |
 | High-dimensional symbolic screen-scale runs | large raw rerun | 77 | 11960 | 26 | complete | Symbolic or generated-instance verification; not exhaustive truth-table enumeration for all large n. |
 | External high-dimensional resource extensions | large raw rerun | 4 | 528 | 4 | complete | Generated large-instance comparisons; external availability and timeout behavior are recorded in manifests. |
 | Boolean screen, frontier, and gate auxiliaries | training plus ablation rerun | 11 | 2170 | 3 | complete | Auxiliary policy-selection evidence; not all rows are promoted as final-quality gains. |
@@ -64,6 +67,10 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - claim use: Verifies that public Chinese handoff, deliverable, and upload-checklist snapshots match current terminal audit counts.
   - scripts: `analyze_public_handoff_freshness_audit.py`
   - representative raw: not applicable for this tier
+- **Runtime envelope and execution cost**
+  - claim use: Consolidates workstation wall-clock evidence for small benchmarks, external probes, high-dimensional symbolic rows, truth-bridge rows, and learned-control rows.
+  - scripts: `analyze_runtime_envelope_audit.py`
+  - representative raw: `results/raw_bitflip_neural_budget_sweep.csv; results/raw_caterpillar_xag_api_best.csv; results/raw_cirkit_aig_probe.csv; results/raw_mockturtle_xag_probe.csv; +16 more`
 - **Method workflow, algorithm, and budget contracts**
   - claim use: Verifies that the method description is connected to executable stages, source anchors, semantic/resource guarantees, and explicit search budgets.
   - scripts: `analyze_method_workflow_table.py; analyze_algorithm_contract_table.py; analyze_search_budget_contract.py`
@@ -75,6 +82,10 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 - **Novelty and comparison scorecard**
   - claim use: Checks that reviewer-facing novelty/comparison questions are tied to manuscript evidence, support-brief anchors, and explicit limitations.
   - scripts: `analyze_novelty_comparison_scorecard.py`
+  - representative raw: not applicable for this tier
+- **Related-work and citation verification**
+  - claim use: Verifies related-work positioning, cited BibTeX coverage, DOI/arXiv locators, and learning-guided synthesis scope boundaries.
+  - scripts: `analyze_related_work_positioning.py; analyze_citation_support_audit.py; analyze_learning_citation_verification.py`
   - representative raw: not applicable for this tier
 - **SSHR reproduction-scope audit**
   - claim use: Separates source-anchored SSHR paper references, same-function SSHR-H rows, timed SSHR-I rows, exact n<=4 pilot checks, and excluded full-paper SSHR reruns.
@@ -128,6 +139,10 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - claim use: Checks logic-level T-depth proxy and explicit auxiliary-lifetime tradeoffs for the high-dimensional frontier controllers.
   - scripts: `analyze_schedule_metrics.py; analyze_schedule_proxy_audit.py`
   - representative raw: `results/raw_schedule_truth_bridge_n23_terms.csv; results/raw_schedule_truth_bridge_terms.csv; results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv`
+- **Runtime envelope and rerun feasibility**
+  - claim use: Summarizes workstation wall-clock envelopes across small, external, high-dimensional, truth-bridge, and learned-control slices.
+  - scripts: `analyze_runtime_envelope_audit.py`
+  - representative raw: `results/raw_bitflip_neural_budget_sweep.csv; results/raw_caterpillar_xag_api_best.csv; results/raw_cirkit_aig_probe.csv; results/raw_mockturtle_xag_probe.csv; +16 more`
 - **High-dimensional symbolic screen-scale runs**
   - claim use: Tests scaling behavior on n=20-64 generated term-set instances with symbolic emitted-circuit checks.
   - scripts: `run_screen_scale_terms.py; analyze_ultra_scale64_stress.py; analyze_ultra_scale64_resource_profile.py`

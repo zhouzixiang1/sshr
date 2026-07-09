@@ -1,0 +1,14 @@
+{
+  "acm_table_anchor_present": true,
+  "analysis": "results/analysis_runtime_envelope_audit.md",
+  "anonymous_table_anchor_present": true,
+  "needs_revision_count": 0,
+  "rows": 5,
+  "script": "analyze_runtime_envelope_audit.py",
+  "status_counts": {
+    "pass": 5
+  },
+  "summary": "results/summary_runtime_envelope_audit.csv",
+  "table": "paper_latex/tables/runtime_envelope_audit.tex",
+  "table_anchor_present": true
+}
