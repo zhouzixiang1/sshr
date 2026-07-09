@@ -22,7 +22,7 @@
       "status": "pass"
     },
     {
-      "bytes": "753315",
+      "bytes": "753317",
       "compile_seconds": "not_recorded",
       "evidence": "stdout_lines=1510; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "author payload LaTeX compile",
@@ -33,7 +33,7 @@
       "status": "pass"
     },
     {
-      "bytes": "750106",
+      "bytes": "750109",
       "compile_seconds": "not_recorded",
       "evidence": "stdout_lines=1518; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "anonymous payload LaTeX compile",
@@ -44,7 +44,7 @@
       "status": "pass"
     },
     {
-      "bytes": "923198",
+      "bytes": "923199",
       "compile_seconds": "not_recorded",
       "evidence": "stdout_lines=2033; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "acm_tqc payload LaTeX compile",

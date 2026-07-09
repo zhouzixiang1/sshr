@@ -68,6 +68,9 @@ ANONYMOUS_LOG = THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.
 PAYLOAD = THIS_DIR / "submission_package" / "dist" / "resource_nmcts_submission_payload.tar.gz"
 PAYLOAD_SHA = THIS_DIR / "submission_package" / "dist" / "resource_nmcts_submission_payload.tar.gz.sha256"
 READINESS = RESULTS / "summary_submission_readiness_audit.csv"
+ARCHIVE_MANIFEST_SUMMARY = RESULTS / "summary_submission_archive_manifest.csv"
+ARCHIVE_MANIFEST_JSON = RESULTS / "manifest_submission_archive_manifest.json"
+ARCHIVE_MANIFEST_TABLE = THIS_DIR / "paper_latex" / "tables" / "submission_archive_manifest.tex"
 REGISTRY_SUMMARY = RESULTS / "summary_artifact_rerun_registry.csv"
 REGISTRY_MANIFEST = RESULTS / "manifest_artifact_rerun_registry.json"
 PAYLOAD_SUMMARY = RESULTS / "summary_submission_payload_archive.csv"
@@ -318,16 +321,40 @@ def verify_readiness() -> dict[str, str]:
             "Readiness summary CSV is missing or empty.",
             "Run analyze_submission_readiness_audit.py.",
         )
-    rows = [item for item in rows if item.get("item") != "Terminal package verifier"]
-    counts: dict[str, int] = {}
+    full_counts: dict[str, int] = {}
     for item in rows:
-        counts[item.get("status", "")] = counts.get(item.get("status", ""), 0) + 1
-    only_author_gate = counts.get("needs author input", 0) == 1 and counts.get("needs revision", 0) == 0
+        full_counts[item.get("status", "")] = full_counts.get(item.get("status", ""), 0) + 1
+    checked_rows = [item for item in rows if item.get("item") != "Terminal package verifier"]
+    checked_counts: dict[str, int] = {}
+    for item in checked_rows:
+        checked_counts[item.get("status", "")] = checked_counts.get(item.get("status", ""), 0) + 1
+    only_author_gate = checked_counts.get("needs author input", 0) == 1 and checked_counts.get("needs revision", 0) == 0
     return row(
         "Readiness audit terminal state",
         "pass" if only_author_gate else "needs revision",
-        f"status_counts={counts}; terminal_verifier_self_row_excluded=True.",
+        f"full_status_counts={full_counts}; checked_status_counts={checked_counts}; terminal_verifier_self_row_excluded=True.",
         "Resolve any needs-revision rows; author-specific declarations remain manual.",
+    )
+
+
+def verify_submission_archive_manifest() -> dict[str, str]:
+    summary_rows = read_csv(ARCHIVE_MANIFEST_SUMMARY)
+    manifest = read_json(ARCHIVE_MANIFEST_JSON)
+    categories = manifest.get("categories", []) if manifest else []
+    table_exists = ARCHIVE_MANIFEST_TABLE.exists()
+    summary_categories = [item.get("category", "") for item in summary_rows]
+    manifest_categories = [str(item.get("category", "")) for item in categories if isinstance(item, dict)]
+    try:
+        missing_total = sum(int(item.get("missing", "0") or 0) for item in summary_rows)
+    except ValueError:
+        missing_total = -1
+    consistent = bool(summary_rows) and summary_categories == manifest_categories
+    status = "pass" if consistent and missing_total == 0 and table_exists else "needs revision"
+    return row(
+        "Submission archive manifest freshness",
+        status,
+        f"summary_categories={len(summary_rows)}; manifest_categories={len(manifest_categories)}; missing_total={missing_total}; table_exists={table_exists}; categories_consistent={consistent}.",
+        "Run analyze_submission_archive_manifest.py after changing scripts, public support files, tables, figures, models, or result files.",
     )
 
 
@@ -1857,6 +1884,7 @@ def build_rows() -> list[dict[str, str]]:
     rows.extend(
         [
             verify_readiness(),
+            verify_submission_archive_manifest(),
             verify_registry(),
             verify_claim_scope(),
             verify_comparison_protocol(),
