@@ -151,6 +151,7 @@ run_py analyze_final_upload_sequence_audit.py
 run_py analyze_payload_extraction_smoke_audit.py
 run_py analyze_payload_latex_compile_audit.py
 run_py analyze_payload_verifier_smoke_audit.py
+run_py analyze_upload_bundle_matrix_audit.py
 run_py analyze_submission_readiness_audit.py
 run_py analyze_public_handoff_freshness_audit.py
 run_py analyze_submission_package_verifier.py

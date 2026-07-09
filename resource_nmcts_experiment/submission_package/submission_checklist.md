@@ -76,6 +76,7 @@ Use this checklist immediately before uploading the manuscript.
 - Author-input closure audit: `results/analysis_author_input_closure_audit.md`
 - Metadata closure-path audit: `results/analysis_submission_metadata_closure_path.md`
 - Final upload sequence audit: `results/analysis_final_upload_sequence_audit.md`
+- Upload bundle matrix audit: `results/analysis_upload_bundle_matrix_audit.md`
 - Metadata pipeline self-test: `results/analysis_submission_metadata_pipeline_selftest.md`
 - Anonymous-review readiness audit: `results/analysis_anonymous_review_readiness.md`
 - Private submission text preview audit: `results/analysis_submission_text_preview.md`
@@ -132,6 +133,7 @@ Run these from `resource_nmcts_experiment/`:
   analyze_submission_metadata_audit.py \
   analyze_author_input_closure_audit.py \
   analyze_final_upload_sequence_audit.py \
+  analyze_upload_bundle_matrix_audit.py \
   analyze_anonymous_review_readiness.py \
   analyze_target_venue_policy_checklist.py \
   analyze_submission_readiness_audit.py \
@@ -158,9 +160,9 @@ rg -n "Overfull|Underfull|undefined|Undefined|Warning|Error|LaTeX Warning|Rerun"
 Expected current state:
 
 - Machine snapshot tokens checked by `analyze_public_handoff_freshness_audit.py`:
-  PDF pages=50/50; readiness=82 pass + 1 needs author input;
-  payload_files=1177; artifact_registry=31 families / 161 raw CSV / 80312 raw rows;
-  source_privacy=0 strict leaks / 57 provenance files / 1134 payload text files;
+  PDF pages=50/50; readiness=83 pass + 1 needs author input;
+  payload_files=1178; artifact_registry=31 families / 161 raw CSV / 80312 raw rows;
+  source_privacy=0 strict leaks / 57 provenance files / 1135 payload text files;
   comparison_validity=8/8 pass; novelty_scorecard=6/6 pass;
   goal_gate=author/venue metadata remains open.
 - Archive manifest: all payload groups complete.
@@ -169,6 +171,9 @@ Expected current state:
 - Payload extraction smoke audit: the upload tarball extracts safely and runs comparison protocol, comparison-target validity, comparison-answer scorecard, novelty/comparison scorecard, threats-to-validity, learned-control, neural/MCTS claim calibration, ROS reproduction gap, editorial screening, support-packet, citation support, source/path privacy, author-input closure, headline numeric consistency, claim-scope lint, and artifact-rerun registry checks from the extracted tree.
 - Payload verifier smoke audit: the upload tarball extracts safely and `verify_submission_package.sh` passes from inside the extracted payload tree.
 - Payload LaTeX compile audit: the upload tarball extracts safely and rebuilds the author, anonymous, and ACM/TQC PDFs from the extracted LaTeX source tree.
+- Upload bundle matrix audit: author, anonymous, ACM/TQC, source/data payload,
+  support-template, private-local, and venue-decision bundles all pass their
+  file, privacy, and claim-boundary checks.
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
 - Comparison protocol audit: all baseline layers have role, evidence, comparability, counterpoint, artifact, and manuscript-anchor coverage.
 - Comparison target validity audit: comparison families are explicitly labeled as primary benchmark, external stress test, exact reversible counterpoint, phase proxy, causal control, scalability verification, or non-dominance boundary.

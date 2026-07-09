@@ -72,6 +72,9 @@ FINAL_HUMAN_GATE_MANIFEST = RESULTS / "manifest_final_human_gate_audit.json"
 FINAL_UPLOAD_SEQUENCE_ANALYSIS = RESULTS / "analysis_final_upload_sequence_audit.md"
 FINAL_UPLOAD_SEQUENCE_SUMMARY = RESULTS / "summary_final_upload_sequence_audit.csv"
 FINAL_UPLOAD_SEQUENCE_MANIFEST = RESULTS / "manifest_final_upload_sequence_audit.json"
+UPLOAD_BUNDLE_MATRIX_ANALYSIS = RESULTS / "analysis_upload_bundle_matrix_audit.md"
+UPLOAD_BUNDLE_MATRIX_SUMMARY = RESULTS / "summary_upload_bundle_matrix_audit.csv"
+UPLOAD_BUNDLE_MATRIX_MANIFEST = RESULTS / "manifest_upload_bundle_matrix_audit.json"
 PAYLOAD_ROUNDTRIP_ANALYSIS = RESULTS / "analysis_payload_roundtrip_audit.md"
 PAYLOAD_ROUNDTRIP_SUMMARY = RESULTS / "summary_payload_roundtrip_audit.csv"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
@@ -845,6 +848,15 @@ def build_rows() -> list[dict[str, str]]:
     )
     final_upload_sequence_ready = (
         bool(final_upload_sequence_manifest.get("sequence_ready", False)) if final_upload_sequence_manifest else False
+    )
+    upload_bundle_manifest = read_json(UPLOAD_BUNDLE_MATRIX_MANIFEST)
+    upload_bundle_counts = upload_bundle_manifest.get("status_counts", {}) if upload_bundle_manifest else {}
+    upload_bundle_revisions = (
+        int(upload_bundle_manifest.get("needs_revision_count", -1)) if upload_bundle_manifest else -1
+    )
+    upload_bundle_rows = upload_bundle_manifest.get("rows", "missing") if upload_bundle_manifest else "missing"
+    upload_bundle_ready = (
+        bool(upload_bundle_manifest.get("bundle_matrix_ready", False)) if upload_bundle_manifest else False
     )
     editorial_screening_manifest = read_json(EDITORIAL_SCREENING_MANIFEST)
     editorial_screening_counts = (
@@ -1831,6 +1843,18 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Final upload sequence audit checks ordered author-facing venue selection, private metadata intake, rebuild/verify, private preview review, availability-link replacement, comparison-claim boundary, and goal-closure protection; rows={final_upload_sequence_rows}; status_counts={final_upload_sequence_counts}; needs_revision_count={final_upload_sequence_revisions}; sequence_ready={final_upload_sequence_ready}.",
             "next_action": "Rerun analyze_final_upload_sequence_audit.py after changing final handoff, checklist, README, metadata templates, anonymous-review policy, or final human-gate audits.",
+        },
+        {
+            "item": "Upload bundle matrix audit",
+            "status": "pass"
+            if UPLOAD_BUNDLE_MATRIX_ANALYSIS.exists()
+            and UPLOAD_BUNDLE_MATRIX_SUMMARY.exists()
+            and UPLOAD_BUNDLE_MATRIX_MANIFEST.exists()
+            and upload_bundle_revisions == 0
+            and upload_bundle_ready
+            else "needs revision",
+            "evidence": f"Upload bundle matrix audit maps author, anonymous, ACM/TQC, payload, support, private-local, and venue-decision bundles to checked files and privacy/claim boundaries; rows={upload_bundle_rows}; status_counts={upload_bundle_counts}; needs_revision_count={upload_bundle_revisions}; bundle_matrix_ready={upload_bundle_ready}.",
+            "next_action": "Rerun analyze_upload_bundle_matrix_audit.py after changing PDF/source outputs, payload packaging, support docs, private-file boundaries, target format, or final upload route docs.",
         },
         {
             "item": "Compiled anonymous review draft",

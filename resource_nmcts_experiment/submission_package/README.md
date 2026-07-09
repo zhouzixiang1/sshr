@@ -86,6 +86,10 @@ noise modeling, or magic-state-factory accounting.
   private metadata intake, rebuild/verification, private previews,
   availability-link replacement, comparison-claim boundaries, and the
   human-only goal gate.
+- `../results/analysis_upload_bundle_matrix_audit.md`: terminal audit that
+  maps the author, anonymous, ACM/TQC, source/data payload, support-template,
+  private-local, and venue-decision bundles to checked files and upload
+  boundaries.
 - `../results/analysis_editorial_screening_audit.md`: audit that checks the
   editor-facing path for scope, novelty, comparison fairness, counterpoints,
   AI-claim boundaries, large-scale verification boundaries, reproducibility,

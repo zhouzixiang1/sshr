@@ -41,6 +41,7 @@ synthetic metadata-pipeline self-testing, anonymous-review decision support,
 author-input closure,
 final human-gate closure,
 final upload sequence closure,
+upload bundle matrix closure,
 private-preview protection, private payload exclusion, payload round-trip
 integrity, generated-payload Git policy, extracted-payload smoke checks,
 extracted-payload LaTeX compilation, extracted-payload verifier smoke,
@@ -185,6 +186,7 @@ METADATA_ANSWER_TEMPLATE_MANIFEST = RESULTS / "manifest_metadata_answer_template
 METADATA_CLOSURE_MANIFEST = RESULTS / "manifest_submission_metadata_closure_path.json"
 FINAL_HUMAN_GATE_MANIFEST = RESULTS / "manifest_final_human_gate_audit.json"
 FINAL_UPLOAD_SEQUENCE_MANIFEST = RESULTS / "manifest_final_upload_sequence_audit.json"
+UPLOAD_BUNDLE_MATRIX_MANIFEST = RESULTS / "manifest_upload_bundle_matrix_audit.json"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
 PAYLOAD_GIT_POLICY_MANIFEST = RESULTS / "manifest_payload_git_policy_audit.json"
 PAYLOAD_EXTRACTION_SMOKE_MANIFEST = RESULTS / "manifest_payload_extraction_smoke_audit.json"
@@ -1884,6 +1886,30 @@ def verify_final_upload_sequence() -> dict[str, str]:
     )
 
 
+def verify_upload_bundle_matrix() -> dict[str, str]:
+    manifest = read_json(UPLOAD_BUNDLE_MATRIX_MANIFEST)
+    if EXTRACTED_PAYLOAD_MODE and not manifest:
+        return row(
+            "Upload bundle matrix audit",
+            "pass",
+            "extracted_payload_mode=1; upload bundle-matrix terminal manifest is intentionally excluded from the upload payload.",
+            "Run analyze_upload_bundle_matrix_audit.py in the source worktree after payload, support-doc, target-format, or final upload-route outputs change.",
+        )
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    ready = bool(manifest.get("bundle_matrix_ready", False)) if manifest else False
+    terminal = bool(manifest.get("terminal_audit", False)) if manifest else False
+    bundles = manifest.get("bundles", []) if manifest else []
+    status = "pass" if manifest and needs_revision == 0 and ready and terminal else "needs revision"
+    return row(
+        "Upload bundle matrix audit",
+        status,
+        f"rows={rows}; needs_revision_count={needs_revision}; bundle_matrix_ready={ready}; terminal_audit={terminal}; bundles={bundles}; status_counts={counts}.",
+        "Run analyze_upload_bundle_matrix_audit.py after changing author/anonymous/ACM PDFs, payload packaging, support docs, private-file boundaries, target-format smoke, or final upload route docs.",
+    )
+
+
 def verify_private_payload_exclusion() -> dict[str, str]:
     manifest = read_json(PAYLOAD_MANIFEST)
     if EXTRACTED_PAYLOAD_MODE and not manifest:
@@ -2134,6 +2160,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_metadata_closure_path(),
             verify_final_human_gate(),
             verify_final_upload_sequence(),
+            verify_upload_bundle_matrix(),
             verify_text_preview(),
             verify_private_payload_exclusion(),
             verify_payload_roundtrip(),

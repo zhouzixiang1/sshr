@@ -11,9 +11,9 @@
   "rows": 4,
   "rows_detail": [
     {
-      "bytes": "1177",
+      "bytes": "1178",
       "compile_seconds": "0.000",
-      "evidence": "extracted_files=1177; error=none.",
+      "evidence": "extracted_files=1178; error=none.",
       "item": "Payload extraction for LaTeX compile",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "pages": "n/a",
@@ -22,7 +22,7 @@
       "status": "pass"
     },
     {
-      "bytes": "759321",
+      "bytes": "759320",
       "compile_seconds": "not_recorded",
       "evidence": "stdout_lines=1532; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "author payload LaTeX compile",
@@ -33,7 +33,7 @@
       "status": "pass"
     },
     {
-      "bytes": "756115",
+      "bytes": "756106",
       "compile_seconds": "not_recorded",
       "evidence": "stdout_lines=1540; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "anonymous payload LaTeX compile",
@@ -44,7 +44,7 @@
       "status": "pass"
     },
     {
-      "bytes": "940146",
+      "bytes": "940148",
       "compile_seconds": "not_recorded",
       "evidence": "stdout_lines=1920; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "acm_tqc payload LaTeX compile",

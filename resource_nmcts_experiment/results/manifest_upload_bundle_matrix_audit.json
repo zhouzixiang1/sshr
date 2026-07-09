@@ -1,0 +1,25 @@
+{
+  "bundle_matrix_ready": true,
+  "bundles": [
+    "Author manuscript bundle",
+    "Generic anonymous-review bundle",
+    "ACM/TQC review-format bundle",
+    "Source/data payload bundle",
+    "Support and declaration templates",
+    "Private local-only metadata boundary",
+    "Venue decision and final-sequence gate"
+  ],
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_upload_bundle_matrix_audit.md",
+    "manifest": "results/manifest_upload_bundle_matrix_audit.json",
+    "summary": "results/summary_upload_bundle_matrix_audit.csv"
+  },
+  "python": "3.11.15",
+  "rows": 7,
+  "script": "analyze_upload_bundle_matrix_audit.py",
+  "status_counts": {
+    "pass": 7
+  },
+  "terminal_audit": true
+}
