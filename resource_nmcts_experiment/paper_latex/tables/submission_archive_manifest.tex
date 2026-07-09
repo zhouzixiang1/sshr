@@ -2,12 +2,12 @@
 \toprule
 Payload group & Files & Missing & Digest & Boundary \\
 \midrule
-Manuscript source & 5 & 0 & \texttt{945102657f0a} & Compiled PDF is checked by readiness audit to avoid self-referential hashes. \\
+Manuscript source & 5 & 0 & \texttt{82f1f4f65a89} & Compiled PDF is checked by readiness audit to avoid self-referential hashes. \\
 Paper tables & 185 & 0 & \texttt{82655109ff44} & Terminal submission audit tables are excluded from the stable payload digest. \\
 Submission figures & 28 & 0 & \texttt{21bcc9aff5c1} & Includes generated figure assets and plotted source data, not raw benchmark reruns. \\
 Raw measurements & 156 & 0 & \texttt{2eb623828855} & Raw CSVs are regenerated only by the heavier run scripts, not by the lightweight rebuild. \\
-Derived summaries & 408 & 0 & \texttt{cd386928698c} & Terminal submission/package outputs are excluded so this manifest remains stable. \\
-Run manifests & 113 & 0 & \texttt{c41fa5a213b4} & Submission-level terminal manifests are excluded from this digest group. \\
+Derived summaries & 408 & 0 & \texttt{f09e06360921} & Terminal submission/package outputs are excluded so this manifest remains stable. \\
+Run manifests & 113 & 0 & \texttt{158be6de0de7} & Submission-level terminal manifests are excluded from this digest group. \\
 Scripts and docs & 143 & 0 & \texttt{c8c0f275c021} & Includes reproducible entry points and top-level core implementation modules; raw sweeps still require their individual drivers. \\
 Models & 20 & 0 & \texttt{4c5c2a1bfc19} & Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild. \\
 External adapters & 1 & 0 & \texttt{de5aa3b78998} & Includes local adapter source files used for external toolchain probes, not vendored tool repositories. \\

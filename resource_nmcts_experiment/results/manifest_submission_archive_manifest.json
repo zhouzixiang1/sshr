@@ -19,21 +19,21 @@
         {
           "bytes": 73126,
           "path": "paper_latex/resource_nmcts_submission_acm_tqc.tex",
-          "sha256": "c9b5161caa01052ecc13112431cf4735b4054e133b5255dc4ee1c145ef0ae0b0"
+          "sha256": "1f6acb283a293408c97c72e99fc6d4ade62d4701d7f804815ee4b082343531a9"
         },
         {
           "bytes": 72887,
           "path": "paper_latex/resource_nmcts_submission_anonymous.tex",
-          "sha256": "4d87d293185a127eb2dc4543adc792db2486e9317f8fb5a62f25dc6687efe324"
+          "sha256": "b8f84c488a068520a1ef5411287f6756e4067cfc62cfad98877b7b563f1d4397"
         },
         {
           "bytes": 74261,
           "path": "paper_latex/resource_nmcts_submission_v1.tex",
-          "sha256": "10839130d364050b2693f5c9bc06eaf37ebcb1625237ef1fb7a831e0df073ad5"
+          "sha256": "adaa40f902bee9b57382216c9b25a8ffa71585121a9eb40811f4798c97aa1b3c"
         }
       ],
       "missing": [],
-      "sha256_digest": "945102657f0a4d9db78b8a9466619867c85ea86f075aa57a0ed4edcb926ac868"
+      "sha256_digest": "82f1f4f65a894693767a0fabc84d8845f3381e6653bbafd11a7ef4f560795614"
     },
     {
       "boundary": "Terminal submission audit tables are excluded from the stable payload digest.",
@@ -2759,7 +2759,7 @@
         {
           "bytes": 1309,
           "path": "results/analysis_target_venue_format_smoke.md",
-          "sha256": "32ef73527a9b70dd06f8efc7fd49111f724547f40880f72e6a074b90127a643a"
+          "sha256": "f70134099eba71bf0c86708921ce03875a4f7847dd534248d02c1ab5fda95c68"
         },
         {
           "bytes": 3057,
@@ -3819,7 +3819,7 @@
         {
           "bytes": 1099,
           "path": "results/summary_target_venue_format_smoke.csv",
-          "sha256": "f6b5b8e1a5347e6eecf2003a10fd31db4a1d9f1291b36716e1df2c40df3eaf3e"
+          "sha256": "93cf79d8fd57701927ef2c92b065b769a7d6823f0ab8de686cce9c9fd5fd03d2"
         },
         {
           "bytes": 4802,
@@ -3958,7 +3958,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "cd386928698cc7b35061e90a400f4ca69005fab29fbae3c335da9c4e496fb9cc"
+      "sha256_digest": "f09e0636092172bde36bbb2141ada6f04fc785d50e848a4a53d71ec951f18d7a"
     },
     {
       "boundary": "Submission-level terminal manifests are excluded from this digest group.",
@@ -4479,7 +4479,7 @@
         {
           "bytes": 2094,
           "path": "results/manifest_target_venue_format_smoke.json",
-          "sha256": "09e211c817893a7a5e8948b3759e22195077b98765ddb82ad361ebfc0ccbab2c"
+          "sha256": "16dba9e8bc7c20696021191f758bfafd4d18e190096490246447ec0b88248e7e"
         },
         {
           "bytes": 1927,
@@ -4533,7 +4533,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "c41fa5a213b4979535124236553471c33e4b259d313eaf6e7a478207a518bbe0"
+      "sha256_digest": "158be6de0de77aa39032b7f29122cdd19b55f6ab6253b4666eef1a4bb1c05045"
     },
     {
       "boundary": "Includes reproducible entry points and top-level core implementation modules; raw sweeps still require their individual drivers.",
