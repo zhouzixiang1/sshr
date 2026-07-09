@@ -110,6 +110,10 @@ COMPARISON_TARGET_VALIDITY_ANALYSIS = RESULTS / "analysis_comparison_target_vali
 COMPARISON_TARGET_VALIDITY_SUMMARY = RESULTS / "summary_comparison_target_validity_audit.csv"
 COMPARISON_TARGET_VALIDITY_MANIFEST = RESULTS / "manifest_comparison_target_validity_audit.json"
 COMPARISON_TARGET_VALIDITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_target_validity_audit.tex"
+COMPARISON_CLAIM_HIERARCHY_ANALYSIS = RESULTS / "analysis_comparison_claim_hierarchy.md"
+COMPARISON_CLAIM_HIERARCHY_SUMMARY = RESULTS / "summary_comparison_claim_hierarchy.csv"
+COMPARISON_CLAIM_HIERARCHY_MANIFEST = RESULTS / "manifest_comparison_claim_hierarchy.json"
+COMPARISON_CLAIM_HIERARCHY_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_claim_hierarchy.tex"
 COMPARISON_ANSWER_ANALYSIS = RESULTS / "analysis_comparison_answer_scorecard.md"
 COMPARISON_ANSWER_SUMMARY = RESULTS / "summary_comparison_answer_scorecard.csv"
 COMPARISON_ANSWER_MANIFEST = RESULTS / "manifest_comparison_answer_scorecard.json"
@@ -242,6 +246,10 @@ LIMITED_LEARNED_BOUNDARY_ANALYSIS = RESULTS / "analysis_limited_learned_control_
 LIMITED_LEARNED_BOUNDARY_SUMMARY = RESULTS / "summary_limited_learned_control_boundary.csv"
 LIMITED_LEARNED_BOUNDARY_MANIFEST = RESULTS / "manifest_limited_learned_control_boundary.json"
 LIMITED_LEARNED_BOUNDARY_TABLE = THIS_DIR / "paper_latex" / "tables" / "limited_learned_control_boundary.tex"
+LEARNED_EFFECT_UNCERTAINTY_ANALYSIS = RESULTS / "analysis_learned_control_effect_uncertainty.md"
+LEARNED_EFFECT_UNCERTAINTY_SUMMARY = RESULTS / "summary_learned_control_effect_uncertainty.csv"
+LEARNED_EFFECT_UNCERTAINTY_MANIFEST = RESULTS / "manifest_learned_control_effect_uncertainty.json"
+LEARNED_EFFECT_UNCERTAINTY_TABLE = THIS_DIR / "paper_latex" / "tables" / "learned_control_effect_uncertainty.tex"
 ROOT_ACTION_RANKER_ANALYSIS = RESULTS / "analysis_root_action_ranker_audit.md"
 ROOT_ACTION_RANKER_SUMMARY = RESULTS / "summary_root_action_ranker_audit.csv"
 ROOT_ACTION_RANKER_MANIFEST = RESULTS / "manifest_root_action_ranker_audit.json"
@@ -375,6 +383,26 @@ def build_rows() -> list[dict[str, str]]:
     comparison_target_validity_anchor = (
         bool(comparison_target_validity_manifest.get("table_anchor_present", False))
         if comparison_target_validity_manifest
+        else False
+    )
+    comparison_claim_hierarchy_manifest = read_json(COMPARISON_CLAIM_HIERARCHY_MANIFEST)
+    comparison_claim_hierarchy_revisions = (
+        int(comparison_claim_hierarchy_manifest.get("needs_revision_count", -1))
+        if comparison_claim_hierarchy_manifest
+        else -1
+    )
+    comparison_claim_hierarchy_counts = (
+        comparison_claim_hierarchy_manifest.get("status_counts", {}) if comparison_claim_hierarchy_manifest else {}
+    )
+    comparison_claim_hierarchy_rows = (
+        comparison_claim_hierarchy_manifest.get("rows", "missing") if comparison_claim_hierarchy_manifest else "missing"
+    )
+    comparison_claim_hierarchy_tiers = (
+        comparison_claim_hierarchy_manifest.get("claim_tiers", []) if comparison_claim_hierarchy_manifest else []
+    )
+    comparison_claim_hierarchy_anchor = (
+        bool(comparison_claim_hierarchy_manifest.get("table_anchor_present", False))
+        if comparison_claim_hierarchy_manifest
         else False
     )
     comparison_answer_manifest = read_json(COMPARISON_ANSWER_MANIFEST)
@@ -702,6 +730,17 @@ def build_rows() -> list[dict[str, str]]:
         if limited_learned_boundary_manifest
         else "missing"
     )
+    learned_effect_manifest = read_json(LEARNED_EFFECT_UNCERTAINTY_MANIFEST)
+    learned_effect_revisions = (
+        int(learned_effect_manifest.get("needs_revision_count", -1))
+        if learned_effect_manifest
+        else -1
+    )
+    learned_effect_counts = learned_effect_manifest.get("status_counts", {}) if learned_effect_manifest else {}
+    learned_effect_class_counts = (
+        learned_effect_manifest.get("claim_class_counts", {}) if learned_effect_manifest else {}
+    )
+    learned_effect_rows = learned_effect_manifest.get("rows", "missing") if learned_effect_manifest else "missing"
     root_action_manifest = read_json(ROOT_ACTION_RANKER_MANIFEST)
     root_action_revisions = int(root_action_manifest.get("needs_revision_count", -1)) if root_action_manifest else -1
     root_action_counts = root_action_manifest.get("status_counts", {}) if root_action_manifest else {}
@@ -1143,6 +1182,22 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_comparison_target_validity_audit.py after changing comparison targets, role labels, claim boundaries, or baseline-scope manuscript text.",
         },
         {
+            "item": "Comparison claim hierarchy",
+            "status": "pass"
+            if "tab:comparison-claim-hierarchy" in text
+            and COMPARISON_CLAIM_HIERARCHY_ANALYSIS.exists()
+            and COMPARISON_CLAIM_HIERARCHY_SUMMARY.exists()
+            and COMPARISON_CLAIM_HIERARCHY_MANIFEST.exists()
+            and COMPARISON_CLAIM_HIERARCHY_TABLE.exists()
+            and comparison_claim_hierarchy_revisions == 0
+            and isinstance(comparison_claim_hierarchy_rows, int)
+            and comparison_claim_hierarchy_rows >= 7
+            and comparison_claim_hierarchy_anchor
+            else "needs revision",
+            "evidence": f"Comparison claim hierarchy separates headline support, external stress tests, counterpoint boundaries, search-control attribution, scaling verification, and phase-proxy transfer; rows={comparison_claim_hierarchy_rows}; tiers={comparison_claim_hierarchy_tiers}; status_counts={comparison_claim_hierarchy_counts}; needs_revision_count={comparison_claim_hierarchy_revisions}; table_anchor_present={comparison_claim_hierarchy_anchor}.",
+            "next_action": "Rerun analyze_comparison_claim_hierarchy.py after changing how comparison families are used in headline, counterpoint, AI-attribution, scale, or phase-proxy claims.",
+        },
+        {
             "item": "Comparison answer scorecard",
             "status": "pass"
             if "tab:comparison-answer-scorecard" in text
@@ -1508,6 +1563,24 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Limited learned-control boundary audit keeps runtime-negative or weak learned diagnostics out of headline AI claims; rows={limited_learned_boundary_rows}; limited_boundary_count={limited_learned_boundary_count}; status_counts={limited_learned_boundary_counts}; needs_revision_count={limited_learned_boundary_revisions}.",
             "next_action": "Rerun analyze_limited_learned_control_boundary.py after changing learned-control classifications, AI claim wording, or reviewer-support text.",
+        },
+        {
+            "item": "Learned-control effect uncertainty",
+            "status": "pass"
+            if "tab:learned-control-effect-uncertainty" in text
+            and LEARNED_EFFECT_UNCERTAINTY_ANALYSIS.exists()
+            and LEARNED_EFFECT_UNCERTAINTY_SUMMARY.exists()
+            and LEARNED_EFFECT_UNCERTAINTY_MANIFEST.exists()
+            and LEARNED_EFFECT_UNCERTAINTY_TABLE.exists()
+            and learned_effect_revisions == 0
+            and isinstance(learned_effect_rows, int)
+            and learned_effect_rows >= 8
+            and learned_effect_class_counts.get("promoted", 0) >= 4
+            and learned_effect_class_counts.get("bounded", 0) >= 2
+            and learned_effect_class_counts.get("limited", 0) >= 2
+            else "needs revision",
+            "evidence": f"Learned-control effect-uncertainty audit adds paired bootstrap intervals to promoted, bounded, and limited AI/search controls; rows={learned_effect_rows}; claim_class_counts={learned_effect_class_counts}; status_counts={learned_effect_counts}; needs_revision_count={learned_effect_revisions}.",
+            "next_action": "Rerun analyze_learned_control_effect_uncertainty.py after changing learned-control raw evidence, class labels, bootstrap logic, or manuscript anchors.",
         },
         {
             "item": "Root-action ranker audit",

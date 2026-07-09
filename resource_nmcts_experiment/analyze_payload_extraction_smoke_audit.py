@@ -67,6 +67,15 @@ SMOKE_SPECS = (
         minimum_rows=7,
     ),
     SmokeSpec(
+        name="Comparison claim hierarchy",
+        script="analyze_comparison_claim_hierarchy.py",
+        manifest="results/manifest_comparison_claim_hierarchy.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=7,
+    ),
+    SmokeSpec(
         name="Score-weight robustness audit",
         script="analyze_weight_robustness.py",
         manifest="results/manifest_weight_robustness.json",
@@ -308,6 +317,15 @@ SMOKE_SPECS = (
         expected_value=0,
         minimum_rows_key="rows",
         minimum_rows=6,
+    ),
+    SmokeSpec(
+        name="Learned-control effect uncertainty",
+        script="analyze_learned_control_effect_uncertainty.py",
+        manifest="results/manifest_learned_control_effect_uncertainty.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=8,
     ),
     SmokeSpec(
         name="Neural/MCTS claim calibration",

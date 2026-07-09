@@ -130,20 +130,20 @@
       "summary_files": "3"
     },
     {
-      "analysis_files": "8",
+      "analysis_files": "9",
       "claim_use": "Verifies the reviewer-facing baseline roles, evidence layers, comparability limits, counterpoints, and manuscript table.",
       "dependency_boundary": "Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps.",
-      "driver_scripts": "analyze_baseline_claim_matrix.py; analyze_comparison_evidence_matrix.py; analyze_baseline_comparability_audit.py; analyze_counterpoint_claim_boundary.py; analyze_comparison_protocol_audit.py; analyze_comparison_target_validity_audit.py; analyze_comparison_answer_scorecard.py; analyze_comparison_route_decision_audit.py",
+      "driver_scripts": "analyze_baseline_claim_matrix.py; analyze_comparison_evidence_matrix.py; analyze_baseline_comparability_audit.py; analyze_counterpoint_claim_boundary.py; analyze_comparison_protocol_audit.py; analyze_comparison_target_validity_audit.py; analyze_comparison_claim_hierarchy.py; analyze_comparison_answer_scorecard.py; analyze_comparison_route_decision_audit.py",
       "evidence_family": "Comparison protocol and claim boundaries",
-      "manifest_files": "4",
+      "manifest_files": "5",
       "raw_files": "0",
       "raw_rows": "0",
       "representative_raw": "",
       "rerun_tier": "quick comparison audit",
       "scripts_missing": "",
-      "scripts_present": "8",
+      "scripts_present": "9",
       "status": "complete",
-      "summary_files": "8"
+      "summary_files": "9"
     },
     {
       "analysis_files": "2",
@@ -370,20 +370,20 @@
       "summary_files": "12"
     },
     {
-      "analysis_files": "29",
+      "analysis_files": "30",
       "claim_use": "Separates neural/search-control effects from deterministic algebraic construction and guarded portfolio selection.",
       "dependency_boundary": "Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only.",
-      "driver_scripts": "train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; run_bitflip_random_prior_control.py; analyze_bitflip_random_prior_control.py; run_bitflip_neural_budget_sweep.py; analyze_bitflip_neural_budget_sweep.py; analyze_bitflip_prior_difficulty_slices.py; analyze_bitflip_prior_feature_gate.py; analyze_bitflip_prior_feature_gate_cv.py; analyze_bitflip_prior_feature_gate_cv_random_control.py; analyze_frontier_random_depth_control.py; analyze_phase_rotation_precision_audit.py; analyze_phase_rotation_sequence_smoke_audit.py; analyze_rotation_synthesis_backend_audit.py; analyze_phase_policy_budget_frontier.py; analyze_phase_policy_random_control.py; analyze_root_action_ranker_audit.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py; analyze_limited_learned_control_boundary.py; analyze_stochastic_control_stability.py; analyze_neural_mcts_claim_calibration.py",
+      "driver_scripts": "train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; run_bitflip_random_prior_control.py; analyze_bitflip_random_prior_control.py; run_bitflip_neural_budget_sweep.py; analyze_bitflip_neural_budget_sweep.py; analyze_bitflip_prior_difficulty_slices.py; analyze_bitflip_prior_feature_gate.py; analyze_bitflip_prior_feature_gate_cv.py; analyze_bitflip_prior_feature_gate_cv_random_control.py; analyze_frontier_random_depth_control.py; analyze_phase_rotation_precision_audit.py; analyze_phase_rotation_sequence_smoke_audit.py; analyze_rotation_synthesis_backend_audit.py; analyze_phase_policy_budget_frontier.py; analyze_phase_policy_random_control.py; analyze_root_action_ranker_audit.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py; analyze_limited_learned_control_boundary.py; analyze_learned_control_effect_uncertainty.py; analyze_stochastic_control_stability.py; analyze_neural_mcts_claim_calibration.py",
       "evidence_family": "Learned-control and ablations",
-      "manifest_files": "23",
+      "manifest_files": "24",
       "raw_files": "20",
       "raw_rows": "10883",
       "representative_raw": "results/raw_bitflip_neural_budget_sweep.csv; results/raw_bitflip_random_prior_control.csv; results/raw_highdim_neural_prior_boolean_guard.csv; results/raw_highdim_neural_prior_learned_prior.csv; +16 more",
       "rerun_tier": "training plus ablation rerun",
       "scripts_missing": "",
-      "scripts_present": "24",
+      "scripts_present": "25",
       "status": "complete",
-      "summary_files": "39"
+      "summary_files": "40"
     },
     {
       "analysis_files": "2",

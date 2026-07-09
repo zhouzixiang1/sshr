@@ -6,6 +6,7 @@ terminal package invariants that are easy to regress during final polishing:
 compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, comparison-protocol coverage,
 comparison-target validity,
+comparison-claim hierarchy,
 comparison-route decision support,
 benchmark-suite composition,
 score-weight robustness,
@@ -19,6 +20,7 @@ traditional structure-mechanism support,
 search-control baseline coverage,
 learned-control audit coverage,
 limited learned-control boundary coverage,
+learned-control effect-uncertainty coverage,
 learned-prior difficulty-slice localization,
 learned-prior feature-gate localization,
 learned-prior cross-validated feature-gate localization,
@@ -91,6 +93,8 @@ COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.jso
 COMPARISON_PROTOCOL_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_protocol_audit.tex"
 COMPARISON_TARGET_VALIDITY_MANIFEST = RESULTS / "manifest_comparison_target_validity_audit.json"
 COMPARISON_TARGET_VALIDITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_target_validity_audit.tex"
+COMPARISON_CLAIM_HIERARCHY_MANIFEST = RESULTS / "manifest_comparison_claim_hierarchy.json"
+COMPARISON_CLAIM_HIERARCHY_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_claim_hierarchy.tex"
 COMPARISON_ANSWER_SCORECARD_MANIFEST = RESULTS / "manifest_comparison_answer_scorecard.json"
 COMPARISON_ANSWER_SCORECARD_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_answer_scorecard.tex"
 COMPARISON_ROUTE_DECISION_MANIFEST = RESULTS / "manifest_comparison_route_decision_audit.json"
@@ -142,6 +146,8 @@ LEARNED_CONTROL_MANIFEST = RESULTS / "manifest_learned_control_audit.json"
 LEARNED_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "learned_control_audit.tex"
 LIMITED_LEARNED_BOUNDARY_MANIFEST = RESULTS / "manifest_limited_learned_control_boundary.json"
 LIMITED_LEARNED_BOUNDARY_TABLE = THIS_DIR / "paper_latex" / "tables" / "limited_learned_control_boundary.tex"
+LEARNED_EFFECT_UNCERTAINTY_MANIFEST = RESULTS / "manifest_learned_control_effect_uncertainty.json"
+LEARNED_EFFECT_UNCERTAINTY_TABLE = THIS_DIR / "paper_latex" / "tables" / "learned_control_effect_uncertainty.tex"
 RUNTIME_ENVELOPE_MANIFEST = RESULTS / "manifest_runtime_envelope_audit.json"
 RUNTIME_ENVELOPE_TABLE = THIS_DIR / "paper_latex" / "tables" / "runtime_envelope_audit.tex"
 ROOT_ACTION_RANKER_MANIFEST = RESULTS / "manifest_root_action_ranker_audit.json"
@@ -473,6 +479,23 @@ def verify_comparison_answer_scorecard() -> dict[str, str]:
         status,
         f"rows={rows}; questions={questions}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
         "Run analyze_comparison_answer_scorecard.py and restore comparison-answer rows, generated table, or manuscript anchor.",
+    )
+
+
+def verify_comparison_claim_hierarchy() -> dict[str, str]:
+    manifest = read_json(COMPARISON_CLAIM_HIERARCHY_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = int(manifest.get("rows", -1)) if manifest else -1
+    claim_tiers = manifest.get("claim_tiers", []) if manifest else []
+    table_exists = COMPARISON_CLAIM_HIERARCHY_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = "pass" if manifest and revisions == 0 and rows >= 7 and table_exists and anchor else "needs revision"
+    return row(
+        "Comparison claim hierarchy",
+        status,
+        f"rows={rows}; claim_tiers={claim_tiers}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_comparison_claim_hierarchy.py and restore claim-tier rows, generated table, or manuscript anchors.",
     )
 
 
@@ -1122,6 +1145,35 @@ def verify_limited_learned_boundary() -> dict[str, str]:
         status,
         f"rows={rows}; limited_boundary_count={limited_count}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
         "Run analyze_limited_learned_control_boundary.py and keep runtime-negative learned diagnostics bounded rather than promoted.",
+    )
+
+
+def verify_learned_effect_uncertainty() -> dict[str, str]:
+    manifest = read_json(LEARNED_EFFECT_UNCERTAINTY_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    class_counts = manifest.get("claim_class_counts", {}) if manifest else {}
+    rows = int(manifest.get("rows", -1)) if manifest else -1
+    table_exists = LEARNED_EFFECT_UNCERTAINTY_TABLE.exists()
+    paper_text = read_text(AUTHOR_TEX) + "\n" + read_text(ANON_TEX) + "\n" + read_text(ACM_TEX)
+    anchor = "tab:learned-control-effect-uncertainty" in paper_text
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and rows >= 8
+        and class_counts.get("promoted", 0) >= 4
+        and class_counts.get("bounded", 0) >= 2
+        and class_counts.get("limited", 0) >= 2
+        and table_exists
+        and anchor
+        else "needs revision"
+    )
+    return row(
+        "Learned-control effect uncertainty",
+        status,
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; claim_class_counts={class_counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_learned_control_effect_uncertainty.py and restore bootstrap intervals, class counts, generated table, or manuscript anchor.",
     )
 
 
@@ -2358,6 +2410,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_claim_scope(),
             verify_comparison_protocol(),
             verify_comparison_target_validity(),
+            verify_comparison_claim_hierarchy(),
             verify_comparison_answer_scorecard(),
             verify_comparison_route_decision(),
             verify_benchmark_suite_audit(),
@@ -2394,6 +2447,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_phase_policy_budget_frontier(),
             verify_learned_control(),
             verify_limited_learned_boundary(),
+            verify_learned_effect_uncertainty(),
             verify_neural_mcts_claim_calibration(),
             verify_runtime_envelope(),
             verify_bitflip_random_prior(),

@@ -1,0 +1,12 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}}
+\toprule
+Claim tier & Role & Comparison families & Supported claim & Excluded claim \\
+\midrule
+Headline support & Primary matched logical-oracle evidence & Direct \anf{}, AND-direct, ESOP beam/MILP, ABC/BDD, SSHR-H/I & Lower T-count and weighted score on matched logical bit-flip Boolean-oracle benchmarks. & No universal CNOT, depth, ancilla, line-count, hardware-mapped, or global-optimality claim. \\
+External stress test & Independent logical-toolchain pressure & ROS-style LUT, mockturtle, Caterpillar API, CirKit, RevKit CLI, ABC AIG/XAG/LUT & The advantage is not an artifact of comparing only against local hand-written baselines. & Not a full ROS SAT garbage-management, reversible-emission, routing, or hardware-mapped comparison. \\
+Counterpoint boundary & Strong opposing-resource evidence & SSHR CNOT, CirKit depth, Caterpillar CNOT, RevKit line count, STG optima & Other methods keep real CNOT, depth, line-count, or tiny-optimum advantages that bound the claim. & A weighted-score win must not be reported as complete Pareto or hardware-level dominance. \\
+Search-control attribution & Causal and ablation evidence for AI/search components & No-\mcts{}, beam-only, learned/no-prior, random-prior, random-depth, sparse/guard controls & Neural/\mcts{} controls provide bounded quality, pruning, or budget-allocation gains over strengthened deterministic controls. & The paper does not claim that deep reinforcement learning alone causes the full resource reduction. \\
+Scaling verification & Logical correctness beyond small exhaustive truth-table rows & $n=20$--$64$ symbolic term-set stress and $n=21$--$30$ complete truth-table bridges & Large symbolic circuits and bridge slices preserve logical correctness inside the stated verification envelope. & Not exhaustive high-dimensional truth-table benchmarking or a proof of global optimality. \\
+Related phase transfer & Secondary logical phase/\rz{} proxy & RevKit oracle\_synth, \anf{}/\fprm{} phase parity, affine phase shortlist & The search framing transfers to a verified logical phase/\rz{} proxy and learned shortlist setting. & Not a final approximate-rotation Clifford+T synthesis or a bit-flip headline result. \\
+\bottomrule
+\end{tabularx}

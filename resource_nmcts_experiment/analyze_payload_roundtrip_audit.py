@@ -81,6 +81,13 @@ COMPARISON_ANSWER_SCORECARD_PATHS = {
     "results/manifest_comparison_answer_scorecard.json",
     "paper_latex/tables/comparison_answer_scorecard.tex",
 }
+COMPARISON_CLAIM_HIERARCHY_PATHS = {
+    "analyze_comparison_claim_hierarchy.py",
+    "results/analysis_comparison_claim_hierarchy.md",
+    "results/summary_comparison_claim_hierarchy.csv",
+    "results/manifest_comparison_claim_hierarchy.json",
+    "paper_latex/tables/comparison_claim_hierarchy.tex",
+}
 WEIGHT_ROBUSTNESS_PATHS = {
     "analyze_weight_robustness.py",
     "results/analysis_weight_robustness.md",
@@ -225,6 +232,7 @@ SEARCH_BUDGET_PATHS = {
 LEARNED_CONTROL_PATHS = {
     "analyze_learned_control_audit.py",
     "analyze_limited_learned_control_boundary.py",
+    "analyze_learned_control_effect_uncertainty.py",
     "analyze_root_action_ranker_audit.py",
     "analyze_phase_rotation_precision_audit.py",
     "analyze_phase_rotation_sequence_smoke_audit.py",
@@ -232,6 +240,7 @@ LEARNED_CONTROL_PATHS = {
     "analyze_phase_policy_budget_frontier.py",
     "results/analysis_learned_control_audit.md",
     "results/analysis_limited_learned_control_boundary.md",
+    "results/analysis_learned_control_effect_uncertainty.md",
     "results/analysis_root_action_ranker_audit.md",
     "results/analysis_phase_rotation_precision_audit.md",
     "results/analysis_phase_rotation_sequence_smoke_audit.md",
@@ -240,6 +249,7 @@ LEARNED_CONTROL_PATHS = {
     "results/raw_phase_rotation_sequence_smoke_audit.csv",
     "results/summary_learned_control_audit.csv",
     "results/summary_limited_learned_control_boundary.csv",
+    "results/summary_learned_control_effect_uncertainty.csv",
     "results/summary_root_action_ranker_audit.csv",
     "results/summary_phase_rotation_precision_audit.csv",
     "results/summary_phase_rotation_sequence_smoke_audit.csv",
@@ -247,6 +257,7 @@ LEARNED_CONTROL_PATHS = {
     "results/summary_phase_policy_budget_frontier.csv",
     "results/manifest_learned_control_audit.json",
     "results/manifest_limited_learned_control_boundary.json",
+    "results/manifest_learned_control_effect_uncertainty.json",
     "results/manifest_root_action_ranker_audit.json",
     "results/manifest_phase_rotation_precision_audit.json",
     "results/manifest_phase_rotation_sequence_smoke_audit.json",
@@ -254,6 +265,7 @@ LEARNED_CONTROL_PATHS = {
     "results/manifest_phase_policy_budget_frontier.json",
     "paper_latex/tables/learned_control_audit.tex",
     "paper_latex/tables/limited_learned_control_boundary.tex",
+    "paper_latex/tables/learned_control_effect_uncertainty.tex",
     "paper_latex/tables/root_action_ranker_audit.tex",
     "paper_latex/tables/phase_rotation_precision_audit.tex",
     "paper_latex/tables/phase_rotation_sequence_smoke_audit.tex",
@@ -580,6 +592,16 @@ def build_rows() -> list[dict[str, str]]:
             "pass" if not comparison_answer_missing else "needs revision",
             f"comparison_answer_files={len(COMPARISON_ANSWER_SCORECARD_PATHS)}; missing={comparison_answer_missing or 'none'}.",
             "Ensure the uploadable archive includes the comparison answer scorecard script, generated evidence, and manuscript table.",
+        )
+    )
+
+    comparison_claim_hierarchy_missing = sorted(COMPARISON_CLAIM_HIERARCHY_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload comparison claim hierarchy",
+            "pass" if not comparison_claim_hierarchy_missing else "needs revision",
+            f"comparison_claim_hierarchy_files={len(COMPARISON_CLAIM_HIERARCHY_PATHS)}; missing={comparison_claim_hierarchy_missing or 'none'}.",
+            "Ensure the uploadable archive includes the comparison claim hierarchy script, generated evidence, and manuscript table.",
         )
     )
 
@@ -987,6 +1009,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "comparison_protocol_paths": sorted(COMPARISON_PROTOCOL_PATHS),
         "comparison_target_validity_paths": sorted(COMPARISON_TARGET_VALIDITY_PATHS),
         "comparison_answer_scorecard_paths": sorted(COMPARISON_ANSWER_SCORECARD_PATHS),
+        "comparison_claim_hierarchy_paths": sorted(COMPARISON_CLAIM_HIERARCHY_PATHS),
         "weight_robustness_paths": sorted(WEIGHT_ROBUSTNESS_PATHS),
         "resource_weight_sensitivity_paths": sorted(RESOURCE_WEIGHT_SENSITIVITY_PATHS),
         "cnot_constraint_profile_paths": sorted(CNOT_CONSTRAINT_PROFILE_PATHS),

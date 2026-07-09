@@ -1,3 +1,3 @@
 manuscript,status,pdf,pages,characters,words,required_anchors,missing_anchors,forbidden_hits,author_identity_anchor,anonymous_identity_anchor,pdftotext_returncode,stderr,failures,next_action
-author,pass,paper_latex/resource_nmcts_submission_v1.pdf,54,260819,23334,18,none,none,True,False,0,none,none,No action needed.
-anonymous,pass,paper_latex/resource_nmcts_submission_anonymous.pdf,54,259501,23163,18,none,none,False,True,0,none,none,No action needed.
+author,pass,paper_latex/resource_nmcts_submission_v1.pdf,56,268479,23983,18,none,none,True,False,0,none,none,No action needed.
+anonymous,pass,paper_latex/resource_nmcts_submission_anonymous.pdf,56,267158,23812,18,none,none,False,True,0,none,none,No action needed.

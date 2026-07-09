@@ -61,11 +61,14 @@ The search-control baseline audit further separates heuristic-only, beam-only, n
 
 The limited learned-control boundary audit adds a direct gate for this point: the generic bit-flip learned prior and Boolean neural guard must remain limited diagnostics with their runtime overhead visible, and cannot be promoted as headline neural/MCTS evidence.
 
+The learned-control effect-uncertainty audit adds paired bootstrap intervals to the same promoted, bounded, and limited controls, so the AI contribution is reported with effect-uncertainty evidence rather than only mean deltas or W/L/T counts.
+
 Manuscript anchors:
 - Search contribution decomposition
 - Search-control baseline audit
 - Learned-control audit
 - Limited learned-control boundary audit
+- Learned-control effect-uncertainty audit
 - Neural/MCTS claim-calibration audit
 - Counterpoint and claim-boundary audit
 - Sparse depth-frontier analysis

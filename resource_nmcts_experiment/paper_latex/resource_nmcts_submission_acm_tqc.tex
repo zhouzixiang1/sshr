@@ -552,6 +552,26 @@ keeps the full method/control list for each family.}
 \input{tables/comparison_target_validity_audit}
 \end{table}
 
+Table~\ref{tab:comparison-claim-hierarchy} turns those role labels into a
+claim hierarchy.  Primary matched logical-oracle rows are the only rows used
+for the headline T-count and weighted-score claim.  External toolchains are
+stress tests, counterpoint rows are boundary evidence, search-control rows are
+attribution evidence, scaling rows are correctness-envelope evidence, and the
+phase/\rz{} branch is treated as a related logical proxy rather than as the
+main bit-flip result.
+
+\begin{table}[H]
+\centering
+\tiny
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{0.94}
+\caption{Comparison-claim hierarchy.  The table classifies each comparison
+family by the manuscript claim tier it is allowed to support and by the
+stronger interpretation that remains excluded.}
+\label{tab:comparison-claim-hierarchy}
+\input{tables/comparison_claim_hierarchy}
+\end{table}
+
 Table~\ref{tab:comparison-route-decision} gives the corresponding route map:
 each claim is tied to the comparator family that can answer it and to the
 over-claim that remains excluded, so the layered comparison set is not read as
@@ -1447,6 +1467,25 @@ or runtime-negative learned diagnostics remain visible as limitations and are
 not promoted as headline neural/\mcts{} evidence.}
 \label{tab:limited-learned-control-boundary}
 \input{tables/limited_learned_control_boundary}
+\end{table}
+
+Table~\ref{tab:learned-control-effect-uncertainty} adds paired bootstrap
+uncertainty intervals for the learned-control rows with instance-level matched
+evidence.  This separates robust quality or effort effects from weak
+diagnostics: promoted rows may preserve score while reducing search effort or
+improve a bounded proxy score, whereas the generic bit-flip prior and Boolean
+neural guard remain limited because their runtime overhead is explicit.
+
+\begin{table}[H]
+\centering
+\tiny
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{0.94}
+\caption{Learned-control effect-uncertainty audit.  Negative score changes
+favor the learned or gated target; effort deltas refer to planning time,
+runtime, or exact candidate evaluations depending on the row.}
+\label{tab:learned-control-effect-uncertainty}
+\input{tables/learned_control_effect_uncertainty}
 \end{table}
 
 Table~\ref{tab:neural-mcts-claim-calibration} then calibrates the

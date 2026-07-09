@@ -2,15 +2,15 @@
 \toprule
 Payload group & Files & Missing & Digest & Boundary \\
 \midrule
-Manuscript source & 5 & 0 & \texttt{2a6c58d811ba} & Compiled PDF is checked by readiness audit to avoid self-referential hashes. \\
-Paper tables & 204 & 0 & \texttt{ce43b1aa0be5} & Terminal submission audit tables are excluded from the stable payload digest. \\
+Manuscript source & 5 & 0 & \texttt{b7317b5dc3f5} & Compiled PDF is checked by readiness audit to avoid self-referential hashes. \\
+Paper tables & 206 & 0 & \texttt{9e08bc7b3f2f} & Terminal submission audit tables are excluded from the stable payload digest. \\
 Submission figures & 28 & 0 & \texttt{30253d5b9368} & Includes generated figure assets and plotted source data, not raw benchmark reruns. \\
 Raw measurements & 161 & 0 & \texttt{fa1965cc81bb} & Raw CSVs are regenerated only by the heavier run scripts, not by the lightweight rebuild. \\
-Derived summaries & 460 & 0 & \texttt{e526141cdbf6} & Terminal submission/package outputs are excluded so this manifest remains stable. \\
-Run manifests & 137 & 0 & \texttt{f20433de692b} & Submission-level terminal manifests are excluded from this digest group. \\
-Scripts and docs & 171 & 0 & \texttt{010ed59b5a98} & Includes reproducible entry points and top-level core implementation modules; raw sweeps still require their individual drivers. \\
+Derived summaries & 464 & 0 & \texttt{f73bbc612340} & Terminal submission/package outputs are excluded so this manifest remains stable. \\
+Run manifests & 139 & 0 & \texttt{723d2ef918e1} & Submission-level terminal manifests are excluded from this digest group. \\
+Scripts and docs & 173 & 0 & \texttt{b517c23f8f1e} & Includes reproducible entry points and top-level core implementation modules; raw sweeps still require their individual drivers. \\
 Models & 20 & 0 & \texttt{4c5c2a1bfc19} & Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild. \\
 External adapters & 1 & 0 & \texttt{de5aa3b78998} & Includes local adapter source files used for external toolchain probes, not vendored tool repositories. \\
-Submission support & 18 & 0 & \texttt{75f7b331057a} & Includes public package README, author-input packet, artifact guide, cover-letter, declaration, checklist, reviewer-brief, editor-screening, venue-selection, and structured metadata templates; ignored generated private submission text is excluded. \\
+Submission support & 18 & 0 & \texttt{e27edf607112} & Includes public package README, author-input packet, artifact guide, cover-letter, declaration, checklist, reviewer-brief, editor-screening, venue-selection, and structured metadata templates; ignored generated private submission text is excluded. \\
 \bottomrule
 \end{tabularx}

@@ -1,0 +1,25 @@
+{
+  "analysis": "results/analysis_comparison_claim_hierarchy.md",
+  "claim_tiers": [
+    "Headline support",
+    "External stress test",
+    "Counterpoint boundary",
+    "Search-control attribution",
+    "Scaling verification",
+    "Related phase transfer",
+    "Manuscript integration"
+  ],
+  "generated_from": [
+    "paper_latex/resource_nmcts_submission_v1.tex",
+    "paper_latex/resource_nmcts_submission_anonymous.tex",
+    "paper_latex/resource_nmcts_submission_acm_tqc.tex"
+  ],
+  "latex_table": "paper_latex/tables/comparison_claim_hierarchy.tex",
+  "needs_revision_count": 0,
+  "rows": 7,
+  "status_counts": {
+    "pass": 7
+  },
+  "summary": "results/summary_comparison_claim_hierarchy.csv",
+  "table_anchor_present": true
+}

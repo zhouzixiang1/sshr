@@ -91,6 +91,13 @@
     "results/manifest_comparison_answer_scorecard.json",
     "results/summary_comparison_answer_scorecard.csv"
   ],
+  "comparison_claim_hierarchy_paths": [
+    "analyze_comparison_claim_hierarchy.py",
+    "paper_latex/tables/comparison_claim_hierarchy.tex",
+    "results/analysis_comparison_claim_hierarchy.md",
+    "results/manifest_comparison_claim_hierarchy.json",
+    "results/summary_comparison_claim_hierarchy.csv"
+  ],
   "comparison_protocol_paths": [
     "analyze_comparison_protocol_audit.py",
     "paper_latex/tables/comparison_protocol_audit.tex",
@@ -133,6 +140,7 @@
   ],
   "learned_control_paths": [
     "analyze_learned_control_audit.py",
+    "analyze_learned_control_effect_uncertainty.py",
     "analyze_limited_learned_control_boundary.py",
     "analyze_phase_policy_budget_frontier.py",
     "analyze_phase_rotation_precision_audit.py",
@@ -140,6 +148,7 @@
     "analyze_root_action_ranker_audit.py",
     "analyze_rotation_synthesis_backend_audit.py",
     "paper_latex/tables/learned_control_audit.tex",
+    "paper_latex/tables/learned_control_effect_uncertainty.tex",
     "paper_latex/tables/limited_learned_control_boundary.tex",
     "paper_latex/tables/phase_policy_budget_frontier.tex",
     "paper_latex/tables/phase_rotation_precision_audit.tex",
@@ -147,6 +156,7 @@
     "paper_latex/tables/root_action_ranker_audit.tex",
     "paper_latex/tables/rotation_synthesis_backend_audit.tex",
     "results/analysis_learned_control_audit.md",
+    "results/analysis_learned_control_effect_uncertainty.md",
     "results/analysis_limited_learned_control_boundary.md",
     "results/analysis_phase_policy_budget_frontier.md",
     "results/analysis_phase_rotation_precision_audit.md",
@@ -154,6 +164,7 @@
     "results/analysis_root_action_ranker_audit.md",
     "results/analysis_rotation_synthesis_backend_audit.md",
     "results/manifest_learned_control_audit.json",
+    "results/manifest_learned_control_effect_uncertainty.json",
     "results/manifest_limited_learned_control_boundary.json",
     "results/manifest_phase_policy_budget_frontier.json",
     "results/manifest_phase_rotation_precision_audit.json",
@@ -162,6 +173,7 @@
     "results/manifest_rotation_synthesis_backend_audit.json",
     "results/raw_phase_rotation_sequence_smoke_audit.csv",
     "results/summary_learned_control_audit.csv",
+    "results/summary_learned_control_effect_uncertainty.csv",
     "results/summary_limited_learned_control_boundary.csv",
     "results/summary_phase_policy_budget_frontier.csv",
     "results/summary_phase_rotation_precision_audit.csv",
@@ -278,19 +290,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1216; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1226; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=1216; archive_files=1216; missing=none; extra=none.",
+      "evidence": "manifest_files=1226; archive_files=1226; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=1216; mismatches=none.",
+      "evidence": "checked=1226; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -329,6 +341,12 @@
       "evidence": "comparison_answer_files=5; missing=none.",
       "item": "Payload comparison answer scorecard",
       "next_action": "Ensure the uploadable archive includes the comparison answer scorecard script, generated evidence, and manuscript table.",
+      "status": "pass"
+    },
+    {
+      "evidence": "comparison_claim_hierarchy_files=5; missing=none.",
+      "item": "Payload comparison claim hierarchy",
+      "next_action": "Ensure the uploadable archive includes the comparison claim hierarchy script, generated evidence, and manuscript table.",
       "status": "pass"
     },
     {
@@ -398,7 +416,7 @@
       "status": "pass"
     },
     {
-      "evidence": "learned_control_files=36; missing=none.",
+      "evidence": "learned_control_files=41; missing=none.",
       "item": "Payload learned-control evidence",
       "next_action": "Ensure the uploadable archive includes the learned-control audit script, generated evidence, manifest, and manuscript table.",
       "status": "pass"
@@ -530,7 +548,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=1216; metadata_issues=none.",
+      "evidence": "members_checked=1226; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -578,7 +596,7 @@
     "results/summary_sshr_reproduction_scope_audit.csv"
   ],
   "status_counts": {
-    "pass": 43
+    "pass": 44
   },
   "stg_benchmark_paths": [
     "analyze_stg_published_benchmark.py",

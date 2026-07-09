@@ -4,14 +4,14 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 
 ## Status counts
 
-- pass: 237
+- pass: 243
 
 ## Dependency types
 
 - bibliography: 3
 - figure: 21
 - main_source: 3
-- tex_input: 210
+- tex_input: 216
 
 ## Missing dependencies
 
@@ -35,6 +35,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/comparison_evidence_matrix` | `paper_latex/tables/comparison_evidence_matrix.tex` | True | True | pass |
 | author | tex_input | `tables/comparison_protocol_audit` | `paper_latex/tables/comparison_protocol_audit.tex` | True | True | pass |
 | author | tex_input | `tables/comparison_target_validity_audit` | `paper_latex/tables/comparison_target_validity_audit.tex` | True | True | pass |
+| author | tex_input | `tables/comparison_claim_hierarchy` | `paper_latex/tables/comparison_claim_hierarchy.tex` | True | True | pass |
 | author | tex_input | `tables/comparison_route_decision_audit` | `paper_latex/tables/comparison_route_decision_audit.tex` | True | True | pass |
 | author | tex_input | `tables/comparison_answer_scorecard` | `paper_latex/tables/comparison_answer_scorecard.tex` | True | True | pass |
 | author | tex_input | `tables/sshr_reproduction_scope_audit` | `paper_latex/tables/sshr_reproduction_scope_audit.tex` | True | True | pass |
@@ -77,6 +78,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/schedule_proxy_audit` | `paper_latex/tables/schedule_proxy_audit.tex` | True | True | pass |
 | author | tex_input | `tables/learned_control_audit` | `paper_latex/tables/learned_control_audit.tex` | True | True | pass |
 | author | tex_input | `tables/limited_learned_control_boundary` | `paper_latex/tables/limited_learned_control_boundary.tex` | True | True | pass |
+| author | tex_input | `tables/learned_control_effect_uncertainty` | `paper_latex/tables/learned_control_effect_uncertainty.tex` | True | True | pass |
 | author | tex_input | `tables/neural_mcts_claim_calibration` | `paper_latex/tables/neural_mcts_claim_calibration.tex` | True | True | pass |
 | author | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
 | author | tex_input | `tables/resource_weight_sensitivity_audit` | `paper_latex/tables/resource_weight_sensitivity_audit.tex` | True | True | pass |
@@ -114,6 +116,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/comparison_evidence_matrix` | `paper_latex/tables/comparison_evidence_matrix.tex` | True | True | pass |
 | anonymous | tex_input | `tables/comparison_protocol_audit` | `paper_latex/tables/comparison_protocol_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/comparison_target_validity_audit` | `paper_latex/tables/comparison_target_validity_audit.tex` | True | True | pass |
+| anonymous | tex_input | `tables/comparison_claim_hierarchy` | `paper_latex/tables/comparison_claim_hierarchy.tex` | True | True | pass |
 | anonymous | tex_input | `tables/comparison_route_decision_audit` | `paper_latex/tables/comparison_route_decision_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/comparison_answer_scorecard` | `paper_latex/tables/comparison_answer_scorecard.tex` | True | True | pass |
 | anonymous | tex_input | `tables/sshr_reproduction_scope_audit` | `paper_latex/tables/sshr_reproduction_scope_audit.tex` | True | True | pass |
@@ -156,6 +159,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/schedule_proxy_audit` | `paper_latex/tables/schedule_proxy_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/learned_control_audit` | `paper_latex/tables/learned_control_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/limited_learned_control_boundary` | `paper_latex/tables/limited_learned_control_boundary.tex` | True | True | pass |
+| anonymous | tex_input | `tables/learned_control_effect_uncertainty` | `paper_latex/tables/learned_control_effect_uncertainty.tex` | True | True | pass |
 | anonymous | tex_input | `tables/neural_mcts_claim_calibration` | `paper_latex/tables/neural_mcts_claim_calibration.tex` | True | True | pass |
 | anonymous | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
 | anonymous | tex_input | `tables/resource_weight_sensitivity_audit` | `paper_latex/tables/resource_weight_sensitivity_audit.tex` | True | True | pass |
@@ -193,6 +197,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/comparison_evidence_matrix` | `paper_latex/tables/comparison_evidence_matrix.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/comparison_protocol_audit` | `paper_latex/tables/comparison_protocol_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/comparison_target_validity_audit` | `paper_latex/tables/comparison_target_validity_audit.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/comparison_claim_hierarchy` | `paper_latex/tables/comparison_claim_hierarchy.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/comparison_route_decision_audit` | `paper_latex/tables/comparison_route_decision_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/comparison_answer_scorecard` | `paper_latex/tables/comparison_answer_scorecard.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/sshr_reproduction_scope_audit` | `paper_latex/tables/sshr_reproduction_scope_audit.tex` | True | True | pass |
@@ -235,6 +240,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/schedule_proxy_audit` | `paper_latex/tables/schedule_proxy_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/learned_control_audit` | `paper_latex/tables/learned_control_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/limited_learned_control_boundary` | `paper_latex/tables/limited_learned_control_boundary.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/learned_control_effect_uncertainty` | `paper_latex/tables/learned_control_effect_uncertainty.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/neural_mcts_claim_calibration` | `paper_latex/tables/neural_mcts_claim_calibration.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/resource_weight_sensitivity_audit` | `paper_latex/tables/resource_weight_sensitivity_audit.tex` | True | True | pass |

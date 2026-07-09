@@ -8,7 +8,7 @@ This audit checks whether the title-level neural MCTS framing is supported by th
 
 | claim anchor | status | evidence gate | allowed claim | excluded claim |
 |---|---|---|---|---|
-| Neural component in the title | pass | learned-control rows=12, promoted=4, bounded=6, limited=2, not_promoted=0; limited-boundary rows=6 | Neural policies and learned gates are bounded ranking, pruning, or budget-allocation controls with promoted and limited evidence classes. | Do not claim that deep learning alone explains the resource reduction. |
+| Neural component in the title | pass | learned-control rows=12, promoted=4, bounded=6, limited=2, not_promoted=0; limited-boundary rows=6; effect-uncertainty rows=8 | Neural policies and learned gates are bounded ranking, pruning, or budget-allocation controls with promoted and limited evidence classes. | Do not claim that deep learning alone explains the resource reduction. |
 | MCTS component in the title | pass | search-control rows=12, needs_revision=0 | MCTS and Pareto search add measured, non-degrading increments over strengthened deterministic portfolios. | Do not attribute the full improvement to MCTS alone. |
 | Causal search-control isolation | pass | bit-flip random rows=18, budget-sweep raw rows=2124, frontier random rows=3 | Same-budget, low-budget, and same-candidate controls support ranking and budget-allocation claims. | Do not use random-control rows as speed, hardware-scheduling, or deep-RL-only evidence. |
 | Resource-constrained objective | pass | schedule-proxy rows=8, needs_revision=0 | The score and schedule-proxy evidence support resource-constrained logical-layer optimization with visible tradeoffs. | Do not turn weighted-score wins into all-resource or hardware-mapped dominance. |

@@ -32,6 +32,8 @@ LEARNED_CONTROL_MANIFEST = RESULTS / "manifest_learned_control_audit.json"
 LEARNED_CONTROL_SUMMARY = RESULTS / "summary_learned_control_audit.csv"
 LIMITED_LEARNED_BOUNDARY_MANIFEST = RESULTS / "manifest_limited_learned_control_boundary.json"
 LIMITED_LEARNED_BOUNDARY_SUMMARY = RESULTS / "summary_limited_learned_control_boundary.csv"
+LEARNED_EFFECT_UNCERTAINTY_MANIFEST = RESULTS / "manifest_learned_control_effect_uncertainty.json"
+LEARNED_EFFECT_UNCERTAINTY_SUMMARY = RESULTS / "summary_learned_control_effect_uncertainty.csv"
 BITFLIP_RANDOM_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control.json"
 BITFLIP_BUDGET_MANIFEST = RESULTS / "manifest_bitflip_neural_budget_sweep.json"
 FRONTIER_RANDOM_MANIFEST = RESULTS / "manifest_frontier_random_depth_control.json"
@@ -112,11 +114,13 @@ def build_rows() -> list[dict[str, str]]:
             "evidence_gate": (
                 f"learned-control rows={manifest_rows(LEARNED_CONTROL_MANIFEST)}, "
                 f"promoted={promoted}, bounded={bounded}, limited={limited}, not_promoted={not_promoted}; "
-                f"limited-boundary rows={manifest_rows(LIMITED_LEARNED_BOUNDARY_MANIFEST)}"
+                f"limited-boundary rows={manifest_rows(LIMITED_LEARNED_BOUNDARY_MANIFEST)}; "
+                f"effect-uncertainty rows={manifest_rows(LEARNED_EFFECT_UNCERTAINTY_MANIFEST)}"
             ),
             "condition": (
                 manifest_revision_count(LEARNED_CONTROL_MANIFEST) == 0
                 and manifest_revision_count(LIMITED_LEARNED_BOUNDARY_MANIFEST) == 0
+                and manifest_revision_count(LEARNED_EFFECT_UNCERTAINTY_MANIFEST) == 0
                 and promoted >= 4
                 and bounded >= 2
                 and limited >= 2
@@ -126,6 +130,7 @@ def build_rows() -> list[dict[str, str]]:
                         "Learned-control evidence audit",
                         "limited diagnostics",
                         "Limited learned-control boundary audit",
+                        "Learned-control effect-uncertainty audit",
                     ),
                 )
                 and not missing_tokens(
@@ -134,6 +139,7 @@ def build_rows() -> list[dict[str, str]]:
                         "Is the AI contribution overstated?",
                         "bounded controls",
                         "Limited learned-control boundary audit",
+                        "effect-uncertainty",
                     ),
                 )
             ),
@@ -144,6 +150,8 @@ def build_rows() -> list[dict[str, str]]:
                 LEARNED_CONTROL_SUMMARY,
                 LIMITED_LEARNED_BOUNDARY_MANIFEST,
                 LIMITED_LEARNED_BOUNDARY_SUMMARY,
+                LEARNED_EFFECT_UNCERTAINTY_MANIFEST,
+                LEARNED_EFFECT_UNCERTAINTY_SUMMARY,
                 REVIEWER_BRIEF,
             ),
         },

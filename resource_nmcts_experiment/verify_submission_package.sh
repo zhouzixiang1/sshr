@@ -49,6 +49,7 @@ fi
 "$PYTHON_BIN" analyze_novelty_comparison_scorecard.py
 "$PYTHON_BIN" analyze_comparison_evidence_matrix.py
 "$PYTHON_BIN" analyze_comparison_target_validity_audit.py
+"$PYTHON_BIN" analyze_comparison_claim_hierarchy.py
 "$PYTHON_BIN" analyze_comparison_answer_scorecard.py
 "$PYTHON_BIN" analyze_comparison_route_decision_audit.py
 "$PYTHON_BIN" analyze_benchmark_suite_audit.py
@@ -71,6 +72,7 @@ fi
 "$PYTHON_BIN" analyze_phase_policy_budget_frontier.py
 "$PYTHON_BIN" analyze_learned_control_audit.py
 "$PYTHON_BIN" analyze_limited_learned_control_boundary.py
+"$PYTHON_BIN" analyze_learned_control_effect_uncertainty.py
 "$PYTHON_BIN" analyze_runtime_envelope_audit.py
 "$PYTHON_BIN" analyze_threats_to_validity_audit.py
 "$PYTHON_BIN" analyze_ultra_scale64_stress.py
@@ -103,6 +105,7 @@ if command -v rg >/dev/null 2>&1; then
     results/analysis_submission_readiness_audit.md
     results/analysis_comparison_protocol_audit.md
     results/analysis_comparison_target_validity_audit.md
+    results/analysis_comparison_claim_hierarchy.md
     results/analysis_comparison_answer_scorecard.md
     results/analysis_comparison_route_decision_audit.md
     results/analysis_benchmark_suite_audit.md
@@ -124,6 +127,8 @@ if command -v rg >/dev/null 2>&1; then
     results/analysis_rotation_synthesis_backend_audit.md
     results/analysis_phase_policy_budget_frontier.md
     results/analysis_learned_control_audit.md
+    results/analysis_limited_learned_control_boundary.md
+    results/analysis_learned_control_effect_uncertainty.md
     results/analysis_runtime_envelope_audit.md
     results/analysis_threats_to_validity_audit.md
     results/analysis_neural_mcts_claim_calibration.md
