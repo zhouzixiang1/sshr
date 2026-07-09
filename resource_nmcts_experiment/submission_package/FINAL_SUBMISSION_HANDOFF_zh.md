@@ -58,7 +58,7 @@ cp submission_package/submission_metadata_template.json submission_package/submi
 
 ```bash
 ./verify_submission_package.sh
-rg -n "needs author input|needs revision" results/analysis_submission_readiness_audit.md results/analysis_submission_metadata_audit.md results/analysis_submission_metadata_validator.md
+rg -n "needs author input|needs revision|closure_path_ready" results/analysis_submission_readiness_audit.md results/analysis_submission_metadata_audit.md results/analysis_submission_metadata_validator.md results/analysis_submission_metadata_closure_path.md
 ```
 
 期望状态是：无 `needs revision`；最终投稿副本中不再保留未处理的
@@ -82,6 +82,7 @@ rg -n "needs author input|needs revision" results/analysis_submission_readiness_
 - `submission_package/artifact_reproduction_guide.md`
 - `submission_package/editor_screening_brief.md`
 - `submission_package/reviewer_concern_brief.md`
+- `results/analysis_submission_metadata_closure_path.md`
 - `results/analysis_payload_verifier_smoke_audit.md`
 - `results/analysis_submission_package_verifier.md`
 

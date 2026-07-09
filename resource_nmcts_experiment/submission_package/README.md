@@ -52,6 +52,10 @@ noise modeling, or magic-state-factory accounting.
   support-document visibility, private metadata Git protection, private-preview
   gates, anonymous-review decision state, and metadata/packet count
   consistency.
+- `../results/analysis_submission_metadata_closure_path.md`: audit that checks
+  the final author/venue metadata closure path, including safe starter prefill,
+  private-file Git protection, validator/preview gates, synthetic rehearsal,
+  anonymous-review gate, and handoff document coverage.
 - `../results/analysis_submission_metadata_pipeline_selftest.md`: synthetic,
   non-private self-test for the metadata validator and private-preview
   renderers.
@@ -192,6 +196,7 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_source_path_privacy_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python validate_submission_metadata.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_author_input_closure_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_metadata_closure_path.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python selftest_submission_metadata_pipeline.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_anonymous_review_readiness.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_text_preview.py
@@ -217,6 +222,7 @@ rg -n "needs author input|pass:|file count|archive sha256|Submission support|unr
   results/manifest_claim_scope_lint.json \
   results/analysis_submission_metadata_validator.md \
   results/analysis_author_input_closure_audit.md \
+  results/analysis_submission_metadata_closure_path.md \
   results/analysis_submission_metadata_pipeline_selftest.md \
   results/analysis_anonymous_review_readiness.md \
   results/analysis_submission_text_preview.md \

@@ -54,6 +54,9 @@ ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 AUTHOR_INPUT_CLOSURE_ANALYSIS = RESULTS / "analysis_author_input_closure_audit.md"
 AUTHOR_INPUT_CLOSURE_SUMMARY = RESULTS / "summary_author_input_closure_audit.csv"
 AUTHOR_INPUT_CLOSURE_MANIFEST = RESULTS / "manifest_author_input_closure_audit.json"
+METADATA_CLOSURE_ANALYSIS = RESULTS / "analysis_submission_metadata_closure_path.md"
+METADATA_CLOSURE_SUMMARY = RESULTS / "summary_submission_metadata_closure_path.csv"
+METADATA_CLOSURE_MANIFEST = RESULTS / "manifest_submission_metadata_closure_path.json"
 PAYLOAD_ROUNDTRIP_ANALYSIS = RESULTS / "analysis_payload_roundtrip_audit.md"
 PAYLOAD_ROUNDTRIP_SUMMARY = RESULTS / "summary_payload_roundtrip_audit.csv"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
@@ -251,6 +254,17 @@ def build_rows() -> list[dict[str, str]]:
         author_input_closure_manifest.get("required_metadata_paths", "missing")
         if author_input_closure_manifest
         else "missing"
+    )
+    metadata_closure_manifest = read_json(METADATA_CLOSURE_MANIFEST)
+    metadata_closure_counts = metadata_closure_manifest.get("status_counts", {}) if metadata_closure_manifest else {}
+    metadata_closure_revisions = (
+        int(metadata_closure_manifest.get("needs_revision_count", -1)) if metadata_closure_manifest else -1
+    )
+    metadata_closure_ready = (
+        bool(metadata_closure_manifest.get("closure_path_ready", False)) if metadata_closure_manifest else False
+    )
+    metadata_closure_paths = (
+        metadata_closure_manifest.get("required_metadata_paths", "missing") if metadata_closure_manifest else "missing"
     )
     payload_roundtrip_manifest = read_json(PAYLOAD_ROUNDTRIP_MANIFEST)
     payload_roundtrip_counts = payload_roundtrip_manifest.get("status_counts", {}) if payload_roundtrip_manifest else {}
@@ -566,6 +580,18 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Author-input closure audit checks metadata-template placeholder coverage, author packet coverage, support-document visibility, private Git protection, private-preview gates, anonymous-review decision gate, and metadata/packet count consistency; required_metadata_paths={author_input_required_paths}; status_counts={author_input_closure_counts}; needs_revision_count={author_input_closure_revisions}.",
             "next_action": "Rerun analyze_author_input_closure_audit.py after changing author/venue metadata fields, private-output names, support docs, or anonymous-review gates.",
+        },
+        {
+            "item": "Submission metadata closure path",
+            "status": "pass"
+            if METADATA_CLOSURE_ANALYSIS.exists()
+            and METADATA_CLOSURE_SUMMARY.exists()
+            and METADATA_CLOSURE_MANIFEST.exists()
+            and metadata_closure_revisions == 0
+            and metadata_closure_ready
+            else "needs revision",
+            "evidence": f"Metadata closure-path audit checks structured intake coverage, safe public starter prefill, Git ignore protection, validator/private-preview gates, synthetic filled-metadata rehearsal, anonymous-review gate, handoff docs, and goal-closure consistency; required_metadata_paths={metadata_closure_paths}; status_counts={metadata_closure_counts}; needs_revision_count={metadata_closure_revisions}; closure_path_ready={metadata_closure_ready}.",
+            "next_action": "Rerun analyze_submission_metadata_closure_path.py after changing metadata templates, validator behavior, preview outputs, anonymous-review policy fields, or author handoff docs.",
         },
         {
             "item": "Compiled anonymous review draft",

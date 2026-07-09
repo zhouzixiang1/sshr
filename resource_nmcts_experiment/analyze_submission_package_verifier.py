@@ -65,6 +65,7 @@ TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
 METADATA_PIPELINE_SELFTEST_MANIFEST = RESULTS / "manifest_submission_metadata_pipeline_selftest.json"
 ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 AUTHOR_INPUT_CLOSURE_MANIFEST = RESULTS / "manifest_author_input_closure_audit.json"
+METADATA_CLOSURE_MANIFEST = RESULTS / "manifest_submission_metadata_closure_path.json"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
 PAYLOAD_EXTRACTION_SMOKE_MANIFEST = RESULTS / "manifest_payload_extraction_smoke_audit.json"
 PAYLOAD_VERIFIER_SMOKE_MANIFEST = RESULTS / "manifest_payload_verifier_smoke_audit.json"
@@ -524,6 +525,22 @@ def verify_author_input_closure() -> dict[str, str]:
     )
 
 
+def verify_metadata_closure_path() -> dict[str, str]:
+    manifest = read_json(METADATA_CLOSURE_MANIFEST)
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    required_paths = manifest.get("required_metadata_paths", "missing") if manifest else "missing"
+    metadata_present = bool(manifest.get("metadata_present", False)) if manifest else False
+    ready = bool(manifest.get("closure_path_ready", False)) if manifest else False
+    status = "pass" if manifest and needs_revision == 0 and ready else "needs revision"
+    return row(
+        "Submission metadata closure path",
+        status,
+        f"needs_revision_count={needs_revision}; required_metadata_paths={required_paths}; metadata_present={metadata_present}; closure_path_ready={ready}; status_counts={counts}.",
+        "Run analyze_submission_metadata_closure_path.py and keep the final author/venue metadata path explicit, ignored, and machine-checkable.",
+    )
+
+
 def verify_private_payload_exclusion() -> dict[str, str]:
     manifest = read_json(PAYLOAD_MANIFEST)
     if EXTRACTED_PAYLOAD_MODE and not manifest:
@@ -697,6 +714,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_metadata_pipeline_selftest(),
             verify_anonymous_review_audit(),
             verify_author_input_closure(),
+            verify_metadata_closure_path(),
             verify_text_preview(),
             verify_private_payload_exclusion(),
             verify_payload_roundtrip(),

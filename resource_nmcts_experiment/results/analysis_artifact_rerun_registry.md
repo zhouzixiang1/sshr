@@ -4,13 +4,14 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 
 ## Status counts
 
-- complete: 14
+- complete: 15
 - unique raw files covered by registry: 144
 - unique raw CSV rows covered by registry: 55308
 
 | evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |
 |---|---|---:|---:|---:|---|---|
-| Lightweight paper-facing rebuild | quick rebuild | 0 | 0 | 9 | complete | Python, latexmk, and existing raw artifacts; does not rerun raw sweeps or external probes. |
+| Lightweight paper-facing rebuild | quick rebuild | 0 | 0 | 10 | complete | Python, latexmk, and existing raw artifacts; does not rerun raw sweeps or external probes. |
+| Submission metadata closure path | quick metadata audit | 0 | 0 | 1 | complete | Does not require private author metadata; filled metadata remains ignored and untracked until author approval. |
 | Traditional logical baselines | raw Python rerun | 4 | 4071 | 4 | complete | Python rerun; ILP-based subbaselines need Gurobi where enabled. |
 | External logical baseline extension | raw Python plus optional solvers | 3 | 2049 | 3 | complete | Python with optional Gurobi/logic-tool components; rows with skips/errors remain explicit. |
 | ROS-style LUT proxy | raw proxy rerun | 3 | 2472 | 2 | complete | Proxy-level LUT analysis only; not a full ROS SAT garbage-management rerun. |
@@ -30,6 +31,10 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 - **Lightweight paper-facing rebuild**
   - claim use: Regenerates manuscript-facing analyses, figures, audits, PDF, archive manifest, and payload from existing artifacts.
   - scripts: `rebuild_submission_package.sh`
+  - representative raw: not applicable for this tier
+- **Submission metadata closure path**
+  - claim use: Verifies that the remaining author/venue metadata step is explicit, private, ignored by Git, and machine-checkable.
+  - scripts: `analyze_submission_metadata_closure_path.py; make_submission_metadata_starter.py; validate_submission_metadata.py; make_submission_text_preview.py`
   - representative raw: not applicable for this tier
 - **Traditional logical baselines**
   - claim use: Primary n<=6 same-task resource comparison against direct, AND-direct, ESOP, SSHR, affine, MCTS, and Pareto variants.

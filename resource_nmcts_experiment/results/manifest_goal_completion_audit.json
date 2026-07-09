@@ -113,8 +113,8 @@
     },
     {
       "boundary": "These fields cannot be inferred from code or experiments and must be confirmed by the author or target venue.",
-      "evidence": "Submission metadata audit reports 12 author/venue field group(s) needing author input; private metadata validation, synthetic metadata-pipeline self-testing, and text-preview generation are prepared for filled metadata.",
-      "evidence_files": "results/analysis_submission_metadata_audit.md; results/analysis_submission_metadata_validator.md; results/analysis_submission_metadata_pipeline_selftest.md; results/analysis_submission_text_preview.md; results/analysis_anonymous_review_readiness.md; submission_package/author_declarations_template.md; submission_package/cover_letter_template.md; submission_package/submission_checklist.md",
+      "evidence": "Submission metadata audit reports 12 author/venue field group(s) needing author input; private metadata validation, synthetic metadata-pipeline self-testing, metadata-closure-path auditing, and text-preview generation are prepared for filled metadata.",
+      "evidence_files": "results/analysis_submission_metadata_audit.md; results/analysis_submission_metadata_validator.md; results/analysis_submission_metadata_pipeline_selftest.md; results/analysis_submission_metadata_closure_path.md; results/analysis_submission_text_preview.md; results/analysis_anonymous_review_readiness.md; submission_package/author_declarations_template.md; submission_package/cover_letter_template.md; submission_package/submission_checklist.md",
       "next_action": "Fill author order, affiliations, ORCIDs, funding, acknowledgements, competing interests, archive links, license, disclosure, and target-venue fields, then review generated private submission text previews.",
       "requirement": "Final author and venue metadata",
       "status": "needs author input"
@@ -122,7 +122,7 @@
     {
       "boundary": "The research/package side is audit-complete, but the full objective is not closed until author and target-venue metadata are supplied.",
       "evidence": "Metadata audit reports 12 human-gated group(s); readiness audit remains the paper/package gate and is cited as a separate evidence file.",
-      "evidence_files": "results/analysis_submission_readiness_audit.md; results/analysis_submission_metadata_audit.md; results/analysis_submission_metadata_validator.md; results/analysis_submission_metadata_pipeline_selftest.md; results/analysis_submission_text_preview.md; results/analysis_anonymous_review_readiness.md",
+      "evidence_files": "results/analysis_submission_readiness_audit.md; results/analysis_submission_metadata_audit.md; results/analysis_submission_metadata_validator.md; results/analysis_submission_metadata_pipeline_selftest.md; results/analysis_submission_metadata_closure_path.md; results/analysis_submission_text_preview.md; results/analysis_anonymous_review_readiness.md",
       "next_action": "Do not mark the objective complete until the author-specific declarations and final archive/venue links are filled and audits rerun.",
       "requirement": "Overall goal closure gate",
       "status": "needs author input"

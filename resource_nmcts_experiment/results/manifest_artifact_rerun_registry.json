@@ -1,13 +1,13 @@
 {
-  "complete_rows": 14,
+  "complete_rows": 15,
   "families": [
     {
-      "analysis_files": "10",
+      "analysis_files": "11",
       "claim_use": "Regenerates manuscript-facing analyses, figures, audits, PDF, archive manifest, and payload from existing artifacts.",
       "dependency_boundary": "Python, latexmk, and existing raw artifacts; does not rerun raw sweeps or external probes.",
       "driver_scripts": "rebuild_submission_package.sh",
       "evidence_family": "Lightweight paper-facing rebuild",
-      "manifest_files": "9",
+      "manifest_files": "10",
       "raw_files": "0",
       "raw_rows": "0",
       "representative_raw": "",
@@ -15,7 +15,23 @@
       "scripts_missing": "",
       "scripts_present": "1",
       "status": "complete",
-      "summary_files": "10"
+      "summary_files": "11"
+    },
+    {
+      "analysis_files": "1",
+      "claim_use": "Verifies that the remaining author/venue metadata step is explicit, private, ignored by Git, and machine-checkable.",
+      "dependency_boundary": "Does not require private author metadata; filled metadata remains ignored and untracked until author approval.",
+      "driver_scripts": "analyze_submission_metadata_closure_path.py; make_submission_metadata_starter.py; validate_submission_metadata.py; make_submission_text_preview.py",
+      "evidence_family": "Submission metadata closure path",
+      "manifest_files": "1",
+      "raw_files": "0",
+      "raw_rows": "0",
+      "representative_raw": "",
+      "rerun_tier": "quick metadata audit",
+      "scripts_missing": "",
+      "scripts_present": "4",
+      "status": "complete",
+      "summary_files": "1"
     },
     {
       "analysis_files": "3",
@@ -378,7 +394,7 @@
     "results/raw_ultra_pairwise_wide_vs_recursive.csv",
     "results/raw_ultra_root_action_pairwise_widths.csv"
   ],
-  "rows": 14,
+  "rows": 15,
   "script": "analyze_artifact_rerun_registry.py",
   "unique_raw_files": 144,
   "unique_raw_rows": 55308

@@ -79,6 +79,12 @@ AUTHOR_INPUT_CLOSURE_PATHS = {
     "results/summary_author_input_closure_audit.csv",
     "results/manifest_author_input_closure_audit.json",
 }
+METADATA_CLOSURE_PATHS = {
+    "analyze_submission_metadata_closure_path.py",
+    "results/analysis_submission_metadata_closure_path.md",
+    "results/summary_submission_metadata_closure_path.csv",
+    "results/manifest_submission_metadata_closure_path.json",
+}
 SOURCE_PATH_PRIVACY_PATHS = {
     "analyze_source_path_privacy_audit.py",
 }
@@ -259,6 +265,16 @@ def build_rows() -> list[dict[str, str]]:
             "pass" if not author_input_missing else "needs revision",
             f"author_input_closure_files={len(AUTHOR_INPUT_CLOSURE_PATHS)}; missing={author_input_missing or 'none'}.",
             "Ensure the uploadable archive includes the author-input closure audit script and generated CSV/Markdown/JSON evidence.",
+        )
+    )
+
+    metadata_closure_missing = sorted(METADATA_CLOSURE_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload metadata closure-path evidence",
+            "pass" if not metadata_closure_missing else "needs revision",
+            f"metadata_closure_files={len(METADATA_CLOSURE_PATHS)}; missing={metadata_closure_missing or 'none'}.",
+            "Ensure the uploadable archive includes the final metadata closure-path audit script and generated evidence.",
         )
     )
 

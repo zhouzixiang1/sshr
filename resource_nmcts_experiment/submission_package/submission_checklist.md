@@ -51,6 +51,7 @@ Use this checklist immediately before uploading the manuscript.
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
 - Metadata validator: `results/analysis_submission_metadata_validator.md`
 - Author-input closure audit: `results/analysis_author_input_closure_audit.md`
+- Metadata closure-path audit: `results/analysis_submission_metadata_closure_path.md`
 - Metadata pipeline self-test: `results/analysis_submission_metadata_pipeline_selftest.md`
 - Anonymous-review readiness audit: `results/analysis_anonymous_review_readiness.md`
 - Private submission text preview audit: `results/analysis_submission_text_preview.md`
@@ -135,6 +136,7 @@ Expected current state:
 - Metadata audit: all author- and venue-specific fields are enumerated before upload, and any filled `submission_metadata.json` is checked.
 - Metadata validator: no `needs revision` rows; missing private metadata remains an author-input gate until filled.
 - Author-input closure audit: metadata-template placeholders, author-input packet fields, support docs, private Git protection, private-preview gates, and anonymous-review decision gates are mutually consistent.
+- Metadata closure-path audit: final author/venue metadata intake is explicit, private, ignored by Git, rehearsed with synthetic metadata, and tied to the goal-closure gate.
 - Metadata pipeline self-test: synthetic non-private metadata exercises validator and preview renderers with no `needs revision` rows.
 - Anonymous-review readiness: no `needs revision` rows; an anonymous review draft is compiled, and final anonymous artifact links remain explicit author-input actions if double-blind review is required.
 - Private submission text preview: public audit exists; generated private Markdown previews remain ignored by Git and excluded from the payload archive.

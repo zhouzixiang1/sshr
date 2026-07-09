@@ -329,11 +329,12 @@ def build_items() -> list[GoalItem]:
         GoalItem(
             requirement="Final author and venue metadata",
             status="needs author input" if metadata_needs else "pass",
-            evidence=f"Submission metadata audit reports {metadata_needs} author/venue field group(s) needing author input; private metadata validation, synthetic metadata-pipeline self-testing, and text-preview generation are prepared for filled metadata.",
+            evidence=f"Submission metadata audit reports {metadata_needs} author/venue field group(s) needing author input; private metadata validation, synthetic metadata-pipeline self-testing, metadata-closure-path auditing, and text-preview generation are prepared for filled metadata.",
             evidence_files=(
                 RESULTS / "analysis_submission_metadata_audit.md",
                 RESULTS / "analysis_submission_metadata_validator.md",
                 RESULTS / "analysis_submission_metadata_pipeline_selftest.md",
+                RESULTS / "analysis_submission_metadata_closure_path.md",
                 RESULTS / "analysis_submission_text_preview.md",
                 RESULTS / "analysis_anonymous_review_readiness.md",
                 THIS_DIR / "submission_package" / "author_declarations_template.md",
@@ -352,6 +353,7 @@ def build_items() -> list[GoalItem]:
                 RESULTS / "analysis_submission_metadata_audit.md",
                 RESULTS / "analysis_submission_metadata_validator.md",
                 RESULTS / "analysis_submission_metadata_pipeline_selftest.md",
+                RESULTS / "analysis_submission_metadata_closure_path.md",
                 RESULTS / "analysis_submission_text_preview.md",
                 RESULTS / "analysis_anonymous_review_readiness.md",
             ),

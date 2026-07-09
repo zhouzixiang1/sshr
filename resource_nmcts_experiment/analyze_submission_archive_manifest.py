@@ -200,6 +200,8 @@ def specs() -> list[CategorySpec]:
                 THIS_DIR / "DELIVERABLE_zh.md",
                 THIS_DIR / "rebuild_submission_package.sh",
                 THIS_DIR / "verify_submission_package.sh",
+                THIS_DIR / "validate_submission_metadata.py",
+                THIS_DIR / "selftest_submission_metadata_pipeline.py",
             ),
             patterns=((THIS_DIR, "run_*.py"), (THIS_DIR, "train_*.py"), (THIS_DIR, "analyze_*.py"), (THIS_DIR, "make_*.py")),
             boundary="Documents reproducible entry points; raw sweeps still require their individual drivers.",

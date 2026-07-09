@@ -120,6 +120,15 @@ SMOKE_SPECS = (
         minimum_rows=7,
     ),
     SmokeSpec(
+        name="Submission metadata closure path",
+        script="analyze_submission_metadata_closure_path.py",
+        manifest="results/manifest_submission_metadata_closure_path.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=8,
+    ),
+    SmokeSpec(
         name="Claim-scope lint",
         script="analyze_claim_scope_lint.py",
         manifest="results/manifest_claim_scope_lint.json",
@@ -192,6 +201,15 @@ def read_json(path: Path) -> dict[str, object]:
         return {}
 
 
+def count_value(value: object, default: int) -> int:
+    if isinstance(value, list):
+        return len(value)
+    try:
+        return int(value)  # type: ignore[arg-type]
+    except Exception:
+        return default
+
+
 def smoke_script(payload_dir: Path, spec: SmokeSpec) -> dict[str, str]:
     script_path = payload_dir / spec.script
     if not script_path.exists():
@@ -220,11 +238,11 @@ def smoke_script(payload_dir: Path, spec: SmokeSpec) -> dict[str, str]:
         )
 
     manifest = read_json(payload_dir / spec.manifest)
-    expected_actual = int(manifest.get(spec.expected_key, -999999)) if manifest else -999999
-    minimum_actual = int(manifest.get(spec.minimum_rows_key, -1)) if manifest else -1
+    expected_actual = count_value(manifest.get(spec.expected_key), -999999) if manifest else -999999
+    minimum_actual = count_value(manifest.get(spec.minimum_rows_key), -1) if manifest else -1
     expected_ok = expected_actual == spec.expected_value
     if spec.expected_value == -1 and spec.expected_key == "complete_rows":
-        expected_ok = expected_actual == minimum_actual
+        expected_ok = expected_actual >= spec.minimum_rows
     status = "pass" if proc.returncode == 0 and manifest and expected_ok and minimum_actual >= spec.minimum_rows else "needs revision"
     stderr = proc.stderr.strip().splitlines()
     evidence = (

@@ -68,6 +68,7 @@ run_py analyze_pdf_visual_audit.py
 run_py analyze_pdf_text_audit.py
 run_py analyze_pdf_metadata_audit.py
 run_py analyze_goal_completion_audit.py
+run_py analyze_submission_metadata_closure_path.py
 run_py make_submission_payload_archive.py
 run_py analyze_latex_dependency_audit.py
 run_py analyze_payload_roundtrip_audit.py

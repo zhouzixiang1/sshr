@@ -7,7 +7,7 @@
   },
   "payload_local_path_files": 53,
   "payload_manifest": "results/manifest_submission_payload_archive.json",
-  "payload_text_files_scanned": 841,
+  "payload_text_files_scanned": 847,
   "python": "3.11.15",
   "rows": 6,
   "script": "analyze_source_path_privacy_audit.py",

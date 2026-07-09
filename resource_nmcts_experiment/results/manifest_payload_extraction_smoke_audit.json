@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=883; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=889; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -69,13 +69,19 @@
       "status": "pass"
     },
     {
+      "evidence": "returncode=0; manifest=results/manifest_submission_metadata_closure_path.json; needs_revision_count=0; rows=8; stderr=none",
+      "item": "Submission metadata closure path",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
       "evidence": "returncode=0; manifest=results/manifest_claim_scope_lint.json; unresolved_count=0; required_boundary_count=5; stderr=none",
       "item": "Claim-scope lint",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=14; rows=14; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=15; rows=15; stderr=none",
       "item": "Artifact rerun registry",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -147,6 +153,13 @@
       "script": "analyze_author_input_closure_audit.py"
     },
     {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_submission_metadata_closure_path.json",
+      "minimum_rows_key": "rows",
+      "name": "Submission metadata closure path",
+      "script": "analyze_submission_metadata_closure_path.py"
+    },
+    {
       "expected_key": "unresolved_count",
       "manifest": "results/manifest_claim_scope_lint.json",
       "minimum_rows_key": "required_boundary_count",
@@ -162,6 +175,6 @@
     }
   ],
   "status_counts": {
-    "pass": 12
+    "pass": 13
   }
 }

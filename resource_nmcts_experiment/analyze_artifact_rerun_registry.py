@@ -93,6 +93,22 @@ def specs() -> list[EvidenceFamily]:
             dependency_boundary="Python, latexmk, and existing raw artifacts; does not rerun raw sweeps or external probes.",
         ),
         EvidenceFamily(
+            family="Submission metadata closure path",
+            claim_use="Verifies that the remaining author/venue metadata step is explicit, private, ignored by Git, and machine-checkable.",
+            rerun_tier="quick metadata audit",
+            scripts=(
+                "analyze_submission_metadata_closure_path.py",
+                "make_submission_metadata_starter.py",
+                "validate_submission_metadata.py",
+                "make_submission_text_preview.py",
+            ),
+            raw_patterns=(),
+            manifest_patterns=("manifest_submission_metadata_closure_path.json",),
+            summary_patterns=("summary_submission_metadata_closure_path.csv",),
+            analysis_patterns=("analysis_submission_metadata_closure_path.md",),
+            dependency_boundary="Does not require private author metadata; filled metadata remains ignored and untracked until author approval.",
+        ),
+        EvidenceFamily(
             family="Traditional logical baselines",
             claim_use="Primary n<=6 same-task resource comparison against direct, AND-direct, ESOP, SSHR, affine, MCTS, and Pareto variants.",
             rerun_tier="raw Python rerun",
