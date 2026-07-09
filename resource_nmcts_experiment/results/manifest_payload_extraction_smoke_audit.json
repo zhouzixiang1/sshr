@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=875; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=876; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -41,6 +41,12 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_pdf_text_audit.json; needs_revision_count=0; rows=2; stderr=none",
       "item": "PDF text audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_pdf_metadata_audit.json; needs_revision_count=0; rows=2; stderr=none",
+      "item": "PDF metadata audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -102,6 +108,13 @@
     },
     {
       "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_pdf_metadata_audit.json",
+      "minimum_rows_key": "rows",
+      "name": "PDF metadata audit",
+      "script": "analyze_pdf_metadata_audit.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
       "manifest": "results/manifest_author_input_closure_audit.json",
       "minimum_rows_key": "rows",
       "name": "Author-input closure audit",
@@ -123,6 +136,6 @@
     }
   ],
   "status_counts": {
-    "pass": 9
+    "pass": 10
   }
 }

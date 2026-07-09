@@ -93,6 +93,9 @@ noise modeling, or magic-state-factory accounting.
   searchable text from the author and anonymous PDFs with Poppler and checks
   title, scope, baseline, availability, reference, headline-number, identity,
   and public-placeholder anchors.
+- `../results/analysis_pdf_metadata_audit.md`: terminal audit that checks
+  PDF metadata and flags with Poppler `pdfinfo`, including privacy-sensitive
+  fields, encryption, JavaScript, forms, and page geometry.
 
 ## Required Author Actions Before Upload
 
@@ -179,6 +182,7 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_latex_dependency_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_pdf_visual_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_pdf_text_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_pdf_metadata_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python validate_submission_metadata.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_author_input_closure_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python selftest_submission_metadata_pipeline.py
@@ -200,6 +204,7 @@ rg -n "needs author input|pass:|file count|archive sha256|Submission support|unr
   results/analysis_latex_dependency_audit.md \
   results/analysis_pdf_visual_audit.md \
   results/analysis_pdf_text_audit.md \
+  results/analysis_pdf_metadata_audit.md \
   results/manifest_claim_scope_lint.json \
   results/analysis_submission_metadata_validator.md \
   results/analysis_author_input_closure_audit.md \

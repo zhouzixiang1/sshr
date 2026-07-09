@@ -65,6 +65,7 @@ echo "==> Building English submission PDF"
 
 run_py analyze_pdf_visual_audit.py
 run_py analyze_pdf_text_audit.py
+run_py analyze_pdf_metadata_audit.py
 run_py analyze_goal_completion_audit.py
 run_py make_submission_payload_archive.py
 run_py analyze_latex_dependency_audit.py

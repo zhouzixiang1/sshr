@@ -1,0 +1,18 @@
+{
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_pdf_metadata_audit.md",
+    "manifest": "results/manifest_pdf_metadata_audit.json",
+    "summary": "results/summary_pdf_metadata_audit.csv"
+  },
+  "python": "3.11.15",
+  "rows": 2,
+  "script": "analyze_pdf_metadata_audit.py",
+  "source_files": {
+    "anonymous_pdf": "paper_latex/resource_nmcts_submission_anonymous.pdf",
+    "author_pdf": "paper_latex/resource_nmcts_submission_v1.pdf"
+  },
+  "status_counts": {
+    "pass": 2
+  }
+}

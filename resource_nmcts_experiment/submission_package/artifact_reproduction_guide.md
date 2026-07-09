@@ -75,6 +75,7 @@ After the quick rebuild, the current package should report:
 - LaTeX dependency state in `results/analysis_latex_dependency_audit.md`
 - PDF visual render state in `results/analysis_pdf_visual_audit.md`
 - PDF text/searchability state in `results/analysis_pdf_text_audit.md`
+- PDF metadata/privacy state in `results/analysis_pdf_metadata_audit.md`
 - payload file count and SHA256 in
   `results/analysis_submission_payload_archive.md`
 - payload extraction smoke status in
@@ -104,6 +105,7 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_latex_dependency_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_pdf_visual_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_pdf_text_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_pdf_metadata_audit.py
 pdfinfo paper_latex/resource_nmcts_submission_v1.pdf | sed -n '1,20p'
 rg -n "Warning|Overfull|Underfull|LaTeX Error|Undefined|Rerun" \
   paper_latex/resource_nmcts_submission_v1.log
@@ -141,6 +143,8 @@ layout warnings.
   `results/analysis_pdf_visual_audit.md`
 - PDF text/searchability audit:
   `results/analysis_pdf_text_audit.md`
+- PDF metadata/privacy audit:
+  `results/analysis_pdf_metadata_audit.md`
 - Paired statistics:
   `results/analysis_paired_statistical_evidence.md`
 - Raw multi-resource tradeoff:

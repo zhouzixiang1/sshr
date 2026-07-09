@@ -239,6 +239,15 @@
 
 该审计调用 Poppler `pdftotext` 抽取作者版和匿名版投稿 PDF 文本，检查 title、method name、logical-layer boundary、problem scope、Related Work、Benchmark and Baselines、Data and Code Availability、References、关键 headline 数字、SSHR/ABC/RevKit/CirKit baseline anchor，以及 author/anonymous 身份分离；同时扫描 TODO/TBD/placeholder、`AUTHOR INPUT REQUIRED`、undefined citation 等公开文本残留。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；输出同样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包，便于审稿人解包后复现 PDF 可检索性检查。
 
+本轮新增 PDF metadata/privacy audit，补上 PDF 元数据与主动内容边界检查：
+
+- `analyze_pdf_metadata_audit.py`
+- `results/summary_pdf_metadata_audit.csv`
+- `results/analysis_pdf_metadata_audit.md`
+- `results/manifest_pdf_metadata_audit.json`
+
+该审计调用 Poppler `pdfinfo` 检查作者版和匿名版投稿 PDF 的 Title/Author/Creator/Producer 等元数据、页数、A4 页面尺寸、加密状态、JavaScript、Form 字段和隐私敏感字符串。当前作者版和匿名版均为 27 页、未加密、无 JavaScript、A4，metadata 中没有作者身份、路径、TODO/TBD/placeholder 或 `AUTHOR INPUT REQUIRED` 泄漏。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；与 visual/text 审计一样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包。
+
 本轮新增投稿完整性层：英文投稿稿末尾加入 `Data and Code Availability`，明确代码、raw/summary CSV、manifest、LaTeX 表、图源数据和 PDF 均位于 `resource_nmcts_experiment/` artifact package，运行入口为 `run_*.py`、`train_*.py`、`analyze_*.py`，环境为 `mcts-qoracle` 和直接解释器路径 `/opt/anaconda3/envs/mcts-qoracle/bin/python`。同时新增自动 submission-readiness audit：
 
 - `analyze_submission_readiness_audit.py`

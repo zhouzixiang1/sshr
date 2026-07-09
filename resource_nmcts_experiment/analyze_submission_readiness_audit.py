@@ -94,6 +94,9 @@ PDF_VISUAL_MANIFEST = RESULTS / "manifest_pdf_visual_audit.json"
 PDF_TEXT_ANALYSIS = RESULTS / "analysis_pdf_text_audit.md"
 PDF_TEXT_SUMMARY = RESULTS / "summary_pdf_text_audit.csv"
 PDF_TEXT_MANIFEST = RESULTS / "manifest_pdf_text_audit.json"
+PDF_METADATA_ANALYSIS = RESULTS / "analysis_pdf_metadata_audit.md"
+PDF_METADATA_SUMMARY = RESULTS / "summary_pdf_metadata_audit.csv"
+PDF_METADATA_MANIFEST = RESULTS / "manifest_pdf_metadata_audit.json"
 PAIRED_EFFECT_ANALYSIS = RESULTS / "analysis_paired_effect_uncertainty.md"
 PAIRED_EFFECT_SUMMARY = RESULTS / "summary_paired_effect_uncertainty.csv"
 PAIRED_EFFECT_MANIFEST = RESULTS / "manifest_paired_effect_uncertainty.json"
@@ -202,6 +205,10 @@ def build_rows() -> list[dict[str, str]]:
     pdf_text_counts = pdf_text_manifest.get("status_counts", {}) if pdf_text_manifest else {}
     pdf_text_rows = pdf_text_manifest.get("rows", "missing") if pdf_text_manifest else "missing"
     pdf_text_anchor_count = pdf_text_manifest.get("required_anchor_count", "missing") if pdf_text_manifest else "missing"
+    pdf_metadata_manifest = read_json(PDF_METADATA_MANIFEST)
+    pdf_metadata_revisions = int(pdf_metadata_manifest.get("needs_revision_count", -1)) if pdf_metadata_manifest else -1
+    pdf_metadata_counts = pdf_metadata_manifest.get("status_counts", {}) if pdf_metadata_manifest else {}
+    pdf_metadata_rows = pdf_metadata_manifest.get("rows", "missing") if pdf_metadata_manifest else "missing"
     text_preview_manifest = read_json(TEXT_PREVIEW_MANIFEST)
     text_preview_counts = text_preview_manifest.get("status_counts", {}) if text_preview_manifest else {}
     private_outputs_ignored = bool(text_preview_manifest.get("private_outputs_are_git_ignored", False))
@@ -403,6 +410,17 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_pdf_text_audit.py after rebuilding PDFs; inspect extracted text if anchors, identity separation, or public-placeholder hygiene fail.",
         },
         {
+            "item": "PDF metadata/privacy audit",
+            "status": "pass"
+            if PDF_METADATA_ANALYSIS.exists()
+            and PDF_METADATA_SUMMARY.exists()
+            and PDF_METADATA_MANIFEST.exists()
+            and pdf_metadata_revisions == 0
+            else "needs revision",
+            "evidence": f"PDF metadata audit checks author/anonymous pdfinfo metadata, page geometry, encryption, JavaScript, forms, and privacy-sensitive metadata strings; rows={pdf_metadata_rows}; status_counts={pdf_metadata_counts}; needs_revision_count={pdf_metadata_revisions}.",
+            "next_action": "Rerun analyze_pdf_metadata_audit.py after rebuilding PDFs; sanitize hyperref metadata or PDF flags if privacy or active-content checks fail.",
+        },
+        {
             "item": "Raw rerun registry",
             "status": "pass"
             if RERUN_REGISTRY_ANALYSIS.exists()
@@ -568,7 +586,7 @@ def build_rows() -> list[dict[str, str]]:
             and VERIFIER_SUMMARY.exists()
             and VERIFIER_MANIFEST.exists()
             else "needs revision",
-            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, PDF visual rendering, PDF text/searchability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, citation support, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, author-input closure, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, extracted-payload LaTeX compilation, and LaTeX log boundaries.",
+            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, PDF visual rendering, PDF text/searchability, PDF metadata/privacy, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, citation support, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, author-input closure, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, extracted-payload LaTeX compilation, and LaTeX log boundaries.",
             "next_action": "Run verify_submission_package.sh after rebuilding the payload archive.",
         },
         {
