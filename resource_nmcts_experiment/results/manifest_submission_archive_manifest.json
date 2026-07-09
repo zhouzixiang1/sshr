@@ -2979,7 +2979,7 @@
         {
           "bytes": 1552,
           "path": "results/analysis_target_venue_format_smoke.md",
-          "sha256": "0004d7de38a2d111b5559dcad54d8a48539179fd0dc0f78fd0440a98d9c646fd"
+          "sha256": "d24a6c20acd7cc0aea65cf5f6522eea80a754e2c178f7a72d80c216715fa5b85"
         },
         {
           "bytes": 2353,
@@ -4164,7 +4164,7 @@
         {
           "bytes": 1334,
           "path": "results/summary_target_venue_format_smoke.csv",
-          "sha256": "21a198ef48e45012629e920a0697cf6193da4b49346f0b8d5a88c6c2cbe1d52a"
+          "sha256": "6240c9ee5fe8235767ec24811213a4443212481abad05937229815a92e8ecde4"
         },
         {
           "bytes": 5296,
@@ -4323,7 +4323,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "6da0ca75f9481cc58d35706abb07514b5f583ba4391ed699adc12b9e19aee147"
+      "sha256_digest": "50564ea2a74267dfbcaa5aab40bfe2c5738cd90a384b48f3fc7b7e83572d6c9e"
     },
     {
       "boundary": "Submission-level terminal manifests are excluded from this digest group.",
@@ -4949,7 +4949,7 @@
         {
           "bytes": 2420,
           "path": "results/manifest_target_venue_format_smoke.json",
-          "sha256": "dc4348d5b71b5aa2b222610ebd68aa8652a1472c763659bc915b8685ee5c351c"
+          "sha256": "962dc0ffeba1184f30bdc2a21e1550756bdb76306447936492816d39f5a1775e"
         },
         {
           "bytes": 7522,
@@ -5013,7 +5013,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "1b485275d00a0e997e8f37cf5c2f038f4e2ace4d5f714fb59511794674be325f"
+      "sha256_digest": "cb321c2d2c5f33b607302697469c8a95a0427a9886d2f3b7ee20cd939d5ae9f5"
     },
     {
       "boundary": "Includes reproducible entry points and top-level core implementation modules; raw sweeps still require their individual drivers.",
