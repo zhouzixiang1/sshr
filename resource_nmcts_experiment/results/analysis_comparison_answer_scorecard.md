@@ -1,0 +1,17 @@
+# Comparison Answer Scorecard
+
+This audit gives a compact quantitative answer to what the method is compared against and what those comparisons mean.
+
+## Status counts
+
+- pass: 7
+
+| reviewer question | comparison target | role | verified evidence | headline answer | excluded claim | status |
+|---|---|---|---|---|---|---|
+| Are gains only over weak algebraic baselines? | Direct ANF, ESOP beam/MILP, ABC/BDD exports | primary same-task benchmark | Internal logical baselines: 1770/1770; Exported SSHR/ABC/BDD extension: 1416/1416 | Pareto vs direct ANF 172/1/4, -67.80%; vs ESOP-MILP 167/3/7, -29.84%; vs ABC-XAG 177/0/0, -65.58% | No universal CNOT, depth, ancilla, line-count, or hardware-mapped optimality claim. | pass |
+| Is SSHR the whole comparison target? | SSHR-H and SSHR-I CNOT | CNOT-oriented small-function counterpoint | Internal logical baselines: 1770/1770; Exported SSHR/ABC/BDD extension: 1416/1416 | Pareto vs SSHR-H 173/4/0, -41.06%; vs SSHR-I CNOT 173/4/0, -31.89%; SSHR-H four-resource dominance 33/4/140/0 | Do not claim CNOT dominance over SSHR; SSHR remains a real CNOT counterpoint. | pass |
+| Does the advantage survive external logic synthesis? | ROS-style LUT, mockturtle XAG, CirKit AIG/MC | external logical-toolchain stress test | ROS-style LUT proxy: 309/309 best rows; 927/927 K-sweep rows; mockturtle KLUT-to-XAG probe: 241/241; CirKit AIG/MC probe: 241/241 | ROS best-K 309/0/0, -84.27%; mockturtle n<=6 166/11/0, -31.50%; CirKit n<=6 177/0/0, -62.34% | Not a full ROS SAT garbage-management, reversible-emission, routing, or hardware-mapped comparison. | pass |
+| What does RevKit test? | Legacy RevKit exact oracle and RevKit phase/Rz branch | reversible and phase proxy counterpoint | Legacy RevKit CLI exact oracle: 708/708; RevKit phase/Rz branch: 531/531; Learned phase pruning: 7611/7611 | RevKit CLI exact oracle 173/0/4, -67.28%; Affine phase vs RevKit oracle_synth 177/0/0, -65.50% | Not lower auxiliary-line count, routed depth, or final approximate-rotation Clifford+T synthesis. | pass |
+| What part is actually AI/MCTS? | No-MCTS portfolio, Pareto archive, learned/random controls | causal search-control ablation | Search-control audit: 10/10 pass | Resource over no-MCTS 54/0/123, -1.44%; Pareto over no-MCTS 106/0/71, -4.69%; learned vs random prior 17/8/152, -0.15% | Do not state that deep reinforcement learning alone explains the full resource reduction. | pass |
+| Is the evidence only small-scale? | n=20--64 symbolic runs and n=21--25 complete truth-table bridges | scaling and correctness verification | High-dimensional frontier search: 2088/2088; Complete truth-table bridges: 400/400 | Stage-gated vs all-depth scale 0/4/92, +0.04% score; -25.43% time; ultra n=48,56,64 stress 480/480 plan+circuit verified; Bridge rows verify plan, emitted symbolic circuit, and complete truth table for n=21-25. | Not exhaustive high-dimensional truth-table benchmarking or global optimality proof. | pass |
+| Does weighted score hide bad tradeoffs? | Four-resource dominance and non-dominated method pool | non-dominance boundary | 12-method n<=6 dominance pool; 177 matched functions | Pareto-Resource-NMCTS is 170/177 non-dominated; RevKit CLI exact oracle four-resource dominance 3/0/170/4; CirKit AIG/MC four-resource dominance 21/0/156/0 | Do not turn weighted-score wins into a complete Pareto or hardware-dominance claim. | pass |

@@ -64,6 +64,8 @@ COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.jso
 COMPARISON_PROTOCOL_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_protocol_audit.tex"
 COMPARISON_TARGET_VALIDITY_MANIFEST = RESULTS / "manifest_comparison_target_validity_audit.json"
 COMPARISON_TARGET_VALIDITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_target_validity_audit.tex"
+COMPARISON_ANSWER_SCORECARD_MANIFEST = RESULTS / "manifest_comparison_answer_scorecard.json"
+COMPARISON_ANSWER_SCORECARD_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_answer_scorecard.tex"
 NOVELTY_SCORECARD_MANIFEST = RESULTS / "manifest_novelty_comparison_scorecard.json"
 NOVELTY_SCORECARD_TABLE = THIS_DIR / "paper_latex" / "tables" / "novelty_comparison_scorecard.tex"
 PUBLIC_HANDOFF_MANIFEST = RESULTS / "manifest_public_handoff_freshness_audit.json"
@@ -313,6 +315,23 @@ def verify_comparison_target_validity() -> dict[str, str]:
         status,
         f"rows={rows}; roles={roles}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
         "Run analyze_comparison_target_validity_audit.py and restore comparison-role labels, evidence gates, and manuscript table anchors.",
+    )
+
+
+def verify_comparison_answer_scorecard() -> dict[str, str]:
+    manifest = read_json(COMPARISON_ANSWER_SCORECARD_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    questions = manifest.get("questions", []) if manifest else []
+    table_exists = COMPARISON_ANSWER_SCORECARD_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = "pass" if manifest and revisions == 0 and table_exists and anchor else "needs revision"
+    return row(
+        "Comparison answer scorecard",
+        status,
+        f"rows={rows}; questions={questions}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_comparison_answer_scorecard.py and restore comparison-answer rows, generated table, or manuscript anchor.",
     )
 
 
@@ -1021,6 +1040,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_claim_scope(),
             verify_comparison_protocol(),
             verify_comparison_target_validity(),
+            verify_comparison_answer_scorecard(),
             verify_novelty_scorecard(),
             verify_public_handoff_freshness(),
             verify_ros_gap(),

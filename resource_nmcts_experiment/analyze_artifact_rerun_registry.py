@@ -191,11 +191,13 @@ def specs() -> list[EvidenceFamily]:
                 "analyze_counterpoint_claim_boundary.py",
                 "analyze_comparison_protocol_audit.py",
                 "analyze_comparison_target_validity_audit.py",
+                "analyze_comparison_answer_scorecard.py",
             ),
             raw_patterns=(),
             manifest_patterns=(
                 "manifest_comparison_protocol_audit.json",
                 "manifest_comparison_target_validity_audit.json",
+                "manifest_comparison_answer_scorecard.json",
             ),
             summary_patterns=(
                 "summary_baseline_claim_matrix.csv",
@@ -204,6 +206,7 @@ def specs() -> list[EvidenceFamily]:
                 "summary_counterpoint_claim_boundary.csv",
                 "summary_comparison_protocol_audit.csv",
                 "summary_comparison_target_validity_audit.csv",
+                "summary_comparison_answer_scorecard.csv",
             ),
             analysis_patterns=(
                 "analysis_baseline_claim_matrix.md",
@@ -212,6 +215,7 @@ def specs() -> list[EvidenceFamily]:
                 "analysis_counterpoint_claim_boundary.md",
                 "analysis_comparison_protocol_audit.md",
                 "analysis_comparison_target_validity_audit.md",
+                "analysis_comparison_answer_scorecard.md",
             ),
             dependency_boundary="Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps.",
         ),

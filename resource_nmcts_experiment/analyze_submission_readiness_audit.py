@@ -86,6 +86,10 @@ COMPARISON_TARGET_VALIDITY_ANALYSIS = RESULTS / "analysis_comparison_target_vali
 COMPARISON_TARGET_VALIDITY_SUMMARY = RESULTS / "summary_comparison_target_validity_audit.csv"
 COMPARISON_TARGET_VALIDITY_MANIFEST = RESULTS / "manifest_comparison_target_validity_audit.json"
 COMPARISON_TARGET_VALIDITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_target_validity_audit.tex"
+COMPARISON_ANSWER_ANALYSIS = RESULTS / "analysis_comparison_answer_scorecard.md"
+COMPARISON_ANSWER_SUMMARY = RESULTS / "summary_comparison_answer_scorecard.csv"
+COMPARISON_ANSWER_MANIFEST = RESULTS / "manifest_comparison_answer_scorecard.json"
+COMPARISON_ANSWER_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_answer_scorecard.tex"
 NOVELTY_SCORECARD_ANALYSIS = RESULTS / "analysis_novelty_comparison_scorecard.md"
 NOVELTY_SCORECARD_SUMMARY = RESULTS / "summary_novelty_comparison_scorecard.csv"
 NOVELTY_SCORECARD_MANIFEST = RESULTS / "manifest_novelty_comparison_scorecard.json"
@@ -264,6 +268,18 @@ def build_rows() -> list[dict[str, str]]:
         bool(comparison_target_validity_manifest.get("table_anchor_present", False))
         if comparison_target_validity_manifest
         else False
+    )
+    comparison_answer_manifest = read_json(COMPARISON_ANSWER_MANIFEST)
+    comparison_answer_revisions = (
+        int(comparison_answer_manifest.get("needs_revision_count", -1)) if comparison_answer_manifest else -1
+    )
+    comparison_answer_counts = comparison_answer_manifest.get("status_counts", {}) if comparison_answer_manifest else {}
+    comparison_answer_rows = comparison_answer_manifest.get("rows", "missing") if comparison_answer_manifest else "missing"
+    comparison_answer_questions = (
+        comparison_answer_manifest.get("questions", []) if comparison_answer_manifest else []
+    )
+    comparison_answer_anchor = (
+        bool(comparison_answer_manifest.get("table_anchor_present", False)) if comparison_answer_manifest else False
     )
     novelty_scorecard_manifest = read_json(NOVELTY_SCORECARD_MANIFEST)
     novelty_scorecard_revisions = (
@@ -619,6 +635,20 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Comparison target validity audit labels primary benchmarks, external probes, exact reversible counterpoints, phase proxies, causal controls, scalability checks, and non-dominance boundaries; rows={comparison_target_validity_rows}; roles={comparison_target_validity_roles}; status_counts={comparison_target_validity_counts}; needs_revision_count={comparison_target_validity_revisions}; table_anchor_present={comparison_target_validity_anchor}.",
             "next_action": "Rerun analyze_comparison_target_validity_audit.py after changing comparison targets, role labels, claim boundaries, or baseline-scope manuscript text.",
+        },
+        {
+            "item": "Comparison answer scorecard",
+            "status": "pass"
+            if "tab:comparison-answer-scorecard" in text
+            and COMPARISON_ANSWER_ANALYSIS.exists()
+            and COMPARISON_ANSWER_SUMMARY.exists()
+            and COMPARISON_ANSWER_MANIFEST.exists()
+            and COMPARISON_ANSWER_TABLE.exists()
+            and comparison_answer_revisions == 0
+            and comparison_answer_anchor
+            else "needs revision",
+            "evidence": f"Comparison answer scorecard gives reviewer-facing quantitative answers for comparison targets, evidence rows, outcomes, and excluded claims; rows={comparison_answer_rows}; questions={comparison_answer_questions}; status_counts={comparison_answer_counts}; needs_revision_count={comparison_answer_revisions}; table_anchor_present={comparison_answer_anchor}.",
+            "next_action": "Rerun analyze_comparison_answer_scorecard.py after changing comparison outcomes, search-control rows, dominance rows, or comparison-scope manuscript text.",
         },
         {
             "item": "Novelty/comparison scorecard",

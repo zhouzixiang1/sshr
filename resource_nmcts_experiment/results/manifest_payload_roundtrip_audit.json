@@ -23,6 +23,13 @@
     "results/manifest_citation_support_audit.json",
     "results/summary_citation_support_audit.csv"
   ],
+  "comparison_answer_scorecard_paths": [
+    "analyze_comparison_answer_scorecard.py",
+    "paper_latex/tables/comparison_answer_scorecard.tex",
+    "results/analysis_comparison_answer_scorecard.md",
+    "results/manifest_comparison_answer_scorecard.json",
+    "results/summary_comparison_answer_scorecard.csv"
+  ],
   "comparison_protocol_paths": [
     "analyze_comparison_protocol_audit.py",
     "paper_latex/tables/comparison_protocol_audit.tex",
@@ -117,19 +124,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=986; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=991; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=986; archive_files=986; missing=none; extra=none.",
+      "evidence": "manifest_files=991; archive_files=991; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=986; mismatches=none.",
+      "evidence": "checked=991; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -162,6 +169,12 @@
       "evidence": "comparison_target_validity_files=5; missing=none.",
       "item": "Payload comparison target validity evidence",
       "next_action": "Ensure the uploadable archive includes the comparison target validity audit script, generated evidence, and manuscript table.",
+      "status": "pass"
+    },
+    {
+      "evidence": "comparison_answer_files=5; missing=none.",
+      "item": "Payload comparison answer scorecard",
+      "next_action": "Ensure the uploadable archive includes the comparison answer scorecard script, generated evidence, and manuscript table.",
       "status": "pass"
     },
     {
@@ -279,7 +292,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=986; metadata_issues=none.",
+      "evidence": "members_checked=991; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -304,7 +317,7 @@
     "results/summary_search_budget_contract.csv"
   ],
   "status_counts": {
-    "pass": 28
+    "pass": 29
   },
   "support_packet_paths": [
     "analyze_submission_support_packet_audit.py",

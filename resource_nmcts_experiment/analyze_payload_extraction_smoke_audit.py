@@ -58,6 +58,15 @@ SMOKE_SPECS = (
         minimum_rows=7,
     ),
     SmokeSpec(
+        name="Comparison answer scorecard",
+        script="analyze_comparison_answer_scorecard.py",
+        manifest="results/manifest_comparison_answer_scorecard.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=7,
+    ),
+    SmokeSpec(
         name="Novelty/comparison scorecard",
         script="analyze_novelty_comparison_scorecard.py",
         manifest="results/manifest_novelty_comparison_scorecard.json",

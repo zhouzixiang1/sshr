@@ -114,20 +114,20 @@
       "summary_files": "3"
     },
     {
-      "analysis_files": "6",
+      "analysis_files": "7",
       "claim_use": "Verifies the reviewer-facing baseline roles, evidence layers, comparability limits, counterpoints, and manuscript table.",
       "dependency_boundary": "Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps.",
-      "driver_scripts": "analyze_baseline_claim_matrix.py; analyze_comparison_evidence_matrix.py; analyze_baseline_comparability_audit.py; analyze_counterpoint_claim_boundary.py; analyze_comparison_protocol_audit.py; analyze_comparison_target_validity_audit.py",
+      "driver_scripts": "analyze_baseline_claim_matrix.py; analyze_comparison_evidence_matrix.py; analyze_baseline_comparability_audit.py; analyze_counterpoint_claim_boundary.py; analyze_comparison_protocol_audit.py; analyze_comparison_target_validity_audit.py; analyze_comparison_answer_scorecard.py",
       "evidence_family": "Comparison protocol and claim boundaries",
-      "manifest_files": "2",
+      "manifest_files": "3",
       "raw_files": "0",
       "raw_rows": "0",
       "representative_raw": "",
       "rerun_tier": "quick comparison audit",
       "scripts_missing": "",
-      "scripts_present": "6",
+      "scripts_present": "7",
       "status": "complete",
-      "summary_files": "6"
+      "summary_files": "7"
     },
     {
       "analysis_files": "1",

@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=986; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=991; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -23,6 +23,12 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_comparison_target_validity_audit.json; needs_revision_count=0; rows=7; stderr=none",
       "item": "Comparison target validity audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_comparison_answer_scorecard.json; needs_revision_count=0; rows=7; stderr=none",
+      "item": "Comparison answer scorecard",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -186,6 +192,13 @@
       "minimum_rows_key": "rows",
       "name": "Comparison target validity audit",
       "script": "analyze_comparison_target_validity_audit.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_comparison_answer_scorecard.json",
+      "minimum_rows_key": "rows",
+      "name": "Comparison answer scorecard",
+      "script": "analyze_comparison_answer_scorecard.py"
     },
     {
       "expected_key": "needs_revision_count",
@@ -357,6 +370,6 @@
     }
   ],
   "status_counts": {
-    "pass": 27
+    "pass": 28
   }
 }

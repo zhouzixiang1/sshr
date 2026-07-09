@@ -71,6 +71,13 @@ COMPARISON_TARGET_VALIDITY_PATHS = {
     "results/manifest_comparison_target_validity_audit.json",
     "paper_latex/tables/comparison_target_validity_audit.tex",
 }
+COMPARISON_ANSWER_SCORECARD_PATHS = {
+    "analyze_comparison_answer_scorecard.py",
+    "results/analysis_comparison_answer_scorecard.md",
+    "results/summary_comparison_answer_scorecard.csv",
+    "results/manifest_comparison_answer_scorecard.json",
+    "paper_latex/tables/comparison_answer_scorecard.tex",
+}
 NOVELTY_SCORECARD_PATHS = {
     "analyze_novelty_comparison_scorecard.py",
     "results/analysis_novelty_comparison_scorecard.md",
@@ -358,6 +365,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    comparison_answer_missing = sorted(COMPARISON_ANSWER_SCORECARD_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload comparison answer scorecard",
+            "pass" if not comparison_answer_missing else "needs revision",
+            f"comparison_answer_files={len(COMPARISON_ANSWER_SCORECARD_PATHS)}; missing={comparison_answer_missing or 'none'}.",
+            "Ensure the uploadable archive includes the comparison answer scorecard script, generated evidence, and manuscript table.",
+        )
+    )
+
     novelty_missing = sorted(NOVELTY_SCORECARD_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -621,6 +638,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "reviewer_entrypoint_paths": sorted(REVIEWER_ENTRYPOINT_PATHS),
         "comparison_protocol_paths": sorted(COMPARISON_PROTOCOL_PATHS),
         "comparison_target_validity_paths": sorted(COMPARISON_TARGET_VALIDITY_PATHS),
+        "comparison_answer_scorecard_paths": sorted(COMPARISON_ANSWER_SCORECARD_PATHS),
         "ros_gap_paths": sorted(ROS_GAP_PATHS),
         "schedule_proxy_paths": sorted(SCHEDULE_PROXY_PATHS),
         "search_budget_paths": sorted(SEARCH_BUDGET_PATHS),

@@ -461,6 +461,29 @@ keeps the full method/control list for each family.}
 \input{tables/comparison_target_validity_audit}
 \end{table}
 
+Table~\ref{tab:comparison-answer-scorecard} turns the role audit into a
+quantitative answer to what the proposed method is compared against.  It
+combines the verified-row counts, paired score outcomes, search-control
+ablations, and raw four-resource dominance checks used throughout the Results
+section.  The table is deliberately phrased as an answer scorecard rather than
+as a universal leaderboard: each row states the comparison target, the
+evidence that makes the comparison meaningful, and the claim boundary that
+prevents over-reading SSHR, external logic-network probes, RevKit, or learned
+controls.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Comparison answer scorecard.  The table gives the short answer to
+``compared with what?'' by linking each comparison target to verified evidence,
+headline quantitative outcomes, and the excluded claim that keeps the
+logical-layer comparison meaningful.}
+\label{tab:comparison-answer-scorecard}
+\input{tables/comparison_answer_scorecard}
+\end{table}
+
 Table~\ref{tab:comparability-audit} makes the fairness boundary explicit.  It
 separates comparisons that share the same bit-flip oracle target from
 logic-network proxies, exact reversible-oracle probes, phase/\rz{} proxies, and

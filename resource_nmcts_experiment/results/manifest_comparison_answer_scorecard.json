@@ -1,0 +1,35 @@
+{
+  "needs_revision_count": 0,
+  "questions": [
+    "Are gains only over weak algebraic baselines?",
+    "Is SSHR the whole comparison target?",
+    "Does the advantage survive external logic synthesis?",
+    "What does RevKit test?",
+    "What part is actually AI/MCTS?",
+    "Is the evidence only small-scale?",
+    "Does weighted score hide bad tradeoffs?"
+  ],
+  "roles": [
+    "CNOT-oriented small-function counterpoint",
+    "causal search-control ablation",
+    "external logical-toolchain stress test",
+    "non-dominance boundary",
+    "primary same-task benchmark",
+    "reversible and phase proxy counterpoint",
+    "scaling and correctness verification"
+  ],
+  "rows": 7,
+  "script": "analyze_comparison_answer_scorecard.py",
+  "source_files": [
+    "summary_comparison_evidence_matrix.csv",
+    "summary_multimetric_nondominated.csv",
+    "summary_multimetric_pairwise_dominance.csv",
+    "summary_paired_statistical_evidence.csv",
+    "summary_search_control_baseline_audit.csv"
+  ],
+  "status_counts": {
+    "pass": 7
+  },
+  "table": "paper_latex/tables/comparison_answer_scorecard.tex",
+  "table_anchor_present": true
+}
