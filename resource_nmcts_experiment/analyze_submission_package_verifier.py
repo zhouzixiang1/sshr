@@ -4,7 +4,8 @@
 The verifier runs after the payload archive has been created.  It checks the
 terminal package invariants that are easy to regress during final polishing:
 compiled PDF availability, payload SHA consistency, readiness status, raw rerun
-registry coverage, claim-scope hygiene, private-metadata validation,
+registry coverage, claim-scope hygiene, private-metadata starter dry-run,
+private-metadata validation,
 synthetic metadata-pipeline self-testing, anonymous-review decision support,
 private-preview protection, private payload exclusion, payload round-trip
 integrity, and LaTeX log cleanliness.  It writes a small audit report but does
@@ -40,6 +41,8 @@ TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
 METADATA_PIPELINE_SELFTEST_MANIFEST = RESULTS / "manifest_submission_metadata_pipeline_selftest.json"
 ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
+METADATA_STARTER = THIS_DIR / "make_submission_metadata_starter.py"
+METADATA_FILE = THIS_DIR / "submission_package" / "submission_metadata.json"
 
 PRIVATE_PAYLOAD_BASENAMES = {
     "submission_metadata.json",
@@ -223,6 +226,53 @@ def verify_metadata_validator() -> dict[str, str]:
     )
 
 
+def verify_metadata_starter_dry_run() -> dict[str, str]:
+    before_exists = METADATA_FILE.exists()
+    before_stat = METADATA_FILE.stat() if before_exists else None
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(METADATA_STARTER)],
+            cwd=THIS_DIR,
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            timeout=20,
+        )
+    except Exception as exc:
+        return row(
+            "Metadata starter dry-run",
+            "needs revision",
+            f"starter execution failed: {exc}.",
+            "Run make_submission_metadata_starter.py without --write-private and fix the exception.",
+        )
+    after_exists = METADATA_FILE.exists()
+    after_stat = METADATA_FILE.stat() if after_exists else None
+    private_created = after_exists and not before_exists
+    private_modified = (
+        before_stat is not None
+        and after_stat is not None
+        and (before_stat.st_mtime_ns, before_stat.st_size) != (after_stat.st_mtime_ns, after_stat.st_size)
+    )
+    expected_tokens = (
+        "filled: code_availability.repository_url",
+        "filled: code_availability.commit_hash",
+        "dry run only",
+    )
+    missing_tokens = [token for token in expected_tokens if token not in proc.stdout]
+    status = (
+        "pass"
+        if proc.returncode == 0 and not missing_tokens and not private_created and not private_modified
+        else "needs revision"
+    )
+    return row(
+        "Metadata starter dry-run",
+        status,
+        f"returncode={proc.returncode}; missing_tokens={missing_tokens or 'none'}; private_preexisting={before_exists}; private_created={private_created}; private_modified={private_modified}.",
+        "Run make_submission_metadata_starter.py without --write-private and keep it read-only until author input is explicit.",
+    )
+
+
 def verify_metadata_pipeline_selftest() -> dict[str, str]:
     manifest = read_json(METADATA_PIPELINE_SELFTEST_MANIFEST)
     counts = manifest.get("status_counts", {}) if manifest else {}
@@ -329,6 +379,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_readiness(),
             verify_registry(),
             verify_claim_scope(),
+            verify_metadata_starter_dry_run(),
             verify_metadata_validator(),
             verify_metadata_pipeline_selftest(),
             verify_anonymous_review_audit(),

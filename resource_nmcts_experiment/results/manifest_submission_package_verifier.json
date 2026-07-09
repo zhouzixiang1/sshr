@@ -5,9 +5,9 @@
     "summary": "results/summary_submission_package_verifier.csv"
   },
   "python": "3.11.15",
-  "rows": 15,
+  "rows": 16,
   "script": "analyze_submission_package_verifier.py",
   "status_counts": {
-    "pass": 15
+    "pass": 16
   }
 }

@@ -4,17 +4,18 @@ This read-only verifier checks the terminal package invariants after the payload
 
 ## Status counts
 
-- pass: 15
+- pass: 16
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Compiled author PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=27, bytes=601116. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
-| Compiled anonymous PDF | pass | paper_latex/resource_nmcts_submission_anonymous.pdf pages=27, bytes=597775. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
-| Payload SHA sidecar | pass | actual=df4212b70b24404795908e8853271276ee702ede3b3237bd7ff84fe32e216ec8; sidecar=df4212b70b24404795908e8853271276ee702ede3b3237bd7ff84fe32e216ec8. | Regenerate the payload archive if the digests differ. |
-| Payload manifest consistency | pass | summary=df4212b70b24404795908e8853271276ee702ede3b3237bd7ff84fe32e216ec8; manifest=df4212b70b24404795908e8853271276ee702ede3b3237bd7ff84fe32e216ec8; file_count=850. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
+| Compiled author PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=27, bytes=601122. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
+| Compiled anonymous PDF | pass | paper_latex/resource_nmcts_submission_anonymous.pdf pages=27, bytes=597774. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
+| Payload SHA sidecar | pass | actual=6efbca08d41ba5626ee3f61dc1f2613834ee97af73c08cbb50819a36ae13967f; sidecar=6efbca08d41ba5626ee3f61dc1f2613834ee97af73c08cbb50819a36ae13967f. | Regenerate the payload archive if the digests differ. |
+| Payload manifest consistency | pass | summary=6efbca08d41ba5626ee3f61dc1f2613834ee97af73c08cbb50819a36ae13967f; manifest=6efbca08d41ba5626ee3f61dc1f2613834ee97af73c08cbb50819a36ae13967f; file_count=850. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
 | Readiness audit terminal state | pass | status_counts={'pass': 27, 'needs author input': 1}. | Resolve any needs-revision rows; author-specific declarations remain manual. |
 | Artifact rerun registry coverage | pass | families=14; registry_raw=144; actual_raw=144. | Rerun analyze_artifact_rerun_registry.py after adding raw CSVs or driver scripts. |
 | Claim-scope lint | pass | unresolved_count=0; status_counts={'guarded': 59, 'pass': 5}. | Run analyze_claim_scope_lint.py and revise unguarded hardware-mapping, universal-dominance, optimality, or full-tool-reproduction claims. |
+| Metadata starter dry-run | pass | returncode=0; missing_tokens=none; private_preexisting=False; private_created=False; private_modified=False. | Run make_submission_metadata_starter.py without --write-private and keep it read-only until author input is explicit. |
 | Private metadata validator | pass | needs_revision_count=0; status_counts={'needs author input': 1}. | Run validate_submission_metadata.py and fix metadata format or consistency rows before upload. |
 | Metadata pipeline self-test | pass | needs_revision_count=0; status_counts={'pass': 14}; synthetic_only=True; writes_private_metadata=False; writes_private_preview_files=False. | Run selftest_submission_metadata_pipeline.py and keep the fixture synthetic and non-private. |
 | Anonymous-review readiness audit | pass | needs_revision_count=0; needs_author_input_count=3; status_counts={'needs author input': 3, 'pass': 3}. | Run analyze_anonymous_review_readiness.py and resolve needs-revision rows; double-blind conversion remains venue-dependent author input. |
