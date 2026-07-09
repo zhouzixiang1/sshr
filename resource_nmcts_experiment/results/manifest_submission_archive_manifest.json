@@ -4169,7 +4169,7 @@
         {
           "bytes": 7851,
           "path": "results/manifest_caterpillar_ros_family_probe.json",
-          "sha256": "a295372213481b07a544621bc45900e6324f76ec3c347b6cf5b006ae33a91929"
+          "sha256": "e49d8195716e3fcc36f2e3ed858a873a8d3e02225d00c98d32674fe8a4f79560"
         },
         {
           "bytes": 1409,
@@ -4529,7 +4529,7 @@
         {
           "bytes": 588,
           "path": "results/manifest_ros_lut_line_sensitivity.json",
-          "sha256": "c962026cf9819521a282cdfd571b31012faf322c4cef89089bec27f13e8b8b3d"
+          "sha256": "29375b5cd64d8e96ba73a7090a185ab07d09e278d475e2cb8f3672c5b98b4d4f"
         },
         {
           "bytes": 1040,
@@ -4703,11 +4703,11 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "21675140cd8e131035d1048331e390fc533ea6cd3326ec86613c0a5e6407c39e"
+      "sha256_digest": "7e314cf404f6b5c00d379d4a1e7e88bb5df19c744b381a06d35847a0e6052a22"
     },
     {
       "boundary": "Includes reproducible entry points and top-level core implementation modules; raw sweeps still require their individual drivers.",
-      "bytes": 2845029,
+      "bytes": 2846261,
       "category": "Scripts and docs",
       "file_count": 149,
       "files": [
@@ -5272,9 +5272,9 @@
           "sha256": "07f7024b96b04de0eaac6fe6fd96780177c7b24ea5d27e4ba292b5c5ebafaa4c"
         },
         {
-          "bytes": 31262,
+          "bytes": 32494,
           "path": "make_submission_figures.py",
-          "sha256": "da2e3aa048bde8d289e5ee1cc06b8be7533dbc5d2a348da093adf89af5500238"
+          "sha256": "812db380f604034aa7809ca7daeb9497e920b067548f8d061d48d41afbfda4e5"
         },
         {
           "bytes": 5062,
@@ -5458,7 +5458,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "6c21586cc027387160d353b38779d61fe7256b7e7013a089380677d0c3a13a4f"
+      "sha256_digest": "3de37f66fa2b1842e7ae85aeafd1a422979736b249bc12675b3377f133bb1175"
     },
     {
       "boundary": "Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild.",

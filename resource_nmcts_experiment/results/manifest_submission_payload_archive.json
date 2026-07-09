@@ -1,6 +1,6 @@
 {
   "archive": "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
-  "archive_bytes": 41894569,
+  "archive_bytes": 41895582,
   "excluded_from_payload": [
     "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
     "submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256",
@@ -606,9 +606,9 @@
       "sha256": "07f7024b96b04de0eaac6fe6fd96780177c7b24ea5d27e4ba292b5c5ebafaa4c"
     },
     {
-      "bytes": 31262,
+      "bytes": 32494,
       "path": "make_submission_figures.py",
-      "sha256": "da2e3aa048bde8d289e5ee1cc06b8be7533dbc5d2a348da093adf89af5500238"
+      "sha256": "812db380f604034aa7809ca7daeb9497e920b067548f8d061d48d41afbfda4e5"
     },
     {
       "bytes": 5062,
@@ -888,7 +888,7 @@
     {
       "bytes": 919749,
       "path": "paper_latex/resource_nmcts_submission_acm_tqc.pdf",
-      "sha256": "9536318cf22bcf2956e5d615940681464bd86a5e2e8c2dca169bb3ae46bb66ad"
+      "sha256": "f58cf703426a633b28a8851537fa085b2565ccbb4189ec7d9eb7f832b839cc10"
     },
     {
       "bytes": 79492,
@@ -896,9 +896,9 @@
       "sha256": "2b9df42728737965bfdb9f429e3a5a9d0de4edefa172f01f26582867e6567a79"
     },
     {
-      "bytes": 746719,
+      "bytes": 746713,
       "path": "paper_latex/resource_nmcts_submission_anonymous.pdf",
-      "sha256": "19cfb7d4615680ae19969a7fb88b59ab4ecd32b30f93a9464123f8e3b66286df"
+      "sha256": "b00032bf68893186fa1b8d546e07af635dc368f83d795cb43b3196456c156dc4"
     },
     {
       "bytes": 79253,
@@ -906,9 +906,9 @@
       "sha256": "308c51b1a5c39ae8d4f5a38f64d24d818c55a1f4cb510bfad62e7c4a1c7832bc"
     },
     {
-      "bytes": 749879,
+      "bytes": 749876,
       "path": "paper_latex/resource_nmcts_submission_v1.pdf",
-      "sha256": "0ae4f11c1e14b0ad593292a01830502b8987f16e00bc6506a9916e263a0f2c96"
+      "sha256": "908e07ed6f3ea7d475f8829321f4d8ce8ea0c529b8ca40492e26173a4d3099a5"
     },
     {
       "bytes": 80627,
@@ -1758,7 +1758,7 @@
     {
       "bytes": 1877,
       "path": "paper_latex/tables/submission_archive_manifest.tex",
-      "sha256": "177637f2f7766802bec7fa1947514309f22cb272dde61ce660472bad04fad8b0"
+      "sha256": "6317154279ac011c5ba1509a79f7b2b7684304a338d1f020b92254a57097a836"
     },
     {
       "bytes": 3408,
@@ -2728,7 +2728,7 @@
     {
       "bytes": 2006,
       "path": "results/analysis_submission_archive_manifest.md",
-      "sha256": "2bcff92b0001c6069ef91946b0f2551375f7b1407659d952969238a6a3fc6536"
+      "sha256": "8711c64c8d38eeda9075b091aeef6a730fe835e1214cfc39555c4744c59a4e96"
     },
     {
       "bytes": 6395,
@@ -2968,7 +2968,7 @@
     {
       "bytes": 7851,
       "path": "results/manifest_caterpillar_ros_family_probe.json",
-      "sha256": "a295372213481b07a544621bc45900e6324f76ec3c347b6cf5b006ae33a91929"
+      "sha256": "e49d8195716e3fcc36f2e3ed858a873a8d3e02225d00c98d32674fe8a4f79560"
     },
     {
       "bytes": 1409,
@@ -3328,7 +3328,7 @@
     {
       "bytes": 588,
       "path": "results/manifest_ros_lut_line_sensitivity.json",
-      "sha256": "c962026cf9819521a282cdfd571b31012faf322c4cef89089bec27f13e8b8b3d"
+      "sha256": "29375b5cd64d8e96ba73a7090a185ab07d09e278d475e2cb8f3672c5b98b4d4f"
     },
     {
       "bytes": 1040,
@@ -3408,7 +3408,7 @@
     {
       "bytes": 227805,
       "path": "results/manifest_submission_archive_manifest.json",
-      "sha256": "caf3473acf469603ce81a0615d3247348d7ff0619982c566c34cf4f719f266e5"
+      "sha256": "f5ed88e4c52c9e8a8eda9972342cf80c41d36105984eceae4e17498fb888f625"
     },
     {
       "bytes": 9313,
@@ -5248,7 +5248,7 @@
     {
       "bytes": 3720,
       "path": "results/summary_submission_archive_manifest.csv",
-      "sha256": "bc663e8ad0da17f4838705d53c5a0981fd9423ea59d5ac8e1e8879e87a4b8f59"
+      "sha256": "01e35772f1417ecf9f74e4bccc04e9c031329e6af1300fe157cb32d64e0a2f3c"
     },
     {
       "bytes": 6869,
@@ -5661,10 +5661,10 @@
       "sha256": "c39dac85a473a0df45ca71729bf696f0de912b0762edeed794763a8caa56f486"
     }
   ],
-  "input_bytes": 116567798,
+  "input_bytes": 116569021,
   "missing": [],
   "python": "3.11.15",
   "script": "make_submission_payload_archive.py",
-  "sha256": "3e7a31215eb039a2c36c69e5fecf6f5017a529f9bf4262083614cb83e17a8502",
+  "sha256": "47ac270b115db77e5fe6ca35a8a178294d7701e637791b941b9095c660a6b4bc",
   "sha256_file": "submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256"
 }

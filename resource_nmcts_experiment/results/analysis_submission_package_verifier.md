@@ -8,10 +8,10 @@ This read-only verifier checks the terminal package invariants after the payload
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Compiled author PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=48, bytes=749879. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
-| Compiled anonymous PDF | pass | paper_latex/resource_nmcts_submission_anonymous.pdf pages=48, bytes=746719. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
-| Payload SHA sidecar | pass | actual=3e7a31215eb039a2c36c69e5fecf6f5017a529f9bf4262083614cb83e17a8502; sidecar=3e7a31215eb039a2c36c69e5fecf6f5017a529f9bf4262083614cb83e17a8502. | Regenerate the payload archive if the digests differ. |
-| Payload manifest consistency | pass | summary=3e7a31215eb039a2c36c69e5fecf6f5017a529f9bf4262083614cb83e17a8502; manifest=3e7a31215eb039a2c36c69e5fecf6f5017a529f9bf4262083614cb83e17a8502; file_count=1123. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
+| Compiled author PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=48, bytes=749876. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
+| Compiled anonymous PDF | pass | paper_latex/resource_nmcts_submission_anonymous.pdf pages=48, bytes=746713. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
+| Payload SHA sidecar | pass | actual=47ac270b115db77e5fe6ca35a8a178294d7701e637791b941b9095c660a6b4bc; sidecar=47ac270b115db77e5fe6ca35a8a178294d7701e637791b941b9095c660a6b4bc. | Regenerate the payload archive if the digests differ. |
+| Payload manifest consistency | pass | summary=47ac270b115db77e5fe6ca35a8a178294d7701e637791b941b9095c660a6b4bc; manifest=47ac270b115db77e5fe6ca35a8a178294d7701e637791b941b9095c660a6b4bc; file_count=1123. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
 | Readiness audit terminal state | pass | status_counts={'pass': 71, 'needs author input': 1}; terminal_verifier_self_row_excluded=True. | Resolve any needs-revision rows; author-specific declarations remain manual. |
 | Artifact rerun registry coverage | pass | families=27; registry_raw=161; actual_raw=161. | Rerun analyze_artifact_rerun_registry.py after adding raw CSVs or driver scripts. |
 | Claim-scope lint | pass | unresolved_count=0; status_counts={'guarded': 83, 'pass': 5}. | Run analyze_claim_scope_lint.py and revise unguarded hardware-mapping, universal-dominance, optimality, or full-tool-reproduction claims. |

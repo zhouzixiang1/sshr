@@ -9,6 +9,7 @@ from __future__ import annotations
 import csv
 from datetime import datetime, timezone
 import re
+import subprocess
 from collections import defaultdict
 from pathlib import Path
 from typing import Iterable
@@ -84,19 +85,65 @@ def normalize_svg(path: Path) -> None:
     path.write_text("\n".join(line.rstrip() for line in lines) + "\n", encoding="utf-8")
 
 
+def assert_pdf_readable(path: Path) -> None:
+    data = path.read_bytes()
+    if not data.startswith(b"%PDF-") or b"%%EOF" not in data[-2048:]:
+        raise RuntimeError(f"Generated PDF is incomplete: {path}")
+    try:
+        subprocess.run(
+            ["pdfinfo", str(path)],
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+    except FileNotFoundError:
+        return
+    except subprocess.CalledProcessError as exc:
+        detail = (exc.stderr or "").strip()
+        raise RuntimeError(f"Generated PDF is unreadable: {path}\n{detail}") from exc
+
+
+def atomic_savefig(fig: plt.Figure, path: Path, *, fmt: str | None = None, **kwargs: object) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(f".{path.name}.tmp")
+    if tmp.exists():
+        tmp.unlink()
+    fig.savefig(tmp, format=fmt, **kwargs)
+    if path.suffix.lower() == ".pdf":
+        assert_pdf_readable(tmp)
+    tmp.replace(path)
+
+
 def save(fig: plt.Figure, name: str) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     creator = "Resource-NMCTS submission figure generator"
     fixed_date = datetime(2026, 7, 9, tzinfo=timezone.utc)
-    fig.savefig(
+    fig.canvas.draw()
+    atomic_savefig(
+        fig,
         OUT / f"{name}.pdf",
+        fmt="pdf",
         bbox_inches="tight",
         metadata={"Creator": creator, "CreationDate": fixed_date, "ModDate": fixed_date},
     )
     svg_path = OUT / f"{name}.svg"
-    fig.savefig(svg_path, bbox_inches="tight", metadata={"Creator": creator, "Date": fixed_date.isoformat()})
+    atomic_savefig(
+        fig,
+        svg_path,
+        fmt="svg",
+        bbox_inches="tight",
+        metadata={"Creator": creator, "Date": fixed_date.isoformat()},
+    )
     normalize_svg(svg_path)
-    fig.savefig(OUT / f"{name}.png", dpi=300, bbox_inches="tight", metadata={"Software": creator})
+    atomic_savefig(
+        fig,
+        OUT / f"{name}.png",
+        fmt="png",
+        dpi=300,
+        bbox_inches="tight",
+        metadata={"Software": creator},
+    )
     plt.close(fig)
 
 
