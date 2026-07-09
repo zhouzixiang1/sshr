@@ -1,0 +1,102 @@
+{
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_submission_metadata_pipeline_selftest.md",
+    "manifest": "results/manifest_submission_metadata_pipeline_selftest.json",
+    "summary": "results/summary_submission_metadata_pipeline_selftest.csv"
+  },
+  "python": "3.11.15",
+  "rows": [
+    {
+      "evidence": "31/31 required paths present.",
+      "item": "required path fixture coverage",
+      "next_action": "Update synthetic fixture when required metadata paths change.",
+      "status": "pass"
+    },
+    {
+      "evidence": "0 placeholder or empty field(s) remain.",
+      "item": "placeholder-free fixture",
+      "next_action": "Remove placeholders from the synthetic fixture.",
+      "status": "pass"
+    },
+    {
+      "evidence": "0 required or placeholder field(s) remain incomplete. fields=none",
+      "item": "validator: Required metadata completeness",
+      "next_action": "Fill every AUTHOR INPUT REQUIRED field before generating final submission text.",
+      "status": "pass"
+    },
+    {
+      "evidence": "7/7 policy flag(s) are parseable as checked/yes/no/not-applicable values. fields=none",
+      "item": "validator: Target policy flags",
+      "next_action": "Use explicit yes/no/checked/not applicable wording for target-venue policy fields.",
+      "status": "pass"
+    },
+    {
+      "evidence": "1 author row(s) checked; corresponding_count=1. fields=none",
+      "item": "validator: Author list structure",
+      "next_action": "Use sequential author order values and mark at least one corresponding author.",
+      "status": "pass"
+    },
+    {
+      "evidence": "Email and ORCID-like fields checked without exposing values. fields=none",
+      "item": "validator: Author contact formats",
+      "next_action": "Use valid email addresses and ORCID format 0000-0000-0000-0000, or an explicit no-ORCID statement if allowed by the venue.",
+      "status": "pass"
+    },
+    {
+      "evidence": "Corresponding-author name/email are checked against the author list without exposing values. fields=none",
+      "item": "validator: Corresponding author consistency",
+      "next_action": "Ensure corresponding_author.name/email match one author entry.",
+      "status": "pass"
+    },
+    {
+      "evidence": "5/5 link-like field(s) are URL/DOI or explicit none; explicit_none_count=1. fields=none",
+      "item": "validator: Availability and repository links",
+      "next_action": "Use https URLs, DOI strings, or explicit none/not-applicable statements for optional links.",
+      "status": "pass"
+    },
+    {
+      "evidence": "Commit hash is checked for hex format and consistency with the current checkout. fields=none",
+      "item": "validator: Code commit hash",
+      "next_action": "Use the final pushed commit hash for the uploaded code/archive.",
+      "status": "pass"
+    },
+    {
+      "evidence": "8/8 prose statement field(s) have at least three words. fields=none",
+      "item": "validator: Submission statements",
+      "next_action": "Use explicit venue-ready prose rather than terse placeholders.",
+      "status": "pass"
+    },
+    {
+      "evidence": "chars=1923; has_header=True; placeholder_present=False.",
+      "item": "preview renderer: author declarations",
+      "next_action": "Fix renderer output before relying on generated private preview files.",
+      "status": "pass"
+    },
+    {
+      "evidence": "chars=815; has_header=True; placeholder_present=False.",
+      "item": "preview renderer: availability statements",
+      "next_action": "Fix renderer output before relying on generated private preview files.",
+      "status": "pass"
+    },
+    {
+      "evidence": "chars=1391; has_header=True; placeholder_present=False.",
+      "item": "preview renderer: cover letter",
+      "next_action": "Fix renderer output before relying on generated private preview files.",
+      "status": "pass"
+    },
+    {
+      "evidence": "chars=4308; has_header=True; placeholder_present=False.",
+      "item": "preview renderer: submission text packet",
+      "next_action": "Fix renderer output before relying on generated private preview files.",
+      "status": "pass"
+    }
+  ],
+  "script": "selftest_submission_metadata_pipeline.py",
+  "status_counts": {
+    "pass": 14
+  },
+  "uses_synthetic_metadata_only": true,
+  "writes_private_metadata": false,
+  "writes_private_preview_files": false
+}

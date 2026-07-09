@@ -293,10 +293,11 @@ def build_items() -> list[GoalItem]:
         GoalItem(
             requirement="Final author and venue metadata",
             status="needs author input" if metadata_needs else "pass",
-            evidence=f"Submission metadata audit reports {metadata_needs} author/venue field group(s) needing author input; private metadata validation and text-preview generation are prepared for filled metadata.",
+            evidence=f"Submission metadata audit reports {metadata_needs} author/venue field group(s) needing author input; private metadata validation, synthetic metadata-pipeline self-testing, and text-preview generation are prepared for filled metadata.",
             evidence_files=(
                 RESULTS / "analysis_submission_metadata_audit.md",
                 RESULTS / "analysis_submission_metadata_validator.md",
+                RESULTS / "analysis_submission_metadata_pipeline_selftest.md",
                 RESULTS / "analysis_submission_text_preview.md",
                 THIS_DIR / "submission_package" / "author_declarations_template.md",
                 THIS_DIR / "submission_package" / "cover_letter_template.md",
@@ -313,6 +314,7 @@ def build_items() -> list[GoalItem]:
                 RESULTS / "analysis_submission_readiness_audit.md",
                 RESULTS / "analysis_submission_metadata_audit.md",
                 RESULTS / "analysis_submission_metadata_validator.md",
+                RESULTS / "analysis_submission_metadata_pipeline_selftest.md",
                 RESULTS / "analysis_submission_text_preview.md",
             ),
             boundary="The research/package side is audit-complete, but the full objective is not closed until author and target-venue metadata are supplied.",

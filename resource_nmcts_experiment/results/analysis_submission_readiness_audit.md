@@ -5,7 +5,7 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 ## Status counts
 
 - needs author input: 1
-- pass: 23
+- pass: 24
 
 ## Checklist
 
@@ -25,10 +25,11 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 | Submission support templates | pass | Package README, author-input packet, artifact guide, cover letter, author declarations, upload checklist, reviewer-concern brief, editor-screening brief, and target-venue brief are present. | Fill the author-specific fields before journal upload. |
 | Submission metadata audit | pass | Author- and venue-specific metadata fields are enumerated in CSV, Markdown, and JSON audit outputs. | Rerun analyze_submission_metadata_audit.py after filling author declarations or choosing a target venue. |
 | Submission metadata validator | pass | Private metadata format validator exists; status_counts={'needs author input': 1}; needs_revision_count=0. | Rerun validate_submission_metadata.py after filling private metadata; fix format or consistency rows before upload. |
+| Submission metadata pipeline self-test | pass | Synthetic metadata self-test exercises validator and preview renderers; status_counts={'pass': 14}; needs_revision_count=0; synthetic_only=True; writes_private_outputs=False. | Rerun selftest_submission_metadata_pipeline.py after changing required metadata paths, validators, or preview renderers. |
 | Private submission text preview | pass | Private preview generator audit exists; status_counts={'needs author input': 1}; private_outputs_are_git_ignored=True. | Rerun make_submission_text_preview.py after filling private metadata; generated_*.md files must remain ignored by Git. |
 | Goal completion audit | pass | The original project objective is mapped to concrete evidence files, boundaries, and remaining author-gated items. | Rerun analyze_goal_completion_audit.py after adding major evidence or filling author/venue metadata. |
 | Uploadable payload archive | pass | Deterministic submission payload tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present. | Rerun make_submission_payload_archive.py after adding or removing upload payload files. |
-| Terminal package verifier | pass | Fast pre-upload verifier script and read-only verifier outputs check PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private metadata validation, private-preview protection, and LaTeX log boundaries. | Run verify_submission_package.sh after rebuilding the payload archive. |
+| Terminal package verifier | pass | Fast pre-upload verifier script and read-only verifier outputs check PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private metadata validation, metadata-pipeline self-test, private-preview protection, and LaTeX log boundaries. | Run verify_submission_package.sh after rebuilding the payload archive. |
 | Derived package rebuild command | pass | A lightweight rebuild script is present and cited in Data and Code Availability. | Keep the rebuild script aligned with paper-facing analysis, figure, audit, and PDF outputs. |
 | Limitations and failure modes | pass | Discussion names logical-layer, ROS-proxy, RevKit-derived, and high-dimensional bridge boundaries. | Add any new negative result to Discussion rather than hiding it in tables. |
 | Data and code availability | pass | Manuscript has an availability section pointing to scripts, CSVs, manifests, tables, and figures. | Replace repository-relative wording with an archival DOI or anonymous link at submission time if required. |

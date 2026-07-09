@@ -43,6 +43,9 @@ METADATA_VALIDATOR_MANIFEST = RESULTS / "manifest_submission_metadata_validator.
 TEXT_PREVIEW_ANALYSIS = RESULTS / "analysis_submission_text_preview.md"
 TEXT_PREVIEW_SUMMARY = RESULTS / "summary_submission_text_preview.csv"
 TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
+METADATA_PIPELINE_SELFTEST_ANALYSIS = RESULTS / "analysis_submission_metadata_pipeline_selftest.md"
+METADATA_PIPELINE_SELFTEST_SUMMARY = RESULTS / "summary_submission_metadata_pipeline_selftest.csv"
+METADATA_PIPELINE_SELFTEST_MANIFEST = RESULTS / "manifest_submission_metadata_pipeline_selftest.json"
 GOAL_ANALYSIS = RESULTS / "analysis_goal_completion_audit.md"
 GOAL_SUMMARY = RESULTS / "summary_goal_completion_audit.csv"
 GOAL_MANIFEST = RESULTS / "manifest_goal_completion_audit.json"
@@ -122,6 +125,13 @@ def build_rows() -> list[dict[str, str]]:
     metadata_validator_manifest = read_json(METADATA_VALIDATOR_MANIFEST)
     metadata_validator_revisions = int(metadata_validator_manifest.get("needs_revision_count", -1)) if metadata_validator_manifest else -1
     metadata_validator_counts = metadata_validator_manifest.get("status_counts", {}) if metadata_validator_manifest else {}
+    metadata_selftest_manifest = read_json(METADATA_PIPELINE_SELFTEST_MANIFEST)
+    metadata_selftest_revisions = int(metadata_selftest_manifest.get("needs_revision_count", -1)) if metadata_selftest_manifest else -1
+    metadata_selftest_counts = metadata_selftest_manifest.get("status_counts", {}) if metadata_selftest_manifest else {}
+    metadata_selftest_synthetic = bool(metadata_selftest_manifest.get("uses_synthetic_metadata_only", False))
+    metadata_selftest_writes_private = bool(metadata_selftest_manifest.get("writes_private_metadata", True)) or bool(
+        metadata_selftest_manifest.get("writes_private_preview_files", True)
+    )
     lower = text.lower()
     todo_hits = re.findall(r"\b(?:todo|tbd|placeholder)\b", lower)
     abstract_words = abstract_word_count(text)
@@ -250,6 +260,19 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun validate_submission_metadata.py after filling private metadata; fix format or consistency rows before upload.",
         },
         {
+            "item": "Submission metadata pipeline self-test",
+            "status": "pass"
+            if METADATA_PIPELINE_SELFTEST_ANALYSIS.exists()
+            and METADATA_PIPELINE_SELFTEST_SUMMARY.exists()
+            and METADATA_PIPELINE_SELFTEST_MANIFEST.exists()
+            and metadata_selftest_revisions == 0
+            and metadata_selftest_synthetic
+            and not metadata_selftest_writes_private
+            else "needs revision",
+            "evidence": f"Synthetic metadata self-test exercises validator and preview renderers; status_counts={metadata_selftest_counts}; needs_revision_count={metadata_selftest_revisions}; synthetic_only={metadata_selftest_synthetic}; writes_private_outputs={metadata_selftest_writes_private}.",
+            "next_action": "Rerun selftest_submission_metadata_pipeline.py after changing required metadata paths, validators, or preview renderers.",
+        },
+        {
             "item": "Private submission text preview",
             "status": "pass"
             if TEXT_PREVIEW_ANALYSIS.exists()
@@ -288,7 +311,7 @@ def build_rows() -> list[dict[str, str]]:
             and VERIFIER_SUMMARY.exists()
             and VERIFIER_MANIFEST.exists()
             else "needs revision",
-            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private metadata validation, private-preview protection, and LaTeX log boundaries.",
+            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private metadata validation, metadata-pipeline self-test, private-preview protection, and LaTeX log boundaries.",
             "next_action": "Run verify_submission_package.sh after rebuilding the payload archive.",
         },
         {

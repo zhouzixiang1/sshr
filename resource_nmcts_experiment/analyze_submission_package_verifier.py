@@ -5,8 +5,9 @@ The verifier runs after the payload archive has been created.  It checks the
 terminal package invariants that are easy to regress during final polishing:
 compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, private-metadata validation,
-private-preview protection, and LaTeX log cleanliness.  It writes a small audit
-report but does not rerun experiments or alter manuscript sources.
+synthetic metadata-pipeline self-testing, private-preview protection, and
+LaTeX log cleanliness.  It writes a small audit report but does not rerun
+experiments or alter manuscript sources.
 """
 from __future__ import annotations
 
@@ -33,6 +34,7 @@ PAYLOAD_MANIFEST = RESULTS / "manifest_submission_payload_archive.json"
 CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
 METADATA_VALIDATOR_MANIFEST = RESULTS / "manifest_submission_metadata_validator.json"
 TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
+METADATA_PIPELINE_SELFTEST_MANIFEST = RESULTS / "manifest_submission_metadata_pipeline_selftest.json"
 
 
 def rel(path: Path) -> str:
@@ -208,6 +210,30 @@ def verify_metadata_validator() -> dict[str, str]:
     )
 
 
+def verify_metadata_pipeline_selftest() -> dict[str, str]:
+    manifest = read_json(METADATA_PIPELINE_SELFTEST_MANIFEST)
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    synthetic_only = bool(manifest.get("uses_synthetic_metadata_only", False))
+    writes_private_metadata = bool(manifest.get("writes_private_metadata", True))
+    writes_private_preview = bool(manifest.get("writes_private_preview_files", True))
+    status = (
+        "pass"
+        if manifest
+        and needs_revision == 0
+        and synthetic_only
+        and not writes_private_metadata
+        and not writes_private_preview
+        else "needs revision"
+    )
+    return row(
+        "Metadata pipeline self-test",
+        status,
+        f"needs_revision_count={needs_revision}; status_counts={counts}; synthetic_only={synthetic_only}; writes_private_metadata={writes_private_metadata}; writes_private_preview_files={writes_private_preview}.",
+        "Run selftest_submission_metadata_pipeline.py and keep the fixture synthetic and non-private.",
+    )
+
+
 def verify_latex_log() -> dict[str, str]:
     if not LOG.exists():
         return row("LaTeX log boundary", "needs revision", "LaTeX log is missing.", "Rebuild the PDF with latexmk.")
@@ -234,7 +260,17 @@ def verify_latex_log() -> dict[str, str]:
 def build_rows() -> list[dict[str, str]]:
     rows = [verify_pdf()]
     rows.extend(verify_payload_sha())
-    rows.extend([verify_readiness(), verify_registry(), verify_claim_scope(), verify_metadata_validator(), verify_text_preview(), verify_latex_log()])
+    rows.extend(
+        [
+            verify_readiness(),
+            verify_registry(),
+            verify_claim_scope(),
+            verify_metadata_validator(),
+            verify_metadata_pipeline_selftest(),
+            verify_text_preview(),
+            verify_latex_log(),
+        ]
+    )
     return rows
 
 

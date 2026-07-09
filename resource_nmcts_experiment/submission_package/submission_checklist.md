@@ -35,6 +35,7 @@ Use this checklist immediately before uploading the manuscript.
 - Claim-scope lint: `results/analysis_claim_scope_lint.md`
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
 - Metadata validator: `results/analysis_submission_metadata_validator.md`
+- Metadata pipeline self-test: `results/analysis_submission_metadata_pipeline_selftest.md`
 - Private submission text preview audit: `results/analysis_submission_text_preview.md`
 - Goal-completion audit: `results/analysis_goal_completion_audit.md`
 - Raw rerun registry: `results/analysis_artifact_rerun_registry.md`
@@ -65,6 +66,7 @@ Run these from `resource_nmcts_experiment/`:
   analyze_submission_readiness_audit.py \
   analyze_submission_traceability_audit.py \
   validate_submission_metadata.py \
+  selftest_submission_metadata_pipeline.py \
   make_submission_text_preview.py
 ./rebuild_submission_package.sh
 ./verify_submission_package.sh
@@ -80,6 +82,7 @@ Expected current state:
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
 - Metadata audit: all author- and venue-specific fields are enumerated before upload, and any filled `submission_metadata.json` is checked.
 - Metadata validator: no `needs revision` rows; missing private metadata remains an author-input gate until filled.
+- Metadata pipeline self-test: synthetic non-private metadata exercises validator and preview renderers with no `needs revision` rows.
 - Private submission text preview: public audit exists; generated private Markdown previews remain ignored by Git and excluded from the payload archive.
 - Goal-completion audit: all research/package requirements pass and only author/venue gates remain open.
 - Traceability audit: all claim families complete.

@@ -41,6 +41,9 @@ noise modeling, or magic-state-factory accounting.
   venue fields that must be filled before upload.
 - `../results/analysis_submission_metadata_validator.md`: public, redacted
   format/consistency validation for the private metadata file.
+- `../results/analysis_submission_metadata_pipeline_selftest.md`: synthetic,
+  non-private self-test for the metadata validator and private-preview
+  renderers.
 - `../results/analysis_submission_text_preview.md`: public audit for the
   private generated submission-system text previews.
 - `submission_checklist.md`: final upload checklist and verification commands.
@@ -80,6 +83,9 @@ The same rebuild also runs `validate_submission_metadata.py`, which checks
 field formats such as email addresses, ORCID-like identifiers, URL/DOI links,
 target-venue policy flags, and code commit hash consistency without writing
 private values to tracked outputs.
+It also runs `selftest_submission_metadata_pipeline.py` with synthetic
+non-private metadata so validator and preview-renderer regressions are caught
+before any real author metadata is supplied.
 
 ## Claim Boundary Check
 
@@ -115,6 +121,7 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_claim_scope_lint.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python validate_submission_metadata.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python selftest_submission_metadata_pipeline.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_text_preview.py
 pdfinfo paper_latex/resource_nmcts_submission_v1.pdf | sed -n '1,20p'
 rg -n "Warning|Overfull|Underfull|LaTeX Error|Undefined|Rerun" \
@@ -124,6 +131,7 @@ rg -n "needs author input|pass:|file count|archive sha256|Submission support|unr
   results/analysis_claim_scope_lint.md \
   results/manifest_claim_scope_lint.json \
   results/analysis_submission_metadata_validator.md \
+  results/analysis_submission_metadata_pipeline_selftest.md \
   results/analysis_submission_text_preview.md \
   results/analysis_submission_payload_archive.md \
   results/analysis_submission_archive_manifest.md
