@@ -1175,6 +1175,19 @@ candidate space is dense, so this supports learned pruned phase-search
 feasibility rather than a claim that the current scorer solves phase/Rz
 synthesis globally.
 
+To check that this conclusion is not an artifact of the single $T/R_z=30$
+constant, Table~\ref{tab:phase-rotation-precision} freezes the same verified
+phase candidates and recomputes scores under a precision-sensitive logical
+model.  Each non-Clifford \rz{} is charged
+$\lceil 3\log_2(1/\epsilon)\rceil$ T gates, following the standard asymptotic
+scaling for ancilla-free Clifford+T Z-rotation approximation~\cite{ross2016optimalzrotation},
+with the same charge added to logical depth and gate count.  At
+$\epsilon=10^{-6}$, Affine-128 remains 177/0/0 against RevKit
+\texttt{oracle\_synth} with a 66.12\% mean score reduction; diverse top-512
+remains 17/0/21 against budget-32 with a 2.38\% mean score reduction and stays
+within 0.002\% of wide-128.  This is a stronger sensitivity check than a single
+constant proxy, but it still does not output approximate rotation sequences.
+
 \begin{table}[H]
 \centering
 \small
@@ -1192,6 +1205,20 @@ function relative to the wide-128 search; negative $\Delta$ values favor the
 learned shortlist.}
 \label{tab:phase-policy-budget-frontier}
 \input{tables/phase_policy_budget_frontier}
+\end{table}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Precision-sensitive logical cost audit for the phase/Rz branch.
+Scores are recomputed after charging each non-Clifford \rz{} by
+$\lceil 3\log_2(1/\epsilon)\rceil$ T gates.  Negative $\Delta$ values favor the
+target method.  This table is a sensitivity model, not rotation-sequence
+synthesis.}
+\label{tab:phase-rotation-precision}
+\input{tables/phase_rotation_precision_audit}
 \end{table}
 
 \begin{table}[H]

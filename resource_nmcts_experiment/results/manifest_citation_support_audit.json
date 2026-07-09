@@ -1,5 +1,5 @@
 {
-  "bib_key_count": 19,
+  "bib_key_count": 20,
   "bib_keys": [
     "brayton2010abc",
     "cirkit",
@@ -12,6 +12,7 @@
     "revkit",
     "rietsch2024unitary",
     "riu2025rlzx",
+    "ross2016optimalzrotation",
     "soeken2012revkit",
     "soeken2018epfl",
     "stgBenchmark",
@@ -21,7 +22,7 @@
     "zheng2025sshr",
     "zhou2022qctmcts"
   ],
-  "cited_key_count": 19,
+  "cited_key_count": 20,
   "cited_keys": [
     "brayton2010abc",
     "cirkit",
@@ -34,6 +35,7 @@
     "revkit",
     "rietsch2024unitary",
     "riu2025rlzx",
+    "ross2016optimalzrotation",
     "soeken2012revkit",
     "soeken2018epfl",
     "stgBenchmark",

@@ -84,18 +84,23 @@
   "learned_control_paths": [
     "analyze_learned_control_audit.py",
     "analyze_phase_policy_budget_frontier.py",
+    "analyze_phase_rotation_precision_audit.py",
     "analyze_root_action_ranker_audit.py",
     "paper_latex/tables/learned_control_audit.tex",
     "paper_latex/tables/phase_policy_budget_frontier.tex",
+    "paper_latex/tables/phase_rotation_precision_audit.tex",
     "paper_latex/tables/root_action_ranker_audit.tex",
     "results/analysis_learned_control_audit.md",
     "results/analysis_phase_policy_budget_frontier.md",
+    "results/analysis_phase_rotation_precision_audit.md",
     "results/analysis_root_action_ranker_audit.md",
     "results/manifest_learned_control_audit.json",
     "results/manifest_phase_policy_budget_frontier.json",
+    "results/manifest_phase_rotation_precision_audit.json",
     "results/manifest_root_action_ranker_audit.json",
     "results/summary_learned_control_audit.csv",
     "results/summary_phase_policy_budget_frontier.csv",
+    "results/summary_phase_rotation_precision_audit.csv",
     "results/summary_root_action_ranker_audit.csv"
   ],
   "needs_revision_count": 0,
@@ -165,19 +170,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1034; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1039; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=1034; archive_files=1034; missing=none; extra=none.",
+      "evidence": "manifest_files=1039; archive_files=1039; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=1034; mismatches=none.",
+      "evidence": "checked=1039; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -261,7 +266,7 @@
       "status": "pass"
     },
     {
-      "evidence": "learned_control_files=15; missing=none.",
+      "evidence": "learned_control_files=20; missing=none.",
       "item": "Payload learned-control evidence",
       "next_action": "Ensure the uploadable archive includes the learned-control audit script, generated evidence, manifest, and manuscript table.",
       "status": "pass"
@@ -363,7 +368,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=1034; metadata_issues=none.",
+      "evidence": "members_checked=1039; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"

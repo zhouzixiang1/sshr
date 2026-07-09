@@ -151,18 +151,23 @@ SEARCH_BUDGET_PATHS = {
 LEARNED_CONTROL_PATHS = {
     "analyze_learned_control_audit.py",
     "analyze_root_action_ranker_audit.py",
+    "analyze_phase_rotation_precision_audit.py",
     "analyze_phase_policy_budget_frontier.py",
     "results/analysis_learned_control_audit.md",
     "results/analysis_root_action_ranker_audit.md",
+    "results/analysis_phase_rotation_precision_audit.md",
     "results/analysis_phase_policy_budget_frontier.md",
     "results/summary_learned_control_audit.csv",
     "results/summary_root_action_ranker_audit.csv",
+    "results/summary_phase_rotation_precision_audit.csv",
     "results/summary_phase_policy_budget_frontier.csv",
     "results/manifest_learned_control_audit.json",
     "results/manifest_root_action_ranker_audit.json",
+    "results/manifest_phase_rotation_precision_audit.json",
     "results/manifest_phase_policy_budget_frontier.json",
     "paper_latex/tables/learned_control_audit.tex",
     "paper_latex/tables/root_action_ranker_audit.tex",
+    "paper_latex/tables/phase_rotation_precision_audit.tex",
     "paper_latex/tables/phase_policy_budget_frontier.tex",
 }
 NEURAL_MCTS_CLAIM_CALIBRATION_PATHS = {

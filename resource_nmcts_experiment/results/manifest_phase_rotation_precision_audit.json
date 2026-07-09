@@ -1,0 +1,40 @@
+{
+  "critical_policy_wide128_epsilon": "1e-06",
+  "critical_policy_wide128_mean_relative": 1.923757250216884e-05,
+  "critical_policy_wide128_wlt": "0/7/31",
+  "epsilons": [
+    "0.001",
+    "1e-06",
+    "1e-09",
+    "1e-12"
+  ],
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_phase_rotation_precision_audit.md",
+    "manifest": "results/manifest_phase_rotation_precision_audit.json",
+    "summary": "results/summary_phase_rotation_precision_audit.csv",
+    "table": "paper_latex/tables/phase_rotation_precision_audit.tex"
+  },
+  "policy_items": 38,
+  "python": "3.11.15",
+  "rows": 28,
+  "script": "analyze_phase_rotation_precision_audit.py",
+  "sources": [
+    "results/raw_revkit_oracle_synth_traditional.csv",
+    "results/raw_phase_parity_anf.csv",
+    "results/raw_phase_parity_fprm.csv",
+    "results/raw_phase_parity_affine.csv",
+    "results/raw_phase_parity_affine_wide128.csv",
+    "results/raw_phase_affine_policy_rank_diverse.csv"
+  ],
+  "status_counts": {
+    "pass": 28
+  },
+  "t_per_rz": {
+    "0.001": 30,
+    "1e-06": 60,
+    "1e-09": 90,
+    "1e-12": 120
+  },
+  "traditional_items": 177
+}

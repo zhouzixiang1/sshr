@@ -20,11 +20,11 @@
 
 以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，用于防止交付说明和机器审计结果漂移：
 
-- PDF pages=40/40
+- PDF pages=41/41
 - readiness=66 pass + 1 needs author input
-- payload_files=1034
+- payload_files=1039
 - artifact_registry=25 families / 149 raw CSV / 63357 raw rows
-- source_privacy=0 strict leaks / 55 provenance files / 991 payload text files
+- source_privacy=0 strict leaks / 55 provenance files / 996 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open
@@ -394,7 +394,7 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/analysis_pdf_metadata_audit.md`
 - `results/manifest_pdf_metadata_audit.json`
 
-该审计调用 Poppler `pdfinfo` 检查作者版和匿名版投稿 PDF 的 Title/Author/Creator/Producer 等元数据、页数、A4 页面尺寸、加密状态、JavaScript、Form 字段和隐私敏感字符串。当前作者版和匿名版均为 39 页、未加密、无 JavaScript、A4，metadata 中没有作者身份、路径、TODO/TBD/placeholder 或 `AUTHOR INPUT REQUIRED` 泄漏。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；与 visual/text 审计一样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包。
+该审计调用 Poppler `pdfinfo` 检查作者版和匿名版投稿 PDF 的 Title/Author/Creator/Producer 等元数据、页数、A4 页面尺寸、加密状态、JavaScript、Form 字段和隐私敏感字符串。当前作者版和匿名版均为 41 页、未加密、无 JavaScript、A4，metadata 中没有作者身份、路径、TODO/TBD/placeholder 或 `AUTHOR INPUT REQUIRED` 泄漏。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；与 visual/text 审计一样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包。
 
 本轮新增 source/path privacy audit，把源码和 payload 中的本机路径分成“严格禁止”和“可复现 provenance”两类：
 
@@ -403,7 +403,7 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/analysis_source_path_privacy_audit.md`
 - `results/manifest_source_path_privacy_audit.json`
 
-该审计检查主稿/匿名稿/ACM-TQC 匿名格式稿 TeX、`references.bib`、生成表格输入和 11 个公开 submission support Markdown/JSON 文件中是否出现 `/Users/...`、`Desktop/tzb` 或旧 `claude` 路径；同时检查匿名稿 source 是否保留 `Anonymous Authors` 且不含 `Zixiang Zhou` 作者字段，payload manifest 中是否混入 private metadata/previews。当前严格区为 0 个本机路径、0 个旧 `claude` 路径、0 个私有 payload 成员；主稿/匿名稿/ACM-TQC 稿、bibliography 和表格输入共 179 个文件通过严格检查；payload 的 971 个文本文件中有 54 个文件含本机路径、215 个路径命中，均归类为 `results/`、`README.md` 或 `DELIVERABLE_zh.md` 中的工具链/实验 provenance，而不是主稿或投稿支持文件泄漏；payload manifest 当前含 1014 个成员。该审计已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke。
+该审计检查主稿/匿名稿/ACM-TQC 匿名格式稿 TeX、`references.bib`、生成表格输入和 11 个公开 submission support Markdown/JSON 文件中是否出现 `/Users/...`、`Desktop/tzb` 或旧 `claude` 路径；同时检查匿名稿 source 是否保留 `Anonymous Authors` 且不含 `Zixiang Zhou` 作者字段，payload manifest 中是否混入 private metadata/previews。当前严格区为 0 个本机路径、0 个旧 `claude` 路径、0 个私有 payload 成员；主稿/匿名稿/ACM-TQC 稿、bibliography 和表格输入共 183 个文件通过严格检查；payload 的 996 个文本文件中有 55 个 provenance 文件含本机路径、217 个路径命中，均归类为 `results/`、`README.md` 或 `DELIVERABLE_zh.md` 中的工具链/实验 provenance，而不是主稿或投稿支持文件泄漏；payload manifest 当前含 1039 个成员。该审计已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke。
 
 本轮新增投稿完整性层：英文投稿稿末尾加入 `Data and Code Availability`，明确代码、raw/summary CSV、manifest、LaTeX 表、图源数据和 PDF 均位于 `resource_nmcts_experiment/` artifact package，运行入口为 `run_*.py`、`train_*.py`、`analyze_*.py`，环境为 `mcts-qoracle` 和直接解释器路径 `/opt/anaconda3/envs/mcts-qoracle/bin/python`。同时新增自动 submission-readiness audit：
 
@@ -2104,7 +2104,7 @@ Git 状态：
 21. `n=21,22,23` 完整 truth-table bridge 加 large-policy 与 cost-aware `n=23` rerun 显示：按当前 v36 主图源数据口径，280/280 个方法行同时通过完整 truth-table oracle 验证、ANF plan 符号验证和 emitted-circuit ANF 符号验证；该结果把完整验证边界从 n<=20 主实验推进到 n>20 的桥接切片。
 22. phase/Rz 分支已经从 RevKit 成本敏感性推进到可验证内部 emitter 和 Affine-FPRM 搜索：phase-parity ANF、fixed-polarity FPRM 与 Affine-FPRM 三组 selected rows 均为 531/531 或 177/177 up-to-global-phase 验证通过；Affine-FPRM 在 `T/Rz=30` 口径下相对 fixed-polarity FPRM 为 81/0/96、平均 score -2.51%，相对 phase-parity ANF 为 85/0/92、平均 score -2.98%，相对 RevKit 为 177/0/0、平均 score -65.50%。
 23. wide Affine-FPRM phase search 显示 phase/Rz 分支仍受可逆线性预条件搜索预算限制：将 transform budget 从 32 扩展到 128 后，531/531 selected rows 继续 up-to-global-phase 验证通过；相对 budget 32，`T/Rz=30` 目标为 43/0/134、平均 synth-score -0.60%，total Rz -2.39%，CNOT -1.74%，depth -1.93%。该结果为后续 learned phase/Rz-aware policy 提供了明确搜索空间，而不是只做固定极性枚举。
-24. learned phase candidate pruning 已把 phase/Rz 分支从“宽预算穷举”推进到“可学习剪枝”诊断，并进一步加入 rank-label 训练、diversity rerank、budget-frontier 审计与 8 组 same-budget random repeat 控制：`train_phase_affine_policy.py` 在 `n<=5` 训练、held-out `n=6` 的 38 个函数测试；diverse policy top-512 只 exact-score 512/8192 个候选，相对 budget-32 的 2048 个候选为 17/0/21、`T/Rz=30` synth-score -2.477%，相对 wide-128 均值 gap 为 +0.003%，并减少 93.75% wide-128 exact scoring；diverse top-256 已经在 256/8192 exact forms 下达到相对 wide-128 +0.012% 的均值 gap，且 7611/7611 selected rows up-to-global-phase 验证通过。新增 `analyze_phase_policy_random_control.py` 将随机重复按函数求均值后做 paired sign test：diverse top-512 相对 per-function random-repeat mean 为 17/0/21、p=1.53e-05，且均值低于全部 8 个 random seed mean。随机对照的绝对幅度仍只有约 0.01%--0.03%，所以该证据可写成 learned pruned-search feasibility 与预算前沿改善，不能写成 phase/Rz 全局最优。
+24. learned phase candidate pruning 已把 phase/Rz 分支从“宽预算穷举”推进到“可学习剪枝”诊断，并进一步加入 rank-label 训练、diversity rerank、budget-frontier 审计、precision-sensitive rotation-cost 审计与 8 组 same-budget random repeat 控制：`train_phase_affine_policy.py` 在 `n<=5` 训练、held-out `n=6` 的 38 个函数测试；diverse policy top-512 只 exact-score 512/8192 个候选，相对 budget-32 的 2048 个候选为 17/0/21、`T/Rz=30` synth-score -2.477%，相对 wide-128 均值 gap 为 +0.003%，并减少 93.75% wide-128 exact scoring；diverse top-256 已经在 256/8192 exact forms 下达到相对 wide-128 +0.012% 的均值 gap，且 7611/7611 selected rows up-to-global-phase 验证通过。新增 `analyze_phase_rotation_precision_audit.py` 冻结同一批 phase/Rz 候选，把每个 non-Clifford `Rz` 按 `ceil(3 log2(1/epsilon))` 估算 T/depth/gate 代价；在 `epsilon=1e-6` 下，Affine-128 相对 RevKit `oracle_synth` 为 177/0/0、mean score -66.118%，diverse top-512 相对 budget-32 为 17/0/21、-2.381%，相对 wide-128 只差 +0.002%。新增 `analyze_phase_policy_random_control.py` 将随机重复按函数求均值后做 paired sign test：diverse top-512 相对 per-function random-repeat mean 为 17/0/21、p=1.53e-05，且均值低于全部 8 个 random seed mean。随机对照的绝对幅度仍只有约 0.01%--0.03%，所以该证据可写成 learned pruned-search feasibility、预算前沿改善和精度敏感成本稳健性，不能写成 phase/Rz 全局最优或实际 rotation sequence synthesis。
 25. CirKit 3 shell AIG/MC probe 把外部工具链对比从 mockturtle/ABC 继续补强：传统 177 行与高维 `n=14` 64 行均逐行 Verilog readback truth-table 验证通过。Pareto-Resource-NMCTS 相对 CirKit AIG/MC 在传统集为 177/0/0、平均 score -62.34%，在 `n=14` 为 64/0/0、平均 score -94.46%；但 depth 分别为 16/156/5 和 14/50/0，说明本文不能宣称 depth-only 支配 CirKit。
 26. Legacy RevKit CLI exact-oracle reversible-synthesis probe 进一步补齐可逆工具链对比：TBS/DBS/RMS 三流合计 531/531 行 usable，best-score portfolio 覆盖传统 177 个函数。Pareto-Resource-NMCTS 相对 RevKit CLI best-score portfolio 在 score 上为 173/0/4、平均 -67.28%，T-count 为 173/0/4、平均 -72.59%；但 peak ancilla 为 0/169/8、平均 +153.11%，说明本文方法用更多辅助线换取低 T 和低 weighted score。
 
@@ -2163,7 +2163,7 @@ Git 状态：
 | RevKit CLI exact-oracle portfolio | n<=6 traditional 177 个函数 | TBS/DBS/RMS 三流 531/531 usable；best-score portfolio 下 Pareto vs RevKit score 为 173/0/4、-67.28%，T 为 173/0/4、-72.59%，peak ancilla 为 0/169/8、+153.11% | 新增 legacy reversible-synthesis CLI probe，但不是 ROS 或硬件 mapping |
 | Affine-FPRM phase search | n<=6 traditional, 177 个函数 | 531/531 selected rows up-to-global-phase 验证通过；`T/Rz=30` vs fixed-polarity FPRM 为 81/0/96、-2.51%；vs phase-parity ANF 为 85/0/92、-2.98%；vs RevKit 为 177/0/0、-65.50% | 当前最强 phase/Rz 搜索证据，仍非旋转序列级综合 |
 | Wide Affine-FPRM phase search | n<=6 traditional, 177 个函数；transform budget 128 | 531/531 selected rows up-to-global-phase 验证通过；相对 budget 32，`T/Rz=30` 目标为 43/0/134、synth-score -0.60%，total Rz -2.39%，CNOT -1.74%，depth -1.93% | 新增 phase/Rz 搜索预算扩展证据 |
-| Rank-diverse learned phase candidate pruning | train n<=5, held-out n=6 38 个函数；transform budget 128 | 7611/7611 selected rows up-to-global-phase 验证通过；diverse policy top-512 vs budget-32 为 17/0/21、`T/Rz=30` synth-score -2.477%；vs wide-128 均值 +0.003%；exact scoring 相对 wide-128 减少 93.75%；vs per-function random-repeat mean 为 17/0/21、p=1.53e-05，低于 8/8 random seed means | 新增更强可学习剪枝和预算前沿证据，但仍不能声称 phase/Rz 全局最优 |
+| Rank-diverse learned phase candidate pruning | train n<=5, held-out n=6 38 个函数；transform budget 128 | 7611/7611 selected rows up-to-global-phase 验证通过；diverse policy top-512 vs budget-32 为 17/0/21、`T/Rz=30` synth-score -2.477%；vs wide-128 均值 +0.003%；exact scoring 相对 wide-128 减少 93.75%；precision model `epsilon=1e-6` 下 vs budget-32 为 17/0/21、-2.381%，vs wide-128 为 +0.002%；vs per-function random-repeat mean 为 17/0/21、p=1.53e-05，低于 8/8 random seed means | 新增更强可学习剪枝、预算前沿和 precision-sensitive 成本稳健性证据，但仍不能声称 phase/Rz 全局最优或输出实际 rotation sequence |
 | highdim wide-fast guard | 12 个 n=14 random ANF | wide vs Resource 为 0/0/12，运行时间 +59.80% | 已有但属负向诊断 |
 | exact FPRM-DP | n<=4 traditional | Resource vs exact FPRM-DP 51/3/18，-12.18%；Pareto vs exact FPRM-DP 51/0/21，-12.20% | 已有但模型受限 |
 | exact XAG MC | n<=4 traditional | Resource/Pareto 达到 T 下界 12/72，平均 T gap +53.01%；ESOP 为 +120.14%，SSHR-I-T 为 +143.06% | 已有全局 T 下界 |

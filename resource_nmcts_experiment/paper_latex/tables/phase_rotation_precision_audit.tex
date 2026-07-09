@@ -1,0 +1,14 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}X>{\raggedleft\arraybackslash}p{0.08\linewidth}>{\raggedleft\arraybackslash}p{0.08\linewidth}>{\raggedleft\arraybackslash}p{0.10\linewidth}>{\raggedleft\arraybackslash}p{0.10\linewidth}}
+\toprule
+Scope & Comparison & $\epsilon$ & $T/R_z$ & W/L/T & $\Delta$ \\
+\midrule
+trad. & Affine-128 vs RevKit oracle\_synth & 0.001 & 30 & 177/0/0 & -65.795\% \\
+trad. & Affine-128 vs RevKit oracle\_synth & 1e-06 & 60 & 177/0/0 & -66.118\% \\
+trad. & Affine-128 vs Affine-32 & 1e-06 & 60 & 43/0/134 & -0.583\% \\
+policy & Diverse-512 vs Budget-32 & 1e-06 & 60 & 17/0/21 & -2.381\% \\
+policy & Diverse-512 vs Wide-128 & 1e-06 & 60 & 0/7/31 & +0.002\% \\
+policy & Diverse-256 vs Wide-128 & 1e-06 & 60 & 0/9/29 & +0.007\% \\
+trad. & Affine-128 vs RevKit oracle\_synth & 1e-09 & 90 & 177/0/0 & -66.226\% \\
+policy & Diverse-512 vs Wide-128 & 1e-09 & 90 & 0/7/31 & +0.001\% \\
+\bottomrule
+\end{tabularx}

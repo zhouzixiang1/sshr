@@ -10,6 +10,6 @@ This audit checks the generated ACM/TQC anonymous review-format draft.
 |---|---|---|---|
 | ACM class availability | pass | kpsewhich_returncode=0; acmart_cls=/usr/local/texlive/2025/texmf-dist/tex/latex/acmart/acmart.cls. | Install TeX Live acmart or choose a non-ACM target format before relying on the ACM/TQC draft. |
 | ACM TQC review source | pass | source_exists=True; missing_tokens=none; forbidden_tokens=none. | Run make_acm_tqc_review_draft.py after changing the anonymous manuscript or ACM/TQC formatting preamble. |
-| ACM TQC compiled PDF | pass | pdf_exists=True; pages=39; bytes=845324; rendered_sample_pages=3; ink_range=0.062325--0.130319; unexpected_log_lines=none; render_issues=none. | Compile paper_latex/resource_nmcts_submission_acm_tqc.tex and inspect unexpected log, blank-page, or render failures. |
-| ACM TQC text anchors | pass | characters=135625; missing_text=none; forbidden_text=none. | Regenerate and recompile the ACM/TQC draft if title, method, scope, anonymity, or availability text is missing. |
+| ACM TQC compiled PDF | pass | pdf_exists=True; pages=40; bytes=849045; rendered_sample_pages=3; ink_range=0.062321--0.130317; unexpected_log_lines=none; render_issues=none. | Compile paper_latex/resource_nmcts_submission_acm_tqc.tex and inspect unexpected log, blank-page, or render failures. |
+| ACM TQC text anchors | pass | characters=137795; missing_text=none; forbidden_text=none. | Regenerate and recompile the ACM/TQC draft if title, method, scope, anonymity, or availability text is missing. |
 | Target-venue alignment | pass | recommended_first_choice=ACM Transactions on Quantum Computing. | Update the ACM/TQC smoke path if the target-venue decision changes. |

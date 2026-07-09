@@ -93,6 +93,8 @@ LEARNED_CONTROL_MANIFEST = RESULTS / "manifest_learned_control_audit.json"
 LEARNED_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "learned_control_audit.tex"
 ROOT_ACTION_RANKER_MANIFEST = RESULTS / "manifest_root_action_ranker_audit.json"
 ROOT_ACTION_RANKER_TABLE = THIS_DIR / "paper_latex" / "tables" / "root_action_ranker_audit.tex"
+PHASE_ROTATION_PRECISION_MANIFEST = RESULTS / "manifest_phase_rotation_precision_audit.json"
+PHASE_ROTATION_PRECISION_TABLE = THIS_DIR / "paper_latex" / "tables" / "phase_rotation_precision_audit.tex"
 PHASE_POLICY_BUDGET_MANIFEST = RESULTS / "manifest_phase_policy_budget_frontier.json"
 PHASE_POLICY_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "phase_policy_budget_frontier.tex"
 NEURAL_MCTS_CLAIM_MANIFEST = RESULTS / "manifest_neural_mcts_claim_calibration.json"
@@ -654,6 +656,37 @@ def verify_phase_policy_budget_frontier() -> dict[str, str]:
         status,
         f"rows={rows}; heldout_functions={heldout}; best_policy={best}; best_budget32_wlt={budget_wlt}; eval_reduction_vs_wide128_pct={eval_cut:.2f}; mean_relative_vs_wide128={wide_rel:.6g}; needs_revision_count={revisions}; table_exists={table_exists}.",
         "Run analyze_phase_policy_budget_frontier.py and restore the learned phase budget-frontier table.",
+    )
+
+
+def verify_phase_rotation_precision() -> dict[str, str]:
+    manifest = read_json(PHASE_ROTATION_PRECISION_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    rows = int(manifest.get("rows", -1)) if manifest else -1
+    traditional = int(manifest.get("traditional_items", -1)) if manifest else -1
+    policy = int(manifest.get("policy_items", -1)) if manifest else -1
+    critical_wlt = manifest.get("critical_policy_wide128_wlt", "missing") if manifest else "missing"
+    critical_rel = float(manifest.get("critical_policy_wide128_mean_relative", 1.0)) if manifest else 1.0
+    epsilons = manifest.get("epsilons", []) if manifest else []
+    table_exists = PHASE_ROTATION_PRECISION_TABLE.exists()
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and rows >= 28
+        and traditional == 177
+        and policy == 38
+        and critical_wlt == "0/7/31"
+        and critical_rel <= 0.0001
+        and set(epsilons) >= {"0.001", "1e-06", "1e-09", "1e-12"}
+        and table_exists
+        else "needs revision"
+    )
+    return row(
+        "Phase rotation-precision audit",
+        status,
+        f"rows={rows}; traditional_items={traditional}; policy_items={policy}; epsilons={epsilons}; critical_wide128_wlt={critical_wlt}; critical_wide128_mean_relative={critical_rel:.6g}; needs_revision_count={revisions}; table_exists={table_exists}.",
+        "Run analyze_phase_rotation_precision_audit.py and restore the precision-sensitive phase/Rz cost table.",
     )
 
 
@@ -1268,6 +1301,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_search_control(),
             verify_bitflip_neural_budget(),
             verify_root_action_ranker(),
+            verify_phase_rotation_precision(),
             verify_phase_policy_budget_frontier(),
             verify_learned_control(),
             verify_neural_mcts_claim_calibration(),
