@@ -377,6 +377,27 @@ and what residual abstraction mismatch remains.}
 \input{tables/baseline_comparability_audit}
 \end{table}
 
+Table~\ref{tab:counterpoint-boundary} records the strongest opposing evidence
+that bounds the comparison claims.  This audit is included because a meaningful
+comparison should not hide metrics on which other methods remain strong.  SSHR
+is therefore treated as a CNOT counterpoint, CirKit as a depth counterpoint,
+RevKit CLI as an auxiliary-line counterpoint, and the learned-prior rows as
+evidence for incremental search control rather than for a deep-RL-only
+explanation.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Counterpoint and claim-boundary audit.  The table reports the
+strongest unfavorable metric evidence that constrains the manuscript's claims,
+the favorable evidence that keeps each comparison meaningful, and the resulting
+claim boundary.}
+\label{tab:counterpoint-boundary}
+\input{tables/counterpoint_claim_boundary}
+\end{table}
+
 The comparison set should therefore be read as layered evidence rather than as
 a single universal leaderboard.  Direct \anf{}, ESOP, ABC/BDD, and related
 representation baselines test matched bit-flip oracle resource efficiency;
