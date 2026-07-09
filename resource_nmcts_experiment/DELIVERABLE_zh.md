@@ -21,10 +21,10 @@
 以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，用于防止交付说明和机器审计结果漂移：
 
 - PDF pages=39/39
-- readiness=63 pass + 1 needs author input
-- payload_files=1008
-- artifact_registry=25 families / 147 raw CSV / 60306 raw rows
-- source_privacy=0 strict leaks / 53 provenance files / 965 payload text files
+- readiness=64 pass + 1 needs author input
+- payload_files=1014
+- artifact_registry=25 families / 148 raw CSV / 61233 raw rows
+- source_privacy=0 strict leaks / 54 provenance files / 971 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open
@@ -394,7 +394,7 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/analysis_pdf_metadata_audit.md`
 - `results/manifest_pdf_metadata_audit.json`
 
-该审计调用 Poppler `pdfinfo` 检查作者版和匿名版投稿 PDF 的 Title/Author/Creator/Producer 等元数据、页数、A4 页面尺寸、加密状态、JavaScript、Form 字段和隐私敏感字符串。当前作者版和匿名版均为 35 页、未加密、无 JavaScript、A4，metadata 中没有作者身份、路径、TODO/TBD/placeholder 或 `AUTHOR INPUT REQUIRED` 泄漏。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；与 visual/text 审计一样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包。
+该审计调用 Poppler `pdfinfo` 检查作者版和匿名版投稿 PDF 的 Title/Author/Creator/Producer 等元数据、页数、A4 页面尺寸、加密状态、JavaScript、Form 字段和隐私敏感字符串。当前作者版和匿名版均为 39 页、未加密、无 JavaScript、A4，metadata 中没有作者身份、路径、TODO/TBD/placeholder 或 `AUTHOR INPUT REQUIRED` 泄漏。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；与 visual/text 审计一样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包。
 
 本轮新增 source/path privacy audit，把源码和 payload 中的本机路径分成“严格禁止”和“可复现 provenance”两类：
 
@@ -403,7 +403,7 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/analysis_source_path_privacy_audit.md`
 - `results/manifest_source_path_privacy_audit.json`
 
-该审计检查主稿/匿名稿/ACM-TQC 匿名格式稿 TeX、`references.bib`、生成表格输入和 11 个公开 submission support Markdown/JSON 文件中是否出现 `/Users/...`、`Desktop/tzb` 或旧 `claude` 路径；同时检查匿名稿 source 是否保留 `Anonymous Authors` 且不含 `Zixiang Zhou` 作者字段，payload manifest 中是否混入 private metadata/previews。当前严格区为 0 个本机路径、0 个旧 `claude` 路径、0 个私有 payload 成员；主稿/匿名稿/ACM-TQC 稿、bibliography 和表格输入共 178 个文件通过严格检查；payload 的 965 个文本文件中有 53 个文件含本机路径、213 个路径命中，均归类为 `results/`、`README.md` 或 `DELIVERABLE_zh.md` 中的工具链/实验 provenance，而不是主稿或投稿支持文件泄漏；payload manifest 当前含 1008 个成员。该审计已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke。
+该审计检查主稿/匿名稿/ACM-TQC 匿名格式稿 TeX、`references.bib`、生成表格输入和 11 个公开 submission support Markdown/JSON 文件中是否出现 `/Users/...`、`Desktop/tzb` 或旧 `claude` 路径；同时检查匿名稿 source 是否保留 `Anonymous Authors` 且不含 `Zixiang Zhou` 作者字段，payload manifest 中是否混入 private metadata/previews。当前严格区为 0 个本机路径、0 个旧 `claude` 路径、0 个私有 payload 成员；主稿/匿名稿/ACM-TQC 稿、bibliography 和表格输入共 179 个文件通过严格检查；payload 的 971 个文本文件中有 54 个文件含本机路径、215 个路径命中，均归类为 `results/`、`README.md` 或 `DELIVERABLE_zh.md` 中的工具链/实验 provenance，而不是主稿或投稿支持文件泄漏；payload manifest 当前含 1014 个成员。该审计已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke。
 
 本轮新增投稿完整性层：英文投稿稿末尾加入 `Data and Code Availability`，明确代码、raw/summary CSV、manifest、LaTeX 表、图源数据和 PDF 均位于 `resource_nmcts_experiment/` artifact package，运行入口为 `run_*.py`、`train_*.py`、`analyze_*.py`，环境为 `mcts-qoracle` 和直接解释器路径 `/opt/anaconda3/envs/mcts-qoracle/bin/python`。同时新增自动 submission-readiness audit：
 
@@ -419,9 +419,9 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/manifest_editorial_screening_audit.json`
 - `paper_latex/tables/editorial_screening_audit.tex`
 
-该审计逐项检查 logical-layer scope、novelty/comparison route、comparison target roles、counterpoint/negative-result visibility、AI/MCTS claim boundary、large-scale verification boundary、reproducibility path、author/venue gate 和 editorial reading path。当前 9/9 项 pass；它已接入 rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke 和 artifact rerun registry。artifact registry 现在覆盖 25 个 evidence family、147 个 raw CSV、60306 行 unique raw-row references。
+该审计逐项检查 logical-layer scope、novelty/comparison route、comparison target roles、counterpoint/negative-result visibility、AI/MCTS claim boundary、large-scale verification boundary、reproducibility path、author/venue gate 和 editorial reading path。当前 9/9 项 pass；它已接入 rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke 和 artifact rerun registry。artifact registry 现在覆盖 25 个 evidence family、148 个 raw CSV、61233 行 unique raw-row references。
 
-当前 submission-readiness 审计结果为 63 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、algorithm contract、search-budget contract、baseline fairness/scope、comparison answer/threats-to-validity/search-control/learned-control/neural-MCTS claim-calibration/citation/editorial screening/target-venue/ROS reproduction-boundary/schedule-proxy/submission support-packet audits、ACM/TQC target-format smoke、ultra-scale symbolic stress/resource-profile audits、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、uploadable payload archive、payload round-trip/extraction/verifier/LaTeX compile checks、terminal package verifier、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder 和 compiled PDF 检查。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
+当前 submission-readiness 审计结果为 64 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、algorithm contract、search-budget contract、baseline fairness/scope、comparison answer/threats-to-validity/search-control/learned-control/neural-MCTS claim-calibration/citation/editorial screening/target-venue/ROS reproduction-boundary/schedule-proxy/submission support-packet audits、ACM/TQC target-format smoke、ultra-scale symbolic stress/resource-profile audits、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、uploadable payload archive、payload round-trip/extraction/verifier/LaTeX compile checks、terminal package verifier、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder 和 compiled PDF 检查。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
 
 ## 2. 当前已完成内容
 
@@ -1766,7 +1766,34 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 - Resource/Pareto 对 line-aware 和 min-ancilla 选择仍保持 309/0/0 score 胜出，因此 LUT proxy 的结论对 K 选择和辅助线压力是稳健的。
 - 该结果应写成“ROS-style LUT proxy sensitivity”，不能写成“官方 ROS 已被复现”。
 
-### 2.12.2 ROS reproduction gap audit：把 proxy 边界机器检查化
+### 2.12.2 ROS-style LUT garbage proxy：同一 LUT DAG 上的垃圾/辅助线压力
+
+本轮正式纳入 `analyze_ros_lut_garbage_proxy.py`。该脚本复用已验证的 309 个 best-K ABC LUT DAG，在同一 DAG 上比较三种可逆垃圾策略：`keep_all_bennett`、`fanout_checkpoint` 和 `zero_checkpoint`。默认模式复核已打包 raw CSV 并重写 summary/manifest；显式 `--run-proxy` 时才重新调用 ABC 和 truth-table verifier，并默认使用 8 个 worker 并行处理 best-K 行。完整 raw 运行产生 927 行，全部语义正确。
+
+主要产物：
+
+- `analyze_ros_lut_garbage_proxy.py`
+- `results/raw_ros_lut_garbage_proxy.csv`
+- `results/summary_ros_lut_garbage_proxy.csv`
+- `results/analysis_ros_lut_garbage_proxy.md`
+- `results/manifest_ros_lut_garbage_proxy.json`
+- `paper_latex/tables/ros_lut_garbage_proxy.tex`
+
+关键结果：
+
+| 策略 | 行数 | 正确行 | mean log10(T+1) | mean peak ancilla | mean log10(score+1) |
+|---|---:|---:|---:|---:|---:|
+| keep_all_bennett | 309 | 309 | 3.29 | 6056.0 | 3.36 |
+| fanout_checkpoint | 309 | 309 | 5.80 | 573.7 | 5.86 |
+| zero_checkpoint | 309 | 309 | 5.93 | 27.4 | 5.99 |
+
+解释：
+
+- `zero_checkpoint` 把 mean peak ancilla 从 6056.0 降到 27.4，但 mean log10(T+1) 从 3.29 增到 5.93，说明朴素重计算会带来巨大操作数代价。
+- 该实验补上的是 ROS-facing garbage-pressure sensitivity：它说明垃圾管理确实是关键 trade-off，但仍不是官方 ROS SAT garbage-management algorithm。
+- 正文新增 `tab:ros-garbage`，把这组负向/边界结果和 line-aware LUT selector、STG published optimum counterpoint 一起放在外部对比段落中。
+
+### 2.12.3 ROS reproduction gap audit：把 proxy 边界机器检查化
 
 本轮新增 `analyze_ros_reproduction_gap_audit.py`，不新增性能数字，而是把“当前到底复现了 ROS 的哪一部分、哪一部分只是 proxy、哪一部分没有复现”做成可机器检查的投稿包审计。
 
@@ -1781,8 +1808,9 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 审计口径：
 
 - `covered`：ROS 文献/task anchor、外部工具链 availability、claim wording 和 reviewer-facing support 已覆盖。
-- `partial`：ABC `K=3,4,5` LUT sweep、line-aware LUT reselection、legacy RevKit exact-oracle counterpoint 只覆盖 ROS-facing 的局部问题。
+- `partial`：ABC `K=3,4,5` LUT sweep、line-aware LUT reselection、LUT garbage-pressure proxy、legacy RevKit exact-oracle counterpoint 只覆盖 ROS-facing 的局部问题。
 - `not reproduced`：官方 ROS 的 SAT garbage management/full ROS flow 仍未复现。
+- Official ROS source-discovery note：当前投稿包不包含 official ROS implementation repository 或 local ROS executable；可公开取得并已纳入证据链的是 ROS paper 与 STG benchmark table。因此本文只能声称 ROS-style LUT proxy、STG 小规模最优库反例和 RevKit/CirKit/mockturtle 工具链 probe，不能声称运行了官方 ROS source tree。
 
 该审计的目标不是把未复现项包装成完成，而是防止投稿时把 ROS-style LUT proxy 写成 full ROS 复现。它已接入 rebuild、verify、payload round-trip、payload extraction smoke、readiness 和 terminal package verifier。
 

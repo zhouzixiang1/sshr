@@ -17,6 +17,7 @@ author,tex_input,tables/reproducibility_audit,paper_latex/tables/reproducibility
 author,tex_input,tables/submission_traceability_audit,paper_latex/tables/submission_traceability_audit.tex,True,True,pass,No action needed.
 author,tex_input,tables/submission_archive_manifest,paper_latex/tables/submission_archive_manifest.tex,True,True,pass,No action needed.
 author,tex_input,tables/ros_lut_line_sensitivity,paper_latex/tables/ros_lut_line_sensitivity.tex,True,True,pass,No action needed.
+author,tex_input,tables/ros_lut_garbage_proxy,paper_latex/tables/ros_lut_garbage_proxy.tex,True,True,pass,No action needed.
 author,tex_input,tables/stg_published_benchmark,paper_latex/tables/stg_published_benchmark.tex,True,True,pass,No action needed.
 author,tex_input,tables/cirkit_aig_probe,paper_latex/tables/cirkit_aig_probe.tex,True,True,pass,No action needed.
 author,tex_input,tables/cirkit_aig_highdim_probe,paper_latex/tables/cirkit_aig_highdim_probe.tex,True,True,pass,No action needed.
@@ -72,6 +73,7 @@ anonymous,tex_input,tables/reproducibility_audit,paper_latex/tables/reproducibil
 anonymous,tex_input,tables/submission_traceability_audit,paper_latex/tables/submission_traceability_audit.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/submission_archive_manifest,paper_latex/tables/submission_archive_manifest.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/ros_lut_line_sensitivity,paper_latex/tables/ros_lut_line_sensitivity.tex,True,True,pass,No action needed.
+anonymous,tex_input,tables/ros_lut_garbage_proxy,paper_latex/tables/ros_lut_garbage_proxy.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/stg_published_benchmark,paper_latex/tables/stg_published_benchmark.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/cirkit_aig_probe,paper_latex/tables/cirkit_aig_probe.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/cirkit_aig_highdim_probe,paper_latex/tables/cirkit_aig_highdim_probe.tex,True,True,pass,No action needed.
@@ -127,6 +129,7 @@ acm_tqc,tex_input,tables/reproducibility_audit,paper_latex/tables/reproducibilit
 acm_tqc,tex_input,tables/submission_traceability_audit,paper_latex/tables/submission_traceability_audit.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/submission_archive_manifest,paper_latex/tables/submission_archive_manifest.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/ros_lut_line_sensitivity,paper_latex/tables/ros_lut_line_sensitivity.tex,True,True,pass,No action needed.
+acm_tqc,tex_input,tables/ros_lut_garbage_proxy,paper_latex/tables/ros_lut_garbage_proxy.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/stg_published_benchmark,paper_latex/tables/stg_published_benchmark.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/cirkit_aig_probe,paper_latex/tables/cirkit_aig_probe.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/cirkit_aig_highdim_probe,paper_latex/tables/cirkit_aig_highdim_probe.tex,True,True,pass,No action needed.

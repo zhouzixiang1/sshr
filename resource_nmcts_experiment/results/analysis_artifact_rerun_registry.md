@@ -5,8 +5,8 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 ## Status counts
 
 - complete: 25
-- unique raw files covered by registry: 147
-- unique raw CSV rows covered by registry: 60306
+- unique raw files covered by registry: 148
+- unique raw CSV rows covered by registry: 61233
 
 | evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |
 |---|---|---:|---:|---:|---|---|
@@ -21,8 +21,8 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | Novelty and comparison scorecard | quick comparison audit | 0 | 0 | 1 | complete | Quick derived audit; it strengthens reviewer-facing positioning without rerunning raw experiments. |
 | Traditional logical baselines | raw Python rerun | 5 | 4341 | 4 | complete | Python rerun; ILP-based subbaselines need Gurobi where enabled. |
 | External logical baseline extension | raw Python plus optional solvers | 3 | 2049 | 3 | complete | Python with optional Gurobi/logic-tool components; rows with skips/errors remain explicit. |
-| ROS-style LUT proxy | raw proxy rerun | 3 | 2472 | 2 | complete | Proxy-level LUT analysis only; not a full ROS SAT garbage-management rerun. |
-| ROS reproduction boundary audit | quick audit | 3 | 2472 | 3 | complete | Checks scope and evidence boundaries; it deliberately records that full official ROS is not reproduced. |
+| ROS-style LUT proxy | raw proxy rerun | 4 | 3399 | 3 | complete | Proxy-level LUT and garbage-pressure analysis only; not a full ROS SAT garbage-management rerun. |
+| ROS reproduction boundary audit | quick audit | 4 | 3399 | 4 | complete | Checks scope and evidence boundaries; it deliberately records that full official ROS is not reproduced. |
 | Published STG optimum-library counterpoint | raw Python rerun | 1 | 270 | 1 | complete | Published small-function optimum-library counterpoint; not full ROS SAT garbage management and not hardware mapping. |
 | mockturtle KLUT-to-XAG probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded mockturtle checkout/header path; still a logical proxy, not reversible mapping. |
 | CirKit AIG/MC probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded CirKit executable/commit; results are logical estimates, not hardware mapping. |
@@ -83,13 +83,13 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - scripts: `run_external_baselines.py`
   - representative raw: `results/raw_external_traditional_resource_n4.csv; results/raw_external_traditional_resource_n5.csv; results/raw_external_traditional_resource_n6.csv`
 - **ROS-style LUT proxy**
-  - claim use: Tests whether the score advantage survives LUT-style oracle-synthesis proxies and line-aware reselection.
-  - scripts: `run_ros_lut_proxy.py; analyze_ros_lut_line_sensitivity.py`
-  - representative raw: `results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; results/raw_ros_lut_proxy_sweep.csv`
+  - claim use: Tests whether the score advantage survives LUT-style oracle-synthesis proxies, line-aware reselection, and executable garbage-pressure schedules.
+  - scripts: `run_ros_lut_proxy.py; analyze_ros_lut_line_sensitivity.py; analyze_ros_lut_garbage_proxy.py`
+  - representative raw: `results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; results/raw_ros_lut_proxy_sweep.csv`
 - **ROS reproduction boundary audit**
   - claim use: Makes the distinction between ROS-style proxy evidence and unreproduced full ROS/SAT garbage management machine-checkable.
   - scripts: `analyze_ros_reproduction_gap_audit.py`
-  - representative raw: `results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; results/raw_ros_lut_proxy_sweep.csv`
+  - representative raw: `results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; results/raw_ros_lut_proxy_sweep.csv`
 - **Published STG optimum-library counterpoint**
   - claim use: Compares the current logical methods on the public n=4/5 STG spectral-representative truth-table table and exposes the small-function optimum boundary.
   - scripts: `analyze_stg_published_benchmark.py`

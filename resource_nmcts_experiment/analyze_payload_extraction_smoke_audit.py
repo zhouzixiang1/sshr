@@ -94,6 +94,15 @@ SMOKE_SPECS = (
         minimum_rows=8,
     ),
     SmokeSpec(
+        name="ROS-style LUT garbage proxy",
+        script="analyze_ros_lut_garbage_proxy.py",
+        manifest="results/manifest_ros_lut_garbage_proxy.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="raw_rows",
+        minimum_rows=927,
+    ),
+    SmokeSpec(
         name="Published STG counterpoint",
         script="analyze_stg_published_benchmark.py",
         manifest="results/manifest_stg_published_benchmark.json",

@@ -76,6 +76,8 @@ NOVELTY_SCORECARD_MANIFEST = RESULTS / "manifest_novelty_comparison_scorecard.js
 NOVELTY_SCORECARD_TABLE = THIS_DIR / "paper_latex" / "tables" / "novelty_comparison_scorecard.tex"
 PUBLIC_HANDOFF_MANIFEST = RESULTS / "manifest_public_handoff_freshness_audit.json"
 ROS_GAP_MANIFEST = RESULTS / "manifest_ros_reproduction_gap_audit.json"
+ROS_GARBAGE_MANIFEST = RESULTS / "manifest_ros_lut_garbage_proxy.json"
+ROS_GARBAGE_TABLE = THIS_DIR / "paper_latex" / "tables" / "ros_lut_garbage_proxy.tex"
 STG_BENCHMARK_MANIFEST = RESULTS / "manifest_stg_published_benchmark.json"
 STG_BENCHMARK_TABLE = THIS_DIR / "paper_latex" / "tables" / "stg_published_benchmark.tex"
 SEARCH_BUDGET_MANIFEST = RESULTS / "manifest_search_budget_contract.json"
@@ -408,6 +410,37 @@ def verify_ros_gap() -> dict[str, str]:
         status,
         f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; coverage_counts={coverage}; official_ros_fully_reproduced={full_ros}; full_ros_boundary_is_explicit={boundary_explicit}.",
         "Run analyze_ros_lut_line_sensitivity.py and analyze_ros_reproduction_gap_audit.py and restore ROS proxy/full-reproduction boundary anchors.",
+    )
+
+
+def verify_ros_garbage_proxy() -> dict[str, str]:
+    manifest = read_json(ROS_GARBAGE_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    raw_rows = manifest.get("raw_rows", "missing") if manifest else "missing"
+    summary_rows = manifest.get("summary_rows", "missing") if manifest else "missing"
+    functions = manifest.get("functions", "missing") if manifest else "missing"
+    policies = manifest.get("policies", []) if manifest else []
+    full_ros = manifest.get("official_ros_fully_reproduced", "missing") if manifest else "missing"
+    table_exists = ROS_GARBAGE_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and raw_rows == 927
+        and summary_rows == 3
+        and functions == 309
+        and full_ros is False
+        and table_exists
+        and anchor
+        else "needs revision"
+    )
+    return row(
+        "ROS-style LUT garbage proxy",
+        status,
+        f"raw_rows={raw_rows}; summary_rows={summary_rows}; functions={functions}; policies={policies}; needs_revision_count={revisions}; status_counts={counts}; official_ros_fully_reproduced={full_ros}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_ros_lut_garbage_proxy.py and keep the table anchored in the external baseline section.",
     )
 
 
@@ -1138,6 +1171,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_threats_to_validity(),
             verify_novelty_scorecard(),
             verify_public_handoff_freshness(),
+            verify_ros_garbage_proxy(),
             verify_ros_gap(),
             verify_stg_benchmark(),
             verify_search_budget_contract(),

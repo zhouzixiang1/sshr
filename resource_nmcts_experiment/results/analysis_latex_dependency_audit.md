@@ -4,14 +4,14 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 
 ## Status counts
 
-- pass: 165
+- pass: 168
 
 ## Dependency types
 
 - bibliography: 3
 - figure: 21
 - main_source: 3
-- tex_input: 138
+- tex_input: 141
 
 ## Missing dependencies
 
@@ -39,6 +39,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/submission_traceability_audit` | `paper_latex/tables/submission_traceability_audit.tex` | True | True | pass |
 | author | tex_input | `tables/submission_archive_manifest` | `paper_latex/tables/submission_archive_manifest.tex` | True | True | pass |
 | author | tex_input | `tables/ros_lut_line_sensitivity` | `paper_latex/tables/ros_lut_line_sensitivity.tex` | True | True | pass |
+| author | tex_input | `tables/ros_lut_garbage_proxy` | `paper_latex/tables/ros_lut_garbage_proxy.tex` | True | True | pass |
 | author | tex_input | `tables/stg_published_benchmark` | `paper_latex/tables/stg_published_benchmark.tex` | True | True | pass |
 | author | tex_input | `tables/cirkit_aig_probe` | `paper_latex/tables/cirkit_aig_probe.tex` | True | True | pass |
 | author | tex_input | `tables/cirkit_aig_highdim_probe` | `paper_latex/tables/cirkit_aig_highdim_probe.tex` | True | True | pass |
@@ -94,6 +95,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/submission_traceability_audit` | `paper_latex/tables/submission_traceability_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/submission_archive_manifest` | `paper_latex/tables/submission_archive_manifest.tex` | True | True | pass |
 | anonymous | tex_input | `tables/ros_lut_line_sensitivity` | `paper_latex/tables/ros_lut_line_sensitivity.tex` | True | True | pass |
+| anonymous | tex_input | `tables/ros_lut_garbage_proxy` | `paper_latex/tables/ros_lut_garbage_proxy.tex` | True | True | pass |
 | anonymous | tex_input | `tables/stg_published_benchmark` | `paper_latex/tables/stg_published_benchmark.tex` | True | True | pass |
 | anonymous | tex_input | `tables/cirkit_aig_probe` | `paper_latex/tables/cirkit_aig_probe.tex` | True | True | pass |
 | anonymous | tex_input | `tables/cirkit_aig_highdim_probe` | `paper_latex/tables/cirkit_aig_highdim_probe.tex` | True | True | pass |
@@ -149,6 +151,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/submission_traceability_audit` | `paper_latex/tables/submission_traceability_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/submission_archive_manifest` | `paper_latex/tables/submission_archive_manifest.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/ros_lut_line_sensitivity` | `paper_latex/tables/ros_lut_line_sensitivity.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/ros_lut_garbage_proxy` | `paper_latex/tables/ros_lut_garbage_proxy.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/stg_published_benchmark` | `paper_latex/tables/stg_published_benchmark.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/cirkit_aig_probe` | `paper_latex/tables/cirkit_aig_probe.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/cirkit_aig_highdim_probe` | `paper_latex/tables/cirkit_aig_highdim_probe.tex` | True | True | pass |

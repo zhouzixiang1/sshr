@@ -652,6 +652,25 @@ ROS SAT garbage-management flow has been reproduced.
 \input{tables/ros_lut_line_sensitivity}
 \end{table}
 
+We also test a reversible-garbage pressure proxy on the same best-K LUT DAGs.
+The proxy re-runs and re-verifies 309 selected ABC LUT networks, then compares
+the keep-all Bennett estimate with two recursive recomputation schedules.  The
+zero-checkpoint schedule lowers mean peak ancilla from 6056.0 to 27.4, while
+raising the average logarithmic T and score costs by more than two orders of
+magnitude (Table~\ref{tab:ros-garbage}).  Thus naive recomputation exposes the
+line-operation trade-off that ROS-style garbage management must solve, but it
+does not replace the unreproduced official SAT garbage-management stage.
+
+\begin{table}[H]
+\centering
+\small
+\caption{ROS-style LUT garbage-management proxy over the verified best-K LUT
+DAGs.  Logarithms are row-wise means over 309 functions; lower peak ancilla is
+reported together with the operation blow-up.}
+\label{tab:ros-garbage}
+\input{tables/ros_lut_garbage_proxy}
+\end{table}
+
 The public STG benchmark suite is a different, deliberately stronger
 small-function counterpoint: it reports precomputed circuits for spectral
 representatives of 4- and 5-input Boolean functions, optimized separately for

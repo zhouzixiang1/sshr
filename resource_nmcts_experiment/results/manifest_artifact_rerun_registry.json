@@ -178,20 +178,20 @@
       "summary_files": "3"
     },
     {
-      "analysis_files": "2",
-      "claim_use": "Tests whether the score advantage survives LUT-style oracle-synthesis proxies and line-aware reselection.",
-      "dependency_boundary": "Proxy-level LUT analysis only; not a full ROS SAT garbage-management rerun.",
-      "driver_scripts": "run_ros_lut_proxy.py; analyze_ros_lut_line_sensitivity.py",
+      "analysis_files": "3",
+      "claim_use": "Tests whether the score advantage survives LUT-style oracle-synthesis proxies, line-aware reselection, and executable garbage-pressure schedules.",
+      "dependency_boundary": "Proxy-level LUT and garbage-pressure analysis only; not a full ROS SAT garbage-management rerun.",
+      "driver_scripts": "run_ros_lut_proxy.py; analyze_ros_lut_line_sensitivity.py; analyze_ros_lut_garbage_proxy.py",
       "evidence_family": "ROS-style LUT proxy",
-      "manifest_files": "2",
-      "raw_files": "3",
-      "raw_rows": "2472",
-      "representative_raw": "results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; results/raw_ros_lut_proxy_sweep.csv",
+      "manifest_files": "3",
+      "raw_files": "4",
+      "raw_rows": "3399",
+      "representative_raw": "results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; results/raw_ros_lut_proxy_sweep.csv",
       "rerun_tier": "raw proxy rerun",
       "scripts_missing": "",
-      "scripts_present": "2",
+      "scripts_present": "3",
       "status": "complete",
-      "summary_files": "2"
+      "summary_files": "3"
     },
     {
       "analysis_files": "1",
@@ -199,10 +199,10 @@
       "dependency_boundary": "Checks scope and evidence boundaries; it deliberately records that full official ROS is not reproduced.",
       "driver_scripts": "analyze_ros_reproduction_gap_audit.py",
       "evidence_family": "ROS reproduction boundary audit",
-      "manifest_files": "3",
-      "raw_files": "3",
-      "raw_rows": "2472",
-      "representative_raw": "results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; results/raw_ros_lut_proxy_sweep.csv",
+      "manifest_files": "4",
+      "raw_files": "4",
+      "raw_rows": "3399",
+      "representative_raw": "results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; results/raw_ros_lut_proxy_sweep.csv",
       "rerun_tier": "quick audit",
       "scripts_missing": "",
       "scripts_present": "1",
@@ -509,6 +509,7 @@
     "results/raw_revkit_cli_tbs_traditional.csv",
     "results/raw_revkit_highdim_timeout_probe.csv",
     "results/raw_revkit_oracle_synth_traditional.csv",
+    "results/raw_ros_lut_garbage_proxy.csv",
     "results/raw_ros_lut_line_sensitivity.csv",
     "results/raw_ros_lut_proxy_best.csv",
     "results/raw_ros_lut_proxy_sweep.csv",
@@ -559,6 +560,6 @@
   ],
   "rows": 25,
   "script": "analyze_artifact_rerun_registry.py",
-  "unique_raw_files": 147,
-  "unique_raw_rows": 60306
+  "unique_raw_files": 148,
+  "unique_raw_rows": 61233
 }

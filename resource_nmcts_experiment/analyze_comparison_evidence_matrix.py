@@ -177,6 +177,7 @@ def build_matrix() -> list[dict[str, str]]:
     external_n6 = [RESULTS / "raw_traditional_resource.csv", RESULTS / "raw_external_traditional_resource_n6.csv"]
     ros_best = [RESULTS / "raw_ros_lut_proxy_best.csv"]
     ros_sweep = [RESULTS / "raw_ros_lut_proxy_sweep.csv"]
+    ros_garbage = [RESULTS / "raw_ros_lut_garbage_proxy.csv"]
     stg_published = [RESULTS / "raw_stg_published_benchmark.csv"]
     stg_summary = RESULTS / "summary_stg_published_benchmark.csv"
     mockturtle = [RESULTS / "raw_mockturtle_xag_probe.csv", RESULTS / "raw_mockturtle_xag_highdim_probe.csv"]
@@ -236,19 +237,20 @@ def build_matrix() -> list[dict[str, str]]:
 
     total_best, usable_best, scope = raw_count(ros_best)
     total_sweep, usable_sweep, _ = raw_count(ros_sweep)
+    total_garbage, usable_garbage, _ = raw_count(ros_garbage)
     rows.append(
         {
             "evidence_block": "ROS-style LUT proxy",
             "scope": scope,
-            "verified_rows": f"{usable_best}/{total_best} best rows; {usable_sweep}/{total_sweep} K-sweep rows",
+            "verified_rows": f"{usable_best}/{total_best} best rows; {usable_sweep}/{total_sweep} K-sweep rows; {usable_garbage}/{total_garbage} garbage-proxy rows",
             "main_result": "Pareto vs best-K proxy "
             + result_from_summary(
                 RESULTS / "summary_ros_lut_proxy.csv",
                 "and_pareto_resource_nmcts",
                 "external_ros_lut_proxy",
             ),
-            "boundary": "Verified LUT proxy only; no official ROS SAT garbage management, reversible emission, or hardware mapping.",
-            "sources": csv_join(ros_best + ros_sweep),
+            "boundary": "Verified LUT and executable garbage-pressure proxies only; no official ROS SAT garbage management, reversible emission, or hardware mapping.",
+            "sources": csv_join(ros_best + ros_sweep + ros_garbage),
         }
     )
 

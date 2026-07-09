@@ -44,6 +44,7 @@ echo "==> ${PYTHON_BIN} analyze_ros_lut_line_sensitivity.py"
   --internal results/raw_ultra_highdim_resource.csv \
   --internal results/raw_mega_highdim_resource.csv \
   --ancilla-weights 10,25
+run_py analyze_ros_lut_garbage_proxy.py
 run_py analyze_ros_reproduction_gap_audit.py
 run_py analyze_paired_statistical_evidence.py
 run_py analyze_paired_effect_uncertainty.py

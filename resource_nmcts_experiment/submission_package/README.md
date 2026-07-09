@@ -190,6 +190,7 @@ Not supported:
 - Hardware-mapped performance.
 - Universal CNOT, depth, ancilla, or line-count dominance.
 - A full ROS SAT garbage-management reproduction.
+- Official ROS source-discovery note: no official ROS implementation repository or local ROS executable is included; the accessible public artifacts are the ROS paper and the STG benchmark table.
 - A final Clifford+T decomposition claim for RevKit `oracle_synth` Rz outputs.
 - Exhaustive truth-table benchmarking for all large-dimensional functions.
 

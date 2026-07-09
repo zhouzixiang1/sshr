@@ -1,0 +1,25 @@
+{
+  "functions": 309,
+  "needs_revision_count": 0,
+  "official_ros_fully_reproduced": false,
+  "outputs": {
+    "analysis": "results/analysis_ros_lut_garbage_proxy.md",
+    "manifest": "results/manifest_ros_lut_garbage_proxy.json",
+    "raw": "results/raw_ros_lut_garbage_proxy.csv",
+    "summary": "results/summary_ros_lut_garbage_proxy.csv",
+    "table": "paper_latex/tables/ros_lut_garbage_proxy.tex"
+  },
+  "policies": [
+    "fanout_checkpoint",
+    "keep_all_bennett",
+    "zero_checkpoint"
+  ],
+  "raw_rows": 927,
+  "script": "analyze_ros_lut_garbage_proxy.py",
+  "status_counts": {
+    "pass": 927
+  },
+  "summary_rows": 3,
+  "table": "paper_latex/tables/ros_lut_garbage_proxy.tex",
+  "table_anchor_present": true
+}

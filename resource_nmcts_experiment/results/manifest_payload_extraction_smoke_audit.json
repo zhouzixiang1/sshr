@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1008; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1014; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -45,8 +45,14 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_ros_reproduction_gap_audit.json; needs_revision_count=0; rows=9; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_ros_reproduction_gap_audit.json; needs_revision_count=0; rows=11; stderr=none",
       "item": "ROS reproduction gap audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_ros_lut_garbage_proxy.json; needs_revision_count=0; raw_rows=927; stderr=none",
+      "item": "ROS-style LUT garbage proxy",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -247,6 +253,13 @@
     },
     {
       "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_ros_lut_garbage_proxy.json",
+      "minimum_rows_key": "raw_rows",
+      "name": "ROS-style LUT garbage proxy",
+      "script": "analyze_ros_lut_garbage_proxy.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
       "manifest": "results/manifest_stg_published_benchmark.json",
       "minimum_rows_key": "raw_rows",
       "name": "Published STG counterpoint",
@@ -422,6 +435,6 @@
     }
   ],
   "status_counts": {
-    "pass": 32
+    "pass": 33
   }
 }

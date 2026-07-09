@@ -93,10 +93,16 @@ THREATS_VALIDITY_PATHS = {
     "paper_latex/tables/threats_to_validity_audit.tex",
 }
 ROS_GAP_PATHS = {
+    "analyze_ros_lut_garbage_proxy.py",
     "analyze_ros_reproduction_gap_audit.py",
+    "results/raw_ros_lut_garbage_proxy.csv",
+    "results/analysis_ros_lut_garbage_proxy.md",
+    "results/summary_ros_lut_garbage_proxy.csv",
+    "results/manifest_ros_lut_garbage_proxy.json",
     "results/analysis_ros_reproduction_gap_audit.md",
     "results/summary_ros_reproduction_gap_audit.csv",
     "results/manifest_ros_reproduction_gap_audit.json",
+    "paper_latex/tables/ros_lut_garbage_proxy.tex",
     "paper_latex/tables/ros_reproduction_gap_audit.tex",
 }
 STG_BENCHMARK_PATHS = {

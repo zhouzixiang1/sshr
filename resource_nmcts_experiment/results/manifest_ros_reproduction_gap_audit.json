@@ -1,8 +1,8 @@
 {
   "coverage_counts": {
     "covered": 5,
-    "not reproduced": 1,
-    "partial": 3
+    "not reproduced": 2,
+    "partial": 4
   },
   "full_ros_boundary_is_explicit": true,
   "needs_revision_count": 0,
@@ -14,7 +14,7 @@
     "table": "paper_latex/tables/ros_reproduction_gap_audit.tex"
   },
   "python": "3.11.15",
-  "rows": 9,
+  "rows": 11,
   "rows_detail": [
     {
       "audit_status": "pass",
@@ -26,6 +26,17 @@
       "next_reproduction_step": "No immediate action; keep the literature anchor when venue formatting changes.",
       "official_requirement": "The paper must cite ROS and identify its resource-constrained LUT-oracle role before using a ROS-style baseline.",
       "supported_claim": "ROS is a relevant resource-constrained oracle-synthesis comparator family."
+    },
+    {
+      "audit_status": "pass",
+      "coverage_status": "not reproduced",
+      "current_coverage": "The package records that the accessible public artifacts used here are the ROS paper and the STG benchmark table; no official ROS implementation directory is present in the local reproducibility tree.",
+      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; absent_paths=tmp_ros_dir=tmp/ros exists=False; tmp_ros_named_dir=tmp/resource_constrained_oracle_synthesis exists=False; project_ros_tool_dir=tools/ros exists=False; project_official_ros_dir=official_ros exists=False",
+      "excluded_claim": "The current package cannot claim that an official ROS executable or source tree was run.",
+      "item": "Official ROS source-discovery and local implementation boundary",
+      "next_reproduction_step": "If an official ROS source tree or binary is obtained, place it under a tracked provenance path or an ignored tmp path and add a dedicated driver before promoting any full-ROS claim.",
+      "official_requirement": "A full official ROS reproduction requires an executable ROS implementation or enough published implementation artifacts to recreate the LUT mapper plus SAT garbage-management flow.",
+      "supported_claim": "The package documents a concrete source-availability boundary before using ROS-style proxy rows."
     },
     {
       "audit_status": "pass",
@@ -48,6 +59,17 @@
       "next_reproduction_step": "Implement or obtain the ROS SAT garbage-management stage before making any official-ROS claim.",
       "official_requirement": "ROS explicitly targets qubit/garbage pressure through resource-aware choices.",
       "supported_claim": "The score advantage is robust to line-aware LUT proxy selectors."
+    },
+    {
+      "audit_status": "pass",
+      "coverage_status": "partial",
+      "current_coverage": "The project re-runs and truth-table verifies the same best-K LUT DAGs and compares keep-all, fanout-checkpoint, and zero-checkpoint recomputation schedules.",
+      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; csv=results/raw_ros_lut_garbage_proxy.csv rows=927/927, incorrect=0; json=results/manifest_ros_lut_garbage_proxy.json::raw_rows=927; results/manifest_ros_lut_garbage_proxy.json::needs_revision_count=0; results/manifest_ros_lut_garbage_proxy.json::official_ros_fully_reproduced=False",
+      "excluded_claim": "This is still not the official ROS SAT garbage-management algorithm or a reproduced full ROS compiler flow.",
+      "item": "Executable LUT garbage-management proxy",
+      "next_reproduction_step": "Replace the proxy with the official SAT garbage-management formulation if executable ROS artifacts or a faithful reimplementation become available.",
+      "official_requirement": "Full ROS uses a dedicated SAT garbage-management stage to trade lines against operations after LUT decomposition.",
+      "supported_claim": "The paper can report an executable garbage-pressure proxy showing the line-operation trade-off over verified LUT DAGs."
     },
     {
       "audit_status": "pass",
@@ -118,6 +140,6 @@
   ],
   "script": "analyze_ros_reproduction_gap_audit.py",
   "status_counts": {
-    "pass": 9
+    "pass": 11
   }
 }

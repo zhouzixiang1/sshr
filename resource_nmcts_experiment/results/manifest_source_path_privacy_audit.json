@@ -5,9 +5,9 @@
     "manifest": "results/manifest_source_path_privacy_audit.json",
     "summary": "results/summary_source_path_privacy_audit.csv"
   },
-  "payload_local_path_files": 53,
+  "payload_local_path_files": 54,
   "payload_manifest": "results/manifest_submission_payload_archive.json",
-  "payload_text_files_scanned": 965,
+  "payload_text_files_scanned": 971,
   "python": "3.11.15",
   "rows": 6,
   "script": "analyze_source_path_privacy_audit.py",

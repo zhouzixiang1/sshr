@@ -33,6 +33,11 @@ ROS_LINE_ANALYSIS = RESULTS / "analysis_ros_lut_line_sensitivity.md"
 ROS_LINE_SUMMARY = RESULTS / "summary_ros_lut_line_sensitivity.csv"
 ROS_LINE_MANIFEST = RESULTS / "manifest_ros_lut_line_sensitivity.json"
 ROS_LINE_RAW = RESULTS / "raw_ros_lut_line_sensitivity.csv"
+ROS_GARBAGE_ANALYSIS = RESULTS / "analysis_ros_lut_garbage_proxy.md"
+ROS_GARBAGE_SUMMARY = RESULTS / "summary_ros_lut_garbage_proxy.csv"
+ROS_GARBAGE_MANIFEST = RESULTS / "manifest_ros_lut_garbage_proxy.json"
+ROS_GARBAGE_RAW = RESULTS / "raw_ros_lut_garbage_proxy.csv"
+ROS_GARBAGE_TABLE = TABLES / "ros_lut_garbage_proxy.tex"
 STG_ANALYSIS = RESULTS / "analysis_stg_published_benchmark.md"
 STG_SUMMARY = RESULTS / "summary_stg_published_benchmark.csv"
 STG_MANIFEST = RESULTS / "manifest_stg_published_benchmark.json"
@@ -61,6 +66,12 @@ class JsonExpectation:
 
 
 @dataclass(frozen=True)
+class AbsentPathExpectation:
+    path: Path
+    label: str
+
+
+@dataclass(frozen=True)
 class RosSpec:
     item: str
     coverage_status: str
@@ -73,10 +84,17 @@ class RosSpec:
     supported_claim: str
     excluded_claim: str
     next_reproduction_step: str
+    absent_path_expectations: tuple[AbsentPathExpectation, ...] = ()
 
 
 def rel(path: Path) -> str:
-    return str(path.relative_to(THIS_DIR))
+    try:
+        return str(path.relative_to(THIS_DIR))
+    except ValueError:
+        try:
+            return str(path.relative_to(THIS_DIR.parent))
+        except ValueError:
+            return str(path)
 
 
 def read_text(path: Path) -> str:
@@ -127,6 +145,11 @@ def check_json(expectation: JsonExpectation) -> tuple[bool, str]:
     return actual == expectation.expected, f"{rel(expectation.path)}::{expectation.key}={actual}"
 
 
+def check_absent_path(expectation: AbsentPathExpectation) -> tuple[bool, str]:
+    exists = expectation.path.exists()
+    return not exists, f"{expectation.label}={rel(expectation.path)} exists={exists}"
+
+
 def specs() -> list[RosSpec]:
     return [
         RosSpec(
@@ -141,6 +164,30 @@ def specs() -> list[RosSpec]:
             supported_claim="ROS is a relevant resource-constrained oracle-synthesis comparator family.",
             excluded_claim="This citation anchor alone does not reproduce the ROS implementation.",
             next_reproduction_step="No immediate action; keep the literature anchor when venue formatting changes.",
+        ),
+        RosSpec(
+            item="Official ROS source-discovery and local implementation boundary",
+            coverage_status="not reproduced",
+            official_requirement="A full official ROS reproduction requires an executable ROS implementation or enough published implementation artifacts to recreate the LUT mapper plus SAT garbage-management flow.",
+            current_coverage="The package records that the accessible public artifacts used here are the ROS paper and the STG benchmark table; no official ROS implementation directory is present in the local reproducibility tree.",
+            files=(README, DELIVERABLE, SUBMISSION_PACKAGE / "README.md", REFERENCES),
+            tokens=(
+                "Official ROS source-discovery note",
+                "no official ROS implementation repository or local ROS executable is included",
+                "accessible public artifacts are the ROS paper and the STG benchmark table",
+                "stgBenchmark",
+            ),
+            csv_expectations=(),
+            json_expectations=(),
+            supported_claim="The package documents a concrete source-availability boundary before using ROS-style proxy rows.",
+            excluded_claim="The current package cannot claim that an official ROS executable or source tree was run.",
+            next_reproduction_step="If an official ROS source tree or binary is obtained, place it under a tracked provenance path or an ignored tmp path and add a dedicated driver before promoting any full-ROS claim.",
+            absent_path_expectations=(
+                AbsentPathExpectation(THIS_DIR.parent / "tmp" / "ros", "tmp_ros_dir"),
+                AbsentPathExpectation(THIS_DIR.parent / "tmp" / "resource_constrained_oracle_synthesis", "tmp_ros_named_dir"),
+                AbsentPathExpectation(THIS_DIR / "tools" / "ros", "project_ros_tool_dir"),
+                AbsentPathExpectation(THIS_DIR / "official_ros", "project_official_ros_dir"),
+            ),
         ),
         RosSpec(
             item="Verified LUT K-sweep proxy",
@@ -173,6 +220,23 @@ def specs() -> list[RosSpec]:
             supported_claim="The score advantage is robust to line-aware LUT proxy selectors.",
             excluded_claim="This is not SAT garbage management and cannot be called a full ROS reproduction.",
             next_reproduction_step="Implement or obtain the ROS SAT garbage-management stage before making any official-ROS claim.",
+        ),
+        RosSpec(
+            item="Executable LUT garbage-management proxy",
+            coverage_status="partial",
+            official_requirement="Full ROS uses a dedicated SAT garbage-management stage to trade lines against operations after LUT decomposition.",
+            current_coverage="The project re-runs and truth-table verifies the same best-K LUT DAGs and compares keep-all, fanout-checkpoint, and zero-checkpoint recomputation schedules.",
+            files=(ROS_GARBAGE_ANALYSIS, ROS_GARBAGE_SUMMARY, ROS_GARBAGE_MANIFEST, ROS_GARBAGE_RAW, ROS_GARBAGE_TABLE, PAPER),
+            tokens=("three reversible garbage policies", "pass: 927", "zero-checkpoint schedule lowers mean peak ancilla", "tab:ros-garbage"),
+            csv_expectations=(CsvExpectation(ROS_GARBAGE_RAW, 927, True),),
+            json_expectations=(
+                JsonExpectation(ROS_GARBAGE_MANIFEST, "raw_rows", 927),
+                JsonExpectation(ROS_GARBAGE_MANIFEST, "needs_revision_count", 0),
+                JsonExpectation(ROS_GARBAGE_MANIFEST, "official_ros_fully_reproduced", False),
+            ),
+            supported_claim="The paper can report an executable garbage-pressure proxy showing the line-operation trade-off over verified LUT DAGs.",
+            excluded_claim="This is still not the official ROS SAT garbage-management algorithm or a reproduced full ROS compiler flow.",
+            next_reproduction_step="Replace the proxy with the official SAT garbage-management formulation if executable ROS artifacts or a faithful reimplementation become available.",
         ),
         RosSpec(
             item="Published STG optimum-library counterpoint",
@@ -266,9 +330,11 @@ def evaluate(spec: RosSpec) -> dict[str, str]:
     hits, missing_tokens = token_hits(spec.files, spec.tokens)
     csv_results = [check_csv(expectation) for expectation in spec.csv_expectations]
     json_results = [check_json(expectation) for expectation in spec.json_expectations]
+    absence_results = [check_absent_path(expectation) for expectation in spec.absent_path_expectations]
     csv_ok = all(ok for ok, _ in csv_results)
     json_ok = all(ok for ok, _ in json_results)
-    status = "pass" if not missing_files and hits == len(spec.tokens) and csv_ok and json_ok else "needs revision"
+    absence_ok = all(ok for ok, _ in absence_results)
+    status = "pass" if not missing_files and hits == len(spec.tokens) and csv_ok and json_ok and absence_ok else "needs revision"
     evidence_parts = [
         f"files_missing={missing_files or 'none'}",
         f"tokens={hits}/{len(spec.tokens)}",
@@ -278,6 +344,8 @@ def evaluate(spec: RosSpec) -> dict[str, str]:
         evidence_parts.append("csv=" + "; ".join(detail for _, detail in csv_results))
     if json_results:
         evidence_parts.append("json=" + "; ".join(detail for _, detail in json_results))
+    if absence_results:
+        evidence_parts.append("absent_paths=" + "; ".join(detail for _, detail in absence_results))
     return {
         "item": spec.item,
         "audit_status": status,

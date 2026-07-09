@@ -110,6 +110,10 @@ ROS_GAP_ANALYSIS = RESULTS / "analysis_ros_reproduction_gap_audit.md"
 ROS_GAP_SUMMARY = RESULTS / "summary_ros_reproduction_gap_audit.csv"
 ROS_GAP_MANIFEST = RESULTS / "manifest_ros_reproduction_gap_audit.json"
 ROS_GAP_TABLE = THIS_DIR / "paper_latex" / "tables" / "ros_reproduction_gap_audit.tex"
+ROS_GARBAGE_ANALYSIS = RESULTS / "analysis_ros_lut_garbage_proxy.md"
+ROS_GARBAGE_SUMMARY = RESULTS / "summary_ros_lut_garbage_proxy.csv"
+ROS_GARBAGE_MANIFEST = RESULTS / "manifest_ros_lut_garbage_proxy.json"
+ROS_GARBAGE_TABLE = THIS_DIR / "paper_latex" / "tables" / "ros_lut_garbage_proxy.tex"
 STG_BENCHMARK_ANALYSIS = RESULTS / "analysis_stg_published_benchmark.md"
 STG_BENCHMARK_SUMMARY = RESULTS / "summary_stg_published_benchmark.csv"
 STG_BENCHMARK_MANIFEST = RESULTS / "manifest_stg_published_benchmark.json"
@@ -330,6 +334,12 @@ def build_rows() -> list[dict[str, str]]:
     ros_gap_rows = ros_gap_manifest.get("rows", "missing") if ros_gap_manifest else "missing"
     ros_gap_fully_reproduced = bool(ros_gap_manifest.get("official_ros_fully_reproduced", True)) if ros_gap_manifest else True
     ros_gap_boundary_explicit = bool(ros_gap_manifest.get("full_ros_boundary_is_explicit", False)) if ros_gap_manifest else False
+    ros_garbage_manifest = read_json(ROS_GARBAGE_MANIFEST)
+    ros_garbage_revisions = int(ros_garbage_manifest.get("needs_revision_count", -1)) if ros_garbage_manifest else -1
+    ros_garbage_counts = ros_garbage_manifest.get("status_counts", {}) if ros_garbage_manifest else {}
+    ros_garbage_raw_rows = ros_garbage_manifest.get("raw_rows", "missing") if ros_garbage_manifest else "missing"
+    ros_garbage_functions = ros_garbage_manifest.get("functions", "missing") if ros_garbage_manifest else "missing"
+    ros_garbage_anchor = bool(ros_garbage_manifest.get("table_anchor_present", False)) if ros_garbage_manifest else False
     stg_manifest = read_json(STG_BENCHMARK_MANIFEST)
     stg_revisions = int(stg_manifest.get("needs_revision_count", -1)) if stg_manifest else -1
     stg_counts = stg_manifest.get("status_counts", {}) if stg_manifest else {}
@@ -745,7 +755,23 @@ def build_rows() -> list[dict[str, str]]:
             and ros_gap_boundary_explicit
             else "needs revision",
             "evidence": f"ROS gap audit separates verified ROS-style LUT proxy evidence from full official ROS reproduction; rows={ros_gap_rows}; status_counts={ros_gap_counts}; coverage_counts={ros_gap_coverage}; official_ros_fully_reproduced={ros_gap_fully_reproduced}; full_ros_boundary_is_explicit={ros_gap_boundary_explicit}; needs_revision_count={ros_gap_revisions}.",
-            "next_action": "Rerun analyze_ros_lut_line_sensitivity.py and analyze_ros_reproduction_gap_audit.py after changing ROS-style LUT proxy results, line-sensitivity rows, or ROS/full-tool reproduction wording.",
+            "next_action": "Rerun analyze_ros_lut_line_sensitivity.py, analyze_ros_lut_garbage_proxy.py, and analyze_ros_reproduction_gap_audit.py after changing ROS-style LUT proxy results, line/garbage sensitivity rows, or ROS/full-tool reproduction wording.",
+        },
+        {
+            "item": "ROS-style LUT garbage proxy",
+            "status": "pass"
+            if "tab:ros-garbage" in text
+            and ROS_GARBAGE_ANALYSIS.exists()
+            and ROS_GARBAGE_SUMMARY.exists()
+            and ROS_GARBAGE_MANIFEST.exists()
+            and ROS_GARBAGE_TABLE.exists()
+            and ros_garbage_revisions == 0
+            and ros_garbage_raw_rows == 927
+            and ros_garbage_functions == 309
+            and ros_garbage_anchor
+            else "needs revision",
+            "evidence": f"ROS-style garbage proxy re-runs verified best-K LUT DAGs under keep-all, fanout-checkpoint, and zero-checkpoint policies; raw_rows={ros_garbage_raw_rows}; functions={ros_garbage_functions}; status_counts={ros_garbage_counts}; needs_revision_count={ros_garbage_revisions}; table_anchor_present={ros_garbage_anchor}.",
+            "next_action": "Rerun analyze_ros_lut_garbage_proxy.py after changing ROS-style LUT best-K rows, table anchors, or garbage-management wording.",
         },
         {
             "item": "Published STG counterpoint",

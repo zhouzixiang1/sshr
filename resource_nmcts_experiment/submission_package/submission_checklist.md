@@ -136,9 +136,9 @@ rg -n "Overfull|Underfull|undefined|Undefined|Warning|Error|LaTeX Warning|Rerun"
 Expected current state:
 
 - Machine snapshot tokens checked by `analyze_public_handoff_freshness_audit.py`:
-  PDF pages=39/39; readiness=63 pass + 1 needs author input;
-  payload_files=1008; artifact_registry=25 families / 147 raw CSV / 60306 raw rows;
-  source_privacy=0 strict leaks / 53 provenance files / 965 payload text files;
+  PDF pages=39/39; readiness=64 pass + 1 needs author input;
+  payload_files=1014; artifact_registry=25 families / 148 raw CSV / 61233 raw rows;
+  source_privacy=0 strict leaks / 54 provenance files / 971 payload text files;
   comparison_validity=8/8 pass; novelty_scorecard=6/6 pass;
   goal_gate=author/venue metadata remains open.
 - Archive manifest: all payload groups complete.
@@ -151,7 +151,7 @@ Expected current state:
 - Comparison protocol audit: all baseline layers have role, evidence, comparability, counterpoint, artifact, and manuscript-anchor coverage.
 - Comparison target validity audit: comparison families are explicitly labeled as primary benchmark, external stress test, exact reversible counterpoint, phase proxy, causal control, scalability verification, or non-dominance boundary.
 - Novelty/comparison scorecard: reviewer-facing method identity, baseline meaning, external probe, tradeoff, AI/MCTS, and scale-boundary questions all pass with manuscript and support-brief anchors.
-- ROS reproduction gap audit: ROS-style LUT and line-sensitivity are proxy evidence; the official ROS SAT garbage-management component is not reproduced and must not be claimed.
+- ROS reproduction gap audit: ROS-style LUT, line-sensitivity, and executable garbage-pressure rows are proxy evidence; the official ROS SAT garbage-management component is not reproduced and must not be claimed.
 - Search-control baseline audit: heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, bit-flip random-prior, frontier random-depth, and phase random-control rows all pass.
 - Ultra-scale n=48/56/64 stress and resource-profile audits: 480/480 plan ANF rows and 480/480 emitted-circuit ANF rows pass with zero mismatches; the profile exposes score/T/CNOT/depth/ancilla/T-depth/lifetime/time tradeoffs, and this remains symbolic scaling evidence rather than full truth-table enumeration.
 - Frontier random-depth control: same-candidate depth-2/3/4 random controls pass on held-out, scale, and truth-table bridge slices; the result is a quality/budget-allocation claim, not a runtime claim.

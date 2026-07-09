@@ -875,9 +875,14 @@ External-tool benchmark exchange:
   runs ABC `if -K` for a configurable K sweep, verifies each mapped BLIF truth
   table, estimates every LUT network by local-ANF compute/action/uncompute
   logic, and chooses the best K under the project score.  It is now complemented
-  by a mockturtle KLUT-to-XAG probe, a CirKit-shell AIG/MC probe, a RevKit
-  Python API phase-netlist baseline, and a legacy RevKit CLI exact-oracle
-  reversible-synthesis probe.  The full official ROS flow remains future work.
+  by line-aware LUT reselection, an executable LUT garbage-pressure proxy over
+  the same 309 best-K DAGs, a mockturtle KLUT-to-XAG probe, a CirKit-shell
+  AIG/MC probe, a RevKit Python API phase-netlist baseline, and a legacy RevKit
+  CLI exact-oracle reversible-synthesis probe. The full official ROS flow remains future work.
+- Official ROS source-discovery note: no official ROS implementation repository or local ROS executable is included in this package. The accessible public artifacts are the ROS paper and the STG benchmark table, so this repository
+  keeps ROS-facing evidence split into the verified ABC LUT proxy, the STG
+  optimum-library counterpoint, and RevKit/CirKit/mockturtle toolchain probes
+  rather than claiming that an official ROS source tree was run.
 - `analyze_toolchain_readiness.py` records external-tool availability for the
   current workstation.  The current audit finds the bundled ABC binary,
   mockturtle source/adapter availability, RevKit Python API availability, and
@@ -1113,7 +1118,7 @@ External toolchain readiness from `results/analysis_toolchain_readiness.md`:
   Python API is available and has produced the `oracle_synth` phase-netlist
   baseline.  Legacy RevKit CLI is available and has produced a TBS/DBS/RMS
   exact-oracle reversible-synthesis portfolio.  Full official ROS reproduction
-  remains future work.
+  remains future work; no official ROS implementation repository or local ROS executable is included here, and the accessible public artifacts are the ROS paper and the STG benchmark table.
 - Against CNOT-optimized SSHR-I, `and_resource_nmcts` has 164 T-count wins, 3
   losses, and 10 ties; score wins/losses/ties are 168/9/0 with a 27.92% mean
   score reduction.  CNOT count is worse on 168/177 functions.
