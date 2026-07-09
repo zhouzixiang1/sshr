@@ -56,8 +56,8 @@ noise modeling, or magic-state-factory accounting.
   private generated submission-system text previews.
 - `../results/analysis_payload_roundtrip_audit.md`: terminal check that opens
   the upload tarball and verifies internal paths, hashes, required artifacts,
-  reviewer entrypoints, comparison-protocol evidence files, and deterministic
-  tar metadata.
+  reviewer entrypoints, comparison-protocol and headline-numeric evidence
+  files, and deterministic tar metadata.
 - `../results/analysis_payload_extraction_smoke_audit.md`: terminal check that
   extracts the upload tarball into a temporary directory and runs lightweight
   reviewer-facing audits from inside the extracted payload.

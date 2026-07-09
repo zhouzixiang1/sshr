@@ -8,10 +8,10 @@ This read-only verifier checks the terminal package invariants after the payload
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Compiled author PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=27, bytes=601125. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
-| Compiled anonymous PDF | pass | paper_latex/resource_nmcts_submission_anonymous.pdf pages=27, bytes=597777. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
-| Payload SHA sidecar | pass | actual=fb3df3382d33074382cf117274aa0df239416076fb2c28623a04e52060c1ad48; sidecar=fb3df3382d33074382cf117274aa0df239416076fb2c28623a04e52060c1ad48. | Regenerate the payload archive if the digests differ. |
-| Payload manifest consistency | pass | summary=fb3df3382d33074382cf117274aa0df239416076fb2c28623a04e52060c1ad48; manifest=fb3df3382d33074382cf117274aa0df239416076fb2c28623a04e52060c1ad48; file_count=864. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
+| Compiled author PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=27, bytes=601116. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
+| Compiled anonymous PDF | pass | paper_latex/resource_nmcts_submission_anonymous.pdf pages=27, bytes=597775. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
+| Payload SHA sidecar | pass | actual=81df14d7cd16a0448bde0e264bf0d75c223fffe2c600609a304c6abcd1fb7af8; sidecar=81df14d7cd16a0448bde0e264bf0d75c223fffe2c600609a304c6abcd1fb7af8. | Regenerate the payload archive if the digests differ. |
+| Payload manifest consistency | pass | summary=81df14d7cd16a0448bde0e264bf0d75c223fffe2c600609a304c6abcd1fb7af8; manifest=81df14d7cd16a0448bde0e264bf0d75c223fffe2c600609a304c6abcd1fb7af8; file_count=864. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
 | Readiness audit terminal state | pass | status_counts={'pass': 32, 'needs author input': 1}. | Resolve any needs-revision rows; author-specific declarations remain manual. |
 | Artifact rerun registry coverage | pass | families=14; registry_raw=144; actual_raw=144. | Rerun analyze_artifact_rerun_registry.py after adding raw CSVs or driver scripts. |
 | Claim-scope lint | pass | unresolved_count=0; status_counts={'guarded': 59, 'pass': 5}. | Run analyze_claim_scope_lint.py and revise unguarded hardware-mapping, universal-dominance, optimality, or full-tool-reproduction claims. |
@@ -26,6 +26,6 @@ This read-only verifier checks the terminal package invariants after the payload
 | Private submission text preview | pass | status_counts={'needs author input': 1}; private_outputs_are_git_ignored=True. | Run make_submission_text_preview.py and keep generated private Markdown files ignored by Git. |
 | Private metadata payload exclusion | pass | private_payload_hits=none; checked_basenames=['generated_author_declarations.md', 'generated_availability_statements.md', 'generated_cover_letter.md', 'generated_submission_text.md', 'submission_metadata.json']. | Regenerate the payload after removing ignored private metadata or preview files from package inputs. |
 | Payload round-trip audit | pass | needs_revision_count=0; status_counts={'pass': 9}. | Run analyze_payload_roundtrip_audit.py after payload creation and fix any archive/manifest/path/hash issues. |
-| Payload extraction smoke audit | pass | needs_revision_count=0; status_counts={'pass': 4}; smoke_scripts=3. | Run analyze_payload_extraction_smoke_audit.py after payload creation and fix extracted-payload script failures. |
+| Payload extraction smoke audit | pass | needs_revision_count=0; status_counts={'pass': 5}; smoke_scripts=4. | Run analyze_payload_extraction_smoke_audit.py after payload creation and fix extracted-payload script failures. |
 | Author LaTeX log boundary | pass | Only allowed rerunfilecheck/showhyphens log lines found. | Inspect the LaTeX log and fix unexpected warnings or errors. |
 | Anonymous LaTeX log boundary | pass | Only allowed rerunfilecheck/showhyphens log lines found. | Inspect the LaTeX log and fix unexpected warnings or errors. |

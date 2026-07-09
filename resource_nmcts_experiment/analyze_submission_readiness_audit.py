@@ -468,7 +468,7 @@ def build_rows() -> list[dict[str, str]]:
             and VERIFIER_SUMMARY.exists()
             and VERIFIER_MANIFEST.exists()
             else "needs revision",
-            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, private-preview protection, private payload exclusion, payload round-trip integrity, and LaTeX log boundaries.",
+            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, and LaTeX log boundaries.",
             "next_action": "Run verify_submission_package.sh after rebuilding the payload archive.",
         },
         {

@@ -21,6 +21,12 @@
       "status": "pass"
     },
     {
+      "evidence": "returncode=0; manifest=results/manifest_headline_numeric_consistency.json; needs_revision_count=0; claims=15; stderr=none",
+      "item": "Headline numeric consistency",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
       "evidence": "returncode=0; manifest=results/manifest_claim_scope_lint.json; unresolved_count=0; required_boundary_count=5; stderr=none",
       "item": "Claim-scope lint",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
@@ -43,6 +49,13 @@
       "script": "analyze_comparison_protocol_audit.py"
     },
     {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_headline_numeric_consistency.json",
+      "minimum_rows_key": "claims",
+      "name": "Headline numeric consistency",
+      "script": "analyze_headline_numeric_consistency.py"
+    },
+    {
       "expected_key": "unresolved_count",
       "manifest": "results/manifest_claim_scope_lint.json",
       "minimum_rows_key": "required_boundary_count",
@@ -58,6 +71,6 @@
     }
   ],
   "status_counts": {
-    "pass": 4
+    "pass": 5
   }
 }

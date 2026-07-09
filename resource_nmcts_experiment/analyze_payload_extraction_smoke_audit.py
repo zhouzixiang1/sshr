@@ -48,6 +48,15 @@ SMOKE_SPECS = (
         minimum_rows=7,
     ),
     SmokeSpec(
+        name="Headline numeric consistency",
+        script="analyze_headline_numeric_consistency.py",
+        manifest="results/manifest_headline_numeric_consistency.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="claims",
+        minimum_rows=15,
+    ),
+    SmokeSpec(
         name="Claim-scope lint",
         script="analyze_claim_scope_lint.py",
         manifest="results/manifest_claim_scope_lint.json",

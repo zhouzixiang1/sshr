@@ -102,8 +102,8 @@ Expected current state:
 
 - Archive manifest: all payload groups complete.
 - Payload archive: tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.
-- Payload round-trip audit: archive contents match manifest paths and hashes, required files, reviewer entrypoints, and comparison-protocol evidence files are present, private files are absent, and tar metadata is deterministic.
-- Payload extraction smoke audit: the upload tarball extracts safely and runs comparison protocol, claim-scope lint, and artifact-rerun registry checks from the extracted tree.
+- Payload round-trip audit: archive contents match manifest paths and hashes, required files, reviewer entrypoints, comparison-protocol evidence files, and headline-numeric evidence files are present, private files are absent, and tar metadata is deterministic.
+- Payload extraction smoke audit: the upload tarball extracts safely and runs comparison protocol, headline numeric consistency, claim-scope lint, and artifact-rerun registry checks from the extracted tree.
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
 - Comparison protocol audit: all baseline layers have role, evidence, comparability, counterpoint, artifact, and manuscript-anchor coverage.
 - Headline numeric consistency audit: all abstract-level numbers match generated CSV evidence and both author/anonymous TeX sources.
