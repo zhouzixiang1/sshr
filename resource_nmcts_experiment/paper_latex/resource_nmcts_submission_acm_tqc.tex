@@ -120,6 +120,17 @@ mockturtle, Caterpillar API, CirKit, RevKit CLI, and RevKit phase/Rz baselines o
 functions.  Fourth, it separates algorithmic gains from engineering guards
 through ablations and high-dimensional verification bridges.
 
+The comparison design is deliberately layered.  Direct \anf{}, ESOP,
+ABC/BDD, and matched SSHR rows answer the same-task resource question;
+mockturtle, Caterpillar, CirKit, ROS-style LUT, and RevKit rows test whether
+the advantage survives external logical toolchains; STG optimum-library rows
+and raw multi-resource dominance audits expose cases where another method is
+stronger.  Thus the paper's claim is not that \method{} is a universal
+leaderboard winner or an SSHR replacement.  It is that a verified
+resource-aware search policy gives a strong T-count and weighted-score point
+for logical Boolean-oracle synthesis while making CNOT, depth, ancilla, and
+hardware-mapping boundaries explicit.
+
 \paragraph{Scope and assumptions.}
 The study is intentionally limited to logical-layer Boolean-oracle synthesis.
 All reported resources are computed before hardware mapping, routing,

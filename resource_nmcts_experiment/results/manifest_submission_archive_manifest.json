@@ -2,7 +2,7 @@
   "categories": [
     {
       "boundary": "Compiled PDF is checked by readiness audit to avoid self-referential hashes.",
-      "bytes": 294295,
+      "bytes": 296395,
       "category": "Manuscript source",
       "file_count": 5,
       "files": [
@@ -17,23 +17,23 @@
           "sha256": "418e28ed757e39365ad22746ff1a61fd0f0064c47b3cbab201e2a1062aa7056d"
         },
         {
-          "bytes": 87818,
+          "bytes": 88518,
           "path": "paper_latex/resource_nmcts_submission_acm_tqc.tex",
-          "sha256": "d4bdfe481f32045dfa897b7ebd3944360b82ecc2a14925bc28b5bbe7b40093c0"
+          "sha256": "3261e0306f2ceec5c26126e043a91a9206ffb78def4538676ac775679efb519f"
         },
         {
-          "bytes": 87314,
+          "bytes": 88014,
           "path": "paper_latex/resource_nmcts_submission_anonymous.tex",
-          "sha256": "a5450c2ef0d579f9b0fcb2aaf13e7646e6e4277865dd27c039e1288128a779d7"
+          "sha256": "2bf1c0e04ca9f10961f694e0e771638497a585b8caafa0102aecc5c2c31aea3c"
         },
         {
-          "bytes": 88688,
+          "bytes": 89388,
           "path": "paper_latex/resource_nmcts_submission_v1.tex",
-          "sha256": "74198517540f283b62a26c2344cfae40681f4742b742a43fd609a3e87c445733"
+          "sha256": "e0b9578420a57d1812eecd3b64a802f5ea0273f7cd85da24fc729755b1f31e7a"
         }
       ],
       "missing": [],
-      "sha256_digest": "fab13f6ee058305cc03c97aa6441cbd6a9dfb4f211c673c09dce076f340c1ede"
+      "sha256_digest": "f171b1af33f06876220aecbfc30f08b5c4f348086b82d0ccf0640420dbb9c601"
     },
     {
       "boundary": "Terminal submission audit tables are excluded from the stable payload digest.",
@@ -2017,7 +2017,7 @@
     },
     {
       "boundary": "Terminal submission/package outputs are excluded so this manifest remains stable.",
-      "bytes": 4951611,
+      "bytes": 4951613,
       "category": "Derived summaries",
       "file_count": 454,
       "files": [
@@ -2167,9 +2167,9 @@
           "sha256": "b4ea2dc476b9b148e9a3319b5de4401b16be4e7c12432898d9815cec934f69b0"
         },
         {
-          "bytes": 53846,
+          "bytes": 53847,
           "path": "results/analysis_claim_scope_lint.md",
-          "sha256": "3e8096bdd56587657d52fa3e46e02039d7dc1b65ceb4951bc48d2712fb6830b1"
+          "sha256": "a91d0a1449320c45817ae624b5d3873688d2ef9cd7a872bbe30014e2b7ada1b4"
         },
         {
           "bytes": 2378,
@@ -3257,9 +3257,9 @@
           "sha256": "980299690ee9263038fc6a8246efc74261bdfb74568877c59a76ea338b18e213"
         },
         {
-          "bytes": 60994,
+          "bytes": 60995,
           "path": "results/summary_claim_scope_lint.csv",
-          "sha256": "6abd5614ade59bbd425c3f11d668b445e75fc68be4798ce7081ec8cf369e9f2a"
+          "sha256": "df4bd41053522aabd2e6101263240484d21773fbb9144adce68bfe2b9339f39c"
         },
         {
           "bytes": 896,
@@ -4293,7 +4293,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "1ad5b203688f6ab46aeeac1ad23beaa9f899696838e8b2726d2bca0f50ab33ed"
+      "sha256_digest": "99845b7ddb3df71928291075c55b5541ed8229bbc7d679f157046fa6f3813288"
     },
     {
       "boundary": "Submission-level terminal manifests are excluded from this digest group.",

@@ -2,11 +2,11 @@
 \toprule
 Payload group & Files & Missing & Digest & Boundary \\
 \midrule
-Manuscript source & 5 & 0 & \texttt{fab13f6ee058} & Compiled PDF is checked by readiness audit to avoid self-referential hashes. \\
+Manuscript source & 5 & 0 & \texttt{f171b1af33f0} & Compiled PDF is checked by readiness audit to avoid self-referential hashes. \\
 Paper tables & 201 & 0 & \texttt{605f91f084b7} & Terminal submission audit tables are excluded from the stable payload digest. \\
 Submission figures & 28 & 0 & \texttt{b115976593d2} & Includes generated figure assets and plotted source data, not raw benchmark reruns. \\
 Raw measurements & 161 & 0 & \texttt{fa1965cc81bb} & Raw CSVs are regenerated only by the heavier run scripts, not by the lightweight rebuild. \\
-Derived summaries & 454 & 0 & \texttt{1ad5b203688f} & Terminal submission/package outputs are excluded so this manifest remains stable. \\
+Derived summaries & 454 & 0 & \texttt{99845b7ddb3d} & Terminal submission/package outputs are excluded so this manifest remains stable. \\
 Run manifests & 134 & 0 & \texttt{2a4bcdc57294} & Submission-level terminal manifests are excluded from this digest group. \\
 Scripts and docs & 168 & 0 & \texttt{8f8eedfbe102} & Includes reproducible entry points and top-level core implementation modules; raw sweeps still require their individual drivers. \\
 Models & 20 & 0 & \texttt{4c5c2a1bfc19} & Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild. \\
