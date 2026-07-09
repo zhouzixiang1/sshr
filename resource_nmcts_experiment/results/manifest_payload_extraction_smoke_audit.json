@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=894; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=904; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -17,6 +17,12 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_comparison_protocol_audit.json; needs_revision_count=0; layers=7; stderr=none",
       "item": "Comparison protocol audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_ros_reproduction_gap_audit.json; needs_revision_count=0; rows=8; stderr=none",
+      "item": "ROS reproduction gap audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -29,6 +35,12 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_editorial_screening_audit.json; needs_revision_count=0; rows=8; stderr=none",
       "item": "Editorial screening audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_submission_support_packet_audit.json; needs_revision_count=0; rows=8; stderr=none",
+      "item": "Submission support packet audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -87,7 +99,7 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=16; rows=16; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=18; rows=18; stderr=none",
       "item": "Artifact rerun registry",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -104,6 +116,13 @@
     },
     {
       "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_ros_reproduction_gap_audit.json",
+      "minimum_rows_key": "rows",
+      "name": "ROS reproduction gap audit",
+      "script": "analyze_ros_reproduction_gap_audit.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
       "manifest": "results/manifest_search_control_baseline_audit.json",
       "minimum_rows_key": "rows",
       "name": "Search-control baseline audit",
@@ -115,6 +134,13 @@
       "minimum_rows_key": "rows",
       "name": "Editorial screening audit",
       "script": "analyze_editorial_screening_audit.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_submission_support_packet_audit.json",
+      "minimum_rows_key": "rows",
+      "name": "Submission support packet audit",
+      "script": "analyze_submission_support_packet_audit.py"
     },
     {
       "expected_key": "needs_revision_count",
@@ -188,6 +214,6 @@
     }
   ],
   "status_counts": {
-    "pass": 14
+    "pass": 16
   }
 }

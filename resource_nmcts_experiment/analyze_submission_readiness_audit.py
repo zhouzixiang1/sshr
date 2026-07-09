@@ -78,6 +78,10 @@ CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
 COMPARISON_PROTOCOL_ANALYSIS = RESULTS / "analysis_comparison_protocol_audit.md"
 COMPARISON_PROTOCOL_SUMMARY = RESULTS / "summary_comparison_protocol_audit.csv"
 COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.json"
+ROS_GAP_ANALYSIS = RESULTS / "analysis_ros_reproduction_gap_audit.md"
+ROS_GAP_SUMMARY = RESULTS / "summary_ros_reproduction_gap_audit.csv"
+ROS_GAP_MANIFEST = RESULTS / "manifest_ros_reproduction_gap_audit.json"
+ROS_GAP_TABLE = THIS_DIR / "paper_latex" / "tables" / "ros_reproduction_gap_audit.tex"
 CITATION_SUPPORT_ANALYSIS = RESULTS / "analysis_citation_support_audit.md"
 CITATION_SUPPORT_SUMMARY = RESULTS / "summary_citation_support_audit.csv"
 CITATION_SUPPORT_MANIFEST = RESULTS / "manifest_citation_support_audit.json"
@@ -118,6 +122,10 @@ EDITORIAL_SCREENING_ANALYSIS = RESULTS / "analysis_editorial_screening_audit.md"
 EDITORIAL_SCREENING_SUMMARY = RESULTS / "summary_editorial_screening_audit.csv"
 EDITORIAL_SCREENING_MANIFEST = RESULTS / "manifest_editorial_screening_audit.json"
 EDITORIAL_SCREENING_TABLE = THIS_DIR / "paper_latex" / "tables" / "editorial_screening_audit.tex"
+SUPPORT_PACKET_ANALYSIS = RESULTS / "analysis_submission_support_packet_audit.md"
+SUPPORT_PACKET_SUMMARY = RESULTS / "summary_submission_support_packet_audit.csv"
+SUPPORT_PACKET_MANIFEST = RESULTS / "manifest_submission_support_packet_audit.json"
+SUPPORT_PACKET_TABLE = THIS_DIR / "paper_latex" / "tables" / "submission_support_packet_audit.tex"
 SUPPORT_FILES = [
     SUBMISSION_PACKAGE / "README.md",
     AUTHOR_INPUT_PACKET,
@@ -187,6 +195,13 @@ def build_rows() -> list[dict[str, str]]:
         int(comparison_protocol_manifest.get("needs_revision_count", -1)) if comparison_protocol_manifest else -1
     )
     comparison_protocol_counts = comparison_protocol_manifest.get("status_counts", {}) if comparison_protocol_manifest else {}
+    ros_gap_manifest = read_json(ROS_GAP_MANIFEST)
+    ros_gap_counts = ros_gap_manifest.get("status_counts", {}) if ros_gap_manifest else {}
+    ros_gap_coverage = ros_gap_manifest.get("coverage_counts", {}) if ros_gap_manifest else {}
+    ros_gap_revisions = int(ros_gap_manifest.get("needs_revision_count", -1)) if ros_gap_manifest else -1
+    ros_gap_rows = ros_gap_manifest.get("rows", "missing") if ros_gap_manifest else "missing"
+    ros_gap_fully_reproduced = bool(ros_gap_manifest.get("official_ros_fully_reproduced", True)) if ros_gap_manifest else True
+    ros_gap_boundary_explicit = bool(ros_gap_manifest.get("full_ros_boundary_is_explicit", False)) if ros_gap_manifest else False
     citation_support_manifest = read_json(CITATION_SUPPORT_MANIFEST)
     citation_support_revisions = (
         int(citation_support_manifest.get("needs_revision_count", -1)) if citation_support_manifest else -1
@@ -278,6 +293,12 @@ def build_rows() -> list[dict[str, str]]:
         int(editorial_screening_manifest.get("needs_revision_count", -1)) if editorial_screening_manifest else -1
     )
     editorial_screening_rows = editorial_screening_manifest.get("rows", "missing") if editorial_screening_manifest else "missing"
+    support_packet_manifest = read_json(SUPPORT_PACKET_MANIFEST)
+    support_packet_counts = support_packet_manifest.get("status_counts", {}) if support_packet_manifest else {}
+    support_packet_revisions = (
+        int(support_packet_manifest.get("needs_revision_count", -1)) if support_packet_manifest else -1
+    )
+    support_packet_rows = support_packet_manifest.get("rows", "missing") if support_packet_manifest else "missing"
     payload_roundtrip_manifest = read_json(PAYLOAD_ROUNDTRIP_MANIFEST)
     payload_roundtrip_counts = payload_roundtrip_manifest.get("status_counts", {}) if payload_roundtrip_manifest else {}
     payload_roundtrip_revisions = int(payload_roundtrip_manifest.get("needs_revision_count", -1)) if payload_roundtrip_manifest else -1
@@ -374,6 +395,20 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Comparison protocol audit checks layered baseline roles, evidence, comparability, counterpoints, and manuscript anchors; status_counts={comparison_protocol_counts}; needs_revision_count={comparison_protocol_revisions}.",
             "next_action": "Rerun analyze_comparison_protocol_audit.py after changing baseline claims, evidence matrices, counterpoint wording, or comparison-scope text.",
+        },
+        {
+            "item": "ROS reproduction gap audit",
+            "status": "pass"
+            if ROS_GAP_ANALYSIS.exists()
+            and ROS_GAP_SUMMARY.exists()
+            and ROS_GAP_MANIFEST.exists()
+            and ROS_GAP_TABLE.exists()
+            and ros_gap_revisions == 0
+            and not ros_gap_fully_reproduced
+            and ros_gap_boundary_explicit
+            else "needs revision",
+            "evidence": f"ROS gap audit separates verified ROS-style LUT proxy evidence from full official ROS reproduction; rows={ros_gap_rows}; status_counts={ros_gap_counts}; coverage_counts={ros_gap_coverage}; official_ros_fully_reproduced={ros_gap_fully_reproduced}; full_ros_boundary_is_explicit={ros_gap_boundary_explicit}; needs_revision_count={ros_gap_revisions}.",
+            "next_action": "Rerun analyze_ros_lut_line_sensitivity.py and analyze_ros_reproduction_gap_audit.py after changing ROS-style LUT proxy results, line-sensitivity rows, or ROS/full-tool reproduction wording.",
         },
         {
             "item": "Search-control baseline audit",
@@ -539,6 +574,18 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Editorial screening audit checks scope, novelty, comparison route, counterpoints, AI-claim boundary, large-scale verification boundary, reproducibility path, author/venue gate, and editor reading path; rows={editorial_screening_rows}; status_counts={editorial_screening_counts}; needs_revision_count={editorial_screening_revisions}.",
             "next_action": "Rerun analyze_editorial_screening_audit.py after changing editor/reviewer briefs, claim-scope text, comparison protocol, metadata closure, or submission support docs.",
+        },
+        {
+            "item": "Submission support packet audit",
+            "status": "pass"
+            if SUPPORT_PACKET_ANALYSIS.exists()
+            and SUPPORT_PACKET_SUMMARY.exists()
+            and SUPPORT_PACKET_MANIFEST.exists()
+            and SUPPORT_PACKET_TABLE.exists()
+            and support_packet_revisions == 0
+            else "needs revision",
+            "evidence": f"Support packet audit checks cover letter, declarations, target-venue brief, checklist, handoff, private-preview gate, anonymous-review fork, and editor/reviewer triage; rows={support_packet_rows}; status_counts={support_packet_counts}; needs_revision_count={support_packet_revisions}.",
+            "next_action": "Rerun analyze_submission_support_packet_audit.py after changing cover letter, declarations, venue brief, upload checklist, handoff docs, metadata template, or editor/reviewer support docs.",
         },
         {
             "item": "Submission metadata audit",

@@ -61,6 +61,13 @@ COMPARISON_PROTOCOL_PATHS = {
     "results/analysis_paired_statistical_evidence.md",
     "results/analysis_multimetric_pareto_tradeoff.md",
 }
+ROS_GAP_PATHS = {
+    "analyze_ros_reproduction_gap_audit.py",
+    "results/analysis_ros_reproduction_gap_audit.md",
+    "results/summary_ros_reproduction_gap_audit.csv",
+    "results/manifest_ros_reproduction_gap_audit.json",
+    "paper_latex/tables/ros_reproduction_gap_audit.tex",
+}
 HEADLINE_NUMERIC_PATHS = {
     "analyze_headline_numeric_consistency.py",
     "results/analysis_headline_numeric_consistency.md",
@@ -79,6 +86,13 @@ EDITORIAL_SCREENING_PATHS = {
     "results/summary_editorial_screening_audit.csv",
     "results/manifest_editorial_screening_audit.json",
     "paper_latex/tables/editorial_screening_audit.tex",
+}
+SUPPORT_PACKET_PATHS = {
+    "analyze_submission_support_packet_audit.py",
+    "results/analysis_submission_support_packet_audit.md",
+    "results/summary_submission_support_packet_audit.csv",
+    "results/manifest_submission_support_packet_audit.json",
+    "paper_latex/tables/submission_support_packet_audit.tex",
 }
 AUTHOR_INPUT_CLOSURE_PATHS = {
     "analyze_author_input_closure_audit.py",
@@ -245,6 +259,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    ros_gap_missing = sorted(ROS_GAP_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload ROS reproduction-boundary evidence",
+            "pass" if not ros_gap_missing else "needs revision",
+            f"ros_gap_files={len(ROS_GAP_PATHS)}; missing={ros_gap_missing or 'none'}.",
+            "Ensure the uploadable archive includes the ROS reproduction gap audit script, generated evidence, and support table.",
+        )
+    )
+
     headline_missing = sorted(HEADLINE_NUMERIC_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -272,6 +296,16 @@ def build_rows() -> list[dict[str, str]]:
             "pass" if not editorial_missing else "needs revision",
             f"editorial_screening_files={len(EDITORIAL_SCREENING_PATHS)}; missing={editorial_missing or 'none'}.",
             "Ensure the uploadable archive includes the editorial screening audit script, generated evidence, and support table.",
+        )
+    )
+
+    support_packet_missing = sorted(SUPPORT_PACKET_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload support packet evidence",
+            "pass" if not support_packet_missing else "needs revision",
+            f"support_packet_files={len(SUPPORT_PACKET_PATHS)}; missing={support_packet_missing or 'none'}.",
+            "Ensure the uploadable archive includes the support packet audit script, generated evidence, and support table.",
         )
     )
 
@@ -397,9 +431,11 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "required_payload_paths": sorted(REQUIRED_PAYLOAD_PATHS),
         "reviewer_entrypoint_paths": sorted(REVIEWER_ENTRYPOINT_PATHS),
         "comparison_protocol_paths": sorted(COMPARISON_PROTOCOL_PATHS),
+        "ros_gap_paths": sorted(ROS_GAP_PATHS),
         "headline_numeric_paths": sorted(HEADLINE_NUMERIC_PATHS),
         "citation_support_paths": sorted(CITATION_SUPPORT_PATHS),
         "editorial_screening_paths": sorted(EDITORIAL_SCREENING_PATHS),
+        "support_packet_paths": sorted(SUPPORT_PACKET_PATHS),
         "author_input_closure_paths": sorted(AUTHOR_INPUT_CLOSURE_PATHS),
         "payload_extraction_smoke_paths": sorted(PAYLOAD_EXTRACTION_SMOKE_PATHS),
         "payload_verifier_smoke_paths": sorted(PAYLOAD_VERIFIER_SMOKE_PATHS),

@@ -80,21 +80,28 @@
     "submission_package/reviewer_concern_brief.md",
     "submission_package/target_venue_brief.md"
   ],
+  "ros_gap_paths": [
+    "analyze_ros_reproduction_gap_audit.py",
+    "paper_latex/tables/ros_reproduction_gap_audit.tex",
+    "results/analysis_ros_reproduction_gap_audit.md",
+    "results/manifest_ros_reproduction_gap_audit.json",
+    "results/summary_ros_reproduction_gap_audit.csv"
+  ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=894; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=904; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=894; archive_files=894; missing=none; extra=none.",
+      "evidence": "manifest_files=904; archive_files=904; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=894; mismatches=none.",
+      "evidence": "checked=904; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -124,6 +131,12 @@
       "status": "pass"
     },
     {
+      "evidence": "ros_gap_files=5; missing=none.",
+      "item": "Payload ROS reproduction-boundary evidence",
+      "next_action": "Ensure the uploadable archive includes the ROS reproduction gap audit script, generated evidence, and support table.",
+      "status": "pass"
+    },
+    {
       "evidence": "headline_numeric_files=4; missing=none.",
       "item": "Payload headline numeric evidence",
       "next_action": "Ensure the uploadable archive includes the headline numeric audit script and generated CSV/Markdown/JSON evidence.",
@@ -139,6 +152,12 @@
       "evidence": "editorial_screening_files=5; missing=none.",
       "item": "Payload editorial screening evidence",
       "next_action": "Ensure the uploadable archive includes the editorial screening audit script, generated evidence, and support table.",
+      "status": "pass"
+    },
+    {
+      "evidence": "support_packet_files=5; missing=none.",
+      "item": "Payload support packet evidence",
+      "next_action": "Ensure the uploadable archive includes the support packet audit script, generated evidence, and support table.",
       "status": "pass"
     },
     {
@@ -172,7 +191,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=894; metadata_issues=none.",
+      "evidence": "members_checked=904; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -180,6 +199,13 @@
   ],
   "script": "analyze_payload_roundtrip_audit.py",
   "status_counts": {
-    "pass": 16
-  }
+    "pass": 18
+  },
+  "support_packet_paths": [
+    "analyze_submission_support_packet_audit.py",
+    "paper_latex/tables/submission_support_packet_audit.tex",
+    "results/analysis_submission_support_packet_audit.md",
+    "results/manifest_submission_support_packet_audit.json",
+    "results/summary_submission_support_packet_audit.csv"
+  ]
 }

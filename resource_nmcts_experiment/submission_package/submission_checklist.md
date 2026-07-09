@@ -40,7 +40,9 @@ Use this checklist immediately before uploading the manuscript.
 - Terminal package verifier: `results/analysis_submission_package_verifier.md`
 - Claim-scope lint: `results/analysis_claim_scope_lint.md`
 - Comparison protocol audit: `results/analysis_comparison_protocol_audit.md`
+- ROS reproduction gap audit: `results/analysis_ros_reproduction_gap_audit.md`
 - Editorial screening audit: `results/analysis_editorial_screening_audit.md`
+- Submission support packet audit: `results/analysis_submission_support_packet_audit.md`
 - Citation support audit: `results/analysis_citation_support_audit.md`
 - Headline numeric consistency audit: `results/analysis_headline_numeric_consistency.md`
 - Figure asset audit: `results/analysis_figure_asset_audit.md`
@@ -86,7 +88,9 @@ Run these from `resource_nmcts_experiment/`:
   analyze_submission_archive_manifest.py \
   analyze_claim_scope_lint.py \
   analyze_comparison_protocol_audit.py \
+  analyze_ros_reproduction_gap_audit.py \
   analyze_editorial_screening_audit.py \
+  analyze_submission_support_packet_audit.py \
   analyze_citation_support_audit.py \
   analyze_headline_numeric_consistency.py \
   analyze_figure_asset_audit.py \
@@ -121,13 +125,15 @@ Expected current state:
 
 - Archive manifest: all payload groups complete.
 - Payload archive: tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.
-- Payload round-trip audit: archive contents match manifest paths and hashes, required files, reviewer entrypoints, comparison-protocol evidence files, editorial-screening evidence files, citation-support evidence files, author-input closure evidence files, source/path privacy audit code, and headline-numeric evidence files are present, private files are absent, and tar metadata is deterministic.
-- Payload extraction smoke audit: the upload tarball extracts safely and runs comparison protocol, editorial screening, citation support, source/path privacy, author-input closure, headline numeric consistency, claim-scope lint, and artifact-rerun registry checks from the extracted tree.
+- Payload round-trip audit: archive contents match manifest paths and hashes, required files, reviewer entrypoints, comparison-protocol evidence files, ROS reproduction-boundary evidence files, editorial-screening evidence files, support-packet evidence files, citation-support evidence files, author-input closure evidence files, source/path privacy audit code, and headline-numeric evidence files are present, private files are absent, and tar metadata is deterministic.
+- Payload extraction smoke audit: the upload tarball extracts safely and runs comparison protocol, ROS reproduction gap, editorial screening, support-packet, citation support, source/path privacy, author-input closure, headline numeric consistency, claim-scope lint, and artifact-rerun registry checks from the extracted tree.
 - Payload verifier smoke audit: the upload tarball extracts safely and `verify_submission_package.sh` passes from inside the extracted payload tree.
 - Payload LaTeX compile audit: the upload tarball extracts safely and rebuilds both author and anonymous PDFs from the extracted LaTeX source tree.
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
 - Comparison protocol audit: all baseline layers have role, evidence, comparability, counterpoint, artifact, and manuscript-anchor coverage.
+- ROS reproduction gap audit: ROS-style LUT and line-sensitivity are proxy evidence; the official ROS SAT garbage-management component is not reproduced and must not be claimed.
 - Editorial screening audit: scope, novelty, comparison route, negative-result visibility, AI-boundary, large-scale boundary, reproducibility path, and author/venue gate all pass.
+- Submission support packet audit: cover letter, declarations, target-venue brief, checklist, handoff, private-preview gate, anonymous-review fork, and editor/reviewer triage all pass.
 - Citation support audit: related-work families, cited BibTeX keys, bibliography entries, and DOI/URL/eprint locators are all closed.
 - Headline numeric consistency audit: all abstract-level numbers match generated CSV evidence and both author/anonymous TeX sources.
 - Figure asset audit: every manuscript figure has generated PDF/PNG/SVG assets and non-empty source-data CSV.
@@ -153,6 +159,7 @@ Expected current state:
 
 - Do not claim hardware mapping, routing, native-gate scheduling, or noise-aware compilation.
 - Do not claim universal dominance over SSHR, CirKit, RevKit, or all CNOT/depth/ancilla metrics.
+- Keep ROS-style LUT results framed as proxy evidence; `analysis_ros_reproduction_gap_audit.md` must show zero `needs revision` rows before upload.
 - Keep RevKit `oracle_synth` framed as a phase/Rz lower-bound or sensitivity probe, not a final Clifford+T comparison.
 - Keep learned-control claims bounded: neural controls contribute measurable guarded or pruning gains, but the largest gains come from the algebraic action space and guarded portfolio search.
 

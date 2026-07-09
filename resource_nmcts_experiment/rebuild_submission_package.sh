@@ -30,6 +30,15 @@ run_py analyze_baseline_comparability_audit.py
 run_py analyze_counterpoint_claim_boundary.py
 run_py analyze_comparison_protocol_audit.py
 run_py analyze_claim_scope_lint.py
+echo "==> ${PYTHON_BIN} analyze_ros_lut_line_sensitivity.py"
+"$PYTHON_BIN" analyze_ros_lut_line_sensitivity.py \
+  --internal results/raw_traditional_resource.csv \
+  --internal results/raw_highdim_resource.csv \
+  --internal results/raw_highdim_scale_resource.csv \
+  --internal results/raw_ultra_highdim_resource.csv \
+  --internal results/raw_mega_highdim_resource.csv \
+  --ancilla-weights 10,25
+run_py analyze_ros_reproduction_gap_audit.py
 run_py analyze_paired_statistical_evidence.py
 run_py analyze_paired_effect_uncertainty.py
 run_py analyze_multimetric_pareto_tradeoff.py
@@ -70,6 +79,7 @@ run_py analyze_pdf_metadata_audit.py
 run_py analyze_goal_completion_audit.py
 run_py analyze_submission_metadata_closure_path.py
 run_py analyze_editorial_screening_audit.py
+run_py analyze_submission_support_packet_audit.py
 run_py make_submission_payload_archive.py
 run_py analyze_latex_dependency_audit.py
 run_py analyze_payload_roundtrip_audit.py

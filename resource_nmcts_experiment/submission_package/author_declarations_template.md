@@ -15,6 +15,10 @@ The rebuild also runs `validate_submission_metadata.py` to check common format
 and consistency issues without exposing private values in tracked files.
 `analyze_anonymous_review_readiness.py` separately flags whether the selected
 venue requires an anonymous manuscript copy or anonymous artifact links.
+Set `target_venue.anonymous_review_required` before upload.  The current main
+manuscript remains author-labeled; if the selected venue requires double-blind
+review, use the generated anonymous draft and replace repository-relative
+availability links with anonymous review links.
 
 Use `AUTHOR_INPUT_REQUIRED.md` as the final author-side checklist before
 upload.

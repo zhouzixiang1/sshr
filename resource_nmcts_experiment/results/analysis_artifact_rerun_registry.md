@@ -4,18 +4,20 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 
 ## Status counts
 
-- complete: 16
+- complete: 18
 - unique raw files covered by registry: 144
 - unique raw CSV rows covered by registry: 55308
 
 | evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |
 |---|---|---:|---:|---:|---|---|
-| Lightweight paper-facing rebuild | quick rebuild | 0 | 0 | 10 | complete | Python, latexmk, and existing raw artifacts; does not rerun raw sweeps or external probes. |
+| Lightweight paper-facing rebuild | quick rebuild | 0 | 0 | 11 | complete | Python, latexmk, and existing raw artifacts; does not rerun raw sweeps or external probes. |
 | Submission metadata closure path | quick metadata audit | 0 | 0 | 1 | complete | Does not require private author metadata; filled metadata remains ignored and untracked until author approval. |
 | Editorial screening and reviewer-risk support | quick submission-support audit | 0 | 0 | 1 | complete | Does not change scientific results; checks public submission-support consistency against existing audit outputs. |
+| Cover-letter and venue support packet | quick submission-support audit | 0 | 0 | 1 | complete | Does not choose a venue or fill private metadata; checks public upload-support consistency against existing audits. |
 | Traditional logical baselines | raw Python rerun | 4 | 4071 | 4 | complete | Python rerun; ILP-based subbaselines need Gurobi where enabled. |
 | External logical baseline extension | raw Python plus optional solvers | 3 | 2049 | 3 | complete | Python with optional Gurobi/logic-tool components; rows with skips/errors remain explicit. |
 | ROS-style LUT proxy | raw proxy rerun | 3 | 2472 | 2 | complete | Proxy-level LUT analysis only; not a full ROS SAT garbage-management rerun. |
+| ROS reproduction boundary audit | quick audit | 3 | 2472 | 3 | complete | Checks scope and evidence boundaries; it deliberately records that full official ROS is not reproduced. |
 | mockturtle KLUT-to-XAG probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded mockturtle checkout/header path; still a logical proxy, not reversible mapping. |
 | CirKit AIG/MC probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded CirKit executable/commit; results are logical estimates, not hardware mapping. |
 | RevKit exact and Rz probes | external toolchain rerun | 5 | 3194 | 5 | complete | Requires RevKit CLI/API availability; Rz rows are phase/sensitivity probes, not final Clifford+T decomposition. |
@@ -41,6 +43,10 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - claim use: Verifies that the editor/reviewer support package exposes scope, novelty, comparison, counterpoint, AI, scale, reproducibility, and author-gate boundaries.
   - scripts: `analyze_editorial_screening_audit.py`
   - representative raw: not applicable for this tier
+- **Cover-letter and venue support packet**
+  - claim use: Verifies that cover letter, declarations, venue brief, upload checklist, and handoff docs preserve claim boundaries and author-gated metadata.
+  - scripts: `analyze_submission_support_packet_audit.py`
+  - representative raw: not applicable for this tier
 - **Traditional logical baselines**
   - claim use: Primary n<=6 same-task resource comparison against direct, AND-direct, ESOP, SSHR, affine, MCTS, and Pareto variants.
   - scripts: `run_experiments.py`
@@ -52,6 +58,10 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 - **ROS-style LUT proxy**
   - claim use: Tests whether the score advantage survives LUT-style oracle-synthesis proxies and line-aware reselection.
   - scripts: `run_ros_lut_proxy.py; analyze_ros_lut_line_sensitivity.py`
+  - representative raw: `results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; results/raw_ros_lut_proxy_sweep.csv`
+- **ROS reproduction boundary audit**
+  - claim use: Makes the distinction between ROS-style proxy evidence and unreproduced full ROS/SAT garbage management machine-checkable.
+  - scripts: `analyze_ros_reproduction_gap_audit.py`
   - representative raw: `results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; results/raw_ros_lut_proxy_sweep.csv`
 - **mockturtle KLUT-to-XAG probe**
   - claim use: Official-header XAG resynthesis probe for external logic-network comparison.

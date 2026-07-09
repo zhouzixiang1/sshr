@@ -1,0 +1,14 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.28\linewidth}}
+\toprule
+ROS-facing element & Coverage & Current evidence & Boundary \\
+\midrule
+ROS literature and task anchor & covered & The manuscript and bibliography cite ROS and frame the current study as logical-layer Boolean-oracle synthesis. & This citation anchor alone does not reproduce the ROS implementation. \\
+Verified LUT K-sweep proxy & partial & The project runs an ABC if -K sweep for K=3,4,5, verifies each mapped BLIF truth table, and selects the best K per function. & The proxy is not the official ROS mapper or reversible implementation flow. \\
+Line and garbage-pressure sensitivity & partial & The line-sensitivity audit reselects the verified LUT sweep under min-ancilla and line-weighted objectives. & This is not SAT garbage management and cannot be called a full ROS reproduction. \\
+Official ROS SAT garbage management & not reproduced & The manuscript, README, and line-sensitivity audit explicitly mark SAT garbage management as not reproduced. & No result may be described as beating or reproducing full ROS with SAT garbage management. \\
+Reversible emission and exact-oracle counterpoint & partial & Legacy RevKit CLI probes synthesize exact oracle permutations and serve as a separate reversible-synthesis counterpoint. & The RevKit CLI probe is not the ROS hierarchical LUT plus SAT garbage-management flow. \\
+External toolchain availability boundary & covered & Toolchain readiness records ABC, mockturtle, CirKit, RevKit API, and legacy RevKit/CirKit availability and separates them from full ROS. & Tool availability is not the same as official ROS reproduction. \\
+Claim wording and comparison protocol & covered & Claim matrix, comparison protocol, claim-scope lint, and manuscript limitations state the ROS boundary. & The current evidence cannot support a full-ROS or hardware-mapped dominance statement. \\
+Reviewer-facing support visibility & covered & The submission package exposes the ROS-style proxy command and states that full ROS SAT garbage management is not included. & Support-package visibility does not add a new official ROS experiment. \\
+\bottomrule
+\end{tabularx}

@@ -123,5 +123,6 @@ Selected rows: 1236.
 ## Interpretation
 
 - The line-aware selectors usually move toward larger K because larger LUTs reduce the number of intermediate nodes.
+- The min-ancilla selector explicitly reselects each LUT sweep group by peak ancilla before score.
 - These selectors make the LUT proxy more ancilla-sensitive, but they still do not implement ROS SAT garbage management.
 - Resource-NMCTS comparisons should therefore be framed as robustness to line-aware LUT proxy choices, not as a full official ROS reproduction.

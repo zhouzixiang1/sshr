@@ -65,8 +65,12 @@ After the quick rebuild, the current package should report:
 - readiness state in `results/analysis_submission_readiness_audit.md`
 - comparison protocol state in
   `results/analysis_comparison_protocol_audit.md`
+- ROS reproduction-boundary state in
+  `results/analysis_ros_reproduction_gap_audit.md`
 - editorial screening state in
   `results/analysis_editorial_screening_audit.md`
+- support packet state in
+  `results/analysis_submission_support_packet_audit.md`
 - citation support state in
   `results/analysis_citation_support_audit.md`
 - author-input closure state in
@@ -105,7 +109,9 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_extraction_smoke_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_verifier_smoke_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_latex_compile_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_ros_reproduction_gap_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_editorial_screening_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_support_packet_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_citation_support_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_author_input_closure_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_headline_numeric_consistency.py
@@ -119,6 +125,7 @@ rg -n "Warning|Overfull|Underfull|LaTeX Error|Undefined|Rerun" \
   paper_latex/resource_nmcts_submission_v1.log
 rg -n "needs author input|pass:|file count|archive sha256|Submission support" \
   results/analysis_submission_readiness_audit.md \
+  results/analysis_submission_support_packet_audit.md \
   results/analysis_submission_payload_archive.md \
   results/analysis_submission_archive_manifest.md
 ```
@@ -190,6 +197,7 @@ manifest coverage, rerun tier, and dependency boundary.
 - Core traditional resource experiments: `run_experiments.py`
 - External baseline aggregation: `run_external_baselines.py`
 - ROS-style LUT proxy: `run_ros_lut_proxy.py`
+- ROS reproduction-boundary audit: `analyze_ros_reproduction_gap_audit.py`
 - mockturtle KLUT-to-XAG probe: `run_mockturtle_xag_probe.py`
 - CirKit AIG/MC probe: `run_cirkit_aig_probe.py`
 - RevKit CLI probe: `run_revkit_cli_probe.py`

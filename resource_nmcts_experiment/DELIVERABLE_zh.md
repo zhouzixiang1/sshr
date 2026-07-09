@@ -268,7 +268,7 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/analysis_pdf_metadata_audit.md`
 - `results/manifest_pdf_metadata_audit.json`
 
-该审计调用 Poppler `pdfinfo` 检查作者版和匿名版投稿 PDF 的 Title/Author/Creator/Producer 等元数据、页数、A4 页面尺寸、加密状态、JavaScript、Form 字段和隐私敏感字符串。当前作者版和匿名版均为 27 页、未加密、无 JavaScript、A4，metadata 中没有作者身份、路径、TODO/TBD/placeholder 或 `AUTHOR INPUT REQUIRED` 泄漏。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；与 visual/text 审计一样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包。
+该审计调用 Poppler `pdfinfo` 检查作者版和匿名版投稿 PDF 的 Title/Author/Creator/Producer 等元数据、页数、A4 页面尺寸、加密状态、JavaScript、Form 字段和隐私敏感字符串。当前作者版和匿名版均为 28 页、未加密、无 JavaScript、A4，metadata 中没有作者身份、路径、TODO/TBD/placeholder 或 `AUTHOR INPUT REQUIRED` 泄漏。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；与 visual/text 审计一样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包。
 
 本轮新增 source/path privacy audit，把源码和 payload 中的本机路径分成“严格禁止”和“可复现 provenance”两类：
 
@@ -277,7 +277,7 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/analysis_source_path_privacy_audit.md`
 - `results/manifest_source_path_privacy_audit.json`
 
-该审计检查主稿/匿名稿 TeX、`references.bib`、生成表格输入和 11 个公开 submission support Markdown/JSON 文件中是否出现 `/Users/...`、`Desktop/tzb` 或旧 `claude` 路径；同时检查匿名稿 source 是否保留 `Anonymous Authors` 且不含 `Zixiang Zhou` 作者字段，payload manifest 中是否混入 private metadata/previews。当前严格区为 0 个本机路径、0 个旧 `claude` 路径、0 个私有 payload 成员；主稿/匿名稿、bibliography 和表格输入共 159 个文件通过严格检查；payload 的 852 个文本文件中有 53 个文件含本机路径、213 个路径命中，均归类为 `results/`、`README.md` 或 `DELIVERABLE_zh.md` 中的工具链/实验 provenance，而不是主稿或投稿支持文件泄漏。该审计已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke。
+该审计检查主稿/匿名稿 TeX、`references.bib`、生成表格输入和 11 个公开 submission support Markdown/JSON 文件中是否出现 `/Users/...`、`Desktop/tzb` 或旧 `claude` 路径；同时检查匿名稿 source 是否保留 `Anonymous Authors` 且不含 `Zixiang Zhou` 作者字段，payload manifest 中是否混入 private metadata/previews。当前严格区为 0 个本机路径、0 个旧 `claude` 路径、0 个私有 payload 成员；主稿/匿名稿、bibliography 和表格输入共 161 个文件通过严格检查；payload 的 862 个文本文件中有 53 个文件含本机路径、213 个路径命中，均归类为 `results/`、`README.md` 或 `DELIVERABLE_zh.md` 中的工具链/实验 provenance，而不是主稿或投稿支持文件泄漏。该审计已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke。
 
 本轮新增投稿完整性层：英文投稿稿末尾加入 `Data and Code Availability`，明确代码、raw/summary CSV、manifest、LaTeX 表、图源数据和 PDF 均位于 `resource_nmcts_experiment/` artifact package，运行入口为 `run_*.py`、`train_*.py`、`analyze_*.py`，环境为 `mcts-qoracle` 和直接解释器路径 `/opt/anaconda3/envs/mcts-qoracle/bin/python`。同时新增自动 submission-readiness audit：
 
@@ -293,9 +293,9 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/manifest_editorial_screening_audit.json`
 - `paper_latex/tables/editorial_screening_audit.tex`
 
-该审计逐项检查 logical-layer scope、novelty/comparison route、counterpoint/negative-result visibility、AI/MCTS claim boundary、large-scale verification boundary、reproducibility path、author/venue gate 和 editorial reading path。当前 8/8 项 pass；它已接入 rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke 和 artifact rerun registry。artifact registry 现在覆盖 16 个 evidence family、144 个 raw CSV、55308 行 raw CSV。
+该审计逐项检查 logical-layer scope、novelty/comparison route、counterpoint/negative-result visibility、AI/MCTS claim boundary、large-scale verification boundary、reproducibility path、author/venue gate 和 editorial reading path。当前 8/8 项 pass；它已接入 rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke 和 artifact rerun registry。artifact registry 现在覆盖 18 个 evidence family、144 个 raw CSV、55308 行 raw CSV。
 
-当前 submission-readiness 审计结果为 44 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、baseline fairness/scope、comparison/search-control/citation/editorial screening audits、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、uploadable payload archive、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder、compiled PDF 和 payload smoke/compile/verifier 检查。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
+当前 submission-readiness 审计结果为 46 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、baseline fairness/scope、comparison/search-control/citation/editorial screening/ROS reproduction-boundary/submission support-packet audits、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、uploadable payload archive、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder、compiled PDF 和 payload smoke/compile/verifier 检查。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
 
 ## 2. 当前已完成内容
 
@@ -1634,6 +1634,26 @@ pairwise-wide 主要改善“根动作排序”，但 headroom 只有 0.1%--0.2%
 - min-ancilla 选择器确实把 LUT proxy 的平均 peak ancilla 从 best-score 选择进一步压低，但代价是自身 score 明显变差。
 - Resource/Pareto 对 line-aware 和 min-ancilla 选择仍保持 309/0/0 score 胜出，因此 LUT proxy 的结论对 K 选择和辅助线压力是稳健的。
 - 该结果应写成“ROS-style LUT proxy sensitivity”，不能写成“官方 ROS 已被复现”。
+
+### 2.12.2 ROS reproduction gap audit：把 proxy 边界机器检查化
+
+本轮新增 `analyze_ros_reproduction_gap_audit.py`，不新增性能数字，而是把“当前到底复现了 ROS 的哪一部分、哪一部分只是 proxy、哪一部分没有复现”做成可机器检查的投稿包审计。
+
+主要产物：
+
+- `analyze_ros_reproduction_gap_audit.py`
+- `results/summary_ros_reproduction_gap_audit.csv`
+- `results/analysis_ros_reproduction_gap_audit.md`
+- `results/manifest_ros_reproduction_gap_audit.json`
+- `paper_latex/tables/ros_reproduction_gap_audit.tex`
+
+审计口径：
+
+- `covered`：ROS 文献/task anchor、外部工具链 availability、claim wording 和 reviewer-facing support 已覆盖。
+- `partial`：ABC `K=3,4,5` LUT sweep、line-aware LUT reselection、legacy RevKit exact-oracle counterpoint 只覆盖 ROS-facing 的局部问题。
+- `not reproduced`：官方 ROS 的 SAT garbage management/full ROS flow 仍未复现。
+
+该审计的目标不是把未复现项包装成完成，而是防止投稿时把 ROS-style LUT proxy 写成 full ROS 复现。它已接入 rebuild、verify、payload round-trip、payload extraction smoke、readiness 和 terminal package verifier。
 
 ## 3. 当前文件交付清单
 

@@ -1,0 +1,20 @@
+# Submission Support Packet Audit
+
+This audit checks the public cover-letter, declaration, venue, checklist, handoff, and editor/reviewer support packet before final author metadata is filled.
+
+## Status counts
+
+- pass: 8
+
+## Packet Matrix
+
+| item | status | upload risk | evidence | supported use | boundary |
+|---|---|---|---|---|---|
+| Cover letter preserves logical-layer scope | pass | Cover-letter prose could accidentally frame the paper as a hardware compiler. | files_missing=none; tokens=4/4; missing_tokens=none; manifest=results/manifest_claim_scope_lint.json::unresolved_count=0 | The cover letter can introduce the manuscript without overclaiming hardware mapping or physical execution. | The cover letter still needs author, editor, reviewer, and prior-dissemination fields before upload. |
+| Cover letter exposes the comparison envelope | pass | Editor may see only a narrow SSHR comparison or miss external-toolchain evidence. | files_missing=none; tokens=7/7; missing_tokens=none; manifest=results/manifest_comparison_protocol_audit.json::needs_revision_count=0 | The cover letter summarizes layered baselines and directs editors to the comparison evidence. | It should not be read as universal dominance over every synthesis or compilation method. |
+| Author declarations keep private fields explicit | pass | Declarations could be mistaken as complete or private author metadata could be committed. | files_missing=none; tokens=7/7; missing_tokens=none; manifest=results/manifest_submission_metadata_closure_path.json::needs_revision_count=0 | The declarations packet is a structured intake path rather than a hidden or implicit author task. | Final authorship, funding, conflicts, archive links, and AI disclosure remain human-gated. |
+| Venue policy gate is visible before upload | pass | Target venue style, anonymous review, AI disclosure, or archive policy could be missed. | files_missing=none; tokens=8/8; missing_tokens=none; manifest=results/manifest_submission_metadata_closure_path.json::closure_path_ready=True | The venue-choice step is concrete enough for the author to fill the private metadata file. | The audit does not choose the journal; it only checks that the choice is explicit and policy-gated. |
+| Private preview path remains safe | pass | Generated cover-letter/declaration previews could leak private metadata into Git or the payload. | files_missing=none; tokens=5/5; missing_tokens=none; manifest=results/manifest_submission_text_preview.json::private_outputs_are_git_ignored=True | Authors can generate private submission-system text after filling metadata without committing it. | Tracked audit outputs remain public and redacted; private generated Markdown files stay ignored. |
+| Anonymous-review fork is not conflated with author version | pass | A double-blind venue could receive author-labeled material or non-anonymous links. | files_missing=none; tokens=4/4; missing_tokens=none; manifest=results/manifest_anonymous_review_readiness.json::needs_revision_count=0 | The support packet separates the current author-labeled manuscript from the venue-dependent anonymous path. | Anonymous-review policy and anonymous archive links still require target-venue input. |
+| Editor and reviewer triage is aligned | pass | Cover letter, editor brief, and reviewer brief could emphasize different claims or boundaries. | files_missing=none; tokens=5/5; missing_tokens=none; manifest=results/manifest_editorial_screening_audit.json::needs_revision_count=0 | The editor-facing and reviewer-facing triage path points to the same bounded evidence package. | Triage briefs are navigation aids, not acceptance guarantees. |
+| Upload checklist cites terminal verifiers | pass | Final upload could skip the one-command package verifier or the support-packet audit. | files_missing=none; tokens=4/4; missing_tokens=none; manifest=not_applicable | The public handoff points authors to the same terminal checks used by the repository. | The checklist cannot replace final venue-system proof review. |

@@ -7,6 +7,8 @@ compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, comparison-protocol coverage,
 search-control baseline coverage,
 editorial screening support,
+submission support packet coverage,
+ROS reproduction-boundary support,
 citation support,
 headline-numeric consistency,
 figure-asset coverage,
@@ -52,8 +54,10 @@ PAYLOAD_SUMMARY = RESULTS / "summary_submission_payload_archive.csv"
 PAYLOAD_MANIFEST = RESULTS / "manifest_submission_payload_archive.json"
 CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
 COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.json"
+ROS_GAP_MANIFEST = RESULTS / "manifest_ros_reproduction_gap_audit.json"
 SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
 EDITORIAL_SCREENING_MANIFEST = RESULTS / "manifest_editorial_screening_audit.json"
+SUPPORT_PACKET_MANIFEST = RESULTS / "manifest_submission_support_packet_audit.json"
 CITATION_SUPPORT_MANIFEST = RESULTS / "manifest_citation_support_audit.json"
 HEADLINE_NUMERIC_MANIFEST = RESULTS / "manifest_headline_numeric_consistency.json"
 FIGURE_ASSET_MANIFEST = RESULTS / "manifest_figure_asset_audit.json"
@@ -263,6 +267,23 @@ def verify_comparison_protocol() -> dict[str, str]:
     )
 
 
+def verify_ros_gap() -> dict[str, str]:
+    manifest = read_json(ROS_GAP_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    coverage = manifest.get("coverage_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    full_ros = manifest.get("official_ros_fully_reproduced", "missing") if manifest else "missing"
+    boundary_explicit = bool(manifest.get("full_ros_boundary_is_explicit", False)) if manifest else False
+    status = "pass" if manifest and revisions == 0 and full_ros is False and boundary_explicit else "needs revision"
+    return row(
+        "ROS reproduction gap audit",
+        status,
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; coverage_counts={coverage}; official_ros_fully_reproduced={full_ros}; full_ros_boundary_is_explicit={boundary_explicit}.",
+        "Run analyze_ros_lut_line_sensitivity.py and analyze_ros_reproduction_gap_audit.py and restore ROS proxy/full-reproduction boundary anchors.",
+    )
+
+
 def verify_search_control() -> dict[str, str]:
     manifest = read_json(SEARCH_CONTROL_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -288,6 +309,20 @@ def verify_editorial_screening() -> dict[str, str]:
         status,
         f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}.",
         "Run analyze_editorial_screening_audit.py and restore scope, novelty, comparison, counterpoint, AI-boundary, scale-boundary, reproducibility, author-gate, or editor-reading anchors.",
+    )
+
+
+def verify_support_packet() -> dict[str, str]:
+    manifest = read_json(SUPPORT_PACKET_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    status = "pass" if manifest and revisions == 0 else "needs revision"
+    return row(
+        "Submission support packet audit",
+        status,
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}.",
+        "Run analyze_submission_support_packet_audit.py and restore cover-letter, declaration, venue, checklist, handoff, anonymous-review, private-preview, or editor/reviewer support anchors.",
     )
 
 
@@ -716,8 +751,10 @@ def build_rows() -> list[dict[str, str]]:
             verify_registry(),
             verify_claim_scope(),
             verify_comparison_protocol(),
+            verify_ros_gap(),
             verify_search_control(),
             verify_editorial_screening(),
+            verify_support_packet(),
             verify_citation_support(),
             verify_headline_numeric(),
             verify_figure_assets(),

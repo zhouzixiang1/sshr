@@ -1,11 +1,11 @@
 {
   "sweep": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/results/raw_ros_lut_proxy_sweep.csv",
   "internal": [
-    "resource_nmcts_experiment/results/raw_traditional_resource.csv",
-    "resource_nmcts_experiment/results/raw_highdim_resource.csv",
-    "resource_nmcts_experiment/results/raw_highdim_scale_resource.csv",
-    "resource_nmcts_experiment/results/raw_ultra_highdim_resource.csv",
-    "resource_nmcts_experiment/results/raw_mega_highdim_resource.csv"
+    "results/raw_traditional_resource.csv",
+    "results/raw_highdim_resource.csv",
+    "results/raw_highdim_scale_resource.csv",
+    "results/raw_ultra_highdim_resource.csv",
+    "results/raw_mega_highdim_resource.csv"
   ],
   "ancilla_weights": [
     10.0,
@@ -13,6 +13,6 @@
   ],
   "selected_rows": 1236,
   "summary_rows": 100,
-  "elapsed_s": 0.06930088996887207,
+  "elapsed_s": 0.07283282279968262,
   "claim_boundary": "Line-aware ABC LUT proxy sensitivity; not official ROS SAT garbage management."
 }
