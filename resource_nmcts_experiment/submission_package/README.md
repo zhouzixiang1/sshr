@@ -39,6 +39,8 @@ noise modeling, or magic-state-factory accounting.
 - `AUTHOR_MINIMAL_RESPONSE_FORM_zh.md`: shortest Chinese response form for
   collecting the final author/venue answers in one pass before filling the
   ignored private metadata JSON.
+- `LAST_MILE_ACTION_CARD_zh.md`: one-page Chinese action card for the final
+  upload pass after the machine-generated research package is complete.
 - `TARGET_VENUE_POLICY_CHECKLIST_zh.md`: Chinese upload-policy checklist that
   maps ACM TQC, Quantum, and archive/license gates to private metadata fields.
 - `FINAL_SUBMISSION_HANDOFF_zh.md`: Chinese final-upload handoff that turns the
@@ -79,6 +81,11 @@ noise modeling, or magic-state-factory accounting.
   the final author/venue metadata closure path, including safe starter prefill,
   private-file Git protection, validator/preview gates, synthetic rehearsal,
   anonymous-review gate, and handoff document coverage.
+- `../results/analysis_final_upload_sequence_audit.md`: terminal audit that
+  checks the final author-facing upload order from venue selection through
+  private metadata intake, rebuild/verification, private previews,
+  availability-link replacement, comparison-claim boundaries, and the
+  human-only goal gate.
 - `../results/analysis_editorial_screening_audit.md`: audit that checks the
   editor-facing path for scope, novelty, comparison fairness, counterpoints,
   AI-claim boundaries, large-scale verification boundaries, reproducibility,
@@ -168,6 +175,8 @@ Do not infer these fields from the experiment artifacts.  They must be supplied
 by the author or selected target venue.
 
 - Choose the target venue and manuscript type.
+- Read `LAST_MILE_ACTION_CARD_zh.md` first if you want the shortest final
+  execution path from current machine-ready state to real venue upload.
 - Use `FINAL_SUBMISSION_HANDOFF_zh.md` as the final Chinese execution checklist
   if working through the upload process in Chinese.
 - Run `/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_from_answers.py --init-private-answers`

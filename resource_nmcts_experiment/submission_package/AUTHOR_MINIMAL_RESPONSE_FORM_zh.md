@@ -2,6 +2,8 @@
 
 用途：把最终投稿前仍需作者确认的信息压缩成一张可回复清单。请不要把真实私人信息写进 tracked 文件；把答案填入被 Git 忽略的 `submission_package/submission_metadata_answers.json`，再由工具生成私有 `submission_metadata.json`。
 
+如果只想看最终上传前的短路径，先读 `submission_package/LAST_MILE_ACTION_CARD_zh.md`。
+
 推荐流程：
 
 ```bash

@@ -22,6 +22,7 @@ VALIDATOR_SUMMARY = RESULTS / "summary_submission_metadata_validator.csv"
 ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 OUTPUT = SUBMISSION_PACKAGE / "AUTHOR_INPUT_REQUIRED.md"
 MINIMAL_FORM = SUBMISSION_PACKAGE / "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md"
+LAST_MILE_ACTION_CARD = SUBMISSION_PACKAGE / "LAST_MILE_ACTION_CARD_zh.md"
 MANIFEST = RESULTS / "manifest_author_input_packet.json"
 
 
@@ -95,6 +96,8 @@ def write_packet(rows: list[dict[str, str]]) -> None:
         "For the shortest possible reply format, use",
         "`submission_package/AUTHOR_MINIMAL_RESPONSE_FORM_zh.md`; it compresses the same",
         "remaining author/venue gate into ten answer groups.",
+        "For the shortest final execution path after the machine package is ready, use",
+        "`submission_package/LAST_MILE_ACTION_CARD_zh.md`.",
         "For venue-policy checks, use",
         "`submission_package/TARGET_VENUE_POLICY_CHECKLIST_zh.md`; it maps ACM TQC,",
         "Quantum, and archive/license gates to the private metadata fields.",
@@ -136,6 +139,7 @@ def write_packet(rows: list[dict[str, str]]) -> None:
             "## Files To Update After Author Decisions",
             "",
             "- `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md` as the Chinese field-by-field intake guide.",
+            "- `submission_package/LAST_MILE_ACTION_CARD_zh.md` as the one-page final-action card before filling private metadata and uploading.",
             "- `submission_package/TARGET_VENUE_POLICY_CHECKLIST_zh.md` as the venue-policy checklist before filling `target_venue.*` fields.",
             "- `submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md` as the Chinese comparison-role matrix before editing cover-letter, response, or venue-system claim text.",
             "- `submission_package/submission_metadata_answers.json` for the short ignored private answer file generated from `submission_metadata_answers_template.json`.",
@@ -166,6 +170,8 @@ def write_minimal_form() -> None:
         "# 最小作者回复表",
         "",
         "用途：把最终投稿前仍需作者确认的信息压缩成一张可回复清单。请不要把真实私人信息写进 tracked 文件；把答案填入被 Git 忽略的 `submission_package/submission_metadata_answers.json`，再由工具生成私有 `submission_metadata.json`。",
+        "",
+        "如果只想看最终上传前的短路径，先读 `submission_package/LAST_MILE_ACTION_CARD_zh.md`。",
         "",
         "推荐流程：",
         "",

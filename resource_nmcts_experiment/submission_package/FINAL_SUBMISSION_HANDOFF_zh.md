@@ -2,6 +2,7 @@
 
 本文档面向作者本人使用，用来把当前已经完成的研究包推进到真实投稿。它不替代
 `AUTHOR_INPUT_REQUIRED.md`，而是给出推荐执行顺序和检查点。
+如果只想看最后一步短路径，先读 `LAST_MILE_ACTION_CARD_zh.md`。
 
 ## 当前状态
 
@@ -22,10 +23,10 @@
 以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，代表当前公开交接状态：
 
 - PDF pages=50/50
-- readiness=81 pass + 1 needs author input
-- payload_files=1175
+- readiness=82 pass + 1 needs author input
+- payload_files=1177
 - artifact_registry=31 families / 161 raw CSV / 80312 raw rows
-- source_privacy=0 strict leaks / 57 provenance files / 1132 payload text files
+- source_privacy=0 strict leaks / 57 provenance files / 1134 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open

@@ -1,0 +1,19 @@
+# Final Upload Sequence Audit
+
+This terminal audit checks that the author-facing upload sequence is ordered, private where required, and machine-checkable.
+
+## Status counts
+
+- pass: 9
+
+| item | status | evidence | next action |
+|---|---|---|---|
+| Target venue and anonymous-policy first | pass | missing_doc_tokens=none; target_venue_revisions=0; policy_revisions=0; anonymous_counts={'needs author input': 3, 'pass': 3}. | Keep target-venue choice and anonymous-review policy before private metadata generation in the final handoff. |
+| Private short-answer intake path | pass | missing_doc_tokens=none; answer_template_exists=True; minimal_form_exists=True; answer_template_revisions=0; minimal_form_revisions=0. | Keep the short private answer path aligned with the structured metadata template and Chinese minimal response form. |
+| Private metadata write and Git protection | pass | missing_doc_tokens=none; metadata_template_exists=True; closure_path_ready=True; metadata_closure_revisions=0; support_packet_revisions=0. | Do not write or track private author metadata outside the ignored metadata and generated-preview files. |
+| Private preview review path | pass | missing_doc_tokens=none; preview_counts={'needs author input': 1}; private_outputs_are_git_ignored=True. | Review generated private declarations, availability text, cover letter, and submission-system text before upload. |
+| Rebuild and verifier sequence | pass | missing_doc_tokens=none; rebuild_exists=True; verify_exists=True. | Run rebuild before the terminal verifier after author metadata or target-venue decisions change. |
+| Availability and archive-link replacement gate | pass | missing_doc_tokens=none. | Replace repository-relative or placeholder availability text with the target venue's final archive DOI, repository URL, or anonymous review link. |
+| Comparison-claim boundary before cover-letter text | pass | missing_doc_tokens=none. | Keep cover-letter, submission-system, and response text aligned with the comparison handoff before upload. |
+| Goal-closure protection | pass | missing_doc_tokens=none; human_gate_open=True; machine_side_closed=True; final_gate_revisions=0. | Do not mark the full objective complete until author/venue metadata are supplied and final audits pass again. |
+| Final upload sequence ready | pass | All author-facing upload steps are documented, ordered, private where required, and tied to machine-checkable audits. | Resolve the failing rows above before treating the package as ready for author-side upload execution. |

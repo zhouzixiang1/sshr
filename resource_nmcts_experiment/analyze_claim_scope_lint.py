@@ -24,6 +24,7 @@ SCAN_FILES = [
     PAPER,
     SUBMISSION_PACKAGE / "README.md",
     SUBMISSION_PACKAGE / "FINAL_SUBMISSION_HANDOFF_zh.md",
+    SUBMISSION_PACKAGE / "LAST_MILE_ACTION_CARD_zh.md",
     SUBMISSION_PACKAGE / "cover_letter_template.md",
     SUBMISSION_PACKAGE / "artifact_reproduction_guide.md",
     SUBMISSION_PACKAGE / "editor_screening_brief.md",

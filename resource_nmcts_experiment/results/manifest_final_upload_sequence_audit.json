@@ -1,0 +1,38 @@
+{
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_final_upload_sequence_audit.md",
+    "manifest": "results/manifest_final_upload_sequence_audit.json",
+    "summary": "results/summary_final_upload_sequence_audit.csv"
+  },
+  "python": "3.11.15",
+  "rows": 9,
+  "script": "analyze_final_upload_sequence_audit.py",
+  "sequence_ready": true,
+  "source_documents": [
+    "submission_package/FINAL_SUBMISSION_HANDOFF_zh.md",
+    "submission_package/submission_checklist.md",
+    "submission_package/README.md",
+    "submission_package/AUTHOR_INPUT_REQUIRED.md",
+    "submission_package/AUTHOR_MINIMAL_RESPONSE_FORM_zh.md",
+    "submission_package/TARGET_VENUE_POLICY_CHECKLIST_zh.md",
+    "submission_package/target_venue_brief.md",
+    "submission_package/COMPARISON_HANDOFF_zh.md",
+    "submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md"
+  ],
+  "source_manifests": [
+    "results/manifest_target_venue_decision_audit.json",
+    "results/manifest_target_venue_policy_checklist.json",
+    "results/manifest_anonymous_review_readiness.json",
+    "results/manifest_submission_support_packet_audit.json",
+    "results/manifest_author_minimal_form_coverage.json",
+    "results/manifest_metadata_answer_template_coverage.json",
+    "results/manifest_submission_metadata_closure_path.json",
+    "results/manifest_submission_text_preview.json",
+    "results/manifest_final_human_gate_audit.json"
+  ],
+  "status_counts": {
+    "pass": 9
+  },
+  "terminal_audit": true
+}

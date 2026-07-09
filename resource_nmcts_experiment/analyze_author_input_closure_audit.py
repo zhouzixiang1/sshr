@@ -30,6 +30,7 @@ from analyze_submission_metadata_audit import (
 AUTHOR_PACKET = SUBMISSION_PACKAGE / "AUTHOR_INPUT_REQUIRED.md"
 AUTHOR_QUESTIONNAIRE_ZH = SUBMISSION_PACKAGE / "AUTHOR_METADATA_QUESTIONNAIRE_zh.md"
 AUTHOR_MINIMAL_FORM_ZH = SUBMISSION_PACKAGE / "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md"
+LAST_MILE_ACTION_CARD_ZH = SUBMISSION_PACKAGE / "LAST_MILE_ACTION_CARD_zh.md"
 METADATA_ANSWERS_TEMPLATE = SUBMISSION_PACKAGE / "submission_metadata_answers_template.json"
 METADATA_ANSWERS_FILE = SUBMISSION_PACKAGE / "submission_metadata_answers.json"
 FINAL_HANDOFF = SUBMISSION_PACKAGE / "FINAL_SUBMISSION_HANDOFF_zh.md"
@@ -202,18 +203,20 @@ def check_support_document_visibility() -> dict[str, str]:
         COVER_TEMPLATE,
         AUTHOR_QUESTIONNAIRE_ZH,
         AUTHOR_MINIMAL_FORM_ZH,
+        LAST_MILE_ACTION_CARD_ZH,
         TARGET_POLICY_CHECKLIST_ZH,
         METADATA_ANSWERS_TEMPLATE,
     )
     missing_docs = [rel(path) for path in required_docs if not path.exists()]
     tokens = {
-        rel(FINAL_HANDOFF): ("AUTHOR_INPUT_REQUIRED.md", "submission_metadata.json", "needs author input"),
-        rel(README): ("AUTHOR_INPUT_REQUIRED.md", "AUTHOR_METADATA_QUESTIONNAIRE_zh.md", "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md", "submission_metadata.json", "generated private previews"),
-        rel(CHECKLIST): ("Required Author Input", "AUTHOR_METADATA_QUESTIONNAIRE_zh.md", "AUTHOR INPUT REQUIRED", "verify_submission_package.sh"),
+        rel(FINAL_HANDOFF): ("AUTHOR_INPUT_REQUIRED.md", "LAST_MILE_ACTION_CARD_zh.md", "submission_metadata.json", "needs author input"),
+        rel(README): ("AUTHOR_INPUT_REQUIRED.md", "AUTHOR_METADATA_QUESTIONNAIRE_zh.md", "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md", "LAST_MILE_ACTION_CARD_zh.md", "submission_metadata.json", "generated private previews"),
+        rel(CHECKLIST): ("Required Author Input", "AUTHOR_METADATA_QUESTIONNAIRE_zh.md", "LAST_MILE_ACTION_CARD_zh.md", "AUTHOR INPUT REQUIRED", "verify_submission_package.sh"),
         rel(AUTHOR_TEMPLATE): ("AUTHOR INPUT REQUIRED", "Code Availability", "Competing Interests"),
         rel(COVER_TEMPLATE): ("AUTHOR INPUT REQUIRED", "logical-layer", "SSHR"),
         rel(AUTHOR_QUESTIONNAIRE_ZH): ("target_venue.name", "authors[].name", "validate_submission_metadata.py"),
         rel(AUTHOR_MINIMAL_FORM_ZH): ("target_venue.*", "authors[]", "code_availability.*", "validate_submission_metadata.py"),
+        rel(LAST_MILE_ACTION_CARD_ZH): ("最后一步行动卡", "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md", "submission_metadata_answers.json", "verify_submission_package.sh", "does not claim hardware mapping", "not full ROS reproduction"),
         rel(TARGET_POLICY_CHECKLIST_ZH): ("目标期刊政策核对表", "target_venue.ai_disclosure_policy_checked", "data_availability.*", "code_availability.*"),
         rel(METADATA_ANSWERS_TEMPLATE): ("target_venue", "authors", "code_availability", "AUTHOR INPUT REQUIRED"),
     }
@@ -228,7 +231,7 @@ def check_support_document_visibility() -> dict[str, str]:
         "Support document author-gate visibility",
         status,
         f"missing_docs={missing_docs or 'none'}; missing_tokens={missing_tokens or 'none'}.",
-        "Keep README, checklist, handoff, declaration template, cover-letter template, questionnaire, minimal response form, target-venue policy checklist, and answer template aligned with the private metadata workflow.",
+        "Keep README, checklist, handoff, declaration template, cover-letter template, questionnaire, minimal response form, last-mile card, target-venue policy checklist, and answer template aligned with the private metadata workflow.",
     )
 
 

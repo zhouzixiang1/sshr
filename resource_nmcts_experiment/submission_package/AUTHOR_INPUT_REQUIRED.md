@@ -40,6 +40,8 @@ human answer to the corresponding JSON path and does not contain private values.
 For the shortest possible reply format, use
 `submission_package/AUTHOR_MINIMAL_RESPONSE_FORM_zh.md`; it compresses the same
 remaining author/venue gate into ten answer groups.
+For the shortest final execution path after the machine package is ready, use
+`submission_package/LAST_MILE_ACTION_CARD_zh.md`.
 For venue-policy checks, use
 `submission_package/TARGET_VENUE_POLICY_CHECKLIST_zh.md`; it maps ACM TQC,
 Quantum, and archive/license gates to the private metadata fields.
@@ -131,6 +133,7 @@ Quantum, and archive/license gates to the private metadata fields.
 ## Files To Update After Author Decisions
 
 - `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md` as the Chinese field-by-field intake guide.
+- `submission_package/LAST_MILE_ACTION_CARD_zh.md` as the one-page final-action card before filling private metadata and uploading.
 - `submission_package/TARGET_VENUE_POLICY_CHECKLIST_zh.md` as the venue-policy checklist before filling `target_venue.*` fields.
 - `submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md` as the Chinese comparison-role matrix before editing cover-letter, response, or venue-system claim text.
 - `submission_package/submission_metadata_answers.json` for the short ignored private answer file generated from `submission_metadata_answers_template.json`.

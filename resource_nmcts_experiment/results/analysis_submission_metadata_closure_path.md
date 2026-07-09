@@ -8,7 +8,7 @@ This audit verifies that the final author/venue metadata step is explicit, priva
 
 ## Closure Sequence
 
-1. Use `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md` or the checked short form `submission_package/AUTHOR_MINIMAL_RESPONSE_FORM_zh.md` to collect author and venue answers.
+1. Use `submission_package/LAST_MILE_ACTION_CARD_zh.md`, then `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md` or the checked short form `submission_package/AUTHOR_MINIMAL_RESPONSE_FORM_zh.md` to collect author and venue answers.
 2. Create ignored private short answers with `make_submission_metadata_from_answers.py --init-private-answers`.
 3. Fill every `AUTHOR INPUT REQUIRED` value in `submission_package/submission_metadata_answers.json`.
 4. Generate ignored private metadata with `make_submission_metadata_from_answers.py --write-private`.
@@ -26,5 +26,5 @@ This audit verifies that the final author/venue metadata step is explicit, priva
 | Validator and private-preview gates | pass | validator_counts={'needs author input': 1}; preview_counts={'needs author input': 1}; needs_author_input=2; private_outputs_are_git_ignored=True. | Rerun validate_submission_metadata.py and make_submission_text_preview.py after private metadata is filled. |
 | Filled-metadata rehearsal | pass | status_counts={'pass': 14}; needs_revision_count=0; synthetic_only=True; writes_private_outputs=False. | Keep the synthetic self-test aligned with validator and private-preview renderer changes. |
 | Anonymous-review decision gate | pass | status_counts={'needs author input': 3, 'pass': 3}; needs_revision_count=0; needs_author_input_count=3. | After selecting the venue, set anonymous-review policy and provide anonymous links if double-blind review is required. |
-| Human handoff document coverage | pass | docs=9; missing=none; token_misses=none. | Keep README, checklist, target-venue brief, target-venue policy checklist, handoff, questionnaire, minimal response form, answer template, and author packet aligned with the private metadata workflow. |
+| Human handoff document coverage | pass | docs=10; missing=none; token_misses=none. | Keep README, checklist, target-venue brief, target-venue policy checklist, handoff, questionnaire, minimal response form, last-mile card, answer template, and author packet aligned with the private metadata workflow. |
 | Goal-closure gate consistency | pass | git_worktree=True; metadata_counts={'needs author input': 12}; author_input_closure_counts={'pass': 9}; goal_overall=not complete. | Do not mark the overall goal complete until author/venue metadata are filled and the readiness audit has no unresolved author-input rows. |

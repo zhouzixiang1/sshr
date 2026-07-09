@@ -18,20 +18,20 @@
       "summary_files": "12"
     },
     {
-      "analysis_files": "4",
+      "analysis_files": "5",
       "claim_use": "Verifies that the remaining author/venue metadata step is explicit, private, ignored by Git, and machine-checkable.",
       "dependency_boundary": "Does not require private author metadata; verifies the public minimal response form, short-answer template, safe starter-only public fields, and ignored private-output path before author approval.",
-      "driver_scripts": "analyze_submission_metadata_closure_path.py; analyze_author_minimal_form_coverage.py; analyze_metadata_answer_template_coverage.py; make_submission_metadata_from_answers.py; make_submission_metadata_starter.py; validate_submission_metadata.py; make_submission_text_preview.py; analyze_final_human_gate_audit.py",
+      "driver_scripts": "analyze_submission_metadata_closure_path.py; analyze_author_minimal_form_coverage.py; analyze_metadata_answer_template_coverage.py; make_submission_metadata_from_answers.py; make_submission_metadata_starter.py; validate_submission_metadata.py; make_submission_text_preview.py; analyze_final_human_gate_audit.py; analyze_final_upload_sequence_audit.py",
       "evidence_family": "Submission metadata closure path",
-      "manifest_files": "4",
+      "manifest_files": "5",
       "raw_files": "0",
       "raw_rows": "0",
       "representative_raw": "",
       "rerun_tier": "quick metadata audit",
       "scripts_missing": "",
-      "scripts_present": "8",
+      "scripts_present": "9",
       "status": "complete",
-      "summary_files": "4"
+      "summary_files": "5"
     },
     {
       "analysis_files": "1",

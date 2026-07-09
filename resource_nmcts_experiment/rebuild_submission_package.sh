@@ -147,6 +147,7 @@ run_py analyze_latex_dependency_audit.py
 run_py analyze_payload_roundtrip_audit.py
 run_py analyze_source_path_privacy_audit.py
 run_py analyze_final_human_gate_audit.py
+run_py analyze_final_upload_sequence_audit.py
 run_py analyze_payload_extraction_smoke_audit.py
 run_py analyze_payload_latex_compile_audit.py
 run_py analyze_payload_verifier_smoke_audit.py

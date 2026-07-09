@@ -7,7 +7,7 @@
     "table": "paper_latex/tables/submission_support_packet_audit.tex"
   },
   "python": "3.11.15",
-  "rows": 21,
+  "rows": 22,
   "rows_detail": [
     {
       "boundary": "The cover letter still needs author, editor, reviewer, and prior-dissemination fields before upload.",
@@ -136,6 +136,15 @@
       "upload_risk": "The short author form could be present but its machine-checked required-field coverage could be hard to find."
     },
     {
+      "boundary": "The action card is public navigation only; it does not contain, infer, or commit private author or venue values.",
+      "evidence": "files_missing=none; tokens=8/8; missing_tokens=none; manifest=results/manifest_submission_metadata_closure_path.json::needs_revision_count=0",
+      "item": "Last-mile action card is visible",
+      "next_action": "No action needed.",
+      "status": "pass",
+      "supported_use": "The author has a one-page Chinese execution card that turns the remaining human metadata gate into a short ordered checklist.",
+      "upload_risk": "The package could be machine-complete but still hard for the author to turn into a real venue upload."
+    },
+    {
       "boundary": "The template contains placeholders only; real author and venue values remain private and human-provided.",
       "evidence": "files_missing=none; tokens=10/10; missing_tokens=none; manifest=results/manifest_metadata_answer_template_coverage.json::needs_revision_count=0",
       "item": "Short answer template covers metadata fields",
@@ -201,6 +210,6 @@
   ],
   "script": "analyze_submission_support_packet_audit.py",
   "status_counts": {
-    "pass": 21
+    "pass": 22
   }
 }

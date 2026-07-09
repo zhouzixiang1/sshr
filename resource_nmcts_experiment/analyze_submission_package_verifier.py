@@ -40,6 +40,7 @@ private-metadata starter dry-run, private-metadata validation,
 synthetic metadata-pipeline self-testing, anonymous-review decision support,
 author-input closure,
 final human-gate closure,
+final upload sequence closure,
 private-preview protection, private payload exclusion, payload round-trip
 integrity, generated-payload Git policy, extracted-payload smoke checks,
 extracted-payload LaTeX compilation, extracted-payload verifier smoke,
@@ -183,6 +184,7 @@ AUTHOR_MINIMAL_FORM_COVERAGE_MANIFEST = RESULTS / "manifest_author_minimal_form_
 METADATA_ANSWER_TEMPLATE_MANIFEST = RESULTS / "manifest_metadata_answer_template_coverage.json"
 METADATA_CLOSURE_MANIFEST = RESULTS / "manifest_submission_metadata_closure_path.json"
 FINAL_HUMAN_GATE_MANIFEST = RESULTS / "manifest_final_human_gate_audit.json"
+FINAL_UPLOAD_SEQUENCE_MANIFEST = RESULTS / "manifest_final_upload_sequence_audit.json"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
 PAYLOAD_GIT_POLICY_MANIFEST = RESULTS / "manifest_payload_git_policy_audit.json"
 PAYLOAD_EXTRACTION_SMOKE_MANIFEST = RESULTS / "manifest_payload_extraction_smoke_audit.json"
@@ -1859,6 +1861,29 @@ def verify_final_human_gate() -> dict[str, str]:
     )
 
 
+def verify_final_upload_sequence() -> dict[str, str]:
+    manifest = read_json(FINAL_UPLOAD_SEQUENCE_MANIFEST)
+    if EXTRACTED_PAYLOAD_MODE and not manifest:
+        return row(
+            "Final upload sequence audit",
+            "pass",
+            "extracted_payload_mode=1; final upload-sequence terminal manifest is intentionally excluded from the upload payload.",
+            "Run analyze_final_upload_sequence_audit.py in the source worktree after handoff, metadata, anonymous-review, or final human-gate audits change.",
+        )
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    sequence_ready = bool(manifest.get("sequence_ready", False)) if manifest else False
+    terminal = bool(manifest.get("terminal_audit", False)) if manifest else False
+    status = "pass" if manifest and needs_revision == 0 and sequence_ready and terminal else "needs revision"
+    return row(
+        "Final upload sequence audit",
+        status,
+        f"rows={rows}; needs_revision_count={needs_revision}; sequence_ready={sequence_ready}; terminal_audit={terminal}; status_counts={counts}.",
+        "Run analyze_final_upload_sequence_audit.py after changing final handoff docs, metadata templates, anonymous-review policy, comparison handoffs, or final human-gate outputs.",
+    )
+
+
 def verify_private_payload_exclusion() -> dict[str, str]:
     manifest = read_json(PAYLOAD_MANIFEST)
     if EXTRACTED_PAYLOAD_MODE and not manifest:
@@ -2108,6 +2133,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_metadata_answer_template_coverage(),
             verify_metadata_closure_path(),
             verify_final_human_gate(),
+            verify_final_upload_sequence(),
             verify_text_preview(),
             verify_private_payload_exclusion(),
             verify_payload_roundtrip(),

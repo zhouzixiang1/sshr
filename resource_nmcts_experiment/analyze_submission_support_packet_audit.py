@@ -33,6 +33,7 @@ ARTIFACT_GUIDE = SUBMISSION_PACKAGE / "artifact_reproduction_guide.md"
 AUTHOR_PACKET = SUBMISSION_PACKAGE / "AUTHOR_INPUT_REQUIRED.md"
 AUTHOR_QUESTIONNAIRE_ZH = SUBMISSION_PACKAGE / "AUTHOR_METADATA_QUESTIONNAIRE_zh.md"
 AUTHOR_MINIMAL_FORM_ZH = SUBMISSION_PACKAGE / "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md"
+LAST_MILE_ACTION_CARD_ZH = SUBMISSION_PACKAGE / "LAST_MILE_ACTION_CARD_zh.md"
 METADATA_ANSWERS_TEMPLATE = SUBMISSION_PACKAGE / "submission_metadata_answers_template.json"
 METADATA_TEMPLATE = SUBMISSION_PACKAGE / "submission_metadata_template.json"
 EDITOR_BRIEF = SUBMISSION_PACKAGE / "editor_screening_brief.md"
@@ -377,6 +378,26 @@ def specs() -> list[PacketSpec]:
             expected=0,
             supported_use="The public guide, README, and checklist now point to the machine check proving the concise author-intake form covers every required metadata path.",
             boundary="This only audits public prompts; private author and venue values remain outside the repository.",
+        ),
+        PacketSpec(
+            item="Last-mile action card is visible",
+            upload_risk="The package could be machine-complete but still hard for the author to turn into a real venue upload.",
+            files=(LAST_MILE_ACTION_CARD_ZH, README, CHECKLIST, FINAL_HANDOFF, AUTHOR_PACKET),
+            tokens=(
+                "LAST_MILE_ACTION_CARD_zh.md",
+                "最后一步行动卡",
+                "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md",
+                "submission_metadata_answers.json",
+                "submission_metadata.json",
+                "verify_submission_package.sh",
+                "does not claim hardware mapping",
+                "not full ROS reproduction",
+            ),
+            manifest_path=METADATA_CLOSURE,
+            manifest_key="needs_revision_count",
+            expected=0,
+            supported_use="The author has a one-page Chinese execution card that turns the remaining human metadata gate into a short ordered checklist.",
+            boundary="The action card is public navigation only; it does not contain, infer, or commit private author or venue values.",
         ),
         PacketSpec(
             item="Short answer template covers metadata fields",

@@ -69,6 +69,9 @@ METADATA_CLOSURE_MANIFEST = RESULTS / "manifest_submission_metadata_closure_path
 FINAL_HUMAN_GATE_ANALYSIS = RESULTS / "analysis_final_human_gate_audit.md"
 FINAL_HUMAN_GATE_SUMMARY = RESULTS / "summary_final_human_gate_audit.csv"
 FINAL_HUMAN_GATE_MANIFEST = RESULTS / "manifest_final_human_gate_audit.json"
+FINAL_UPLOAD_SEQUENCE_ANALYSIS = RESULTS / "analysis_final_upload_sequence_audit.md"
+FINAL_UPLOAD_SEQUENCE_SUMMARY = RESULTS / "summary_final_upload_sequence_audit.csv"
+FINAL_UPLOAD_SEQUENCE_MANIFEST = RESULTS / "manifest_final_upload_sequence_audit.json"
 PAYLOAD_ROUNDTRIP_ANALYSIS = RESULTS / "analysis_payload_roundtrip_audit.md"
 PAYLOAD_ROUNDTRIP_SUMMARY = RESULTS / "summary_payload_roundtrip_audit.csv"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
@@ -827,6 +830,21 @@ def build_rows() -> list[dict[str, str]]:
     )
     final_human_gate_blocker = (
         final_human_gate_manifest.get("remaining_blocker_class", "missing") if final_human_gate_manifest else "missing"
+    )
+    final_upload_sequence_manifest = read_json(FINAL_UPLOAD_SEQUENCE_MANIFEST)
+    final_upload_sequence_counts = (
+        final_upload_sequence_manifest.get("status_counts", {}) if final_upload_sequence_manifest else {}
+    )
+    final_upload_sequence_revisions = (
+        int(final_upload_sequence_manifest.get("needs_revision_count", -1))
+        if final_upload_sequence_manifest
+        else -1
+    )
+    final_upload_sequence_rows = (
+        final_upload_sequence_manifest.get("rows", "missing") if final_upload_sequence_manifest else "missing"
+    )
+    final_upload_sequence_ready = (
+        bool(final_upload_sequence_manifest.get("sequence_ready", False)) if final_upload_sequence_manifest else False
     )
     editorial_screening_manifest = read_json(EDITORIAL_SCREENING_MANIFEST)
     editorial_screening_counts = (
@@ -1801,6 +1819,18 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Final human-gate audit checks that remaining open state is limited to author/venue metadata and target anonymous-review policy; rows={final_human_gate_rows}; status_counts={final_human_gate_counts}; needs_revision_count={final_human_gate_revisions}; machine_side_closed={final_human_gate_machine_closed}; remaining_blocker_class={final_human_gate_blocker}.",
             "next_action": "Rerun analyze_final_human_gate_audit.py after changing goal closure, metadata validation, anonymous-review, payload, or source-privacy audits.",
+        },
+        {
+            "item": "Final upload sequence audit",
+            "status": "pass"
+            if FINAL_UPLOAD_SEQUENCE_ANALYSIS.exists()
+            and FINAL_UPLOAD_SEQUENCE_SUMMARY.exists()
+            and FINAL_UPLOAD_SEQUENCE_MANIFEST.exists()
+            and final_upload_sequence_revisions == 0
+            and final_upload_sequence_ready
+            else "needs revision",
+            "evidence": f"Final upload sequence audit checks ordered author-facing venue selection, private metadata intake, rebuild/verify, private preview review, availability-link replacement, comparison-claim boundary, and goal-closure protection; rows={final_upload_sequence_rows}; status_counts={final_upload_sequence_counts}; needs_revision_count={final_upload_sequence_revisions}; sequence_ready={final_upload_sequence_ready}.",
+            "next_action": "Rerun analyze_final_upload_sequence_audit.py after changing final handoff, checklist, README, metadata templates, anonymous-review policy, or final human-gate audits.",
         },
         {
             "item": "Compiled anonymous review draft",

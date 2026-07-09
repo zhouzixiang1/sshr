@@ -5,6 +5,7 @@ Use this checklist immediately before uploading the manuscript.
 ## Required Author Input
 
 - AUTHOR INPUT REQUIRED: Work through `submission_package/AUTHOR_INPUT_REQUIRED.md` before uploading.
+- Start with `submission_package/LAST_MILE_ACTION_CARD_zh.md` for the shortest final-action path.
 - AUTHOR INPUT REQUIRED: Use `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md` as the Chinese field-by-field guide before filling private metadata.
 - If working in Chinese, follow `submission_package/FINAL_SUBMISSION_HANDOFF_zh.md` for the final execution order.
 - AUTHOR INPUT REQUIRED: Choose the target venue using `submission_package/target_venue_brief.md` as a planning aid, then copy the final choice into `submission_package/submission_metadata_answers.json`.
@@ -40,6 +41,7 @@ Use this checklist immediately before uploading the manuscript.
 - Author input packet: `submission_package/AUTHOR_INPUT_REQUIRED.md`
 - Chinese metadata questionnaire: `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md`
 - Chinese minimal response form: `submission_package/AUTHOR_MINIMAL_RESPONSE_FORM_zh.md`
+- Chinese last-mile action card: `submission_package/LAST_MILE_ACTION_CARD_zh.md`
 - Target venue policy checklist: `submission_package/TARGET_VENUE_POLICY_CHECKLIST_zh.md`
 - Chinese final handoff: `submission_package/FINAL_SUBMISSION_HANDOFF_zh.md`
 - Chinese comparison significance matrix: `submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md`
@@ -73,6 +75,7 @@ Use this checklist immediately before uploading the manuscript.
 - Author minimal response-form coverage audit: `results/analysis_author_minimal_form_coverage.md`
 - Author-input closure audit: `results/analysis_author_input_closure_audit.md`
 - Metadata closure-path audit: `results/analysis_submission_metadata_closure_path.md`
+- Final upload sequence audit: `results/analysis_final_upload_sequence_audit.md`
 - Metadata pipeline self-test: `results/analysis_submission_metadata_pipeline_selftest.md`
 - Anonymous-review readiness audit: `results/analysis_anonymous_review_readiness.md`
 - Private submission text preview audit: `results/analysis_submission_text_preview.md`
@@ -128,6 +131,7 @@ Run these from `resource_nmcts_experiment/`:
   analyze_source_path_privacy_audit.py \
   analyze_submission_metadata_audit.py \
   analyze_author_input_closure_audit.py \
+  analyze_final_upload_sequence_audit.py \
   analyze_anonymous_review_readiness.py \
   analyze_target_venue_policy_checklist.py \
   analyze_submission_readiness_audit.py \
@@ -154,9 +158,9 @@ rg -n "Overfull|Underfull|undefined|Undefined|Warning|Error|LaTeX Warning|Rerun"
 Expected current state:
 
 - Machine snapshot tokens checked by `analyze_public_handoff_freshness_audit.py`:
-  PDF pages=50/50; readiness=81 pass + 1 needs author input;
-  payload_files=1175; artifact_registry=31 families / 161 raw CSV / 80312 raw rows;
-  source_privacy=0 strict leaks / 57 provenance files / 1132 payload text files;
+  PDF pages=50/50; readiness=82 pass + 1 needs author input;
+  payload_files=1177; artifact_registry=31 families / 161 raw CSV / 80312 raw rows;
+  source_privacy=0 strict leaks / 57 provenance files / 1134 payload text files;
   comparison_validity=8/8 pass; novelty_scorecard=6/6 pass;
   goal_gate=author/venue metadata remains open.
 - Archive manifest: all payload groups complete.

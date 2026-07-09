@@ -10,6 +10,7 @@
     "paper_latex/resource_nmcts_submission_v1.tex",
     "submission_package/README.md",
     "submission_package/FINAL_SUBMISSION_HANDOFF_zh.md",
+    "submission_package/LAST_MILE_ACTION_CARD_zh.md",
     "submission_package/cover_letter_template.md",
     "submission_package/artifact_reproduction_guide.md",
     "submission_package/editor_screening_brief.md",
@@ -19,9 +20,9 @@
     "submission_package/submission_checklist.md"
   ],
   "status_counts": {
-    "guarded": 84,
+    "guarded": 92,
     "pass": 5
   },
   "unresolved_count": 0,
-  "unsupported_claim_hit_count": 84
+  "unsupported_claim_hit_count": 92
 }
