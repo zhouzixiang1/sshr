@@ -11,9 +11,9 @@
   "rows": 3,
   "rows_detail": [
     {
-      "bytes": "874",
+      "bytes": "875",
       "compile_seconds": "0.000",
-      "evidence": "extracted_files=874; error=none.",
+      "evidence": "extracted_files=875; error=none.",
       "item": "Payload extraction for LaTeX compile",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "pages": "n/a",
@@ -23,7 +23,7 @@
     },
     {
       "bytes": "601116",
-      "compile_seconds": "2.287",
+      "compile_seconds": "2.497",
       "evidence": "stdout_lines=1073; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "author payload LaTeX compile",
       "next_action": "Inspect the extracted payload LaTeX log and restore missing table, figure, bibliography, or style dependencies.",
@@ -34,7 +34,7 @@
     },
     {
       "bytes": "597775",
-      "compile_seconds": "2.286",
+      "compile_seconds": "2.350",
       "evidence": "stdout_lines=1081; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "anonymous payload LaTeX compile",
       "next_action": "Inspect the extracted payload LaTeX log and restore missing table, figure, bibliography, or style dependencies.",

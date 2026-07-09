@@ -45,6 +45,7 @@ Use this checklist immediately before uploading the manuscript.
 - Figure asset audit: `results/analysis_figure_asset_audit.md`
 - LaTeX dependency audit: `results/analysis_latex_dependency_audit.md`
 - PDF visual render audit: `results/analysis_pdf_visual_audit.md`
+- PDF text/searchability audit: `results/analysis_pdf_text_audit.md`
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
 - Metadata validator: `results/analysis_submission_metadata_validator.md`
 - Author-input closure audit: `results/analysis_author_input_closure_audit.md`
@@ -85,6 +86,7 @@ Run these from `resource_nmcts_experiment/`:
   analyze_figure_asset_audit.py \
   analyze_latex_dependency_audit.py \
   analyze_pdf_visual_audit.py \
+  analyze_pdf_text_audit.py \
   analyze_submission_metadata_audit.py \
   analyze_author_input_closure_audit.py \
   analyze_anonymous_review_readiness.py \
@@ -120,6 +122,7 @@ Expected current state:
 - Figure asset audit: every manuscript figure has generated PDF/PNG/SVG assets and non-empty source-data CSV.
 - LaTeX dependency audit: every author/anonymous TeX input, figure reference, and bibliography file exists locally and is included in the upload payload.
 - PDF visual render audit: every author/anonymous PDF page renders through Poppler with stable dimensions and nonblank visible content.
+- PDF text/searchability audit: every author/anonymous PDF extracts searchable text through Poppler with title, scope, baseline, availability, reference, headline-number, identity, and public-placeholder anchors checked.
 - Metadata audit: all author- and venue-specific fields are enumerated before upload, and any filled `submission_metadata.json` is checked.
 - Metadata validator: no `needs revision` rows; missing private metadata remains an author-input gate until filled.
 - Author-input closure audit: metadata-template placeholders, author-input packet fields, support docs, private Git protection, private-preview gates, and anonymous-review decision gates are mutually consistent.

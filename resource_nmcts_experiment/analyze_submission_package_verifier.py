@@ -10,6 +10,7 @@ headline-numeric consistency,
 figure-asset coverage,
 LaTeX dependency closure,
 PDF visual rendering,
+PDF text/searchability,
 private-metadata starter dry-run, private-metadata validation,
 synthetic metadata-pipeline self-testing, anonymous-review decision support,
 author-input closure,
@@ -50,6 +51,7 @@ HEADLINE_NUMERIC_MANIFEST = RESULTS / "manifest_headline_numeric_consistency.jso
 FIGURE_ASSET_MANIFEST = RESULTS / "manifest_figure_asset_audit.json"
 LATEX_DEPENDENCY_MANIFEST = RESULTS / "manifest_latex_dependency_audit.json"
 PDF_VISUAL_MANIFEST = RESULTS / "manifest_pdf_visual_audit.json"
+PDF_TEXT_MANIFEST = RESULTS / "manifest_pdf_text_audit.json"
 METADATA_VALIDATOR_MANIFEST = RESULTS / "manifest_submission_metadata_validator.json"
 TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
 METADATA_PIPELINE_SELFTEST_MANIFEST = RESULTS / "manifest_submission_metadata_pipeline_selftest.json"
@@ -304,6 +306,21 @@ def verify_pdf_visual() -> dict[str, str]:
     )
 
 
+def verify_pdf_text() -> dict[str, str]:
+    manifest = read_json(PDF_TEXT_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    anchors = manifest.get("required_anchor_count", "missing") if manifest else "missing"
+    status = "pass" if manifest and revisions == 0 else "needs revision"
+    return row(
+        "PDF text/searchability audit",
+        status,
+        f"rows={rows}; required_anchors={anchors}; needs_revision_count={revisions}; status_counts={counts}.",
+        "Run analyze_pdf_text_audit.py and inspect pdftotext output for missing anchors, identity leaks, or placeholder remnants.",
+    )
+
+
 def verify_text_preview() -> dict[str, str]:
     manifest = read_json(TEXT_PREVIEW_MANIFEST)
     counts = manifest.get("status_counts", {}) if manifest else {}
@@ -537,6 +554,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_figure_assets(),
             verify_latex_dependencies(),
             verify_pdf_visual(),
+            verify_pdf_text(),
             verify_metadata_starter_dry_run(),
             verify_metadata_validator(),
             verify_metadata_pipeline_selftest(),

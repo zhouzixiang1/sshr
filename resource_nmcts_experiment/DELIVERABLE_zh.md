@@ -230,6 +230,15 @@
 
 该审计调用 Poppler `pdftoppm` 渲染作者版和匿名版投稿 PDF 的每一页，检查渲染页数、页面尺寸、非空 ink coverage、页面字节数和渲染错误。它作为 terminal audit 接入 rebuild、readiness、package verifier 和 payload extraction smoke；输出不进入稳定 payload digest，避免 PDF/审计之间形成自引用，但脚本本身会随 payload 打包，审稿人解包后也能复现渲染检查。
 
+本轮新增 PDF text/searchability audit，把 PDF 检查从“能渲染”继续推进到“可检索、关键文本可抽取”：
+
+- `analyze_pdf_text_audit.py`
+- `results/summary_pdf_text_audit.csv`
+- `results/analysis_pdf_text_audit.md`
+- `results/manifest_pdf_text_audit.json`
+
+该审计调用 Poppler `pdftotext` 抽取作者版和匿名版投稿 PDF 文本，检查 title、method name、logical-layer boundary、problem scope、Related Work、Benchmark and Baselines、Data and Code Availability、References、关键 headline 数字、SSHR/ABC/RevKit/CirKit baseline anchor，以及 author/anonymous 身份分离；同时扫描 TODO/TBD/placeholder、`AUTHOR INPUT REQUIRED`、undefined citation 等公开文本残留。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；输出同样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包，便于审稿人解包后复现 PDF 可检索性检查。
+
 本轮新增投稿完整性层：英文投稿稿末尾加入 `Data and Code Availability`，明确代码、raw/summary CSV、manifest、LaTeX 表、图源数据和 PDF 均位于 `resource_nmcts_experiment/` artifact package，运行入口为 `run_*.py`、`train_*.py`、`analyze_*.py`，环境为 `mcts-qoracle` 和直接解释器路径 `/opt/anaconda3/envs/mcts-qoracle/bin/python`。同时新增自动 submission-readiness audit：
 
 - `analyze_submission_readiness_audit.py`

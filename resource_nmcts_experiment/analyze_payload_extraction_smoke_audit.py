@@ -75,6 +75,15 @@ SMOKE_SPECS = (
         minimum_rows=2,
     ),
     SmokeSpec(
+        name="PDF text audit",
+        script="analyze_pdf_text_audit.py",
+        manifest="results/manifest_pdf_text_audit.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=2,
+    ),
+    SmokeSpec(
         name="Author-input closure audit",
         script="analyze_author_input_closure_audit.py",
         manifest="results/manifest_author_input_closure_audit.json",
