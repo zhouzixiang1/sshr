@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1091; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1100; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -147,6 +147,12 @@
       "status": "pass"
     },
     {
+      "evidence": "returncode=0; manifest=results/manifest_rotation_synthesis_backend_audit.json; needs_revision_count=0; rows=4; stderr=none",
+      "item": "Rotation-synthesis backend audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
       "evidence": "returncode=0; manifest=results/manifest_phase_policy_budget_frontier.json; needs_revision_count=0; rows=8; stderr=none",
       "item": "Phase policy budget frontier",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
@@ -239,6 +245,12 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_author_input_closure_audit.json; needs_revision_count=0; rows=7; stderr=none",
       "item": "Author-input closure audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_author_questionnaire_coverage.json; needs_revision_count=0; rows=6; stderr=none",
+      "item": "Author questionnaire coverage audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -425,6 +437,13 @@
     },
     {
       "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_rotation_synthesis_backend_audit.json",
+      "minimum_rows_key": "rows",
+      "name": "Rotation-synthesis backend audit",
+      "script": "analyze_rotation_synthesis_backend_audit.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
       "manifest": "results/manifest_phase_policy_budget_frontier.json",
       "minimum_rows_key": "rows",
       "name": "Phase policy budget frontier",
@@ -537,6 +556,13 @@
     },
     {
       "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_author_questionnaire_coverage.json",
+      "minimum_rows_key": "rows",
+      "name": "Author questionnaire coverage audit",
+      "script": "analyze_author_questionnaire_coverage.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
       "manifest": "results/manifest_submission_metadata_closure_path.json",
       "minimum_rows_key": "rows",
       "name": "Submission metadata closure path",
@@ -565,6 +591,6 @@
     }
   ],
   "status_counts": {
-    "pass": 43
+    "pass": 45
   }
 }

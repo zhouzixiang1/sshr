@@ -1,0 +1,7 @@
+item,status,evidence,next_action
+Questionnaire file and private workflow,pass,questionnaire_exists=True; missing_tokens=none.,Keep the questionnaire as a public checklist and store real values only in the ignored submission_metadata.json file.
+Required metadata path coverage,pass,required_paths=50; missing_paths=none.,Add every missing private metadata path to AUTHOR_METADATA_QUESTIONNAIRE_zh.md.
+Template path parity,pass,required_paths=50; missing_in_template=none.,Keep REQUIRED_METADATA_PATHS aligned with submission_metadata_template.json.
+Claim-boundary reminders,pass,missing_tokens=none.,Keep overclaim boundaries visible where authors fill final submission text.
+Anonymous-review link prompts,pass,missing_tokens=none.,Keep double-blind data/code link prompts visible until the target venue is selected.
+Post-fill verification commands,pass,missing_tokens=none.,Keep the post-fill command sequence in the public questionnaire.

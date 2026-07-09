@@ -1,0 +1,10 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}X}
+\toprule
+Item & Availability & Evidence & Boundary \\
+\midrule
+Internal source-derived sequence smoke & internal matrix beam & smoke=20/20; tight=5/20; max error=0.11185337158122222 & This does not certify high-precision or optimal rotation synthesis. \\
+External command-line high-precision backends & none available & gridsynth=missing; newsynth=missing; pgridsynth=missing & Missing command-line backends mean the current package cannot claim a reproduced Ross--Selinger/gridsynth flow. \\
+Python synthesis SDK backends & none available & pyzx=missing; qiskit=missing; cirq=missing & The internal beam smoke remains the only sequence emitter unless one of these backends is added and audited. \\
+Tight-tolerance diagnostic & 5/20 tight pass & 15 tight failures listed in CSV & The phase/Rz branch is still a logical proxy and should not be used as a final Clifford+T compiler claim. \\
+\bottomrule
+\end{tabularx}

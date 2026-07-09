@@ -1,0 +1,28 @@
+{
+  "boundary": "No official high-precision Ross--Selinger/gridsynth backend was available unless explicitly listed in command_backends or python_backends.",
+  "command_backends": {
+    "gridsynth": "",
+    "newsynth": "",
+    "pgridsynth": ""
+  },
+  "high_precision_backend_available": false,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_rotation_synthesis_backend_audit.md",
+    "manifest": "results/manifest_rotation_synthesis_backend_audit.json",
+    "summary": "results/summary_rotation_synthesis_backend_audit.csv",
+    "table": "paper_latex/tables/rotation_synthesis_backend_audit.tex"
+  },
+  "python": "3.11.15",
+  "python_backends": {
+    "cirq": false,
+    "pyzx": false,
+    "qiskit": false
+  },
+  "rows": 4,
+  "script": "analyze_rotation_synthesis_backend_audit.py",
+  "sequence_manifest": "results/manifest_phase_rotation_sequence_smoke_audit.json",
+  "status_counts": {
+    "pass": 4
+  }
+}

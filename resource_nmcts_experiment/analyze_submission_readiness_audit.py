@@ -54,6 +54,9 @@ ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 AUTHOR_INPUT_CLOSURE_ANALYSIS = RESULTS / "analysis_author_input_closure_audit.md"
 AUTHOR_INPUT_CLOSURE_SUMMARY = RESULTS / "summary_author_input_closure_audit.csv"
 AUTHOR_INPUT_CLOSURE_MANIFEST = RESULTS / "manifest_author_input_closure_audit.json"
+AUTHOR_QUESTIONNAIRE_COVERAGE_ANALYSIS = RESULTS / "analysis_author_questionnaire_coverage.md"
+AUTHOR_QUESTIONNAIRE_COVERAGE_SUMMARY = RESULTS / "summary_author_questionnaire_coverage.csv"
+AUTHOR_QUESTIONNAIRE_COVERAGE_MANIFEST = RESULTS / "manifest_author_questionnaire_coverage.json"
 METADATA_CLOSURE_ANALYSIS = RESULTS / "analysis_submission_metadata_closure_path.md"
 METADATA_CLOSURE_SUMMARY = RESULTS / "summary_submission_metadata_closure_path.csv"
 METADATA_CLOSURE_MANIFEST = RESULTS / "manifest_submission_metadata_closure_path.json"
@@ -628,6 +631,17 @@ def build_rows() -> list[dict[str, str]]:
         author_input_closure_manifest.get("required_metadata_paths", "missing")
         if author_input_closure_manifest
         else "missing"
+    )
+    author_questionnaire_manifest = read_json(AUTHOR_QUESTIONNAIRE_COVERAGE_MANIFEST)
+    author_questionnaire_counts = author_questionnaire_manifest.get("status_counts", {}) if author_questionnaire_manifest else {}
+    author_questionnaire_revisions = (
+        int(author_questionnaire_manifest.get("needs_revision_count", -1)) if author_questionnaire_manifest else -1
+    )
+    author_questionnaire_required = (
+        author_questionnaire_manifest.get("required_paths", "missing") if author_questionnaire_manifest else "missing"
+    )
+    author_questionnaire_missing = (
+        author_questionnaire_manifest.get("missing_required_paths", "missing") if author_questionnaire_manifest else "missing"
     )
     metadata_closure_manifest = read_json(METADATA_CLOSURE_MANIFEST)
     metadata_closure_counts = metadata_closure_manifest.get("status_counts", {}) if metadata_closure_manifest else {}
@@ -1403,6 +1417,18 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Author-input closure audit checks metadata-template placeholder coverage, author packet coverage, support-document visibility, private Git protection, private-preview gates, anonymous-review decision gate, and metadata/packet count consistency; required_metadata_paths={author_input_required_paths}; status_counts={author_input_closure_counts}; needs_revision_count={author_input_closure_revisions}.",
             "next_action": "Rerun analyze_author_input_closure_audit.py after changing author/venue metadata fields, private-output names, support docs, or anonymous-review gates.",
+        },
+        {
+            "item": "Author questionnaire coverage audit",
+            "status": "pass"
+            if AUTHOR_QUESTIONNAIRE_COVERAGE_ANALYSIS.exists()
+            and AUTHOR_QUESTIONNAIRE_COVERAGE_SUMMARY.exists()
+            and AUTHOR_QUESTIONNAIRE_COVERAGE_MANIFEST.exists()
+            and author_questionnaire_revisions == 0
+            and not author_questionnaire_missing
+            else "needs revision",
+            "evidence": f"Questionnaire coverage audit checks every private metadata path against AUTHOR_METADATA_QUESTIONNAIRE_zh.md; required_paths={author_questionnaire_required}; missing_required_paths={author_questionnaire_missing}; status_counts={author_questionnaire_counts}; needs_revision_count={author_questionnaire_revisions}.",
+            "next_action": "Rerun analyze_author_questionnaire_coverage.py after changing submission_metadata_template.json or AUTHOR_METADATA_QUESTIONNAIRE_zh.md.",
         },
         {
             "item": "Submission metadata closure path",

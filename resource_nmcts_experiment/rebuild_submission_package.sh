@@ -9,6 +9,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PYTHON_BIN="${PYTHON_BIN:-/opt/anaconda3/envs/mcts-qoracle/bin/python}"
 LATEXMK_BIN="${LATEXMK_BIN:-latexmk}"
+PDFLATEX_BIN="${PDFLATEX_BIN:-pdflatex}"
 
 cd "$ROOT_DIR"
 
@@ -58,6 +59,7 @@ run_py analyze_bitflip_neural_budget_sweep.py
 run_py analyze_frontier_random_depth_control.py
 run_py analyze_phase_rotation_precision_audit.py
 run_py analyze_phase_rotation_sequence_smoke_audit.py
+run_py analyze_rotation_synthesis_backend_audit.py
 run_py analyze_phase_policy_budget_frontier.py
 run_py analyze_search_control_baseline_audit.py
 run_py analyze_boolean_ring_structural_evidence.py
@@ -84,6 +86,7 @@ run_py analyze_reproducibility_audit.py
 run_py analyze_submission_metadata_audit.py
 run_py validate_submission_metadata.py
 run_py make_author_input_packet.py
+run_py analyze_author_questionnaire_coverage.py
 run_py make_submission_text_preview.py
 run_py selftest_submission_metadata_pipeline.py
 run_py make_anonymous_review_draft.py
@@ -103,8 +106,14 @@ echo "==> Building English submission PDF"
   cd paper_latex
   rm -f resource_nmcts_submission_{v1,anonymous,acm_tqc}.{aux,bbl,blg,fdb_latexmk,fls,out,log,toc,lof,lot}
   "$LATEXMK_BIN" -pdf -interaction=nonstopmode -halt-on-error resource_nmcts_submission_v1.tex
+  "$PDFLATEX_BIN" -interaction=nonstopmode -halt-on-error resource_nmcts_submission_v1.tex
+  "$PDFLATEX_BIN" -interaction=nonstopmode -halt-on-error resource_nmcts_submission_v1.tex
   "$LATEXMK_BIN" -pdf -interaction=nonstopmode -halt-on-error resource_nmcts_submission_anonymous.tex
+  "$PDFLATEX_BIN" -interaction=nonstopmode -halt-on-error resource_nmcts_submission_anonymous.tex
+  "$PDFLATEX_BIN" -interaction=nonstopmode -halt-on-error resource_nmcts_submission_anonymous.tex
   "$LATEXMK_BIN" -pdf -interaction=nonstopmode -halt-on-error resource_nmcts_submission_acm_tqc.tex
+  "$PDFLATEX_BIN" -interaction=nonstopmode -halt-on-error resource_nmcts_submission_acm_tqc.tex
+  "$PDFLATEX_BIN" -interaction=nonstopmode -halt-on-error resource_nmcts_submission_acm_tqc.tex
 )
 
 run_py analyze_pdf_visual_audit.py

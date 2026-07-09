@@ -109,6 +109,8 @@ PHASE_ROTATION_PRECISION_MANIFEST = RESULTS / "manifest_phase_rotation_precision
 PHASE_ROTATION_PRECISION_TABLE = THIS_DIR / "paper_latex" / "tables" / "phase_rotation_precision_audit.tex"
 PHASE_ROTATION_SEQUENCE_MANIFEST = RESULTS / "manifest_phase_rotation_sequence_smoke_audit.json"
 PHASE_ROTATION_SEQUENCE_TABLE = THIS_DIR / "paper_latex" / "tables" / "phase_rotation_sequence_smoke_audit.tex"
+ROTATION_SYNTHESIS_BACKEND_MANIFEST = RESULTS / "manifest_rotation_synthesis_backend_audit.json"
+ROTATION_SYNTHESIS_BACKEND_TABLE = THIS_DIR / "paper_latex" / "tables" / "rotation_synthesis_backend_audit.tex"
 PHASE_POLICY_BUDGET_MANIFEST = RESULTS / "manifest_phase_policy_budget_frontier.json"
 PHASE_POLICY_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "phase_policy_budget_frontier.tex"
 NEURAL_MCTS_CLAIM_MANIFEST = RESULTS / "manifest_neural_mcts_claim_calibration.json"
@@ -139,6 +141,7 @@ TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
 METADATA_PIPELINE_SELFTEST_MANIFEST = RESULTS / "manifest_submission_metadata_pipeline_selftest.json"
 ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 AUTHOR_INPUT_CLOSURE_MANIFEST = RESULTS / "manifest_author_input_closure_audit.json"
+AUTHOR_QUESTIONNAIRE_COVERAGE_MANIFEST = RESULTS / "manifest_author_questionnaire_coverage.json"
 METADATA_CLOSURE_MANIFEST = RESULTS / "manifest_submission_metadata_closure_path.json"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
 PAYLOAD_GIT_POLICY_MANIFEST = RESULTS / "manifest_payload_git_policy_audit.json"
@@ -896,6 +899,33 @@ def verify_phase_rotation_sequence_smoke() -> dict[str, str]:
     )
 
 
+def verify_rotation_synthesis_backend() -> dict[str, str]:
+    manifest = read_json(ROTATION_SYNTHESIS_BACKEND_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    rows = int(manifest.get("rows", -1)) if manifest else -1
+    high_precision = bool(manifest.get("high_precision_backend_available", True)) if manifest else True
+    commands = manifest.get("command_backends", {}) if manifest else {}
+    modules = manifest.get("python_backends", {}) if manifest else {}
+    table_exists = ROTATION_SYNTHESIS_BACKEND_TABLE.exists()
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and rows >= 4
+        and high_precision is False
+        and {"gridsynth", "newsynth", "pgridsynth"} <= set(commands)
+        and {"pyzx", "qiskit", "cirq"} <= set(modules)
+        and table_exists
+        else "needs revision"
+    )
+    return row(
+        "Rotation-synthesis backend audit",
+        status,
+        f"rows={rows}; high_precision_backend_available={high_precision}; command_backends={commands}; python_backends={modules}; needs_revision_count={revisions}; table_exists={table_exists}.",
+        "Run analyze_rotation_synthesis_backend_audit.py and keep the phase/Rz backend boundary explicit.",
+    )
+
+
 def verify_neural_mcts_claim_calibration() -> dict[str, str]:
     manifest = read_json(NEURAL_MCTS_CLAIM_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -1295,6 +1325,22 @@ def verify_author_input_closure() -> dict[str, str]:
     )
 
 
+def verify_author_questionnaire_coverage() -> dict[str, str]:
+    manifest = read_json(AUTHOR_QUESTIONNAIRE_COVERAGE_MANIFEST)
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    required_paths = manifest.get("required_paths", "missing") if manifest else "missing"
+    missing_required = manifest.get("missing_required_paths", "missing") if manifest else "missing"
+    missing_template = manifest.get("missing_template_paths", "missing") if manifest else "missing"
+    status = "pass" if manifest and needs_revision == 0 and not missing_required and not missing_template else "needs revision"
+    return row(
+        "Author questionnaire coverage audit",
+        status,
+        f"required_paths={required_paths}; missing_required_paths={missing_required}; missing_template_paths={missing_template}; status_counts={counts}.",
+        "Run analyze_author_questionnaire_coverage.py and align the Chinese questionnaire with every private metadata template field.",
+    )
+
+
 def verify_metadata_closure_path() -> dict[str, str]:
     manifest = read_json(METADATA_CLOSURE_MANIFEST)
     counts = manifest.get("status_counts", {}) if manifest else {}
@@ -1514,6 +1560,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_root_action_ranker(),
             verify_phase_rotation_precision(),
             verify_phase_rotation_sequence_smoke(),
+            verify_rotation_synthesis_backend(),
             verify_phase_policy_budget_frontier(),
             verify_learned_control(),
             verify_neural_mcts_claim_calibration(),
@@ -1536,6 +1583,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_metadata_pipeline_selftest(),
             verify_anonymous_review_audit(),
             verify_author_input_closure(),
+            verify_author_questionnaire_coverage(),
             verify_metadata_closure_path(),
             verify_text_preview(),
             verify_private_payload_exclusion(),

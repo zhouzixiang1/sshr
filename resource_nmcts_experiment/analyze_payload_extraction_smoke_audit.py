@@ -238,6 +238,15 @@ SMOKE_SPECS = (
         minimum_rows=20,
     ),
     SmokeSpec(
+        name="Rotation-synthesis backend audit",
+        script="analyze_rotation_synthesis_backend_audit.py",
+        manifest="results/manifest_rotation_synthesis_backend_audit.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=4,
+    ),
+    SmokeSpec(
         name="Phase policy budget frontier",
         script="analyze_phase_policy_budget_frontier.py",
         manifest="results/manifest_phase_policy_budget_frontier.json",
@@ -380,6 +389,15 @@ SMOKE_SPECS = (
         expected_value=0,
         minimum_rows_key="rows",
         minimum_rows=7,
+    ),
+    SmokeSpec(
+        name="Author questionnaire coverage audit",
+        script="analyze_author_questionnaire_coverage.py",
+        manifest="results/manifest_author_questionnaire_coverage.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=6,
     ),
     SmokeSpec(
         name="Submission metadata closure path",

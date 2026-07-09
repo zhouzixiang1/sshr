@@ -204,27 +204,32 @@ LEARNED_CONTROL_PATHS = {
     "analyze_root_action_ranker_audit.py",
     "analyze_phase_rotation_precision_audit.py",
     "analyze_phase_rotation_sequence_smoke_audit.py",
+    "analyze_rotation_synthesis_backend_audit.py",
     "analyze_phase_policy_budget_frontier.py",
     "results/analysis_learned_control_audit.md",
     "results/analysis_root_action_ranker_audit.md",
     "results/analysis_phase_rotation_precision_audit.md",
     "results/analysis_phase_rotation_sequence_smoke_audit.md",
+    "results/analysis_rotation_synthesis_backend_audit.md",
     "results/analysis_phase_policy_budget_frontier.md",
     "results/raw_phase_rotation_sequence_smoke_audit.csv",
     "results/summary_learned_control_audit.csv",
     "results/summary_root_action_ranker_audit.csv",
     "results/summary_phase_rotation_precision_audit.csv",
     "results/summary_phase_rotation_sequence_smoke_audit.csv",
+    "results/summary_rotation_synthesis_backend_audit.csv",
     "results/summary_phase_policy_budget_frontier.csv",
     "results/manifest_learned_control_audit.json",
     "results/manifest_root_action_ranker_audit.json",
     "results/manifest_phase_rotation_precision_audit.json",
     "results/manifest_phase_rotation_sequence_smoke_audit.json",
+    "results/manifest_rotation_synthesis_backend_audit.json",
     "results/manifest_phase_policy_budget_frontier.json",
     "paper_latex/tables/learned_control_audit.tex",
     "paper_latex/tables/root_action_ranker_audit.tex",
     "paper_latex/tables/phase_rotation_precision_audit.tex",
     "paper_latex/tables/phase_rotation_sequence_smoke_audit.tex",
+    "paper_latex/tables/rotation_synthesis_backend_audit.tex",
     "paper_latex/tables/phase_policy_budget_frontier.tex",
 }
 NEURAL_MCTS_CLAIM_CALIBRATION_PATHS = {
@@ -312,6 +317,13 @@ AUTHOR_INPUT_CLOSURE_PATHS = {
     "results/analysis_author_input_closure_audit.md",
     "results/summary_author_input_closure_audit.csv",
     "results/manifest_author_input_closure_audit.json",
+}
+AUTHOR_QUESTIONNAIRE_COVERAGE_PATHS = {
+    "analyze_author_questionnaire_coverage.py",
+    "submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md",
+    "results/analysis_author_questionnaire_coverage.md",
+    "results/summary_author_questionnaire_coverage.csv",
+    "results/manifest_author_questionnaire_coverage.json",
 }
 METADATA_CLOSURE_PATHS = {
     "analyze_submission_metadata_closure_path.py",
@@ -715,6 +727,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    questionnaire_missing = sorted(AUTHOR_QUESTIONNAIRE_COVERAGE_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload author-questionnaire coverage evidence",
+            "pass" if not questionnaire_missing else "needs revision",
+            f"author_questionnaire_files={len(AUTHOR_QUESTIONNAIRE_COVERAGE_PATHS)}; missing={questionnaire_missing or 'none'}.",
+            "Ensure the uploadable archive includes the questionnaire coverage audit, generated evidence, and Chinese intake form.",
+        )
+    )
+
     metadata_closure_missing = sorted(METADATA_CLOSURE_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -859,6 +881,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "target_venue_format_paths": sorted(TARGET_VENUE_FORMAT_PATHS),
         "support_packet_paths": sorted(SUPPORT_PACKET_PATHS),
         "author_input_closure_paths": sorted(AUTHOR_INPUT_CLOSURE_PATHS),
+        "author_questionnaire_coverage_paths": sorted(AUTHOR_QUESTIONNAIRE_COVERAGE_PATHS),
         "payload_extraction_smoke_paths": sorted(PAYLOAD_EXTRACTION_SMOKE_PATHS),
         "payload_verifier_smoke_paths": sorted(PAYLOAD_VERIFIER_SMOKE_PATHS),
         "private_basenames": sorted(PRIVATE_BASENAMES),

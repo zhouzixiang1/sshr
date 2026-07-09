@@ -65,7 +65,7 @@
     },
     {
       "boundary": "The questionnaire is an intake guide only; it does not contain, infer, or commit private author values.",
-      "evidence": "files_missing=none; tokens=14/14; missing_tokens=none; manifest=results/manifest_submission_metadata_closure_path.json::needs_revision_count=0",
+      "evidence": "files_missing=none; tokens=14/14; missing_tokens=none; manifest=results/manifest_author_questionnaire_coverage.json::needs_revision_count=0",
       "item": "Chinese metadata questionnaire maps human inputs",
       "next_action": "No action needed.",
       "status": "pass",

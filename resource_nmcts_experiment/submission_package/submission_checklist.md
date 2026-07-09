@@ -138,9 +138,9 @@ rg -n "Overfull|Underfull|undefined|Undefined|Warning|Error|LaTeX Warning|Rerun"
 Expected current state:
 
 - Machine snapshot tokens checked by `analyze_public_handoff_freshness_audit.py`:
-  PDF pages=45/45; readiness=70 pass + 1 needs author input;
-  payload_files=1091; artifact_registry=27 families / 158 raw CSV / 77942 raw rows;
-  source_privacy=0 strict leaks / 55 provenance files / 1048 payload text files;
+  PDF pages=46/46; readiness=71 pass + 1 needs author input;
+  payload_files=1100; artifact_registry=27 families / 158 raw CSV / 77942 raw rows;
+  source_privacy=0 strict leaks / 55 provenance files / 1057 payload text files;
   comparison_validity=8/8 pass; novelty_scorecard=6/6 pass;
   goal_gate=author/venue metadata remains open.
 - Archive manifest: all payload groups complete.

@@ -1287,7 +1287,12 @@ All 20 source-derived targets pass a coarse
 $\epsilon_{\mathrm{smoke}}=0.125$ sequence test, while five pass
 $\epsilon=0.05$.  This closes part of the Rz evidence gap, but the bounded beam
 is not Ross--Selinger gridsynth, does not certify optimal T count, and is not
-used for the headline resource claims.
+used for the headline resource claims.  Table~\ref{tab:rotation-backend-audit}
+makes the backend boundary machine-checkable: no command-line gridsynth-style
+tool or Python synthesis SDK is present in the recorded environment, so the
+internal beam smoke remains the only emitted-sequence backend and the 15
+tight-tolerance failures are reported as a target set for future high-precision
+synthesis work.
 
 \begin{table}[H]
 \centering
@@ -1334,6 +1339,19 @@ emitted one-qubit sequence.  These rows demonstrate coarse sequence
 availability only; they are not optimal rotation synthesis.}
 \label{tab:phase-rotation-sequence-smoke}
 \input{tables/phase_rotation_sequence_smoke_audit}
+\end{table}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Rotation-synthesis backend availability and remaining sequence gap.
+This audit records which high-precision synthesis backends are available in the
+reproducibility environment and separates the internal coarse sequence smoke
+from missing Ross--Selinger/gridsynth-style reproduction.}
+\label{tab:rotation-backend-audit}
+\input{tables/rotation_synthesis_backend_audit}
 \end{table}
 
 \begin{table}[H]

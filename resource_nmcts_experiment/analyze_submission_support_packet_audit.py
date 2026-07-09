@@ -44,6 +44,7 @@ METADATA_CLOSURE = RESULTS / "manifest_submission_metadata_closure_path.json"
 TEXT_PREVIEW = RESULTS / "manifest_submission_text_preview.json"
 ANONYMOUS_REVIEW = RESULTS / "manifest_anonymous_review_readiness.json"
 TARGET_VENUE_DECISION = RESULTS / "manifest_target_venue_decision_audit.json"
+AUTHOR_QUESTIONNAIRE_COVERAGE = RESULTS / "manifest_author_questionnaire_coverage.json"
 
 
 @dataclass(frozen=True)
@@ -225,7 +226,7 @@ def specs() -> list[PacketSpec]:
                 "permissions.third_party_material_confirmed",
                 "validate_submission_metadata.py",
             ),
-            manifest_path=METADATA_CLOSURE,
+            manifest_path=AUTHOR_QUESTIONNAIRE_COVERAGE,
             manifest_key="needs_revision_count",
             expected=0,
             supported_use="The author can answer a Chinese field-by-field questionnaire and transfer the answers to the ignored private metadata JSON.",

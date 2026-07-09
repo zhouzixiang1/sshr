@@ -1,0 +1,57 @@
+{
+  "missing_required_paths": [],
+  "missing_template_paths": [],
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_author_questionnaire_coverage.md",
+    "manifest": "results/manifest_author_questionnaire_coverage.json",
+    "summary": "results/summary_author_questionnaire_coverage.csv"
+  },
+  "python": "3.11.15",
+  "questionnaire": "submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md",
+  "required_paths": 50,
+  "rows": 6,
+  "rows_detail": [
+    {
+      "evidence": "questionnaire_exists=True; missing_tokens=none.",
+      "item": "Questionnaire file and private workflow",
+      "next_action": "Keep the questionnaire as a public checklist and store real values only in the ignored submission_metadata.json file.",
+      "status": "pass"
+    },
+    {
+      "evidence": "required_paths=50; missing_paths=none.",
+      "item": "Required metadata path coverage",
+      "next_action": "Add every missing private metadata path to AUTHOR_METADATA_QUESTIONNAIRE_zh.md.",
+      "status": "pass"
+    },
+    {
+      "evidence": "required_paths=50; missing_in_template=none.",
+      "item": "Template path parity",
+      "next_action": "Keep REQUIRED_METADATA_PATHS aligned with submission_metadata_template.json.",
+      "status": "pass"
+    },
+    {
+      "evidence": "missing_tokens=none.",
+      "item": "Claim-boundary reminders",
+      "next_action": "Keep overclaim boundaries visible where authors fill final submission text.",
+      "status": "pass"
+    },
+    {
+      "evidence": "missing_tokens=none.",
+      "item": "Anonymous-review link prompts",
+      "next_action": "Keep double-blind data/code link prompts visible until the target venue is selected.",
+      "status": "pass"
+    },
+    {
+      "evidence": "missing_tokens=none.",
+      "item": "Post-fill verification commands",
+      "next_action": "Keep the post-fill command sequence in the public questionnaire.",
+      "status": "pass"
+    }
+  ],
+  "script": "analyze_author_questionnaire_coverage.py",
+  "status_counts": {
+    "pass": 6
+  },
+  "template": "submission_package/submission_metadata_template.json"
+}
