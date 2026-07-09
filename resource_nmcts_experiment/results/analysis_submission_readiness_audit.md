@@ -5,7 +5,7 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 ## Status counts
 
 - needs author input: 1
-- pass: 26
+- pass: 27
 
 ## Checklist
 
@@ -17,6 +17,7 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 | Contribution-to-evidence chain | pass | Introduction includes a contribution-to-evidence map. | Update the map whenever a headline contribution changes. |
 | Executable method workflow | pass | Method includes an end-to-end synthesis and verification workflow table. | Keep the workflow table aligned with new candidate generators or verification stages. |
 | Baseline fairness and scope | pass | Experimental design includes claim, evidence, and comparability matrices. | Keep cross-toolchain claims tied to the comparability audit. |
+| Paired effect uncertainty | pass | Manuscript includes bootstrap uncertainty intervals for paired score-effect estimates. | Rerun analyze_paired_effect_uncertainty.py after changing paired comparisons or score fields. |
 | Claim-scope lint | pass | Claim-scope lint scans manuscript and handoff files; unresolved_count=0. | Rerun analyze_claim_scope_lint.py and revise unguarded hardware-mapping, universal-dominance, optimality, or full-tool-reproduction claims. |
 | Reproducibility evidence | pass | Manuscript includes compute, worker, artifact, and external-tool provenance table. | Rerun analyze_reproducibility_audit.py after adding scripts, tables, or figures. |
 | Raw rerun registry | pass | Artifact rerun registry maps evidence families to driver scripts, raw CSV coverage, manifests, rerun tiers, and dependency boundaries. | Rerun analyze_artifact_rerun_registry.py after adding raw data families, run scripts, or external-tool probes. |

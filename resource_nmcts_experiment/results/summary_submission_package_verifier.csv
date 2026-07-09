@@ -1,8 +1,8 @@
 item,status,evidence,next_action
-Compiled PDF,pass,"paper_latex/resource_nmcts_submission_v1.pdf pages=26, bytes=597039.",Rebuild the submission package and inspect latexmk output if the PDF is missing.
-Payload SHA sidecar,pass,actual=ecb5479586e2bd504abe99216c0812096535bc009adb5615a5ab1f3a701b92fb; sidecar=ecb5479586e2bd504abe99216c0812096535bc009adb5615a5ab1f3a701b92fb.,Regenerate the payload archive if the digests differ.
-Payload manifest consistency,pass,summary=ecb5479586e2bd504abe99216c0812096535bc009adb5615a5ab1f3a701b92fb; manifest=ecb5479586e2bd504abe99216c0812096535bc009adb5615a5ab1f3a701b92fb; file_count=839.,Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree.
-Readiness audit terminal state,pass,"status_counts={'pass': 25, 'needs author input': 1}.",Resolve any needs-revision rows; author-specific declarations remain manual.
+Compiled PDF,pass,"paper_latex/resource_nmcts_submission_v1.pdf pages=26, bytes=599102.",Rebuild the submission package and inspect latexmk output if the PDF is missing.
+Payload SHA sidecar,pass,actual=9a0f248161251c3a17bbb5e3a15a9f7688359d85d33559aa65ba03079cb740cd; sidecar=9a0f248161251c3a17bbb5e3a15a9f7688359d85d33559aa65ba03079cb740cd.,Regenerate the payload archive if the digests differ.
+Payload manifest consistency,pass,summary=9a0f248161251c3a17bbb5e3a15a9f7688359d85d33559aa65ba03079cb740cd; manifest=9a0f248161251c3a17bbb5e3a15a9f7688359d85d33559aa65ba03079cb740cd; file_count=844.,Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree.
+Readiness audit terminal state,pass,"status_counts={'pass': 26, 'needs author input': 1}.",Resolve any needs-revision rows; author-specific declarations remain manual.
 Artifact rerun registry coverage,pass,families=14; registry_raw=144; actual_raw=144.,Rerun analyze_artifact_rerun_registry.py after adding raw CSVs or driver scripts.
 Claim-scope lint,pass,"unresolved_count=0; status_counts={'guarded': 53, 'pass': 5}.","Run analyze_claim_scope_lint.py and revise unguarded hardware-mapping, universal-dominance, optimality, or full-tool-reproduction claims."
 Private metadata validator,pass,needs_revision_count=0; status_counts={'needs author input': 1}.,Run validate_submission_metadata.py and fix metadata format or consistency rows before upload.

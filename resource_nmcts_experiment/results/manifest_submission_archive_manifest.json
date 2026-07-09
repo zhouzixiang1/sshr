@@ -2,7 +2,7 @@
   "categories": [
     {
       "boundary": "Compiled PDF is checked by readiness audit to avoid self-referential hashes.",
-      "bytes": 73830,
+      "bytes": 75009,
       "category": "Manuscript source",
       "file_count": 3,
       "files": [
@@ -17,19 +17,19 @@
           "sha256": "ab6321067236ad1c6bcae4fdc2509ecfb992fe915a3f0218531da7cb57466028"
         },
         {
-          "bytes": 48576,
+          "bytes": 49755,
           "path": "paper_latex/resource_nmcts_submission_v1.tex",
-          "sha256": "83fb2c662abbcd9c61c2a610961706296ca5e90c288f4cf6c5a72c9ff6e09028"
+          "sha256": "e1d6806687a6159f8bc03836cd04874b452560028b02e643d5e22a6c1501acfc"
         }
       ],
       "missing": [],
-      "sha256_digest": "be1f55c9d8353ecc2d2efdc0fcc0648f143cd9fba58d83bef17a2f86893a5b8d"
+      "sha256_digest": "9683723cf7b12b4519383a8f1891075153d245a41e49d2942e0430bbb24a2c07"
     },
     {
       "boundary": "Terminal submission audit tables are excluded from the stable payload digest.",
-      "bytes": 133485,
+      "bytes": 135640,
       "category": "Paper tables",
-      "file_count": 150,
+      "file_count": 151,
       "files": [
         {
           "bytes": 2608,
@@ -377,6 +377,11 @@
           "sha256": "663a0417dc3bdd47284d382ff75d75bfb1cbbbc7bffc61729b9cf9f5bf6a3a5f"
         },
         {
+          "bytes": 2155,
+          "path": "paper_latex/tables/paired_effect_uncertainty.tex",
+          "sha256": "b9ad9012e153b0fd425d51a7daf769c40c60f35699e7d481817216b3720ef0ac"
+        },
+        {
           "bytes": 1556,
           "path": "paper_latex/tables/paired_statistical_evidence.tex",
           "sha256": "326587defe62decb5be80dcd464bc38f38c640fd46558a7378d561457e98745c"
@@ -434,7 +439,7 @@
         {
           "bytes": 1352,
           "path": "paper_latex/tables/reproducibility_audit.tex",
-          "sha256": "4bc96462602e24ea0bf30ec6199d484cfff41e8f7faf856723978038b41d25f3"
+          "sha256": "b6a7fe90543a70a24808385f729f8f120e467457319fa8bb117ee90c41d700e4"
         },
         {
           "bytes": 517,
@@ -783,7 +788,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "db639ffa572981bd58d50306a839b7794f503977cf8fe44738eb8bce0b570903"
+      "sha256_digest": "fe81f240e9414c788a96aad7bfc0197047e633a7237df6a72c051903481bbb02"
     },
     {
       "boundary": "Includes generated figure assets and plotted source data, not raw benchmark reruns.",
@@ -1667,9 +1672,9 @@
     },
     {
       "boundary": "Terminal submission/package outputs are excluded so this manifest remains stable.",
-      "bytes": 4430074,
+      "bytes": 4437469,
       "category": "Derived summaries",
-      "file_count": 325,
+      "file_count": 327,
       "files": [
         {
           "bytes": 30224,
@@ -1747,9 +1752,9 @@
           "sha256": "f24ad4391979e30bf864d2d74f5197655216bcd2d72e4e0fa3e6a1ca98a3b47d"
         },
         {
-          "bytes": 31189,
+          "bytes": 31190,
           "path": "results/analysis_claim_scope_lint.md",
-          "sha256": "740e551c760dc6bb538600283d9706d5123d19d1529c87578c27a013c3cfde5f"
+          "sha256": "1db7313042417a2ac8357c6ca2b0fbf5ca4bfdf8876d1f765b0cb01f1f9081ba"
         },
         {
           "bytes": 3720,
@@ -1942,9 +1947,9 @@
           "sha256": "3274439bbe884618464e974ca35a31d4ba4c7e0980c6bc1f384e57009d5cb9bf"
         },
         {
-          "bytes": 10226,
+          "bytes": 10354,
           "path": "results/analysis_goal_completion_audit.md",
-          "sha256": "13f736dfd3a7ace6fe2a46ec2e987a7ac24d17479f4cde3dc741c92c3f2031c0"
+          "sha256": "68ab5a89342e731cddfeb1f545dc50d8b32403a64390f15009390afa78ec1ff8"
         },
         {
           "bytes": 946,
@@ -2082,6 +2087,11 @@
           "sha256": "092c160de66c5561ba7c6f47d75173c1eb494505d0f1827720056b8512a7bdb6"
         },
         {
+          "bytes": 2129,
+          "path": "results/analysis_paired_effect_uncertainty.md",
+          "sha256": "56cea6dfd897b527d0d448b3c9f2e2032c9bb2b54fc721e389c4ec3d2266da99"
+        },
+        {
           "bytes": 1506,
           "path": "results/analysis_paired_statistical_evidence.md",
           "sha256": "ed01da8b44265933b4ad4ba89566018faee90cb2aa6a11a4ff40d6afa7433ba0"
@@ -2144,7 +2154,7 @@
         {
           "bytes": 1331,
           "path": "results/analysis_reproducibility_audit.md",
-          "sha256": "d1eafe4e190d9d0842ed1e4893b75da39b03c56ac8fa377d0706fb5e57a8ff28"
+          "sha256": "ea4ad36814edeeebf2ee9c365927b3c5ea823eae1f18a9a54144a3e3a8fc2785"
         },
         {
           "bytes": 18485,
@@ -2512,9 +2522,9 @@
           "sha256": "03f80069b5d51bd79092304be93abb0e88d985f437f0aaf754928c7e5f2b034e"
         },
         {
-          "bytes": 35227,
+          "bytes": 35228,
           "path": "results/summary_claim_scope_lint.csv",
-          "sha256": "92c75951111716c66d6cb46ba2535357f601c05f8a21bfea8dc9e6075f578aca"
+          "sha256": "31999bed4466e3c4cd93324cfb7d30433ccb375c597e719f57da86ad8c905452"
         },
         {
           "bytes": 3117,
@@ -2747,9 +2757,9 @@
           "sha256": "239851a4e45235ac2f4546d4adc9d76cb98466054c2252ad8150570e8a51bc00"
         },
         {
-          "bytes": 9205,
+          "bytes": 9333,
           "path": "results/summary_goal_completion_audit.csv",
-          "sha256": "7908c738d6087c92516292b5f60a857c60f1dc2ebb18c88d977bef42a8b8b01d"
+          "sha256": "bed69b99c9d533c494b8cbd2bde7d003205a479f0cd9338fc78b7feeca632756"
         },
         {
           "bytes": 435,
@@ -2932,6 +2942,11 @@
           "sha256": "35572505d9885c30600ed5ba92e57ebaf8f9d70f3d75e0e265844e6b4dfda7ce"
         },
         {
+          "bytes": 5008,
+          "path": "results/summary_paired_effect_uncertainty.csv",
+          "sha256": "7f129ac313b387e6c360031c3033c9c682ff11a0ab5065ca5a11da5a028c0e26"
+        },
+        {
           "bytes": 3981,
           "path": "results/summary_paired_statistical_evidence.csv",
           "sha256": "4b1cb9b20fde887a2c59dfc74ab074b8a7ca7191e7a656d30dcc5c43dc95b6ee"
@@ -2994,7 +3009,7 @@
         {
           "bytes": 1115,
           "path": "results/summary_reproducibility_audit.csv",
-          "sha256": "7991f2b0bea131d7c68d7af1ae0fb85b8481ff413310a2b13cfac9eadcbf34c4"
+          "sha256": "04a62ac29ddc973421669f92bec85262dfc7ef0db17c940e61c8f2d6e071daff"
         },
         {
           "bytes": 16230,
@@ -3298,13 +3313,13 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "76a7cca1d032c4e8f34655b9b5125fff2583e897c9cfb921453ca0e04c988813"
+      "sha256_digest": "a7ad2e5b016f084988b680cfc0a8c06f172559ecd3cf4ba6c551d82d515e94d7"
     },
     {
       "boundary": "Submission-level terminal manifests are excluded from this digest group.",
-      "bytes": 128498,
+      "bytes": 129121,
       "category": "Run manifests",
-      "file_count": 74,
+      "file_count": 75,
       "files": [
         {
           "bytes": 802,
@@ -3432,9 +3447,9 @@
           "sha256": "9f9f367e772de60658bc85d8d24da77ad9fc72693aad4362b0d0e7696767e986"
         },
         {
-          "bytes": 11713,
+          "bytes": 11841,
           "path": "results/manifest_goal_completion_audit.json",
-          "sha256": "90abc10dc4105424829564f2453cec26699350df3bf9a9b4ef589afd5188853e"
+          "sha256": "6d6f5ba5d9d604dcc1f7f5cedcd15f9d85076c566acaff8db3a6bfe7f4870899"
         },
         {
           "bytes": 914,
@@ -3510,6 +3525,11 @@
           "bytes": 1668,
           "path": "results/manifest_mockturtle_xag_probe.json",
           "sha256": "23a58ab0d531beabd97347b4ab7daab73d51f8ba337d535132407de10ceb5ca1"
+        },
+        {
+          "bytes": 495,
+          "path": "results/manifest_paired_effect_uncertainty.json",
+          "sha256": "074c66572ad5afca8e20ab1609dcea058937834498e51efca2123defe12f7d31"
         },
         {
           "bytes": 1216,
@@ -3678,13 +3698,13 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "add8e06d1a6abb14d2fea9dd19fd1144555920afdc390fb9f71b0be93cd88291"
+      "sha256_digest": "428e1270910a3b3c589588d5a4345eadc5e5da0db5ae73bca2f29249243357e5"
     },
     {
       "boundary": "Documents reproducible entry points; raw sweeps still require their individual drivers.",
-      "bytes": 1420438,
+      "bytes": 1430717,
       "category": "Scripts and docs",
-      "file_count": 75,
+      "file_count": 76,
       "files": [
         {
           "bytes": 154984,
@@ -3762,9 +3782,9 @@
           "sha256": "3d0672851e5cc2ee231fb8886a64b3b718be94e12a3373f1245eb1b6a13def9b"
         },
         {
-          "bytes": 22434,
+          "bytes": 22723,
           "path": "analyze_goal_completion_audit.py",
-          "sha256": "581610b35ac8c6fa2666867ca5153c5d42c198156b42b871a2debc113cd0aa44"
+          "sha256": "58eac3652de143ff5f8d2efc8c8adca6012ff58c300d54ec5e6353c0dc525263"
         },
         {
           "bytes": 20516,
@@ -3790,6 +3810,11 @@
           "bytes": 9419,
           "path": "analyze_neural_prior_ablation.py",
           "sha256": "c9dea49f01e7b6a95360106598b80944542976016767be9398874c26b408f2a3"
+        },
+        {
+          "bytes": 8888,
+          "path": "analyze_paired_effect_uncertainty.py",
+          "sha256": "1c9c9fc758afdbcab12058dc6cc2af963966ee26fd4fd85dd56919967f504c9f"
         },
         {
           "bytes": 7361,
@@ -3907,14 +3932,14 @@
           "sha256": "7fdb57860366323741fd74720b2dc01c7392909afdfd22b6a57282f5a604dcc9"
         },
         {
-          "bytes": 24084,
+          "bytes": 25017,
           "path": "analyze_submission_readiness_audit.py",
-          "sha256": "bdb18c3645af1a6d850cb1f92da21e46489fb46c2a02445f23ec5b5fcf194af1"
+          "sha256": "b7bd99f94022002b91251ba65432ca981f7682f89c5a01434f7f120cc92409b5"
         },
         {
-          "bytes": 13173,
+          "bytes": 13298,
           "path": "analyze_submission_traceability_audit.py",
-          "sha256": "732db9e171b9807b8c048970a0a0437dfae3b4aebddb2b8602e01d0c3f106087"
+          "sha256": "91597ec7287e85546d11d7c666b8284adbde2d7a56d6032950f11e6efd0757f1"
         },
         {
           "bytes": 17495,
@@ -3947,9 +3972,9 @@
           "sha256": "05bd6be23b49ab6c6ac65da94a185deccb15ba02c6428f2f51110713d178574f"
         },
         {
-          "bytes": 2224,
+          "bytes": 2268,
           "path": "rebuild_submission_package.sh",
-          "sha256": "3da28dd5c7070ad9beb79ba223525ed09524284ec5f2f125ea7f3b4d4d8b354a"
+          "sha256": "c1b277c37b3e7d1575d1b26184efb97adf6981b80dbcb16c518d5d88d42da751"
         },
         {
           "bytes": 24403,
@@ -4063,7 +4088,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "e843e36c1745e73d62b32eeedc96a27b8921abd1aba74b770f5910196eeae15b"
+      "sha256_digest": "69a43885060d1ff7e69c22458aff42cfcae0779dac09ac2425d41227de6761e8"
     },
     {
       "boundary": "Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild.",

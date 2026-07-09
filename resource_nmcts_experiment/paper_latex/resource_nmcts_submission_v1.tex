@@ -577,6 +577,30 @@ a two-sided exact sign test over wins and losses, ignoring ties.}
 \input{tables/paired_statistical_evidence}
 \end{table}
 
+To avoid treating each mean effect as a single point estimate, we also compute
+nonparametric bootstrap intervals on the same matched rows.  This uncertainty
+check does not introduce new measurements; it asks whether the observed effect
+sizes remain separated from zero when functions or items are resampled with
+replacement.  Table~\ref{tab:paired-effect-uncertainty} shows that the main
+small-function and external-toolchain comparisons remain negative with narrow
+intervals, while the high-dimensional root-beam and fast-pair comparisons keep
+smaller but still negative intervals.  The table therefore strengthens the
+paired evidence without converting a weighted-score result into a universal
+resource-dominance claim.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Bootstrap uncertainty intervals for paired score-effect estimates.
+Rows reuse the matched pairs from Table~\ref{tab:paired-statistics}.
+Intervals are percentile bootstrap intervals over relative score changes;
+negative values favor the target method.}
+\label{tab:paired-effect-uncertainty}
+\input{tables/paired_effect_uncertainty}
+\end{table}
+
 \subsection{Raw multi-resource dominance}
 
 Because Eq.~\eqref{eq:score} is only a ranking objective, we also test

@@ -1,6 +1,6 @@
 {
   "archive": "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
-  "archive_bytes": 38918181,
+  "archive_bytes": 38925394,
   "excluded_from_payload": [
     "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
     "submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256",
@@ -10,7 +10,7 @@
     "results/summary_submission_readiness_audit.csv",
     "results/analysis_submission_readiness_audit.md"
   ],
-  "file_count": 839,
+  "file_count": 844,
   "files": [
     {
       "bytes": 154984,
@@ -88,9 +88,9 @@
       "sha256": "3d0672851e5cc2ee231fb8886a64b3b718be94e12a3373f1245eb1b6a13def9b"
     },
     {
-      "bytes": 22434,
+      "bytes": 22723,
       "path": "analyze_goal_completion_audit.py",
-      "sha256": "581610b35ac8c6fa2666867ca5153c5d42c198156b42b871a2debc113cd0aa44"
+      "sha256": "58eac3652de143ff5f8d2efc8c8adca6012ff58c300d54ec5e6353c0dc525263"
     },
     {
       "bytes": 20516,
@@ -116,6 +116,11 @@
       "bytes": 9419,
       "path": "analyze_neural_prior_ablation.py",
       "sha256": "c9dea49f01e7b6a95360106598b80944542976016767be9398874c26b408f2a3"
+    },
+    {
+      "bytes": 8888,
+      "path": "analyze_paired_effect_uncertainty.py",
+      "sha256": "1c9c9fc758afdbcab12058dc6cc2af963966ee26fd4fd85dd56919967f504c9f"
     },
     {
       "bytes": 7361,
@@ -233,14 +238,14 @@
       "sha256": "7fdb57860366323741fd74720b2dc01c7392909afdfd22b6a57282f5a604dcc9"
     },
     {
-      "bytes": 24084,
+      "bytes": 25017,
       "path": "analyze_submission_readiness_audit.py",
-      "sha256": "bdb18c3645af1a6d850cb1f92da21e46489fb46c2a02445f23ec5b5fcf194af1"
+      "sha256": "b7bd99f94022002b91251ba65432ca981f7682f89c5a01434f7f120cc92409b5"
     },
     {
-      "bytes": 13173,
+      "bytes": 13298,
       "path": "analyze_submission_traceability_audit.py",
-      "sha256": "732db9e171b9807b8c048970a0a0437dfae3b4aebddb2b8602e01d0c3f106087"
+      "sha256": "91597ec7287e85546d11d7c666b8284adbde2d7a56d6032950f11e6efd0757f1"
     },
     {
       "bytes": 17495,
@@ -523,14 +528,14 @@
       "sha256": "ab6321067236ad1c6bcae4fdc2509ecfb992fe915a3f0218531da7cb57466028"
     },
     {
-      "bytes": 597039,
+      "bytes": 599102,
       "path": "paper_latex/resource_nmcts_submission_v1.pdf",
-      "sha256": "f1e7e0025720381770b9f77ae18d41365d80c084b66471bbbf190a27dd5e8169"
+      "sha256": "71693161e1619242315515446b06e6e2e7dda7c113e3aaeca225e0a376267661"
     },
     {
-      "bytes": 48576,
+      "bytes": 49755,
       "path": "paper_latex/resource_nmcts_submission_v1.tex",
-      "sha256": "83fb2c662abbcd9c61c2a610961706296ca5e90c288f4cf6c5a72c9ff6e09028"
+      "sha256": "e1d6806687a6159f8bc03836cd04874b452560028b02e643d5e22a6c1501acfc"
     },
     {
       "bytes": 2608,
@@ -878,6 +883,11 @@
       "sha256": "663a0417dc3bdd47284d382ff75d75bfb1cbbbc7bffc61729b9cf9f5bf6a3a5f"
     },
     {
+      "bytes": 2155,
+      "path": "paper_latex/tables/paired_effect_uncertainty.tex",
+      "sha256": "b9ad9012e153b0fd425d51a7daf769c40c60f35699e7d481817216b3720ef0ac"
+    },
+    {
       "bytes": 1556,
       "path": "paper_latex/tables/paired_statistical_evidence.tex",
       "sha256": "326587defe62decb5be80dcd464bc38f38c640fd46558a7378d561457e98745c"
@@ -935,7 +945,7 @@
     {
       "bytes": 1352,
       "path": "paper_latex/tables/reproducibility_audit.tex",
-      "sha256": "4bc96462602e24ea0bf30ec6199d484cfff41e8f7faf856723978038b41d25f3"
+      "sha256": "b6a7fe90543a70a24808385f729f8f120e467457319fa8bb117ee90c41d700e4"
     },
     {
       "bytes": 517,
@@ -1210,7 +1220,7 @@
     {
       "bytes": 1834,
       "path": "paper_latex/tables/submission_archive_manifest.tex",
-      "sha256": "1eb3f8c797e0fe400d2a6013957f7e406f559a0f80ce4db76082d86f00e9073d"
+      "sha256": "2fdd1c8d7f5b362802be2b69dc89b27981f3f89bef3c3bd4108a57d50e4671b6"
     },
     {
       "bytes": 2602,
@@ -1293,9 +1303,9 @@
       "sha256": "a0ffbc119d11e9bd26bb05803b70fc9b49f0f7babbc7c424d474cb15963615a9"
     },
     {
-      "bytes": 2224,
+      "bytes": 2268,
       "path": "rebuild_submission_package.sh",
-      "sha256": "3da28dd5c7070ad9beb79ba223525ed09524284ec5f2f125ea7f3b4d4d8b354a"
+      "sha256": "c1b277c37b3e7d1575d1b26184efb97adf6981b80dbcb16c518d5d88d42da751"
     },
     {
       "bytes": 30224,
@@ -1373,9 +1383,9 @@
       "sha256": "f24ad4391979e30bf864d2d74f5197655216bcd2d72e4e0fa3e6a1ca98a3b47d"
     },
     {
-      "bytes": 31189,
+      "bytes": 31190,
       "path": "results/analysis_claim_scope_lint.md",
-      "sha256": "740e551c760dc6bb538600283d9706d5123d19d1529c87578c27a013c3cfde5f"
+      "sha256": "1db7313042417a2ac8357c6ca2b0fbf5ca4bfdf8876d1f765b0cb01f1f9081ba"
     },
     {
       "bytes": 3720,
@@ -1568,9 +1578,9 @@
       "sha256": "3274439bbe884618464e974ca35a31d4ba4c7e0980c6bc1f384e57009d5cb9bf"
     },
     {
-      "bytes": 10226,
+      "bytes": 10354,
       "path": "results/analysis_goal_completion_audit.md",
-      "sha256": "13f736dfd3a7ace6fe2a46ec2e987a7ac24d17479f4cde3dc741c92c3f2031c0"
+      "sha256": "68ab5a89342e731cddfeb1f545dc50d8b32403a64390f15009390afa78ec1ff8"
     },
     {
       "bytes": 946,
@@ -1708,6 +1718,11 @@
       "sha256": "092c160de66c5561ba7c6f47d75173c1eb494505d0f1827720056b8512a7bdb6"
     },
     {
+      "bytes": 2129,
+      "path": "results/analysis_paired_effect_uncertainty.md",
+      "sha256": "56cea6dfd897b527d0d448b3c9f2e2032c9bb2b54fc721e389c4ec3d2266da99"
+    },
+    {
       "bytes": 1506,
       "path": "results/analysis_paired_statistical_evidence.md",
       "sha256": "ed01da8b44265933b4ad4ba89566018faee90cb2aa6a11a4ff40d6afa7433ba0"
@@ -1770,7 +1785,7 @@
     {
       "bytes": 1331,
       "path": "results/analysis_reproducibility_audit.md",
-      "sha256": "d1eafe4e190d9d0842ed1e4893b75da39b03c56ac8fa377d0706fb5e57a8ff28"
+      "sha256": "ea4ad36814edeeebf2ee9c365927b3c5ea823eae1f18a9a54144a3e3a8fc2785"
     },
     {
       "bytes": 18485,
@@ -1945,7 +1960,7 @@
     {
       "bytes": 1961,
       "path": "results/analysis_submission_archive_manifest.md",
-      "sha256": "19eab2df101e9a10424ce86d0b7a7f4b3f877d3e58e77ec1f60e0681e3fb4040"
+      "sha256": "133e269c1f71fd2ffc6d0ccb90e440cf83e36fdf9cc20ec592118225090cffbb"
     },
     {
       "bytes": 5678,
@@ -1968,9 +1983,9 @@
       "sha256": "4ceae95b745428c36946efc0f07f7c7bf1cb9972293a40a93342bd8fae6bf16c"
     },
     {
-      "bytes": 5979,
+      "bytes": 6076,
       "path": "results/analysis_submission_traceability_audit.md",
-      "sha256": "f5a88e01fedef5779cdca81f3160397a66d03009098247964cd79c6ca77eaa41"
+      "sha256": "7faf9c6e222d1d708d89210feb119a1e206aeff012a10a52a1d0e8065bd41fd0"
     },
     {
       "bytes": 7221,
@@ -2193,9 +2208,9 @@
       "sha256": "9f9f367e772de60658bc85d8d24da77ad9fc72693aad4362b0d0e7696767e986"
     },
     {
-      "bytes": 11713,
+      "bytes": 11841,
       "path": "results/manifest_goal_completion_audit.json",
-      "sha256": "90abc10dc4105424829564f2453cec26699350df3bf9a9b4ef589afd5188853e"
+      "sha256": "6d6f5ba5d9d604dcc1f7f5cedcd15f9d85076c566acaff8db3a6bfe7f4870899"
     },
     {
       "bytes": 914,
@@ -2271,6 +2286,11 @@
       "bytes": 1668,
       "path": "results/manifest_mockturtle_xag_probe.json",
       "sha256": "23a58ab0d531beabd97347b4ab7daab73d51f8ba337d535132407de10ceb5ca1"
+    },
+    {
+      "bytes": 495,
+      "path": "results/manifest_paired_effect_uncertainty.json",
+      "sha256": "074c66572ad5afca8e20ab1609dcea058937834498e51efca2123defe12f7d31"
     },
     {
       "bytes": 1216,
@@ -2378,9 +2398,9 @@
       "sha256": "ada7ffbc4efdf8f3336b44c9a769a0a655834957715f0be61ead1c8d778d58a6"
     },
     {
-      "bytes": 171567,
+      "bytes": 172562,
       "path": "results/manifest_submission_archive_manifest.json",
-      "sha256": "536eff09414c5d64626f11d435ae3438690be11e8d958b49f0efee7d0bad447d"
+      "sha256": "8f1674f3bbcde67e2e6880d966aeb57e965153a87c26484ada8f885203020aea"
     },
     {
       "bytes": 8596,
@@ -3248,9 +3268,9 @@
       "sha256": "03f80069b5d51bd79092304be93abb0e88d985f437f0aaf754928c7e5f2b034e"
     },
     {
-      "bytes": 35227,
+      "bytes": 35228,
       "path": "results/summary_claim_scope_lint.csv",
-      "sha256": "92c75951111716c66d6cb46ba2535357f601c05f8a21bfea8dc9e6075f578aca"
+      "sha256": "31999bed4466e3c4cd93324cfb7d30433ccb375c597e719f57da86ad8c905452"
     },
     {
       "bytes": 3117,
@@ -3483,9 +3503,9 @@
       "sha256": "239851a4e45235ac2f4546d4adc9d76cb98466054c2252ad8150570e8a51bc00"
     },
     {
-      "bytes": 9205,
+      "bytes": 9333,
       "path": "results/summary_goal_completion_audit.csv",
-      "sha256": "7908c738d6087c92516292b5f60a857c60f1dc2ebb18c88d977bef42a8b8b01d"
+      "sha256": "bed69b99c9d533c494b8cbd2bde7d003205a479f0cd9338fc78b7feeca632756"
     },
     {
       "bytes": 435,
@@ -3668,6 +3688,11 @@
       "sha256": "35572505d9885c30600ed5ba92e57ebaf8f9d70f3d75e0e265844e6b4dfda7ce"
     },
     {
+      "bytes": 5008,
+      "path": "results/summary_paired_effect_uncertainty.csv",
+      "sha256": "7f129ac313b387e6c360031c3033c9c682ff11a0ab5065ca5a11da5a028c0e26"
+    },
+    {
       "bytes": 3981,
       "path": "results/summary_paired_statistical_evidence.csv",
       "sha256": "4b1cb9b20fde887a2c59dfc74ab074b8a7ca7191e7a656d30dcc5c43dc95b6ee"
@@ -3730,7 +3755,7 @@
     {
       "bytes": 1115,
       "path": "results/summary_reproducibility_audit.csv",
-      "sha256": "7991f2b0bea131d7c68d7af1ae0fb85b8481ff413310a2b13cfac9eadcbf34c4"
+      "sha256": "04a62ac29ddc973421669f92bec85262dfc7ef0db17c940e61c8f2d6e071daff"
     },
     {
       "bytes": 16230,
@@ -3900,7 +3925,7 @@
     {
       "bytes": 3656,
       "path": "results/summary_submission_archive_manifest.csv",
-      "sha256": "32565e7b9bd8dc44eb9f0904e69f499a2fb701cbdd81659d9d710702c0c6c460"
+      "sha256": "ddcbfafbb81198e2e1d287879ada2afaebde2bc8ab91fb7af9c826961229dc02"
     },
     {
       "bytes": 6152,
@@ -3923,9 +3948,9 @@
       "sha256": "fc3b1be822d7baa1bd58bc77711e39cd3d5626f385393c0045e9bea8be2645ad"
     },
     {
-      "bytes": 5625,
+      "bytes": 5722,
       "path": "results/summary_submission_traceability_audit.csv",
-      "sha256": "3db7004b6a1320f9f4a583b25ba883dd9566a90ee40f2ee1563ecd0dfe016cc5"
+      "sha256": "dd774f36372b42deb71a9bf6e1d1434564550e9275a91e0731a6e39f9a78e4d7"
     },
     {
       "bytes": 4072,
@@ -4208,10 +4233,10 @@
       "sha256": "992f7f70e1034c05790571e24b6c7f2fce74b8389d383d5e427a1cfd61985aa8"
     }
   ],
-  "input_bytes": 106468022,
+  "input_bytes": 106492905,
   "missing": [],
   "python": "3.11.15",
   "script": "make_submission_payload_archive.py",
-  "sha256": "ecb5479586e2bd504abe99216c0812096535bc009adb5615a5ab1f3a701b92fb",
+  "sha256": "9a0f248161251c3a17bbb5e3a15a9f7688359d85d33559aa65ba03079cb740cd",
   "sha256_file": "submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256"
 }

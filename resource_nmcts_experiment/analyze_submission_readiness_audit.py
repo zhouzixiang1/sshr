@@ -62,6 +62,10 @@ RERUN_REGISTRY_ANALYSIS = RESULTS / "analysis_artifact_rerun_registry.md"
 RERUN_REGISTRY_SUMMARY = RESULTS / "summary_artifact_rerun_registry.csv"
 RERUN_REGISTRY_MANIFEST = RESULTS / "manifest_artifact_rerun_registry.json"
 RERUN_REGISTRY_TABLE = THIS_DIR / "paper_latex" / "tables" / "artifact_rerun_registry.tex"
+PAIRED_EFFECT_ANALYSIS = RESULTS / "analysis_paired_effect_uncertainty.md"
+PAIRED_EFFECT_SUMMARY = RESULTS / "summary_paired_effect_uncertainty.csv"
+PAIRED_EFFECT_MANIFEST = RESULTS / "manifest_paired_effect_uncertainty.json"
+PAIRED_EFFECT_TABLE = THIS_DIR / "paper_latex" / "tables" / "paired_effect_uncertainty.tex"
 SUPPORT_FILES = [
     SUBMISSION_PACKAGE / "README.md",
     AUTHOR_INPUT_PACKET,
@@ -201,6 +205,18 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": "Experimental design includes claim, evidence, and comparability matrices.",
             "next_action": "Keep cross-toolchain claims tied to the comparability audit.",
+        },
+        {
+            "item": "Paired effect uncertainty",
+            "status": "pass"
+            if "tab:paired-effect-uncertainty" in text
+            and PAIRED_EFFECT_ANALYSIS.exists()
+            and PAIRED_EFFECT_SUMMARY.exists()
+            and PAIRED_EFFECT_MANIFEST.exists()
+            and PAIRED_EFFECT_TABLE.exists()
+            else "needs revision",
+            "evidence": "Manuscript includes bootstrap uncertainty intervals for paired score-effect estimates.",
+            "next_action": "Rerun analyze_paired_effect_uncertainty.py after changing paired comparisons or score fields.",
         },
         {
             "item": "Claim-scope lint",

@@ -1,0 +1,15 @@
+{
+  "bootstrap_samples": 4000,
+  "bootstrap_seed": 20260709,
+  "mean_ci_excludes_zero": 15,
+  "median_ci_excludes_zero": 15,
+  "outputs": {
+    "analysis": "results/analysis_paired_effect_uncertainty.md",
+    "manifest": "results/manifest_paired_effect_uncertainty.json",
+    "summary": "results/summary_paired_effect_uncertainty.csv",
+    "table": "paper_latex/tables/paired_effect_uncertainty.tex"
+  },
+  "python": "3.11.15",
+  "rows": 15,
+  "script": "analyze_paired_effect_uncertainty.py"
+}

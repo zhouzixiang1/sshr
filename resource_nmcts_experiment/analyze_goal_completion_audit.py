@@ -185,15 +185,19 @@ def build_items() -> list[GoalItem]:
             status=status_if(
                 (
                     RESULTS / "analysis_paired_statistical_evidence.md",
+                    RESULTS / "analysis_paired_effect_uncertainty.md",
                     TABLES / "paired_statistical_evidence.tex",
+                    TABLES / "paired_effect_uncertainty.tex",
                     FIGURES / "fig2_traditional_resources.pdf",
                     FIGURES / "fig3_baseline_comparisons.pdf",
                 )
             ),
-            evidence="Paired statistics show score/T improvements over direct ANF, ESOP, SSHR variants, ABC-XAG, ROS-style LUT, mockturtle, CirKit, RevKit CLI, and high-dimensional root/fast baselines.",
+            evidence="Paired statistics and bootstrap effect intervals show score/T improvements over direct ANF, ESOP, SSHR variants, ABC-XAG, ROS-style LUT, mockturtle, CirKit, RevKit CLI, and high-dimensional root/fast baselines.",
             evidence_files=(
                 RESULTS / "analysis_paired_statistical_evidence.md",
+                RESULTS / "analysis_paired_effect_uncertainty.md",
                 TABLES / "paired_statistical_evidence.tex",
+                TABLES / "paired_effect_uncertainty.tex",
                 FIGURES / "fig2_traditional_resources.pdf",
                 FIGURES / "fig3_baseline_comparisons.pdf",
             ),
