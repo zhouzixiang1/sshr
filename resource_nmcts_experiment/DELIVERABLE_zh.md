@@ -22,9 +22,9 @@
 
 - PDF pages=49/49
 - readiness=75 pass + 1 needs author input
-- payload_files=1147
+- payload_files=1151
 - artifact_registry=30 families / 161 raw CSV / 80312 raw rows
-- source_privacy=0 strict leaks / 57 provenance files / 1104 payload text files
+- source_privacy=0 strict leaks / 57 provenance files / 1108 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open
@@ -294,6 +294,16 @@
 
 新增 summary figure 将上述边界可视化：promoted controls 同时满足 score 不显著变差/有改善与搜索开销下降，limited diagnostics 则落在“质量弱或运行时间反向”的区域，用于防止把所有 AI 组件都写成主贡献。
 
+本轮进一步新增 stochastic-control stability audit，把随机 prior、随机 depth、phase shortlist 和 sparse-gate 独立 seed 的重复实验合并成稳定性证据：
+
+- `analyze_stochastic_control_stability.py`
+- `results/summary_stochastic_control_stability.csv`
+- `results/analysis_stochastic_control_stability.md`
+- `results/manifest_stochastic_control_stability.json`
+- `paper_latex/tables/stochastic_control_stability.tex`
+
+该审计当前 6/6 项 pass。关键边界是：bit-flip learned prior 相对 8 个 deterministic random-prior mean 为 17/8/152、score -0.15%，击败 8/8 个 seed mean，但 runtime +48.05%，因此只能写成稳定但有限的质量信号；Pareto learned prior 为 5/5/167、score -0.03%，击败 6/8 个 seed mean，不能做 headline neural effect；depth-frontier policy 在 `n=24,28,32,40` 上相对 same-candidate random depth 为 55/3/38、score -1.12%，击败 8/8 个 seed mean，但 planning time +58.78%，应写成质量导向的 budget allocation；`n=23` complete truth-table bridge 为 5/0/1、score -0.89%，支持 random-depth control 的真值表闭环；held-out `n=6` phase diverse shortlist 相对 8 个 random shortlist mean 为 17/0/21、score -0.012%，支持稳定的 phase/Rz proxy pruning；三组独立 seed 的 sparse depth-4 gate 为 0/0/144、0 false skip，并减少 13.43% sparse-frontier evaluation time。这个审计强化了“neural/MCTS/search-control”证据的稳健性，同时避免把泛化 bit-flip prior 写成速度收益或深度学习单独驱动的主结果。
+
 本轮进一步新增 neural/MCTS claim-calibration audit，专门回答“题目能不能写 neural MCTS、是否会被认为标题党”：
 
 - `analyze_neural_mcts_claim_calibration.py`
@@ -459,7 +469,7 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/analysis_pdf_metadata_audit.md`
 - `results/manifest_pdf_metadata_audit.json`
 
-该审计调用 Poppler `pdfinfo` 检查作者版和匿名版投稿 PDF 的 Title/Author/Creator/Producer 等元数据、页数、A4 页面尺寸、加密状态、JavaScript、Form 字段和隐私敏感字符串。当前作者版为 48 页、匿名版为 47 页，均未加密、无 JavaScript、A4，metadata 中没有作者身份、路径、TODO/TBD/placeholder 或 `AUTHOR INPUT REQUIRED` 泄漏。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；与 visual/text 审计一样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包。
+该审计调用 Poppler `pdfinfo` 检查作者版和匿名版投稿 PDF 的 Title/Author/Creator/Producer 等元数据、页数、A4 页面尺寸、加密状态、JavaScript、Form 字段和隐私敏感字符串。当前作者版和匿名版均为 49 页，均未加密、无 JavaScript、A4，metadata 中没有作者身份、路径、TODO/TBD/placeholder 或 `AUTHOR INPUT REQUIRED` 泄漏。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；与 visual/text 审计一样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包。
 
 本轮新增 source/path privacy audit，把源码和 payload 中的本机路径分成“严格禁止”和“可复现 provenance”两类：
 
@@ -486,7 +496,7 @@ payload 后可以从解包目录运行一键 verifier。
 
 该审计逐项检查 logical-layer scope、novelty/comparison route、comparison target roles、counterpoint/negative-result visibility、AI/MCTS claim boundary、large-scale verification boundary、reproducibility path、author/venue gate 和 editorial reading path。当前 9/9 项 pass；它已接入 rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke 和 artifact rerun registry。artifact registry 现在覆盖 30 个 evidence family、161 个 raw CSV、80312 行 unique raw-row references。
 
-当前 submission-readiness 审计结果为 74 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、algorithm contract、search-budget contract、baseline fairness/scope、comparison answer/resource-weight sensitivity/CNOT constraint/SSHR reproduction/threats-to-validity/search-control/learned-control/neural-MCTS claim-calibration/citation/editorial screening/target-venue/ROS reproduction-boundary/schedule-proxy/runtime-envelope/submission support-packet audits、ACM/TQC target-format smoke、ultra-scale symbolic stress/resource-profile audits、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、uploadable payload archive、payload round-trip/extraction/verifier/LaTeX compile checks、terminal package verifier、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder 和 compiled PDF 检查。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
+当前 submission-readiness 审计结果为 75 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、algorithm contract、search-budget contract、baseline fairness/scope、comparison answer/resource-weight sensitivity/CNOT constraint/SSHR reproduction/threats-to-validity/search-control/learned-control/stochastic-control stability/neural-MCTS claim-calibration/citation/editorial screening/target-venue/ROS reproduction-boundary/schedule-proxy/runtime-envelope/submission support-packet audits、ACM/TQC target-format smoke、ultra-scale symbolic stress/resource-profile audits、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、uploadable payload archive、payload round-trip/extraction/verifier/LaTeX compile checks、terminal package verifier、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder 和 compiled PDF 检查。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
 
 ## 2. 当前已完成内容
 

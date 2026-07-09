@@ -1488,7 +1488,7 @@ def build_rows() -> list[dict[str, str]]:
             and SUPPORT_PACKET_TABLE.exists()
             and support_packet_revisions == 0
             else "needs revision",
-            "evidence": f"Support packet audit checks cover letter, declarations, target-venue brief, venue policy checklist, upload checklist, handoff, comparison matrix, minimal author form, private-preview gate, anonymous-review fork, and editor/reviewer triage; rows={support_packet_rows}; status_counts={support_packet_counts}; needs_revision_count={support_packet_revisions}.",
+            "evidence": f"Support packet audit checks cover letter, declarations, target-venue brief, venue policy checklist, upload checklist, handoff, comparison matrix, comparison evidence-entrypoint integrity, minimal author form, private-preview gate, anonymous-review fork, and editor/reviewer triage; rows={support_packet_rows}; status_counts={support_packet_counts}; needs_revision_count={support_packet_revisions}.",
             "next_action": "Rerun analyze_submission_support_packet_audit.py after changing cover letter, declarations, venue brief, venue-policy checklist, upload checklist, comparison docs, handoff docs, metadata template, or editor/reviewer support docs.",
         },
         {

@@ -7,7 +7,7 @@
     "table": "paper_latex/tables/submission_support_packet_audit.tex"
   },
   "python": "3.11.15",
-  "rows": 14,
+  "rows": 15,
   "rows_detail": [
     {
       "boundary": "The cover letter still needs author, editor, reviewer, and prior-dissemination fields before upload.",
@@ -62,6 +62,15 @@
       "status": "pass",
       "supported_use": "The author can map each baseline family to its role, supported conclusion, invalid conclusion, and evidence entry point before drafting upload text or rebuttals.",
       "upload_risk": "The author may know the baseline names but not which conclusion each comparison can legitimately support."
+    },
+    {
+      "boundary": "This checks evidence-entrypoint integrity; it does not add new experiments or strengthen any comparison claim beyond the referenced artifacts.",
+      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; manifest=results/manifest_comparison_support_reference_integrity.json::missing_count=0",
+      "item": "Comparison evidence entrypoints resolve",
+      "next_action": "No action needed.",
+      "status": "pass",
+      "supported_use": "The comparison handoff now has a machine-checked path from each cited evidence file or table name to an existing artifact.",
+      "upload_risk": "Author-facing comparison handoffs could cite stale evidence filenames that cannot be opened during upload preparation or reviewer response drafting."
     },
     {
       "boundary": "Final authorship, funding, conflicts, archive links, and AI disclosure remain human-gated.",
@@ -138,6 +147,6 @@
   ],
   "script": "analyze_submission_support_packet_audit.py",
   "status_counts": {
-    "pass": 14
+    "pass": 15
   }
 }

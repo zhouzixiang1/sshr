@@ -43,6 +43,7 @@ CLAIM_SCOPE = RESULTS / "manifest_claim_scope_lint.json"
 COMPARISON_PROTOCOL = RESULTS / "manifest_comparison_protocol_audit.json"
 COMPARISON_TARGET_VALIDITY = RESULTS / "manifest_comparison_target_validity_audit.json"
 COMPARISON_ANSWER_SCORECARD = RESULTS / "manifest_comparison_answer_scorecard.json"
+COMPARISON_REFERENCE_INTEGRITY = RESULTS / "manifest_comparison_support_reference_integrity.json"
 NOVELTY_SCORECARD = RESULTS / "manifest_novelty_comparison_scorecard.json"
 EDITORIAL_SCREENING = RESULTS / "manifest_editorial_screening_audit.json"
 METADATA_CLOSURE = RESULTS / "manifest_submission_metadata_closure_path.json"
@@ -215,6 +216,22 @@ def specs() -> list[PacketSpec]:
             expected=0,
             supported_use="The author can map each baseline family to its role, supported conclusion, invalid conclusion, and evidence entry point before drafting upload text or rebuttals.",
             boundary="The matrix summarizes existing verified comparison evidence; it does not introduce a new result or broaden the comparison scope.",
+        ),
+        PacketSpec(
+            item="Comparison evidence entrypoints resolve",
+            upload_risk="Author-facing comparison handoffs could cite stale evidence filenames that cannot be opened during upload preparation or reviewer response drafting.",
+            files=(COMPARISON_HANDOFF_ZH, COMPARISON_SIGNIFICANCE_ZH, REVIEWER_BRIEF),
+            tokens=(
+                "analysis_comparison_answer_scorecard.md",
+                "analysis_comparison_target_validity_audit.md",
+                "analysis_search_control_baseline_audit.md",
+                "COMPARISON_SIGNIFICANCE_MATRIX_zh.md",
+            ),
+            manifest_path=COMPARISON_REFERENCE_INTEGRITY,
+            manifest_key="missing_count",
+            expected=0,
+            supported_use="The comparison handoff now has a machine-checked path from each cited evidence file or table name to an existing artifact.",
+            boundary="This checks evidence-entrypoint integrity; it does not add new experiments or strengthen any comparison claim beyond the referenced artifacts.",
         ),
         PacketSpec(
             item="Author declarations keep private fields explicit",

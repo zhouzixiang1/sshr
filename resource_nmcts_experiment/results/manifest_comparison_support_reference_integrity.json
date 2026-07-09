@@ -1,0 +1,20 @@
+{
+  "files_scanned": [
+    "submission_package/COMPARISON_HANDOFF_zh.md",
+    "submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md",
+    "submission_package/reviewer_concern_brief.md"
+  ],
+  "missing_count": 0,
+  "missing_references": [],
+  "outputs": {
+    "analysis": "results/analysis_comparison_support_reference_integrity.md",
+    "manifest": "results/manifest_comparison_support_reference_integrity.json",
+    "summary": "results/summary_comparison_support_reference_integrity.csv"
+  },
+  "python": "3.11.15",
+  "reference_count": 31,
+  "script": "analyze_comparison_support_reference_integrity.py",
+  "status_counts": {
+    "pass": 31
+  }
+}
