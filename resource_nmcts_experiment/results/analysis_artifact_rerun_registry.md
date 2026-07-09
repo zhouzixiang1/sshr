@@ -6,7 +6,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 
 - complete: 27
 - unique raw files covered by registry: 158
-- unique raw CSV rows covered by registry: 77942
+- unique raw CSV rows covered by registry: 78365
 
 | evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |
 |---|---|---:|---:|---:|---|---|
@@ -24,7 +24,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | Traditional logical baselines | raw Python rerun | 5 | 4341 | 4 | complete | Python rerun; ILP-based subbaselines need Gurobi where enabled. |
 | External logical baseline extension | raw Python plus optional solvers | 3 | 2049 | 3 | complete | Python with optional Gurobi/logic-tool components; rows with skips/errors remain explicit. |
 | ROS-style LUT proxy | raw proxy rerun | 6 | 4932 | 5 | complete | Proxy-level LUT and garbage-pressure analysis only; not a full ROS SAT garbage-management rerun. |
-| ROS reproduction boundary audit | quick audit | 6 | 4932 | 6 | complete | Checks scope and evidence boundaries; it deliberately records that full official ROS is not reproduced. |
+| ROS reproduction boundary audit | quick audit | 6 | 4932 | 7 | complete | Checks scope and evidence boundaries; Caterpillar is source/API/build smoke evidence only, and full official ROS is not reproduced. |
 | Published STG optimum-library counterpoint | raw Python rerun | 1 | 270 | 1 | complete | Published small-function optimum-library counterpoint; not full ROS SAT garbage management and not hardware mapping. |
 | mockturtle KLUT-to-XAG probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded mockturtle checkout/header path; still a logical proxy, not reversible mapping. |
 | CirKit AIG/MC probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded CirKit executable/commit; results are logical estimates, not hardware mapping. |
@@ -35,7 +35,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | High-dimensional symbolic screen-scale runs | large raw rerun | 77 | 11960 | 26 | complete | Symbolic or generated-instance verification; not exhaustive truth-table enumeration for all large n. |
 | External high-dimensional resource extensions | large raw rerun | 4 | 528 | 4 | complete | Generated large-instance comparisons; external availability and timeout behavior are recorded in manifests. |
 | Boolean screen, frontier, and gate auxiliaries | training plus ablation rerun | 11 | 2170 | 3 | complete | Auxiliary policy-selection evidence; not all rows are promoted as final-quality gains. |
-| Exact, resource-sweep, and development probes | auxiliary raw rerun | 11 | 12524 | 6 | complete | Development and auxiliary evidence retained in the payload; not all rows correspond to headline manuscript claims. |
+| Exact, resource-sweep, and development probes | auxiliary raw rerun | 11 | 12947 | 7 | complete | Development and auxiliary evidence retained in the payload; not all rows correspond to headline manuscript claims. |
 | Complete truth-table bridge slices | bridge raw rerun | 13 | 880 | 0 | complete | Narrow bridge slices because full truth tables grow exponentially. |
 
 ## Driver scripts and representative raw artifacts
@@ -97,8 +97,8 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - scripts: `run_ros_lut_proxy.py; analyze_ros_lut_line_sensitivity.py; analyze_ros_lut_garbage_proxy.py; analyze_ros_lut_garbage_budget_frontier.py; analyze_ros_lut_checkpoint_optimizer.py`
   - representative raw: `results/raw_ros_lut_checkpoint_optimizer.csv; results/raw_ros_lut_garbage_budget_frontier.csv; results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; +2 more`
 - **ROS reproduction boundary audit**
-  - claim use: Makes the distinction between ROS-style proxy evidence and unreproduced full ROS/SAT garbage management machine-checkable.
-  - scripts: `analyze_ros_reproduction_gap_audit.py`
+  - claim use: Makes the distinction between ROS-style proxy evidence, Caterpillar source-family probing, and unreproduced full ROS/SAT garbage management machine-checkable.
+  - scripts: `analyze_caterpillar_ros_family_probe.py; analyze_ros_reproduction_gap_audit.py`
   - representative raw: `results/raw_ros_lut_checkpoint_optimizer.csv; results/raw_ros_lut_garbage_budget_frontier.csv; results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; +2 more`
 - **Published STG optimum-library counterpoint**
   - claim use: Compares the current logical methods on the public n=4/5 STG spectral-representative truth-table table and exposes the small-function optimum boundary.
@@ -142,7 +142,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - representative raw: `results/raw_boolean_neural_guard_vs_deterministic.csv; results/raw_boolean_neural_highdim.csv; results/raw_boolean_screen_depth_frontier_policy.csv; results/raw_boolean_screen_depth_frontier_policy_cost_time003.csv; +7 more`
 - **Exact, resource-sweep, and development probes**
   - claim use: Auxiliary exact-DP, XAG/MC, resource-sweep, pilot, smoke, and early evidence checks retained for auditability.
-  - scripts: `analyze_exact_fprm_dp.py; analyze_exact_xag_mc.py; run_resource_sweep.py; analyze_resource_sweep.py`
+  - scripts: `analyze_exact_fprm_dp.py; analyze_exact_xag_mc.py; run_resource_sweep.py; analyze_resource_sweep.py; analyze_cnot_constraint_profile_audit.py`
   - representative raw: `results/raw_ablation_affine.csv; results/raw_evidence.csv; results/raw_evidence_affine.csv; results/raw_exact_fprm_dp.csv; +7 more`
 - **Complete truth-table bridge slices**
   - claim use: Connects high-dimensional symbolic plans to complete truth-table simulation on n=21-30 bridge rows.

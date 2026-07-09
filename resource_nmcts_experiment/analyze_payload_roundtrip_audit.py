@@ -94,6 +94,15 @@ RESOURCE_WEIGHT_SENSITIVITY_PATHS = {
     "results/manifest_resource_weight_sensitivity_audit.json",
     "paper_latex/tables/resource_weight_sensitivity_audit.tex",
 }
+CNOT_CONSTRAINT_PROFILE_PATHS = {
+    "run_resource_sweep.py",
+    "analyze_cnot_constraint_profile_audit.py",
+    "results/raw_resource_sweep.csv",
+    "results/analysis_cnot_constraint_profile_audit.md",
+    "results/summary_cnot_constraint_profile_audit.csv",
+    "results/manifest_cnot_constraint_profile_audit.json",
+    "paper_latex/tables/cnot_constraint_profile_audit.tex",
+}
 SSHR_REPRODUCTION_SCOPE_PATHS = {
     "analyze_sshr_reproduction_scope_audit.py",
     "results/raw_traditional_resource.csv",
@@ -132,10 +141,14 @@ THREATS_VALIDITY_PATHS = {
     "paper_latex/tables/threats_to_validity_audit.tex",
 }
 ROS_GAP_PATHS = {
+    "analyze_caterpillar_ros_family_probe.py",
     "analyze_ros_lut_garbage_proxy.py",
     "analyze_ros_lut_garbage_budget_frontier.py",
     "analyze_ros_lut_checkpoint_optimizer.py",
     "analyze_ros_reproduction_gap_audit.py",
+    "results/analysis_caterpillar_ros_family_probe.md",
+    "results/summary_caterpillar_ros_family_probe.csv",
+    "results/manifest_caterpillar_ros_family_probe.json",
     "results/raw_ros_lut_garbage_proxy.csv",
     "results/raw_ros_lut_garbage_budget_frontier.csv",
     "results/raw_ros_lut_checkpoint_optimizer.csv",
@@ -151,6 +164,7 @@ ROS_GAP_PATHS = {
     "results/analysis_ros_reproduction_gap_audit.md",
     "results/summary_ros_reproduction_gap_audit.csv",
     "results/manifest_ros_reproduction_gap_audit.json",
+    "paper_latex/tables/caterpillar_ros_family_probe.tex",
     "paper_latex/tables/ros_lut_garbage_proxy.tex",
     "paper_latex/tables/ros_lut_garbage_budget_frontier.tex",
     "paper_latex/tables/ros_lut_checkpoint_optimizer.tex",
@@ -527,6 +541,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    cnot_constraint_missing = sorted(CNOT_CONSTRAINT_PROFILE_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload CNOT constraint profile evidence",
+            "pass" if not cnot_constraint_missing else "needs revision",
+            f"cnot_constraint_profile_files={len(CNOT_CONSTRAINT_PROFILE_PATHS)}; missing={cnot_constraint_missing or 'none'}.",
+            "Ensure the uploadable archive includes the CNOT-only rerun audit script, raw sweep, generated evidence, manifest, and manuscript table.",
+        )
+    )
+
     sshr_reproduction_missing = sorted(SSHR_REPRODUCTION_SCOPE_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -863,6 +887,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "comparison_answer_scorecard_paths": sorted(COMPARISON_ANSWER_SCORECARD_PATHS),
         "weight_robustness_paths": sorted(WEIGHT_ROBUSTNESS_PATHS),
         "resource_weight_sensitivity_paths": sorted(RESOURCE_WEIGHT_SENSITIVITY_PATHS),
+        "cnot_constraint_profile_paths": sorted(CNOT_CONSTRAINT_PROFILE_PATHS),
         "sshr_reproduction_scope_paths": sorted(SSHR_REPRODUCTION_SCOPE_PATHS),
         "threats_validity_paths": sorted(THREATS_VALIDITY_PATHS),
         "ros_gap_paths": sorted(ROS_GAP_PATHS),

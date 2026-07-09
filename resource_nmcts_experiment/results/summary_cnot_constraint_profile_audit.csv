@@ -1,0 +1,7 @@
+method,label,functions,mean_T,mean_CNOT,mean_depth,mean_peak_ancilla,mean_score,cnot_vs_sshr_h_wlt,cnot_vs_sshr_h_mean_relative_pct,cnot_vs_balanced_same_method_mean_relative_pct,cnot_best_or_tied_functions,status
+and_pareto_resource_nmcts,Pareto-Resource-NMCTS,47,36.6809,71.3830,76.6809,2.1702,71.3830,14/33/0,8.599749,-3.025875,14,pass
+and_profile_resource_nmcts,Profile-Resource-NMCTS,47,41.1064,76.2340,85.4468,2.0000,76.2340,12/35/0,13.210961,-5.536971,11,pass
+and_resource_nmcts,Resource-NMCTS,47,41.1064,76.9787,85.3830,1.9787,76.9787,12/35/0,13.720429,-5.839495,11,pass
+and_fprm_polarity_archive,Polarity archive,47,37.7021,73.6170,78.8298,2.3404,73.6170,12/35/0,14.718604,-3.233924,10,pass
+and_affine_nmcts,Affine-NMCTS,47,42.2979,84.0638,88.2766,1.6809,84.0638,11/36/0,21.851071,-0.812239,9,pass
+sshr_h,SSHR-H,47,73.7021,64.5957,83.2979,1.1915,64.5957,0/0/47,0.000000,0.000000,33,pass

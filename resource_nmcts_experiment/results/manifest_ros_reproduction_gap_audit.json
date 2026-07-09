@@ -41,9 +41,9 @@
     {
       "audit_status": "pass",
       "coverage_status": "partial",
-      "current_coverage": "The workstation has a local caterpillar checkout and source/build probe for XAG synthesis and SAT-based pebbling components; no standalone ROS executable is detected in that checkout.",
-      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none",
-      "excluded_claim": "caterpillar availability is not a full ROS SAT garbage-management reproduction and is not used as a new standalone performance baseline.",
+      "current_coverage": "The workstation has a local caterpillar checkout, API/build provenance, and a toy AIG compile/run smoke for logic-network synthesis and SAT/pebbling-related components; no standalone ROS executable is detected in that checkout.",
+      "evidence": "files_missing=none; tokens=6/6; missing_tokens=none; csv=results/summary_caterpillar_ros_family_probe.csv rows=8/8; json=results/manifest_caterpillar_ros_family_probe.json::rows=8; results/manifest_caterpillar_ros_family_probe.json::needs_revision_count=0; results/manifest_caterpillar_ros_family_probe.json::compile_smoke_passed=True; results/manifest_caterpillar_ros_family_probe.json::standalone_cli_detected=False; results/manifest_caterpillar_ros_family_probe.json::official_ros_fully_reproduced=False",
+      "excluded_claim": "caterpillar availability and a toy API smoke are not a full ROS SAT garbage-management reproduction and are not used as a new standalone performance baseline.",
       "item": "caterpillar/XAG source-family probe",
       "next_reproduction_step": "If a stable caterpillar CLI or project adapter is added, run it on the exported truth-table benchmarks and keep the results separate from the ROS-style proxy rows.",
       "official_requirement": "Related open-source synthesis libraries should be separated from the standalone ROS flow unless they expose the same LUT plus SAT garbage-management compiler path.",

@@ -1,0 +1,36 @@
+{
+  "acm_table_anchor_present": true,
+  "anonymous_table_anchor_present": true,
+  "error_rows": 0,
+  "functions_cnot_only": 47,
+  "needs_revision_count": 0,
+  "profiles": [
+    "ancilla_tight",
+    "balanced",
+    "cnot_depth",
+    "cnot_only",
+    "t_heavy"
+  ],
+  "raw_rows": 2115,
+  "run_manifest_exists": true,
+  "script": "analyze_cnot_constraint_profile_audit.py",
+  "skipped_rows": 0,
+  "status_counts": {
+    "pass": 5
+  },
+  "summary_rows": 6,
+  "table": "paper_latex/tables/cnot_constraint_profile_audit.tex",
+  "table_anchor_present": true,
+  "usable_rows": 2115,
+  "winner_counts_cnot_only": {
+    "and_affine_nmcts": 9,
+    "and_cube_beam": 2,
+    "and_direct_anf": 5,
+    "and_fprm_polarity_archive": 10,
+    "and_mcts_factor": 6,
+    "and_pareto_resource_nmcts": 14,
+    "and_profile_resource_nmcts": 11,
+    "and_resource_nmcts": 11,
+    "sshr_h": 33
+  }
+}

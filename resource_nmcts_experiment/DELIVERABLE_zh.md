@@ -20,11 +20,11 @@
 
 以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，用于防止交付说明和机器审计结果漂移：
 
-- PDF pages=46/46
-- readiness=71 pass + 1 needs author input
-- payload_files=1100
-- artifact_registry=27 families / 158 raw CSV / 77942 raw rows
-- source_privacy=0 strict leaks / 55 provenance files / 1057 payload text files
+- PDF pages=47/47
+- readiness=72 pass + 1 needs author input
+- payload_files=1110
+- artifact_registry=27 families / 158 raw CSV / 78365 raw rows
+- source_privacy=0 strict leaks / 57 provenance files / 1067 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open
@@ -192,6 +192,16 @@
 
 该审计仍不声称复现官方 ROS，但它比三点 proxy 更接近 ROS 的 SAT garbage-management 问题：对同一批已验证 ABC LUT DAG，若 multi-fanout checkpoint candidates 不超过 12，则穷举所有 checkpoint 子集，并在 keep100、line75、line50、line25、minline 五种 peak-ancilla 预算下选择最低 score 可行 schedule。当前覆盖 192 个 DAG，其中包括全部 177 个 traditional `n<=6` 函数；生成 474 行 raw、35 行 summary，117 个 fanout-heavy 高维 DAG 被明确标为 out-of-exact-scope。关键结果是 Pareto-Resource-NMCTS 相对 exact checkpoint keep100 和 minline optimized baseline 的 score 均为 192/0/0；相对 minline 的 peak-ancilla 为 186/0/6。这显著降低“ROS 只是简单 greedy proxy”的审稿风险，但仍不能写成 full ROS SAT optimizer 或 hardware mapping。
 
+本轮新增 `caterpillar/XAG source-family probe`，把 ROS-facing 开源实现族边界从文字说明推进到源码/API/build/烟测证据：
+
+- `analyze_caterpillar_ros_family_probe.py`
+- `results/summary_caterpillar_ros_family_probe.csv`
+- `results/analysis_caterpillar_ros_family_probe.md`
+- `results/manifest_caterpillar_ros_family_probe.json`
+- `paper_latex/tables/caterpillar_ros_family_probe.tex`
+
+该审计检查本地 `tmp/caterpillar` Git provenance、README 中 Boolean-function quantum synthesis 与 quantum memory management 定位、`logic_network_synthesis`/`stg_gate`/`pebbling_mapping_strategy`/`circuit_to_logic_network` API、BSAT/Z3 pebbling solver surface、CMake build-test 对象与 `liblibabcsat.a`，并运行一个 toy AIG compile/run smoke。当前结论应写成“Caterpillar source-family probe”：本机源码、API 与 toy smoke 可用，但没有 standalone Caterpillar/ROS executable baseline；英文边界是 not a full ROS SAT garbage-management reproduction，也不新增性能 leaderboard 行。
+
 本轮进一步补充了 paired statistical evidence 层，避免论文只依赖均值叙述：
 
 - `analyze_paired_statistical_evidence.py`
@@ -222,6 +232,16 @@
 - `paper_latex/tables/resource_weight_sensitivity_audit.tex`
 
 该审计不重跑综合，而是在 verified raw CSV 上对 12 类内部/外部对比重新计算 6 套逻辑资源权重：paper score、T-only、CNOT-only、CNOT-depth、balanced 和 ancilla-tight。当前生成 12732 个 pair/profile 行、72 个 summary 行，并接入 author/anonymous/ACM 三套正文表格、rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke、traceability、artifact rerun registry 和 threats-to-validity audit。结论更适合作为投稿说法：在 paper/T/CNOT-depth/ancilla-tight 权重下，Pareto-Resource-NMCTS 对 direct ANF、ESOP-MILP、ABC-XAG、ROS-style LUT、ROS min-line、RevKit CLI、CirKit 和高维 root-beam 对比多数保持优势；但 CNOT-only 下 SSHR-H 为 43/128/6、SSHR-I CNOT 为 0/168/9，mockturtle XAG 在 T-only 与 CNOT-only 也构成边界。这说明本文的对比是有意义的多资源逻辑层搜索对比，而不是宣称全指标、全工具链、硬件映射层面的绝对支配。
+
+本轮进一步新增 CNOT constraint profile audit，把 CNOT-only 从 post-hoc 重新计分推进到真实重跑搜索 profile：
+
+- `analyze_cnot_constraint_profile_audit.py`
+- `results/summary_cnot_constraint_profile_audit.csv`
+- `results/analysis_cnot_constraint_profile_audit.md`
+- `results/manifest_cnot_constraint_profile_audit.json`
+- `paper_latex/tables/cnot_constraint_profile_audit.tex`
+
+该审计基于 `run_resource_sweep.py` 新增的 `cnot_only` profile，当前 `raw_resource_sweep.csv` 从 1692 行扩展到 2115 行，覆盖 47 个小函数 × 9 个方法 × 5 个 profile 且无 error/skip。结果显示 Pareto-Resource-NMCTS 在 CNOT-only 重跑下平均 CNOT 为 71.38，相对自身 balanced profile 降低 3.03%，Profile-Resource-NMCTS 降低 5.54%，Resource-NMCTS 降低 5.84%；但 SSHR-H 平均 CNOT 仍为 64.60，Pareto 相对 SSHR-H 为 14/33/0。正文新增 `tab:cnot-constraint-profile`，用于支撑“方法能响应 CNOT 约束，但 SSHR 仍是 CNOT-specialized boundary”的更精确说法。
 
 本轮新增 Boolean-ring structural evidence 层，把此前分散的高维结构搜索结果整理成一张可投稿表：
 

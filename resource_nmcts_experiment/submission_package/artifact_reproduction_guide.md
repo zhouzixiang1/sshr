@@ -77,6 +77,8 @@ After the quick rebuild, the current package should report:
   `results/analysis_neural_mcts_claim_calibration.md`
 - ROS reproduction-boundary state in
   `results/analysis_ros_reproduction_gap_audit.md`
+- Caterpillar source-family probe state in
+  `results/analysis_caterpillar_ros_family_probe.md`
 - editorial screening state in
   `results/analysis_editorial_screening_audit.md`
 - support packet state in
@@ -122,6 +124,7 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_extraction_smoke_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_verifier_smoke_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_latex_compile_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_caterpillar_ros_family_probe.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_ros_reproduction_gap_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_editorial_screening_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_support_packet_audit.py
@@ -213,6 +216,7 @@ manifest coverage, rerun tier, and dependency boundary.
 - External baseline aggregation: `run_external_baselines.py`
 - SSHR reproduction-scope audit: `analyze_sshr_reproduction_scope_audit.py`
 - ROS-style LUT proxy: `run_ros_lut_proxy.py`
+- Caterpillar source-family probe: `analyze_caterpillar_ros_family_probe.py`
 - ROS reproduction-boundary audit: `analyze_ros_reproduction_gap_audit.py`
 - mockturtle KLUT-to-XAG probe: `run_mockturtle_xag_probe.py`
 - CirKit AIG/MC probe: `run_cirkit_aig_probe.py`

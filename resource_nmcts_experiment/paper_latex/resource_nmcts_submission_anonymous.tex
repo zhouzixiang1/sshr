@@ -734,6 +734,31 @@ does not reproduce the full ROS SAT garbage-management flow.}
 \input{tables/ros_lut_checkpoint_optimizer}
 \end{table}
 
+We also audit the local Caterpillar checkout because it is the closest
+open-source implementation family in the LSI ecosystem to the ROS-facing
+question: it exposes XAG/logic-network synthesis, single-target-gate circuit
+objects, and pebbling-style memory-management APIs.  Table
+\ref{tab:caterpillar-ros-family} records this as a source-family probe rather
+than a new performance baseline.  The audit checks the local Git provenance, API
+surface, CMake build products, and a toy AIG compile/run smoke through
+\texttt{logic\_network\_synthesis}; it also verifies that no standalone
+Caterpillar/ROS executable is being used in the result tables.  This improves
+the reproducibility boundary for ROS-facing comparisons while preserving the
+central limitation: the current submission still does not reproduce full ROS
+SAT garbage management.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\caption{Caterpillar ROS-family source probe.  This is a local source/API/build
+and toy compile smoke audit for a related open-source synthesis library; it is
+not a full ROS SAT garbage-management reproduction or a standalone performance
+baseline.}
+\label{tab:caterpillar-ros-family}
+\input{tables/caterpillar_ros_family_probe}
+\end{table}
+
 The public STG benchmark suite is a different, deliberately stronger
 small-function counterpoint: it reports precomputed circuits for spectral
 representatives of 4- and 5-input Boolean functions, optimized separately for
@@ -1212,6 +1237,29 @@ after recomputing the matched rows under the listed logical-resource profile;
 negative values favor \method{} or Pareto-\method{}.}
 \label{tab:resource-weight-sensitivity}
 \input{tables/resource_weight_sensitivity_audit}
+\end{table}
+
+Post-hoc reweighting alone does not show whether the search policy itself
+responds to a changed resource constraint.  We therefore rerun the
+small-function resource sweep with a pure CNOT objective.  The CNOT-only
+profile lowers the selected CNOT count for \method{}, Profile-\method{}, and
+Pareto-\method{} relative to their balanced-profile runs, but it still does
+not overtake SSHR-H.  Table~\ref{tab:cnot-constraint-profile} makes this
+distinction explicit: the proposed search has measurable CNOT sensitivity, yet
+SSHR-H remains the CNOT-specialized counterpoint.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.08}
+\caption{CNOT-only resource-profile rerun on the small-function sweep.  The
+profile changes the search objective before synthesis rather than only
+recomputing scores afterward.  $\Delta$ reports the same-method mean CNOT
+change relative to the balanced-profile run; negative values mean the CNOT-only
+rerun selected lower-CNOT circuits.}
+\label{tab:cnot-constraint-profile}
+\input{tables/cnot_constraint_profile_audit}
 \end{table}
 
 \subsection{Phase/Rz search}

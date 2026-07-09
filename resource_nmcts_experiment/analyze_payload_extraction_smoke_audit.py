@@ -85,6 +85,15 @@ SMOKE_SPECS = (
         minimum_rows=12000,
     ),
     SmokeSpec(
+        name="CNOT constraint profile audit",
+        script="analyze_cnot_constraint_profile_audit.py",
+        manifest="results/manifest_cnot_constraint_profile_audit.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="summary_rows",
+        minimum_rows=6,
+    ),
+    SmokeSpec(
         name="SSHR reproduction-scope audit",
         script="analyze_sshr_reproduction_scope_audit.py",
         manifest="results/manifest_sshr_reproduction_scope_audit.json",

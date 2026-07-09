@@ -98,6 +98,11 @@ RESOURCE_WEIGHT_SENSITIVITY_SUMMARY = RESULTS / "summary_resource_weight_sensiti
 RESOURCE_WEIGHT_SENSITIVITY_RAW = RESULTS / "raw_resource_weight_sensitivity_audit.csv"
 RESOURCE_WEIGHT_SENSITIVITY_MANIFEST = RESULTS / "manifest_resource_weight_sensitivity_audit.json"
 RESOURCE_WEIGHT_SENSITIVITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "resource_weight_sensitivity_audit.tex"
+CNOT_CONSTRAINT_PROFILE_ANALYSIS = RESULTS / "analysis_cnot_constraint_profile_audit.md"
+CNOT_CONSTRAINT_PROFILE_SUMMARY = RESULTS / "summary_cnot_constraint_profile_audit.csv"
+CNOT_CONSTRAINT_PROFILE_RAW = RESULTS / "raw_resource_sweep.csv"
+CNOT_CONSTRAINT_PROFILE_MANIFEST = RESULTS / "manifest_cnot_constraint_profile_audit.json"
+CNOT_CONSTRAINT_PROFILE_TABLE = THIS_DIR / "paper_latex" / "tables" / "cnot_constraint_profile_audit.tex"
 SSHR_REPRODUCTION_ANALYSIS = RESULTS / "analysis_sshr_reproduction_scope_audit.md"
 SSHR_REPRODUCTION_SUMMARY = RESULTS / "summary_sshr_reproduction_scope_audit.csv"
 SSHR_REPRODUCTION_MANIFEST = RESULTS / "manifest_sshr_reproduction_scope_audit.json"
@@ -343,6 +348,28 @@ def build_rows() -> list[dict[str, str]]:
     resource_weight_profiles = resource_weight_manifest.get("profiles", []) if resource_weight_manifest else []
     resource_weight_anchor = (
         bool(resource_weight_manifest.get("table_anchor_present", False)) if resource_weight_manifest else False
+    )
+    cnot_constraint_manifest = read_json(CNOT_CONSTRAINT_PROFILE_MANIFEST)
+    cnot_constraint_revisions = (
+        int(cnot_constraint_manifest.get("needs_revision_count", -1)) if cnot_constraint_manifest else -1
+    )
+    cnot_constraint_counts = cnot_constraint_manifest.get("status_counts", {}) if cnot_constraint_manifest else {}
+    cnot_constraint_raw_rows = cnot_constraint_manifest.get("raw_rows", "missing") if cnot_constraint_manifest else "missing"
+    cnot_constraint_summary_rows = (
+        cnot_constraint_manifest.get("summary_rows", "missing") if cnot_constraint_manifest else "missing"
+    )
+    cnot_constraint_profiles = cnot_constraint_manifest.get("profiles", []) if cnot_constraint_manifest else []
+    cnot_constraint_functions = (
+        cnot_constraint_manifest.get("functions_cnot_only", "missing") if cnot_constraint_manifest else "missing"
+    )
+    cnot_constraint_anchor = (
+        bool(cnot_constraint_manifest.get("table_anchor_present", False)) if cnot_constraint_manifest else False
+    )
+    cnot_constraint_anonymous_anchor = (
+        bool(cnot_constraint_manifest.get("anonymous_table_anchor_present", False)) if cnot_constraint_manifest else False
+    )
+    cnot_constraint_acm_anchor = (
+        bool(cnot_constraint_manifest.get("acm_table_anchor_present", False)) if cnot_constraint_manifest else False
     )
     sshr_reproduction_manifest = read_json(SSHR_REPRODUCTION_MANIFEST)
     sshr_reproduction_revisions = (
@@ -864,6 +891,30 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Resource-weight sensitivity audit recomputes matched internal/external baselines under alternative logical-resource profiles; raw_rows={resource_weight_raw_rows}; summary_rows={resource_weight_summary_rows}; comparisons={len(resource_weight_comparisons)}; profiles={resource_weight_profiles}; status_counts={resource_weight_counts}; needs_revision_count={resource_weight_revisions}; table_anchor_present={resource_weight_anchor}.",
             "next_action": "Rerun analyze_resource_weight_sensitivity_audit.py after changing weighted-score claims, comparison targets, or resource-sensitivity manuscript text.",
+        },
+        {
+            "item": "CNOT constraint profile audit",
+            "status": "pass"
+            if "tab:cnot-constraint-profile" in text
+            and CNOT_CONSTRAINT_PROFILE_ANALYSIS.exists()
+            and CNOT_CONSTRAINT_PROFILE_SUMMARY.exists()
+            and CNOT_CONSTRAINT_PROFILE_RAW.exists()
+            and CNOT_CONSTRAINT_PROFILE_MANIFEST.exists()
+            and CNOT_CONSTRAINT_PROFILE_TABLE.exists()
+            and cnot_constraint_revisions == 0
+            and isinstance(cnot_constraint_raw_rows, int)
+            and cnot_constraint_raw_rows >= 2000
+            and isinstance(cnot_constraint_summary_rows, int)
+            and cnot_constraint_summary_rows >= 6
+            and "cnot_only" in cnot_constraint_profiles
+            and isinstance(cnot_constraint_functions, int)
+            and cnot_constraint_functions >= 47
+            and cnot_constraint_anchor
+            and cnot_constraint_anonymous_anchor
+            and cnot_constraint_acm_anchor
+            else "needs revision",
+            "evidence": f"CNOT-only rerun audit checks that the search responds to a pure CNOT objective while preserving SSHR-H as the CNOT boundary; raw_rows={cnot_constraint_raw_rows}; summary_rows={cnot_constraint_summary_rows}; profiles={cnot_constraint_profiles}; functions_cnot_only={cnot_constraint_functions}; status_counts={cnot_constraint_counts}; needs_revision_count={cnot_constraint_revisions}; table_anchor_present={cnot_constraint_anchor}; anonymous_anchor={cnot_constraint_anonymous_anchor}; acm_anchor={cnot_constraint_acm_anchor}.",
+            "next_action": "Rerun run_resource_sweep.py --resume and analyze_cnot_constraint_profile_audit.py after changing resource profiles or CNOT-only boundary wording.",
         },
         {
             "item": "SSHR reproduction-scope audit",

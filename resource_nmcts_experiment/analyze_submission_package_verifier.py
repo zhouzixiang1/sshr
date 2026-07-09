@@ -7,6 +7,7 @@ compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, comparison-protocol coverage,
 comparison-target validity,
 score-weight robustness,
+rerun CNOT-constraint profile,
 SSHR reproduction-scope support,
 threats-to-validity coverage,
 novelty/comparison scorecard coverage,
@@ -76,6 +77,8 @@ WEIGHT_ROBUSTNESS_MANIFEST = RESULTS / "manifest_weight_robustness.json"
 WEIGHT_ROBUSTNESS_TABLE = THIS_DIR / "paper_latex" / "tables" / "weight_robustness_compact.tex"
 RESOURCE_WEIGHT_SENSITIVITY_MANIFEST = RESULTS / "manifest_resource_weight_sensitivity_audit.json"
 RESOURCE_WEIGHT_SENSITIVITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "resource_weight_sensitivity_audit.tex"
+CNOT_CONSTRAINT_PROFILE_MANIFEST = RESULTS / "manifest_cnot_constraint_profile_audit.json"
+CNOT_CONSTRAINT_PROFILE_TABLE = THIS_DIR / "paper_latex" / "tables" / "cnot_constraint_profile_audit.tex"
 SSHR_REPRODUCTION_MANIFEST = RESULTS / "manifest_sshr_reproduction_scope_audit.json"
 SSHR_REPRODUCTION_TABLE = THIS_DIR / "paper_latex" / "tables" / "sshr_reproduction_scope_audit.tex"
 THREATS_VALIDITY_MANIFEST = RESULTS / "manifest_threats_to_validity_audit.json"
@@ -84,6 +87,8 @@ NOVELTY_SCORECARD_MANIFEST = RESULTS / "manifest_novelty_comparison_scorecard.js
 NOVELTY_SCORECARD_TABLE = THIS_DIR / "paper_latex" / "tables" / "novelty_comparison_scorecard.tex"
 PUBLIC_HANDOFF_MANIFEST = RESULTS / "manifest_public_handoff_freshness_audit.json"
 ROS_GAP_MANIFEST = RESULTS / "manifest_ros_reproduction_gap_audit.json"
+CATERPILLAR_PROBE_MANIFEST = RESULTS / "manifest_caterpillar_ros_family_probe.json"
+CATERPILLAR_PROBE_TABLE = THIS_DIR / "paper_latex" / "tables" / "caterpillar_ros_family_probe.tex"
 ROS_GARBAGE_MANIFEST = RESULTS / "manifest_ros_lut_garbage_proxy.json"
 ROS_GARBAGE_TABLE = THIS_DIR / "paper_latex" / "tables" / "ros_lut_garbage_proxy.tex"
 ROS_GARBAGE_BUDGET_MANIFEST = RESULTS / "manifest_ros_lut_garbage_budget_frontier.json"
@@ -435,6 +440,41 @@ def verify_resource_weight_sensitivity() -> dict[str, str]:
     )
 
 
+def verify_cnot_constraint_profile() -> dict[str, str]:
+    manifest = read_json(CNOT_CONSTRAINT_PROFILE_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    raw_rows = int(manifest.get("raw_rows", -1)) if manifest else -1
+    summary_rows = int(manifest.get("summary_rows", -1)) if manifest else -1
+    profiles = manifest.get("profiles", []) if manifest else []
+    functions = int(manifest.get("functions_cnot_only", -1)) if manifest else -1
+    table_exists = CNOT_CONSTRAINT_PROFILE_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    anonymous_anchor = bool(manifest.get("anonymous_table_anchor_present", False)) if manifest else False
+    acm_anchor = bool(manifest.get("acm_table_anchor_present", False)) if manifest else False
+    winners = manifest.get("winner_counts_cnot_only", {}) if manifest else {}
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and raw_rows >= 2000
+        and summary_rows >= 6
+        and "cnot_only" in profiles
+        and functions >= 47
+        and table_exists
+        and anchor
+        and anonymous_anchor
+        and acm_anchor
+        else "needs revision"
+    )
+    return row(
+        "CNOT constraint profile audit",
+        status,
+        f"raw_rows={raw_rows}; summary_rows={summary_rows}; profiles={profiles}; functions_cnot_only={functions}; cnot_winner_counts={winners}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}; anonymous_anchor={anonymous_anchor}; acm_anchor={acm_anchor}.",
+        "Run analyze_cnot_constraint_profile_audit.py after the CNOT-only resource sweep and restore the manuscript table anchors.",
+    )
+
+
 def verify_sshr_reproduction_scope() -> dict[str, str]:
     manifest = read_json(SSHR_REPRODUCTION_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -526,6 +566,39 @@ def verify_ros_gap() -> dict[str, str]:
         status,
         f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; coverage_counts={coverage}; official_ros_fully_reproduced={full_ros}; full_ros_boundary_is_explicit={boundary_explicit}.",
         "Run analyze_ros_lut_line_sensitivity.py and analyze_ros_reproduction_gap_audit.py and restore ROS proxy/full-reproduction boundary anchors.",
+    )
+
+
+def verify_caterpillar_probe() -> dict[str, str]:
+    manifest = read_json(CATERPILLAR_PROBE_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    coverage = manifest.get("coverage_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    source_tree = bool(manifest.get("source_tree_available", False)) if manifest else False
+    compile_smoke = bool(manifest.get("compile_smoke_passed", False)) if manifest else False
+    standalone_cli = bool(manifest.get("standalone_cli_detected", True)) if manifest else True
+    full_ros = manifest.get("official_ros_fully_reproduced", "missing") if manifest else "missing"
+    performance_baseline = bool(manifest.get("caterpillar_is_performance_baseline", True)) if manifest else True
+    table_exists = CATERPILLAR_PROBE_TABLE.exists()
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and rows == 8
+        and source_tree
+        and compile_smoke
+        and not standalone_cli
+        and full_ros is False
+        and not performance_baseline
+        and table_exists
+        else "needs revision"
+    )
+    return row(
+        "Caterpillar ROS-family source probe",
+        status,
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; coverage_counts={coverage}; source_tree_available={source_tree}; compile_smoke_passed={compile_smoke}; standalone_cli_detected={standalone_cli}; official_ros_fully_reproduced={full_ros}; caterpillar_is_performance_baseline={performance_baseline}; table_exists={table_exists}.",
+        "Run analyze_caterpillar_ros_family_probe.py from the source worktree and keep Caterpillar framed as source/API/build smoke evidence, not a full ROS or standalone performance baseline.",
     )
 
 
@@ -1542,6 +1615,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_comparison_answer_scorecard(),
             verify_weight_robustness(),
             verify_resource_weight_sensitivity(),
+            verify_cnot_constraint_profile(),
             verify_sshr_reproduction_scope(),
             verify_threats_to_validity(),
             verify_novelty_scorecard(),
@@ -1549,6 +1623,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_ros_garbage_proxy(),
             verify_ros_garbage_budget_frontier(),
             verify_ros_checkpoint_optimizer(),
+            verify_caterpillar_probe(),
             verify_ros_gap(),
             verify_stg_benchmark(),
             verify_search_budget_contract(),

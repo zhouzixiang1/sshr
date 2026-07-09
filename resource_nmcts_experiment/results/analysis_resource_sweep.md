@@ -1,6 +1,6 @@
 # Resource Sweep Analysis
 
-Rows: 1692; usable: 1692; errors: 0; skipped: 0.
+Rows: 2115; usable: 2115; errors: 0; skipped: 0.
 
 ## Mean resources by profile and method
 
@@ -33,6 +33,15 @@ Rows: 1692; usable: 1692; errors: 0; skipped: 0.
 | CNOT-depth | Pareto-Resource-NMCTS | 47 | 35.91 | 73.55 | 77.79 | 1.94 | 47.06 | 1.688 |
 | CNOT-depth | ESOP cube beam | 47 | 83.49 | 133.64 | 160.87 | 2.45 | 96.86 | 0.019 |
 | CNOT-depth | SSHR-H | 47 | 73.70 | 64.60 | 83.30 | 1.19 | 68.96 | 0.016 |
+| CNOT-only | AND-direct ANF | 47 | 86.98 | 143.47 | 143.74 | 1.79 | 143.47 | 0.000 |
+| CNOT-only | Fixed MCTS | 47 | 55.74 | 108.60 | 108.87 | 1.57 | 108.60 | 0.012 |
+| CNOT-only | Affine-NMCTS | 47 | 42.30 | 84.06 | 88.28 | 1.68 | 84.06 | 0.135 |
+| CNOT-only | Resource-NMCTS | 47 | 41.11 | 76.98 | 85.38 | 1.98 | 76.98 | 0.211 |
+| CNOT-only | Profile-Resource-NMCTS | 47 | 41.11 | 76.23 | 85.45 | 2.00 | 76.23 | 0.444 |
+| CNOT-only | Polarity archive | 47 | 37.70 | 73.62 | 78.83 | 2.34 | 73.62 | 0.239 |
+| CNOT-only | Pareto-Resource-NMCTS | 47 | 36.68 | 71.38 | 76.68 | 2.17 | 71.38 | 2.195 |
+| CNOT-only | ESOP cube beam | 47 | 83.40 | 133.23 | 161.17 | 2.51 | 133.23 | 0.008 |
+| CNOT-only | SSHR-H | 47 | 73.70 | 64.60 | 83.30 | 1.19 | 64.60 | 0.034 |
 | Ancilla-tight | AND-direct ANF | 47 | 86.98 | 143.47 | 143.74 | 1.79 | 109.74 | 0.000 |
 | Ancilla-tight | Fixed MCTS | 47 | 55.06 | 109.30 | 109.57 | 1.55 | 73.98 | 0.138 |
 | Ancilla-tight | Affine-NMCTS | 47 | 43.32 | 86.43 | 90.23 | 1.66 | 61.83 | 1.271 |
@@ -74,6 +83,15 @@ Rows: 1692; usable: 1692; errors: 0; skipped: 0.
 | CNOT-depth | AND-direct ANF | 5 |
 | CNOT-depth | SSHR-H | 5 |
 | CNOT-depth | ESOP cube beam | 1 |
+| CNOT-only | SSHR-H | 33 |
+| CNOT-only | Pareto-Resource-NMCTS | 14 |
+| CNOT-only | Resource-NMCTS | 11 |
+| CNOT-only | Profile-Resource-NMCTS | 11 |
+| CNOT-only | Polarity archive | 10 |
+| CNOT-only | Affine-NMCTS | 9 |
+| CNOT-only | Fixed MCTS | 6 |
+| CNOT-only | AND-direct ANF | 5 |
+| CNOT-only | ESOP cube beam | 2 |
 | Ancilla-tight | Pareto-Resource-NMCTS | 43 |
 | Ancilla-tight | Profile-Resource-NMCTS | 29 |
 | Ancilla-tight | Resource-NMCTS | 28 |
@@ -163,6 +181,31 @@ Rows: 1692; usable: 1692; errors: 0; skipped: 0.
 | CNOT-depth | SSHR-H | CNOT | 12 | 35 | 0 | +20.95% |
 | CNOT-depth | SSHR-H | depth | 21 | 25 | 1 | +1.25% |
 | CNOT-depth | SSHR-H | peak_ancilla | 3 | 22 | 22 | +36.17% |
+| CNOT-only | Resource-NMCTS | score | 3 | 0 | 44 | -0.32% |
+| CNOT-only | Resource-NMCTS | T | 2 | 1 | 44 | +0.13% |
+| CNOT-only | Resource-NMCTS | CNOT | 3 | 0 | 44 | -0.32% |
+| CNOT-only | Resource-NMCTS | depth | 2 | 1 | 44 | +0.16% |
+| CNOT-only | Resource-NMCTS | peak_ancilla | 0 | 1 | 46 | +0.71% |
+| CNOT-only | Affine-NMCTS | score | 20 | 0 | 27 | -5.59% |
+| CNOT-only | Affine-NMCTS | T | 12 | 6 | 29 | -2.02% |
+| CNOT-only | Affine-NMCTS | CNOT | 20 | 0 | 27 | -5.59% |
+| CNOT-only | Affine-NMCTS | depth | 15 | 5 | 27 | -2.45% |
+| CNOT-only | Affine-NMCTS | peak_ancilla | 0 | 14 | 33 | +20.21% |
+| CNOT-only | Fixed MCTS | score | 41 | 0 | 6 | -25.93% |
+| CNOT-only | Fixed MCTS | T | 39 | 2 | 6 | -25.58% |
+| CNOT-only | Fixed MCTS | CNOT | 41 | 0 | 6 | -25.93% |
+| CNOT-only | Fixed MCTS | depth | 38 | 2 | 7 | -19.51% |
+| CNOT-only | Fixed MCTS | peak_ancilla | 0 | 18 | 29 | +25.89% |
+| CNOT-only | ESOP cube beam | score | 41 | 0 | 6 | -28.53% |
+| CNOT-only | ESOP cube beam | T | 41 | 0 | 6 | -39.81% |
+| CNOT-only | ESOP cube beam | CNOT | 41 | 0 | 6 | -28.53% |
+| CNOT-only | ESOP cube beam | depth | 41 | 0 | 6 | -34.22% |
+| CNOT-only | ESOP cube beam | peak_ancilla | 21 | 3 | 23 | -17.20% |
+| CNOT-only | SSHR-H | score | 12 | 35 | 0 | +13.21% |
+| CNOT-only | SSHR-H | T | 43 | 0 | 4 | -43.83% |
+| CNOT-only | SSHR-H | CNOT | 12 | 35 | 0 | +13.21% |
+| CNOT-only | SSHR-H | depth | 20 | 27 | 0 | -1.31% |
+| CNOT-only | SSHR-H | peak_ancilla | 3 | 35 | 9 | +63.83% |
 | Ancilla-tight | Resource-NMCTS | score | 4 | 0 | 43 | -0.52% |
 | Ancilla-tight | Resource-NMCTS | T | 3 | 0 | 44 | -0.51% |
 | Ancilla-tight | Resource-NMCTS | CNOT | 2 | 2 | 43 | -0.30% |
@@ -283,6 +326,36 @@ Rows: 1692; usable: 1692; errors: 0; skipped: 0.
 | CNOT-depth | SSHR-H | CNOT | 13 | 34 | 0 | +11.61% |
 | CNOT-depth | SSHR-H | depth | 23 | 23 | 1 | -5.93% |
 | CNOT-depth | SSHR-H | peak_ancilla | 3 | 29 | 15 | +58.51% |
+| CNOT-only | Profile-Resource-NMCTS | score | 17 | 0 | 30 | -3.34% |
+| CNOT-only | Profile-Resource-NMCTS | T | 14 | 1 | 32 | -4.54% |
+| CNOT-only | Profile-Resource-NMCTS | CNOT | 17 | 0 | 30 | -3.34% |
+| CNOT-only | Profile-Resource-NMCTS | depth | 18 | 2 | 27 | -4.43% |
+| CNOT-only | Profile-Resource-NMCTS | peak_ancilla | 2 | 9 | 36 | +8.69% |
+| CNOT-only | Resource-NMCTS | score | 17 | 0 | 30 | -3.63% |
+| CNOT-only | Resource-NMCTS | T | 14 | 1 | 32 | -4.43% |
+| CNOT-only | Resource-NMCTS | CNOT | 17 | 0 | 30 | -3.63% |
+| CNOT-only | Resource-NMCTS | depth | 18 | 2 | 27 | -4.32% |
+| CNOT-only | Resource-NMCTS | peak_ancilla | 1 | 9 | 37 | +9.22% |
+| CNOT-only | Affine-NMCTS | score | 26 | 0 | 21 | -8.62% |
+| CNOT-only | Affine-NMCTS | T | 21 | 3 | 23 | -6.57% |
+| CNOT-only | Affine-NMCTS | CNOT | 26 | 0 | 21 | -8.62% |
+| CNOT-only | Affine-NMCTS | depth | 26 | 2 | 19 | -6.99% |
+| CNOT-only | Affine-NMCTS | peak_ancilla | 0 | 20 | 27 | +28.72% |
+| CNOT-only | Fixed MCTS | score | 41 | 0 | 6 | -28.43% |
+| CNOT-only | Fixed MCTS | T | 41 | 0 | 6 | -29.49% |
+| CNOT-only | Fixed MCTS | CNOT | 41 | 0 | 6 | -28.43% |
+| CNOT-only | Fixed MCTS | depth | 40 | 0 | 7 | -23.39% |
+| CNOT-only | Fixed MCTS | peak_ancilla | 0 | 23 | 24 | +35.11% |
+| CNOT-only | ESOP cube beam | score | 44 | 0 | 3 | -31.22% |
+| CNOT-only | ESOP cube beam | T | 44 | 0 | 3 | -43.30% |
+| CNOT-only | ESOP cube beam | CNOT | 44 | 0 | 3 | -31.22% |
+| CNOT-only | ESOP cube beam | depth | 45 | 0 | 2 | -37.89% |
+| CNOT-only | ESOP cube beam | peak_ancilla | 15 | 5 | 27 | -11.70% |
+| CNOT-only | SSHR-H | score | 14 | 33 | 0 | +8.60% |
+| CNOT-only | SSHR-H | T | 43 | 0 | 4 | -46.85% |
+| CNOT-only | SSHR-H | CNOT | 14 | 33 | 0 | +8.60% |
+| CNOT-only | SSHR-H | depth | 22 | 24 | 1 | -6.99% |
+| CNOT-only | SSHR-H | peak_ancilla | 3 | 37 | 7 | +77.66% |
 | Ancilla-tight | Profile-Resource-NMCTS | score | 15 | 0 | 32 | -2.51% |
 | Ancilla-tight | Profile-Resource-NMCTS | T | 12 | 0 | 35 | -3.41% |
 | Ancilla-tight | Profile-Resource-NMCTS | CNOT | 14 | 0 | 33 | -2.95% |

@@ -4,13 +4,13 @@ This terminal audit opens the reviewer/upload tarball and checks manifest agreem
 
 ## Status counts
 
-- pass: 38
+- pass: 39
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Payload archive readable | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1100; error=none. | Regenerate the payload archive if it cannot be opened by Python tarfile. |
-| Payload manifest round-trip | pass | manifest_files=1100; archive_files=1100; missing=none; extra=none. | Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge. |
-| Payload per-file SHA256 | pass | checked=1100; mismatches=none. | Regenerate the payload archive and manifest if any archived file digest differs from the manifest. |
+| Payload archive readable | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1110; error=none. | Regenerate the payload archive if it cannot be opened by Python tarfile. |
+| Payload manifest round-trip | pass | manifest_files=1110; archive_files=1110; missing=none; extra=none. | Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge. |
+| Payload per-file SHA256 | pass | checked=1110; mismatches=none. | Regenerate the payload archive and manifest if any archived file digest differs from the manifest. |
 | Payload path hygiene | pass | unsafe_paths=none; private_hits=none. | Remove unsafe, platform-generated, or private files from the payload inputs. |
 | Payload required artifacts | pass | required=15; missing=none. | Ensure the uploadable archive includes manuscript, bibliography, rebuild/verify scripts, handoff docs, and submission audits. |
 | Payload reviewer entrypoints | pass | reviewer_entries=7; missing=none. | Ensure the uploadable archive includes reviewer-facing guide, editor/reviewer briefs, venue brief, registry, and reproducibility audit. |
@@ -19,10 +19,11 @@ This terminal audit opens the reviewer/upload tarball and checks manifest agreem
 | Payload comparison answer scorecard | pass | comparison_answer_files=5; missing=none. | Ensure the uploadable archive includes the comparison answer scorecard script, generated evidence, and manuscript table. |
 | Payload score-weight robustness evidence | pass | weight_robustness_files=5; missing=none. | Ensure the uploadable archive includes the score-weight robustness script, generated evidence, manifest, and manuscript table. |
 | Payload resource-weight sensitivity evidence | pass | resource_weight_sensitivity_files=6; missing=none. | Ensure the uploadable archive includes the broader resource-weight sensitivity audit script, raw rows, generated evidence, manifest, and manuscript table. |
+| Payload CNOT constraint profile evidence | pass | cnot_constraint_profile_files=7; missing=none. | Ensure the uploadable archive includes the CNOT-only rerun audit script, raw sweep, generated evidence, manifest, and manuscript table. |
 | Payload SSHR reproduction-scope evidence | pass | sshr_reproduction_scope_files=21; missing=none. | Ensure the uploadable archive includes the SSHR reproduction-scope audit script, required raw rows, generated evidence, manifest, and manuscript table. |
 | Payload novelty/comparison scorecard | pass | novelty_scorecard_files=5; missing=none. | Ensure the uploadable archive includes the novelty/comparison scorecard script, generated evidence, and manuscript table. |
 | Payload threats-to-validity audit | pass | threats_validity_files=5; missing=none. | Ensure the uploadable archive includes the threats-to-validity audit script, generated evidence, and manuscript table. |
-| Payload ROS reproduction-boundary evidence | pass | ros_gap_files=23; missing=none. | Ensure the uploadable archive includes the ROS reproduction gap audit script, generated evidence, and support table. |
+| Payload ROS reproduction-boundary evidence | pass | ros_gap_files=28; missing=none. | Ensure the uploadable archive includes the ROS reproduction gap audit script, generated evidence, and support table. |
 | Payload published STG counterpoint | pass | stg_benchmark_files=6; missing=none. | Ensure the uploadable archive includes the STG counterpoint script, raw rows, generated evidence, manifest, and manuscript table. |
 | Payload schedule-proxy evidence | pass | schedule_proxy_files=8; missing=none. | Ensure the uploadable archive includes the schedule metrics scripts, compact audit outputs, and manuscript schedule-proxy table. |
 | Payload ultra-scale n=48--64 evidence | pass | ultra_scale64_files=16; missing=none. | Ensure the uploadable archive includes the n=48--64 raw term-set stress rows, compact audit, and manuscript tables. |
@@ -45,4 +46,4 @@ This terminal audit opens the reviewer/upload tarball and checks manifest agreem
 | Payload Git-policy executable | pass | payload_git_policy_scripts=1; missing=none; terminal_outputs_excluded=3. | Ensure the uploadable archive includes payload Git-policy audit code; generated terminal outputs are intentionally excluded and regenerated from the source tree. |
 | Payload extraction smoke executable | pass | payload_extraction_smoke_scripts=1; missing=none; terminal_outputs_excluded=3. | Ensure the uploadable archive includes the extraction smoke audit code; generated terminal outputs are intentionally excluded and regenerated from the source tree. |
 | Payload verifier smoke executable | pass | payload_verifier_smoke_scripts=1; missing=none; terminal_outputs_excluded=3. | Ensure the uploadable archive includes the verifier smoke audit code; generated terminal outputs are intentionally excluded and regenerated from the source tree. |
-| Payload deterministic tar metadata | pass | members_checked=1100; metadata_issues=none. | Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads. |
+| Payload deterministic tar metadata | pass | members_checked=1110; metadata_issues=none. | Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads. |

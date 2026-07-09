@@ -13,11 +13,12 @@ THIS_DIR = Path(__file__).resolve().parent
 RESULTS = THIS_DIR / "results"
 PAPER_TABLES = THIS_DIR / "paper_latex" / "tables"
 
-PROFILE_ORDER = ["t_heavy", "balanced", "cnot_depth", "ancilla_tight"]
+PROFILE_ORDER = ["t_heavy", "balanced", "cnot_depth", "cnot_only", "ancilla_tight"]
 PROFILE_LABELS = {
     "t_heavy": "T-heavy",
     "balanced": "Balanced",
     "cnot_depth": "CNOT-depth",
+    "cnot_only": "CNOT-only",
     "ancilla_tight": "Ancilla-tight",
 }
 METHOD_ORDER = [

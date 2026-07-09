@@ -13,8 +13,15 @@
     "sshr_h"
   ],
   "last_run_methods": [
+    "and_direct_anf",
+    "and_mcts_factor",
+    "and_affine_nmcts",
+    "and_resource_nmcts",
+    "and_profile_resource_nmcts",
     "and_fprm_polarity_archive",
-    "and_pareto_resource_nmcts"
+    "and_pareto_resource_nmcts",
+    "and_cube_beam",
+    "sshr_h"
   ],
   "profiles": {
     "t_heavy": {
@@ -50,6 +57,17 @@
       },
       "max_factor_ancilla": 4
     },
+    "cnot_only": {
+      "label": "CNOT-only",
+      "weights": {
+        "t": 0.0,
+        "cnot": 1.0,
+        "depth": 0.0,
+        "gates": 0.0,
+        "ancilla": 0.0
+      },
+      "max_factor_ancilla": 4
+    },
     "ancilla_tight": {
       "label": "Ancilla-tight",
       "weights": {
@@ -62,7 +80,7 @@
       "max_factor_ancilla": 1
     }
   },
-  "model": "models/action_scorer_rollout_logical_and.pt",
+  "model": "/Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment/models/action_scorer_rollout_logical_and.pt",
   "workers": 10,
-  "seconds": 35.567566871643066
+  "seconds": 20.336884021759033
 }

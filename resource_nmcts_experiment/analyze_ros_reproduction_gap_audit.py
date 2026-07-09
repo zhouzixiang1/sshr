@@ -59,6 +59,10 @@ COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.jso
 CLAIM_MATRIX = RESULTS / "summary_baseline_claim_matrix.csv"
 CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
 REPRODUCIBILITY = RESULTS / "analysis_reproducibility_audit.md"
+CATERPILLAR_ANALYSIS = RESULTS / "analysis_caterpillar_ros_family_probe.md"
+CATERPILLAR_SUMMARY = RESULTS / "summary_caterpillar_ros_family_probe.csv"
+CATERPILLAR_MANIFEST = RESULTS / "manifest_caterpillar_ros_family_probe.json"
+CATERPILLAR_TABLE = TABLES / "caterpillar_ros_family_probe.tex"
 
 
 @dataclass(frozen=True)
@@ -203,18 +207,26 @@ def specs() -> list[RosSpec]:
             item="caterpillar/XAG source-family probe",
             coverage_status="partial",
             official_requirement="Related open-source synthesis libraries should be separated from the standalone ROS flow unless they expose the same LUT plus SAT garbage-management compiler path.",
-            current_coverage="The workstation has a local caterpillar checkout and source/build probe for XAG synthesis and SAT-based pebbling components; no standalone ROS executable is detected in that checkout.",
-            files=(TOOLCHAIN_ANALYSIS, README, DELIVERABLE),
+            current_coverage="The workstation has a local caterpillar checkout, API/build provenance, and a toy AIG compile/run smoke for logic-network synthesis and SAT/pebbling-related components; no standalone ROS executable is detected in that checkout.",
+            files=(TOOLCHAIN_ANALYSIS, CATERPILLAR_ANALYSIS, CATERPILLAR_SUMMARY, CATERPILLAR_MANIFEST, CATERPILLAR_TABLE, PAPER, README, DELIVERABLE),
             tokens=(
                 "caterpillar source is locally available",
-                "SAT-based pebbling",
-                "no standalone ROS executable",
+                "Toy AIG compile/run smoke",
+                "standalone CLI detected: False",
+                "source-family probe",
+                "not a full ROS SAT",
                 "caterpillar: <https://github.com/gmeuli/caterpillar>",
             ),
-            csv_expectations=(),
-            json_expectations=(),
+            csv_expectations=(CsvExpectation(CATERPILLAR_SUMMARY, 8),),
+            json_expectations=(
+                JsonExpectation(CATERPILLAR_MANIFEST, "rows", 8),
+                JsonExpectation(CATERPILLAR_MANIFEST, "needs_revision_count", 0),
+                JsonExpectation(CATERPILLAR_MANIFEST, "compile_smoke_passed", True),
+                JsonExpectation(CATERPILLAR_MANIFEST, "standalone_cli_detected", False),
+                JsonExpectation(CATERPILLAR_MANIFEST, "official_ros_fully_reproduced", False),
+            ),
             supported_claim="The package now records a closer open-source implementation-family probe for XAG synthesis and quantum memory-management components.",
-            excluded_claim="caterpillar availability is not a full ROS SAT garbage-management reproduction and is not used as a new standalone performance baseline.",
+            excluded_claim="caterpillar availability and a toy API smoke are not a full ROS SAT garbage-management reproduction and are not used as a new standalone performance baseline.",
             next_reproduction_step="If a stable caterpillar CLI or project adapter is added, run it on the exported truth-table benchmarks and keep the results separate from the ROS-style proxy rows.",
         ),
         RosSpec(

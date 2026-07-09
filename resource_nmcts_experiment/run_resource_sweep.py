@@ -38,6 +38,11 @@ PROFILES = {
         "weights": ResourceWeights(t=0.65, cnot=0.18, depth=0.08, gates=0.01, ancilla=2.0),
         "max_factor_ancilla": 4,
     },
+    "cnot_only": {
+        "label": "CNOT-only",
+        "weights": ResourceWeights(t=0.0, cnot=1.0, depth=0.0, gates=0.0, ancilla=0.0),
+        "max_factor_ancilla": 4,
+    },
     "ancilla_tight": {
         "label": "Ancilla-tight",
         "weights": ResourceWeights(t=1.0, cnot=0.04, depth=0.015, gates=0.01, ancilla=8.0),

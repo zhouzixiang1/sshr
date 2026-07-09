@@ -1,0 +1,14 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.26\linewidth}}
+\toprule
+Probe item & Coverage & Current evidence & Boundary \\
+\midrule
+Local Caterpillar checkout & source available & source tree present; Git provenance recorded in manifest & A source checkout alone is not a reproduced ROS benchmark. \\
+README-stated synthesis role & documented role & README tokens 4/4 for synthesis and memory-management role & This documentation role is not evidence that the paper ran full ROS. \\
+Core API surface & API present & 4 synthesis, gate, strategy, and verification header families token-checked & Header availability is not a matched benchmark result over the paper's function suite. \\
+SAT/pebbling implementation surface & solver surface present & 3 BSAT/Z3 and pebbling solver header families token-checked & These hooks are not the official ROS SAT garbage-management optimizer used as a reproduced baseline. \\
+CMake build artifacts & partial build present & CMake caches present; 19 test objects; abcsat library present & The build artifacts do not include a standalone ROS or Caterpillar benchmark executable. \\
+Toy AIG compile/run smoke & local compile smoke & compile return code 0; run return code 0 & This is a toy API smoke test, not a published ROS reproduction or performance comparison. \\
+Standalone baseline executable & not available & 0 candidate benchmark executables detected & No standalone Caterpillar/ROS executable baseline is claimed or used in the result tables. \\
+Manuscript and ROS-gap boundary & claim boundary explicit & paper, deliverable, and ROS-gap boundary tokens present & The manuscript must not describe the Caterpillar probe as full ROS SAT garbage management. \\
+\bottomrule
+\end{tabularx}

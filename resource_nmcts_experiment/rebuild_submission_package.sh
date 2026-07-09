@@ -49,6 +49,7 @@ echo "==> ${PYTHON_BIN} analyze_ros_lut_line_sensitivity.py"
 run_py analyze_ros_lut_garbage_proxy.py
 run_py analyze_ros_lut_garbage_budget_frontier.py
 run_py analyze_ros_lut_checkpoint_optimizer.py
+run_py analyze_caterpillar_ros_family_probe.py
 run_py analyze_ros_reproduction_gap_audit.py
 run_py analyze_paired_statistical_evidence.py
 run_py analyze_paired_effect_uncertainty.py
@@ -81,6 +82,7 @@ run_py analyze_ultra_scale64_resource_profile.py
 run_py analyze_scaling_resource_audit.py
 run_py analyze_weight_robustness.py
 run_py analyze_resource_weight_sensitivity_audit.py
+run_py analyze_cnot_constraint_profile_audit.py
 run_py analyze_artifact_rerun_registry.py
 run_py analyze_reproducibility_audit.py
 run_py analyze_submission_metadata_audit.py

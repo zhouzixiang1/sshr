@@ -226,20 +226,20 @@
       "summary_files": "5"
     },
     {
-      "analysis_files": "1",
-      "claim_use": "Makes the distinction between ROS-style proxy evidence and unreproduced full ROS/SAT garbage management machine-checkable.",
-      "dependency_boundary": "Checks scope and evidence boundaries; it deliberately records that full official ROS is not reproduced.",
-      "driver_scripts": "analyze_ros_reproduction_gap_audit.py",
+      "analysis_files": "2",
+      "claim_use": "Makes the distinction between ROS-style proxy evidence, Caterpillar source-family probing, and unreproduced full ROS/SAT garbage management machine-checkable.",
+      "dependency_boundary": "Checks scope and evidence boundaries; Caterpillar is source/API/build smoke evidence only, and full official ROS is not reproduced.",
+      "driver_scripts": "analyze_caterpillar_ros_family_probe.py; analyze_ros_reproduction_gap_audit.py",
       "evidence_family": "ROS reproduction boundary audit",
-      "manifest_files": "6",
+      "manifest_files": "7",
       "raw_files": "6",
       "raw_rows": "4932",
       "representative_raw": "results/raw_ros_lut_checkpoint_optimizer.csv; results/raw_ros_lut_garbage_budget_frontier.csv; results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; +2 more",
       "rerun_tier": "quick audit",
       "scripts_missing": "",
-      "scripts_present": "1",
+      "scripts_present": "2",
       "status": "complete",
-      "summary_files": "1"
+      "summary_files": "2"
     },
     {
       "analysis_files": "1",
@@ -402,20 +402,20 @@
       "summary_files": "14"
     },
     {
-      "analysis_files": "8",
+      "analysis_files": "9",
       "claim_use": "Auxiliary exact-DP, XAG/MC, resource-sweep, pilot, smoke, and early evidence checks retained for auditability.",
       "dependency_boundary": "Development and auxiliary evidence retained in the payload; not all rows correspond to headline manuscript claims.",
-      "driver_scripts": "analyze_exact_fprm_dp.py; analyze_exact_xag_mc.py; run_resource_sweep.py; analyze_resource_sweep.py",
+      "driver_scripts": "analyze_exact_fprm_dp.py; analyze_exact_xag_mc.py; run_resource_sweep.py; analyze_resource_sweep.py; analyze_cnot_constraint_profile_audit.py",
       "evidence_family": "Exact, resource-sweep, and development probes",
-      "manifest_files": "6",
+      "manifest_files": "7",
       "raw_files": "11",
-      "raw_rows": "12524",
+      "raw_rows": "12947",
       "representative_raw": "results/raw_ablation_affine.csv; results/raw_evidence.csv; results/raw_evidence_affine.csv; results/raw_exact_fprm_dp.csv; +7 more",
       "rerun_tier": "auxiliary raw rerun",
       "scripts_missing": "",
-      "scripts_present": "4",
+      "scripts_present": "5",
       "status": "complete",
-      "summary_files": "7"
+      "summary_files": "8"
     },
     {
       "analysis_files": "13",
@@ -603,5 +603,5 @@
   "rows": 27,
   "script": "analyze_artifact_rerun_registry.py",
   "unique_raw_files": 158,
-  "unique_raw_rows": 77942
+  "unique_raw_rows": 78365
 }

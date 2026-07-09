@@ -1,0 +1,129 @@
+{
+  "caterpillar_is_performance_baseline": false,
+  "compile_smoke_passed": true,
+  "coverage_counts": {
+    "API present": 1,
+    "claim boundary explicit": 1,
+    "documented role": 1,
+    "local compile smoke": 1,
+    "not available": 1,
+    "partial build present": 1,
+    "solver surface present": 1,
+    "source available": 1
+  },
+  "git": {
+    "branch": "master",
+    "commit": "4c6f766",
+    "remote": "https://github.com/gmeuli/caterpillar.git"
+  },
+  "meta": {
+    "candidate_executables": [],
+    "compile_smoke": {
+      "compile_output_excerpt": "In file included from /var/folders/j1/5gmyxvnn6214sv5lt8jm57z80000gn/T/caterpillar_ros_probe_xaxsuobc/probe.cpp:3:\nIn file included from /Users/zhouzixiang/Desktop/tzb/src/tmp/caterpillar/include/caterpillar/caterpillar.hpp:35:\nIn file included from /Users/zhouzixiang/Desktop/tzb/src/tmp/caterpillar/include/caterpillar/details/utils.hpp:6:\nIn file included from /Users/zhouzixiang/Desktop/tzb/src/tmp/caterpillar/lib/tweedledum/tweedledum/gates/gate_set.hpp:8:\nIn file included from /Users/zhouzixiang/Desktop/tzb/src/tmp/caterpillar/lib/fmt/fmt/format.h:44:\nIn file included from /Users/zhouzixiang/Desktop/tzb/src/tmp/caterpillar/lib/fmt/fmt/core.h:13:\nIn file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/functional:601:\nIn file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/vector:363:",
+      "compile_returncode": 0,
+      "run_output_excerpt": "",
+      "run_returncode": 0,
+      "status": "pass",
+      "warnings": 19
+    },
+    "git": {
+      "branch": "master",
+      "commit": "4c6f766",
+      "remote": "https://github.com/gmeuli/caterpillar.git"
+    },
+    "libabcsat_exists": true,
+    "source_tree_available": true,
+    "standalone_cli_detected": false,
+    "test_object_count": 19
+  },
+  "needs_revision_count": 0,
+  "official_ros_fully_reproduced": false,
+  "outputs": {
+    "analysis": "results/analysis_caterpillar_ros_family_probe.md",
+    "manifest": "results/manifest_caterpillar_ros_family_probe.json",
+    "summary": "results/summary_caterpillar_ros_family_probe.csv",
+    "table": "paper_latex/tables/caterpillar_ros_family_probe.tex"
+  },
+  "python": "3.11.15",
+  "rows": 8,
+  "rows_detail": [
+    {
+      "audit_status": "pass",
+      "coverage_status": "source available",
+      "evidence": "path=tmp/caterpillar; remote=https://github.com/gmeuli/caterpillar.git; branch=master; commit=4c6f766",
+      "excluded_claim": "A source checkout alone is not a reproduced ROS benchmark.",
+      "item": "Local Caterpillar checkout",
+      "next_action": "Keep the checkout provenance in the manifest; add a pinned adapter only if it becomes a performance baseline.",
+      "supported_claim": "The workstation has a provenance-recorded Caterpillar source checkout for a ROS-family source probe."
+    },
+    {
+      "audit_status": "pass",
+      "coverage_status": "documented role",
+      "evidence": "tmp/caterpillar/README.md tokens=4/4",
+      "excluded_claim": "This documentation role is not evidence that the paper ran full ROS.",
+      "item": "README-stated synthesis role",
+      "next_action": "Refresh the source-family note if the local checkout changes.",
+      "supported_claim": "Caterpillar is relevant because it targets Boolean-function quantum-circuit synthesis with quantum memory management."
+    },
+    {
+      "audit_status": "pass",
+      "coverage_status": "API present",
+      "evidence": "tmp/caterpillar/include/caterpillar/synthesis/lhrs.hpp tokens=3/3; tmp/caterpillar/include/caterpillar/synthesis/strategies/pebbling_mapping_strategy.hpp tokens=3/3; tmp/caterpillar/include/caterpillar/structures/stg_gate.hpp tokens=3/3; tmp/caterpillar/include/caterpillar/verification/circuit_to_logic_network.hpp tokens=3/3",
+      "excluded_claim": "Header availability is not a matched benchmark result over the paper's function suite.",
+      "item": "Core API surface",
+      "next_action": "Use these APIs for a future standalone adapter before claiming a new executable baseline.",
+      "supported_claim": "The local source exposes logic-network synthesis, single-target gates, pebbling strategies, and circuit-to-logic verification."
+    },
+    {
+      "audit_status": "pass",
+      "coverage_status": "solver surface present",
+      "evidence": "tmp/caterpillar/include/caterpillar/solvers/solver_manager.hpp tokens=3/3; tmp/caterpillar/include/caterpillar/solvers/bsat_solver.hpp tokens=3/3; tmp/caterpillar/include/caterpillar/solvers/z3_solver.hpp tokens=3/3",
+      "excluded_claim": "These hooks are not the official ROS SAT garbage-management optimizer used as a reproduced baseline.",
+      "item": "SAT/pebbling implementation surface",
+      "next_action": "Promote this only after a benchmark driver emits matched oracle resources.",
+      "supported_claim": "The source contains bounded-pebbling controls and BSAT/Z3-oriented solver hooks relevant to garbage/memory management."
+    },
+    {
+      "audit_status": "pass",
+      "coverage_status": "partial build present",
+      "evidence": "build_cache=True; build_test_cache=True; test_objects=19; libabcsat=tmp/caterpillar/build-test/lib/abcsat/liblibabcsat.a exists=True",
+      "excluded_claim": "The build artifacts do not include a standalone ROS or Caterpillar benchmark executable.",
+      "item": "CMake build artifacts",
+      "next_action": "If a stable CLI/adapter is added, record its binary path and matched benchmark manifest.",
+      "supported_claim": "The local CMake probe built core object files and the abcsat support library."
+    },
+    {
+      "audit_status": "pass",
+      "coverage_status": "local compile smoke",
+      "evidence": "compile_rc=0; run_rc=0; warnings=19; reason=none",
+      "excluded_claim": "This is a toy API smoke test, not a published ROS reproduction or performance comparison.",
+      "item": "Toy AIG compile/run smoke",
+      "next_action": "Turn this into a real baseline only by exporting the paper's benchmark functions and recording resources row by row.",
+      "supported_claim": "A tiny local AIG can be synthesized through Caterpillar's API and converted back for semantic checking on this workstation."
+    },
+    {
+      "audit_status": "pass",
+      "coverage_status": "not available",
+      "evidence": "candidate_executables=0; examples_cpp=0; experiments_cpp=0",
+      "excluded_claim": "No standalone Caterpillar/ROS executable baseline is claimed or used in the result tables.",
+      "item": "Standalone baseline executable",
+      "next_action": "Create a dedicated adapter and manifest before adding Caterpillar to the quantitative leaderboard.",
+      "supported_claim": "The audit records why Caterpillar is currently source-family evidence rather than a new performance row."
+    },
+    {
+      "audit_status": "pass",
+      "coverage_status": "claim boundary explicit",
+      "evidence": "paper_latex/resource_nmcts_submission_v1.tex tokens=3/3; DELIVERABLE_zh.md tokens=2/2; results/analysis_ros_reproduction_gap_audit.md tokens=2/2",
+      "excluded_claim": "The manuscript must not describe the Caterpillar probe as full ROS SAT garbage management.",
+      "item": "Manuscript and ROS-gap boundary",
+      "next_action": "Keep this row green after changing ROS or external-toolchain wording.",
+      "supported_claim": "The paper can mention Caterpillar as a stronger implementation-family probe while preserving the full-ROS boundary."
+    }
+  ],
+  "script": "analyze_caterpillar_ros_family_probe.py",
+  "source_tree_available": true,
+  "standalone_cli_detected": false,
+  "status_counts": {
+    "pass": 8
+  }
+}

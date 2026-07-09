@@ -76,6 +76,9 @@ noise modeling, or magic-state-factory accounting.
 - `../results/analysis_ros_reproduction_gap_audit.md`: audit that separates
   verified ROS-style LUT proxy evidence from full official ROS reproduction
   and SAT garbage-management claims.
+- `../results/analysis_caterpillar_ros_family_probe.md`: local source/API/build
+  and toy compile smoke audit for the Caterpillar implementation family; this
+  is not a standalone ROS performance baseline.
 - `../results/analysis_submission_metadata_pipeline_selftest.md`: synthetic,
   non-private self-test for the metadata validator and private-preview
   renderers.
@@ -217,6 +220,7 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_comparison_protocol_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_comparison_target_validity_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_sshr_reproduction_scope_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_caterpillar_ros_family_probe.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_ros_reproduction_gap_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_editorial_screening_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_support_packet_audit.py
