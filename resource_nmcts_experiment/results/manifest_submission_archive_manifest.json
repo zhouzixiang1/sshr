@@ -37,7 +37,7 @@
     },
     {
       "boundary": "Terminal submission audit tables are excluded from the stable payload digest.",
-      "bytes": 212471,
+      "bytes": 212563,
       "category": "Paper tables",
       "file_count": 191,
       "files": [
@@ -47,9 +47,9 @@
           "sha256": "a437d9b41433460a9c58afab6b1be661fe4833f25a5bcef93f96bd08cc57b056"
         },
         {
-          "bytes": 5221,
+          "bytes": 5313,
           "path": "paper_latex/tables/artifact_rerun_registry.tex",
-          "sha256": "560b04073c011e630c7f259b60866cfa3848265c603cd66faaebae26ae15b3a6"
+          "sha256": "0a5a479b9df9f85433e1da5ce0635e36b43c9d6facfc225d27c17513d2f6ad2e"
         },
         {
           "bytes": 3479,
@@ -998,7 +998,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "8455e2317a22cd158f4cbbe8422e6e3940ee01f5cbb0e1d8f6ceb7e17b327763"
+      "sha256_digest": "849ab9ebd3c3cdc24533f546367c9579078d3df491c036146a06a65e50842663"
     },
     {
       "boundary": "Includes generated figure assets and plotted source data, not raw benchmark reruns.",
@@ -1152,7 +1152,7 @@
     },
     {
       "boundary": "Raw CSVs are regenerated only by the heavier run scripts, not by the lightweight rebuild.",
-      "bytes": 102901113,
+      "bytes": 102895998,
       "category": "Raw measurements",
       "file_count": 160,
       "files": [
@@ -1207,14 +1207,14 @@
           "sha256": "2132b7651566d4ab4d3486937deaf80bff37bb70d16a7055bf8b80ca6b836b75"
         },
         {
-          "bytes": 30117,
+          "bytes": 28853,
           "path": "results/raw_caterpillar_xag_api_best.csv",
-          "sha256": "c911d09deda75241a05bb63f15bcc0347cddcf054fa700bdd305812f17dfa314"
+          "sha256": "635d74474b6cf7d48d56e61037b48d2ced141279fd1e98a379ca6c1165f1b630"
         },
         {
-          "bytes": 84364,
+          "bytes": 80513,
           "path": "results/raw_caterpillar_xag_api_probe.csv",
-          "sha256": "bb4944fc091f4073989761e9890d7ca17f2dfa8281dbb1c984e3fa6e185190cb"
+          "sha256": "639b57e550c52cccba36e88fd9bb1cb1d86428cbd670b235f7b87ad84fa48491"
         },
         {
           "bytes": 29257,
@@ -1958,11 +1958,11 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "fd1bb6854f6d488e17aa02a209545e81caf2f119e78a7837dd32cb40b56cd103"
+      "sha256_digest": "f01a73adbdb0da1b0700c977151ee682623b97a287dafac4e09ac5b41da6a1d2"
     },
     {
       "boundary": "Terminal submission/package outputs are excluded so this manifest remains stable.",
-      "bytes": 4812771,
+      "bytes": 4813175,
       "category": "Derived summaries",
       "file_count": 422,
       "files": [
@@ -1982,9 +1982,9 @@
           "sha256": "d18605f22a5193ea396742c0e4c16912ab0e88c8399cd8f3093c270fe3ba9ad8"
         },
         {
-          "bytes": 18085,
+          "bytes": 18177,
           "path": "results/analysis_artifact_rerun_registry.md",
-          "sha256": "c93ea2f596069716f1480eb0fa3867fd086819ea3ff0f3f350e81e4ed5db2648"
+          "sha256": "9d2df79083ae352eda51248dfecc24f310cb292d6abd7ee3a3dca25f81cf71df"
         },
         {
           "bytes": 2051,
@@ -2062,9 +2062,9 @@
           "sha256": "fafa81bd631580bd7da508c3d2c0aba5d13edc50daac944c4f83e613a42e9e3f"
         },
         {
-          "bytes": 2587,
+          "bytes": 2807,
           "path": "results/analysis_caterpillar_xag_api_probe.md",
-          "sha256": "decda1718e29d8c8c669d925f55f234d8e7623b42645b8a25ba7bb67aa8646c2"
+          "sha256": "1520687b782706661d5453a369796fd2c10d85d10c266600dd486ebe3103f595"
         },
         {
           "bytes": 5562,
@@ -2834,7 +2834,7 @@
         {
           "bytes": 1309,
           "path": "results/analysis_target_venue_format_smoke.md",
-          "sha256": "c1830853cd66e9c4dd18de245e25cfddbf846b5abfb42a1a04c5b166621018e6"
+          "sha256": "fc88062cbcfa6a51c23bd318c3c562aa6bbec9aa77594789af6202e66946f029"
         },
         {
           "bytes": 3057,
@@ -2977,9 +2977,9 @@
           "sha256": "bea04c1a18037b90b58f25270c05d61118d2f39626cb0d22a682cfc52ded231b"
         },
         {
-          "bytes": 14753,
+          "bytes": 14845,
           "path": "results/summary_artifact_rerun_registry.csv",
-          "sha256": "b64b0ed0186fb95dc1b45dd734b4b0e010b163c844faf6dba5ecd4b5fbde2d17"
+          "sha256": "16de2a28a23320e50c4a26af2ebd2774d6b9fadb4298a2ebfc2948870236d29b"
         },
         {
           "bytes": 1622,
@@ -3074,7 +3074,7 @@
         {
           "bytes": 408,
           "path": "results/summary_caterpillar_xag_api_probe.csv",
-          "sha256": "450745c637da75b13d08fe374073abb0342cf8b832fbf1282662d5dbd6925005"
+          "sha256": "b60552d5d6271b18d9e4b2755928858f67ba25d188f98f53b481ca3f0a8a025f"
         },
         {
           "bytes": 4751,
@@ -3929,7 +3929,7 @@
         {
           "bytes": 1099,
           "path": "results/summary_target_venue_format_smoke.csv",
-          "sha256": "5f3419d6ebe8f4e6e4adcd5d420c311e90b4f3b2e3532572d6d13d563c3dbe0a"
+          "sha256": "251549d0445fbaa7753565677adb223e9cee0f1fa5900da08adfc2236126aedb"
         },
         {
           "bytes": 4802,
@@ -4078,11 +4078,11 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "e375b17d7fccc418550344aa1933c8159371fd98cdccb5f8958cb1aa8329fdbf"
+      "sha256_digest": "0ad8fa55e65d750b49de77f113e95d6ed59eac58272bdf10c8b2005946bda86a"
     },
     {
       "boundary": "Submission-level terminal manifests are excluded from this digest group.",
-      "bytes": 224531,
+      "bytes": 224659,
       "category": "Run manifests",
       "file_count": 118,
       "files": [
@@ -4102,9 +4102,9 @@
           "sha256": "d4694c927876f027ed7dc8a33cc62b15e0d34efa12caa6e4fc9fb188445c8801"
         },
         {
-          "bytes": 33380,
+          "bytes": 33472,
           "path": "results/manifest_artifact_rerun_registry.json",
-          "sha256": "e86dbd33cfa348b5977356f8af91c2b079bae075c2ae18b9c79f4da65d3c7b9f"
+          "sha256": "857be01d0c7d24fdc230c06258090670d6725adb9f6936da70a640bf675bef54"
         },
         {
           "bytes": 3038,
@@ -4149,12 +4149,12 @@
         {
           "bytes": 7851,
           "path": "results/manifest_caterpillar_ros_family_probe.json",
-          "sha256": "229ca0b56e5af3a888f7105f1b263def9ae44641b0e63f378cd4c550969de42c"
+          "sha256": "677e345cc2476a98910fc28cdb163f3d68d996dd9f3a88e78bc9ac9901cf7826"
         },
         {
-          "bytes": 1373,
+          "bytes": 1409,
           "path": "results/manifest_caterpillar_xag_api_probe.json",
-          "sha256": "9e69ea5511e5ce0af4dfd5519724575f96ffe01979a1234d89f39f3e43e57261"
+          "sha256": "4893f2da8bcf36723b5e12723e47860bc02a7092cf92073af246816813be382c"
         },
         {
           "bytes": 1606,
@@ -4509,7 +4509,7 @@
         {
           "bytes": 588,
           "path": "results/manifest_ros_lut_line_sensitivity.json",
-          "sha256": "edd7a38710ab293b4e03b3ce4b93535a8de76f253288995ef8da30f66f2d369d"
+          "sha256": "aec9fa5a1f315ee66ea388277bf6756d82a2404482476b69abbfc234b878293d"
         },
         {
           "bytes": 1040,
@@ -4624,7 +4624,7 @@
         {
           "bytes": 2094,
           "path": "results/manifest_target_venue_format_smoke.json",
-          "sha256": "cac2d5149f4e7faa75de71b200af0bedb2c5f89be2321740cba5ab6ed9e703e2"
+          "sha256": "de0fe05ed425d2c40c2410f5614a1a4d7011a49dc46704547be7381911c6e072"
         },
         {
           "bytes": 1927,
@@ -4678,18 +4678,18 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "4ceb3ec1dec76d1e66dd10c58ef2bea7f27cc20733fece2e2dd3784966a1e530"
+      "sha256_digest": "dd63dbceb7cce76ba86d2dadfe2a4b5e384ce5bd16637cfdc192d7e3344273bb"
     },
     {
       "boundary": "Includes reproducible entry points and top-level core implementation modules; raw sweeps still require their individual drivers.",
-      "bytes": 2825205,
+      "bytes": 2826989,
       "category": "Scripts and docs",
       "file_count": 148,
       "files": [
         {
-          "bytes": 197739,
+          "bytes": 197811,
           "path": "DELIVERABLE_zh.md",
-          "sha256": "6d1227ab652bf6a570b336c9a789199c67e5a8b245d39cfd8c822e76162e36c0"
+          "sha256": "d3fa5f28e62404222607acbf2862e3a525dba4072fa108ebd72a9eb27a131f45"
         },
         {
           "bytes": 106775,
@@ -4717,9 +4717,9 @@
           "sha256": "a71efc32a379ffa4d61a03ec7538d9c547ae956ee40c98a31aaf4aa861f7e8eb"
         },
         {
-          "bytes": 39792,
+          "bytes": 39884,
           "path": "analyze_artifact_rerun_registry.py",
-          "sha256": "7eb1bbdbd9048615d8a9d486979065b3760d08b890d4295914fac4189db12374"
+          "sha256": "a7b724abcd28fdf3f2b2d818125da6ae7fdb1b056ffcc85d44d505b57e3f4363"
         },
         {
           "bytes": 14681,
@@ -4922,9 +4922,9 @@
           "sha256": "bac071ae0fedbd3cf472dc629b18d4eaeffb268b2ac4c282cd9e9b0dd320f78c"
         },
         {
-          "bytes": 11942,
+          "bytes": 12206,
           "path": "analyze_payload_latex_compile_audit.py",
-          "sha256": "d060f011680df5824c1c46c9e2da364e6c9fabec2e6a4799a57a60a3afb795a8"
+          "sha256": "e58ae417355ada77952b38c03ebb151a4496fc30e040e16c28417475f94b900d"
         },
         {
           "bytes": 44559,
@@ -5272,9 +5272,9 @@
           "sha256": "14d0ea1b2067f4f847c764a6d802631ea5339142463c4e98410703692b9bad97"
         },
         {
-          "bytes": 6090,
+          "bytes": 6243,
           "path": "rebuild_submission_package.sh",
-          "sha256": "8faaf17258302b4749eccfe0ba3293c5c4a215f51c08b7b2cfda8a4d5feeca44"
+          "sha256": "68ce47c90166f6c3f917d1dd0d3396984de20acb61503d0c5bac66781c5bd8b6"
         },
         {
           "bytes": 5184,
@@ -5292,9 +5292,9 @@
           "sha256": "85a40be8f1275a925b929333ef6a119c4772783cf93f3bebb524b646b64df352"
         },
         {
-          "bytes": 27796,
+          "bytes": 28999,
           "path": "run_caterpillar_xag_api_probe.py",
-          "sha256": "150d4da141e9811883f5263e3f148047f65ac173e92d4d6d15a359cfe8cdb4af"
+          "sha256": "f1ffb5860b3b1ac910248d2c4c1364224e9c2c472a705adbbd4c5500c7612cfc"
         },
         {
           "bytes": 24403,
@@ -5428,7 +5428,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "3b0026cea721e688ca7a2a58c0ca6a9332ad91344433ae7efcba5b70f16d724c"
+      "sha256_digest": "f7f5f5cf411badfcdfeb4e58e6969fd71e2239e1996c681da92592206c1d02d5"
     },
     {
       "boundary": "Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild.",

@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import csv
 import json
+import argparse
 import shutil
 import statistics
 import subprocess
@@ -505,6 +506,12 @@ def wlt(target: dict[str, dict[str, str]], baseline: dict[str, dict[str, str]], 
     return wins, losses, ties, mean_rel
 
 
+def normalize_timing(raw_rows: list[dict[str, str]]) -> None:
+    """Keep tracked probe artifacts deterministic unless profiling is explicit."""
+    for row in raw_rows:
+        row["time_s"] = "0.0"
+
+
 def summarize(raw_rows: list[dict[str, str]]) -> list[dict[str, str]]:
     by_strategy: dict[str, list[dict[str, str]]] = defaultdict(list)
     for row in raw_rows:
@@ -591,7 +598,13 @@ def load_baseline(method: str) -> dict[str, dict[str, str]]:
     return out
 
 
-def write_analysis(path: Path, raw_rows: list[dict[str, str]], summary: list[dict[str, str]], commit: str) -> None:
+def write_analysis(
+    path: Path,
+    raw_rows: list[dict[str, str]],
+    summary: list[dict[str, str]],
+    commit: str,
+    timing_mode: str,
+) -> None:
     status_counts = Counter(row["status"] for row in summary)
     best = best_rows(raw_rows)
     baselines = {
@@ -622,6 +635,7 @@ def write_analysis(path: Path, raw_rows: list[dict[str, str]], summary: list[dic
             f"- input rows: `{rel(INPUT)}`",
             f"- raw probe rows: {len(raw_rows)}",
             f"- unique functions covered by best-of-Caterpillar: {len(best)}",
+            f"- timing mode: `{timing_mode}`",
             "",
             "## Strategy Summary",
             "",
@@ -648,6 +662,7 @@ def write_analysis(path: Path, raw_rows: list[dict[str, str]], summary: list[dic
             "## Boundary",
             "",
             "- Supported claim: Caterpillar can now be cited as a bounded, verified API-level implementation-family counterpoint on the same traditional function names.",
+            "- Timing note: tracked outputs normalize wall-clock timings to zero by default so the rebuild and payload hash remain deterministic; rerun with `--measure-time` only for local profiling.",
             "- Excluded claim: these rows do not reproduce full ROS SAT garbage management, LUT mapping, reversible emission, routing, or hardware mapping.",
         ]
     )
@@ -711,7 +726,14 @@ def write_latex(path: Path, summary: list[dict[str, str]], raw_rows: list[dict[s
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def write_manifest(path: Path, tasks: list[Task], raw_rows: list[dict[str, str]], summary: list[dict[str, str]], commit: str) -> None:
+def write_manifest(
+    path: Path,
+    tasks: list[Task],
+    raw_rows: list[dict[str, str]],
+    summary: list[dict[str, str]],
+    commit: str,
+    timing_mode: str,
+) -> None:
     needs_revision = sum(1 for row in summary if row["status"] == "needs revision")
     best = best_rows(raw_rows)
     pareto = load_baseline("and_pareto_resource_nmcts")
@@ -726,6 +748,7 @@ def write_manifest(path: Path, tasks: list[Task], raw_rows: list[dict[str, str]]
         "tasks": len(tasks),
         "strategies": list(STRATEGIES),
         "raw_rows": len(raw_rows),
+        "timing_mode": timing_mode,
         "best_raw_rows": len(best),
         "summary_rows": len(summary),
         "correct_rows": sum(1 for row in raw_rows if row["correct"] == "True"),
@@ -753,10 +776,27 @@ def write_manifest(path: Path, tasks: list[Task], raw_rows: list[dict[str, str]]
     path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--measure-time",
+        action="store_true",
+        help=(
+            "keep measured wall-clock timings in generated CSV/Markdown outputs. "
+            "The default normalizes time_s to zero for deterministic tracked artifacts."
+        ),
+    )
+    return parser.parse_args()
+
+
 def main() -> None:
+    args = parse_args()
     tasks = load_tasks(INPUT)
     commit = git_commit(CATERPILLAR)
     raw_rows = build_and_run_tool(tasks, commit, timeout=240)
+    timing_mode = "measured_wall_clock" if args.measure_time else "normalized_zero"
+    if not args.measure_time:
+        normalize_timing(raw_rows)
     best_raw_rows = best_row_list(raw_rows)
     summary = summarize(raw_rows)
     write_csv(RAW_OUT, raw_rows, FIELDS)
@@ -777,9 +817,9 @@ def main() -> None:
             "mean_time_s",
         ],
     )
-    write_analysis(ANALYSIS_OUT, raw_rows, summary, commit)
+    write_analysis(ANALYSIS_OUT, raw_rows, summary, commit, timing_mode)
     write_latex(TABLE_OUT, summary, raw_rows)
-    write_manifest(MANIFEST_OUT, tasks, raw_rows, summary, commit)
+    write_manifest(MANIFEST_OUT, tasks, raw_rows, summary, commit, timing_mode)
     print(f"wrote {len(raw_rows)} Caterpillar XAG API probe rows")
 
 

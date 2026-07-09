@@ -4,7 +4,7 @@
     {
       "analysis_files": "12",
       "claim_use": "Regenerates manuscript-facing analyses, figures, audits, PDF, archive manifest, and payload from existing artifacts.",
-      "dependency_boundary": "Python, latexmk, and existing raw artifacts; does not rerun raw sweeps or external probes.",
+      "dependency_boundary": "Python, latexmk, existing raw artifacts, and the bounded local Caterpillar API check; does not rerun heavy raw sweeps, neural training jobs, or full external-toolchain reproductions.",
       "driver_scripts": "rebuild_submission_package.sh",
       "evidence_family": "Lightweight paper-facing rebuild",
       "manifest_files": "11",

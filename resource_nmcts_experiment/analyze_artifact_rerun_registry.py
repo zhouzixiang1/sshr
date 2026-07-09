@@ -90,7 +90,7 @@ def specs() -> list[EvidenceFamily]:
             manifest_patterns=("manifest_submission_*.json", "manifest_goal_completion_audit.json"),
             summary_patterns=("summary_submission_*.csv", "summary_goal_completion_audit.csv"),
             analysis_patterns=("analysis_submission_*.md", "analysis_goal_completion_audit.md"),
-            dependency_boundary="Python, latexmk, and existing raw artifacts; does not rerun raw sweeps or external probes.",
+            dependency_boundary="Python, latexmk, existing raw artifacts, and the bounded local Caterpillar API check; does not rerun heavy raw sweeps, neural training jobs, or full external-toolchain reproductions.",
         ),
         EvidenceFamily(
             family="Submission metadata closure path",

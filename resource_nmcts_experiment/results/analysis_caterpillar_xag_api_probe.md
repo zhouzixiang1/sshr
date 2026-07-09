@@ -15,15 +15,16 @@ It is a real Caterpillar API performance probe over ANF-XAG inputs, but it is st
 - input rows: `results/raw_traditional_resource.csv`
 - raw probe rows: 531
 - unique functions covered by best-of-Caterpillar: 177
+- timing mode: `normalized_zero`
 
 ## Strategy Summary
 
 | item | status | rows | correct rows | mean T | mean CNOT | mean depth | mean peak ancilla | mean score | mean time s |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| xag_fast_lowt | pass | 177 | 177 | 62.9153 | 27.9661 | 31.8249 | 15.7288 | 96.5677 | 0.000118 |
-| xag_lowd | pass | 177 | 177 | 62.9153 | 64.0791 | 33.8475 | 22.7740 | 112.4941 | 0.000138 |
-| xag_lowt | pass | 177 | 177 | 62.9153 | 27.9661 | 34.1469 | 15.7288 | 96.6025 | 0.000098 |
-| best_of_caterpillar_xag_api | pass | 177 | 177 | 62.9153 | 27.9661 | 31.5311 | 15.7288 | 96.5633 | 0.000109 |
+| xag_fast_lowt | pass | 177 | 177 | 62.9153 | 27.9661 | 31.8249 | 15.7288 | 96.5677 | 0.000000 |
+| xag_lowd | pass | 177 | 177 | 62.9153 | 64.0791 | 33.8475 | 22.7740 | 112.4941 | 0.000000 |
+| xag_lowt | pass | 177 | 177 | 62.9153 | 27.9661 | 34.1469 | 15.7288 | 96.6025 | 0.000000 |
+| best_of_caterpillar_xag_api | pass | 177 | 177 | 62.9153 | 27.9661 | 31.5311 | 15.7288 | 96.5633 | 0.000000 |
 
 ## Matched Comparison
 
@@ -53,4 +54,5 @@ It is a real Caterpillar API performance probe over ANF-XAG inputs, but it is st
 ## Boundary
 
 - Supported claim: Caterpillar can now be cited as a bounded, verified API-level implementation-family counterpoint on the same traditional function names.
+- Timing note: tracked outputs normalize wall-clock timings to zero by default so the rebuild and payload hash remain deterministic; rerun with `--measure-time` only for local profiling.
 - Excluded claim: these rows do not reproduce full ROS SAT garbage management, LUT mapping, reversible emission, routing, or hardware mapping.

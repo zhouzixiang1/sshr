@@ -60,6 +60,14 @@ COMPILE_SPECS = (
 )
 
 
+def deterministic_latex_env() -> dict[str, str]:
+    env = os.environ.copy()
+    env.setdefault("SOURCE_DATE_EPOCH", "1767225600")
+    env.setdefault("FORCE_SOURCE_DATE", "1")
+    env.setdefault("TZ", "UTC")
+    return env
+
+
 def rel(path: Path) -> str:
     return str(path.relative_to(THIS_DIR))
 
@@ -185,6 +193,7 @@ def compile_one(payload_dir: Path, spec: CompileSpec, latexmk: str) -> dict[str,
         check=False,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
+        env=deterministic_latex_env(),
         text=True,
         timeout=180,
     )
