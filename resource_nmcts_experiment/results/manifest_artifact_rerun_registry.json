@@ -306,20 +306,20 @@
       "summary_files": "2"
     },
     {
-      "analysis_files": "60",
+      "analysis_files": "61",
       "claim_use": "Tests scaling behavior on n=20-64 generated term-set instances with symbolic emitted-circuit checks.",
       "dependency_boundary": "Symbolic or generated-instance verification; not exhaustive truth-table enumeration for all large n.",
-      "driver_scripts": "run_screen_scale_terms.py; analyze_ultra_scale64_stress.py",
+      "driver_scripts": "run_screen_scale_terms.py; analyze_ultra_scale64_stress.py; analyze_ultra_scale64_resource_profile.py",
       "evidence_family": "High-dimensional symbolic screen-scale runs",
-      "manifest_files": "25",
+      "manifest_files": "26",
       "raw_files": "77",
       "raw_rows": "11960",
       "representative_raw": "results/raw_giga_adaptive_resource_vs_and_direct.csv; results/raw_giga_adaptive_screen_resource.csv; results/raw_giga_adaptive_screen_vs_single.csv; results/raw_giga_boolean_neural_resource.csv; +73 more",
       "rerun_tier": "large raw rerun",
       "scripts_missing": "",
-      "scripts_present": "2",
+      "scripts_present": "3",
       "status": "complete",
-      "summary_files": "78"
+      "summary_files": "80"
     },
     {
       "analysis_files": "4",

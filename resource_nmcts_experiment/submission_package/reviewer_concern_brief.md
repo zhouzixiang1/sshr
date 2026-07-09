@@ -57,13 +57,13 @@ Manuscript anchors:
 
 ## Does the large-scale result rely only on symbolic checks?
 
-Large rows use symbolic term-set and emitted-circuit verification, including the $n=48,56,64$ stress slice.  Complete truth-table checks are used only for bridge slices because exhaustive truth tables scale exponentially.  The paper states this boundary explicitly.
+Large rows use symbolic term-set and emitted-circuit verification, including the $n=48,56,64$ stress slice and its resource profile.  Complete truth-table checks are used only for bridge slices because exhaustive truth tables scale exponentially.  The paper states this boundary explicitly.
 
 Manuscript anchors:
 - High-dimensional verification result
 - Validation table
 - Scaling resource audit
-- Ultra-scale stress table
+- Ultra-scale stress and resource-profile tables
 - Discussion
 
 ## Is the package reproducible?

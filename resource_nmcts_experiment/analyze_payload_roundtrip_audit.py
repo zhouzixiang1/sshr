@@ -96,14 +96,20 @@ SCHEDULE_PROXY_PATHS = {
 ULTRA_SCALE64_PATHS = {
     "run_screen_scale_terms.py",
     "analyze_ultra_scale64_stress.py",
+    "analyze_ultra_scale64_resource_profile.py",
     "results/raw_screen_scale_ultra_scale64_terms.csv",
     "results/summary_screen_scale_ultra_scale64_terms.csv",
     "results/analysis_screen_scale_ultra_scale64_terms.md",
     "results/summary_screen_scale_ultra_scale64_stress.csv",
     "results/analysis_screen_scale_ultra_scale64_stress.md",
     "results/manifest_screen_scale_ultra_scale64_stress.json",
+    "results/summary_screen_scale_ultra_scale64_resource_profile.csv",
+    "results/summary_screen_scale_ultra_scale64_resource_deltas.csv",
+    "results/analysis_screen_scale_ultra_scale64_resource_profile.md",
+    "results/manifest_screen_scale_ultra_scale64_resource_profile.json",
     "paper_latex/tables/screen_scale_ultra_scale64_terms.tex",
     "paper_latex/tables/screen_scale_ultra_scale64_stress.tex",
+    "paper_latex/tables/screen_scale_ultra_scale64_resource_profile.tex",
 }
 SEARCH_BUDGET_PATHS = {
     "analyze_search_budget_contract.py",

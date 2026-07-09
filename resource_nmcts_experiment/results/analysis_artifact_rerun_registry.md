@@ -29,7 +29,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | Phase and affine FPRM branch | raw phase rerun and training | 7 | 11859 | 7 | complete | Logical phase verification up to global phase; not approximate rotation synthesis. |
 | Learned-control and ablations | training plus ablation rerun | 14 | 8207 | 12 | complete | Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only. |
 | Schedule proxy and lifetime tradeoffs | quick derived audit | 3 | 1140 | 1 | complete | Emitted-circuit logical schedule proxies only; not hardware routing, native-gate scheduling, or device execution. |
-| High-dimensional symbolic screen-scale runs | large raw rerun | 77 | 11960 | 25 | complete | Symbolic or generated-instance verification; not exhaustive truth-table enumeration for all large n. |
+| High-dimensional symbolic screen-scale runs | large raw rerun | 77 | 11960 | 26 | complete | Symbolic or generated-instance verification; not exhaustive truth-table enumeration for all large n. |
 | External high-dimensional resource extensions | large raw rerun | 4 | 528 | 4 | complete | Generated large-instance comparisons; external availability and timeout behavior are recorded in manifests. |
 | Boolean screen, frontier, and gate auxiliaries | training plus ablation rerun | 11 | 2170 | 3 | complete | Auxiliary policy-selection evidence; not all rows are promoted as final-quality gains. |
 | Exact, resource-sweep, and development probes | auxiliary raw rerun | 11 | 12524 | 6 | complete | Development and auxiliary evidence retained in the payload; not all rows correspond to headline manuscript claims. |
@@ -115,7 +115,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - representative raw: `results/raw_schedule_truth_bridge_n23_terms.csv; results/raw_schedule_truth_bridge_terms.csv; results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv`
 - **High-dimensional symbolic screen-scale runs**
   - claim use: Tests scaling behavior on n=20-64 generated term-set instances with symbolic emitted-circuit checks.
-  - scripts: `run_screen_scale_terms.py; analyze_ultra_scale64_stress.py`
+  - scripts: `run_screen_scale_terms.py; analyze_ultra_scale64_stress.py; analyze_ultra_scale64_resource_profile.py`
   - representative raw: `results/raw_giga_adaptive_resource_vs_and_direct.csv; results/raw_giga_adaptive_screen_resource.csv; results/raw_giga_adaptive_screen_vs_single.csv; results/raw_giga_boolean_neural_resource.csv; +73 more`
 - **External high-dimensional resource extensions**
   - claim use: Auxiliary high-dimensional extensions for external/resource baselines used to stress-test scaling claims.

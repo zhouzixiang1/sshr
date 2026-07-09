@@ -1,10 +1,10 @@
 {
-  "dependency_count": 100,
+  "dependency_count": 102,
   "dependency_type_counts": {
     "bibliography": 2,
     "figure": 14,
     "main_source": 2,
-    "tex_input": 82
+    "tex_input": 84
   },
   "needs_revision_count": 0,
   "outputs": {
@@ -20,6 +20,6 @@
     "author_tex": "paper_latex/resource_nmcts_submission_v1.tex"
   },
   "status_counts": {
-    "pass": 100
+    "pass": 102
   }
 }

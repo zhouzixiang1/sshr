@@ -126,6 +126,11 @@ The high-dimensional scale audit is materialized by
 method rows, verified rows, and representative resource means for the large
 frontier, stage-gated frontier, width-probe, and complete truth-table bridge
 slices in `paper_latex/tables/scaling_resource_audit.tex`.
+The ultra-scale resource-profile audit is materialized by
+`analyze_ultra_scale64_resource_profile.py`, which reuses the verified
+`n=48,56,64` stress rows and reports score, T-count, CNOT count, depth, peak
+ancilla, T-depth proxy, auxiliary lifetime, and planning time means in
+`paper_latex/tables/screen_scale_ultra_scale64_resource_profile.tex`.
 The compute/reproducibility audit is materialized by
 `analyze_reproducibility_audit.py`, which records the local CPU/GPU/Python
 environment, manifest-level worker counts, artifact coverage, and external

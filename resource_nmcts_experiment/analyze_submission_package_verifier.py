@@ -11,6 +11,7 @@ public handoff freshness,
 search-control baseline coverage,
 frontier random-depth control coverage,
 ultra-scale n=48--64 stress coverage,
+ultra-scale n=48--64 resource-profile coverage,
 editorial screening support,
 target-venue decision support,
 submission support packet coverage,
@@ -73,6 +74,8 @@ SCHEDULE_PROXY_MANIFEST = RESULTS / "manifest_schedule_proxy_audit.json"
 SCHEDULE_PROXY_TABLE = THIS_DIR / "paper_latex" / "tables" / "schedule_proxy_audit.tex"
 ULTRA_SCALE64_MANIFEST = RESULTS / "manifest_screen_scale_ultra_scale64_stress.json"
 ULTRA_SCALE64_TABLE = THIS_DIR / "paper_latex" / "tables" / "screen_scale_ultra_scale64_stress.tex"
+ULTRA_SCALE64_PROFILE_MANIFEST = RESULTS / "manifest_screen_scale_ultra_scale64_resource_profile.json"
+ULTRA_SCALE64_PROFILE_TABLE = THIS_DIR / "paper_latex" / "tables" / "screen_scale_ultra_scale64_resource_profile.tex"
 SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
 BITFLIP_RANDOM_PRIOR_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control.json"
 BITFLIP_RANDOM_PRIOR_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_random_prior_control.tex"
@@ -398,6 +401,40 @@ def verify_ultra_scale64() -> dict[str, str]:
         status,
         f"raw_rows={raw_rows}; plan_verified={plan_rows}; circuit_verified={circuit_rows}; max_circuit_mismatches={mismatch}; n_values={n_values}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
         "Run analyze_ultra_scale64_stress.py and restore the n=48--64 stress manifest and manuscript table.",
+    )
+
+
+def verify_ultra_scale64_resource_profile() -> dict[str, str]:
+    manifest = read_json(ULTRA_SCALE64_PROFILE_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    raw_rows = manifest.get("raw_rows", "missing") if manifest else "missing"
+    plan_rows = manifest.get("plan_verified_rows", "missing") if manifest else "missing"
+    circuit_rows = manifest.get("circuit_verified_rows", "missing") if manifest else "missing"
+    plan_mismatch = manifest.get("max_plan_mismatches", "missing") if manifest else "missing"
+    circuit_mismatch = manifest.get("max_circuit_mismatches", "missing") if manifest else "missing"
+    profile_rows = manifest.get("profile_rows", "missing") if manifest else "missing"
+    delta_rows = manifest.get("delta_rows", "missing") if manifest else "missing"
+    table_exists = ULTRA_SCALE64_PROFILE_TABLE.exists()
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and raw_rows == 480
+        and plan_rows == 480
+        and circuit_rows == 480
+        and plan_mismatch == 0
+        and circuit_mismatch == 0
+        and profile_rows == 20
+        and delta_rows == 12
+        and table_exists
+        else "needs revision"
+    )
+    return row(
+        "Ultra-scale n=48--64 resource profile",
+        status,
+        f"raw_rows={raw_rows}; plan_verified={plan_rows}; circuit_verified={circuit_rows}; max_plan_mismatches={plan_mismatch}; max_circuit_mismatches={circuit_mismatch}; profile_rows={profile_rows}; delta_rows={delta_rows}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
+        "Run analyze_ultra_scale64_resource_profile.py and restore the n=48--64 resource-profile manifest and manuscript table.",
     )
 
 
@@ -959,6 +996,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_search_budget_contract(),
             verify_schedule_proxy(),
             verify_ultra_scale64(),
+            verify_ultra_scale64_resource_profile(),
             verify_search_control(),
             verify_bitflip_random_prior(),
             verify_frontier_random_depth(),

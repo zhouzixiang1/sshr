@@ -229,6 +229,10 @@ Current source evidence:
   `../results/analysis_screen_scale_ultra_scale64_stress.md`
 - ultra-scale n=48/56/64 stress manifest:
   `../results/manifest_screen_scale_ultra_scale64_stress.json`
+- ultra-scale n=48/56/64 resource-profile analysis:
+  `../results/analysis_screen_scale_ultra_scale64_resource_profile.md`
+- ultra-scale n=48/56/64 resource-profile manifest:
+  `../results/manifest_screen_scale_ultra_scale64_resource_profile.json`
 - large frontier n=23 truth-table bridge CSV:
   `../results/raw_truth_bridge_n23_large_frontier_terms.csv`
 - large frontier n=23 truth-table bridge analysis:
@@ -329,6 +333,7 @@ Current source evidence:
 	  `tables/screen_scale_depth_frontier_policy_large_generalization_terms.tex`,
 	  `tables/screen_scale_ultra_scale64_terms.tex`,
 	  `tables/screen_scale_ultra_scale64_stress.tex`,
+	  `tables/screen_scale_ultra_scale64_resource_profile.tex`,
 	  `tables/truth_bridge_terms.tex`,
 	  `tables/truth_bridge_n23_large_frontier_terms.tex`,
 	  `tables/boolean_screen_depth_frontier_policy_cost_time003.tex`,

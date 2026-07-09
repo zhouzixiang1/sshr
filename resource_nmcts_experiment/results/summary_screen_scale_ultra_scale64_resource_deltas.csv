@@ -1,0 +1,13 @@
+scope,target,baseline,target_label,baseline_label,role,pairs,score_wlt,mean_delta_score_pct,mean_delta_T_pct,mean_delta_CNOT_pct,mean_delta_depth_pct,mean_delta_gates_pct,mean_delta_peak_ancilla_pct,mean_delta_schedule_t_depth_proxy_pct,mean_delta_explicit_ancilla_lifetime_area_pct,mean_delta_time_s_pct
+n=48/56/64,screen_depth4,screen_depth2,Depth-4 screen,Depth-2 screen,deterministic depth-4 gain,48,24/0/24,-1.81,-1.85,-1.68,-1.68,-1.41,+0.30,-1.81,+20.87,+488.77
+n=48/56/64,depth_frontier_policy,screen_depth2,Learned frontier,Depth-2 screen,learned frontier vs cheap depth-2,48,10/0/38,-0.84,-0.85,-0.79,-0.79,-0.70,+0.00,-0.83,+10.37,+244.67
+n=48/56/64,depth_frontier_policy,adaptive_all_depth,Learned frontier,All-depth frontier,learned frontier vs full frontier,48,0/14/34,+1.02,+1.04,+0.92,+0.92,+0.74,-0.26,+1.03,-7.58,-61.61
+n=48,screen_depth4,screen_depth2,Depth-4 screen,Depth-2 screen,deterministic depth-4 gain,16,6/0/10,-1.07,-1.09,-0.98,-0.98,-0.80,+0.00,-1.02,+16.61,+494.86
+n=48,depth_frontier_policy,screen_depth2,Learned frontier,Depth-2 screen,learned frontier vs cheap depth-2,16,5/0/11,-1.00,-1.02,-0.93,-0.93,-0.78,+0.00,-0.96,+14.65,+385.63
+n=48,depth_frontier_policy,adaptive_all_depth,Learned frontier,All-depth frontier,learned frontier vs full frontier,16,0/1/15,+0.07,+0.07,+0.05,+0.05,+0.02,+0.00,+0.06,-1.49,-53.13
+n=56,screen_depth4,screen_depth2,Depth-4 screen,Depth-2 screen,deterministic depth-4 gain,16,10/0/6,-2.23,-2.28,-2.08,-2.08,-1.77,+0.89,-2.28,+23.72,+591.40
+n=56,depth_frontier_policy,screen_depth2,Learned frontier,Depth-2 screen,learned frontier vs cheap depth-2,16,4/0/12,-1.13,-1.14,-1.07,-1.07,-0.96,+0.00,-1.14,+12.69,+287.60
+n=56,depth_frontier_policy,adaptive_all_depth,Learned frontier,All-depth frontier,learned frontier vs full frontier,16,0/6/10,+1.14,+1.17,+1.04,+1.04,+0.83,-0.78,+1.17,-8.43,-60.06
+n=64,screen_depth4,screen_depth2,Depth-4 screen,Depth-2 screen,deterministic depth-4 gain,16,8/0/8,-2.13,-2.17,-1.97,-1.97,-1.65,+0.00,-2.15,+22.28,+380.03
+n=64,depth_frontier_policy,screen_depth2,Learned frontier,Depth-2 screen,learned frontier vs cheap depth-2,16,1/0/15,-0.38,-0.38,-0.37,-0.37,-0.35,+0.00,-0.38,+3.78,+60.77
+n=64,depth_frontier_policy,adaptive_all_depth,Learned frontier,All-depth frontier,learned frontier vs full frontier,16,0/7/9,+1.85,+1.88,+1.68,+1.68,+1.36,+0.00,+1.86,-12.82,-71.64

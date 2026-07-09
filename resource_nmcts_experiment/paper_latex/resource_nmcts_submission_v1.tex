@@ -1137,6 +1137,23 @@ measured frontier but accepts a small score gap on this harder slice.}
 \input{tables/screen_scale_ultra_scale64_stress}
 \end{table}
 
+Table~\ref{tab:ultra-scale64-resource-profile} separates the same stress slice
+into raw logical resources.  The learned frontier is not the all-depth quality
+ceiling, but it lowers mean score, T-count, CNOT count, depth, and T-depth
+proxy relative to the cheap depth-2 screen while reducing planning time
+relative to the full measured frontier.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Ultra-scale $n=48,56,64$ resource profile.  Means are over the 48
+verified generated term-set functions in the stress slice; lower is better.}
+\label{tab:ultra-scale64-resource-profile}
+\input{tables/screen_scale_ultra_scale64_resource_profile}
+\end{table}
+
 \begin{table}[H]
 \centering
 \small

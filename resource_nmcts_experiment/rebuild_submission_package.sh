@@ -64,6 +64,7 @@ echo "==> ${PYTHON_BIN} analyze_schedule_metrics.py"
 run_py analyze_schedule_proxy_audit.py
 run_py analyze_learned_control_audit.py
 run_py analyze_ultra_scale64_stress.py
+run_py analyze_ultra_scale64_resource_profile.py
 run_py analyze_scaling_resource_audit.py
 run_py analyze_weight_robustness.py
 run_py analyze_artifact_rerun_registry.py

@@ -64,6 +64,9 @@ explanation.
   relative score changes, and exact sign-test evidence.
 - Multi-resource tradeoff audit: reports raw T/CNOT/depth/ancilla Pareto
   dominance separately from the weighted score.
+- Ultra-scale resource-profile audit: separates the $n=48,56,64$ stress slice
+  into score, T-count, CNOT count, depth, ancilla, T-depth proxy, auxiliary
+  lifetime, and planning-time means.
 - Claim-scope lint: automatically checks that hardware-mapping, universal
   dominance, and external-tool-reproduction language is locally guarded by the
   stated logical-layer scope.
@@ -80,8 +83,8 @@ explanation.
 - Explicit counterpoint evidence showing where SSHR, CirKit, and RevKit remain
   strong under individual resource metrics.
 - High-dimensional symbolic verification through the $n=48,56,64$ stress
-  slice, plus bridge-truth-table verification of emitted logical circuits
-  within the stated scope.
+  slice, with a separate resource profile, plus bridge-truth-table verification
+  of emitted logical circuits within the stated scope.
 - Bounded learned-control benefits and planning-time savings from frontier and
   guard policies.
 

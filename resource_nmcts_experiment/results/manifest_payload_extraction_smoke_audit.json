@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=973; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=979; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -47,6 +47,12 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_screen_scale_ultra_scale64_stress.json; needs_revision_count=0; raw_rows=480; stderr=none",
       "item": "Ultra-scale n=48--64 stress audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_screen_scale_ultra_scale64_resource_profile.json; needs_revision_count=0; raw_rows=480; stderr=none",
+      "item": "Ultra-scale n=48--64 resource profile",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -205,6 +211,13 @@
     },
     {
       "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_screen_scale_ultra_scale64_resource_profile.json",
+      "minimum_rows_key": "raw_rows",
+      "name": "Ultra-scale n=48--64 resource profile",
+      "script": "analyze_ultra_scale64_resource_profile.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
       "manifest": "results/manifest_search_budget_contract.json",
       "minimum_rows_key": "rows",
       "name": "Search-budget contract audit",
@@ -331,6 +344,6 @@
     }
   ],
   "status_counts": {
-    "pass": 25
+    "pass": 26
   }
 }

@@ -34,6 +34,7 @@ COUNTERPOINT = RESULTS / "analysis_counterpoint_claim_boundary.md"
 SEARCH_CONTROL = RESULTS / "manifest_search_control_baseline_audit.json"
 LEARNED_CONTROL = RESULTS / "analysis_learned_control_audit.md"
 SCALING = RESULTS / "analysis_scaling_resource_audit.md"
+ULTRA_PROFILE = RESULTS / "analysis_screen_scale_ultra_scale64_resource_profile.md"
 TRACEABILITY = RESULTS / "analysis_submission_traceability_audit.md"
 ARCHIVE_MANIFEST = RESULTS / "analysis_submission_archive_manifest.md"
 METADATA_CLOSURE = RESULTS / "manifest_submission_metadata_closure_path.json"
@@ -155,12 +156,12 @@ def specs() -> list[ScreeningSpec]:
         ScreeningSpec(
             item="Large-scale verification boundary visible",
             risk="Reviewer may object that the n=48--64 symbolic stress rows are not exhaustive truth-table checks.",
-            files=(PAPER, REVIEWER_BRIEF, SCALING),
-            tokens=("symbolic", "complete truth-table", "exponential", "bridge"),
+            files=(PAPER, REVIEWER_BRIEF, SCALING, ULTRA_PROFILE),
+            tokens=("symbolic", "complete truth-table", "exponential", "bridge", "resource profile"),
             manifest_path=None,
             manifest_key="",
             expected_value=0,
-            supported_decision="Large-scale evidence is framed as symbolic verification plus bounded truth-table bridges.",
+            supported_decision="Large-scale evidence is framed as symbolic verification, resource-profile tradeoffs, and bounded truth-table bridges.",
             boundary="Do not claim exhaustive high-dimensional truth-table benchmarking.",
         ),
         ScreeningSpec(

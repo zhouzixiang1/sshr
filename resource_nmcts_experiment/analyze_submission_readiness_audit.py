@@ -110,6 +110,11 @@ ULTRA_SCALE64_ANALYSIS = RESULTS / "analysis_screen_scale_ultra_scale64_stress.m
 ULTRA_SCALE64_SUMMARY = RESULTS / "summary_screen_scale_ultra_scale64_stress.csv"
 ULTRA_SCALE64_MANIFEST = RESULTS / "manifest_screen_scale_ultra_scale64_stress.json"
 ULTRA_SCALE64_TABLE = THIS_DIR / "paper_latex" / "tables" / "screen_scale_ultra_scale64_stress.tex"
+ULTRA_SCALE64_PROFILE_ANALYSIS = RESULTS / "analysis_screen_scale_ultra_scale64_resource_profile.md"
+ULTRA_SCALE64_PROFILE_SUMMARY = RESULTS / "summary_screen_scale_ultra_scale64_resource_profile.csv"
+ULTRA_SCALE64_PROFILE_DELTA_SUMMARY = RESULTS / "summary_screen_scale_ultra_scale64_resource_deltas.csv"
+ULTRA_SCALE64_PROFILE_MANIFEST = RESULTS / "manifest_screen_scale_ultra_scale64_resource_profile.json"
+ULTRA_SCALE64_PROFILE_TABLE = THIS_DIR / "paper_latex" / "tables" / "screen_scale_ultra_scale64_resource_profile.tex"
 CITATION_SUPPORT_ANALYSIS = RESULTS / "analysis_citation_support_audit.md"
 CITATION_SUPPORT_SUMMARY = RESULTS / "summary_citation_support_audit.csv"
 CITATION_SUPPORT_MANIFEST = RESULTS / "manifest_citation_support_audit.json"
@@ -294,6 +299,50 @@ def build_rows() -> list[dict[str, str]]:
     )
     ultra_scale64_mismatch = (
         ultra_scale64_manifest.get("max_circuit_mismatches", "missing") if ultra_scale64_manifest else "missing"
+    )
+    ultra_scale64_profile_manifest = read_json(ULTRA_SCALE64_PROFILE_MANIFEST)
+    ultra_scale64_profile_revisions = (
+        int(ultra_scale64_profile_manifest.get("needs_revision_count", -1))
+        if ultra_scale64_profile_manifest
+        else -1
+    )
+    ultra_scale64_profile_counts = (
+        ultra_scale64_profile_manifest.get("status_counts", {}) if ultra_scale64_profile_manifest else {}
+    )
+    ultra_scale64_profile_rows = (
+        ultra_scale64_profile_manifest.get("profile_rows", "missing")
+        if ultra_scale64_profile_manifest
+        else "missing"
+    )
+    ultra_scale64_delta_rows = (
+        ultra_scale64_profile_manifest.get("delta_rows", "missing")
+        if ultra_scale64_profile_manifest
+        else "missing"
+    )
+    ultra_scale64_profile_raw_rows = (
+        ultra_scale64_profile_manifest.get("raw_rows", "missing")
+        if ultra_scale64_profile_manifest
+        else "missing"
+    )
+    ultra_scale64_profile_plan = (
+        ultra_scale64_profile_manifest.get("plan_verified_rows", "missing")
+        if ultra_scale64_profile_manifest
+        else "missing"
+    )
+    ultra_scale64_profile_circuit = (
+        ultra_scale64_profile_manifest.get("circuit_verified_rows", "missing")
+        if ultra_scale64_profile_manifest
+        else "missing"
+    )
+    ultra_scale64_profile_plan_mismatch = (
+        ultra_scale64_profile_manifest.get("max_plan_mismatches", "missing")
+        if ultra_scale64_profile_manifest
+        else "missing"
+    )
+    ultra_scale64_profile_circuit_mismatch = (
+        ultra_scale64_profile_manifest.get("max_circuit_mismatches", "missing")
+        if ultra_scale64_profile_manifest
+        else "missing"
     )
     citation_support_manifest = read_json(CITATION_SUPPORT_MANIFEST)
     citation_support_revisions = (
@@ -614,6 +663,27 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Ultra-scale term-set stress covers n=48,56,64 with raw_rows={ultra_scale64_rows}; plan_verified={ultra_scale64_plan}; circuit_verified={ultra_scale64_circuit}; max_circuit_mismatches={ultra_scale64_mismatch}; status_counts={ultra_scale64_counts}; needs_revision_count={ultra_scale64_revisions}.",
             "next_action": "Rerun run_screen_scale_terms.py with --tag ultra_scale64, then analyze_ultra_scale64_stress.py after changing ultra-scale term-set evidence or manuscript anchors.",
+        },
+        {
+            "item": "Ultra-scale n=48--64 resource profile",
+            "status": "pass"
+            if "tab:ultra-scale64-resource-profile" in text
+            and ULTRA_SCALE64_PROFILE_ANALYSIS.exists()
+            and ULTRA_SCALE64_PROFILE_SUMMARY.exists()
+            and ULTRA_SCALE64_PROFILE_DELTA_SUMMARY.exists()
+            and ULTRA_SCALE64_PROFILE_MANIFEST.exists()
+            and ULTRA_SCALE64_PROFILE_TABLE.exists()
+            and ultra_scale64_profile_revisions == 0
+            and ultra_scale64_profile_raw_rows == 480
+            and ultra_scale64_profile_plan == 480
+            and ultra_scale64_profile_circuit == 480
+            and ultra_scale64_profile_plan_mismatch == 0
+            and ultra_scale64_profile_circuit_mismatch == 0
+            and ultra_scale64_profile_rows == 20
+            and ultra_scale64_delta_rows == 12
+            else "needs revision",
+            "evidence": f"Ultra-scale resource profile exposes score/T/CNOT/depth/ancilla/T-depth/lifetime/time means and deltas; raw_rows={ultra_scale64_profile_raw_rows}; profile_rows={ultra_scale64_profile_rows}; delta_rows={ultra_scale64_delta_rows}; plan_verified={ultra_scale64_profile_plan}; circuit_verified={ultra_scale64_profile_circuit}; max_plan_mismatches={ultra_scale64_profile_plan_mismatch}; max_circuit_mismatches={ultra_scale64_profile_circuit_mismatch}; status_counts={ultra_scale64_profile_counts}; needs_revision_count={ultra_scale64_profile_revisions}.",
+            "next_action": "Rerun analyze_ultra_scale64_resource_profile.py after changing ultra-scale raw rows, resource columns, or manuscript anchors.",
         },
         {
             "item": "Search-control baseline audit",

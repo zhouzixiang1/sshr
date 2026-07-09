@@ -36,8 +36,8 @@ ROWS = [
     {
         "contribution": "High-dimensional and phase-search verification envelope",
         "implementation": "n=20,24,28,32,40 symbolic term-set checks, n=48,56,64 ultra-scale symbolic stress, n=21--25 complete truth-table bridges, Affine-FPRM phase search, learned phase shortlist.",
-        "evidence_latex": r"Tables~\ref{tab:scale-audit}, \ref{tab:ultra-scale64-stress}, \ref{tab:validation}, \ref{tab:phase-policy-random}; Fig.~\ref{fig:validation}",
-        "evidence_plain": "scale audit, validation table, phase random-control table, validation figure",
+        "evidence_latex": r"Tables~\ref{tab:scale-audit}, \ref{tab:ultra-scale64-stress}, \ref{tab:ultra-scale64-resource-profile}, \ref{tab:validation}, \ref{tab:phase-policy-random}; Fig.~\ref{fig:validation}",
+        "evidence_plain": "scale audit, ultra-scale stress and resource-profile tables, validation table, phase random-control table, validation figure",
         "boundary": "Large rows are logically and symbolically verified; complete truth-table enumeration remains limited to bridge slices.",
     },
 ]
