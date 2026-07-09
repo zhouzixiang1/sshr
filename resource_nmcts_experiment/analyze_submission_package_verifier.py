@@ -84,6 +84,9 @@ FRONTIER_RANDOM_DEPTH_TABLE = THIS_DIR / "paper_latex" / "tables" / "frontier_ra
 EDITORIAL_SCREENING_MANIFEST = RESULTS / "manifest_editorial_screening_audit.json"
 TARGET_VENUE_DECISION_MANIFEST = RESULTS / "manifest_target_venue_decision_audit.json"
 TARGET_VENUE_DECISION_TABLE = THIS_DIR / "paper_latex" / "tables" / "target_venue_decision_audit.tex"
+TARGET_VENUE_FORMAT_MANIFEST = RESULTS / "manifest_target_venue_format_smoke.json"
+TARGET_VENUE_FORMAT_SOURCE = THIS_DIR / "paper_latex" / "resource_nmcts_submission_acm_tqc.tex"
+TARGET_VENUE_FORMAT_PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_acm_tqc.pdf"
 SUPPORT_PACKET_MANIFEST = RESULTS / "manifest_submission_support_packet_audit.json"
 CITATION_SUPPORT_MANIFEST = RESULTS / "manifest_citation_support_audit.json"
 HEADLINE_NUMERIC_MANIFEST = RESULTS / "manifest_headline_numeric_consistency.json"
@@ -525,6 +528,34 @@ def verify_target_venue_decision() -> dict[str, str]:
         status,
         f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; recommended_first_choice={first}; strong_fit_count={strong}; table_exists={table_exists}.",
         "Run analyze_target_venue_decision_audit.py and restore the source-backed target-venue decision packet.",
+    )
+
+
+def verify_target_venue_format() -> dict[str, str]:
+    manifest = read_json(TARGET_VENUE_FORMAT_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    pages = manifest.get("pdf_pages", "missing") if manifest else "missing"
+    pdf_bytes = manifest.get("pdf_bytes", "missing") if manifest else "missing"
+    source_exists = TARGET_VENUE_FORMAT_SOURCE.exists()
+    pdf_exists = TARGET_VENUE_FORMAT_PDF.exists()
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and rows == 5
+        and isinstance(pages, int)
+        and pages > 0
+        and source_exists
+        and pdf_exists
+        else "needs revision"
+    )
+    return row(
+        "Target-venue ACM/TQC format smoke",
+        status,
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; pages={pages}; bytes={pdf_bytes}; source_exists={source_exists}; pdf_exists={pdf_exists}.",
+        "Run make_acm_tqc_review_draft.py, compile resource_nmcts_submission_acm_tqc.tex, and rerun analyze_target_venue_format_smoke.py.",
     )
 
 
@@ -1002,6 +1033,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_frontier_random_depth(),
             verify_editorial_screening(),
             verify_target_venue_decision(),
+            verify_target_venue_format(),
             verify_support_packet(),
             verify_citation_support(),
             verify_headline_numeric(),

@@ -66,20 +66,20 @@
       "summary_files": "1"
     },
     {
-      "analysis_files": "2",
-      "claim_use": "Verifies that cover letter, declarations, venue brief, target-venue decision support, upload checklist, and handoff docs preserve claim boundaries and author-gated metadata.",
-      "dependency_boundary": "Does not choose a venue or fill private metadata; checks public upload-support consistency against existing audits.",
-      "driver_scripts": "analyze_target_venue_decision_audit.py; analyze_submission_support_packet_audit.py",
+      "analysis_files": "3",
+      "claim_use": "Verifies that cover letter, declarations, venue brief, target-venue decision support, ACM/TQC format smoke, upload checklist, and handoff docs preserve claim boundaries and author-gated metadata.",
+      "dependency_boundary": "Does not choose a venue or fill private metadata; checks public upload-support consistency and ACM/TQC template smoke compilation against existing audits.",
+      "driver_scripts": "make_acm_tqc_review_draft.py; analyze_target_venue_decision_audit.py; analyze_target_venue_format_smoke.py; analyze_submission_support_packet_audit.py",
       "evidence_family": "Cover-letter and venue support packet",
-      "manifest_files": "2",
+      "manifest_files": "3",
       "raw_files": "0",
       "raw_rows": "0",
       "representative_raw": "",
       "rerun_tier": "quick submission-support audit",
       "scripts_missing": "",
-      "scripts_present": "2",
+      "scripts_present": "4",
       "status": "complete",
-      "summary_files": "2"
+      "summary_files": "3"
     },
     {
       "analysis_files": "1",

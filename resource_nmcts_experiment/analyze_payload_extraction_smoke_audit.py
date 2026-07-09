@@ -157,6 +157,15 @@ SMOKE_SPECS = (
         minimum_rows=5,
     ),
     SmokeSpec(
+        name="Target venue ACM/TQC format smoke",
+        script="analyze_target_venue_format_smoke.py",
+        manifest="results/manifest_target_venue_format_smoke.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=5,
+    ),
+    SmokeSpec(
         name="Submission support packet audit",
         script="analyze_submission_support_packet_audit.py",
         manifest="results/manifest_submission_support_packet_audit.json",

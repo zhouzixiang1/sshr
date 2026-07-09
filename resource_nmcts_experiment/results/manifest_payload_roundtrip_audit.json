@@ -85,6 +85,8 @@
   "python": "3.11.15",
   "required_payload_paths": [
     "paper_latex/references.bib",
+    "paper_latex/resource_nmcts_submission_acm_tqc.pdf",
+    "paper_latex/resource_nmcts_submission_acm_tqc.tex",
     "paper_latex/resource_nmcts_submission_anonymous.pdf",
     "paper_latex/resource_nmcts_submission_anonymous.tex",
     "paper_latex/resource_nmcts_submission_v1.pdf",
@@ -115,19 +117,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=979; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=986; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=979; archive_files=979; missing=none; extra=none.",
+      "evidence": "manifest_files=986; archive_files=986; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=979; mismatches=none.",
+      "evidence": "checked=986; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -139,7 +141,7 @@
       "status": "pass"
     },
     {
-      "evidence": "required=12; missing=none.",
+      "evidence": "required=14; missing=none.",
       "item": "Payload required artifacts",
       "next_action": "Ensure the uploadable archive includes manuscript, bibliography, rebuild/verify scripts, handoff docs, and submission audits.",
       "status": "pass"
@@ -229,6 +231,12 @@
       "status": "pass"
     },
     {
+      "evidence": "target_venue_format_files=7; missing=none.",
+      "item": "Payload target-venue ACM/TQC format evidence",
+      "next_action": "Ensure the uploadable archive includes the ACM/TQC generated review source, compiled PDF, and format smoke audit.",
+      "status": "pass"
+    },
+    {
       "evidence": "support_packet_files=5; missing=none.",
       "item": "Payload support packet evidence",
       "next_action": "Ensure the uploadable archive includes the support packet audit script, generated evidence, and support table.",
@@ -271,7 +279,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=979; metadata_issues=none.",
+      "evidence": "members_checked=986; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -296,7 +304,7 @@
     "results/summary_search_budget_contract.csv"
   ],
   "status_counts": {
-    "pass": 27
+    "pass": 28
   },
   "support_packet_paths": [
     "analyze_submission_support_packet_audit.py",
@@ -311,5 +319,14 @@
     "results/analysis_target_venue_decision_audit.md",
     "results/manifest_target_venue_decision_audit.json",
     "results/summary_target_venue_decision_audit.csv"
+  ],
+  "target_venue_format_paths": [
+    "analyze_target_venue_format_smoke.py",
+    "make_acm_tqc_review_draft.py",
+    "paper_latex/resource_nmcts_submission_acm_tqc.pdf",
+    "paper_latex/resource_nmcts_submission_acm_tqc.tex",
+    "results/analysis_target_venue_format_smoke.md",
+    "results/manifest_target_venue_format_smoke.json",
+    "results/summary_target_venue_format_smoke.csv"
   ]
 }

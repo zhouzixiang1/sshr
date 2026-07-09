@@ -31,6 +31,8 @@ REQUIRED_PAYLOAD_PATHS = {
     "paper_latex/resource_nmcts_submission_v1.pdf",
     "paper_latex/resource_nmcts_submission_anonymous.tex",
     "paper_latex/resource_nmcts_submission_anonymous.pdf",
+    "paper_latex/resource_nmcts_submission_acm_tqc.tex",
+    "paper_latex/resource_nmcts_submission_acm_tqc.pdf",
     "paper_latex/references.bib",
     "rebuild_submission_package.sh",
     "verify_submission_package.sh",
@@ -161,6 +163,15 @@ TARGET_VENUE_DECISION_PATHS = {
     "results/summary_target_venue_decision_audit.csv",
     "results/manifest_target_venue_decision_audit.json",
     "paper_latex/tables/target_venue_decision_audit.tex",
+}
+TARGET_VENUE_FORMAT_PATHS = {
+    "make_acm_tqc_review_draft.py",
+    "analyze_target_venue_format_smoke.py",
+    "paper_latex/resource_nmcts_submission_acm_tqc.tex",
+    "paper_latex/resource_nmcts_submission_acm_tqc.pdf",
+    "results/analysis_target_venue_format_smoke.md",
+    "results/summary_target_venue_format_smoke.csv",
+    "results/manifest_target_venue_format_smoke.json",
 }
 SUPPORT_PACKET_PATHS = {
     "analyze_submission_support_packet_audit.py",
@@ -457,6 +468,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    target_format_missing = sorted(TARGET_VENUE_FORMAT_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload target-venue ACM/TQC format evidence",
+            "pass" if not target_format_missing else "needs revision",
+            f"target_venue_format_files={len(TARGET_VENUE_FORMAT_PATHS)}; missing={target_format_missing or 'none'}.",
+            "Ensure the uploadable archive includes the ACM/TQC generated review source, compiled PDF, and format smoke audit.",
+        )
+    )
+
     support_packet_missing = sorted(SUPPORT_PACKET_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -609,6 +630,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "citation_support_paths": sorted(CITATION_SUPPORT_PATHS),
         "editorial_screening_paths": sorted(EDITORIAL_SCREENING_PATHS),
         "target_venue_decision_paths": sorted(TARGET_VENUE_DECISION_PATHS),
+        "target_venue_format_paths": sorted(TARGET_VENUE_FORMAT_PATHS),
         "support_packet_paths": sorted(SUPPORT_PACKET_PATHS),
         "author_input_closure_paths": sorted(AUTHOR_INPUT_CLOSURE_PATHS),
         "payload_extraction_smoke_paths": sorted(PAYLOAD_EXTRACTION_SMOKE_PATHS),

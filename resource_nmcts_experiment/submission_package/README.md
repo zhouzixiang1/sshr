@@ -16,6 +16,10 @@ noise modeling, or magic-state-factory accounting.
   `../paper_latex/resource_nmcts_submission_anonymous.tex`
 - Optional anonymous review PDF:
   `../paper_latex/resource_nmcts_submission_anonymous.pdf`
+- Optional ACM/TQC anonymous review-format source:
+  `../paper_latex/resource_nmcts_submission_acm_tqc.tex`
+- Optional ACM/TQC anonymous review-format PDF:
+  `../paper_latex/resource_nmcts_submission_acm_tqc.pdf`
 - Bibliography: `../paper_latex/references.bib`
 - Generated tables: `../paper_latex/tables/*.tex`
 - Generated figures and source data:
@@ -85,8 +89,8 @@ noise modeling, or magic-state-factory accounting.
   extracts the upload tarball and runs `verify_submission_package.sh` from
   inside the extracted payload tree.
 - `../results/analysis_payload_latex_compile_audit.md`: terminal check that
-  extracts the upload tarball and rebuilds the author and anonymous PDFs from
-  the extracted LaTeX source tree.
+  extracts the upload tarball and rebuilds the author, anonymous, and ACM/TQC
+  PDFs from the extracted LaTeX source tree.
 - `submission_checklist.md`: final upload checklist and verification commands.
 - `../results/analysis_claim_scope_lint.md`: automated claim-boundary lint for
   the manuscript and handoff files.
@@ -102,8 +106,8 @@ noise modeling, or magic-state-factory accounting.
 - `../results/analysis_figure_asset_audit.md`: figure-asset audit that checks
   manuscript figure references, PDF/PNG/SVG outputs, and source-data CSVs.
 - `../results/analysis_latex_dependency_audit.md`: terminal audit that checks
-  author/anonymous TeX inputs, figure references, and bibliography files exist
-  locally and are included in the upload payload.
+  author, anonymous, and ACM/TQC TeX inputs, figure references, and bibliography
+  files exist locally and are included in the upload payload.
 - `../results/analysis_pdf_visual_audit.md`: terminal audit that renders every
   page of the author and anonymous PDFs with Poppler and checks for readable,
   nonblank page images.

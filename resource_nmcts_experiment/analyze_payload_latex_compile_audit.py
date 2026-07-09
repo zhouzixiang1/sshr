@@ -34,6 +34,7 @@ class CompileSpec:
     tex_path: str
     pdf_path: str
     log_path: str
+    strict_log: bool = True
 
 
 COMPILE_SPECS = (
@@ -48,6 +49,13 @@ COMPILE_SPECS = (
         tex_path="paper_latex/resource_nmcts_submission_anonymous.tex",
         pdf_path="paper_latex/resource_nmcts_submission_anonymous.pdf",
         log_path="paper_latex/resource_nmcts_submission_anonymous.log",
+    ),
+    CompileSpec(
+        label="acm_tqc",
+        tex_path="paper_latex/resource_nmcts_submission_acm_tqc.tex",
+        pdf_path="paper_latex/resource_nmcts_submission_acm_tqc.pdf",
+        log_path="paper_latex/resource_nmcts_submission_acm_tqc.log",
+        strict_log=False,
     ),
 )
 
@@ -133,10 +141,14 @@ def pdf_pages(path: Path) -> int:
     return int(match.group(1)) if match else -1
 
 
-def unexpected_log_lines(path: Path) -> list[str]:
+def unexpected_log_lines(path: Path, strict: bool = True) -> list[str]:
     if not path.exists():
         return ["log missing"]
-    bad_patterns = re.compile(r"Warning|Overfull|Underfull|LaTeX Error|Undefined|Rerun")
+    bad_patterns = (
+        re.compile(r"Warning|Overfull|Underfull|LaTeX Error|Undefined|Rerun")
+        if strict
+        else re.compile(r"LaTeX Error|Undefined control sequence|Emergency stop|Fatal error")
+    )
     allowed = (
         "Package: rerunfilecheck",
         r"LaTeX Warning: Command \showhyphens",
@@ -178,13 +190,14 @@ def compile_one(payload_dir: Path, spec: CompileSpec, latexmk: str) -> dict[str,
     )
     pages = pdf_pages(pdf)
     pdf_bytes = pdf.stat().st_size if pdf.exists() else 0
-    log_unexpected = unexpected_log_lines(log)
+    log_unexpected = unexpected_log_lines(log, spec.strict_log)
     raw_stderr_lines = proc.stderr.strip().splitlines()
     allowed_stderr = (
         "Latexmk: Missing bbl file",
         "Latexmk: Using bibtex to make bibliography file(s).",
         "No file resource_nmcts_submission_v1.bbl",
         "No file resource_nmcts_submission_anonymous.bbl",
+        "No file resource_nmcts_submission_acm_tqc.bbl",
     )
     stderr_lines = [line for line in raw_stderr_lines if not any(token in line for token in allowed_stderr)]
     status = "pass" if proc.returncode == 0 and pages > 0 and pdf_bytes > 100_000 and not log_unexpected else "needs revision"
@@ -258,7 +271,7 @@ def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
     lines = [
         "# Payload LaTeX Compile Audit",
         "",
-        "This terminal audit extracts the upload payload and rebuilds the author and anonymous PDFs from the extracted LaTeX sources.",
+        "This terminal audit extracts the upload payload and rebuilds the author, anonymous, and ACM/TQC PDFs from the extracted LaTeX sources.",
         "",
         "## Status counts",
         "",

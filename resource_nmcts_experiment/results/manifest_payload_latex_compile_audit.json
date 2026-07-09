@@ -1,6 +1,6 @@
 {
   "archive": "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
-  "compiled_manuscripts": 2,
+  "compiled_manuscripts": 3,
   "needs_revision_count": 0,
   "outputs": {
     "analysis": "results/analysis_payload_latex_compile_audit.md",
@@ -8,12 +8,12 @@
     "summary": "results/summary_payload_latex_compile_audit.csv"
   },
   "python": "3.11.15",
-  "rows": 3,
+  "rows": 4,
   "rows_detail": [
     {
-      "bytes": "979",
+      "bytes": "986",
       "compile_seconds": "0.000",
-      "evidence": "extracted_files=979; error=none.",
+      "evidence": "extracted_files=986; error=none.",
       "item": "Payload extraction for LaTeX compile",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "pages": "n/a",
@@ -22,7 +22,7 @@
       "status": "pass"
     },
     {
-      "bytes": "630603",
+      "bytes": "630609",
       "compile_seconds": "not_recorded",
       "evidence": "stdout_lines=1228; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "author payload LaTeX compile",
@@ -33,7 +33,7 @@
       "status": "pass"
     },
     {
-      "bytes": "626883",
+      "bytes": "626884",
       "compile_seconds": "not_recorded",
       "evidence": "stdout_lines=1234; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "anonymous payload LaTeX compile",
@@ -42,10 +42,21 @@
       "returncode": "0",
       "source": "paper_latex/resource_nmcts_submission_anonymous.tex",
       "status": "pass"
+    },
+    {
+      "bytes": "825248",
+      "compile_seconds": "not_recorded",
+      "evidence": "stdout_lines=1713; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
+      "item": "acm_tqc payload LaTeX compile",
+      "next_action": "Inspect the extracted payload LaTeX log and restore missing table, figure, bibliography, or style dependencies.",
+      "pages": "34",
+      "returncode": "0",
+      "source": "paper_latex/resource_nmcts_submission_acm_tqc.tex",
+      "status": "pass"
     }
   ],
   "script": "analyze_payload_latex_compile_audit.py",
   "status_counts": {
-    "pass": 3
+    "pass": 4
   }
 }

@@ -75,6 +75,7 @@ run_py make_author_input_packet.py
 run_py make_submission_text_preview.py
 run_py selftest_submission_metadata_pipeline.py
 run_py make_anonymous_review_draft.py
+run_py make_acm_tqc_review_draft.py
 run_py analyze_anonymous_review_readiness.py
 run_py analyze_author_input_closure_audit.py
 run_py make_submission_figures.py
@@ -88,6 +89,7 @@ echo "==> Building English submission PDF"
   cd paper_latex
   "$LATEXMK_BIN" -pdf -interaction=nonstopmode -halt-on-error resource_nmcts_submission_v1.tex
   "$LATEXMK_BIN" -pdf -interaction=nonstopmode -halt-on-error resource_nmcts_submission_anonymous.tex
+  "$LATEXMK_BIN" -pdf -interaction=nonstopmode -halt-on-error resource_nmcts_submission_acm_tqc.tex
 )
 
 run_py analyze_pdf_visual_audit.py
@@ -97,6 +99,7 @@ run_py analyze_goal_completion_audit.py
 run_py analyze_submission_metadata_closure_path.py
 run_py analyze_editorial_screening_audit.py
 run_py analyze_target_venue_decision_audit.py
+run_py analyze_target_venue_format_smoke.py
 run_py analyze_submission_support_packet_audit.py
 run_py make_submission_payload_archive.py
 run_py analyze_payload_git_policy_audit.py

@@ -142,6 +142,7 @@ def manuscript_source_row() -> dict[str, str]:
     paths = [
         PAPER_LATEX / "resource_nmcts_submission_v1.tex",
         PAPER_LATEX / "resource_nmcts_submission_anonymous.tex",
+        PAPER_LATEX / "resource_nmcts_submission_acm_tqc.tex",
         PAPER_LATEX / "references.bib",
     ]
     paths.extend(sorted((PAPER_LATEX / "tables").glob("*.tex")))
@@ -180,19 +181,29 @@ def submission_support_row() -> dict[str, str]:
 
 
 def anonymous_source_identity_row() -> dict[str, str]:
-    path = PAPER_LATEX / "resource_nmcts_submission_anonymous.tex"
-    text = read_text(path) if path.exists() else ""
-    missing_anonymous = "Anonymous Authors" not in text
-    identity_hits = [pattern.pattern for pattern in AUTHOR_IDENTITY_PATTERNS if pattern.search(text)]
-    status = "pass" if path.exists() and not missing_anonymous and not identity_hits else "needs revision"
+    paths = [
+        PAPER_LATEX / "resource_nmcts_submission_anonymous.tex",
+        PAPER_LATEX / "resource_nmcts_submission_acm_tqc.tex",
+    ]
+    present_paths = [path for path in paths if path.exists()]
+    identity_hits: dict[str, list[str]] = {}
+    missing_anonymous: list[str] = []
+    for path in present_paths:
+        text = read_text(path)
+        if "Anonymous Authors" not in text:
+            missing_anonymous.append(rel(path))
+        hits = [pattern.pattern for pattern in AUTHOR_IDENTITY_PATTERNS if pattern.search(text)]
+        if hits:
+            identity_hits[rel(path)] = hits
+    status = "pass" if len(present_paths) == len(paths) and not missing_anonymous and not identity_hits else "needs revision"
     return row(
         "Anonymous source identity boundary",
         status,
-        rel(path),
-        1 if path.exists() else 0,
-        len(identity_hits) + int(missing_anonymous),
-        f"anonymous_author_present={not missing_anonymous}; identity_hits={identity_hits or 'none'}.",
-        "Regenerate the anonymous draft and remove author identity from the anonymous source if double-blind review is selected.",
+        "anonymous and ACM/TQC review sources",
+        len(present_paths),
+        sum(len(hits) for hits in identity_hits.values()) + len(missing_anonymous),
+        f"missing_anonymous={missing_anonymous or 'none'}; identity_hits={identity_hits or 'none'}.",
+        "Regenerate the anonymous and ACM/TQC drafts and remove author identity from review sources if double-blind review is selected.",
     )
 
 

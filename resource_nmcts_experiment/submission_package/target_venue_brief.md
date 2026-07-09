@@ -13,6 +13,8 @@ Machine-checkable support files:
 - Target venue decision audit: `results/analysis_target_venue_decision_audit.md`
 - Summary CSV: `results/summary_target_venue_decision_audit.csv`
 - Manifest: `results/manifest_target_venue_decision_audit.json`
+- ACM/TQC format smoke audit: `results/analysis_target_venue_format_smoke.md`
+- ACM/TQC review draft: `paper_latex/resource_nmcts_submission_acm_tqc.tex`
 - recommended_first_choice: ACM Transactions on Quantum Computing
 
 ## Current Manuscript Fit
@@ -44,7 +46,9 @@ execution unless those sections are added later.
 ## Recommended Order
 
 1. ACM TQC if the priority is a computer-science/quantum-compilation journal
-   and a template conversion is acceptable.
+   and a template conversion is acceptable.  A generated anonymous ACM/TQC
+   review-format smoke draft is available, but final ACM metadata and archive
+   links still require author input.
 2. Quantum if an arXiv-first workflow is acceptable and the manuscript can be
    tightened around broadly understandable quantum-oracle contributions.
 3. IEEE TQE if open access and quantum-engineering framing are acceptable.

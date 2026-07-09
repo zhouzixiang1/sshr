@@ -88,10 +88,10 @@
       "status": "pass"
     },
     {
-      "boundary": "Author names, target-venue formatting choices, and final declarations remain external author inputs.",
-      "evidence": "Compiled submission PDF exists with 36 pages and the TeX source is present.",
-      "evidence_files": "paper_latex/resource_nmcts_submission_v1.tex; paper_latex/resource_nmcts_submission_v1.pdf; results/analysis_submission_readiness_audit.md",
-      "next_action": "After author metadata is supplied, recompile and rerun readiness checks.",
+      "boundary": "Author names, ACM CCS/rights metadata, target-venue final policy choices, and final declarations remain external author inputs.",
+      "evidence": "Compiled submission PDF exists with 36 pages and the TeX source is present; an ACM/TQC anonymous review-format smoke draft is generated and audited separately.",
+      "evidence_files": "paper_latex/resource_nmcts_submission_v1.tex; paper_latex/resource_nmcts_submission_v1.pdf; paper_latex/resource_nmcts_submission_acm_tqc.tex; paper_latex/resource_nmcts_submission_acm_tqc.pdf; results/analysis_target_venue_format_smoke.md; results/analysis_submission_readiness_audit.md",
+      "next_action": "After author metadata is supplied, recompile the author, anonymous, and ACM/TQC drafts and rerun readiness checks.",
       "requirement": "Complete LaTeX manuscript draft",
       "status": "pass"
     },
@@ -113,8 +113,8 @@
     },
     {
       "boundary": "These fields cannot be inferred from code or experiments and must be confirmed by the author or target venue.",
-      "evidence": "Submission metadata audit reports 12 author/venue field group(s) needing author input; target-venue decision auditing, private metadata validation, synthetic metadata-pipeline self-testing, metadata-closure-path auditing, and text-preview generation are prepared for filled metadata.",
-      "evidence_files": "results/analysis_target_venue_decision_audit.md; results/analysis_submission_metadata_audit.md; results/analysis_submission_metadata_validator.md; results/analysis_submission_metadata_pipeline_selftest.md; results/analysis_submission_metadata_closure_path.md; results/analysis_submission_text_preview.md; results/analysis_anonymous_review_readiness.md; submission_package/target_venue_brief.md; submission_package/author_declarations_template.md; submission_package/cover_letter_template.md; submission_package/submission_checklist.md",
+      "evidence": "Submission metadata audit reports 12 author/venue field group(s) needing author input; target-venue decision auditing, ACM/TQC format smoke, private metadata validation, synthetic metadata-pipeline self-testing, metadata-closure-path auditing, and text-preview generation are prepared for filled metadata.",
+      "evidence_files": "results/analysis_target_venue_decision_audit.md; results/analysis_target_venue_format_smoke.md; results/analysis_submission_metadata_audit.md; results/analysis_submission_metadata_validator.md; results/analysis_submission_metadata_pipeline_selftest.md; results/analysis_submission_metadata_closure_path.md; results/analysis_submission_text_preview.md; results/analysis_anonymous_review_readiness.md; submission_package/target_venue_brief.md; submission_package/author_declarations_template.md; submission_package/cover_letter_template.md; submission_package/submission_checklist.md",
       "next_action": "Fill author order, affiliations, ORCIDs, funding, acknowledgements, competing interests, archive links, license, disclosure, and target-venue fields, then review generated private submission text previews.",
       "requirement": "Final author and venue metadata",
       "status": "needs author input"

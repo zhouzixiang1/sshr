@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Audit LaTeX dependency closure for the submission sources.
 
-This terminal audit parses the author and anonymous LaTeX sources, resolves
+This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources, resolves
 table inputs, included figures, and bibliography files, then checks that every
 resolved dependency exists locally and is present in the upload payload
 manifest.
@@ -21,6 +21,7 @@ RESULTS = THIS_DIR / "results"
 PAPER_DIR = THIS_DIR / "paper_latex"
 AUTHOR_TEX = PAPER_DIR / "resource_nmcts_submission_v1.tex"
 ANONYMOUS_TEX = PAPER_DIR / "resource_nmcts_submission_anonymous.tex"
+ACM_TQC_TEX = PAPER_DIR / "resource_nmcts_submission_acm_tqc.tex"
 PAYLOAD_MANIFEST = RESULTS / "manifest_submission_payload_archive.json"
 
 
@@ -128,7 +129,11 @@ def dependency_rows(label: str, tex_path: Path) -> list[dict[str, str]]:
 
 def build_rows() -> list[dict[str, str]]:
     payload_paths = read_payload_paths()
-    rows = dependency_rows("author", AUTHOR_TEX) + dependency_rows("anonymous", ANONYMOUS_TEX)
+    rows = (
+        dependency_rows("author", AUTHOR_TEX)
+        + dependency_rows("anonymous", ANONYMOUS_TEX)
+        + dependency_rows("acm_tqc", ACM_TQC_TEX)
+    )
     for row in rows:
         payload_present = row["resolved_path"] in payload_paths
         row["payload_present"] = str(payload_present)
@@ -166,7 +171,7 @@ def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
     lines = [
         "# LaTeX Dependency Audit",
         "",
-        "This terminal audit parses the author and anonymous LaTeX sources and checks that every resolved table, figure, and bibliography dependency exists locally and is present in the upload payload manifest.",
+        "This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and checks that every resolved table, figure, and bibliography dependency exists locally and is present in the upload payload manifest.",
         "",
         "## Status counts",
         "",
@@ -214,6 +219,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "source_files": {
             "author_tex": rel(AUTHOR_TEX),
             "anonymous_tex": rel(ANONYMOUS_TEX),
+            "acm_tqc_tex": rel(ACM_TQC_TEX),
         },
         "outputs": {
             "summary": "results/summary_latex_dependency_audit.csv",

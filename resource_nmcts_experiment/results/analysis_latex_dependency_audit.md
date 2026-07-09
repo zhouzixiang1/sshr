@@ -1,17 +1,17 @@
 # LaTeX Dependency Audit
 
-This terminal audit parses the author and anonymous LaTeX sources and checks that every resolved table, figure, and bibliography dependency exists locally and is present in the upload payload manifest.
+This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and checks that every resolved table, figure, and bibliography dependency exists locally and is present in the upload payload manifest.
 
 ## Status counts
 
-- pass: 102
+- pass: 153
 
 ## Dependency types
 
-- bibliography: 2
-- figure: 14
-- main_source: 2
-- tex_input: 84
+- bibliography: 3
+- figure: 21
+- main_source: 3
+- tex_input: 126
 
 ## Missing dependencies
 
@@ -123,3 +123,54 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 | anonymous | figure | `fig4_phase_affine.pdf` | `paper_latex/figures/submission_v36/fig4_phase_affine.pdf` | True | True | pass |
 | anonymous | figure | `fig5_validation.pdf` | `paper_latex/figures/submission_v36/fig5_validation.pdf` | True | True | pass |
 | anonymous | bibliography | `references` | `paper_latex/references.bib` | True | True | pass |
+| acm_tqc | main_source | `paper_latex/resource_nmcts_submission_acm_tqc.tex` | `paper_latex/resource_nmcts_submission_acm_tqc.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/contribution_evidence_map` | `paper_latex/tables/contribution_evidence_map.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/novelty_comparison_scorecard` | `paper_latex/tables/novelty_comparison_scorecard.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/related_work_positioning` | `paper_latex/tables/related_work_positioning.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/method_workflow` | `paper_latex/tables/method_workflow.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/algorithm_contract` | `paper_latex/tables/algorithm_contract.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/search_budget_contract` | `paper_latex/tables/search_budget_contract.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/baseline_claim_matrix` | `paper_latex/tables/baseline_claim_matrix.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/comparison_evidence_matrix` | `paper_latex/tables/comparison_evidence_matrix.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/comparison_protocol_audit` | `paper_latex/tables/comparison_protocol_audit.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/comparison_target_validity_audit` | `paper_latex/tables/comparison_target_validity_audit.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/baseline_comparability_audit` | `paper_latex/tables/baseline_comparability_audit.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/counterpoint_claim_boundary` | `paper_latex/tables/counterpoint_claim_boundary.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/reproducibility_audit` | `paper_latex/tables/reproducibility_audit.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/submission_traceability_audit` | `paper_latex/tables/submission_traceability_audit.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/submission_archive_manifest` | `paper_latex/tables/submission_archive_manifest.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/ros_lut_line_sensitivity` | `paper_latex/tables/ros_lut_line_sensitivity.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/cirkit_aig_probe` | `paper_latex/tables/cirkit_aig_probe.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/cirkit_aig_highdim_probe` | `paper_latex/tables/cirkit_aig_highdim_probe.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/revkit_cli_multiflow_traditional` | `paper_latex/tables/revkit_cli_multiflow_traditional.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/paired_statistical_evidence` | `paper_latex/tables/paired_statistical_evidence.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/paired_effect_uncertainty` | `paper_latex/tables/paired_effect_uncertainty.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/multimetric_pairwise_dominance` | `paper_latex/tables/multimetric_pairwise_dominance.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/multimetric_nondominated` | `paper_latex/tables/multimetric_nondominated.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/search_contribution_decomposition` | `paper_latex/tables/search_contribution_decomposition.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/search_control_baseline_audit` | `paper_latex/tables/search_control_baseline_audit.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/bitflip_random_prior_control` | `paper_latex/tables/bitflip_random_prior_control.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/frontier_random_depth_control` | `paper_latex/tables/frontier_random_depth_control.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/boolean_ring_structural_evidence` | `paper_latex/tables/boolean_ring_structural_evidence.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/sparse_depth_frontier` | `paper_latex/tables/sparse_depth_frontier.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/sparse_depth4_gate` | `paper_latex/tables/sparse_depth4_gate.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/sparse_depth4_gate_generalization` | `paper_latex/tables/sparse_depth4_gate_generalization.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/stage_gated_frontier` | `paper_latex/tables/stage_gated_frontier.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/schedule_proxy_audit` | `paper_latex/tables/schedule_proxy_audit.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/learned_control_audit` | `paper_latex/tables/learned_control_audit.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/phase_parity_affine` | `paper_latex/tables/phase_parity_affine.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/phase_affine_budget_wide128_vs_32` | `paper_latex/tables/phase_affine_budget_wide128_vs_32.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/phase_affine_policy_rank_diverse` | `paper_latex/tables/phase_affine_policy_rank_diverse.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/phase_policy_random_control` | `paper_latex/tables/phase_policy_random_control.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/scaling_resource_audit` | `paper_latex/tables/scaling_resource_audit.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/screen_scale_ultra_scale64_stress` | `paper_latex/tables/screen_scale_ultra_scale64_stress.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/screen_scale_ultra_scale64_resource_profile` | `paper_latex/tables/screen_scale_ultra_scale64_resource_profile.tex` | True | True | pass |
+| acm_tqc | figure | `fig1_pipeline.pdf` | `paper_latex/figures/submission_v36/fig1_pipeline.pdf` | True | True | pass |
+| acm_tqc | figure | `fig2_traditional_resources.pdf` | `paper_latex/figures/submission_v36/fig2_traditional_resources.pdf` | True | True | pass |
+| acm_tqc | figure | `fig3_baseline_comparisons.pdf` | `paper_latex/figures/submission_v36/fig3_baseline_comparisons.pdf` | True | True | pass |
+| acm_tqc | figure | `fig6_sparse_gate_sensitivity.pdf` | `paper_latex/figures/submission_v36/fig6_sparse_gate_sensitivity.pdf` | True | True | pass |
+| acm_tqc | figure | `fig7_learned_control_summary.pdf` | `paper_latex/figures/submission_v36/fig7_learned_control_summary.pdf` | True | True | pass |
+| acm_tqc | figure | `fig4_phase_affine.pdf` | `paper_latex/figures/submission_v36/fig4_phase_affine.pdf` | True | True | pass |
+| acm_tqc | figure | `fig5_validation.pdf` | `paper_latex/figures/submission_v36/fig5_validation.pdf` | True | True | pass |
+| acm_tqc | bibliography | `references` | `paper_latex/references.bib` | True | True | pass |

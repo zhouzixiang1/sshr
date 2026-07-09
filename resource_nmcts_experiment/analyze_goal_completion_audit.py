@@ -318,10 +318,17 @@ def build_items() -> list[GoalItem]:
         GoalItem(
             requirement="Complete LaTeX manuscript draft",
             status="pass" if pages not in {"missing", "unknown"} and PAPER.exists() else "needs evidence",
-            evidence=f"Compiled submission PDF exists with {pages} pages and the TeX source is present.",
-            evidence_files=(PAPER, PDF, RESULTS / "analysis_submission_readiness_audit.md"),
-            boundary="Author names, target-venue formatting choices, and final declarations remain external author inputs.",
-            next_action="After author metadata is supplied, recompile and rerun readiness checks.",
+            evidence=f"Compiled submission PDF exists with {pages} pages and the TeX source is present; an ACM/TQC anonymous review-format smoke draft is generated and audited separately.",
+            evidence_files=(
+                PAPER,
+                PDF,
+                THIS_DIR / "paper_latex" / "resource_nmcts_submission_acm_tqc.tex",
+                THIS_DIR / "paper_latex" / "resource_nmcts_submission_acm_tqc.pdf",
+                RESULTS / "analysis_target_venue_format_smoke.md",
+                RESULTS / "analysis_submission_readiness_audit.md",
+            ),
+            boundary="Author names, ACM CCS/rights metadata, target-venue final policy choices, and final declarations remain external author inputs.",
+            next_action="After author metadata is supplied, recompile the author, anonymous, and ACM/TQC drafts and rerun readiness checks.",
         ),
         GoalItem(
             requirement="Reproducible submission payload",
@@ -375,9 +382,10 @@ def build_items() -> list[GoalItem]:
         GoalItem(
             requirement="Final author and venue metadata",
             status="needs author input" if metadata_needs else "pass",
-            evidence=f"Submission metadata audit reports {metadata_needs} author/venue field group(s) needing author input; target-venue decision auditing, private metadata validation, synthetic metadata-pipeline self-testing, metadata-closure-path auditing, and text-preview generation are prepared for filled metadata.",
+            evidence=f"Submission metadata audit reports {metadata_needs} author/venue field group(s) needing author input; target-venue decision auditing, ACM/TQC format smoke, private metadata validation, synthetic metadata-pipeline self-testing, metadata-closure-path auditing, and text-preview generation are prepared for filled metadata.",
             evidence_files=(
                 RESULTS / "analysis_target_venue_decision_audit.md",
+                RESULTS / "analysis_target_venue_format_smoke.md",
                 RESULTS / "analysis_submission_metadata_audit.md",
                 RESULTS / "analysis_submission_metadata_validator.md",
                 RESULTS / "analysis_submission_metadata_pipeline_selftest.md",

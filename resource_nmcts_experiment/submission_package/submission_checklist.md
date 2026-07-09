@@ -136,9 +136,9 @@ rg -n "Overfull|Underfull|undefined|Undefined|Warning|Error|LaTeX Warning|Rerun"
 Expected current state:
 
 - Machine snapshot tokens checked by `analyze_public_handoff_freshness_audit.py`:
-  PDF pages=36/35; readiness=57 pass + 1 needs author input;
-  payload_files=979; artifact_registry=24 families / 146 raw CSV / 60036 raw rows;
-  source_privacy=0 strict leaks / 53 provenance files / 937 payload text files;
+  PDF pages=36/35; readiness=58 pass + 1 needs author input;
+  payload_files=986; artifact_registry=24 families / 146 raw CSV / 60036 raw rows;
+  source_privacy=0 strict leaks / 53 provenance files / 943 payload text files;
   comparison_validity=7/7 pass; novelty_scorecard=6/6 pass;
   goal_gate=author/venue metadata remains open.
 - Archive manifest: all payload groups complete.
@@ -146,7 +146,7 @@ Expected current state:
 - Payload round-trip audit: archive contents match manifest paths and hashes, required files, reviewer entrypoints, comparison-protocol evidence files, comparison-target validity files, novelty/comparison scorecard files, ROS reproduction-boundary evidence files, editorial-screening evidence files, support-packet evidence files, citation-support evidence files, author-input closure evidence files, source/path privacy audit code, and headline-numeric evidence files are present, private files are absent, and tar metadata is deterministic.
 - Payload extraction smoke audit: the upload tarball extracts safely and runs comparison protocol, comparison-target validity, novelty/comparison scorecard, ROS reproduction gap, editorial screening, support-packet, citation support, source/path privacy, author-input closure, headline numeric consistency, claim-scope lint, and artifact-rerun registry checks from the extracted tree.
 - Payload verifier smoke audit: the upload tarball extracts safely and `verify_submission_package.sh` passes from inside the extracted payload tree.
-- Payload LaTeX compile audit: the upload tarball extracts safely and rebuilds both author and anonymous PDFs from the extracted LaTeX source tree.
+- Payload LaTeX compile audit: the upload tarball extracts safely and rebuilds the author, anonymous, and ACM/TQC PDFs from the extracted LaTeX source tree.
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
 - Comparison protocol audit: all baseline layers have role, evidence, comparability, counterpoint, artifact, and manuscript-anchor coverage.
 - Comparison target validity audit: comparison families are explicitly labeled as primary benchmark, external stress test, exact reversible counterpoint, phase proxy, causal control, scalability verification, or non-dominance boundary.
@@ -161,7 +161,7 @@ Expected current state:
 - Citation support audit: related-work families, cited BibTeX keys, bibliography entries, and DOI/URL/eprint locators are all closed.
 - Headline numeric consistency audit: all abstract-level numbers match generated CSV evidence and both author/anonymous TeX sources.
 - Figure asset audit: every manuscript figure has generated PDF/PNG/SVG assets and non-empty source-data CSV.
-- LaTeX dependency audit: every author/anonymous TeX input, figure reference, and bibliography file exists locally and is included in the upload payload.
+- LaTeX dependency audit: every author, anonymous, and ACM/TQC TeX input, figure reference, and bibliography file exists locally and is included in the upload payload.
 - PDF visual render audit: every author/anonymous PDF page renders through Poppler with stable dimensions and nonblank visible content.
 - PDF text/searchability audit: every author/anonymous PDF extracts searchable text through Poppler with title, scope, baseline, availability, reference, headline-number, identity, and public-placeholder anchors checked.
 - PDF metadata/privacy audit: every author/anonymous PDF passes `pdfinfo` metadata and flag checks for page geometry, encryption, JavaScript, forms, and privacy-sensitive metadata strings.

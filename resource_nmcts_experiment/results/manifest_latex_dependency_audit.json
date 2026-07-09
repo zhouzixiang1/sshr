@@ -1,10 +1,10 @@
 {
-  "dependency_count": 102,
+  "dependency_count": 153,
   "dependency_type_counts": {
-    "bibliography": 2,
-    "figure": 14,
-    "main_source": 2,
-    "tex_input": 84
+    "bibliography": 3,
+    "figure": 21,
+    "main_source": 3,
+    "tex_input": 126
   },
   "needs_revision_count": 0,
   "outputs": {
@@ -16,10 +16,11 @@
   "python": "3.11.15",
   "script": "analyze_latex_dependency_audit.py",
   "source_files": {
+    "acm_tqc_tex": "paper_latex/resource_nmcts_submission_acm_tqc.tex",
     "anonymous_tex": "paper_latex/resource_nmcts_submission_anonymous.tex",
     "author_tex": "paper_latex/resource_nmcts_submission_v1.tex"
   },
   "status_counts": {
-    "pass": 102
+    "pass": 153
   }
 }

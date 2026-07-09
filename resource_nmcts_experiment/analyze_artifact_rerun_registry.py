@@ -132,14 +132,31 @@ def specs() -> list[EvidenceFamily]:
         ),
         EvidenceFamily(
             family="Cover-letter and venue support packet",
-            claim_use="Verifies that cover letter, declarations, venue brief, target-venue decision support, upload checklist, and handoff docs preserve claim boundaries and author-gated metadata.",
+            claim_use="Verifies that cover letter, declarations, venue brief, target-venue decision support, ACM/TQC format smoke, upload checklist, and handoff docs preserve claim boundaries and author-gated metadata.",
             rerun_tier="quick submission-support audit",
-            scripts=("analyze_target_venue_decision_audit.py", "analyze_submission_support_packet_audit.py"),
+            scripts=(
+                "make_acm_tqc_review_draft.py",
+                "analyze_target_venue_decision_audit.py",
+                "analyze_target_venue_format_smoke.py",
+                "analyze_submission_support_packet_audit.py",
+            ),
             raw_patterns=(),
-            manifest_patterns=("manifest_target_venue_decision_audit.json", "manifest_submission_support_packet_audit.json"),
-            summary_patterns=("summary_target_venue_decision_audit.csv", "summary_submission_support_packet_audit.csv"),
-            analysis_patterns=("analysis_target_venue_decision_audit.md", "analysis_submission_support_packet_audit.md"),
-            dependency_boundary="Does not choose a venue or fill private metadata; checks public upload-support consistency against existing audits.",
+            manifest_patterns=(
+                "manifest_target_venue_decision_audit.json",
+                "manifest_target_venue_format_smoke.json",
+                "manifest_submission_support_packet_audit.json",
+            ),
+            summary_patterns=(
+                "summary_target_venue_decision_audit.csv",
+                "summary_target_venue_format_smoke.csv",
+                "summary_submission_support_packet_audit.csv",
+            ),
+            analysis_patterns=(
+                "analysis_target_venue_decision_audit.md",
+                "analysis_target_venue_format_smoke.md",
+                "analysis_submission_support_packet_audit.md",
+            ),
+            dependency_boundary="Does not choose a venue or fill private metadata; checks public upload-support consistency and ACM/TQC template smoke compilation against existing audits.",
         ),
         EvidenceFamily(
             family="Public handoff freshness",

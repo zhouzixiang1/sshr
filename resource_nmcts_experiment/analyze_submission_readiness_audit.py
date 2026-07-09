@@ -167,6 +167,11 @@ TARGET_VENUE_DECISION_ANALYSIS = RESULTS / "analysis_target_venue_decision_audit
 TARGET_VENUE_DECISION_SUMMARY = RESULTS / "summary_target_venue_decision_audit.csv"
 TARGET_VENUE_DECISION_MANIFEST = RESULTS / "manifest_target_venue_decision_audit.json"
 TARGET_VENUE_DECISION_TABLE = THIS_DIR / "paper_latex" / "tables" / "target_venue_decision_audit.tex"
+TARGET_VENUE_FORMAT_ANALYSIS = RESULTS / "analysis_target_venue_format_smoke.md"
+TARGET_VENUE_FORMAT_SUMMARY = RESULTS / "summary_target_venue_format_smoke.csv"
+TARGET_VENUE_FORMAT_MANIFEST = RESULTS / "manifest_target_venue_format_smoke.json"
+TARGET_VENUE_FORMAT_SOURCE = THIS_DIR / "paper_latex" / "resource_nmcts_submission_acm_tqc.tex"
+TARGET_VENUE_FORMAT_PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_acm_tqc.pdf"
 SUPPORT_PACKET_ANALYSIS = RESULTS / "analysis_submission_support_packet_audit.md"
 SUPPORT_PACKET_SUMMARY = RESULTS / "summary_submission_support_packet_audit.csv"
 SUPPORT_PACKET_MANIFEST = RESULTS / "manifest_submission_support_packet_audit.json"
@@ -457,6 +462,14 @@ def build_rows() -> list[dict[str, str]]:
         target_venue_manifest.get("recommended_first_choice", "missing") if target_venue_manifest else "missing"
     )
     target_venue_strong = target_venue_manifest.get("strong_fit_count", "missing") if target_venue_manifest else "missing"
+    target_format_manifest = read_json(TARGET_VENUE_FORMAT_MANIFEST)
+    target_format_counts = target_format_manifest.get("status_counts", {}) if target_format_manifest else {}
+    target_format_revisions = (
+        int(target_format_manifest.get("needs_revision_count", -1)) if target_format_manifest else -1
+    )
+    target_format_rows = target_format_manifest.get("rows", "missing") if target_format_manifest else "missing"
+    target_format_pages = target_format_manifest.get("pdf_pages", "missing") if target_format_manifest else "missing"
+    target_format_bytes = target_format_manifest.get("pdf_bytes", "missing") if target_format_manifest else "missing"
     support_packet_manifest = read_json(SUPPORT_PACKET_MANIFEST)
     support_packet_counts = support_packet_manifest.get("status_counts", {}) if support_packet_manifest else {}
     support_packet_revisions = (
@@ -794,7 +807,7 @@ def build_rows() -> list[dict[str, str]]:
             and LATEX_DEPENDENCY_MANIFEST.exists()
             and latex_dependency_revisions == 0
             else "needs revision",
-            "evidence": f"LaTeX dependency audit checks author/anonymous source, table inputs, figure references, and bibliography files against local files and the upload payload; dependencies={latex_dependency_count}; type_counts={latex_dependency_types}; status_counts={latex_dependency_counts}; needs_revision_count={latex_dependency_revisions}.",
+            "evidence": f"LaTeX dependency audit checks author, anonymous, and ACM/TQC sources, table inputs, figure references, and bibliography files against local files and the upload payload; dependencies={latex_dependency_count}; type_counts={latex_dependency_types}; status_counts={latex_dependency_counts}; needs_revision_count={latex_dependency_revisions}.",
             "next_action": "Rerun make_submission_payload_archive.py and analyze_latex_dependency_audit.py after editing TeX inputs, figures, bibliography, or payload packaging.",
         },
         {
@@ -887,6 +900,22 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Target-venue audit checks source-backed fit, risk, policy gates, metadata fields, and recommended order; rows={target_venue_rows}; status_counts={target_venue_counts}; recommended_first_choice={target_venue_first}; strong_fit_count={target_venue_strong}; needs_revision_count={target_venue_revisions}.",
             "next_action": "Rerun analyze_target_venue_decision_audit.py after changing target_venue_brief.md, metadata template fields, or venue shortlist/order.",
+        },
+        {
+            "item": "Target-venue ACM/TQC format smoke",
+            "status": "pass"
+            if TARGET_VENUE_FORMAT_ANALYSIS.exists()
+            and TARGET_VENUE_FORMAT_SUMMARY.exists()
+            and TARGET_VENUE_FORMAT_MANIFEST.exists()
+            and TARGET_VENUE_FORMAT_SOURCE.exists()
+            and TARGET_VENUE_FORMAT_PDF.exists()
+            and target_format_revisions == 0
+            and target_format_rows == 5
+            and isinstance(target_format_pages, int)
+            and target_format_pages > 0
+            else "needs revision",
+            "evidence": f"ACM/TQC smoke draft checks acmart availability, generated anonymous review source, compiled PDF, text anchors, and recommended-venue alignment; rows={target_format_rows}; status_counts={target_format_counts}; pages={target_format_pages}; bytes={target_format_bytes}; needs_revision_count={target_format_revisions}.",
+            "next_action": "Rerun make_acm_tqc_review_draft.py, compile the ACM/TQC source, and rerun analyze_target_venue_format_smoke.py after changing target venue formatting.",
         },
         {
             "item": "Submission support packet audit",
@@ -1066,7 +1095,7 @@ def build_rows() -> list[dict[str, str]]:
             and PAYLOAD_LATEX_COMPILE_MANIFEST.exists()
             and payload_latex_revisions == 0
             else "needs revision",
-            "evidence": f"Payload LaTeX compile audit extracts the upload tarball and rebuilds author/anonymous PDFs from the extracted TeX sources; compiled_manuscripts={payload_latex_compiled}; status_counts={payload_latex_counts}; needs_revision_count={payload_latex_revisions}.",
+            "evidence": f"Payload LaTeX compile audit extracts the upload tarball and rebuilds author, anonymous, and ACM/TQC PDFs from the extracted TeX sources; compiled_manuscripts={payload_latex_compiled}; status_counts={payload_latex_counts}; needs_revision_count={payload_latex_revisions}.",
             "next_action": "Rerun analyze_payload_latex_compile_audit.py after payload creation and restore missing extracted-payload LaTeX dependencies.",
         },
         {
@@ -1077,7 +1106,7 @@ def build_rows() -> list[dict[str, str]]:
             and VERIFIER_SUMMARY.exists()
             and VERIFIER_MANIFEST.exists()
             else "needs revision",
-            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, PDF visual rendering, PDF text/searchability, PDF metadata/privacy, source/path privacy, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, citation support, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, author-input closure, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, extracted-payload LaTeX compilation, extracted-payload verifier smoke, and LaTeX log boundaries.",
+            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, ACM/TQC format smoke, PDF visual rendering, PDF text/searchability, PDF metadata/privacy, source/path privacy, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, citation support, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, author-input closure, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, extracted-payload LaTeX compilation, extracted-payload verifier smoke, and LaTeX log boundaries.",
             "next_action": "Run verify_submission_package.sh after rebuilding the payload archive.",
         },
         {

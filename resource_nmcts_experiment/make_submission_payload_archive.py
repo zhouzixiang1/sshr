@@ -26,6 +26,7 @@ RESULTS = THIS_DIR / "results"
 TABLES = THIS_DIR / "paper_latex" / "tables"
 PAPER = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.pdf"
 ANONYMOUS_PAPER = THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.pdf"
+ACM_TQC_PAPER = THIS_DIR / "paper_latex" / "resource_nmcts_submission_acm_tqc.pdf"
 DIST = THIS_DIR / "submission_package" / "dist"
 ARCHIVE = DIST / "resource_nmcts_submission_payload.tar.gz"
 SHA256 = DIST / "resource_nmcts_submission_payload.tar.gz.sha256"
@@ -34,6 +35,7 @@ PAYLOAD_ROOT = "resource_nmcts_submission_payload"
 EXTRA_FILES = (
     PAPER,
     ANONYMOUS_PAPER,
+    ACM_TQC_PAPER,
     RESULTS / "summary_submission_archive_manifest.csv",
     RESULTS / "analysis_submission_archive_manifest.md",
     RESULTS / "manifest_submission_archive_manifest.json",

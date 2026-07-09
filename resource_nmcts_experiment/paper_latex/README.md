@@ -22,6 +22,10 @@ Current English submission draft:
   high-dimensional verification boundary.  The claim is explicitly limited to
   logical-layer synthesis, with CirKit depth and RevKit CLI peak-ancilla
   trade-offs stated in the abstract and discussion.
+- `resource_nmcts_submission_acm_tqc.tex` / `resource_nmcts_submission_acm_tqc.pdf`:
+  generated ACM/TQC anonymous review-format smoke draft.  It verifies that the
+  recommended ACM TQC path can be compiled locally, but final ACM metadata, CCS
+  concepts, rights text, and archive links remain author/venue input.
 
 Build:
 
