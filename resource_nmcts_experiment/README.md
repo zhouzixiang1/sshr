@@ -297,9 +297,11 @@ Latest phase/Rz progress:
 Latest high-dimensional verification progress:
 
 - `run_truth_bridge_terms.py --ns 24 --per-n 6 --tag truth_bridge_n24`,
-  `run_truth_bridge_terms.py --ns 25 --per-n 6 --tag truth_bridge_n25`, and
-  `run_truth_bridge_terms.py --ns 26 --per-n 6 --tag truth_bridge_n26` extend
-  the full truth-table bridge from `n=21,22,23` to `n=24,25,26`.
+  `run_truth_bridge_terms.py --ns 25 --per-n 6 --tag truth_bridge_n25`,
+  `run_truth_bridge_terms.py --ns 26 --per-n 6 --tag truth_bridge_n26`, and
+  `run_truth_bridge_terms.py --ns 27 --per-n 6 --tag truth_bridge_n27`, and
+  `run_truth_bridge_terms.py --ns 28 --per-n 6 --tag truth_bridge_n28` extend
+  the full truth-table bridge from `n=21,22,23` to `n=24,25,26,27,28`.
 - The bridge uses the bit-mask ANF truth-table evaluator in `anf_utils.py`; it
   builds variable assignment masks and evaluates monomials with large-integer
   AND/XOR instead of Python-level coefficient zeta expansion.
@@ -316,13 +318,25 @@ Latest high-dimensional verification progress:
   mismatches=0.  Mean truth-table build time is 0.68 s per function; adaptive
   all-depth beats single screen by 6/0/0 and fixed depth-2 by 5/0/1, while the
   depth-frontier policy remains a faster bounded-quality controller.
+- `n=27`: 6 generated ANF functions and 60 method rows verify: 60/60 full
+  oracle checks, 60/60 ANF plan checks, 60/60 emitted-circuit symbolic checks,
+  mismatches=0.  Mean truth-table build time is 1.36 s per function; adaptive
+  all-depth beats single screen by 6/0/0 and fixed depth-2 by 4/0/2, while the
+  depth-frontier policy beats fixed depth-2 by 3/0/3 and remains close to
+  depth-4 with less planning time.
+- `n=28`: 6 generated ANF functions and 60 method rows verify: 60/60 full
+  oracle checks, 60/60 ANF plan checks, 60/60 emitted-circuit symbolic checks,
+  mismatches=0.  Mean truth-table build time is 2.85 s per function; adaptive
+  all-depth beats single screen by 6/0/0 and fixed depth-2 by 4/0/2, while the
+  depth-frontier policy beats fixed depth-2 by 2/0/4 and remains close to
+  depth-4/all-depth with materially less planning time.
 - The action-width probe at widths 6, 12, and 24 shows that simply widening
   the Boolean-ring screen candidate set does not improve the default score on
   the `n=20,28,40` term-set slice; each width verifies 504/504 method rows, and
   width 6 remains the paper-facing default because gains come from recursive
   depth/frontier selection rather than wider root candidates.
 - This is a verification-boundary improvement, not a hardware-mapping claim;
-  `n=27--64` remain covered by plan/circuit symbolic verification rather than
+  `n=29--64` remain covered by plan/circuit symbolic verification rather than
   full truth-table enumeration.
 
 Core commands:
@@ -352,6 +366,7 @@ cd /Users/zhouzixiang/Desktop/tzb/src/resource_nmcts_experiment
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260724 --ns 24 --per-n 6 --workers 4 --action-width 6 --max-screen-depth 4 --tag truth_bridge_n24
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260725 --ns 25 --per-n 6 --workers 4 --action-width 6 --max-screen-depth 4 --tag truth_bridge_n25
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260716 --ns 26 --per-n 6 --workers 2 --action-width 6 --max-screen-depth 4 --tag truth_bridge_n26
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_truth_bridge_terms.py --seed 20260717 --ns 27 --per-n 6 --workers 2 --action-width 6 --max-screen-depth 4 --tag truth_bridge_n27
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 20,28,40 --per-n 24 --workers 6 --action-width 6 --max-screen-depth 4 --tag screen_scale_width6_probe
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 20,28,40 --per-n 24 --workers 6 --action-width 12 --max-screen-depth 4 --tag screen_scale_width12_probe
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_screen_scale_terms.py --seed 20260712 --ns 20,28,40 --per-n 24 --workers 6 --action-width 24 --max-screen-depth 4 --tag screen_scale_width24_probe

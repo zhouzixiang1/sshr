@@ -66,7 +66,7 @@ def tex_escape(text: str) -> str:
     )
     replacements = {
         "n=20,28,40": r"$n=20,28,40$",
-        "n=21--26": r"$n=21$--$26$",
+        "n=21--28": r"$n=21$--$28$",
         "n=21--25": r"$n=21$--$25$",
         "n=24,28,32,40": r"$n=24,28,32,40$",
         "n=20--40": r"$n=20$--$40$",
@@ -84,8 +84,8 @@ def compact_scope_tex(text: str) -> str:
         return r"$20,28,40$"
     if text == "n=48,56,64":
         return r"$48,56,64$"
-    if text == "n=21--26":
-        return r"$21$--$26$"
+    if text == "n=21--28":
+        return r"$21$--$28$"
     if text == "n=21--25":
         return r"$21$--$25$"
     return tex_escape(text)
@@ -118,6 +118,8 @@ def build_rows() -> list[dict[str, str]]:
         "raw_truth_bridge_n24_terms.csv",
         "raw_truth_bridge_n25_terms.csv",
         "raw_truth_bridge_n26_terms.csv",
+        "raw_truth_bridge_n27_terms.csv",
+        "raw_truth_bridge_n28_terms.csv",
     ):
         truth_rows.extend(read_csv(RESULTS / filename))
     truth_rep = [row for row in truth_rows if row["method"] == "depth_frontier_policy"]
@@ -205,7 +207,7 @@ def build_rows() -> list[dict[str, str]]:
         },
         {
             "slice": "Complete truth-table bridge",
-            "n_scope": "n=21--26",
+            "n_scope": "n=21--28",
             "function_or_setting_count": str(truth_settings),
             "method_rows": str(len(truth_rows)),
             "verified_rows": str(
@@ -222,7 +224,7 @@ def build_rows() -> list[dict[str, str]]:
             "mean_time_s": fmt_float(mean(truth_rep, "plan_time_s"), 2),
             "resource_text": resource_summary(truth_rep, "plan_time_s")
             + f"; truth check {fmt_float(mean(truth_rep, 'truth_verify_time_s'), 2)}s",
-            "extra": "46 function/settings x 10 methods",
+            "extra": "52 function/settings x 10 methods",
             "boundary": "Complete checking on generated bridge slices only.",
         },
     ]

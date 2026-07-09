@@ -418,20 +418,20 @@
       "summary_files": "7"
     },
     {
-      "analysis_files": "9",
-      "claim_use": "Connects high-dimensional symbolic plans to complete truth-table simulation on n=21-26 bridge rows.",
+      "analysis_files": "11",
+      "claim_use": "Connects high-dimensional symbolic plans to complete truth-table simulation on n=21-28 bridge rows.",
       "dependency_boundary": "Narrow bridge slices because full truth tables grow exponentially.",
       "driver_scripts": "run_truth_bridge_terms.py",
       "evidence_family": "Complete truth-table bridge slices",
       "manifest_files": "0",
-      "raw_files": "9",
-      "raw_rows": "640",
-      "representative_raw": "results/raw_schedule_truth_bridge_n23_terms.csv; results/raw_schedule_truth_bridge_terms.csv; results/raw_truth_bridge_n23_cost_time003_frontier_terms.csv; results/raw_truth_bridge_n23_large_frontier_terms.csv; +5 more",
+      "raw_files": "11",
+      "raw_rows": "760",
+      "representative_raw": "results/raw_schedule_truth_bridge_n23_terms.csv; results/raw_schedule_truth_bridge_terms.csv; results/raw_truth_bridge_n23_cost_time003_frontier_terms.csv; results/raw_truth_bridge_n23_large_frontier_terms.csv; +7 more",
       "rerun_tier": "bridge raw rerun",
       "scripts_missing": "",
       "scripts_present": "1",
       "status": "complete",
-      "summary_files": "9"
+      "summary_files": "11"
     }
   ],
   "outputs": {
@@ -582,6 +582,8 @@
     "results/raw_truth_bridge_n24_terms.csv",
     "results/raw_truth_bridge_n25_terms.csv",
     "results/raw_truth_bridge_n26_terms.csv",
+    "results/raw_truth_bridge_n27_terms.csv",
+    "results/raw_truth_bridge_n28_terms.csv",
     "results/raw_truth_bridge_terms.csv",
     "results/raw_ultra_boolean_guard_vs_boolean_linear.csv",
     "results/raw_ultra_boolean_guard_vs_old_deep.csv",
@@ -598,6 +600,6 @@
   ],
   "rows": 27,
   "script": "analyze_artifact_rerun_registry.py",
-  "unique_raw_files": 154,
-  "unique_raw_rows": 77702
+  "unique_raw_files": 156,
+  "unique_raw_rows": 77822
 }

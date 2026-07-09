@@ -54,7 +54,7 @@ ROWS = [
     },
     {
         "comparison_role": "Scaling and correctness bridges",
-        "methods": "n=20,24,28,32,40 term-set symbolic runs; n=48,56,64 ultra-scale symbolic stress; n=21-26 complete truth-table bridge rows",
+        "methods": "n=20,24,28,32,40 term-set symbolic runs; n=48,56,64 ultra-scale symbolic stress; n=21-28 complete truth-table bridge rows",
         "why_it_matters": "They push semantic checks beyond the small truth-table slice while keeping full verification where still feasible.",
         "supported_claim": "The emitted logical-layer circuits remain symbolically and bridge-truth-table verified at larger dimensions.",
         "excluded_claim": "Does not make exhaustive high-dimensional truth-table benchmarking feasible or complete.",
@@ -89,7 +89,7 @@ def latex_cell(text: str) -> str:
         ("Rz", r"\rz{}"),
         ("n=20,24,28,32,40", r"$n=20$, 24, 28, 32, 40"),
         ("n=48,56,64", r"$n=48$, 56, 64"),
-        ("n=21-26", r"$n=21$--$26$"),
+        ("n=21-28", r"$n=21$--$28$"),
         ("n=21-25", r"$n=21$--$25$"),
         ("T-count", r"T-count"),
         ("CNOT", r"CNOT"),

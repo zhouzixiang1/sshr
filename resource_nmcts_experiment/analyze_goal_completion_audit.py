@@ -278,10 +278,12 @@ def build_items() -> list[GoalItem]:
                     RESULTS / "raw_truth_bridge_n24_terms.csv",
                     RESULTS / "raw_truth_bridge_n25_terms.csv",
                     RESULTS / "raw_truth_bridge_n26_terms.csv",
+                    RESULTS / "raw_truth_bridge_n27_terms.csv",
+                    RESULTS / "raw_truth_bridge_n28_terms.csv",
                     FIGURES / "fig5_validation.pdf",
                 )
             ),
-            evidence="Scaling audit covers n=20,24,28,32,40 plus an n=48,56,64 ultra-scale symbolic stress and resource-profile slice and complete truth-table bridge checks for n=21--26 generated functions.",
+            evidence="Scaling audit covers n=20,24,28,32,40 plus an n=48,56,64 ultra-scale symbolic stress and resource-profile slice and complete truth-table bridge checks for n=21--28 generated functions.",
             evidence_files=(
                 RESULTS / "analysis_scaling_resource_audit.md",
                 RESULTS / "analysis_screen_scale_ultra_scale64_stress.md",
@@ -296,9 +298,11 @@ def build_items() -> list[GoalItem]:
                 RESULTS / "raw_truth_bridge_n24_terms.csv",
                 RESULTS / "raw_truth_bridge_n25_terms.csv",
                 RESULTS / "raw_truth_bridge_n26_terms.csv",
+                RESULTS / "raw_truth_bridge_n27_terms.csv",
+                RESULTS / "raw_truth_bridge_n28_terms.csv",
                 FIGURES / "fig5_validation.pdf",
             ),
-            boundary="High-dimensional rows outside generated bridge slices are symbolic checks, not exhaustive truth-table enumeration for all n=27--64 functions.",
+            boundary="High-dimensional rows outside generated bridge slices are symbolic checks, not exhaustive truth-table enumeration for all n=29--64 functions.",
             next_action="Keep large-scale claims tied to the scaling audit and bridge scope.",
         ),
         GoalItem(

@@ -291,6 +291,8 @@ def main() -> int:
         ("truth-bridge-n24", RESULTS / "raw_truth_bridge_n24_terms.csv"),
         ("truth-bridge-n25", RESULTS / "raw_truth_bridge_n25_terms.csv"),
         ("truth-bridge-n26", RESULTS / "raw_truth_bridge_n26_terms.csv"),
+        ("truth-bridge-n27", RESULTS / "raw_truth_bridge_n27_terms.csv"),
+        ("truth-bridge-n28", RESULTS / "raw_truth_bridge_n28_terms.csv"),
     ]
     rows: list[dict[str, object]] = []
     for source, path in sources:

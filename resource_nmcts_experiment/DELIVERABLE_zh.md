@@ -22,9 +22,9 @@
 
 - PDF pages=45/45
 - readiness=70 pass + 1 needs author input
-- payload_files=1075
-- artifact_registry=27 families / 154 raw CSV / 77702 raw rows
-- source_privacy=0 strict leaks / 55 provenance files / 1032 payload text files
+- payload_files=1083
+- artifact_registry=27 families / 156 raw CSV / 77822 raw rows
+- source_privacy=0 strict leaks / 55 provenance files / 1040 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open
@@ -239,7 +239,7 @@
 - `results/analysis_sparse_depth_frontier.md`
 - `paper_latex/tables/sparse_depth_frontier.tex`
 
-核心结果是：在 `scale-frontier` 72 对、`scale-generalization` 96 对、`n=23/24/25` truth-bridge 各 6 对上，sparse depth-2/4 frontier 相对完整 depth-2/3/4 frontier 分别为 0/0/72、0/0/96、0/0/6、0/0/6、0/0/6，score/T/CNOT/depth/ancilla 完全持平，同时平均 time 分别下降 27.57%、28.17%、24.94%、28.88%、27.06%。该结果比现有 stage-gated frontier 更干净：它不牺牲 score，不需要阈值，直接删除当前审计切片中没有最终入选的 depth-3 评估。但论文中仍应写成“当前生成切片上的经验 controller”，不能写成 depth-3 在所有函数上理论上被 depth-4 支配。
+核心结果是：在 `scale-frontier` 72 对、`scale-generalization` 96 对、`n=23/24/25/26/27/28` truth-bridge 各 6 对上，sparse depth-2/4 frontier 相对完整 depth-2/3/4 frontier 分别为 0/0/72、0/0/96、0/0/6、0/0/6、0/0/6、0/0/6、0/0/6、0/0/6，score/T/CNOT/depth/ancilla 完全持平，同时平均 time 分别下降 27.57%、28.17%、24.94%、28.88%、27.06%、27.21%、28.19%、29.23%。该结果比现有 stage-gated frontier 更干净：它不牺牲 score，不需要阈值，直接删除当前审计切片中没有最终入选的 depth-3 评估。但论文中仍应写成“当前生成切片上的经验 controller”，不能写成 depth-3 在所有函数上理论上被 depth-4 支配。
 
 本轮新增 learned-control audit 层，用于校准题目中“neural/MCTS”的贡献强度：
 
@@ -279,7 +279,7 @@
 - `results/analysis_scaling_resource_audit.md`
 - `paper_latex/tables/scaling_resource_audit.tex`
 
-该审计把函数/设置数、方法行数、验证行数和代表性资源均值分开。核心覆盖为：`n=24,28,32,40` large term-set frontier 96 个函数、960/960 symbolic rows；stage-gated frontier 96/96 symbolic rows；`n=20,28,40` action-width probe 216 个 width/function settings、1512/1512 symbolic rows；新增 `n=48,56,64` ultra-scale symbolic stress 48 个函数、480/480 plan+emitted-circuit symbolic rows；`n=21--26` complete truth-table bridge 46 个 function/settings、460/460 truth+symbolic rows。对应代表性资源均值由审计表自动给出。论文中应把这写成“高维逻辑层验证与资源审计”，不是硬件映射，也不是所有高维实例的完整真值表枚举。
+该审计把函数/设置数、方法行数、验证行数和代表性资源均值分开。核心覆盖为：`n=24,28,32,40` large term-set frontier 96 个函数、960/960 symbolic rows；stage-gated frontier 96/96 symbolic rows；`n=20,28,40` action-width probe 216 个 width/function settings、1512/1512 symbolic rows；新增 `n=48,56,64` ultra-scale symbolic stress 48 个函数、480/480 plan+emitted-circuit symbolic rows；`n=21--28` complete truth-table bridge 58 个 function/settings、580/580 truth+symbolic rows。对应代表性资源均值由审计表自动给出。论文中应把这写成“高维逻辑层验证与资源审计”，不是硬件映射，也不是所有高维实例的完整真值表枚举。
 
 本轮还补充 compute/reproducibility audit 层，用于回应“大规模实验是否可复现、是否利用多核/GPU环境”的问题：
 
@@ -721,6 +721,14 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/summary_truth_bridge_n26_terms.csv`
 - `results/analysis_truth_bridge_n26_terms.md`
 - `paper_latex/tables/truth_bridge_n26_terms.tex`
+- `results/raw_truth_bridge_n27_terms.csv`
+- `results/summary_truth_bridge_n27_terms.csv`
+- `results/analysis_truth_bridge_n27_terms.md`
+- `paper_latex/tables/truth_bridge_n27_terms.tex`
+- `results/raw_truth_bridge_n28_terms.csv`
+- `results/summary_truth_bridge_n28_terms.csv`
+- `results/analysis_truth_bridge_n28_terms.md`
+- `paper_latex/tables/truth_bridge_n28_terms.tex`
 - `paper_latex_zh/resource_nmcts_zh_manuscript_v34.tex`
 - `results/raw_screen_scale_width6_probe_terms.csv`
 - `results/raw_screen_scale_width12_probe_terms.csv`
@@ -764,13 +772,40 @@ payload 后可以从解包目录运行一键 verifier。
 | depth-frontier policy vs depth-4 | 0/3/3，score +1.76%，plan time -47.09% |
 | depth-frontier policy vs adaptive all-depth | 0/3/3，score +1.76%，plan time -68.71% |
 
+新增 `n=27` 和 `n=28` 结果：
+
+| 项目 | 结果 |
+|---|---:|
+| n=27 生成式 ANF 函数 | 6 |
+| 完整 truth-table oracle 验证 | 60/60 |
+| ANF plan 验证 | 60/60 |
+| emitted-circuit 符号验证 | 60/60，mismatch=0 |
+| 平均 truth-table 构造时间 | 1.36 s/函数 |
+| adaptive all-depth vs single screen | 6/0/0，score -9.11% |
+| adaptive all-depth vs fixed depth-2 | 4/0/2，score -2.85% |
+| depth-frontier policy vs fixed depth-2 | 3/0/3，score -2.33% |
+| depth-frontier policy vs depth-4 | 0/1/5，score +0.54%，plan time -11.70% |
+| depth-frontier policy vs adaptive all-depth | 0/1/5，score +0.54%，plan time -53.12% |
+| n=28 生成式 ANF 函数 | 6 |
+| n=28 完整 truth-table oracle 验证 | 60/60 |
+| n=28 ANF plan 验证 | 60/60 |
+| n=28 emitted-circuit 符号验证 | 60/60，mismatch=0 |
+| n=28 平均 truth-table 构造时间 | 2.85 s/函数 |
+| n=28 adaptive all-depth vs single screen | 6/0/0，score -8.80% |
+| n=28 adaptive all-depth vs fixed depth-2 | 4/0/2，score -1.60% |
+| n=28 depth-frontier policy vs fixed depth-2 | 2/0/4，score -1.28% |
+| n=28 depth-frontier policy vs depth-4 | 0/2/4，score +0.32%，plan time -34.87% |
+| n=28 depth-frontier policy vs adaptive all-depth | 0/2/4，score +0.32%，plan time -65.39% |
+
 解释边界：
 
-- 完整 bridge 从 `n=21,22,23,24,25` 的 400/400 扩展到 `n=21,22,23,24,25,26` 的 460/460 方法行。
+- 完整 bridge 从 `n=21,22,23,24,25,26,27` 的 520/520 扩展到 `n=21,22,23,24,25,26,27,28` 的 580/580 方法行。
 - `n=25` 是验证边界和 frontier policy 证据的实质推进：frontier policy 在该切片上与 depth-4/all-depth score 持平，同时降低 plan time。
 - `n=26` 是验证边界的继续上移：所有方法行完整 truth-table、plan ANF 与 emitted-circuit ANF 三重验证均通过；同时说明 frontier policy 是快速质量折中，不应写成总是等同 all-depth。
+- `n=27` 进一步把完整 truth-table bridge 上界后移；frontier policy 相对 depth-2 仍有 score 优势，但相对 depth-4/all-depth 是小幅质量折中。
+- `n=28` 继续把完整 truth-table bridge 上界后移；完整真值表构造均值升至 2.85 s/函数，但全部方法行仍通过完整 oracle、plan ANF 和 emitted-circuit ANF 三重验证。
 - width probe 是一个有用的负向消融：当前高维收益来自递归深度与 frontier 选择，而不是盲目增加 action width；因此论文中继续使用 width 6 作为默认设置是有证据的。
-- 仍不能写成所有 `n>=27` 或 `n=27--64` 高维实例已完整枚举；这些维度目前仍主要依赖项集级 plan 验证和 emitted-circuit GF(2) 符号验证。
+- 仍不能写成所有 `n>=29` 或 `n=29--64` 高维实例已完整枚举；这些维度目前仍主要依赖项集级 plan 验证和 emitted-circuit GF(2) 符号验证。
 
 ### 2.0 RevKit API baseline 与工具链边界
 
@@ -2207,7 +2242,7 @@ Git 状态：
 | stage-gated frontier | 72 个 validation 项集 + 96 个独立泛化项集 + 6 个 n=23 bridge 函数 | validation 选阈值 1.25%；scale vs all-depth 为 +0.04% score、staged time -25.43%；n=23 vs all-depth 为 +0.00% score、staged time -11.51% | 新增接近 all-depth 的 teacher/guard |
 | learned sparse depth-4 gate | train `n=16,20,24`；三组独立 seed 审计 `n=24,28,32,40`，144 个 pair | vs sparse frontier 为 0/0/144、score +0.00%、false skip 0；只运行 106/144 个 depth-4，time -13.43%；阈值扫描 zero-false-skip 最优为 -14.92% time | 新增 sparse frontier 内部学习预算控制 |
 | n=21/22/23 truth-table bridge | 16 个基础生成式 ANF 函数 + 12 个 n=23 rerun 函数 | 按当前 v36 主图源数据口径，280/280 完整 truth-table oracle 验证通过，280/280 plan 与 emitted-circuit 符号验证通过，0 mismatch；large/cost 两种 n=23 rerun 均完整验证 | 新增 n>20 完整验证桥接 |
-| n=24/25/26 truth-table bridge | 18 个生成式 ANF 函数 | 新增 180/180 完整 truth-table oracle 验证通过，180/180 plan 与 emitted-circuit 符号验证通过，0 mismatch；累计 bridge 为 460/460 | 新增 n=24、n=25 与 n=26 完整验证边界 |
+| n=24/25/26/27/28 truth-table bridge | 30 个生成式 ANF 函数 | 新增 300/300 完整 truth-table oracle 验证通过，300/300 plan 与 emitted-circuit 符号验证通过，0 mismatch；累计 bridge 为 580/580 | 新增 n=24、n=25、n=26、n=27 与 n=28 完整验证边界 |
 | action-width probe | n=20/28/40，每个宽度 72 个项集 | width 6/12/24 各 504/504 plan 与 emitted-circuit 符号验证通过；单纯加宽不改善默认 score 结论，时间显著上升 | 新增负向消融，支持默认 width 6 |
 | schedule proxy | 96 个 n=24/28/32/40 项集 + 30 个 n=21/22/23 bridge/rerun 函数 | frontier policy vs depth-2：项集 T-depth proxy 40/0/56、-1.85%，large n=23 vs old policy 为 1/0/5、-0.45% T-depth proxy；cost n=23 vs large 为 time -56.29%、lifetime -12.62% | 新增逻辑层后端相关指标，非硬件 mapping |
 | ROS-style LUT proxy | 309 个 n=3..6/14/15/16/18 函数 | 927/927 K-sweep truth-table 检查通过；best-K vs fixed K=4 为 219/0/90、-18.12%；Resource vs proxy 为 309/0/0、-83.77% | 新增更强 LUT proxy，但不是官方 ROS 复现 |
@@ -2233,4 +2268,4 @@ Git 状态：
 
 但是投稿前还需要继续补强“AI 搜索本身带来的贡献”这一点。learned sparse depth-4 gate 已经把 frontier 内部预算控制补上了一块，但文章仍需要避免被评价为一组 FPRM/ESOP 工程启发的组合，而不是强化学习与 MCTS 方法论文。
 
-本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、pairwise-wide n=16 full synthesis、Boolean-ring linear factor、schedule proxy、n=23/24/25/26 完整 truth-table bridge、ROS-style LUT proxy、CirKit 3 shell AIG/MC probe、legacy RevKit CLI exact-oracle portfolio、large frontier policy、cost-aware frontier policy、learned sparse depth-4 gate、Affine-FPRM phase search、wide Affine-FPRM budget 扩展、learned phase candidate pruning 和 20-angle phase rotation-sequence smoke 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照、高维 pairwise-wide root-action ranker、Boolean-ring factor 扩展、emitted-circuit 层 T-depth/辅助生命周期 trade-off、n=21/22/23/24/25/26 共 460/460 方法行的完整 oracle 验证、large frontier policy 相对旧 policy 的质量提升、cost-aware frontier policy 的快速质量折中、sparse depth-4 gate 在 144 个独立 seed 审计 pair 上 0 false skip 且省 13.43% sparse-frontier 时间，并且阈值扫描显示 zero-false-skip 省时可到 14.92%、相对更强 LUT proxy 的 309/0/0 score 优势、相对 CirKit AIG/MC 的传统 177/0/0 与 n=14 64/0/0 score 优势、相对 RevKit CLI best-score portfolio 的 173/0/4 score 优势、Affine-FPRM 相对 fixed-polarity FPRM 的 81/0/96 phase-search 增益、wide128 相对 budget32 的 43/0/134 `T/Rz=30` 增益、policy top-512 相对 budget32 的 17/0/21 剪枝增益和相对 random-repeat mean 的 17/0/21、p=1.53e-05 稳健性，以及最高频 20 个 phase/Rz 角的 20/20 coarse sequence smoke pass。不过官方 ROS 完整复现、从 phase/Rz 候选剪枝升级到真正的 high-precision learned rotation/phase policy、以及作者/期刊元数据仍需继续推进，所以目标还不能判定完成。
+本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、pairwise-wide n=16 full synthesis、Boolean-ring linear factor、schedule proxy、n=23/24/25/26/27/28 完整 truth-table bridge、ROS-style LUT proxy、CirKit 3 shell AIG/MC probe、legacy RevKit CLI exact-oracle portfolio、large frontier policy、cost-aware frontier policy、learned sparse depth-4 gate、Affine-FPRM phase search、wide Affine-FPRM budget 扩展、learned phase candidate pruning 和 20-angle phase rotation-sequence smoke 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照、高维 pairwise-wide root-action ranker、Boolean-ring factor 扩展、emitted-circuit 层 T-depth/辅助生命周期 trade-off、n=21/22/23/24/25/26/27/28 共 580/580 方法行的完整 oracle 验证、large frontier policy 相对旧 policy 的质量提升、cost-aware frontier policy 的快速质量折中、sparse depth-4 gate 在 144 个独立 seed 审计 pair 上 0 false skip 且省 13.43% sparse-frontier 时间，并且阈值扫描显示 zero-false-skip 省时可到 14.92%、相对更强 LUT proxy 的 309/0/0 score 优势、相对 CirKit AIG/MC 的传统 177/0/0 与 n=14 64/0/0 score 优势、相对 RevKit CLI best-score portfolio 的 173/0/4 score 优势、Affine-FPRM 相对 fixed-polarity FPRM 的 81/0/96 phase-search 增益、wide128 相对 budget32 的 43/0/134 `T/Rz=30` 增益、policy top-512 相对 budget32 的 17/0/21 剪枝增益和相对 random-repeat mean 的 17/0/21、p=1.53e-05 稳健性，以及最高频 20 个 phase/Rz 角的 20/20 coarse sequence smoke pass。不过官方 ROS 完整复现、从 phase/Rz 候选剪枝升级到真正的 high-precision learned rotation/phase policy、以及作者/期刊元数据仍需继续推进，所以目标还不能判定完成。

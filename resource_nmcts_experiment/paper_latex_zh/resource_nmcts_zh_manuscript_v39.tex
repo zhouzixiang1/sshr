@@ -45,7 +45,7 @@
 
 在 $n\leq6$ 的 177 个传统函数上，Pareto-\method{} 相对 direct \anf{} 平均 T-count 降低 72.25\%、平均 score 降低 67.80\%；相对 ESOP beam、weighted ESOP-MILP 和 SSHR-H 分别获得 174/0/3、167/3/7 和 173/0/4 的配对胜/负/平。相对 ROS-style LUT proxy，Pareto-\method{} 在 309 个函数上为 309/0/0，平均 score 降低 84.27\%；相对官方 mockturtle KLUT-to-XAG probe，在传统 177 个函数上为 166/11/0，在 $n=14$ 的 64 个高维函数上为 64/0/0。进一步地，本文新增 CirKit 3 shell AIG/multiplicative-complexity probe：传统 177 行和 $n=14$ 高维 64 行均通过 Verilog readback truth-table 验证；Pareto-\method{} 相对 CirKit AIG/MC 在两组数据上分别为 177/0/0、64/0/0，平均 score 降低 62.34\% 和 94.46\%。Legacy RevKit CLI exact-oracle probe 进一步把传统函数嵌入为 `(x,y)->(x,y xor f(x))` 的 SPEC permutation，并运行 TBS/DBS/RMS 三个 reversible-synthesis flow；531/531 个直接 flow 行均返回，best-score portfolio 下 Pareto-\method{} 相对 RevKit CLI 为 173/0/4，平均 score 降低 67.28\%、T-count 降低 72.59\%。CirKit 和 RevKit CLI probe 同时显示本文方法在 depth 或 peak ancilla 上存在 trade-off，因此本文主张限定为低 T-count、低 weighted score 和低逻辑层资源 trade-off，而非 depth-only 或 ancilla-only 支配。内部消融显示，Affine-NMCTS 相对 fixed-coordinate MCTS 平均 score 降低 14.82\%，Pareto archive 相对单一 \method{} 平均 score 降低 3.26\%，learned prior 提供小幅但无 score-loss 的质量增益。
 
-为处理 RevKit \texttt{oracle\_synth} 的 phase/Rz gate-set 边界，本文实现了可验证的 phase-parity \anf{} emitter、fixed-polarity \fprm{} search 和 Affine-FPRM phase search。默认 transform-budget 32 的 Affine-FPRM 在 $T/R_z=30$ proxy 下相对 fixed-polarity FPRM 为 81/0/96、平均 score 降低 2.51\%，相对 RevKit 为 177/0/0、平均降低 65.50\%。进一步把 affine transform budget 扩展到 128 后，selected rows 仍为 531/531 up-to-global-phase 验证通过；在同一 $T/R_z=30$ 目标上相对 budget 32 为 43/0/134，平均 synth-score 再降低 0.60\%，并把 total Rz、CNOT 和 depth 分别降低 2.39\%、1.74\% 和 1.93\%。在 held-out $n=6$ split 上，训练于 $n\leq5$ 的 phase candidate policy 仅 exact-score top-512/8192 个候选即可相对 budget-32 获得 17/0/21、平均 $T/R_z=30$ synth-score 降低 2.47\%，且相对 wide-128 仅高 0.01\%；但同预算 random shortlist 也很接近，因此该结果应解读为可学习剪枝的可行性和候选空间密集性的证据，而非 learned policy 已显著支配 random。正确性方面，本稿主图汇总的 $n=20$--$40$ item-level runs 为 5640/5640，width probe 为 1512/1512，phase selected rows 为 531/531；完整 \ttable{} bridge 在 $n=21$--$26$ 上累计 460/460 方法行通过完整 oracle、plan \anf{} 和 emitted-circuit 符号验证。结果表明，资源约束量子布尔函数综合可以被写成可验证的搜索问题；当前边界是 phase/Rz 分支仍为 parity-gadget 级 proxy，RevKit CLI 仍不是 ROS/SAT garbage-management 或硬件 mapping，官方 ROS 全流程尚未复现，硬件 mapping 不在本文范围内。
+为处理 RevKit \texttt{oracle\_synth} 的 phase/Rz gate-set 边界，本文实现了可验证的 phase-parity \anf{} emitter、fixed-polarity \fprm{} search 和 Affine-FPRM phase search。默认 transform-budget 32 的 Affine-FPRM 在 $T/R_z=30$ proxy 下相对 fixed-polarity FPRM 为 81/0/96、平均 score 降低 2.51\%，相对 RevKit 为 177/0/0、平均降低 65.50\%。进一步把 affine transform budget 扩展到 128 后，selected rows 仍为 531/531 up-to-global-phase 验证通过；在同一 $T/R_z=30$ 目标上相对 budget 32 为 43/0/134，平均 synth-score 再降低 0.60\%，并把 total Rz、CNOT 和 depth 分别降低 2.39\%、1.74\% 和 1.93\%。在 held-out $n=6$ split 上，训练于 $n\leq5$ 的 phase candidate policy 仅 exact-score top-512/8192 个候选即可相对 budget-32 获得 17/0/21、平均 $T/R_z=30$ synth-score 降低 2.47\%，且相对 wide-128 仅高 0.01\%；但同预算 random shortlist 也很接近，因此该结果应解读为可学习剪枝的可行性和候选空间密集性的证据，而非 learned policy 已显著支配 random。正确性方面，本稿主图汇总的 $n=20$--$40$ item-level runs 为 5640/5640，width probe 为 1512/1512，phase selected rows 为 531/531；完整 \ttable{} bridge 在 $n=21$--$28$ 上累计 580/580 方法行通过完整 oracle、plan \anf{} 和 emitted-circuit 符号验证。结果表明，资源约束量子布尔函数综合可以被写成可验证的搜索问题；当前边界是 phase/Rz 分支仍为 parity-gadget 级 proxy，RevKit CLI 仍不是 ROS/SAT garbage-management 或硬件 mapping，官方 ROS 全流程尚未复现，硬件 mapping 不在本文范围内。
 \end{abstract}
 
 \noindent\textbf{关键词：}量子 oracle 综合；布尔函数综合；强化学习；蒙特卡洛树搜索；ANF；FPRM；资源约束编译
@@ -272,12 +272,12 @@ RevKit \texttt{oracle\_synth} 在 177 个传统函数上全部返回，但 171/1
 
 \subsection{高维验证与 bridge}
 
-图~\ref{fig:validation} 汇总本稿主图采用的验证覆盖。$n=20$--$40$ item-level runs 为 5640/5640，width probe 为 1512/1512，phase selected rows 为 531/531，完整 \ttable{} bridge 为 460/460。Bridge 的组成是：$n=21,22$ 基础 bridge 120 行，$n=23$ 基础 bridge 40 行，$n=23$ large-policy rerun 60 行，$n=23$ cost-aware rerun 60 行，$n=24$、$n=25$ 和 $n=26$ 各 60 行。所有这些方法行同时通过完整 oracle、plan \anf{} 和 emitted-circuit 符号验证。
+图~\ref{fig:validation} 汇总本稿主图采用的验证覆盖。$n=20$--$40$ item-level runs 为 5640/5640，width probe 为 1512/1512，phase selected rows 为 531/531，完整 \ttable{} bridge 为 580/580。Bridge 的组成是：$n=21,22$ 基础 bridge 120 行，$n=23$ 基础 bridge 40 行，$n=23$ large-policy rerun 60 行，$n=23$ cost-aware rerun 60 行，$n=24$、$n=25$、$n=26$、$n=27$ 和 $n=28$ 各 60 行。所有这些方法行同时通过完整 oracle、plan \anf{} 和 emitted-circuit 符号验证。
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.94\linewidth]{fig5_validation.pdf}
-\caption{\textbf{验证覆盖。} 主图汇总的逻辑层结论均有对应 source-data 行；完整 \ttable{} bridge 当前按源数据为 460/460。Source data: \texttt{fig5\_validation.csv}.}
+\caption{\textbf{验证覆盖。} 主图汇总的逻辑层结论均有对应 source-data 行；完整 \ttable{} bridge 当前按源数据为 580/580。Source data: \texttt{fig5\_validation.csv}.}
 \label{fig:validation}
 \end{figure}
 
@@ -292,7 +292,7 @@ RevKit \texttt{oracle\_synth} 在 177 个传统函数上全部返回，但 171/1
 \midrule
 $n=20$--$40$ item-level symbolic runs & 5640/5640 & 不是完整 \ttable{} 枚举。 \\
 Width probe symbolic runs & 1512/1512 & 证明加宽候选不是主收益来源，但仍是项集级验证。 \\
-$n=21$--$26$ complete bridge & 460/460 & 小样本完整枚举，不能外推为 $n=27$--$40$ 全部完整验证。 \\
+$n=21$--$28$ complete bridge & 580/580 & 小样本完整枚举，不能外推为 $n=29$--$40$ 全部完整验证。 \\
 Phase selected rows & 531/531 & up to global phase 验证，不输出近似旋转门序列。 \\
 \bottomrule
 \end{tabularx}

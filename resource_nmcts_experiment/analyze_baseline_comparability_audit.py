@@ -62,7 +62,7 @@ ROWS = [
     },
     {
         "baseline_family": "High-dimensional symbolic and bridge checks",
-        "task_alignment": "Large term-set instances and n=21--26 bridge functions test the same emitted logical oracle semantics.",
+        "task_alignment": "Large term-set instances and n=21--28 bridge functions test the same emitted logical oracle semantics.",
         "fairness_control": "Symbolic ANF/circuit checks cover all reported high-dimensional rows; bridge slices add complete truth-table checks.",
         "residual_risk": "Complete truth-table enumeration is limited to bridge slices and generated functions.",
         "usable_claim": "The large-scale evidence supports semantic correctness and scaling of the logical search, not exhaustive high-dimensional optimality.",
@@ -89,7 +89,7 @@ def latex_cell(text: str) -> str:
         ("CNOT", r"CNOT"),
         ("Rz", r"\rz{}"),
         ("n<=6", r"$n\leq6$"),
-        ("n=21--26", r"$n=21$--$26$"),
+        ("n=21--28", r"$n=21$--$28$"),
         ("n=21--25", r"$n=21$--$25$"),
         ("(x,y)->(x,y xor f(x))", r"$(x,y)\mapsto(x,y\oplus f(x))$"),
     ]

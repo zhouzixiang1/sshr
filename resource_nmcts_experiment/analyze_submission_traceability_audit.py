@@ -281,6 +281,8 @@ def build_rows() -> list[dict[str, str]]:
                 RESULTS / "raw_truth_bridge_n24_terms.csv",
                 RESULTS / "raw_truth_bridge_n25_terms.csv",
                 RESULTS / "raw_truth_bridge_n26_terms.csv",
+                RESULTS / "raw_truth_bridge_n27_terms.csv",
+                RESULTS / "raw_truth_bridge_n28_terms.csv",
                 FIGURES / "fig5_validation.pdf",
             ],
             "Results, high-dimensional verification",

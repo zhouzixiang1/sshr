@@ -200,7 +200,7 @@ L -3.5 0
       </g>
      </g>
      <g id="text_12">
-      <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: end" x="80.334" y="116.78275" transform="rotate(-0 80.334 116.78275)">truth bridge n=21-26</text>
+      <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: end" x="80.334" y="116.78275" transform="rotate(-0 80.334 116.78275)">truth bridge n=21-28</text>
      </g>
     </g>
     <g id="ytick_4">
@@ -242,8 +242,8 @@ z
    </g>
    <g id="patch_5">
     <path d="M 87.334 103.317124
-L 109.171408 103.317124
-L 109.171408 125.217126
+L 114.868123 103.317124
+L 114.868123 125.217126
 L 87.334 125.217126
 z
 " clip-path="url(#p6013e222c1)" style="fill: #3b8c5a"/>
@@ -281,7 +281,7 @@ L 466.713857 204.021813
     <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="159.830395" y="80.75415" transform="rotate(-0 159.830395 80.75415)">1512/1512</text>
    </g>
    <g id="text_17">
-    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="109.389782" y="116.076734" transform="rotate(-0 109.389782 116.076734)">460/460</text>
+    <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="115.143464" y="116.076734" transform="rotate(-0 115.143464 116.076734)">580/580</text>
    </g>
    <g id="text_18">
     <text style="font-size: 7px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="112.794044" y="151.399319" transform="rotate(-0 112.794044 151.399319)">531/531</text>
