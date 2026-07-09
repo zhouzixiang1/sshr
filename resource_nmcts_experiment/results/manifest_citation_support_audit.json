@@ -1,5 +1,5 @@
 {
-  "bib_key_count": 18,
+  "bib_key_count": 19,
   "bib_keys": [
     "brayton2010abc",
     "cirkit",
@@ -14,13 +14,14 @@
     "riu2025rlzx",
     "soeken2012revkit",
     "soeken2018epfl",
+    "stgBenchmark",
     "tsaras2024shortcircuit",
     "wille2009bdd",
     "yu2025backend",
     "zheng2025sshr",
     "zhou2022qctmcts"
   ],
-  "cited_key_count": 18,
+  "cited_key_count": 19,
   "cited_keys": [
     "brayton2010abc",
     "cirkit",
@@ -35,6 +36,7 @@
     "riu2025rlzx",
     "soeken2012revkit",
     "soeken2018epfl",
+    "stgBenchmark",
     "tsaras2024shortcircuit",
     "wille2009bdd",
     "yu2025backend",

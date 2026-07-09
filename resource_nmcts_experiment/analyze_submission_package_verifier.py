@@ -9,8 +9,10 @@ comparison-target validity,
 threats-to-validity coverage,
 novelty/comparison scorecard coverage,
 public handoff freshness,
+published STG counterpoint,
 search-control baseline coverage,
 learned-control audit coverage,
+neural/MCTS claim-calibration coverage,
 frontier random-depth control coverage,
 ultra-scale n=48--64 stress coverage,
 ultra-scale n=48--64 resource-profile coverage,
@@ -74,6 +76,8 @@ NOVELTY_SCORECARD_MANIFEST = RESULTS / "manifest_novelty_comparison_scorecard.js
 NOVELTY_SCORECARD_TABLE = THIS_DIR / "paper_latex" / "tables" / "novelty_comparison_scorecard.tex"
 PUBLIC_HANDOFF_MANIFEST = RESULTS / "manifest_public_handoff_freshness_audit.json"
 ROS_GAP_MANIFEST = RESULTS / "manifest_ros_reproduction_gap_audit.json"
+STG_BENCHMARK_MANIFEST = RESULTS / "manifest_stg_published_benchmark.json"
+STG_BENCHMARK_TABLE = THIS_DIR / "paper_latex" / "tables" / "stg_published_benchmark.tex"
 SEARCH_BUDGET_MANIFEST = RESULTS / "manifest_search_budget_contract.json"
 SEARCH_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "search_budget_contract.tex"
 SCHEDULE_PROXY_MANIFEST = RESULTS / "manifest_schedule_proxy_audit.json"
@@ -85,6 +89,8 @@ ULTRA_SCALE64_PROFILE_TABLE = THIS_DIR / "paper_latex" / "tables" / "screen_scal
 SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
 LEARNED_CONTROL_MANIFEST = RESULTS / "manifest_learned_control_audit.json"
 LEARNED_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "learned_control_audit.tex"
+NEURAL_MCTS_CLAIM_MANIFEST = RESULTS / "manifest_neural_mcts_claim_calibration.json"
+NEURAL_MCTS_CLAIM_TABLE = THIS_DIR / "paper_latex" / "tables" / "neural_mcts_claim_calibration.tex"
 BITFLIP_RANDOM_PRIOR_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control.json"
 BITFLIP_RANDOM_PRIOR_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_random_prior_control.tex"
 FRONTIER_RANDOM_DEPTH_MANIFEST = RESULTS / "manifest_frontier_random_depth_control.json"
@@ -405,6 +411,32 @@ def verify_ros_gap() -> dict[str, str]:
     )
 
 
+def verify_stg_benchmark() -> dict[str, str]:
+    manifest = read_json(STG_BENCHMARK_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    benchmark_rows = manifest.get("benchmark_rows", "missing") if manifest else "missing"
+    raw_rows = manifest.get("raw_rows", "missing") if manifest else "missing"
+    usable_rows = manifest.get("usable_rows", "missing") if manifest else "missing"
+    table_exists = STG_BENCHMARK_TABLE.exists()
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and benchmark_rows == 54
+        and raw_rows == 270
+        and usable_rows == 270
+        and table_exists
+        else "needs revision"
+    )
+    return row(
+        "Published STG counterpoint",
+        status,
+        f"benchmark_rows={benchmark_rows}; raw_rows={raw_rows}; usable_rows={usable_rows}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
+        "Run analyze_stg_published_benchmark.py and restore the STG counterpoint raw rows, manifest, and manuscript table.",
+    )
+
+
 def verify_schedule_proxy() -> dict[str, str]:
     manifest = read_json(SCHEDULE_PROXY_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -531,6 +563,23 @@ def verify_learned_control() -> dict[str, str]:
         status,
         f"rows={rows}; promoted_count={promoted}; limited_count={limited}; needs_revision_count={revisions}; status_counts={counts}; claim_class_counts={class_counts}; table_exists={table_exists}.",
         "Run analyze_learned_control_audit.py and restore promoted/bounded/limited learned-control classifications and the manuscript table.",
+    )
+
+
+def verify_neural_mcts_claim_calibration() -> dict[str, str]:
+    manifest = read_json(NEURAL_MCTS_CLAIM_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    anchors = manifest.get("claim_anchors", []) if manifest else []
+    table_exists = NEURAL_MCTS_CLAIM_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = "pass" if manifest and revisions == 0 and rows == 7 and table_exists and anchor else "needs revision"
+    return row(
+        "Neural/MCTS claim calibration",
+        status,
+        f"rows={rows}; claim_anchors={anchors}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_neural_mcts_claim_calibration.py and restore title-level claim anchors, generated table, or manuscript anchor.",
     )
 
 
@@ -1090,12 +1139,14 @@ def build_rows() -> list[dict[str, str]]:
             verify_novelty_scorecard(),
             verify_public_handoff_freshness(),
             verify_ros_gap(),
+            verify_stg_benchmark(),
             verify_search_budget_contract(),
             verify_schedule_proxy(),
             verify_ultra_scale64(),
             verify_ultra_scale64_resource_profile(),
             verify_search_control(),
             verify_learned_control(),
+            verify_neural_mcts_claim_calibration(),
             verify_bitflip_random_prior(),
             verify_frontier_random_depth(),
             verify_editorial_screening(),

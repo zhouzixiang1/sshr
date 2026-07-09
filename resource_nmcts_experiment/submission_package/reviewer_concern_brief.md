@@ -62,9 +62,29 @@ Manuscript anchors:
 - Search contribution decomposition
 - Search-control baseline audit
 - Learned-control audit
+- Neural/MCTS claim-calibration audit
 - Counterpoint and claim-boundary audit
 - Sparse depth-frontier analysis
 - Discussion
+
+## Can the title say neural MCTS?
+
+Yes, but only in the calibrated sense used by the manuscript.  The neural/MCTS
+claim-calibration audit ties the title-level terms to evidence gates: MCTS and
+Pareto search are measured against no-MCTS portfolios; learned policies and
+gates rank, prune, or allocate bounded search budgets; random-prior and
+random-depth controls isolate the learned ranking/budget-allocation signal; and
+claim-scope/threats audits keep the result at the logical layer.  The audit
+marks these as excluded and not supported claims: a deep-learning-only
+explanation, neural semantic certification, hardware mapping, or global
+optimality.
+
+Manuscript anchors:
+- Neural/MCTS claim-calibration audit
+- Search-control baseline audit
+- Learned-control audit
+- Threats-to-validity audit
+- Claim-scope lint
 
 ## Does the large-scale result rely only on symbolic checks?
 

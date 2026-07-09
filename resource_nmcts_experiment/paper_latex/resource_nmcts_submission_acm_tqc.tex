@@ -652,6 +652,28 @@ ROS SAT garbage-management flow has been reproduced.
 \input{tables/ros_lut_line_sensitivity}
 \end{table}
 
+The public STG benchmark suite is a different, deliberately stronger
+small-function counterpoint: it reports precomputed circuits for spectral
+representatives of 4- and 5-input Boolean functions, optimized separately for
+T-count, T-depth, and qubit count~\cite{stgBenchmark}.  We therefore do not
+present it as a reproduced ROS flow or as a scalable compiler baseline.
+Table~\ref{tab:stg-published} instead records the boundary.  On these 54
+truth-table representatives, the published STG optima remain much lower in
+T-count and line count than the current generic search, while
+Pareto-\method{} still reduces the paper's own direct and AND-direct baselines
+on the same functions.  This negative counterpoint keeps the small-function
+claim separate from the large-scale logical-search claim.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Published STG benchmark counterpoint on 4- and 5-input
+spectral-representative truth tables.  The STG rows are public precomputed
+optimum-library results, not a reproduced ROS SAT garbage-management flow.}
+\label{tab:stg-published}
+\input{tables/stg_published_benchmark}
+\end{table}
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.94\linewidth]{fig3_baseline_comparisons.pdf}
@@ -1003,6 +1025,27 @@ quality/runtime advantage to carry the main claim.
 to bound the role of AI rather than promoted as headline improvements.}
 \label{tab:learned-control-audit}
 \input{tables/learned_control_audit}
+\end{table}
+
+Table~\ref{tab:neural-mcts-claim-calibration} then calibrates the
+title-level \emph{neural \mcts{}} framing against the evidence above.  Its role
+is not to add another performance number, but to state which interpretation is
+licensed by the ablations and which stronger reading is excluded.  In
+particular, the method can be described as a neural \mcts{} framework because
+learned policies rank, gate, or allocate bounded search budgets inside a
+verified algebraic synthesis workflow; it should not be described as a
+deep-learning-only, hardware-mapped, or globally optimal compiler.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Neural/\mcts{} claim-calibration audit.  Each row connects a
+title-level or abstract-level phrase to the generated evidence gate that
+supports it and to the stronger claim that remains outside the paper.}
+\label{tab:neural-mcts-claim-calibration}
+\input{tables/neural_mcts_claim_calibration}
 \end{table}
 
 Figure~\ref{fig:learned-control-summary} visualizes the same conservative

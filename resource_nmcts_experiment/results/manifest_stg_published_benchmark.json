@@ -1,0 +1,27 @@
+{
+  "script": "analyze_stg_published_benchmark.py",
+  "stg_source_url": "https://github.com/gmeuli/stg-benchmark",
+  "benchmark_rows": 54,
+  "raw_rows": 270,
+  "usable_rows": 270,
+  "methods": [
+    "direct_anf",
+    "and_direct_anf",
+    "and_resource_no_mcts",
+    "and_resource_nmcts",
+    "and_pareto_resource_nmcts"
+  ],
+  "summary_rows": 22,
+  "needs_revision_count": 0,
+  "status_counts": {
+    "pass": 22
+  },
+  "outputs": {
+    "raw": "results/raw_stg_published_benchmark.csv",
+    "summary": "results/summary_stg_published_benchmark.csv",
+    "analysis": "results/analysis_stg_published_benchmark.md",
+    "table": "paper_latex/tables/stg_published_benchmark.tex",
+    "manifest": "results/manifest_stg_published_benchmark.json"
+  },
+  "boundary": "Published n=4/5 STG optimum-library counterpoint; not full ROS SAT garbage management and not hardware mapping."
+}

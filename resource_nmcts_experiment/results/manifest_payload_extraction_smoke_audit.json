@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=997; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1008; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -21,13 +21,13 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_comparison_target_validity_audit.json; needs_revision_count=0; rows=7; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_comparison_target_validity_audit.json; needs_revision_count=0; rows=8; stderr=none",
       "item": "Comparison target validity audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_comparison_answer_scorecard.json; needs_revision_count=0; rows=7; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_comparison_answer_scorecard.json; needs_revision_count=0; rows=8; stderr=none",
       "item": "Comparison answer scorecard",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -45,8 +45,14 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_ros_reproduction_gap_audit.json; needs_revision_count=0; rows=8; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_ros_reproduction_gap_audit.json; needs_revision_count=0; rows=9; stderr=none",
       "item": "ROS reproduction gap audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_stg_published_benchmark.json; needs_revision_count=0; raw_rows=270; stderr=none",
+      "item": "Published STG counterpoint",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -83,6 +89,12 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_learned_control_audit.json; needs_revision_count=0; rows=8; stderr=none",
       "item": "Learned-control audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_neural_mcts_claim_calibration.json; needs_revision_count=0; rows=7; stderr=none",
+      "item": "Neural/MCTS claim calibration",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -183,7 +195,7 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=24; rows=24; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=25; rows=25; stderr=none",
       "item": "Artifact rerun registry",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -235,6 +247,13 @@
     },
     {
       "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_stg_published_benchmark.json",
+      "minimum_rows_key": "raw_rows",
+      "name": "Published STG counterpoint",
+      "script": "analyze_stg_published_benchmark.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
       "manifest": "results/manifest_schedule_proxy_audit.json",
       "minimum_rows_key": "rows",
       "name": "Schedule-proxy tradeoff audit",
@@ -274,6 +293,13 @@
       "minimum_rows_key": "rows",
       "name": "Learned-control audit",
       "script": "analyze_learned_control_audit.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_neural_mcts_claim_calibration.json",
+      "minimum_rows_key": "rows",
+      "name": "Neural/MCTS claim calibration",
+      "script": "analyze_neural_mcts_claim_calibration.py"
     },
     {
       "expected_key": "needs_revision_count",
@@ -396,6 +422,6 @@
     }
   ],
   "status_counts": {
-    "pass": 30
+    "pass": 32
   }
 }

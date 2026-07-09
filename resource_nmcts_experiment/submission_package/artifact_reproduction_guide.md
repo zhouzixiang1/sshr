@@ -43,8 +43,8 @@ From `resource_nmcts_experiment/`, run:
 This command regenerates:
 
 - contribution, method, related-work, baseline, comparison, statistical,
-  multi-resource, learned-control, scaling, robustness, and reproducibility
-  analyses;
+  multi-resource, learned-control, neural/MCTS claim-calibration, scaling,
+  robustness, and reproducibility analyses;
 - paper tables under `paper_latex/tables/`;
 - figures and figure source data under `paper_latex/figures/submission_v36/`;
 - the English submission PDF and optional anonymous-review PDF;
@@ -71,6 +71,8 @@ After the quick rebuild, the current package should report:
   `results/analysis_comparison_answer_scorecard.md`
 - threats-to-validity audit state in
   `results/analysis_threats_to_validity_audit.md`
+- neural/MCTS claim-calibration state in
+  `results/analysis_neural_mcts_claim_calibration.md`
 - ROS reproduction-boundary state in
   `results/analysis_ros_reproduction_gap_audit.md`
 - editorial screening state in

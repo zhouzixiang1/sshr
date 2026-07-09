@@ -136,15 +136,15 @@ rg -n "Overfull|Underfull|undefined|Undefined|Warning|Error|LaTeX Warning|Rerun"
 Expected current state:
 
 - Machine snapshot tokens checked by `analyze_public_handoff_freshness_audit.py`:
-  PDF pages=38/38; readiness=61 pass + 1 needs author input;
-  payload_files=997; artifact_registry=24 families / 146 raw CSV / 60036 raw rows;
-  source_privacy=0 strict leaks / 53 provenance files / 954 payload text files;
-  comparison_validity=7/7 pass; novelty_scorecard=6/6 pass;
+  PDF pages=39/39; readiness=63 pass + 1 needs author input;
+  payload_files=1008; artifact_registry=25 families / 147 raw CSV / 60306 raw rows;
+  source_privacy=0 strict leaks / 53 provenance files / 965 payload text files;
+  comparison_validity=8/8 pass; novelty_scorecard=6/6 pass;
   goal_gate=author/venue metadata remains open.
 - Archive manifest: all payload groups complete.
 - Payload archive: tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.
-- Payload round-trip audit: archive contents match manifest paths and hashes, required files, reviewer entrypoints, comparison-protocol evidence files, comparison-target validity files, comparison-answer scorecard files, novelty/comparison scorecard files, ROS reproduction-boundary evidence files, learned-control evidence files, editorial-screening evidence files, support-packet evidence files, citation-support evidence files, author-input closure evidence files, source/path privacy audit code, and headline-numeric evidence files are present, private files are absent, and tar metadata is deterministic.
-- Payload extraction smoke audit: the upload tarball extracts safely and runs comparison protocol, comparison-target validity, comparison-answer scorecard, novelty/comparison scorecard, threats-to-validity, learned-control, ROS reproduction gap, editorial screening, support-packet, citation support, source/path privacy, author-input closure, headline numeric consistency, claim-scope lint, and artifact-rerun registry checks from the extracted tree.
+- Payload round-trip audit: archive contents match manifest paths and hashes, required files, reviewer entrypoints, comparison-protocol evidence files, comparison-target validity files, comparison-answer scorecard files, novelty/comparison scorecard files, ROS reproduction-boundary evidence files, learned-control evidence files, neural/MCTS claim-calibration files, editorial-screening evidence files, support-packet evidence files, citation-support evidence files, author-input closure evidence files, source/path privacy audit code, and headline-numeric evidence files are present, private files are absent, and tar metadata is deterministic.
+- Payload extraction smoke audit: the upload tarball extracts safely and runs comparison protocol, comparison-target validity, comparison-answer scorecard, novelty/comparison scorecard, threats-to-validity, learned-control, neural/MCTS claim calibration, ROS reproduction gap, editorial screening, support-packet, citation support, source/path privacy, author-input closure, headline numeric consistency, claim-scope lint, and artifact-rerun registry checks from the extracted tree.
 - Payload verifier smoke audit: the upload tarball extracts safely and `verify_submission_package.sh` passes from inside the extracted payload tree.
 - Payload LaTeX compile audit: the upload tarball extracts safely and rebuilds the author, anonymous, and ACM/TQC PDFs from the extracted LaTeX source tree.
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.

@@ -44,9 +44,9 @@ FAMILIES = (
     ),
     CitationFamily(
         item="ROS and back-end-aware oracle synthesis",
-        required_keys=("meuli2020ros", "yu2025backend"),
+        required_keys=("meuli2020ros", "stgBenchmark", "yu2025backend"),
         anchor="LUT/ROS-style oracle synthesis",
-        role="resource-aware LUT/oracle synthesis boundary",
+        role="resource-aware LUT/oracle synthesis and published small-function counterpoint boundary",
     ),
     CitationFamily(
         item="XAG and multiplicative complexity",

@@ -167,6 +167,16 @@ def build_rows() -> list[dict[str, str]]:
             "sources": "summary_comparison_evidence_matrix.csv; summary_paired_statistical_evidence.csv",
         },
         {
+            "reviewer_question": "Does it beat published tiny-function optima?",
+            "comparison_target": "Published STG n=4/5 optimum table",
+            "role": "small-function optimum-library counterpoint",
+            "verified_evidence": verified("Published STG optimum-library counterpoint"),
+            "headline_answer": evidence_block("Published STG optimum-library counterpoint").get("main_result", "missing"),
+            "usable_claim": "The method improves its own direct logical baselines on the same STG truth-table slice, while public STG optima remain stronger on tiny precomputed representatives.",
+            "excluded_claim": "No claim of beating published STG T-count, T-depth, or qubit optima on n=4/5 spectral representatives.",
+            "sources": "summary_comparison_evidence_matrix.csv; summary_stg_published_benchmark.csv",
+        },
+        {
             "reviewer_question": "What does RevKit test?",
             "comparison_target": "Legacy RevKit exact oracle and RevKit phase/Rz branch",
             "role": "reversible and phase proxy counterpoint",

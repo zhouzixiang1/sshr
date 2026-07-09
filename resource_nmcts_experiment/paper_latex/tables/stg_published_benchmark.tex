@@ -1,0 +1,11 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}X}
+\toprule
+Target & Baseline & T-count W/L/T & Score or line W/L/T & Boundary \\
+\midrule
+\method{} & STG T-count optimum & 0/40/14, +88.58\% & 0/50/4, +22.17\% & published optimum-library counterpoint \\
+Pareto-\method{} & STG T-count / qubit optima & 0/40/14, +84.26\% & 0/50/4, +22.74\% & published optimum-library counterpoint \\
+Pareto-\method{} & Direct ANF & 50/0/4, -63.62\% & 50/4/0, -58.10\% & same truth-table slice, same cost model \\
+Pareto-\method{} & AND-direct ANF & 42/0/12, -36.45\% & 42/0/12, -33.63\% & same truth-table slice, same cost model \\
+Pareto-\method{} & No-MCTS portfolio & 12/0/42, -3.25\% & 19/0/35, -3.01\% & same truth-table slice, same cost model \\
+\bottomrule
+\end{tabularx}

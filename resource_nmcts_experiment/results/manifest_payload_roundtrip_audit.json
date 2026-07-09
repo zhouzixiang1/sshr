@@ -78,6 +78,13 @@
     "results/summary_learned_control_audit.csv"
   ],
   "needs_revision_count": 0,
+  "neural_mcts_claim_calibration_paths": [
+    "analyze_neural_mcts_claim_calibration.py",
+    "paper_latex/tables/neural_mcts_claim_calibration.tex",
+    "results/analysis_neural_mcts_claim_calibration.md",
+    "results/manifest_neural_mcts_claim_calibration.json",
+    "results/summary_neural_mcts_claim_calibration.csv"
+  ],
   "outputs": {
     "analysis": "results/analysis_payload_roundtrip_audit.md",
     "manifest": "results/manifest_payload_roundtrip_audit.json",
@@ -131,19 +138,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=997; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1008; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=997; archive_files=997; missing=none; extra=none.",
+      "evidence": "manifest_files=1008; archive_files=1008; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=997; mismatches=none.",
+      "evidence": "checked=1008; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -203,6 +210,12 @@
       "status": "pass"
     },
     {
+      "evidence": "stg_benchmark_files=6; missing=none.",
+      "item": "Payload published STG counterpoint",
+      "next_action": "Ensure the uploadable archive includes the STG counterpoint script, raw rows, generated evidence, manifest, and manuscript table.",
+      "status": "pass"
+    },
+    {
       "evidence": "schedule_proxy_files=8; missing=none.",
       "item": "Payload schedule-proxy evidence",
       "next_action": "Ensure the uploadable archive includes the schedule metrics scripts, compact audit outputs, and manuscript schedule-proxy table.",
@@ -224,6 +237,12 @@
       "evidence": "learned_control_files=5; missing=none.",
       "item": "Payload learned-control evidence",
       "next_action": "Ensure the uploadable archive includes the learned-control audit script, generated evidence, manifest, and manuscript table.",
+      "status": "pass"
+    },
+    {
+      "evidence": "neural_mcts_claim_calibration_files=5; missing=none.",
+      "item": "Payload neural/MCTS claim calibration",
+      "next_action": "Ensure the uploadable archive includes the neural/MCTS claim-calibration script, generated evidence, manifest, and manuscript table.",
       "status": "pass"
     },
     {
@@ -311,7 +330,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=997; metadata_issues=none.",
+      "evidence": "members_checked=1008; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -336,8 +355,16 @@
     "results/summary_search_budget_contract.csv"
   ],
   "status_counts": {
-    "pass": 31
+    "pass": 33
   },
+  "stg_benchmark_paths": [
+    "analyze_stg_published_benchmark.py",
+    "paper_latex/tables/stg_published_benchmark.tex",
+    "results/analysis_stg_published_benchmark.md",
+    "results/manifest_stg_published_benchmark.json",
+    "results/raw_stg_published_benchmark.csv",
+    "results/summary_stg_published_benchmark.csv"
+  ],
   "support_packet_paths": [
     "analyze_submission_support_packet_audit.py",
     "paper_latex/tables/submission_support_packet_audit.tex",

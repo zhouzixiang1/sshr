@@ -22,11 +22,11 @@ ROWS = [
     },
     {
         "line": "LUT/ROS-style oracle synthesis",
-        "representative_plain": "ROS and back-end-aware oracle synthesis",
-        "representative_latex": r"ROS and back-end-aware oracle synthesis~\cite{meuli2020ros,yu2025backend}",
-        "main_lever": "Resource-aware LUT mapping and downstream implementation-cost estimates.",
-        "gap": "Full ROS garbage-management and hardware/back-end mapping are outside the logical-layer claim.",
-        "paper_use": "Reproduced through a verified ROS-style LUT proxy and line-aware reselection stress tests.",
+        "representative_plain": "ROS, STG benchmarks, and back-end-aware oracle synthesis",
+        "representative_latex": r"ROS, STG benchmarks, and back-end-aware oracle synthesis~\cite{meuli2020ros,stgBenchmark,yu2025backend}",
+        "main_lever": "Resource-aware LUT mapping, small-function optimum libraries, and downstream implementation-cost estimates.",
+        "gap": "Full ROS garbage-management and hardware/back-end mapping are outside the logical-layer claim, and STG is a small-function optimum counterpoint.",
+        "paper_use": "Used through a verified ROS-style LUT proxy, line-aware reselection stress tests, and a published STG counterpoint.",
     },
     {
         "line": "XAG and multiplicative complexity",

@@ -4,14 +4,14 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 
 ## Status counts
 
-- pass: 159
+- pass: 165
 
 ## Dependency types
 
 - bibliography: 3
 - figure: 21
 - main_source: 3
-- tex_input: 132
+- tex_input: 138
 
 ## Missing dependencies
 
@@ -39,6 +39,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/submission_traceability_audit` | `paper_latex/tables/submission_traceability_audit.tex` | True | True | pass |
 | author | tex_input | `tables/submission_archive_manifest` | `paper_latex/tables/submission_archive_manifest.tex` | True | True | pass |
 | author | tex_input | `tables/ros_lut_line_sensitivity` | `paper_latex/tables/ros_lut_line_sensitivity.tex` | True | True | pass |
+| author | tex_input | `tables/stg_published_benchmark` | `paper_latex/tables/stg_published_benchmark.tex` | True | True | pass |
 | author | tex_input | `tables/cirkit_aig_probe` | `paper_latex/tables/cirkit_aig_probe.tex` | True | True | pass |
 | author | tex_input | `tables/cirkit_aig_highdim_probe` | `paper_latex/tables/cirkit_aig_highdim_probe.tex` | True | True | pass |
 | author | tex_input | `tables/revkit_cli_multiflow_traditional` | `paper_latex/tables/revkit_cli_multiflow_traditional.tex` | True | True | pass |
@@ -57,6 +58,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/stage_gated_frontier` | `paper_latex/tables/stage_gated_frontier.tex` | True | True | pass |
 | author | tex_input | `tables/schedule_proxy_audit` | `paper_latex/tables/schedule_proxy_audit.tex` | True | True | pass |
 | author | tex_input | `tables/learned_control_audit` | `paper_latex/tables/learned_control_audit.tex` | True | True | pass |
+| author | tex_input | `tables/neural_mcts_claim_calibration` | `paper_latex/tables/neural_mcts_claim_calibration.tex` | True | True | pass |
 | author | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
 | author | tex_input | `tables/phase_parity_affine` | `paper_latex/tables/phase_parity_affine.tex` | True | True | pass |
 | author | tex_input | `tables/phase_affine_budget_wide128_vs_32` | `paper_latex/tables/phase_affine_budget_wide128_vs_32.tex` | True | True | pass |
@@ -92,6 +94,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/submission_traceability_audit` | `paper_latex/tables/submission_traceability_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/submission_archive_manifest` | `paper_latex/tables/submission_archive_manifest.tex` | True | True | pass |
 | anonymous | tex_input | `tables/ros_lut_line_sensitivity` | `paper_latex/tables/ros_lut_line_sensitivity.tex` | True | True | pass |
+| anonymous | tex_input | `tables/stg_published_benchmark` | `paper_latex/tables/stg_published_benchmark.tex` | True | True | pass |
 | anonymous | tex_input | `tables/cirkit_aig_probe` | `paper_latex/tables/cirkit_aig_probe.tex` | True | True | pass |
 | anonymous | tex_input | `tables/cirkit_aig_highdim_probe` | `paper_latex/tables/cirkit_aig_highdim_probe.tex` | True | True | pass |
 | anonymous | tex_input | `tables/revkit_cli_multiflow_traditional` | `paper_latex/tables/revkit_cli_multiflow_traditional.tex` | True | True | pass |
@@ -110,6 +113,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/stage_gated_frontier` | `paper_latex/tables/stage_gated_frontier.tex` | True | True | pass |
 | anonymous | tex_input | `tables/schedule_proxy_audit` | `paper_latex/tables/schedule_proxy_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/learned_control_audit` | `paper_latex/tables/learned_control_audit.tex` | True | True | pass |
+| anonymous | tex_input | `tables/neural_mcts_claim_calibration` | `paper_latex/tables/neural_mcts_claim_calibration.tex` | True | True | pass |
 | anonymous | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
 | anonymous | tex_input | `tables/phase_parity_affine` | `paper_latex/tables/phase_parity_affine.tex` | True | True | pass |
 | anonymous | tex_input | `tables/phase_affine_budget_wide128_vs_32` | `paper_latex/tables/phase_affine_budget_wide128_vs_32.tex` | True | True | pass |
@@ -145,6 +149,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/submission_traceability_audit` | `paper_latex/tables/submission_traceability_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/submission_archive_manifest` | `paper_latex/tables/submission_archive_manifest.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/ros_lut_line_sensitivity` | `paper_latex/tables/ros_lut_line_sensitivity.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/stg_published_benchmark` | `paper_latex/tables/stg_published_benchmark.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/cirkit_aig_probe` | `paper_latex/tables/cirkit_aig_probe.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/cirkit_aig_highdim_probe` | `paper_latex/tables/cirkit_aig_highdim_probe.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/revkit_cli_multiflow_traditional` | `paper_latex/tables/revkit_cli_multiflow_traditional.tex` | True | True | pass |
@@ -163,6 +168,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/stage_gated_frontier` | `paper_latex/tables/stage_gated_frontier.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/schedule_proxy_audit` | `paper_latex/tables/schedule_proxy_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/learned_control_audit` | `paper_latex/tables/learned_control_audit.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/neural_mcts_claim_calibration` | `paper_latex/tables/neural_mcts_claim_calibration.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/phase_parity_affine` | `paper_latex/tables/phase_parity_affine.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/phase_affine_budget_wide128_vs_32` | `paper_latex/tables/phase_affine_budget_wide128_vs_32.tex` | True | True | pass |

@@ -99,6 +99,14 @@ ROS_GAP_PATHS = {
     "results/manifest_ros_reproduction_gap_audit.json",
     "paper_latex/tables/ros_reproduction_gap_audit.tex",
 }
+STG_BENCHMARK_PATHS = {
+    "analyze_stg_published_benchmark.py",
+    "results/raw_stg_published_benchmark.csv",
+    "results/analysis_stg_published_benchmark.md",
+    "results/summary_stg_published_benchmark.csv",
+    "results/manifest_stg_published_benchmark.json",
+    "paper_latex/tables/stg_published_benchmark.tex",
+}
 SCHEDULE_PROXY_PATHS = {
     "analyze_schedule_metrics.py",
     "analyze_schedule_proxy_audit.py",
@@ -140,6 +148,13 @@ LEARNED_CONTROL_PATHS = {
     "results/summary_learned_control_audit.csv",
     "results/manifest_learned_control_audit.json",
     "paper_latex/tables/learned_control_audit.tex",
+}
+NEURAL_MCTS_CLAIM_CALIBRATION_PATHS = {
+    "analyze_neural_mcts_claim_calibration.py",
+    "results/analysis_neural_mcts_claim_calibration.md",
+    "results/summary_neural_mcts_claim_calibration.csv",
+    "results/manifest_neural_mcts_claim_calibration.json",
+    "paper_latex/tables/neural_mcts_claim_calibration.tex",
 }
 BITFLIP_RANDOM_PRIOR_PATHS = {
     "run_bitflip_random_prior_control.py",
@@ -419,6 +434,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    stg_missing = sorted(STG_BENCHMARK_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload published STG counterpoint",
+            "pass" if not stg_missing else "needs revision",
+            f"stg_benchmark_files={len(STG_BENCHMARK_PATHS)}; missing={stg_missing or 'none'}.",
+            "Ensure the uploadable archive includes the STG counterpoint script, raw rows, generated evidence, manifest, and manuscript table.",
+        )
+    )
+
     schedule_proxy_missing = sorted(SCHEDULE_PROXY_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -456,6 +481,16 @@ def build_rows() -> list[dict[str, str]]:
             "pass" if not learned_control_missing else "needs revision",
             f"learned_control_files={len(LEARNED_CONTROL_PATHS)}; missing={learned_control_missing or 'none'}.",
             "Ensure the uploadable archive includes the learned-control audit script, generated evidence, manifest, and manuscript table.",
+        )
+    )
+
+    neural_mcts_missing = sorted(NEURAL_MCTS_CLAIM_CALIBRATION_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload neural/MCTS claim calibration",
+            "pass" if not neural_mcts_missing else "needs revision",
+            f"neural_mcts_claim_calibration_files={len(NEURAL_MCTS_CLAIM_CALIBRATION_PATHS)}; missing={neural_mcts_missing or 'none'}.",
+            "Ensure the uploadable archive includes the neural/MCTS claim-calibration script, generated evidence, manifest, and manuscript table.",
         )
     )
 
@@ -675,9 +710,11 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "comparison_answer_scorecard_paths": sorted(COMPARISON_ANSWER_SCORECARD_PATHS),
         "threats_validity_paths": sorted(THREATS_VALIDITY_PATHS),
         "ros_gap_paths": sorted(ROS_GAP_PATHS),
+        "stg_benchmark_paths": sorted(STG_BENCHMARK_PATHS),
         "schedule_proxy_paths": sorted(SCHEDULE_PROXY_PATHS),
         "search_budget_paths": sorted(SEARCH_BUDGET_PATHS),
         "learned_control_paths": sorted(LEARNED_CONTROL_PATHS),
+        "neural_mcts_claim_calibration_paths": sorted(NEURAL_MCTS_CLAIM_CALIBRATION_PATHS),
         "bitflip_random_prior_paths": sorted(BITFLIP_RANDOM_PRIOR_PATHS),
         "frontier_random_depth_paths": sorted(FRONTIER_RANDOM_DEPTH_PATHS),
         "headline_numeric_paths": sorted(HEADLINE_NUMERIC_PATHS),

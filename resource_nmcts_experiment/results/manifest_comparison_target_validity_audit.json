@@ -8,12 +8,13 @@
     "non-dominance boundary",
     "phase proxy",
     "primary benchmark",
-    "scalability verification"
+    "scalability verification",
+    "small-function optimum counterpoint"
   ],
-  "rows": 7,
+  "rows": 8,
   "script": "analyze_comparison_target_validity_audit.py",
   "status_counts": {
-    "pass": 7
+    "pass": 8
   },
   "table": "paper_latex/tables/comparison_target_validity_audit.tex",
   "table_anchor_present": true

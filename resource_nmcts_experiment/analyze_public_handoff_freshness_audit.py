@@ -139,6 +139,8 @@ def current_snapshot() -> dict[str, object]:
 
     comparison = read_json(COMPARISON_VALIDITY)
     novelty = read_json(NOVELTY_SCORECARD)
+    comparison_counts = comparison.get("status_counts", {}) if comparison else {}
+    novelty_counts = novelty.get("status_counts", {}) if novelty else {}
 
     return {
         "author_pages": page_by_kind.get("author", -1),
@@ -152,8 +154,10 @@ def current_snapshot() -> dict[str, object]:
         "strict_local_path_leaks": strict_leaks,
         "payload_text_files": payload_text_files,
         "provenance_local_path_files": provenance_local_files,
+        "comparison_pass": int(comparison_counts.get("pass", -1)) if comparison_counts else -1,
         "comparison_rows": int(comparison.get("rows", -1)) if comparison else -1,
         "comparison_needs_revision": int(comparison.get("needs_revision_count", -1)) if comparison else -1,
+        "novelty_pass": int(novelty_counts.get("pass", -1)) if novelty_counts else -1,
         "novelty_rows": int(novelty.get("rows", -1)) if novelty else -1,
         "novelty_needs_revision": int(novelty.get("needs_revision_count", -1)) if novelty else -1,
     }
@@ -177,8 +181,8 @@ def snapshot_tokens(snapshot: dict[str, object]) -> tuple[str, ...]:
             f"{snapshot['provenance_local_path_files']} provenance files / "
             f"{snapshot['payload_text_files']} payload text files"
         ),
-        f"comparison_validity={snapshot['comparison_rows']}/7 pass",
-        f"novelty_scorecard={snapshot['novelty_rows']}/6 pass",
+        f"comparison_validity={snapshot['comparison_pass']}/{snapshot['comparison_rows']} pass",
+        f"novelty_scorecard={snapshot['novelty_pass']}/{snapshot['novelty_rows']} pass",
         "goal_gate=author/venue metadata remains open",
     )
 

@@ -19,6 +19,15 @@
   oracle-synthesis task under resource constraints.
   <https://arxiv.org/abs/2005.00211>
 
+- Meuli's public STG benchmark repository reports precomputed compilation
+  results for 4- and 5-input Boolean-function spectral representatives under
+  T-count, T-depth, and qubit objectives.  This is a strong small-function
+  optimum-library counterpoint rather than a scalable ROS reproduction.  The
+  current paper should use it to bound claims: Resource-NMCTS improves local
+  direct baselines on the same truth tables, but does not beat the published
+  STG optima on these tiny representatives.
+  <https://github.com/gmeuli/stg-benchmark>
+
 - Meuli, Soeken, Campbell, Roetteler, and De Micheli, "The Role of
   Multiplicative Complexity in Compiling Low T-count Oracle Circuits", ICCAD
   2019, doi:10.1109/ICCAD45719.2019.8942093.  This supports the T-count logic:

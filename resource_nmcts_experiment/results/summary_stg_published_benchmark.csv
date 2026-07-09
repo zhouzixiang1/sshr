@@ -1,0 +1,23 @@
+baseline,baseline_mean,boundary,items,losses,mean_relative,metric,row_type,target,target_mean,ties,wins
+STG T-count optimum,13.185185185185185,Published STG n=4/5 spectral-representative circuit table; not a reproduced ROS flow.,54,44,2.623456790123457,T,published_counterpoint,and_direct_anf,51.407407407407405,10,0
+STG qubit optimum,6.277777777777778,Published STG n=4/5 spectral-representative circuit table; not a reproduced ROS flow.,54,50,0.25299823633156965,logical_qubits,published_counterpoint,and_direct_anf,7.888888888888889,4,0
+STG T-count optimum,13.185185185185185,Published STG n=4/5 spectral-representative circuit table; not a reproduced ROS flow.,54,40,0.8425925925925926,T,published_counterpoint,and_pareto_resource_nmcts,25.11111111111111,14,0
+STG qubit optimum,6.277777777777778,Published STG n=4/5 spectral-representative circuit table; not a reproduced ROS flow.,54,50,0.22742504409171074,logical_qubits,published_counterpoint,and_pareto_resource_nmcts,7.703703703703703,4,0
+STG T-count optimum,13.185185185185185,Published STG n=4/5 spectral-representative circuit table; not a reproduced ROS flow.,54,40,0.8858024691358024,T,published_counterpoint,and_resource_nmcts,25.77777777777778,14,0
+STG qubit optimum,6.277777777777778,Published STG n=4/5 spectral-representative circuit table; not a reproduced ROS flow.,54,50,0.2216931216931217,logical_qubits,published_counterpoint,and_resource_nmcts,7.666666666666667,4,0
+STG T-count optimum,13.185185185185185,Published STG n=4/5 spectral-representative circuit table; not a reproduced ROS flow.,54,42,0.9182098765432098,T,published_counterpoint,and_resource_no_mcts,26.296296296296298,12,0
+STG qubit optimum,6.277777777777778,Published STG n=4/5 spectral-representative circuit table; not a reproduced ROS flow.,54,50,0.23227513227513227,logical_qubits,published_counterpoint,and_resource_no_mcts,7.7407407407407405,4,0
+STG T-count optimum,13.185185185185185,Published STG n=4/5 spectral-representative circuit table; not a reproduced ROS flow.,54,50,6.021604938271605,T,published_counterpoint,direct_anf,100.22222222222223,4,0
+STG qubit optimum,6.277777777777778,Published STG n=4/5 spectral-representative circuit table; not a reproduced ROS flow.,54,47,0.1379188712522046,logical_qubits,published_counterpoint,direct_anf,7.148148148148148,7,0
+direct_anf,100.22222222222223,Same STG truth-table slice under the paper's logical cost model.,54,0,-0.6328228371298322,T,same_benchmark_internal,and_resource_nmcts,25.77777777777778,4,50
+direct_anf,7.148148148148148,Same STG truth-table slice under the paper's logical cost model.,54,27,0.07341269841269842,logical_qubits,same_benchmark_internal,and_resource_nmcts,7.666666666666667,27,0
+direct_anf,106.41361111111111,Same STG truth-table slice under the paper's logical cost model.,54,4,-0.5775355460498778,score,same_benchmark_internal,and_resource_nmcts,32.47814814814815,0,50
+direct_anf,100.22222222222223,Same STG truth-table slice under the paper's logical cost model.,54,0,-0.636246733793065,T,same_benchmark_internal,and_pareto_resource_nmcts,25.11111111111111,4,50
+direct_anf,7.148148148148148,Same STG truth-table slice under the paper's logical cost model.,54,28,0.07837301587301587,logical_qubits,same_benchmark_internal,and_pareto_resource_nmcts,7.703703703703703,26,0
+direct_anf,106.41361111111111,Same STG truth-table slice under the paper's logical cost model.,54,4,-0.5810029968940537,score,same_benchmark_internal,and_pareto_resource_nmcts,31.78203703703704,0,50
+and_direct_anf,51.407407407407405,Same STG truth-table slice under the paper's logical cost model.,54,0,-0.36450542223853044,T,same_benchmark_internal,and_pareto_resource_nmcts,25.11111111111111,12,42
+and_direct_anf,7.888888888888889,Same STG truth-table slice under the paper's logical cost model.,54,2,-0.020061728395061727,logical_qubits,same_benchmark_internal,and_pareto_resource_nmcts,7.703703703703703,40,12
+and_direct_anf,60.304907407407406,Same STG truth-table slice under the paper's logical cost model.,54,0,-0.33627842849380263,score,same_benchmark_internal,and_pareto_resource_nmcts,31.78203703703704,12,42
+and_resource_no_mcts,26.296296296296298,Same STG truth-table slice under the paper's logical cost model.,54,0,-0.03246506579839913,T,same_benchmark_internal,and_pareto_resource_nmcts,25.11111111111111,42,12
+and_resource_no_mcts,7.7407407407407405,Same STG truth-table slice under the paper's logical cost model.,54,3,-0.0033436213991769543,logical_qubits,same_benchmark_internal,and_pareto_resource_nmcts,7.703703703703703,46,5
+and_resource_no_mcts,33.14740740740741,Same STG truth-table slice under the paper's logical cost model.,54,0,-0.03010263420881897,score,same_benchmark_internal,and_pareto_resource_nmcts,31.78203703703704,35,19

@@ -110,6 +110,10 @@ ROS_GAP_ANALYSIS = RESULTS / "analysis_ros_reproduction_gap_audit.md"
 ROS_GAP_SUMMARY = RESULTS / "summary_ros_reproduction_gap_audit.csv"
 ROS_GAP_MANIFEST = RESULTS / "manifest_ros_reproduction_gap_audit.json"
 ROS_GAP_TABLE = THIS_DIR / "paper_latex" / "tables" / "ros_reproduction_gap_audit.tex"
+STG_BENCHMARK_ANALYSIS = RESULTS / "analysis_stg_published_benchmark.md"
+STG_BENCHMARK_SUMMARY = RESULTS / "summary_stg_published_benchmark.csv"
+STG_BENCHMARK_MANIFEST = RESULTS / "manifest_stg_published_benchmark.json"
+STG_BENCHMARK_TABLE = THIS_DIR / "paper_latex" / "tables" / "stg_published_benchmark.tex"
 SCHEDULE_PROXY_ANALYSIS = RESULTS / "analysis_schedule_proxy_audit.md"
 SCHEDULE_PROXY_SUMMARY = RESULTS / "summary_schedule_proxy_audit.csv"
 SCHEDULE_PROXY_MANIFEST = RESULTS / "manifest_schedule_proxy_audit.json"
@@ -163,6 +167,10 @@ LEARNED_CONTROL_ANALYSIS = RESULTS / "analysis_learned_control_audit.md"
 LEARNED_CONTROL_SUMMARY = RESULTS / "summary_learned_control_audit.csv"
 LEARNED_CONTROL_MANIFEST = RESULTS / "manifest_learned_control_audit.json"
 LEARNED_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "learned_control_audit.tex"
+NEURAL_MCTS_CLAIM_ANALYSIS = RESULTS / "analysis_neural_mcts_claim_calibration.md"
+NEURAL_MCTS_CLAIM_SUMMARY = RESULTS / "summary_neural_mcts_claim_calibration.csv"
+NEURAL_MCTS_CLAIM_MANIFEST = RESULTS / "manifest_neural_mcts_claim_calibration.json"
+NEURAL_MCTS_CLAIM_TABLE = THIS_DIR / "paper_latex" / "tables" / "neural_mcts_claim_calibration.tex"
 BITFLIP_RANDOM_PRIOR_ANALYSIS = RESULTS / "analysis_bitflip_random_prior_control.md"
 BITFLIP_RANDOM_PRIOR_SUMMARY = RESULTS / "summary_bitflip_random_prior_control.csv"
 BITFLIP_RANDOM_PRIOR_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control.json"
@@ -322,6 +330,12 @@ def build_rows() -> list[dict[str, str]]:
     ros_gap_rows = ros_gap_manifest.get("rows", "missing") if ros_gap_manifest else "missing"
     ros_gap_fully_reproduced = bool(ros_gap_manifest.get("official_ros_fully_reproduced", True)) if ros_gap_manifest else True
     ros_gap_boundary_explicit = bool(ros_gap_manifest.get("full_ros_boundary_is_explicit", False)) if ros_gap_manifest else False
+    stg_manifest = read_json(STG_BENCHMARK_MANIFEST)
+    stg_revisions = int(stg_manifest.get("needs_revision_count", -1)) if stg_manifest else -1
+    stg_counts = stg_manifest.get("status_counts", {}) if stg_manifest else {}
+    stg_benchmark_rows = stg_manifest.get("benchmark_rows", "missing") if stg_manifest else "missing"
+    stg_raw_rows = stg_manifest.get("raw_rows", "missing") if stg_manifest else "missing"
+    stg_usable_rows = stg_manifest.get("usable_rows", "missing") if stg_manifest else "missing"
     schedule_proxy_manifest = read_json(SCHEDULE_PROXY_MANIFEST)
     schedule_proxy_revisions = int(schedule_proxy_manifest.get("needs_revision_count", -1)) if schedule_proxy_manifest else -1
     schedule_proxy_counts = schedule_proxy_manifest.get("status_counts", {}) if schedule_proxy_manifest else {}
@@ -407,6 +421,18 @@ def build_rows() -> list[dict[str, str]]:
     learned_control_rows = learned_control_manifest.get("rows", "missing") if learned_control_manifest else "missing"
     learned_control_promoted = (
         learned_control_manifest.get("promoted_count", "missing") if learned_control_manifest else "missing"
+    )
+    neural_mcts_claim_manifest = read_json(NEURAL_MCTS_CLAIM_MANIFEST)
+    neural_mcts_claim_revisions = (
+        int(neural_mcts_claim_manifest.get("needs_revision_count", -1)) if neural_mcts_claim_manifest else -1
+    )
+    neural_mcts_claim_counts = neural_mcts_claim_manifest.get("status_counts", {}) if neural_mcts_claim_manifest else {}
+    neural_mcts_claim_rows = neural_mcts_claim_manifest.get("rows", "missing") if neural_mcts_claim_manifest else "missing"
+    neural_mcts_claim_anchors = (
+        neural_mcts_claim_manifest.get("claim_anchors", []) if neural_mcts_claim_manifest else []
+    )
+    neural_mcts_claim_anchor_present = (
+        bool(neural_mcts_claim_manifest.get("table_anchor_present", False)) if neural_mcts_claim_manifest else False
     )
     bitflip_random_manifest = read_json(BITFLIP_RANDOM_PRIOR_MANIFEST)
     bitflip_random_revisions = (
@@ -722,6 +748,22 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_ros_lut_line_sensitivity.py and analyze_ros_reproduction_gap_audit.py after changing ROS-style LUT proxy results, line-sensitivity rows, or ROS/full-tool reproduction wording.",
         },
         {
+            "item": "Published STG counterpoint",
+            "status": "pass"
+            if "tab:stg-published" in text
+            and STG_BENCHMARK_ANALYSIS.exists()
+            and STG_BENCHMARK_SUMMARY.exists()
+            and STG_BENCHMARK_MANIFEST.exists()
+            and STG_BENCHMARK_TABLE.exists()
+            and stg_revisions == 0
+            and stg_benchmark_rows == 54
+            and stg_raw_rows == 270
+            and stg_usable_rows == 270
+            else "needs revision",
+            "evidence": f"Published STG benchmark counterpoint checks 54 public n=4/5 spectral representatives with 270 same-slice synthesis rows; status_counts={stg_counts}; needs_revision_count={stg_revisions}; benchmark_rows={stg_benchmark_rows}; raw_rows={stg_raw_rows}; usable_rows={stg_usable_rows}.",
+            "next_action": "Rerun analyze_stg_published_benchmark.py after changing STG counterpoint wording, methods, raw rows, or the manuscript table anchor.",
+        },
+        {
             "item": "Schedule-proxy tradeoff audit",
             "status": "pass"
             if "tab:schedule-proxy-audit" in text
@@ -800,6 +842,21 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Learned-control audit classifies promoted, bounded, limited, and not-promoted AI/search controls; rows={learned_control_rows}; promoted_count={learned_control_promoted}; claim_class_counts={learned_control_class_counts}; status_counts={learned_control_counts}; needs_revision_count={learned_control_revisions}.",
             "next_action": "Rerun analyze_learned_control_audit.py after changing learned frontier policies, sparse depth gates, phase shortlist controls, neural guard/prior results, or AI-claim manuscript text.",
+        },
+        {
+            "item": "Neural/MCTS claim calibration",
+            "status": "pass"
+            if "tab:neural-mcts-claim-calibration" in text
+            and NEURAL_MCTS_CLAIM_ANALYSIS.exists()
+            and NEURAL_MCTS_CLAIM_SUMMARY.exists()
+            and NEURAL_MCTS_CLAIM_MANIFEST.exists()
+            and NEURAL_MCTS_CLAIM_TABLE.exists()
+            and neural_mcts_claim_revisions == 0
+            and neural_mcts_claim_rows == 7
+            and neural_mcts_claim_anchor_present
+            else "needs revision",
+            "evidence": f"Neural/MCTS claim-calibration audit ties title-level neural, MCTS, resource-constrained, large-scale, and logical-layer terms to evidence gates and excluded claims; rows={neural_mcts_claim_rows}; claim_anchors={neural_mcts_claim_anchors}; status_counts={neural_mcts_claim_counts}; needs_revision_count={neural_mcts_claim_revisions}; table_anchor_present={neural_mcts_claim_anchor_present}.",
+            "next_action": "Rerun analyze_neural_mcts_claim_calibration.py after changing the title, abstract, AI/MCTS wording, learned-control evidence, large-scale boundary, or logical-layer scope.",
         },
         {
             "item": "Bit-flip random-prior control",

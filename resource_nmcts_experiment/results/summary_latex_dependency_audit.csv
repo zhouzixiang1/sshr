@@ -17,6 +17,7 @@ author,tex_input,tables/reproducibility_audit,paper_latex/tables/reproducibility
 author,tex_input,tables/submission_traceability_audit,paper_latex/tables/submission_traceability_audit.tex,True,True,pass,No action needed.
 author,tex_input,tables/submission_archive_manifest,paper_latex/tables/submission_archive_manifest.tex,True,True,pass,No action needed.
 author,tex_input,tables/ros_lut_line_sensitivity,paper_latex/tables/ros_lut_line_sensitivity.tex,True,True,pass,No action needed.
+author,tex_input,tables/stg_published_benchmark,paper_latex/tables/stg_published_benchmark.tex,True,True,pass,No action needed.
 author,tex_input,tables/cirkit_aig_probe,paper_latex/tables/cirkit_aig_probe.tex,True,True,pass,No action needed.
 author,tex_input,tables/cirkit_aig_highdim_probe,paper_latex/tables/cirkit_aig_highdim_probe.tex,True,True,pass,No action needed.
 author,tex_input,tables/revkit_cli_multiflow_traditional,paper_latex/tables/revkit_cli_multiflow_traditional.tex,True,True,pass,No action needed.
@@ -35,6 +36,7 @@ author,tex_input,tables/sparse_depth4_gate_generalization,paper_latex/tables/spa
 author,tex_input,tables/stage_gated_frontier,paper_latex/tables/stage_gated_frontier.tex,True,True,pass,No action needed.
 author,tex_input,tables/schedule_proxy_audit,paper_latex/tables/schedule_proxy_audit.tex,True,True,pass,No action needed.
 author,tex_input,tables/learned_control_audit,paper_latex/tables/learned_control_audit.tex,True,True,pass,No action needed.
+author,tex_input,tables/neural_mcts_claim_calibration,paper_latex/tables/neural_mcts_claim_calibration.tex,True,True,pass,No action needed.
 author,tex_input,tables/weight_robustness_compact,paper_latex/tables/weight_robustness_compact.tex,True,True,pass,No action needed.
 author,tex_input,tables/phase_parity_affine,paper_latex/tables/phase_parity_affine.tex,True,True,pass,No action needed.
 author,tex_input,tables/phase_affine_budget_wide128_vs_32,paper_latex/tables/phase_affine_budget_wide128_vs_32.tex,True,True,pass,No action needed.
@@ -70,6 +72,7 @@ anonymous,tex_input,tables/reproducibility_audit,paper_latex/tables/reproducibil
 anonymous,tex_input,tables/submission_traceability_audit,paper_latex/tables/submission_traceability_audit.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/submission_archive_manifest,paper_latex/tables/submission_archive_manifest.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/ros_lut_line_sensitivity,paper_latex/tables/ros_lut_line_sensitivity.tex,True,True,pass,No action needed.
+anonymous,tex_input,tables/stg_published_benchmark,paper_latex/tables/stg_published_benchmark.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/cirkit_aig_probe,paper_latex/tables/cirkit_aig_probe.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/cirkit_aig_highdim_probe,paper_latex/tables/cirkit_aig_highdim_probe.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/revkit_cli_multiflow_traditional,paper_latex/tables/revkit_cli_multiflow_traditional.tex,True,True,pass,No action needed.
@@ -88,6 +91,7 @@ anonymous,tex_input,tables/sparse_depth4_gate_generalization,paper_latex/tables/
 anonymous,tex_input,tables/stage_gated_frontier,paper_latex/tables/stage_gated_frontier.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/schedule_proxy_audit,paper_latex/tables/schedule_proxy_audit.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/learned_control_audit,paper_latex/tables/learned_control_audit.tex,True,True,pass,No action needed.
+anonymous,tex_input,tables/neural_mcts_claim_calibration,paper_latex/tables/neural_mcts_claim_calibration.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/weight_robustness_compact,paper_latex/tables/weight_robustness_compact.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/phase_parity_affine,paper_latex/tables/phase_parity_affine.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/phase_affine_budget_wide128_vs_32,paper_latex/tables/phase_affine_budget_wide128_vs_32.tex,True,True,pass,No action needed.
@@ -123,6 +127,7 @@ acm_tqc,tex_input,tables/reproducibility_audit,paper_latex/tables/reproducibilit
 acm_tqc,tex_input,tables/submission_traceability_audit,paper_latex/tables/submission_traceability_audit.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/submission_archive_manifest,paper_latex/tables/submission_archive_manifest.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/ros_lut_line_sensitivity,paper_latex/tables/ros_lut_line_sensitivity.tex,True,True,pass,No action needed.
+acm_tqc,tex_input,tables/stg_published_benchmark,paper_latex/tables/stg_published_benchmark.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/cirkit_aig_probe,paper_latex/tables/cirkit_aig_probe.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/cirkit_aig_highdim_probe,paper_latex/tables/cirkit_aig_highdim_probe.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/revkit_cli_multiflow_traditional,paper_latex/tables/revkit_cli_multiflow_traditional.tex,True,True,pass,No action needed.
@@ -141,6 +146,7 @@ acm_tqc,tex_input,tables/sparse_depth4_gate_generalization,paper_latex/tables/sp
 acm_tqc,tex_input,tables/stage_gated_frontier,paper_latex/tables/stage_gated_frontier.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/schedule_proxy_audit,paper_latex/tables/schedule_proxy_audit.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/learned_control_audit,paper_latex/tables/learned_control_audit.tex,True,True,pass,No action needed.
+acm_tqc,tex_input,tables/neural_mcts_claim_calibration,paper_latex/tables/neural_mcts_claim_calibration.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/weight_robustness_compact,paper_latex/tables/weight_robustness_compact.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/phase_parity_affine,paper_latex/tables/phase_parity_affine.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/phase_affine_budget_wide128_vs_32,paper_latex/tables/phase_affine_budget_wide128_vs_32.tex,True,True,pass,No action needed.

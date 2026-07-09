@@ -33,6 +33,10 @@ ROS_LINE_ANALYSIS = RESULTS / "analysis_ros_lut_line_sensitivity.md"
 ROS_LINE_SUMMARY = RESULTS / "summary_ros_lut_line_sensitivity.csv"
 ROS_LINE_MANIFEST = RESULTS / "manifest_ros_lut_line_sensitivity.json"
 ROS_LINE_RAW = RESULTS / "raw_ros_lut_line_sensitivity.csv"
+STG_ANALYSIS = RESULTS / "analysis_stg_published_benchmark.md"
+STG_SUMMARY = RESULTS / "summary_stg_published_benchmark.csv"
+STG_MANIFEST = RESULTS / "manifest_stg_published_benchmark.json"
+STG_RAW = RESULTS / "raw_stg_published_benchmark.csv"
 TOOLCHAIN_ANALYSIS = RESULTS / "analysis_toolchain_readiness.md"
 COMPARISON_EVIDENCE = RESULTS / "analysis_comparison_evidence_matrix.md"
 COMPARISON_PROTOCOL = RESULTS / "analysis_comparison_protocol_audit.md"
@@ -169,6 +173,22 @@ def specs() -> list[RosSpec]:
             supported_claim="The score advantage is robust to line-aware LUT proxy selectors.",
             excluded_claim="This is not SAT garbage management and cannot be called a full ROS reproduction.",
             next_reproduction_step="Implement or obtain the ROS SAT garbage-management stage before making any official-ROS claim.",
+        ),
+        RosSpec(
+            item="Published STG optimum-library counterpoint",
+            coverage_status="covered",
+            official_requirement="The related STG benchmark reports precomputed 4- and 5-input spectral-representative circuit optima, not a full ROS execution path.",
+            current_coverage="The project synthesizes the same 54 public truth-table representatives and reports both the negative STG-optimum boundary and the same-slice direct-baseline gains.",
+            files=(STG_ANALYSIS, STG_SUMMARY, STG_MANIFEST, STG_RAW, PAPER, COMPARISON_EVIDENCE),
+            tokens=("Published STG optima remain much stronger", "raw synthesis rows: 270", "Pareto vs STG T-count optimum", "tab:stg-published"),
+            csv_expectations=(CsvExpectation(STG_RAW, 270, True),),
+            json_expectations=(
+                JsonExpectation(STG_MANIFEST, "raw_rows", 270),
+                JsonExpectation(STG_MANIFEST, "needs_revision_count", 0),
+            ),
+            supported_claim="The paper includes a published small-function optimum-library counterpoint and does not hide that STG wins on tiny precomputed representatives.",
+            excluded_claim="This is not a reproduced ROS SAT garbage-management flow and does not replace scalable logical-layer comparisons.",
+            next_reproduction_step="Keep this counterpoint separate from ROS-style LUT and RevKit rows; add full ROS only if executable artifacts or a faithful SAT-garbage implementation are available.",
         ),
         RosSpec(
             item="Official ROS SAT garbage management",

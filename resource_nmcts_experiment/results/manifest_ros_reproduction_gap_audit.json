@@ -1,6 +1,6 @@
 {
   "coverage_counts": {
-    "covered": 4,
+    "covered": 5,
     "not reproduced": 1,
     "partial": 3
   },
@@ -14,7 +14,7 @@
     "table": "paper_latex/tables/ros_reproduction_gap_audit.tex"
   },
   "python": "3.11.15",
-  "rows": 8,
+  "rows": 9,
   "rows_detail": [
     {
       "audit_status": "pass",
@@ -48,6 +48,17 @@
       "next_reproduction_step": "Implement or obtain the ROS SAT garbage-management stage before making any official-ROS claim.",
       "official_requirement": "ROS explicitly targets qubit/garbage pressure through resource-aware choices.",
       "supported_claim": "The score advantage is robust to line-aware LUT proxy selectors."
+    },
+    {
+      "audit_status": "pass",
+      "coverage_status": "covered",
+      "current_coverage": "The project synthesizes the same 54 public truth-table representatives and reports both the negative STG-optimum boundary and the same-slice direct-baseline gains.",
+      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; csv=results/raw_stg_published_benchmark.csv rows=270/270, incorrect=0; json=results/manifest_stg_published_benchmark.json::raw_rows=270; results/manifest_stg_published_benchmark.json::needs_revision_count=0",
+      "excluded_claim": "This is not a reproduced ROS SAT garbage-management flow and does not replace scalable logical-layer comparisons.",
+      "item": "Published STG optimum-library counterpoint",
+      "next_reproduction_step": "Keep this counterpoint separate from ROS-style LUT and RevKit rows; add full ROS only if executable artifacts or a faithful SAT-garbage implementation are available.",
+      "official_requirement": "The related STG benchmark reports precomputed 4- and 5-input spectral-representative circuit optima, not a full ROS execution path.",
+      "supported_claim": "The paper includes a published small-function optimum-library counterpoint and does not hide that STG wins on tiny precomputed representatives."
     },
     {
       "audit_status": "pass",
@@ -107,6 +118,6 @@
   ],
   "script": "analyze_ros_reproduction_gap_audit.py",
   "status_counts": {
-    "pass": 8
+    "pass": 9
   }
 }

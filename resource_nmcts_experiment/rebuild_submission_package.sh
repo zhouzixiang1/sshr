@@ -35,6 +35,7 @@ run_py analyze_comparison_protocol_audit.py
 run_py analyze_comparison_target_validity_audit.py
 run_py analyze_comparison_answer_scorecard.py
 run_py analyze_claim_scope_lint.py
+run_py analyze_stg_published_benchmark.py
 echo "==> ${PYTHON_BIN} analyze_ros_lut_line_sensitivity.py"
 "$PYTHON_BIN" analyze_ros_lut_line_sensitivity.py \
   --internal results/raw_traditional_resource.csv \
@@ -84,6 +85,7 @@ run_py analyze_figure_asset_audit.py
 run_py analyze_headline_numeric_consistency.py
 run_py analyze_submission_archive_manifest.py
 run_py analyze_threats_to_validity_audit.py
+run_py analyze_neural_mcts_claim_calibration.py
 run_py analyze_submission_traceability_audit.py
 
 echo "==> Building English submission PDF"

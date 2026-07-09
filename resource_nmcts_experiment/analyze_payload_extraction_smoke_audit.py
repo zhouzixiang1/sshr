@@ -94,6 +94,15 @@ SMOKE_SPECS = (
         minimum_rows=8,
     ),
     SmokeSpec(
+        name="Published STG counterpoint",
+        script="analyze_stg_published_benchmark.py",
+        manifest="results/manifest_stg_published_benchmark.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="raw_rows",
+        minimum_rows=270,
+    ),
+    SmokeSpec(
         name="Schedule-proxy tradeoff audit",
         script="analyze_schedule_proxy_audit.py",
         manifest="results/manifest_schedule_proxy_audit.json",
@@ -146,6 +155,15 @@ SMOKE_SPECS = (
         expected_value=0,
         minimum_rows_key="rows",
         minimum_rows=8,
+    ),
+    SmokeSpec(
+        name="Neural/MCTS claim calibration",
+        script="analyze_neural_mcts_claim_calibration.py",
+        manifest="results/manifest_neural_mcts_claim_calibration.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=7,
     ),
     SmokeSpec(
         name="Bit-flip random-prior control",

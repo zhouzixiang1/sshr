@@ -4,6 +4,7 @@
     "Are gains only over weak algebraic baselines?",
     "Is SSHR the whole comparison target?",
     "Does the advantage survive external logic synthesis?",
+    "Does it beat published tiny-function optima?",
     "What does RevKit test?",
     "What part is actually AI/MCTS?",
     "Is the evidence only small-scale?",
@@ -16,19 +17,21 @@
     "non-dominance boundary",
     "primary same-task benchmark",
     "reversible and phase proxy counterpoint",
-    "scaling and correctness verification"
+    "scaling and correctness verification",
+    "small-function optimum-library counterpoint"
   ],
-  "rows": 7,
+  "rows": 8,
   "script": "analyze_comparison_answer_scorecard.py",
   "source_files": [
     "summary_comparison_evidence_matrix.csv",
     "summary_multimetric_nondominated.csv",
     "summary_multimetric_pairwise_dominance.csv",
     "summary_paired_statistical_evidence.csv",
-    "summary_search_control_baseline_audit.csv"
+    "summary_search_control_baseline_audit.csv",
+    "summary_stg_published_benchmark.csv"
   ],
   "status_counts": {
-    "pass": 7
+    "pass": 8
   },
   "table": "paper_latex/tables/comparison_answer_scorecard.tex",
   "table_anchor_present": true

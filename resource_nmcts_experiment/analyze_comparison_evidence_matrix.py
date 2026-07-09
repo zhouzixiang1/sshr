@@ -177,6 +177,8 @@ def build_matrix() -> list[dict[str, str]]:
     external_n6 = [RESULTS / "raw_traditional_resource.csv", RESULTS / "raw_external_traditional_resource_n6.csv"]
     ros_best = [RESULTS / "raw_ros_lut_proxy_best.csv"]
     ros_sweep = [RESULTS / "raw_ros_lut_proxy_sweep.csv"]
+    stg_published = [RESULTS / "raw_stg_published_benchmark.csv"]
+    stg_summary = RESULTS / "summary_stg_published_benchmark.csv"
     mockturtle = [RESULTS / "raw_mockturtle_xag_probe.csv", RESULTS / "raw_mockturtle_xag_highdim_probe.csv"]
     cirkit = [RESULTS / "raw_cirkit_aig_probe.csv", RESULTS / "raw_cirkit_aig_highdim_probe.csv"]
     revkit_cli = [RESULTS / "raw_revkit_cli_multiflow_traditional.csv"]
@@ -247,6 +249,23 @@ def build_matrix() -> list[dict[str, str]]:
             ),
             "boundary": "Verified LUT proxy only; no official ROS SAT garbage management, reversible emission, or hardware mapping.",
             "sources": csv_join(ros_best + ros_sweep),
+        }
+    )
+
+    total, usable, scope = raw_count(stg_published)
+    rows.append(
+        {
+            "evidence_block": "Published STG optimum-library counterpoint",
+            "scope": scope,
+            "verified_rows": f"{usable}/{total}",
+            "main_result": (
+                "Pareto vs STG T-count optimum "
+                + result_from_summary(stg_summary, "and_pareto_resource_nmcts", "STG T-count optimum", "T")
+                + "; vs direct ANF on STG slice "
+                + result_from_summary(stg_summary, "and_pareto_resource_nmcts", "direct_anf", "score")
+            ),
+            "boundary": "Public n=4/5 spectral-representative optimum-library table; this is a strong small-function counterpoint, not a reproduced ROS flow or scalable compiler baseline.",
+            "sources": csv_join(stg_published + [stg_summary]),
         }
     )
 

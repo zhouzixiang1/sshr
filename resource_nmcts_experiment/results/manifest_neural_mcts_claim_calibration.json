@@ -1,0 +1,19 @@
+{
+  "claim_anchors": [
+    "Neural component in the title",
+    "MCTS component in the title",
+    "Causal search-control isolation",
+    "Resource-constrained objective",
+    "Verified workflow rather than learned correctness",
+    "Large-scale claim boundary",
+    "Logical-layer boundary"
+  ],
+  "needs_revision_count": 0,
+  "rows": 7,
+  "script": "analyze_neural_mcts_claim_calibration.py",
+  "status_counts": {
+    "pass": 7
+  },
+  "table": "paper_latex/tables/neural_mcts_claim_calibration.tex",
+  "table_anchor_present": true
+}

@@ -1,5 +1,5 @@
 {
-  "complete_rows": 24,
+  "complete_rows": 25,
   "families": [
     {
       "analysis_files": "12",
@@ -152,9 +152,9 @@
       "driver_scripts": "run_experiments.py",
       "evidence_family": "Traditional logical baselines",
       "manifest_files": "4",
-      "raw_files": "4",
-      "raw_rows": "4071",
-      "representative_raw": "results/raw_traditional_resource.csv; results/raw_traditional_resource_learned_prior.csv; results/raw_traditional_resource_no_prior.csv; results/raw_traditional_small.csv",
+      "raw_files": "5",
+      "raw_rows": "4341",
+      "representative_raw": "results/raw_stg_published_benchmark.csv; results/raw_traditional_resource.csv; results/raw_traditional_resource_learned_prior.csv; results/raw_traditional_resource_no_prior.csv; +1 more",
       "rerun_tier": "raw Python rerun",
       "scripts_missing": "",
       "scripts_present": "1",
@@ -204,6 +204,22 @@
       "raw_rows": "2472",
       "representative_raw": "results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; results/raw_ros_lut_proxy_sweep.csv",
       "rerun_tier": "quick audit",
+      "scripts_missing": "",
+      "scripts_present": "1",
+      "status": "complete",
+      "summary_files": "1"
+    },
+    {
+      "analysis_files": "1",
+      "claim_use": "Compares the current logical methods on the public n=4/5 STG spectral-representative truth-table table and exposes the small-function optimum boundary.",
+      "dependency_boundary": "Published small-function optimum-library counterpoint; not full ROS SAT garbage management and not hardware mapping.",
+      "driver_scripts": "analyze_stg_published_benchmark.py",
+      "evidence_family": "Published STG optimum-library counterpoint",
+      "manifest_files": "1",
+      "raw_files": "1",
+      "raw_rows": "270",
+      "representative_raw": "results/raw_stg_published_benchmark.csv",
+      "rerun_tier": "raw Python rerun",
       "scripts_missing": "",
       "scripts_present": "1",
       "status": "complete",
@@ -274,20 +290,20 @@
       "summary_files": "9"
     },
     {
-      "analysis_files": "14",
+      "analysis_files": "15",
       "claim_use": "Separates neural/search-control effects from deterministic algebraic construction and guarded portfolio selection.",
       "dependency_boundary": "Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only.",
-      "driver_scripts": "train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; run_bitflip_random_prior_control.py; analyze_bitflip_random_prior_control.py; analyze_frontier_random_depth_control.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py",
+      "driver_scripts": "train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; run_bitflip_random_prior_control.py; analyze_bitflip_random_prior_control.py; analyze_frontier_random_depth_control.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py; analyze_neural_mcts_claim_calibration.py",
       "evidence_family": "Learned-control and ablations",
-      "manifest_files": "13",
+      "manifest_files": "14",
       "raw_files": "14",
       "raw_rows": "8207",
       "representative_raw": "results/raw_bitflip_random_prior_control.csv; results/raw_highdim_neural_prior_boolean_guard.csv; results/raw_highdim_neural_prior_learned_prior.csv; results/raw_highdim_neural_prior_no_prior.csv; +10 more",
       "rerun_tier": "training plus ablation rerun",
       "scripts_missing": "",
-      "scripts_present": "9",
+      "scripts_present": "10",
       "status": "complete",
-      "summary_files": "23"
+      "summary_files": "24"
     },
     {
       "analysis_files": "2",
@@ -517,6 +533,7 @@
     "results/raw_sparse_depth4_gate.csv",
     "results/raw_sparse_depth4_gate_generalization.csv",
     "results/raw_stage_gated_frontier.csv",
+    "results/raw_stg_published_benchmark.csv",
     "results/raw_traditional_resource.csv",
     "results/raw_traditional_resource_learned_prior.csv",
     "results/raw_traditional_resource_no_prior.csv",
@@ -540,8 +557,8 @@
     "results/raw_ultra_pairwise_wide_vs_recursive.csv",
     "results/raw_ultra_root_action_pairwise_widths.csv"
   ],
-  "rows": 24,
+  "rows": 25,
   "script": "analyze_artifact_rerun_registry.py",
-  "unique_raw_files": 146,
-  "unique_raw_rows": 60036
+  "unique_raw_files": 147,
+  "unique_raw_rows": 60306
 }
