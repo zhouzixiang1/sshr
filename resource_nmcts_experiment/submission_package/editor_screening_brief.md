@@ -37,10 +37,11 @@ leaderboard.
    algebraic candidate space and the resource score.
 
 The manuscript then reports a separate counterpoint and claim-boundary audit:
-SSHR is treated as the CNOT counterpoint, CirKit as the depth counterpoint,
-RevKit CLI as the auxiliary-line counterpoint, and the learned-prior rows as
-bounded evidence for search control rather than for a deep-learning-only
-explanation.
+SSHR is treated as the CNOT counterpoint, Caterpillar API as an
+implementation-family CNOT-pressure counterpoint, CirKit as the depth
+counterpoint, RevKit CLI as the auxiliary-line counterpoint, and the
+learned-prior rows as bounded evidence for search control rather than for a
+deep-learning-only explanation.
 
 ## Main Evidence to Check
 
@@ -58,8 +59,8 @@ explanation.
   role, evidence, comparability boundary, counterpoint coverage where relevant,
   and manuscript anchors.
 - Counterpoint and claim-boundary audit: lists the strongest unfavorable metric
-  evidence for SSHR, CirKit, RevKit CLI, learned priors, and large-scale
-  verification, next to the favorable evidence that keeps each comparison
+  evidence for SSHR, Caterpillar API, CirKit, RevKit CLI, learned priors, and
+  large-scale verification, next to the favorable evidence that keeps each comparison
   meaningful.
 - Paired statistical evidence: reports paired wins/losses/ties, mean and median
   relative score changes, and exact sign-test evidence.
@@ -81,8 +82,8 @@ explanation.
 - Strong T-count and weighted-score improvements on matched small functions
   against algebraic, ESOP, SSHR, ABC/BDD, and external probe baselines.
 - Evidence that the advantage is not limited to a single self-written baseline.
-- Explicit counterpoint evidence showing where SSHR, CirKit, and RevKit remain
-  strong under individual resource metrics.
+- Explicit counterpoint evidence showing where SSHR, Caterpillar API, CirKit,
+  and RevKit remain strong under individual resource metrics.
 - High-dimensional symbolic verification through the $n=48,56,64$ stress
   slice, with a separate resource profile, plus bridge-truth-table verification
   of emitted logical circuits within the stated scope.

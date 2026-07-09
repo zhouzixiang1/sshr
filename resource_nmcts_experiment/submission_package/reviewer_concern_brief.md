@@ -42,7 +42,7 @@ Manuscript anchors:
 
 ## Does the method dominate every resource?
 
-No.  The paper claims strong T-count and weighted-score advantages, not universal dominance.  It explicitly reports tradeoffs: SSHR remains a strong CNOT counterpoint, CirKit is often shallower, and RevKit CLI often uses fewer auxiliary lines.  The counterpoint and claim-boundary audit reports these unfavorable metrics next to the favorable score evidence so that the comparison is not presented as a one-metric victory.
+No.  The paper claims strong T-count and weighted-score advantages, not universal dominance.  It explicitly reports tradeoffs: SSHR remains a strong CNOT counterpoint, Caterpillar API is a CNOT-only implementation-family counterpoint, CirKit is often shallower, and RevKit CLI often uses fewer auxiliary lines.  The counterpoint and claim-boundary audit reports these unfavorable metrics next to the favorable score evidence so that the comparison is not presented as a one-metric victory.
 
 Manuscript anchors:
 - Abstract

@@ -91,7 +91,7 @@ ROWS = (
     ),
     ScorecardRow(
         question="Does a score win hide unfavorable resources?",
-        answer="No. Counterpoint, Pareto, and schedule-proxy audits report where SSHR, CirKit, and RevKit remain strong.",
+        answer="No. Counterpoint, Pareto, and schedule-proxy audits report where SSHR, Caterpillar, CirKit, and RevKit remain strong.",
         artifacts=(
             "results/analysis_counterpoint_claim_boundary.md",
             "results/analysis_multimetric_pareto_tradeoff.md",
@@ -102,10 +102,11 @@ ROWS = (
         ),
         manuscript_tokens=(
             "not that \\method{} dominates every metric",
+            "Caterpillar API is a strong",
             "CirKit AIG/MC remains a",
             "RevKit CLI uses fewer auxiliary lines",
         ),
-        support_tokens=("Does the method dominate every resource?", "not universal dominance"),
+        support_tokens=("Does the method dominate every resource?", "Caterpillar API", "not universal dominance"),
         evidence_latex=r"Tables~\ref{tab:counterpoint-boundary}, \ref{tab:multimetric-nondominated}, \ref{tab:schedule-proxy-audit}",
         limitation="The correct claim is a strong T/weighted-score point with explicit CNOT, depth, ancilla, and runtime tradeoffs.",
     ),

@@ -20,10 +20,10 @@ It is a real Caterpillar API performance probe over ANF-XAG inputs, but it is st
 
 | item | status | rows | correct rows | mean T | mean CNOT | mean depth | mean peak ancilla | mean score | mean time s |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| xag_fast_lowt | pass | 177 | 177 | 62.9153 | 27.9661 | 31.8249 | 15.7288 | 96.5677 | 0.000094 |
-| xag_lowd | pass | 177 | 177 | 62.9153 | 64.0791 | 33.8475 | 22.7740 | 112.4941 | 0.000112 |
-| xag_lowt | pass | 177 | 177 | 62.9153 | 27.9661 | 34.1469 | 15.7288 | 96.6025 | 0.000079 |
-| best_of_caterpillar_xag_api | pass | 177 | 177 | 62.9153 | 27.9661 | 31.5311 | 15.7288 | 96.5633 | 0.000089 |
+| xag_fast_lowt | pass | 177 | 177 | 62.9153 | 27.9661 | 31.8249 | 15.7288 | 96.5677 | 0.000118 |
+| xag_lowd | pass | 177 | 177 | 62.9153 | 64.0791 | 33.8475 | 22.7740 | 112.4941 | 0.000138 |
+| xag_lowt | pass | 177 | 177 | 62.9153 | 27.9661 | 34.1469 | 15.7288 | 96.6025 | 0.000098 |
+| best_of_caterpillar_xag_api | pass | 177 | 177 | 62.9153 | 27.9661 | 31.5311 | 15.7288 | 96.5633 | 0.000109 |
 
 ## Matched Comparison
 

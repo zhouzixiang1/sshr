@@ -4,8 +4,9 @@
 The comparison evidence matrix reports wins.  This companion audit reports the
 strongest opposing evidence that should constrain the manuscript's claims:
 SSHR is a CNOT counterpoint, CirKit is a depth counterpoint, RevKit is an
-auxiliary-line counterpoint, learned priors are incremental, and large-scale
-checks remain bounded by symbolic or bridge verification.
+auxiliary-line counterpoint, Caterpillar exposes CNOT-only pressure, learned
+priors are incremental, and large-scale checks remain bounded by symbolic or
+bridge verification.
 """
 from __future__ import annotations
 
@@ -141,6 +142,7 @@ def build_rows() -> list[dict[str, str]]:
     traditional = ("raw_traditional_resource.csv",)
     external_n6 = ("raw_external_traditional_resource_n6.csv",)
     cirkit = ("raw_cirkit_aig_probe.csv",)
+    caterpillar = ("raw_caterpillar_xag_api_best.csv",)
     revkit = ("raw_revkit_cli_multiflow_traditional.csv",)
 
     sshr_i_score = compare(
@@ -185,6 +187,21 @@ def build_rows() -> list[dict[str, str]]:
         cirkit,
         "external_cirkit_aig_mc",
         "depth",
+    )
+
+    caterpillar_score = compare(
+        traditional,
+        "and_pareto_resource_nmcts",
+        caterpillar,
+        "external_caterpillar_xag_api_best",
+        "score",
+    )
+    caterpillar_cnot = compare(
+        traditional,
+        "and_pareto_resource_nmcts",
+        caterpillar,
+        "external_caterpillar_xag_api_best",
+        "CNOT",
     )
 
     revkit_score = compare(
@@ -244,6 +261,12 @@ def build_rows() -> list[dict[str, str]]:
             "opposing_evidence": f"depth {fmt_cmp(cirkit_depth)}",
             "favorable_evidence": f"score {fmt_cmp(cirkit_score)}",
             "claim_boundary": "Use CirKit as a depth-oriented external probe; do not claim depth dominance over logic-network synthesis.",
+        },
+        {
+            "counterpoint": "Caterpillar API CNOT pressure",
+            "opposing_evidence": f"CNOT {fmt_cmp(caterpillar_cnot)}",
+            "favorable_evidence": f"score {fmt_cmp(caterpillar_score)}",
+            "claim_boundary": "Use Caterpillar as a bounded ANF-XAG implementation-family counterpoint; do not claim CNOT-only, full-ROS, or hardware-mapped dominance.",
         },
         {
             "counterpoint": "RevKit exact-oracle auxiliary lines",
