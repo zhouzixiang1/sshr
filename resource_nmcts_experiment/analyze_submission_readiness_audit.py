@@ -66,6 +66,9 @@ CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
 COMPARISON_PROTOCOL_ANALYSIS = RESULTS / "analysis_comparison_protocol_audit.md"
 COMPARISON_PROTOCOL_SUMMARY = RESULTS / "summary_comparison_protocol_audit.csv"
 COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.json"
+CITATION_SUPPORT_ANALYSIS = RESULTS / "analysis_citation_support_audit.md"
+CITATION_SUPPORT_SUMMARY = RESULTS / "summary_citation_support_audit.csv"
+CITATION_SUPPORT_MANIFEST = RESULTS / "manifest_citation_support_audit.json"
 RERUN_REGISTRY_ANALYSIS = RESULTS / "analysis_artifact_rerun_registry.md"
 RERUN_REGISTRY_SUMMARY = RESULTS / "summary_artifact_rerun_registry.csv"
 RERUN_REGISTRY_MANIFEST = RESULTS / "manifest_artifact_rerun_registry.json"
@@ -152,6 +155,13 @@ def build_rows() -> list[dict[str, str]]:
         int(comparison_protocol_manifest.get("needs_revision_count", -1)) if comparison_protocol_manifest else -1
     )
     comparison_protocol_counts = comparison_protocol_manifest.get("status_counts", {}) if comparison_protocol_manifest else {}
+    citation_support_manifest = read_json(CITATION_SUPPORT_MANIFEST)
+    citation_support_revisions = (
+        int(citation_support_manifest.get("needs_revision_count", -1)) if citation_support_manifest else -1
+    )
+    citation_support_counts = citation_support_manifest.get("status_counts", {}) if citation_support_manifest else {}
+    citation_support_rows = citation_support_manifest.get("rows", "missing") if citation_support_manifest else "missing"
+    citation_support_keys = citation_support_manifest.get("cited_key_count", "missing") if citation_support_manifest else "missing"
     figure_asset_manifest = read_json(FIGURE_ASSET_MANIFEST)
     figure_asset_revisions = int(figure_asset_manifest.get("needs_revision_count", -1)) if figure_asset_manifest else -1
     figure_asset_counts = figure_asset_manifest.get("status_counts", {}) if figure_asset_manifest else {}
@@ -261,6 +271,17 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Comparison protocol audit checks layered baseline roles, evidence, comparability, counterpoints, and manuscript anchors; status_counts={comparison_protocol_counts}; needs_revision_count={comparison_protocol_revisions}.",
             "next_action": "Rerun analyze_comparison_protocol_audit.py after changing baseline claims, evidence matrices, counterpoint wording, or comparison-scope text.",
+        },
+        {
+            "item": "Citation support audit",
+            "status": "pass"
+            if CITATION_SUPPORT_ANALYSIS.exists()
+            and CITATION_SUPPORT_SUMMARY.exists()
+            and CITATION_SUPPORT_MANIFEST.exists()
+            and citation_support_revisions == 0
+            else "needs revision",
+            "evidence": f"Citation support audit checks related-work families, cited BibTeX keys, bibliography resolution, and DOI/URL/eprint locator coverage; rows={citation_support_rows}; cited_keys={citation_support_keys}; status_counts={citation_support_counts}; needs_revision_count={citation_support_revisions}.",
+            "next_action": "Rerun analyze_citation_support_audit.py after changing related-work text, citations, bibliography entries, or literature-positioning tables.",
         },
         {
             "item": "Paired effect uncertainty",
@@ -468,7 +489,7 @@ def build_rows() -> list[dict[str, str]]:
             and VERIFIER_SUMMARY.exists()
             and VERIFIER_MANIFEST.exists()
             else "needs revision",
-            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, and LaTeX log boundaries.",
+            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, citation support, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, and LaTeX log boundaries.",
             "next_action": "Run verify_submission_package.sh after rebuilding the payload archive.",
         },
         {

@@ -23,6 +23,7 @@ echo "==> Using Python: ${PYTHON_BIN}"
 run_py analyze_contribution_evidence_map.py
 run_py analyze_method_workflow_table.py
 run_py analyze_related_work_positioning.py
+run_py analyze_citation_support_audit.py
 run_py analyze_baseline_claim_matrix.py
 run_py analyze_comparison_evidence_matrix.py
 run_py analyze_baseline_comparability_audit.py

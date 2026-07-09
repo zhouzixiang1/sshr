@@ -56,8 +56,8 @@ noise modeling, or magic-state-factory accounting.
   private generated submission-system text previews.
 - `../results/analysis_payload_roundtrip_audit.md`: terminal check that opens
   the upload tarball and verifies internal paths, hashes, required artifacts,
-  reviewer entrypoints, comparison-protocol and headline-numeric evidence
-  files, and deterministic tar metadata.
+  reviewer entrypoints, comparison-protocol, citation-support, and
+  headline-numeric evidence files, and deterministic tar metadata.
 - `../results/analysis_payload_extraction_smoke_audit.md`: terminal check that
   extracts the upload tarball into a temporary directory and runs lightweight
   reviewer-facing audits from inside the extracted payload.
@@ -67,6 +67,9 @@ noise modeling, or magic-state-factory accounting.
 - `../results/analysis_comparison_protocol_audit.md`: machine-readable audit
   that checks each baseline layer has a role, evidence, comparability boundary,
   counterpoint coverage where relevant, and manuscript anchors.
+- `../results/analysis_citation_support_audit.md`: audit that checks
+  related-work families, cited BibTeX keys, bibliography resolution, and
+  DOI/URL/eprint locator coverage.
 - `../results/analysis_headline_numeric_consistency.md`: audit that
   recomputes abstract-level numerical claims from CSV evidence and checks the
   author and anonymous TeX sources contain the matching headline tokens.
@@ -155,6 +158,7 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_claim_scope_lint.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_comparison_protocol_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_citation_support_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_headline_numeric_consistency.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_figure_asset_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_latex_dependency_audit.py
@@ -171,6 +175,7 @@ rg -n "needs author input|pass:|file count|archive sha256|Submission support|unr
   results/analysis_submission_readiness_audit.md \
   results/analysis_claim_scope_lint.md \
   results/analysis_comparison_protocol_audit.md \
+  results/analysis_citation_support_audit.md \
   results/analysis_headline_numeric_consistency.md \
   results/analysis_figure_asset_audit.md \
   results/analysis_latex_dependency_audit.md \

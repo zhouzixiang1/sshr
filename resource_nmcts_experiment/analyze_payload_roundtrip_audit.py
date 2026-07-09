@@ -67,6 +67,12 @@ HEADLINE_NUMERIC_PATHS = {
     "results/summary_headline_numeric_consistency.csv",
     "results/manifest_headline_numeric_consistency.json",
 }
+CITATION_SUPPORT_PATHS = {
+    "analyze_citation_support_audit.py",
+    "results/analysis_citation_support_audit.md",
+    "results/summary_citation_support_audit.csv",
+    "results/manifest_citation_support_audit.json",
+}
 
 
 def rel(path: Path) -> str:
@@ -221,6 +227,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    citation_missing = sorted(CITATION_SUPPORT_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload citation support evidence",
+            "pass" if not citation_missing else "needs revision",
+            f"citation_support_files={len(CITATION_SUPPORT_PATHS)}; missing={citation_missing or 'none'}.",
+            "Ensure the uploadable archive includes the citation support audit script and generated CSV/Markdown/JSON evidence.",
+        )
+    )
+
     metadata_bad: list[str] = []
     for member in members:
         if not member.name.startswith(f"{PAYLOAD_ROOT}/"):
@@ -294,6 +310,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "reviewer_entrypoint_paths": sorted(REVIEWER_ENTRYPOINT_PATHS),
         "comparison_protocol_paths": sorted(COMPARISON_PROTOCOL_PATHS),
         "headline_numeric_paths": sorted(HEADLINE_NUMERIC_PATHS),
+        "citation_support_paths": sorted(CITATION_SUPPORT_PATHS),
         "private_basenames": sorted(PRIVATE_BASENAMES),
         "rows": rows,
         "outputs": {

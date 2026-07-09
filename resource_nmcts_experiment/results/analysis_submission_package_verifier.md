@@ -4,18 +4,19 @@ This read-only verifier checks the terminal package invariants after the payload
 
 ## Status counts
 
-- pass: 21
+- pass: 22
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Compiled author PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=27, bytes=601116. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
-| Compiled anonymous PDF | pass | paper_latex/resource_nmcts_submission_anonymous.pdf pages=27, bytes=597775. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
-| Payload SHA sidecar | pass | actual=81df14d7cd16a0448bde0e264bf0d75c223fffe2c600609a304c6abcd1fb7af8; sidecar=81df14d7cd16a0448bde0e264bf0d75c223fffe2c600609a304c6abcd1fb7af8. | Regenerate the payload archive if the digests differ. |
-| Payload manifest consistency | pass | summary=81df14d7cd16a0448bde0e264bf0d75c223fffe2c600609a304c6abcd1fb7af8; manifest=81df14d7cd16a0448bde0e264bf0d75c223fffe2c600609a304c6abcd1fb7af8; file_count=864. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
-| Readiness audit terminal state | pass | status_counts={'pass': 32, 'needs author input': 1}. | Resolve any needs-revision rows; author-specific declarations remain manual. |
+| Compiled author PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=27, bytes=601123. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
+| Compiled anonymous PDF | pass | paper_latex/resource_nmcts_submission_anonymous.pdf pages=27, bytes=597771. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
+| Payload SHA sidecar | pass | actual=3e10cb11267896c12a44c5f515ab7aaebbc13ca845d4a0ccb9d3408f9a76e8b4; sidecar=3e10cb11267896c12a44c5f515ab7aaebbc13ca845d4a0ccb9d3408f9a76e8b4. | Regenerate the payload archive if the digests differ. |
+| Payload manifest consistency | pass | summary=3e10cb11267896c12a44c5f515ab7aaebbc13ca845d4a0ccb9d3408f9a76e8b4; manifest=3e10cb11267896c12a44c5f515ab7aaebbc13ca845d4a0ccb9d3408f9a76e8b4; file_count=868. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
+| Readiness audit terminal state | pass | status_counts={'pass': 33, 'needs author input': 1}. | Resolve any needs-revision rows; author-specific declarations remain manual. |
 | Artifact rerun registry coverage | pass | families=14; registry_raw=144; actual_raw=144. | Rerun analyze_artifact_rerun_registry.py after adding raw CSVs or driver scripts. |
 | Claim-scope lint | pass | unresolved_count=0; status_counts={'guarded': 59, 'pass': 5}. | Run analyze_claim_scope_lint.py and revise unguarded hardware-mapping, universal-dominance, optimality, or full-tool-reproduction claims. |
 | Comparison protocol audit | pass | layers=7; needs_revision_count=0; status_counts={'pass': 7}. | Run analyze_comparison_protocol_audit.py and restore missing baseline-role, evidence, comparability, counterpoint, or manuscript anchors. |
+| Citation support audit | pass | rows=10; cited_keys=18; bib_keys=18; needs_revision_count=0; status_counts={'pass': 10}. | Run analyze_citation_support_audit.py and restore missing citations, BibTeX entries, or reference locators. |
 | Headline numeric consistency | pass | claims=15; needs_revision_count=0; status_counts={'pass': 15}. | Run analyze_headline_numeric_consistency.py and align abstract tokens with CSV-derived evidence. |
 | Figure asset audit | pass | figures=7; needs_revision_count=0; status_counts={'pass': 7}. | Run make_submission_figures.py and analyze_figure_asset_audit.py to restore referenced PDF/PNG/SVG assets and source-data CSVs. |
 | LaTeX dependency audit | pass | dependencies=80; type_counts={'bibliography': 2, 'figure': 14, 'main_source': 2, 'tex_input': 62}; needs_revision_count=0; status_counts={'pass': 80}. | Run analyze_latex_dependency_audit.py after payload creation and restore missing TeX, table, figure, bibliography, or payload entries. |
@@ -25,7 +26,7 @@ This read-only verifier checks the terminal package invariants after the payload
 | Anonymous-review readiness audit | pass | needs_revision_count=0; needs_author_input_count=3; status_counts={'needs author input': 3, 'pass': 3}. | Run analyze_anonymous_review_readiness.py and resolve needs-revision rows; double-blind conversion remains venue-dependent author input. |
 | Private submission text preview | pass | status_counts={'needs author input': 1}; private_outputs_are_git_ignored=True. | Run make_submission_text_preview.py and keep generated private Markdown files ignored by Git. |
 | Private metadata payload exclusion | pass | private_payload_hits=none; checked_basenames=['generated_author_declarations.md', 'generated_availability_statements.md', 'generated_cover_letter.md', 'generated_submission_text.md', 'submission_metadata.json']. | Regenerate the payload after removing ignored private metadata or preview files from package inputs. |
-| Payload round-trip audit | pass | needs_revision_count=0; status_counts={'pass': 9}. | Run analyze_payload_roundtrip_audit.py after payload creation and fix any archive/manifest/path/hash issues. |
-| Payload extraction smoke audit | pass | needs_revision_count=0; status_counts={'pass': 5}; smoke_scripts=4. | Run analyze_payload_extraction_smoke_audit.py after payload creation and fix extracted-payload script failures. |
+| Payload round-trip audit | pass | needs_revision_count=0; status_counts={'pass': 10}. | Run analyze_payload_roundtrip_audit.py after payload creation and fix any archive/manifest/path/hash issues. |
+| Payload extraction smoke audit | pass | needs_revision_count=0; status_counts={'pass': 6}; smoke_scripts=5. | Run analyze_payload_extraction_smoke_audit.py after payload creation and fix extracted-payload script failures. |
 | Author LaTeX log boundary | pass | Only allowed rerunfilecheck/showhyphens log lines found. | Inspect the LaTeX log and fix unexpected warnings or errors. |
 | Anonymous LaTeX log boundary | pass | Only allowed rerunfilecheck/showhyphens log lines found. | Inspect the LaTeX log and fix unexpected warnings or errors. |

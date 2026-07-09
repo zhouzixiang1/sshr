@@ -1,5 +1,11 @@
 {
   "archive": "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
+  "citation_support_paths": [
+    "analyze_citation_support_audit.py",
+    "results/analysis_citation_support_audit.md",
+    "results/manifest_citation_support_audit.json",
+    "results/summary_citation_support_audit.csv"
+  ],
   "comparison_protocol_paths": [
     "analyze_comparison_protocol_audit.py",
     "results/analysis_baseline_claim_matrix.md",
@@ -57,19 +63,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=864; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=868; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=864; archive_files=864; missing=none; extra=none.",
+      "evidence": "manifest_files=868; archive_files=868; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=864; mismatches=none.",
+      "evidence": "checked=868; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -105,7 +111,13 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=864; metadata_issues=none.",
+      "evidence": "citation_support_files=4; missing=none.",
+      "item": "Payload citation support evidence",
+      "next_action": "Ensure the uploadable archive includes the citation support audit script and generated CSV/Markdown/JSON evidence.",
+      "status": "pass"
+    },
+    {
+      "evidence": "members_checked=868; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -113,6 +125,6 @@
   ],
   "script": "analyze_payload_roundtrip_audit.py",
   "status_counts": {
-    "pass": 9
+    "pass": 10
   }
 }

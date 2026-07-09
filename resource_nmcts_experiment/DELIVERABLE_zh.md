@@ -53,6 +53,15 @@
 
 该矩阵按 BDD、LUT/ROS、XAG/multiplicative complexity、ABC/RevKit/mockturtle/CirKit、SSHR 和 learning-guided synthesis 六类文献说明各自优化杠杆、本文缺口和实验用途，已经接入英文投稿稿的 Related Work 末尾。
 
+本轮新增 citation support audit，把文献支撑从“表格中写了引用”推进为可机器检查的闭环：
+
+- `analyze_citation_support_audit.py`
+- `results/summary_citation_support_audit.csv`
+- `results/analysis_citation_support_audit.md`
+- `results/manifest_citation_support_audit.json`
+
+该审计逐项检查 BDD、ROS/back-end-aware oracle synthesis、XAG/multiplicative complexity、logic/reversible toolchains、SSHR 和 learning-guided synthesis 六类 related-work 证据：所需 BibTeX key 是否在正文或表格中实际引用、是否存在于 `references.bib`、是否具备 DOI/URL/eprint/howpublished 等可检索 locator，以及 related-work table 是否保留对应 anchor。它已接入 rebuild、readiness、payload round-trip 和解包 smoke test，避免投稿包中出现引用键缺失、未引用 bib 条目或文献定位表与 bibliography 脱节。
+
 本轮已把这层定位固化为两张可复现矩阵：先用 claim matrix 说明每类 baseline 的论证角色和不能支持的过度主张，再用 evidence matrix 汇总覆盖范围、verified rows 和 paired score 结果。
 
 - `analyze_baseline_claim_matrix.py`

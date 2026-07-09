@@ -1,0 +1,63 @@
+{
+  "bib_key_count": 18,
+  "bib_keys": [
+    "brayton2010abc",
+    "cirkit",
+    "kremer2025nonclifford",
+    "machiya2026monteq",
+    "meuli2019multiplicative",
+    "meuli2020ros",
+    "meuli2022xag",
+    "mockturtle",
+    "revkit",
+    "rietsch2024unitary",
+    "riu2025rlzx",
+    "soeken2012revkit",
+    "soeken2018epfl",
+    "tsaras2024shortcircuit",
+    "wille2009bdd",
+    "yu2025backend",
+    "zheng2025sshr",
+    "zhou2022qctmcts"
+  ],
+  "cited_key_count": 18,
+  "cited_keys": [
+    "brayton2010abc",
+    "cirkit",
+    "kremer2025nonclifford",
+    "machiya2026monteq",
+    "meuli2019multiplicative",
+    "meuli2020ros",
+    "meuli2022xag",
+    "mockturtle",
+    "revkit",
+    "rietsch2024unitary",
+    "riu2025rlzx",
+    "soeken2012revkit",
+    "soeken2018epfl",
+    "tsaras2024shortcircuit",
+    "wille2009bdd",
+    "yu2025backend",
+    "zheng2025sshr",
+    "zhou2022qctmcts"
+  ],
+  "families": 6,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_citation_support_audit.md",
+    "manifest": "results/manifest_citation_support_audit.json",
+    "summary": "results/summary_citation_support_audit.csv"
+  },
+  "python": "3.11.15",
+  "rows": 10,
+  "script": "analyze_citation_support_audit.py",
+  "source_files": {
+    "anonymous_tex": "paper_latex/resource_nmcts_submission_anonymous.tex",
+    "author_tex": "paper_latex/resource_nmcts_submission_v1.tex",
+    "references": "paper_latex/references.bib",
+    "related_table": "paper_latex/tables/related_work_positioning.tex"
+  },
+  "status_counts": {
+    "pass": 10
+  }
+}

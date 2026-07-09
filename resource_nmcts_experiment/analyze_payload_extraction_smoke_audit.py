@@ -57,6 +57,15 @@ SMOKE_SPECS = (
         minimum_rows=15,
     ),
     SmokeSpec(
+        name="Citation support audit",
+        script="analyze_citation_support_audit.py",
+        manifest="results/manifest_citation_support_audit.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=10,
+    ),
+    SmokeSpec(
         name="Claim-scope lint",
         script="analyze_claim_scope_lint.py",
         manifest="results/manifest_claim_scope_lint.json",

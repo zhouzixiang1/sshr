@@ -5,6 +5,7 @@ The verifier runs after the payload archive has been created.  It checks the
 terminal package invariants that are easy to regress during final polishing:
 compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, comparison-protocol coverage,
+citation support,
 headline-numeric consistency,
 figure-asset coverage,
 LaTeX dependency closure,
@@ -41,6 +42,7 @@ PAYLOAD_SUMMARY = RESULTS / "summary_submission_payload_archive.csv"
 PAYLOAD_MANIFEST = RESULTS / "manifest_submission_payload_archive.json"
 CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
 COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.json"
+CITATION_SUPPORT_MANIFEST = RESULTS / "manifest_citation_support_audit.json"
 HEADLINE_NUMERIC_MANIFEST = RESULTS / "manifest_headline_numeric_consistency.json"
 FIGURE_ASSET_MANIFEST = RESULTS / "manifest_figure_asset_audit.json"
 LATEX_DEPENDENCY_MANIFEST = RESULTS / "manifest_latex_dependency_audit.json"
@@ -220,6 +222,22 @@ def verify_comparison_protocol() -> dict[str, str]:
         status,
         f"layers={layers}; needs_revision_count={revisions}; status_counts={counts}.",
         "Run analyze_comparison_protocol_audit.py and restore missing baseline-role, evidence, comparability, counterpoint, or manuscript anchors.",
+    )
+
+
+def verify_citation_support() -> dict[str, str]:
+    manifest = read_json(CITATION_SUPPORT_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    cited_keys = manifest.get("cited_key_count", "missing") if manifest else "missing"
+    bib_keys = manifest.get("bib_key_count", "missing") if manifest else "missing"
+    status = "pass" if manifest and revisions == 0 else "needs revision"
+    return row(
+        "Citation support audit",
+        status,
+        f"rows={rows}; cited_keys={cited_keys}; bib_keys={bib_keys}; needs_revision_count={revisions}; status_counts={counts}.",
+        "Run analyze_citation_support_audit.py and restore missing citations, BibTeX entries, or reference locators.",
     )
 
 
@@ -461,6 +479,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_registry(),
             verify_claim_scope(),
             verify_comparison_protocol(),
+            verify_citation_support(),
             verify_headline_numeric(),
             verify_figure_assets(),
             verify_latex_dependencies(),

@@ -65,6 +65,8 @@ After the quick rebuild, the current package should report:
 - readiness state in `results/analysis_submission_readiness_audit.md`
 - comparison protocol state in
   `results/analysis_comparison_protocol_audit.md`
+- citation support state in
+  `results/analysis_citation_support_audit.md`
 - headline numeric consistency in
   `results/analysis_headline_numeric_consistency.md`
 - figure asset state in `results/analysis_figure_asset_audit.md`
@@ -89,6 +91,7 @@ git diff --check
 ./verify_submission_package.sh
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_extraction_smoke_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_citation_support_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_headline_numeric_consistency.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_latex_dependency_audit.py
 pdfinfo paper_latex/resource_nmcts_submission_v1.pdf | sed -n '1,20p'
@@ -114,6 +117,8 @@ layout warnings.
   `results/analysis_baseline_comparability_audit.md`
 - Comparison protocol audit:
   `results/analysis_comparison_protocol_audit.md`
+- Citation support audit:
+  `results/analysis_citation_support_audit.md`
 - Headline numeric consistency audit:
   `results/analysis_headline_numeric_consistency.md`
 - Figure asset audit:
