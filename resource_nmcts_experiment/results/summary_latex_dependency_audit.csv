@@ -3,6 +3,7 @@ author,main_source,paper_latex/resource_nmcts_submission_v1.tex,paper_latex/reso
 author,tex_input,tables/contribution_evidence_map,paper_latex/tables/contribution_evidence_map.tex,True,True,pass,No action needed.
 author,tex_input,tables/novelty_comparison_scorecard,paper_latex/tables/novelty_comparison_scorecard.tex,True,True,pass,No action needed.
 author,tex_input,tables/related_work_positioning,paper_latex/tables/related_work_positioning.tex,True,True,pass,No action needed.
+author,tex_input,tables/oracle_resource_citation_audit,paper_latex/tables/oracle_resource_citation_audit.tex,True,True,pass,No action needed.
 author,tex_input,tables/method_workflow,paper_latex/tables/method_workflow.tex,True,True,pass,No action needed.
 author,tex_input,tables/algorithm_contract,paper_latex/tables/algorithm_contract.tex,True,True,pass,No action needed.
 author,tex_input,tables/search_budget_contract,paper_latex/tables/search_budget_contract.tex,True,True,pass,No action needed.
@@ -80,6 +81,7 @@ anonymous,main_source,paper_latex/resource_nmcts_submission_anonymous.tex,paper_
 anonymous,tex_input,tables/contribution_evidence_map,paper_latex/tables/contribution_evidence_map.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/novelty_comparison_scorecard,paper_latex/tables/novelty_comparison_scorecard.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/related_work_positioning,paper_latex/tables/related_work_positioning.tex,True,True,pass,No action needed.
+anonymous,tex_input,tables/oracle_resource_citation_audit,paper_latex/tables/oracle_resource_citation_audit.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/method_workflow,paper_latex/tables/method_workflow.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/algorithm_contract,paper_latex/tables/algorithm_contract.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/search_budget_contract,paper_latex/tables/search_budget_contract.tex,True,True,pass,No action needed.
@@ -157,6 +159,7 @@ acm_tqc,main_source,paper_latex/resource_nmcts_submission_acm_tqc.tex,paper_late
 acm_tqc,tex_input,tables/contribution_evidence_map,paper_latex/tables/contribution_evidence_map.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/novelty_comparison_scorecard,paper_latex/tables/novelty_comparison_scorecard.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/related_work_positioning,paper_latex/tables/related_work_positioning.tex,True,True,pass,No action needed.
+acm_tqc,tex_input,tables/oracle_resource_citation_audit,paper_latex/tables/oracle_resource_citation_audit.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/method_workflow,paper_latex/tables/method_workflow.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/algorithm_contract,paper_latex/tables/algorithm_contract.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/search_budget_contract,paper_latex/tables/search_budget_contract.tex,True,True,pass,No action needed.

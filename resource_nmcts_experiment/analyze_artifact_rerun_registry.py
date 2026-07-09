@@ -320,24 +320,28 @@ def specs() -> list[EvidenceFamily]:
             scripts=(
                 "analyze_related_work_positioning.py",
                 "analyze_citation_support_audit.py",
+                "analyze_oracle_resource_citation_audit.py",
                 "analyze_learning_citation_verification.py",
             ),
             raw_patterns=(),
             manifest_patterns=(
                 "manifest_citation_support_audit.json",
+                "manifest_oracle_resource_citation_audit.json",
                 "manifest_learning_citation_verification.json",
             ),
             summary_patterns=(
                 "summary_related_work_positioning.csv",
                 "summary_citation_support_audit.csv",
+                "summary_oracle_resource_citation_audit.csv",
                 "summary_learning_citation_verification.csv",
             ),
             analysis_patterns=(
                 "analysis_related_work_positioning.md",
                 "analysis_citation_support_audit.md",
+                "analysis_oracle_resource_citation_audit.md",
                 "analysis_learning_citation_verification.md",
             ),
-            dependency_boundary="Offline locator and scope-boundary audit; it records source-backed related-work positioning but does not claim that adjacent AI/MCTS systems are same-task baselines.",
+            dependency_boundary="Offline locator and scope-boundary audit; it records source-backed related-work and oracle-resource positioning but does not claim that adjacent papers are same-task baselines.",
         ),
         EvidenceFamily(
             family="SSHR reproduction-scope audit",

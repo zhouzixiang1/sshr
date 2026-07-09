@@ -197,6 +197,10 @@ ULTRA_SCALE64_PROFILE_TABLE = THIS_DIR / "paper_latex" / "tables" / "screen_scal
 CITATION_SUPPORT_ANALYSIS = RESULTS / "analysis_citation_support_audit.md"
 CITATION_SUPPORT_SUMMARY = RESULTS / "summary_citation_support_audit.csv"
 CITATION_SUPPORT_MANIFEST = RESULTS / "manifest_citation_support_audit.json"
+ORACLE_RESOURCE_CITATION_ANALYSIS = RESULTS / "analysis_oracle_resource_citation_audit.md"
+ORACLE_RESOURCE_CITATION_SUMMARY = RESULTS / "summary_oracle_resource_citation_audit.csv"
+ORACLE_RESOURCE_CITATION_MANIFEST = RESULTS / "manifest_oracle_resource_citation_audit.json"
+ORACLE_RESOURCE_CITATION_TABLE = THIS_DIR / "paper_latex" / "tables" / "oracle_resource_citation_audit.tex"
 RERUN_REGISTRY_ANALYSIS = RESULTS / "analysis_artifact_rerun_registry.md"
 RERUN_REGISTRY_SUMMARY = RESULTS / "summary_artifact_rerun_registry.csv"
 RERUN_REGISTRY_MANIFEST = RESULTS / "manifest_artifact_rerun_registry.json"
@@ -632,6 +636,23 @@ def build_rows() -> list[dict[str, str]]:
     citation_support_counts = citation_support_manifest.get("status_counts", {}) if citation_support_manifest else {}
     citation_support_rows = citation_support_manifest.get("rows", "missing") if citation_support_manifest else "missing"
     citation_support_keys = citation_support_manifest.get("cited_key_count", "missing") if citation_support_manifest else "missing"
+    oracle_resource_citation_manifest = read_json(ORACLE_RESOURCE_CITATION_MANIFEST)
+    oracle_resource_citation_revisions = (
+        int(oracle_resource_citation_manifest.get("needs_revision_count", -1))
+        if oracle_resource_citation_manifest
+        else -1
+    )
+    oracle_resource_citation_counts = (
+        oracle_resource_citation_manifest.get("status_counts", {}) if oracle_resource_citation_manifest else {}
+    )
+    oracle_resource_citation_rows = (
+        oracle_resource_citation_manifest.get("rows", "missing") if oracle_resource_citation_manifest else "missing"
+    )
+    oracle_resource_citation_keys = (
+        oracle_resource_citation_manifest.get("citation_rows", "missing")
+        if oracle_resource_citation_manifest
+        else "missing"
+    )
     search_control_manifest = read_json(SEARCH_CONTROL_MANIFEST)
     search_control_revisions = (
         int(search_control_manifest.get("needs_revision_count", -1)) if search_control_manifest else -1
@@ -1552,6 +1573,19 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Citation support audit checks related-work families, cited BibTeX keys, bibliography resolution, and DOI/URL/eprint locator coverage; rows={citation_support_rows}; cited_keys={citation_support_keys}; status_counts={citation_support_counts}; needs_revision_count={citation_support_revisions}.",
             "next_action": "Rerun analyze_citation_support_audit.py after changing related-work text, citations, bibliography entries, or literature-positioning tables.",
+        },
+        {
+            "item": "Oracle-resource citation boundary audit",
+            "status": "pass"
+            if ORACLE_RESOURCE_CITATION_ANALYSIS.exists()
+            and ORACLE_RESOURCE_CITATION_SUMMARY.exists()
+            and ORACLE_RESOURCE_CITATION_MANIFEST.exists()
+            and ORACLE_RESOURCE_CITATION_TABLE.exists()
+            and "tab:oracle-resource-citation-audit" in text
+            and oracle_resource_citation_revisions == 0
+            else "needs revision",
+            "evidence": f"Recent oracle-resource citation audit checks arXiv locators, manuscript-variant citations, related-work table anchors, and adjacent-context boundaries; rows={oracle_resource_citation_rows}; citation_rows={oracle_resource_citation_keys}; status_counts={oracle_resource_citation_counts}; needs_revision_count={oracle_resource_citation_revisions}; table_anchor_present={'tab:oracle-resource-citation-audit' in text}.",
+            "next_action": "Rerun analyze_oracle_resource_citation_audit.py after changing recent oracle-resource citations, BibTeX entries, or same-task baseline boundary wording.",
         },
         {
             "item": "Paired effect uncertainty",

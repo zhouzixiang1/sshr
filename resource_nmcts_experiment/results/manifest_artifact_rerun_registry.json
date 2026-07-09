@@ -178,20 +178,20 @@
       "summary_files": "1"
     },
     {
-      "analysis_files": "3",
+      "analysis_files": "4",
       "claim_use": "Verifies related-work positioning, cited BibTeX coverage, DOI/arXiv locators, and learning-guided synthesis scope boundaries.",
-      "dependency_boundary": "Offline locator and scope-boundary audit; it records source-backed related-work positioning but does not claim that adjacent AI/MCTS systems are same-task baselines.",
-      "driver_scripts": "analyze_related_work_positioning.py; analyze_citation_support_audit.py; analyze_learning_citation_verification.py",
+      "dependency_boundary": "Offline locator and scope-boundary audit; it records source-backed related-work and oracle-resource positioning but does not claim that adjacent papers are same-task baselines.",
+      "driver_scripts": "analyze_related_work_positioning.py; analyze_citation_support_audit.py; analyze_oracle_resource_citation_audit.py; analyze_learning_citation_verification.py",
       "evidence_family": "Related-work and citation verification",
-      "manifest_files": "2",
+      "manifest_files": "3",
       "raw_files": "0",
       "raw_rows": "0",
       "representative_raw": "",
       "rerun_tier": "quick literature audit",
       "scripts_missing": "",
-      "scripts_present": "3",
+      "scripts_present": "4",
       "status": "complete",
-      "summary_files": "3"
+      "summary_files": "4"
     },
     {
       "analysis_files": "3",

@@ -4,14 +4,14 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 
 ## Status counts
 
-- pass: 231
+- pass: 234
 
 ## Dependency types
 
 - bibliography: 3
 - figure: 21
 - main_source: 3
-- tex_input: 204
+- tex_input: 207
 
 ## Missing dependencies
 
@@ -25,6 +25,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/contribution_evidence_map` | `paper_latex/tables/contribution_evidence_map.tex` | True | True | pass |
 | author | tex_input | `tables/novelty_comparison_scorecard` | `paper_latex/tables/novelty_comparison_scorecard.tex` | True | True | pass |
 | author | tex_input | `tables/related_work_positioning` | `paper_latex/tables/related_work_positioning.tex` | True | True | pass |
+| author | tex_input | `tables/oracle_resource_citation_audit` | `paper_latex/tables/oracle_resource_citation_audit.tex` | True | True | pass |
 | author | tex_input | `tables/method_workflow` | `paper_latex/tables/method_workflow.tex` | True | True | pass |
 | author | tex_input | `tables/algorithm_contract` | `paper_latex/tables/algorithm_contract.tex` | True | True | pass |
 | author | tex_input | `tables/search_budget_contract` | `paper_latex/tables/search_budget_contract.tex` | True | True | pass |
@@ -102,6 +103,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/contribution_evidence_map` | `paper_latex/tables/contribution_evidence_map.tex` | True | True | pass |
 | anonymous | tex_input | `tables/novelty_comparison_scorecard` | `paper_latex/tables/novelty_comparison_scorecard.tex` | True | True | pass |
 | anonymous | tex_input | `tables/related_work_positioning` | `paper_latex/tables/related_work_positioning.tex` | True | True | pass |
+| anonymous | tex_input | `tables/oracle_resource_citation_audit` | `paper_latex/tables/oracle_resource_citation_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/method_workflow` | `paper_latex/tables/method_workflow.tex` | True | True | pass |
 | anonymous | tex_input | `tables/algorithm_contract` | `paper_latex/tables/algorithm_contract.tex` | True | True | pass |
 | anonymous | tex_input | `tables/search_budget_contract` | `paper_latex/tables/search_budget_contract.tex` | True | True | pass |
@@ -179,6 +181,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/contribution_evidence_map` | `paper_latex/tables/contribution_evidence_map.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/novelty_comparison_scorecard` | `paper_latex/tables/novelty_comparison_scorecard.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/related_work_positioning` | `paper_latex/tables/related_work_positioning.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/oracle_resource_citation_audit` | `paper_latex/tables/oracle_resource_citation_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/method_workflow` | `paper_latex/tables/method_workflow.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/algorithm_contract` | `paper_latex/tables/algorithm_contract.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/search_budget_contract` | `paper_latex/tables/search_budget_contract.tex` | True | True | pass |

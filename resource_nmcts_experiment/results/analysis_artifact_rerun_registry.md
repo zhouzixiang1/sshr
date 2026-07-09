@@ -21,7 +21,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | Comparison protocol and claim boundaries | quick comparison audit | 0 | 0 | 4 | complete | Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps. |
 | Benchmark suite composition and representativeness | quick benchmark audit | 51 | 34954 | 2 | complete | Descriptive derived audit over existing raw CSVs; it records coverage and verification routes but does not rerun synthesis, training, or external toolchains. |
 | Novelty and comparison scorecard | quick comparison audit | 0 | 0 | 1 | complete | Quick derived audit; it strengthens reviewer-facing positioning without rerunning raw experiments. |
-| Related-work and citation verification | quick literature audit | 0 | 0 | 2 | complete | Offline locator and scope-boundary audit; it records source-backed related-work positioning but does not claim that adjacent AI/MCTS systems are same-task baselines. |
+| Related-work and citation verification | quick literature audit | 0 | 0 | 3 | complete | Offline locator and scope-boundary audit; it records source-backed related-work and oracle-resource positioning but does not claim that adjacent papers are same-task baselines. |
 | SSHR reproduction-scope audit | quick comparison audit | 3 | 3402 | 4 | complete | Quick scope audit over existing SSHR-facing rows and references; it does not rerun heavy SSHR-I/Gurobi or every published random table. |
 | Resource-weight sensitivity and robustness | quick derived audit | 12 | 20630 | 2 | complete | Post-hoc logical-resource rescoring only; it does not rerun synthesis and is not a hardware cost model. |
 | Traditional logical baselines | raw Python rerun | 6 | 4518 | 5 | complete | Python rerun; ILP-based subbaselines need Gurobi where enabled. |
@@ -90,7 +90,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - representative raw: not applicable for this tier
 - **Related-work and citation verification**
   - claim use: Verifies related-work positioning, cited BibTeX coverage, DOI/arXiv locators, and learning-guided synthesis scope boundaries.
-  - scripts: `analyze_related_work_positioning.py; analyze_citation_support_audit.py; analyze_learning_citation_verification.py`
+  - scripts: `analyze_related_work_positioning.py; analyze_citation_support_audit.py; analyze_oracle_resource_citation_audit.py; analyze_learning_citation_verification.py`
   - representative raw: not applicable for this tier
 - **SSHR reproduction-scope audit**
   - claim use: Separates source-anchored SSHR paper references, same-function SSHR-H rows, timed SSHR-I rows, exact n<=4 pilot checks, and excluded full-paper SSHR reruns.

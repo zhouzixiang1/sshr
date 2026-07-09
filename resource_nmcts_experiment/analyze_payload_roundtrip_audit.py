@@ -328,9 +328,21 @@ HEADLINE_NUMERIC_PATHS = {
 }
 CITATION_SUPPORT_PATHS = {
     "analyze_citation_support_audit.py",
+    "analyze_oracle_resource_citation_audit.py",
     "results/analysis_citation_support_audit.md",
+    "results/analysis_oracle_resource_citation_audit.md",
     "results/summary_citation_support_audit.csv",
+    "results/summary_oracle_resource_citation_audit.csv",
     "results/manifest_citation_support_audit.json",
+    "results/manifest_oracle_resource_citation_audit.json",
+    "paper_latex/tables/oracle_resource_citation_audit.tex",
+}
+ORACLE_RESOURCE_CITATION_PATHS = {
+    "analyze_oracle_resource_citation_audit.py",
+    "results/analysis_oracle_resource_citation_audit.md",
+    "results/summary_oracle_resource_citation_audit.csv",
+    "results/manifest_oracle_resource_citation_audit.json",
+    "paper_latex/tables/oracle_resource_citation_audit.tex",
 }
 EDITORIAL_SCREENING_PATHS = {
     "analyze_editorial_screening_audit.py",
@@ -766,6 +778,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    oracle_citation_missing = sorted(ORACLE_RESOURCE_CITATION_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload oracle-resource citation evidence",
+            "pass" if not oracle_citation_missing else "needs revision",
+            f"oracle_resource_citation_files={len(ORACLE_RESOURCE_CITATION_PATHS)}; missing={oracle_citation_missing or 'none'}.",
+            "Ensure the uploadable archive includes the oracle-resource citation audit script, generated evidence, and manuscript table.",
+        )
+    )
+
     editorial_missing = sorted(EDITORIAL_SCREENING_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -978,6 +1000,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "stochastic_control_stability_paths": sorted(STOCHASTIC_CONTROL_STABILITY_PATHS),
         "headline_numeric_paths": sorted(HEADLINE_NUMERIC_PATHS),
         "citation_support_paths": sorted(CITATION_SUPPORT_PATHS),
+        "oracle_resource_citation_paths": sorted(ORACLE_RESOURCE_CITATION_PATHS),
         "editorial_screening_paths": sorted(EDITORIAL_SCREENING_PATHS),
         "target_venue_decision_paths": sorted(TARGET_VENUE_DECISION_PATHS),
         "target_venue_format_paths": sorted(TARGET_VENUE_FORMAT_PATHS),

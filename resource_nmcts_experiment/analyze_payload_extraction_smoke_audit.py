@@ -391,6 +391,15 @@ SMOKE_SPECS = (
         minimum_rows=10,
     ),
     SmokeSpec(
+        name="Oracle-resource citation audit",
+        script="analyze_oracle_resource_citation_audit.py",
+        manifest="results/manifest_oracle_resource_citation_audit.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="citation_rows",
+        minimum_rows=3,
+    ),
+    SmokeSpec(
         name="PDF visual audit",
         script="analyze_pdf_visual_audit.py",
         manifest="results/manifest_pdf_visual_audit.json",

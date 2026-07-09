@@ -49,6 +49,12 @@ FAMILIES = (
         role="resource-aware LUT/oracle synthesis and published small-function counterpoint boundary",
     ),
     CitationFamily(
+        item="Recent oracle-resource and Boolean-encoding work",
+        required_keys=("li2026oracle", "assaad2026esop", "dutta2025tdepth"),
+        anchor="Recent oracle-resource and Boolean-encoding work",
+        role="recent adjacent oracle-resource context and non-baseline boundary",
+    ),
+    CitationFamily(
         item="XAG and multiplicative complexity",
         required_keys=("meuli2019multiplicative", "meuli2022xag"),
         anchor="XAG and multiplicative complexity",

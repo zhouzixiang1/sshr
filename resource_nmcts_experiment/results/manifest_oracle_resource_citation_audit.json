@@ -1,0 +1,33 @@
+{
+  "checked_keys": [
+    "li2026oracle",
+    "assaad2026esop",
+    "dutta2025tdepth"
+  ],
+  "citation_rows": 3,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_oracle_resource_citation_audit.md",
+    "manifest": "results/manifest_oracle_resource_citation_audit.json",
+    "summary": "results/summary_oracle_resource_citation_audit.csv",
+    "table": "paper_latex/tables/oracle_resource_citation_audit.tex"
+  },
+  "primary_sources": [
+    "arXiv:2506.01542",
+    "arXiv:2605.16202",
+    "arXiv:2605.21380"
+  ],
+  "python": "3.11.15",
+  "rows": 4,
+  "script": "analyze_oracle_resource_citation_audit.py",
+  "source_files": {
+    "acm_tex": "paper_latex/resource_nmcts_submission_acm_tqc.tex",
+    "anonymous_tex": "paper_latex/resource_nmcts_submission_anonymous.tex",
+    "author_tex": "paper_latex/resource_nmcts_submission_v1.tex",
+    "references": "paper_latex/references.bib",
+    "related_table": "paper_latex/tables/related_work_positioning.tex"
+  },
+  "status_counts": {
+    "pass": 4
+  }
+}

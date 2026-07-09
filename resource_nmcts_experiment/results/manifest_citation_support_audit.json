@@ -1,12 +1,15 @@
 {
-  "bib_key_count": 27,
+  "bib_key_count": 30,
   "bib_keys": [
+    "assaad2026esop",
     "brayton2010abc",
     "caterpillar",
     "cirkit",
     "dubal2025paulinetwork",
+    "dutta2025tdepth",
     "furrutter2024diffusion",
     "kremer2025nonclifford",
+    "li2026oracle",
     "machiya2026monteq",
     "meuli2019multiplicative",
     "meuli2020ros",
@@ -29,14 +32,17 @@
     "zheng2025sshr",
     "zhou2022qctmcts"
   ],
-  "cited_key_count": 27,
+  "cited_key_count": 30,
   "cited_keys": [
+    "assaad2026esop",
     "brayton2010abc",
     "caterpillar",
     "cirkit",
     "dubal2025paulinetwork",
+    "dutta2025tdepth",
     "furrutter2024diffusion",
     "kremer2025nonclifford",
+    "li2026oracle",
     "machiya2026monteq",
     "meuli2019multiplicative",
     "meuli2020ros",
@@ -59,7 +65,7 @@
     "zheng2025sshr",
     "zhou2022qctmcts"
   ],
-  "families": 6,
+  "families": 7,
   "needs_revision_count": 0,
   "outputs": {
     "analysis": "results/analysis_citation_support_audit.md",
@@ -67,7 +73,7 @@
     "summary": "results/summary_citation_support_audit.csv"
   },
   "python": "3.11.15",
-  "rows": 10,
+  "rows": 11,
   "script": "analyze_citation_support_audit.py",
   "source_files": {
     "anonymous_tex": "paper_latex/resource_nmcts_submission_anonymous.tex",
@@ -76,6 +82,6 @@
     "related_table": "paper_latex/tables/related_work_positioning.tex"
   },
   "status_counts": {
-    "pass": 10
+    "pass": 11
   }
 }

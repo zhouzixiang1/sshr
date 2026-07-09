@@ -183,6 +183,8 @@ TARGET_VENUE_FORMAT_SOURCE = THIS_DIR / "paper_latex" / "resource_nmcts_submissi
 TARGET_VENUE_FORMAT_PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_acm_tqc.pdf"
 SUPPORT_PACKET_MANIFEST = RESULTS / "manifest_submission_support_packet_audit.json"
 CITATION_SUPPORT_MANIFEST = RESULTS / "manifest_citation_support_audit.json"
+ORACLE_RESOURCE_CITATION_MANIFEST = RESULTS / "manifest_oracle_resource_citation_audit.json"
+ORACLE_RESOURCE_CITATION_TABLE = THIS_DIR / "paper_latex" / "tables" / "oracle_resource_citation_audit.tex"
 LEARNING_CITATION_MANIFEST = RESULTS / "manifest_learning_citation_verification.json"
 LEARNING_CITATION_TABLE = THIS_DIR / "paper_latex" / "tables" / "learning_citation_verification.tex"
 HEADLINE_NUMERIC_MANIFEST = RESULTS / "manifest_headline_numeric_consistency.json"
@@ -1610,6 +1612,27 @@ def verify_citation_support() -> dict[str, str]:
     )
 
 
+def verify_oracle_resource_citation() -> dict[str, str]:
+    manifest = read_json(ORACLE_RESOURCE_CITATION_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    citation_rows = manifest.get("citation_rows", "missing") if manifest else "missing"
+    sources = manifest.get("primary_sources", []) if manifest else []
+    table_exists = ORACLE_RESOURCE_CITATION_TABLE.exists()
+    status = (
+        "pass"
+        if manifest and revisions == 0 and rows == 4 and citation_rows == 3 and table_exists
+        else "needs revision"
+    )
+    return row(
+        "Oracle-resource citation boundary audit",
+        status,
+        f"rows={rows}; citation_rows={citation_rows}; primary_sources={len(sources) if isinstance(sources, list) else 'missing'}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
+        "Run analyze_oracle_resource_citation_audit.py and restore recent oracle-resource citations, BibTeX locators, manuscript anchors, or boundary wording.",
+    )
+
+
 def verify_learning_citation_verification() -> dict[str, str]:
     manifest = read_json(LEARNING_CITATION_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -2353,6 +2376,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_target_venue_format(),
             verify_support_packet(),
             verify_citation_support(),
+            verify_oracle_resource_citation(),
             verify_learning_citation_verification(),
             verify_headline_numeric(),
             verify_figure_assets(),

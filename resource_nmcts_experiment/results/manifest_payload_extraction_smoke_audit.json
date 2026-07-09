@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1206; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1211; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -243,8 +243,14 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_citation_support_audit.json; needs_revision_count=0; rows=10; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_citation_support_audit.json; needs_revision_count=0; rows=11; stderr=none",
       "item": "Citation support audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_oracle_resource_citation_audit.json; needs_revision_count=0; citation_rows=3; stderr=none",
+      "item": "Oracle-resource citation audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -592,6 +598,13 @@
     },
     {
       "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_oracle_resource_citation_audit.json",
+      "minimum_rows_key": "citation_rows",
+      "name": "Oracle-resource citation audit",
+      "script": "analyze_oracle_resource_citation_audit.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
       "manifest": "results/manifest_pdf_visual_audit.json",
       "minimum_rows_key": "rows",
       "name": "PDF visual audit",
@@ -669,6 +682,6 @@
     }
   ],
   "status_counts": {
-    "pass": 51
+    "pass": 52
   }
 }

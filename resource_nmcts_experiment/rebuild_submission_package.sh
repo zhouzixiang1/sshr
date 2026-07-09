@@ -35,6 +35,7 @@ run_py analyze_algorithm_contract_table.py
 run_py analyze_search_budget_contract.py
 run_py analyze_related_work_positioning.py
 run_py analyze_citation_support_audit.py
+run_py analyze_oracle_resource_citation_audit.py
 run_py analyze_learning_citation_verification.py
 run_py analyze_baseline_claim_matrix.py
 run_py run_caterpillar_xag_api_probe.py

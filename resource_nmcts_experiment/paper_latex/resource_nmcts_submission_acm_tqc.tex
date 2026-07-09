@@ -194,6 +194,14 @@ cost~\cite{meuli2022xag,meuli2019multiplicative}.  Back-end-aware oracle
 synthesis further connects logic synthesis to downstream resource metrics, but
 that line includes mapping concerns that are outside the scope of this
 logical-layer study~\cite{yu2025backend}.
+Recent oracle-resource work also emphasizes that oracle structure can dominate
+algorithm-level cost: HRSE/ASDT modeling targets hierarchical oracle
+description and space--depth tradeoffs~\cite{li2026oracle}, ESOP encodings
+reduce Grover-SAT oracle costs for formula instances~\cite{assaad2026esop},
+and analytic Boolean-circuit constructions study T-depth bounds for arbitrary
+Boolean functions~\cite{dutta2025tdepth}.  These results motivate
+resource-aware Boolean-oracle representations, but they are adjacent context
+rather than neural \mcts{} \anf{}/\fprm{} term-search baselines.
 
 \subsection{Reversible and logic-synthesis toolchains}
 
@@ -247,6 +255,24 @@ literature family optimizes, which gap motivates the proposed search, and how
 the manuscript uses that family in experiments or claim boundaries.}
 \label{tab:related-positioning}
 \input{tables/related_work_positioning}
+\end{table}
+
+Table~\ref{tab:oracle-resource-citation-audit} records the specific boundary
+for the recent oracle-resource citations.  This prevents the new citations
+from being read as missing baselines: they support motivation and scope, while
+the experimental comparison remains the matched logical-layer benchmark suite
+described below.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.04}
+\caption{Recent oracle-resource citation audit.  Each row records what the
+adjacent paper verifies and why it is not treated as a direct experimental
+baseline for neural \mcts{} \anf{}/\fprm{} term search.}
+\label{tab:oracle-resource-citation-audit}
+\input{tables/oracle_resource_citation_audit}
 \end{table}
 
 \section{Problem and Resource Model}

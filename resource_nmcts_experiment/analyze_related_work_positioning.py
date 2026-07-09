@@ -29,6 +29,14 @@ ROWS = [
         "paper_use": "Used through a verified ROS-style LUT proxy, line-aware reselection stress tests, and a published STG counterpoint.",
     },
     {
+        "line": "Recent oracle-resource and Boolean-encoding work",
+        "representative_plain": "HRSE/ASDT oracle modeling, ESOP SAT oracles, and T-depth Boolean-circuit constructions",
+        "representative_latex": r"HRSE/ASDT oracle modeling, ESOP SAT oracles, and T-depth Boolean-circuit constructions~\cite{li2026oracle,assaad2026esop,dutta2025tdepth}",
+        "main_lever": "Improves oracle resource modeling, application-level Boolean encodings, or analytic T-depth bounds.",
+        "gap": "These works motivate oracle-resource pressure but do not provide a neural MCTS ANF/FPRM term-search baseline.",
+        "paper_use": "Used as recent adjacent oracle-resource context, not as direct experimental baselines.",
+    },
+    {
         "line": "XAG and multiplicative complexity",
         "representative_plain": "XAG compilation and multiplicative-complexity oracle cost",
         "representative_latex": r"XAG compilation and multiplicative-complexity oracle cost~\cite{meuli2019multiplicative,meuli2022xag}",

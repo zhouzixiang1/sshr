@@ -66,9 +66,14 @@
   ],
   "citation_support_paths": [
     "analyze_citation_support_audit.py",
+    "analyze_oracle_resource_citation_audit.py",
+    "paper_latex/tables/oracle_resource_citation_audit.tex",
     "results/analysis_citation_support_audit.md",
+    "results/analysis_oracle_resource_citation_audit.md",
     "results/manifest_citation_support_audit.json",
-    "results/summary_citation_support_audit.csv"
+    "results/manifest_oracle_resource_citation_audit.json",
+    "results/summary_citation_support_audit.csv",
+    "results/summary_oracle_resource_citation_audit.csv"
   ],
   "cnot_constraint_profile_paths": [
     "analyze_cnot_constraint_profile_audit.py",
@@ -167,6 +172,13 @@
     "results/manifest_neural_mcts_claim_calibration.json",
     "results/summary_neural_mcts_claim_calibration.csv"
   ],
+  "oracle_resource_citation_paths": [
+    "analyze_oracle_resource_citation_audit.py",
+    "paper_latex/tables/oracle_resource_citation_audit.tex",
+    "results/analysis_oracle_resource_citation_audit.md",
+    "results/manifest_oracle_resource_citation_audit.json",
+    "results/summary_oracle_resource_citation_audit.csv"
+  ],
   "outputs": {
     "analysis": "results/analysis_payload_roundtrip_audit.md",
     "manifest": "results/manifest_payload_roundtrip_audit.json",
@@ -261,19 +273,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1206; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1211; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=1206; archive_files=1206; missing=none; extra=none.",
+      "evidence": "manifest_files=1211; archive_files=1211; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=1206; mismatches=none.",
+      "evidence": "checked=1211; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -429,9 +441,15 @@
       "status": "pass"
     },
     {
-      "evidence": "citation_support_files=4; missing=none.",
+      "evidence": "citation_support_files=9; missing=none.",
       "item": "Payload citation support evidence",
       "next_action": "Ensure the uploadable archive includes the citation support audit script and generated CSV/Markdown/JSON evidence.",
+      "status": "pass"
+    },
+    {
+      "evidence": "oracle_resource_citation_files=5; missing=none.",
+      "item": "Payload oracle-resource citation evidence",
+      "next_action": "Ensure the uploadable archive includes the oracle-resource citation audit script, generated evidence, and manuscript table.",
       "status": "pass"
     },
     {
@@ -507,7 +525,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=1206; metadata_issues=none.",
+      "evidence": "members_checked=1211; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -555,7 +573,7 @@
     "results/summary_sshr_reproduction_scope_audit.csv"
   ],
   "status_counts": {
-    "pass": 42
+    "pass": 43
   },
   "stg_benchmark_paths": [
     "analyze_stg_published_benchmark.py",
