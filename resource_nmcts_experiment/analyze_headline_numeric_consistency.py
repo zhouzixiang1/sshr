@@ -154,15 +154,25 @@ def paired_claims() -> list[Claim]:
 
 
 def traditional_t_claim() -> Claim:
-    pairs, mean_rel = traditional_pairs("T")
+    rows = read_csv(WEIGHT_ROBUSTNESS)
+    row = find_row(
+        rows,
+        dataset="traditional",
+        profile="t_only",
+        target_method="and_pareto_resource_nmcts",
+        baseline_method="direct_anf",
+    )
+    pairs = int(row.get("pairs", "-1")) if row else -1
+    actual_wlt = wlt(row) if row else "missing"
+    mean_rel = float(row.get("mean_relative_pct", "nan")) if row else float("nan")
     return Claim(
         claim="n<=6 Pareto vs direct ANF mean T-count reduction",
-        computed=f"pairs={pairs}; mean={pct(mean_rel)}",
-        expected="pairs=177; mean=-73.92%",
-        source="results/raw_traditional_resource.csv",
-        tokens=("73.92%",),
-        numeric_ok=pairs == 177 and float_close(mean_rel, -73.92),
-        evidence_note="Pairwise mean relative T-count over correct non-skipped direct_anf and and_pareto_resource_nmcts rows.",
+        computed=f"pairs={pairs}; W/L/T={actual_wlt}; mean={pct(mean_rel)}",
+        expected="pairs=177; W/L/T=172/0/5; mean=-72.25%",
+        source="results/summary_weight_robustness.csv",
+        tokens=("72.25%",),
+        numeric_ok=pairs == 177 and actual_wlt == "172/0/5" and float_close(mean_rel, -72.25),
+        evidence_note="T-only robustness profile over traditional n<=6 functions.",
     )
 
 
@@ -223,24 +233,28 @@ def phase_shortlist_claim() -> Claim:
 
 
 def validation_scale_claim() -> Claim:
-    rows = read_csv(EVIDENCE_MATRIX)
-    verified_total = 0
-    bridge_ok = False
-    for row in rows:
-        value = row.get("verified_rows", "")
-        if row.get("evidence_block") == "Complete truth-table bridges":
-            bridge_ok = "400/400" in value
-        for match in re.finditer(r"(\d+)/\1", value):
-            verified_total += int(match.group(1))
-    numeric_ok = verified_total == 15762 and bridge_ok
+    rows = read_csv(VALIDATION_SOURCE)
+    by_group = {row.get("group", ""): row for row in rows}
+    headline_groups = [
+        "n=20-40 item symbolic",
+        "width probe symbolic",
+        "phase exact search",
+        "phase policy pruning",
+    ]
+    verified_total = sum(int(by_group[group]["verified"]) for group in headline_groups if group in by_group)
+    total_total = sum(int(by_group[group]["total"]) for group in headline_groups if group in by_group)
+    bridge = by_group.get("truth bridge n=21-25", {})
+    bridge_ok = bridge.get("verified") == "400" and bridge.get("total") == "400"
+    all_exact = verified_total == total_total and bridge_ok
+    numeric_ok = verified_total == 15294 and all_exact
     return Claim(
         claim="headline verification row count",
-        computed=f"verified_total={verified_total:,}; bridge_400_400={bridge_ok}",
-        expected="verified_total=15,762; bridge_400_400=True",
-        source="results/summary_comparison_evidence_matrix.csv",
-        tokens=("15,762", "400/400"),
+        computed=f"verified_total={verified_total:,}; bridge_400_400={bridge_ok}; all_exact={all_exact}",
+        expected="verified_total=15,294; bridge_400_400=True; all_exact=True",
+        source="paper_latex/figures/submission_v36/source_data/fig5_validation.csv",
+        tokens=("15,294", "400/400"),
         numeric_ok=numeric_ok,
-        evidence_note="Sums all exact X/X verified-row entries in the comparison evidence matrix.",
+        evidence_note="Sums symbolic and phase-policy validation rows in Fig.5 source data; bridge rows are reported separately.",
     )
 
 

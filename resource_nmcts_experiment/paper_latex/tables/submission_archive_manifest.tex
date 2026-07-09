@@ -2,13 +2,13 @@
 \toprule
 Payload group & Files & Missing & Digest & Boundary \\
 \midrule
-Manuscript source & 4 & 0 & \texttt{30edf9736517} & Compiled PDF is checked by readiness audit to avoid self-referential hashes. \\
+Manuscript source & 4 & 0 & \texttt{360564866e9c} & Compiled PDF is checked by readiness audit to avoid self-referential hashes. \\
 Paper tables & 152 & 0 & \texttt{275da7a81320} & Terminal submission audit tables are excluded from the stable payload digest. \\
 Submission figures & 28 & 0 & \texttt{824254679c95} & Includes generated figure assets and plotted source data, not raw benchmark reruns. \\
 Raw measurements & 144 & 0 & \texttt{87ee477b5c7c} & Raw CSVs are regenerated only by the heavier run scripts, not by the lightweight rebuild. \\
-Derived summaries & 333 & 0 & \texttt{966eb9c64d50} & Terminal submission/package outputs are excluded so this manifest remains stable. \\
-Run manifests & 77 & 0 & \texttt{cdff86c3ced5} & Submission-level terminal manifests are excluded from this digest group. \\
-Scripts and docs & 84 & 0 & \texttt{56450a4989de} & Documents reproducible entry points; raw sweeps still require their individual drivers. \\
+Derived summaries & 333 & 0 & \texttt{25fe3995d1fc} & Terminal submission/package outputs are excluded so this manifest remains stable. \\
+Run manifests & 77 & 0 & \texttt{a0c61668ef7f} & Submission-level terminal manifests are excluded from this digest group. \\
+Scripts and docs & 84 & 0 & \texttt{f904c64e86a2} & Documents reproducible entry points; raw sweeps still require their individual drivers. \\
 Models & 20 & 0 & \texttt{4c5c2a1bfc19} & Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild. \\
 External adapters & 1 & 0 & \texttt{de5aa3b78998} & Includes local adapter source files used for external toolchain probes, not vendored tool repositories. \\
 Submission support & 11 & 0 & \texttt{b4d53f0c17c1} & Includes public package README, author-input packet, artifact guide, cover-letter, declaration, checklist, reviewer-brief, editor-screening, venue-selection, and structured metadata templates; ignored generated private submission text is excluded. \\

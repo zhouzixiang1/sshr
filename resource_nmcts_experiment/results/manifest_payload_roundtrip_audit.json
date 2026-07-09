@@ -12,6 +12,12 @@
     "results/manifest_comparison_protocol_audit.json",
     "results/summary_comparison_protocol_audit.csv"
   ],
+  "headline_numeric_paths": [
+    "analyze_headline_numeric_consistency.py",
+    "results/analysis_headline_numeric_consistency.md",
+    "results/manifest_headline_numeric_consistency.json",
+    "results/summary_headline_numeric_consistency.csv"
+  ],
   "needs_revision_count": 0,
   "outputs": {
     "analysis": "results/analysis_payload_roundtrip_audit.md",
@@ -93,6 +99,12 @@
       "status": "pass"
     },
     {
+      "evidence": "headline_numeric_files=4; missing=none.",
+      "item": "Payload headline numeric evidence",
+      "next_action": "Ensure the uploadable archive includes the headline numeric audit script and generated CSV/Markdown/JSON evidence.",
+      "status": "pass"
+    },
+    {
       "evidence": "members_checked=864; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
@@ -101,6 +113,6 @@
   ],
   "script": "analyze_payload_roundtrip_audit.py",
   "status_counts": {
-    "pass": 8
+    "pass": 9
   }
 }

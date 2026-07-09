@@ -61,6 +61,12 @@ COMPARISON_PROTOCOL_PATHS = {
     "results/analysis_paired_statistical_evidence.md",
     "results/analysis_multimetric_pareto_tradeoff.md",
 }
+HEADLINE_NUMERIC_PATHS = {
+    "analyze_headline_numeric_consistency.py",
+    "results/analysis_headline_numeric_consistency.md",
+    "results/summary_headline_numeric_consistency.csv",
+    "results/manifest_headline_numeric_consistency.json",
+}
 
 
 def rel(path: Path) -> str:
@@ -205,6 +211,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    headline_missing = sorted(HEADLINE_NUMERIC_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload headline numeric evidence",
+            "pass" if not headline_missing else "needs revision",
+            f"headline_numeric_files={len(HEADLINE_NUMERIC_PATHS)}; missing={headline_missing or 'none'}.",
+            "Ensure the uploadable archive includes the headline numeric audit script and generated CSV/Markdown/JSON evidence.",
+        )
+    )
+
     metadata_bad: list[str] = []
     for member in members:
         if not member.name.startswith(f"{PAYLOAD_ROOT}/"):
@@ -277,6 +293,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "required_payload_paths": sorted(REQUIRED_PAYLOAD_PATHS),
         "reviewer_entrypoint_paths": sorted(REVIEWER_ENTRYPOINT_PATHS),
         "comparison_protocol_paths": sorted(COMPARISON_PROTOCOL_PATHS),
+        "headline_numeric_paths": sorted(HEADLINE_NUMERIC_PATHS),
         "private_basenames": sorted(PRIVATE_BASENAMES),
         "rows": rows,
         "outputs": {

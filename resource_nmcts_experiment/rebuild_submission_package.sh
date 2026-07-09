@@ -48,9 +48,9 @@ run_py make_submission_text_preview.py
 run_py selftest_submission_metadata_pipeline.py
 run_py make_anonymous_review_draft.py
 run_py analyze_anonymous_review_readiness.py
-run_py analyze_headline_numeric_consistency.py
 run_py make_submission_figures.py
 run_py analyze_figure_asset_audit.py
+run_py analyze_headline_numeric_consistency.py
 run_py analyze_submission_archive_manifest.py
 run_py analyze_submission_traceability_audit.py
 

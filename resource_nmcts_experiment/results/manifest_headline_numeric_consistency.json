@@ -13,12 +13,12 @@
   "python": "3.11.15",
   "script": "analyze_headline_numeric_consistency.py",
   "source_files": [
-    "results/raw_traditional_resource.csv",
-    "results/summary_comparison_evidence_matrix.csv",
+    "paper_latex/figures/submission_v36/source_data/fig5_validation.csv",
     "results/summary_paired_statistical_evidence.csv",
     "results/summary_phase_policy_random_control.csv",
     "results/summary_sparse_depth4_gate_threshold_operating_points.csv",
-    "results/summary_sparse_depth_frontier.csv"
+    "results/summary_sparse_depth_frontier.csv",
+    "results/summary_weight_robustness.csv"
   ],
   "status_counts": {
     "pass": 15

@@ -4,7 +4,7 @@ This terminal audit opens the reviewer/upload tarball and checks manifest agreem
 
 ## Status counts
 
-- pass: 8
+- pass: 9
 
 | item | status | evidence | next action |
 |---|---|---|---|
@@ -15,4 +15,5 @@ This terminal audit opens the reviewer/upload tarball and checks manifest agreem
 | Payload required artifacts | pass | required=12; missing=none. | Ensure the uploadable archive includes manuscript, bibliography, rebuild/verify scripts, handoff docs, and submission audits. |
 | Payload reviewer entrypoints | pass | reviewer_entries=7; missing=none. | Ensure the uploadable archive includes reviewer-facing guide, editor/reviewer briefs, venue brief, registry, and reproducibility audit. |
 | Payload comparison protocol evidence | pass | comparison_protocol_files=10; missing=none. | Ensure the uploadable archive includes the comparison protocol audit plus its claim, evidence, comparability, counterpoint, statistical, and tradeoff sources. |
+| Payload headline numeric evidence | pass | headline_numeric_files=4; missing=none. | Ensure the uploadable archive includes the headline numeric audit script and generated CSV/Markdown/JSON evidence. |
 | Payload deterministic tar metadata | pass | members_checked=864; metadata_issues=none. | Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads. |
