@@ -536,9 +536,7 @@ def smoke_script(payload_dir: Path, spec: SmokeSpec) -> dict[str, str]:
             "Regenerate the payload archive so the extracted smoke-test script is present.",
         )
     try:
-        env = None
-        if spec.script == "analyze_payload_git_policy_audit.py":
-            env = {**dict(os.environ), "RESOURCE_NMCTS_EXTRACTED_PAYLOAD": "1"}
+        env = {**dict(os.environ), "RESOURCE_NMCTS_EXTRACTED_PAYLOAD": "1"}
         proc = subprocess.run(
             [sys.executable, str(script_path)],
             cwd=payload_dir,

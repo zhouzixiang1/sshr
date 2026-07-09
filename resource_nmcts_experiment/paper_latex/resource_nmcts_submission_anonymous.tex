@@ -30,6 +30,7 @@
 \newcommand{\rz}{\ensuremath{R_z}}
 \newcommand{\score}{\ensuremath{\mathrm{score}}}
 \newcommand{\ttable}{truth table}
+\providecommand{\Description}[1]{}
 
 \title{Resource-Constrained Neural Monte Carlo Tree Search for Quantum Boolean Oracle Synthesis}
 \author{Anonymous Authors}
@@ -158,6 +159,7 @@ boundary that prevents overclaiming.}
 \ttable{} inputs or \anf{} term sets, searches algebraic actions under neural
 and tree-search control, and verifies candidate circuits at plan, emitted
 symbolic-circuit, and complete-\ttable{} levels.}
+\Description{Pipeline diagram showing Boolean-function inputs, algebraic search actions, neural and tree-search control, circuit emission, and semantic verification outputs.}
 \label{fig:pipeline}
 \end{figure}
 
@@ -708,6 +710,7 @@ claim.
 \caption{\textbf{Mean logical resources on the traditional slice.}
 Pareto-\method{} has the lowest T-count and weighted score; SSHR-H remains a
 strong CNOT-oriented baseline.}
+\Description{Bar chart comparing mean T-count, CNOT count, logical depth, ancilla, and weighted score for traditional n at most six baselines.}
 \label{fig:traditional}
 \end{figure}
 
@@ -915,6 +918,7 @@ optimum-library results, not a reproduced ROS SAT garbage-management flow.}
 \includegraphics[width=0.94\linewidth]{fig3_baseline_comparisons.pdf}
 \caption{\textbf{Paired baseline comparisons.} Negative values favor the
 target method.  Labels show win/loss/tie counts.}
+\Description{Paired comparison plot with relative score changes for internal, external, ROS-style, CirKit, mockturtle, Caterpillar, and RevKit baselines.}
 \label{fig:baselines}
 \end{figure}
 
@@ -1245,6 +1249,7 @@ sparse depth-2/4 frontier.}
 the trained gate on the 144-pair independent-seed audit.  The validation-selected
 threshold lies inside a zero-false-skip plateau, showing that the gate acts as a
 calibrated search-budget controller rather than as an unguarded depth-4 skip.}
+\Description{Threshold-sensitivity plot for the sparse depth-four gate showing score preservation, skipped frontier evaluations, and false-skip behavior across thresholds.}
 \label{fig:sparse-gate-sensitivity}
 \end{figure}
 
@@ -1338,6 +1343,7 @@ reported only where quality and search-effort evidence align.  Positive
 time/evaluation saving means fewer frontier evaluations, less staged planning
 time, or fewer exact-scored phase candidates; negative score change favors the
 learned controller.}
+\Description{Summary plot of learned-control experiments showing score changes, search-effort savings, and promotion status for neural or gated controllers.}
 \label{fig:learned-control-summary}
 \end{figure}
 
@@ -1426,6 +1432,7 @@ boundary into a verifiable search branch.
 \caption{\textbf{Affine-FPRM phase search.} Affine preconditioning improves the
 phase-parity proxy over fixed-polarity FPRM and ANF baselines, while remaining
 a logical phase/Rz proxy rather than an approximate-rotation sequence.}
+\Description{Phase-search comparison plot showing affine FPRM and learned shortlist performance relative to ANF, fixed-polarity FPRM, and budgeted affine searches.}
 \label{fig:phase}
 \end{figure}
 
@@ -1580,6 +1587,7 @@ representative resource means only for the paper-facing method in each slice.
 validated symbolically; phase-search and phase-policy rows are checked up to
 global phase; $n=21$--$26$ bridge slices add complete \ttable{} checking on
 selected generated functions.}
+\Description{Validation coverage plot summarizing symbolic checks, phase checks, policy pruning checks, and complete truth-table bridge verification across benchmark families.}
 \label{fig:validation}
 \end{figure}
 

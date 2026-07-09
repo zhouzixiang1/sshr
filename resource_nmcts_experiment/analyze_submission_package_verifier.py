@@ -1403,7 +1403,7 @@ def verify_target_venue_format() -> dict[str, str]:
         "pass"
         if manifest
         and revisions == 0
-        and rows == 5
+        and rows == 6
         and isinstance(pages, int)
         and pages > 0
         and source_exists

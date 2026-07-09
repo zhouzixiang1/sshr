@@ -6,10 +6,10 @@
     "summary": "results/summary_target_venue_format_smoke.csv"
   },
   "pdf": "paper_latex/resource_nmcts_submission_acm_tqc.pdf",
-  "pdf_bytes": 928477,
+  "pdf_bytes": 940148,
   "pdf_pages": 49,
   "python": "3.11.15",
-  "rows": 5,
+  "rows": 6,
   "rows_detail": [
     {
       "evidence": "kpsewhich_returncode=0; acmart_cls=/usr/local/texlive/2025/texmf-dist/tex/latex/acmart/acmart.cls.",
@@ -24,13 +24,19 @@
       "status": "pass"
     },
     {
-      "evidence": "pdf_exists=True; pages=49; bytes=928477; rendered_sample_pages=3; ink_range=0.063010--0.130851; unexpected_log_lines=none; render_issues=none.",
+      "evidence": "pdf_exists=True; pages=49; bytes=940148; rendered_sample_pages=3; ink_range=0.088299--0.130851; unexpected_log_lines=none; render_issues=none.",
       "item": "ACM TQC compiled PDF",
       "next_action": "Compile paper_latex/resource_nmcts_submission_acm_tqc.tex and inspect unexpected log, blank-page, or render failures.",
       "status": "pass"
     },
     {
-      "evidence": "characters=174213; missing_text=none; forbidden_text=none.",
+      "evidence": "log_exists=True; log_missing_allowed=False; warning_hits=none.",
+      "item": "ACM TQC metadata and accessibility warnings",
+      "next_action": "Add ACM CCS concepts, keywords, reference-strip metadata, and figure descriptions to the generated ACM/TQC review draft.",
+      "status": "pass"
+    },
+    {
+      "evidence": "characters=174606; missing_text=none; forbidden_text=none.",
       "item": "ACM TQC text anchors",
       "next_action": "Regenerate and recompile the ACM/TQC draft if title, method, scope, anonymity, or availability text is missing.",
       "status": "pass"
@@ -45,6 +51,6 @@
   "script": "analyze_target_venue_format_smoke.py",
   "source": "paper_latex/resource_nmcts_submission_acm_tqc.tex",
   "status_counts": {
-    "pass": 5
+    "pass": 6
   }
 }

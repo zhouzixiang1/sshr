@@ -208,7 +208,7 @@ def write_public_checklist(path: Path, rows: list[dict[str, str]]) -> None:
         "## 必须先确认的总原则",
         "",
         "- 本文当前只主张 logical-layer quantum Boolean oracle synthesis。",
-        "- 若选择 ACM TQC，当前已有 `paper_latex/resource_nmcts_submission_acm_tqc.tex` 和已通过的 ACM/TQC format smoke，但正式 ACM metadata、CCS、keywords、rights、ORCID、conflict 与 AI disclosure 仍需作者确认。",
+        "- 若选择 ACM TQC，当前已有 `paper_latex/resource_nmcts_submission_acm_tqc.tex`、review-stage CCS/keywords 和已通过的 ACM/TQC format smoke，但正式 ACM metadata、rights、ORCID、conflict、AI disclosure 与最终 archive 链接仍需作者确认。",
         "- 若选择 Quantum，通常需要 arXiv/quant-ph 路线、贡献声明和 AI/LLM 使用范围说明。",
         "- Data/code archive DOI、匿名审稿链接、license、funding、acknowledgements、conflict、prior submission 都不能从代码自动推断。",
         "",

@@ -22,7 +22,7 @@
       "status": "pass"
     },
     {
-      "bytes": "759317",
+      "bytes": "759314",
       "compile_seconds": "not_recorded",
       "evidence": "stdout_lines=1532; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "author payload LaTeX compile",
@@ -33,7 +33,7 @@
       "status": "pass"
     },
     {
-      "bytes": "756108",
+      "bytes": "756109",
       "compile_seconds": "not_recorded",
       "evidence": "stdout_lines=1540; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "anonymous payload LaTeX compile",
@@ -44,9 +44,9 @@
       "status": "pass"
     },
     {
-      "bytes": "928477",
+      "bytes": "940146",
       "compile_seconds": "not_recorded",
-      "evidence": "stdout_lines=2055; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
+      "evidence": "stdout_lines=1920; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "acm_tqc payload LaTeX compile",
       "next_action": "Inspect the extracted payload LaTeX log and restore missing table, figure, bibliography, or style dependencies.",
       "pages": "49",

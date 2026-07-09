@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import csv
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -216,6 +217,20 @@ def check_starter_prefill() -> dict[str, str]:
         )
             if has_author_placeholder(value_at(starter, path))
     ]
+    repo_url = value_at(starter, "code_availability.repository_url")
+    commit_hash = value_at(starter, "code_availability.commit_hash")
+    environment_notes = value_at(starter, "code_availability.environment_notes")
+    repo_url_shape = (
+        isinstance(repo_url, str)
+        and repo_url.startswith("https://github.com/")
+        and not repo_url.endswith(".git")
+    )
+    commit_hash_shape = isinstance(commit_hash, str) and bool(re.fullmatch(r"[0-9a-f]{40}", commit_hash))
+    environment_notes_present = (
+        isinstance(environment_notes, str)
+        and "mcts-qoracle" in environment_notes
+        and "./rebuild_submission_package.sh" in environment_notes
+    )
     if not git_worktree:
         return row(
             "Private metadata starter dry-run",
@@ -223,11 +238,12 @@ def check_starter_prefill() -> dict[str, str]:
             f"git_worktree=False; public_prefill_fields={len(filled)}; unavailable_public_fields={len(unavailable)}; author_gated_examples={len(still_private)}.",
             "In extracted payloads the starter cannot infer Git remote/HEAD, but it must still leave author/venue declarations human-gated.",
         )
+    release_shape_ok = repo_url_shape and commit_hash_shape and environment_notes_present
     return row(
         "Private metadata starter dry-run",
-        "pass" if len(filled) >= 2 and not unavailable and len(still_private) == 6 else "needs revision",
-        f"public_prefill_fields={len(filled)}; unavailable={unavailable or 'none'}; author_gated_examples={len(still_private)}.",
-        "The starter should prefill only safe public repository fields and leave author/venue declarations human-gated.",
+        "pass" if len(filled) >= 2 and not unavailable and len(still_private) == 6 and release_shape_ok else "needs revision",
+        f"public_prefill_fields={len(filled)}; unavailable={unavailable or 'none'}; repo_url_shape={repo_url_shape}; commit_hash_40hex={commit_hash_shape}; environment_notes_present={environment_notes_present}; author_gated_examples={len(still_private)}.",
+        "The starter should prefill safe public repository fields with release-shaped values and leave author/venue declarations human-gated.",
     )
 
 

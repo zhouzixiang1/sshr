@@ -37,9 +37,9 @@
       "status": "pass"
     },
     {
-      "evidence": "public_prefill_fields=2; unavailable=none; author_gated_examples=6.",
+      "evidence": "public_prefill_fields=2; unavailable=none; repo_url_shape=True; commit_hash_40hex=True; environment_notes_present=True; author_gated_examples=6.",
       "item": "Private metadata starter dry-run",
-      "next_action": "The starter should prefill only safe public repository fields and leave author/venue declarations human-gated.",
+      "next_action": "The starter should prefill safe public repository fields with release-shaped values and leave author/venue declarations human-gated.",
       "status": "pass"
     },
     {

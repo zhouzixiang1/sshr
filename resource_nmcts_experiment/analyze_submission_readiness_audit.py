@@ -1655,11 +1655,11 @@ def build_rows() -> list[dict[str, str]]:
             and TARGET_VENUE_FORMAT_SOURCE.exists()
             and TARGET_VENUE_FORMAT_PDF.exists()
             and target_format_revisions == 0
-            and target_format_rows == 5
+            and target_format_rows == 6
             and isinstance(target_format_pages, int)
             and target_format_pages > 0
             else "needs revision",
-            "evidence": f"ACM/TQC smoke draft checks acmart availability, generated anonymous review source, compiled PDF, text anchors, and recommended-venue alignment; rows={target_format_rows}; status_counts={target_format_counts}; pages={target_format_pages}; bytes={target_format_bytes}; needs_revision_count={target_format_revisions}.",
+            "evidence": f"ACM/TQC smoke draft checks acmart availability, generated anonymous review source, review-stage CCS/keywords, figure descriptions, compiled PDF, text anchors, and recommended-venue alignment; rows={target_format_rows}; status_counts={target_format_counts}; pages={target_format_pages}; bytes={target_format_bytes}; needs_revision_count={target_format_revisions}.",
             "next_action": "Rerun make_acm_tqc_review_draft.py, compile the ACM/TQC source, and rerun analyze_target_venue_format_smoke.py after changing target venue formatting.",
         },
         {

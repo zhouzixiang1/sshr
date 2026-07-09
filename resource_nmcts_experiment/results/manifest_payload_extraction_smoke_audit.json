@@ -207,7 +207,7 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_target_venue_format_smoke.json; needs_revision_count=0; rows=5; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_target_venue_format_smoke.json; needs_revision_count=0; rows=6; stderr=none",
       "item": "Target venue ACM/TQC format smoke",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"

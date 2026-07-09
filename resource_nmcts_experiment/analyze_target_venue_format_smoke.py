@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import csv
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -26,6 +27,7 @@ ACM_SOURCE = PAPER_DIR / "resource_nmcts_submission_acm_tqc.tex"
 ACM_PDF = PAPER_DIR / "resource_nmcts_submission_acm_tqc.pdf"
 ACM_LOG = PAPER_DIR / "resource_nmcts_submission_acm_tqc.log"
 TARGET_VENUE_MANIFEST = RESULTS / "manifest_target_venue_decision_audit.json"
+EXTRACTED_PAYLOAD_MODE = os.environ.get("RESOURCE_NMCTS_EXTRACTED_PAYLOAD") == "1"
 
 
 def rel(path: Path) -> str:
@@ -187,7 +189,10 @@ def build_rows() -> list[dict[str, str]]:
         r"\acmJournal{TQC}",
         r"\author{Anonymous Authors}",
         r"\bibliographystyle{ACM-Reference-Format}",
-        "Final author metadata, CCS terms",
+        "Final author metadata, rights text",
+        r"\ccsdesc[500]{Theory of computation~Quantum computation theory}",
+        r"\keywords{quantum Boolean oracle synthesis",
+        r"\Description{Pipeline diagram",
     )
     missing_source = [token for token in required_source_tokens if token not in source]
     forbidden_source = [token for token in ("Zixiang Zhou", r"\documentclass[11pt]{article}") if token in source]
@@ -218,6 +223,25 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             f"pdf_exists={ACM_PDF.exists()}; pages={pages}; bytes={pdf_bytes}; rendered_sample_pages={rendered_pages}; ink_range={ink_range}; unexpected_log_lines={log_issues[:3] or 'none'}; render_issues={render_issues[:3] or 'none'}.",
             "Compile paper_latex/resource_nmcts_submission_acm_tqc.tex and inspect unexpected log, blank-page, or render failures.",
+        )
+    )
+
+    log_text = ACM_LOG.read_text(encoding="utf-8", errors="replace") if ACM_LOG.exists() else ""
+    warning_tokens = (
+        "A possible image without description",
+        "Some images may lack descriptions",
+        "ACM keywords are mandatory",
+        "ACM reference format is mandatory",
+        "CCS concepts are mandatory",
+    )
+    warning_hits = [token for token in warning_tokens if token in log_text]
+    log_missing_allowed = EXTRACTED_PAYLOAD_MODE and not ACM_LOG.exists()
+    rows.append(
+        row(
+            "ACM TQC metadata and accessibility warnings",
+            "pass" if (ACM_LOG.exists() or log_missing_allowed) and not warning_hits else "needs revision",
+            f"log_exists={ACM_LOG.exists()}; log_missing_allowed={log_missing_allowed}; warning_hits={warning_hits or 'none'}.",
+            "Add ACM CCS concepts, keywords, reference-strip metadata, and figure descriptions to the generated ACM/TQC review draft.",
         )
     )
 
