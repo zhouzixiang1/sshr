@@ -1,6 +1,6 @@
 {
   "archive": "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
-  "archive_bytes": 40932313,
+  "archive_bytes": 40932581,
   "excluded_from_payload": [
     "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
     "submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256",
@@ -861,34 +861,34 @@
       "sha256": "ca2f951c642cad9c10fe906715f7368014294cea9826ad27195b85a6f58f0b37"
     },
     {
-      "bytes": 758134,
+      "bytes": 758132,
       "path": "paper_latex/resource_nmcts_submission_acm_tqc.pdf",
-      "sha256": "1f7afe892559127f98d97909060d76796df523ec4ffeff15e822c57399130eb5"
+      "sha256": "21e38181a2278016d826c3abe01226b0e399d623c964b31cc3082426f46a0b3c"
     },
     {
       "bytes": 73126,
       "path": "paper_latex/resource_nmcts_submission_acm_tqc.tex",
-      "sha256": "c9b5161caa01052ecc13112431cf4735b4054e133b5255dc4ee1c145ef0ae0b0"
+      "sha256": "1f6acb283a293408c97c72e99fc6d4ade62d4701d7f804815ee4b082343531a9"
     },
     {
-      "bytes": 557602,
+      "bytes": 557606,
       "path": "paper_latex/resource_nmcts_submission_anonymous.pdf",
-      "sha256": "109b9537a15f0079322d6bb8fc2acac7641bdc4d6eac5cb1941940831bd6adbe"
+      "sha256": "a054fecc5ce27b9c6ae5848e9b5ba7eeb971746f31411fc68086c4d9e3e3b45f"
     },
     {
       "bytes": 72887,
       "path": "paper_latex/resource_nmcts_submission_anonymous.tex",
-      "sha256": "4d87d293185a127eb2dc4543adc792db2486e9317f8fb5a62f25dc6687efe324"
+      "sha256": "b8f84c488a068520a1ef5411287f6756e4067cfc62cfad98877b7b563f1d4397"
     },
     {
-      "bytes": 561011,
+      "bytes": 561020,
       "path": "paper_latex/resource_nmcts_submission_v1.pdf",
-      "sha256": "8d5df1d9cef8a43b95b1752fe46aff951c096126185e49734cb487a9a67502e2"
+      "sha256": "c0f9e8e9374ecd647cb1bc465a762883da8905446dcb8215398ca089c0acf5d3"
     },
     {
       "bytes": 74261,
       "path": "paper_latex/resource_nmcts_submission_v1.tex",
-      "sha256": "10839130d364050b2693f5c9bc06eaf37ebcb1625237ef1fb7a831e0df073ad5"
+      "sha256": "adaa40f902bee9b57382216c9b25a8ffa71585121a9eb40811f4798c97aa1b3c"
     },
     {
       "bytes": 3408,
@@ -1713,7 +1713,7 @@
     {
       "bytes": 1877,
       "path": "paper_latex/tables/submission_archive_manifest.tex",
-      "sha256": "e66e55b75f7cc282ff245774ce682ef1a3566f0e7c5cd90e41faaf1f94187d81"
+      "sha256": "4b3008061f7f0ac4b380dc83e1b49befbc851088d5aab13910b628c09ff15faf"
     },
     {
       "bytes": 3408,
@@ -2643,7 +2643,7 @@
     {
       "bytes": 2006,
       "path": "results/analysis_submission_archive_manifest.md",
-      "sha256": "88b3c99f411c13a868c7bf03f857961486090042a57d3c457a0a43f2514249c8"
+      "sha256": "3a98ffbf73da2dd1a866623b6cae851102a94e6070cf3593f4244f8317700ec7"
     },
     {
       "bytes": 6395,
@@ -2688,7 +2688,7 @@
     {
       "bytes": 1309,
       "path": "results/analysis_target_venue_format_smoke.md",
-      "sha256": "32ef73527a9b70dd06f8efc7fd49111f724547f40880f72e6a074b90127a643a"
+      "sha256": "f70134099eba71bf0c86708921ce03875a4f7847dd534248d02c1ab5fda95c68"
     },
     {
       "bytes": 3057,
@@ -3283,7 +3283,7 @@
     {
       "bytes": 219749,
       "path": "results/manifest_submission_archive_manifest.json",
-      "sha256": "01ca4692ea7632745e514f08962efe74b9bb151b23f3fd2fec138a713a8ea68f"
+      "sha256": "4c4d2988d54c6a1d4238e4630f4c814dd0e48608830de964b6c20db21e24e2e6"
     },
     {
       "bytes": 9313,
@@ -3328,7 +3328,7 @@
     {
       "bytes": 2094,
       "path": "results/manifest_target_venue_format_smoke.json",
-      "sha256": "09e211c817893a7a5e8948b3759e22195077b98765ddb82ad361ebfc0ccbab2c"
+      "sha256": "16dba9e8bc7c20696021191f758bfafd4d18e190096490246447ec0b88248e7e"
     },
     {
       "bytes": 1927,
@@ -5068,7 +5068,7 @@
     {
       "bytes": 3720,
       "path": "results/summary_submission_archive_manifest.csv",
-      "sha256": "3686699cd6b416cd5fb38cb137c2d4cf15511e72711a2f3cacfef12791bc6406"
+      "sha256": "b6628ace5ca1d00be64c3c0249cf266995a5707ed02464b58159d49a2a64594f"
     },
     {
       "bytes": 6869,
@@ -5113,7 +5113,7 @@
     {
       "bytes": 1099,
       "path": "results/summary_target_venue_format_smoke.csv",
-      "sha256": "f6b5b8e1a5347e6eecf2003a10fd31db4a1d9f1291b36716e1df2c40df3eaf3e"
+      "sha256": "93cf79d8fd57701927ef2c92b065b769a7d6823f0ab8de686cce9c9fd5fd03d2"
     },
     {
       "bytes": 4802,
@@ -5461,10 +5461,10 @@
       "sha256": "650408237c5bc7ddb15a1057e1003fe50c19c9a68535dc4c7ba1733f7fa6a3b7"
     }
   ],
-  "input_bytes": 115100369,
+  "input_bytes": 115100380,
   "missing": [],
   "python": "3.11.15",
   "script": "make_submission_payload_archive.py",
-  "sha256": "5b1a520b4aa907587c00e9c0ed2512a64fa01244041a10c71e3e583525314938",
+  "sha256": "8d72588da8858579e7b6c09f118a4f075725bc1d0d60a175c60192341a5c9e8d",
   "sha256_file": "submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256"
 }
