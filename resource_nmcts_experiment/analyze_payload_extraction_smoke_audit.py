@@ -175,6 +175,15 @@ SMOKE_SPECS = (
         minimum_rows=5,
     ),
     SmokeSpec(
+        name="Phase policy budget frontier",
+        script="analyze_phase_policy_budget_frontier.py",
+        manifest="results/manifest_phase_policy_budget_frontier.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=8,
+    ),
+    SmokeSpec(
         name="Learned-control audit",
         script="analyze_learned_control_audit.py",
         manifest="results/manifest_learned_control_audit.json",

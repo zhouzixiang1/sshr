@@ -93,6 +93,8 @@ LEARNED_CONTROL_MANIFEST = RESULTS / "manifest_learned_control_audit.json"
 LEARNED_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "learned_control_audit.tex"
 ROOT_ACTION_RANKER_MANIFEST = RESULTS / "manifest_root_action_ranker_audit.json"
 ROOT_ACTION_RANKER_TABLE = THIS_DIR / "paper_latex" / "tables" / "root_action_ranker_audit.tex"
+PHASE_POLICY_BUDGET_MANIFEST = RESULTS / "manifest_phase_policy_budget_frontier.json"
+PHASE_POLICY_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "phase_policy_budget_frontier.tex"
 NEURAL_MCTS_CLAIM_MANIFEST = RESULTS / "manifest_neural_mcts_claim_calibration.json"
 NEURAL_MCTS_CLAIM_TABLE = THIS_DIR / "paper_latex" / "tables" / "neural_mcts_claim_calibration.tex"
 BITFLIP_RANDOM_PRIOR_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control.json"
@@ -621,6 +623,37 @@ def verify_root_action_ranker() -> dict[str, str]:
         status,
         f"rows={rows}; combined_pairs={pairs}; combined_score_wlt={score_wlt}; needs_revision_count={revisions}; table_exists={table_exists}.",
         "Run analyze_root_action_ranker_audit.py and restore the bounded root-action candidate-extension evidence.",
+    )
+
+
+def verify_phase_policy_budget_frontier() -> dict[str, str]:
+    manifest = read_json(PHASE_POLICY_BUDGET_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    rows = int(manifest.get("rows", -1)) if manifest else -1
+    heldout = int(manifest.get("heldout_functions", -1)) if manifest else -1
+    best = manifest.get("best_policy", "missing") if manifest else "missing"
+    budget_wlt = manifest.get("best_budget32_wlt", "missing") if manifest else "missing"
+    eval_cut = float(manifest.get("best_eval_reduction_vs_wide128_pct", -1.0)) if manifest else -1.0
+    wide_rel = float(manifest.get("best_mean_relative_vs_wide128", 1.0)) if manifest else 1.0
+    table_exists = PHASE_POLICY_BUDGET_TABLE.exists()
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and rows >= 8
+        and heldout >= 38
+        and best == "diverse_top512"
+        and budget_wlt == "17/0/21"
+        and eval_cut >= 90.0
+        and wide_rel <= 0.001
+        and table_exists
+        else "needs revision"
+    )
+    return row(
+        "Phase policy budget-frontier audit",
+        status,
+        f"rows={rows}; heldout_functions={heldout}; best_policy={best}; best_budget32_wlt={budget_wlt}; eval_reduction_vs_wide128_pct={eval_cut:.2f}; mean_relative_vs_wide128={wide_rel:.6g}; needs_revision_count={revisions}; table_exists={table_exists}.",
+        "Run analyze_phase_policy_budget_frontier.py and restore the learned phase budget-frontier table.",
     )
 
 
@@ -1235,6 +1268,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_search_control(),
             verify_bitflip_neural_budget(),
             verify_root_action_ranker(),
+            verify_phase_policy_budget_frontier(),
             verify_learned_control(),
             verify_neural_mcts_claim_calibration(),
             verify_bitflip_random_prior(),

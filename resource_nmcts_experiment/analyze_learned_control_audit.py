@@ -83,6 +83,11 @@ def build_rows() -> list[dict[str, str]]:
         baseline="phase_affine_wide128_tperrz30",
         metric="score_synth_tperrz30",
     )
+    phase_frontier = require_row(
+        read_csv(RESULTS / "summary_phase_policy_budget_frontier.csv"),
+        policy="diverse",
+        topk="512",
+    )
 
     boolean_guard = read_csv(RESULTS / "summary_boolean_neural_guard_vs_deterministic.csv")
     boolean_score = require_row(boolean_guard, metric="score")
@@ -178,12 +183,13 @@ def build_rows() -> list[dict[str, str]]:
             "claim_class": "promoted",
             "scope": "held-out n=6 phase search; 38 rows",
             "quality": f"vs budget-32 {wlt(phase_budget)}, {pct(phase_budget['mean_relative'])}; vs wide-128 {wlt(phase_wide)}, {pct(phase_wide['mean_relative'])}",
-            "cost": "512/8192 exact forms per function",
+            "cost": f"{phase_frontier['target_exact_forms']}/{phase_frontier['wide128_exact_forms']} exact forms; {float(phase_frontier['eval_reduction_vs_wide128_pct']):.2f}% fewer vs wide-128",
             "role": "promoted phase-search pruning",
             "status": status_from(
                 int(phase_budget["wins"]) > int(phase_budget["losses"])
                 and int(phase_budget["losses"]) == 0
                 and abs(float(phase_wide["mean_relative"])) <= 0.001
+                and float(phase_frontier["eval_reduction_vs_wide128_pct"]) >= 90.0
             ),
         },
         {
@@ -367,6 +373,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
             "results/summary_stage_gated_frontier.csv",
             "results/summary_sparse_depth4_gate_generalization.csv",
             "results/summary_phase_affine_policy_rank_diverse.csv",
+            "results/summary_phase_policy_budget_frontier.csv",
             "results/summary_boolean_neural_guard_vs_deterministic.csv",
             "results/summary_bitflip_random_prior_control.csv",
             "results/summary_bitflip_neural_budget_sweep.csv",

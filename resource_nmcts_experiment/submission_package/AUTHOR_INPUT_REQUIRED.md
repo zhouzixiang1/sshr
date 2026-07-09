@@ -20,6 +20,11 @@ When the metadata file is complete, the rebuild also creates ignored private pre
 Before generating final upload text, `validate_submission_metadata.py` checks common
 format issues without writing private values to tracked files.
 
+Before editing venue-specific claims, cover-letter language, or reviewer replies, read
+`submission_package/COMPARISON_HANDOFF_zh.md`.  It gives the Chinese author-facing
+answer to what the method is compared against, why the comparison set is meaningful,
+and which stronger claims must not be made.
+
 ## Current Gate
 
 - metadata rows needing author input: 12

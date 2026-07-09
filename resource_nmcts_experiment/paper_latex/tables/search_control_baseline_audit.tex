@@ -1,4 +1,4 @@
-\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}rcc>{\raggedright\arraybackslash}X}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedleft\arraybackslash}p{0.045\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}X}
 \toprule
 Layer & Comparison & Pairs & Score W/L/T & Mean $\Delta$ score & Claim boundary \\
 \midrule
@@ -12,6 +12,7 @@ bit-flip random control & Learned bit-flip prior vs same-budget random-prior mea
 bit-flip low-budget control & Learned prior vs no-prior under compressed candidate/MCTS budgets & 1062 & 218/0/844 & -1.04\% & The same rows still show runtime overhead, so this is budget-allocation quality evidence rather than a speedup claim. \\
 frontier random-depth control & Large frontier policy vs same-candidate random depth & 102 & 55/3/38; 5/0/1 & -1.12\% & The control is quality-positive but runtime-negative against random depth; it is not a speed, hardware-scheduling, or global-optimality claim. \\
 high-dimensional deterministic control & Highdim no-MCTS portfolio over root beam & 16 & 14/0/2 & -6.25\% & This is symbolic/high-dimensional evidence, not exhaustive truth-table optimality. \\
+phase budget frontier & Diverse phase shortlist top-512 vs budget-32 and wide-128 & 38 & 17/0/21; 0/7/31 & -2.477\% vs budget-32; +0.003\% vs wide-128 & This is a logical phase/Rz budget-efficiency result, not a final rotation-synthesis or hardware-mapped claim. \\
 phase random control & Diverse phase shortlist top-512 vs same-budget random mean & 38 & 17/0/21 & -0.012\% & This is a phase/Rz proxy control, not a bit-flip random baseline or rotation synthesis. \\
 \bottomrule
 \end{tabularx}

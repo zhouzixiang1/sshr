@@ -53,6 +53,7 @@ run_py analyze_search_contribution.py
 run_py analyze_bitflip_random_prior_control.py
 run_py analyze_bitflip_neural_budget_sweep.py
 run_py analyze_frontier_random_depth_control.py
+run_py analyze_phase_policy_budget_frontier.py
 run_py analyze_search_control_baseline_audit.py
 run_py analyze_boolean_ring_structural_evidence.py
 run_py analyze_sparse_depth_frontier.py

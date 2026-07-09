@@ -94,6 +94,7 @@ def build_rows() -> list[dict[str, str]]:
     bitflip_random = read_csv(RESULTS / "summary_bitflip_random_prior_control.csv")
     bitflip_budget = read_csv(RESULTS / "summary_bitflip_neural_budget_sweep.csv")
     frontier_random = read_csv(RESULTS / "summary_frontier_random_depth_control.csv")
+    phase_budget = read_csv(RESULTS / "summary_phase_policy_budget_frontier.csv")
     phase_random = read_csv(RESULTS / "summary_phase_policy_random_control.csv")
 
     def search_row(
@@ -154,6 +155,7 @@ def build_rows() -> list[dict[str, str]]:
     frontier_random_scale = require_row(frontier_random, source="scale generalization")
     frontier_random_bridge = require_row(frontier_random, source="truth-table bridge")
     phase = require_row(phase_random, policy="diverse", topk="512")
+    phase_frontier = require_row(phase_budget, policy="diverse", topk="512")
 
     rows = [
         search_row(
@@ -269,6 +271,23 @@ def build_rows() -> list[dict[str, str]]:
             boundary="This is symbolic/high-dimensional evidence, not exhaustive truth-table optimality.",
         ),
         {
+            "layer": "phase budget frontier",
+            "evidence_source": "phase policy budget-frontier audit",
+            "comparison": "Diverse phase shortlist top-512 vs budget-32 and wide-128",
+            "scope": "38 held-out n=6 phase functions",
+            "pairs": phase_frontier["functions"],
+            "score_wlt": f"{phase_frontier['vs_budget32_wins']}/{phase_frontier['vs_budget32_losses']}/{phase_frontier['vs_budget32_ties']}; {phase_frontier['vs_wide128_wins']}/{phase_frontier['vs_wide128_losses']}/{phase_frontier['vs_wide128_ties']}",
+            "mean_score_change": f"{pct_ratio(phase_frontier['vs_budget32_mean_relative'], digits=3)} vs budget-32; {pct_ratio(phase_frontier['vs_wide128_mean_relative'], digits=3)} vs wide-128",
+            "cost_or_runtime": f"{phase_frontier['target_exact_forms']}/{phase_frontier['wide128_exact_forms']} exact forms; {float(phase_frontier['eval_reduction_vs_wide128_pct']):.2f}% fewer vs wide-128",
+            "supported_conclusion": "The learned/diverse shortlist preserves the wide-search phase proxy while exact-scoring far fewer candidates.",
+            "boundary": "This is a logical phase/Rz budget-efficiency result, not a final rotation-synthesis or hardware-mapped claim.",
+            "status": "pass"
+            if phase_frontier["vs_budget32_losses"] == "0"
+            and float(phase_frontier["vs_budget32_mean_relative"]) < 0.0
+            and float(phase_frontier["vs_wide128_mean_relative"]) <= 0.001
+            else "needs revision",
+        },
+        {
             "layer": "phase random control",
             "evidence_source": "phase affine policy random-control audit",
             "comparison": "Diverse phase shortlist top-512 vs same-budget random mean",
@@ -348,7 +367,7 @@ def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
             "## Interpretation",
             "",
             "- The bit-flip branch compares against heuristic-only, beam-only, no-MCTS, MCTS, Pareto, learned-prior/no-prior, and same-budget random-prior controls.",
-            "- Random controls now cover the bit-flip action-prior scorer, the high-dimensional frontier depth allocator, and the phase/Rz shortlist branch; they support bounded ranking/pruning/budget-allocation claims, not runtime or full-causality claims.",
+            "- Random controls now cover the bit-flip action-prior scorer, the high-dimensional frontier depth allocator, and the phase/Rz shortlist branch; the phase budget-frontier row separately quantifies exact-scoring savings relative to budget-32 and wide-128 searches.",
             "- The evidence supports resource-aware search control, not a claim that reinforcement learning alone causes the full improvement.",
         ]
     )
@@ -369,7 +388,7 @@ def tex_escape(text: str) -> str:
 
 def write_latex(path: Path, rows: list[dict[str, str]]) -> None:
     lines = [
-        r"\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}rcc>{\raggedright\arraybackslash}X}",
+        r"\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedleft\arraybackslash}p{0.045\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}X}",
         r"\toprule",
         r"Layer & Comparison & Pairs & Score W/L/T & Mean $\Delta$ score & Claim boundary \\",
         r"\midrule",
@@ -405,6 +424,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
             "results/raw_neural_prior_ablation.csv",
             "results/summary_bitflip_random_prior_control.csv",
             "results/summary_frontier_random_depth_control.csv",
+            "results/summary_phase_policy_budget_frontier.csv",
             "results/summary_phase_policy_random_control.csv",
         ],
         "outputs": {

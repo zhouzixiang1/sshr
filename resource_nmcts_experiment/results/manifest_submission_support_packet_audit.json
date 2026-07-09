@@ -7,7 +7,7 @@
     "table": "paper_latex/tables/submission_support_packet_audit.tex"
   },
   "python": "3.11.15",
-  "rows": 10,
+  "rows": 11,
   "rows_detail": [
     {
       "boundary": "The cover letter still needs author, editor, reviewer, and prior-dissemination fields before upload.",
@@ -44,6 +44,15 @@
       "status": "pass",
       "supported_use": "The support packet gives reviewers a direct route from comparison targets to role labels and excluded claims.",
       "upload_risk": "Reviewer may not know which comparisons are primary benchmarks, external probes, controls, or counterpoints."
+    },
+    {
+      "boundary": "It is a navigation and wording guide over existing evidence; it does not add experiments or replace author/venue metadata.",
+      "evidence": "files_missing=none; tokens=10/10; missing_tokens=none; manifest=results/manifest_comparison_target_validity_audit.json::needs_revision_count=0",
+      "item": "Chinese comparison handoff is visible",
+      "next_action": "No action needed.",
+      "status": "pass",
+      "supported_use": "The author-facing Chinese handoff keeps comparison, novelty, and excluded-claim language aligned before upload or reviewer response.",
+      "upload_risk": "Author-side upload text or reviewer replies could overstate SSHR, ROS, RevKit, or AI/MCTS claims."
     },
     {
       "boundary": "Final authorship, funding, conflicts, archive links, and AI disclosure remain human-gated.",
@@ -102,6 +111,6 @@
   ],
   "script": "analyze_submission_support_packet_audit.py",
   "status_counts": {
-    "pass": 10
+    "pass": 11
   }
 }

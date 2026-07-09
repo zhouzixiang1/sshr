@@ -151,14 +151,19 @@ SEARCH_BUDGET_PATHS = {
 LEARNED_CONTROL_PATHS = {
     "analyze_learned_control_audit.py",
     "analyze_root_action_ranker_audit.py",
+    "analyze_phase_policy_budget_frontier.py",
     "results/analysis_learned_control_audit.md",
     "results/analysis_root_action_ranker_audit.md",
+    "results/analysis_phase_policy_budget_frontier.md",
     "results/summary_learned_control_audit.csv",
     "results/summary_root_action_ranker_audit.csv",
+    "results/summary_phase_policy_budget_frontier.csv",
     "results/manifest_learned_control_audit.json",
     "results/manifest_root_action_ranker_audit.json",
+    "results/manifest_phase_policy_budget_frontier.json",
     "paper_latex/tables/learned_control_audit.tex",
     "paper_latex/tables/root_action_ranker_audit.tex",
+    "paper_latex/tables/phase_policy_budget_frontier.tex",
 }
 NEURAL_MCTS_CLAIM_CALIBRATION_PATHS = {
     "analyze_neural_mcts_claim_calibration.py",
@@ -233,6 +238,7 @@ TARGET_VENUE_FORMAT_PATHS = {
 }
 SUPPORT_PACKET_PATHS = {
     "analyze_submission_support_packet_audit.py",
+    "submission_package/COMPARISON_HANDOFF_zh.md",
     "results/analysis_submission_support_packet_audit.md",
     "results/summary_submission_support_packet_audit.csv",
     "results/manifest_submission_support_packet_audit.json",

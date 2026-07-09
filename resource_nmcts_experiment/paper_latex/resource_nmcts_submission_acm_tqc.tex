@@ -1161,14 +1161,19 @@ A rank-trained policy and a deterministic diversity reranker then compress this
 search.  On the held-out $n=6$ split, the diverse top-512 policy exact-scores
 only 512 of 8192 affine forms per function, keeps the budget-32 comparison at
 17/0/21 with a 2.48\% mean reduction, and matches the wide-128 mean within
-0.01\%.  Table~\ref{tab:phase-policy-random} then uses the eight same-budget
-random repeats as a control.  The independent unit is the held-out function:
-random repeats are averaged per function before the sign test.  The strongest
-row is the diverse top-512 policy, which is 17/0/21 against the per-function
-random mean, has sign-test $p=1.53\times 10^{-5}$, and beats all eight random
-seed means.  The absolute margins are small because the affine candidate space
-is dense, so this supports learned pruned phase-search feasibility rather than
-a claim that the current scorer solves phase/Rz synthesis globally.
+0.01\%.  Table~\ref{tab:phase-policy-budget-frontier} makes the budget
+frontier explicit: diverse top-256 is already within 0.012\% of wide-128 while
+exact-scoring only 256/8192 forms, and diverse top-512 reduces exact scoring by
+93.75\% relative to wide-128 while retaining a 17/0/21, 2.477\% advantage over
+budget-32.  Table~\ref{tab:phase-policy-random} then uses the eight
+same-budget random repeats as a control.  The independent unit is the held-out
+function: random repeats are averaged per function before the sign test.  The
+strongest row is the diverse top-512 policy, which is 17/0/21 against the
+per-function random mean, has sign-test $p=1.53\times 10^{-5}$, and beats all
+eight random seed means.  The absolute margins are small because the affine
+candidate space is dense, so this supports learned pruned phase-search
+feasibility rather than a claim that the current scorer solves phase/Rz
+synthesis globally.
 
 \begin{table}[H]
 \centering
@@ -1181,10 +1186,12 @@ a claim that the current scorer solves phase/Rz synthesis globally.
 \begin{table}[H]
 \centering
 \small
-\caption{Rank-trained and diversity-reranked phase candidate pruning on
-held-out $n=6$ functions.}
-\label{tab:phase-policy}
-\input{tables/phase_affine_policy_rank_diverse}
+\caption{Exact-scoring budget frontier for learned phase candidate pruning.
+Forms/fn. reports shortlisted exact phase-score evaluations per held-out
+function relative to the wide-128 search; negative $\Delta$ values favor the
+learned shortlist.}
+\label{tab:phase-policy-budget-frontier}
+\input{tables/phase_policy_budget_frontier}
 \end{table}
 
 \begin{table}[H]

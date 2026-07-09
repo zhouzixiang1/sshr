@@ -1,0 +1,26 @@
+{
+  "best_budget32_wlt": "17/0/21",
+  "best_eval_reduction_vs_wide128_pct": 93.75,
+  "best_mean_relative_vs_budget32": -0.024772491427759957,
+  "best_mean_relative_vs_wide128": 3.1367595268431145e-05,
+  "best_policy": "diverse_top512",
+  "best_wide128_wlt": "0/7/31",
+  "heldout_functions": 38,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_phase_policy_budget_frontier.md",
+    "manifest": "results/manifest_phase_policy_budget_frontier.json",
+    "summary": "results/summary_phase_policy_budget_frontier.csv",
+    "table": "paper_latex/tables/phase_policy_budget_frontier.tex"
+  },
+  "python": "3.11.15",
+  "rows": 8,
+  "script": "analyze_phase_policy_budget_frontier.py",
+  "sources": [
+    "results/raw_phase_affine_policy_rank_diverse.csv"
+  ],
+  "status_counts": {
+    "bounded": 6,
+    "pass": 2
+  }
+}

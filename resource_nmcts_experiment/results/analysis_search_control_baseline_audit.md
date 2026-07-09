@@ -4,7 +4,7 @@ This audit answers the reviewer-facing question: which search/control baselines 
 
 ## Status counts
 
-- pass: 11
+- pass: 12
 
 | layer | comparison | scope | score W/L/T | mean score change | supported conclusion | boundary | status |
 |---|---|---|---:|---:|---|---|---|
@@ -18,10 +18,11 @@ This audit answers the reviewer-facing question: which search/control baselines 
 | bit-flip low-budget control | Learned prior vs no-prior under compressed candidate/MCTS budgets | 2 budgets x 3 methods x 177 n<=6 functions | 218/0/844 | -1.04% | The learned prior remains a positive quality signal when candidate and MCTS budgets are tightened. | The same rows still show runtime overhead, so this is budget-allocation quality evidence rather than a speedup claim. | pass |
 | frontier random-depth control | Large frontier policy vs same-candidate random depth | 96 n=24,28,32,40 scale rows; 6 n=23 truth-bridge rows; eight random-depth repeats | 55/3/38; 5/0/1 | -1.12% | The large frontier policy allocates depth budget better than random selection among the same verified candidates on scale and bridge slices. | The control is quality-positive but runtime-negative against random depth; it is not a speed, hardware-scheduling, or global-optimality claim. | pass |
 | high-dimensional deterministic control | Highdim no-MCTS portfolio over root beam | 16 n=14 ANF instances | 14/0/2 | -6.25% | High-dimensional gains also need strong deterministic guards, not only MCTS. | This is symbolic/high-dimensional evidence, not exhaustive truth-table optimality. | pass |
+| phase budget frontier | Diverse phase shortlist top-512 vs budget-32 and wide-128 | 38 held-out n=6 phase functions | 17/0/21; 0/7/31 | -2.477% vs budget-32; +0.003% vs wide-128 | The learned/diverse shortlist preserves the wide-search phase proxy while exact-scoring far fewer candidates. | This is a logical phase/Rz budget-efficiency result, not a final rotation-synthesis or hardware-mapped claim. | pass |
 | phase random control | Diverse phase shortlist top-512 vs same-budget random mean | 38 held-out n=6 phase functions; eight random repeats | 17/0/21 | -0.012% | The phase shortlist is better than same-budget random controls on this proxy. | This is a phase/Rz proxy control, not a bit-flip random baseline or rotation synthesis. | pass |
 
 ## Interpretation
 
 - The bit-flip branch compares against heuristic-only, beam-only, no-MCTS, MCTS, Pareto, learned-prior/no-prior, and same-budget random-prior controls.
-- Random controls now cover the bit-flip action-prior scorer, the high-dimensional frontier depth allocator, and the phase/Rz shortlist branch; they support bounded ranking/pruning/budget-allocation claims, not runtime or full-causality claims.
+- Random controls now cover the bit-flip action-prior scorer, the high-dimensional frontier depth allocator, and the phase/Rz shortlist branch; the phase budget-frontier row separately quantifies exact-scoring savings relative to budget-32 and wide-128 searches.
 - The evidence supports resource-aware search control, not a claim that reinforcement learning alone causes the full improvement.

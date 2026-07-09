@@ -274,26 +274,26 @@
       "summary_files": "5"
     },
     {
-      "analysis_files": "9",
+      "analysis_files": "10",
       "claim_use": "Checks whether the search framing extends to phase-oracle/Rz proxy objectives and affine shortlist policies.",
       "dependency_boundary": "Logical phase verification up to global phase; not approximate rotation synthesis.",
-      "driver_scripts": "run_phase_parity_baseline.py; run_phase_parity_affine_search.py; run_phase_parity_fprm_search.py; train_phase_affine_policy.py",
+      "driver_scripts": "run_phase_parity_baseline.py; run_phase_parity_affine_search.py; run_phase_parity_fprm_search.py; train_phase_affine_policy.py; analyze_phase_policy_budget_frontier.py",
       "evidence_family": "Phase and affine FPRM branch",
-      "manifest_files": "7",
+      "manifest_files": "8",
       "raw_files": "7",
       "raw_rows": "11859",
       "representative_raw": "results/raw_phase_affine_policy.csv; results/raw_phase_affine_policy_rank_diverse.csv; results/raw_phase_parity_affine.csv; results/raw_phase_parity_affine_wide128.csv; +3 more",
       "rerun_tier": "raw phase rerun and training",
       "scripts_missing": "",
-      "scripts_present": "4",
+      "scripts_present": "5",
       "status": "complete",
-      "summary_files": "9"
+      "summary_files": "10"
     },
     {
       "analysis_files": "22",
       "claim_use": "Separates neural/search-control effects from deterministic algebraic construction and guarded portfolio selection.",
       "dependency_boundary": "Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only.",
-      "driver_scripts": "train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; run_bitflip_random_prior_control.py; analyze_bitflip_random_prior_control.py; run_bitflip_neural_budget_sweep.py; analyze_bitflip_neural_budget_sweep.py; analyze_frontier_random_depth_control.py; analyze_root_action_ranker_audit.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py; analyze_neural_mcts_claim_calibration.py",
+      "driver_scripts": "train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; run_bitflip_random_prior_control.py; analyze_bitflip_random_prior_control.py; run_bitflip_neural_budget_sweep.py; analyze_bitflip_neural_budget_sweep.py; analyze_frontier_random_depth_control.py; analyze_phase_policy_budget_frontier.py; analyze_root_action_ranker_audit.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py; analyze_neural_mcts_claim_calibration.py",
       "evidence_family": "Learned-control and ablations",
       "manifest_files": "17",
       "raw_files": "20",
@@ -301,7 +301,7 @@
       "representative_raw": "results/raw_bitflip_neural_budget_sweep.csv; results/raw_bitflip_random_prior_control.csv; results/raw_highdim_neural_prior_boolean_guard.csv; results/raw_highdim_neural_prior_learned_prior.csv; +16 more",
       "rerun_tier": "training plus ablation rerun",
       "scripts_missing": "",
-      "scripts_present": "13",
+      "scripts_present": "14",
       "status": "complete",
       "summary_files": "32"
     },

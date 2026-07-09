@@ -32,6 +32,7 @@ AUTHOR_PACKET = SUBMISSION_PACKAGE / "AUTHOR_INPUT_REQUIRED.md"
 METADATA_TEMPLATE = SUBMISSION_PACKAGE / "submission_metadata_template.json"
 EDITOR_BRIEF = SUBMISSION_PACKAGE / "editor_screening_brief.md"
 REVIEWER_BRIEF = SUBMISSION_PACKAGE / "reviewer_concern_brief.md"
+COMPARISON_HANDOFF_ZH = SUBMISSION_PACKAGE / "COMPARISON_HANDOFF_zh.md"
 
 CLAIM_SCOPE = RESULTS / "manifest_claim_scope_lint.json"
 COMPARISON_PROTOCOL = RESULTS / "manifest_comparison_protocol_audit.json"
@@ -160,6 +161,28 @@ def specs() -> list[PacketSpec]:
             expected=0,
             supported_use="The support packet gives reviewers a direct route from comparison targets to role labels and excluded claims.",
             boundary="The validity audit classifies existing comparisons; it does not convert secondary probes into full hardware-mapped baselines.",
+        ),
+        PacketSpec(
+            item="Chinese comparison handoff is visible",
+            upload_risk="Author-side upload text or reviewer replies could overstate SSHR, ROS, RevKit, or AI/MCTS claims.",
+            files=(README, AUTHOR_PACKET, FINAL_HANDOFF, COMPARISON_HANDOFF_ZH),
+            tokens=(
+                "COMPARISON_HANDOFF_zh.md",
+                "主比较对象",
+                "二级外部探针",
+                "反例边界",
+                "AI/MCTS 口径",
+                "审稿问答口径",
+                "不能说",
+                "logical-layer",
+                "weighted-score",
+                "hardware mapping",
+            ),
+            manifest_path=COMPARISON_TARGET_VALIDITY,
+            manifest_key="needs_revision_count",
+            expected=0,
+            supported_use="The author-facing Chinese handoff keeps comparison, novelty, and excluded-claim language aligned before upload or reviewer response.",
+            boundary="It is a navigation and wording guide over existing evidence; it does not add experiments or replace author/venue metadata.",
         ),
         PacketSpec(
             item="Author declarations keep private fields explicit",

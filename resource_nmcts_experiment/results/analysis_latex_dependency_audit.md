@@ -64,7 +64,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
 | author | tex_input | `tables/phase_parity_affine` | `paper_latex/tables/phase_parity_affine.tex` | True | True | pass |
 | author | tex_input | `tables/phase_affine_budget_wide128_vs_32` | `paper_latex/tables/phase_affine_budget_wide128_vs_32.tex` | True | True | pass |
-| author | tex_input | `tables/phase_affine_policy_rank_diverse` | `paper_latex/tables/phase_affine_policy_rank_diverse.tex` | True | True | pass |
+| author | tex_input | `tables/phase_policy_budget_frontier` | `paper_latex/tables/phase_policy_budget_frontier.tex` | True | True | pass |
 | author | tex_input | `tables/phase_policy_random_control` | `paper_latex/tables/phase_policy_random_control.tex` | True | True | pass |
 | author | tex_input | `tables/scaling_resource_audit` | `paper_latex/tables/scaling_resource_audit.tex` | True | True | pass |
 | author | tex_input | `tables/screen_scale_ultra_scale64_stress` | `paper_latex/tables/screen_scale_ultra_scale64_stress.tex` | True | True | pass |
@@ -121,7 +121,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
 | anonymous | tex_input | `tables/phase_parity_affine` | `paper_latex/tables/phase_parity_affine.tex` | True | True | pass |
 | anonymous | tex_input | `tables/phase_affine_budget_wide128_vs_32` | `paper_latex/tables/phase_affine_budget_wide128_vs_32.tex` | True | True | pass |
-| anonymous | tex_input | `tables/phase_affine_policy_rank_diverse` | `paper_latex/tables/phase_affine_policy_rank_diverse.tex` | True | True | pass |
+| anonymous | tex_input | `tables/phase_policy_budget_frontier` | `paper_latex/tables/phase_policy_budget_frontier.tex` | True | True | pass |
 | anonymous | tex_input | `tables/phase_policy_random_control` | `paper_latex/tables/phase_policy_random_control.tex` | True | True | pass |
 | anonymous | tex_input | `tables/scaling_resource_audit` | `paper_latex/tables/scaling_resource_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/screen_scale_ultra_scale64_stress` | `paper_latex/tables/screen_scale_ultra_scale64_stress.tex` | True | True | pass |
@@ -178,7 +178,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/phase_parity_affine` | `paper_latex/tables/phase_parity_affine.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/phase_affine_budget_wide128_vs_32` | `paper_latex/tables/phase_affine_budget_wide128_vs_32.tex` | True | True | pass |
-| acm_tqc | tex_input | `tables/phase_affine_policy_rank_diverse` | `paper_latex/tables/phase_affine_policy_rank_diverse.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/phase_policy_budget_frontier` | `paper_latex/tables/phase_policy_budget_frontier.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/phase_policy_random_control` | `paper_latex/tables/phase_policy_random_control.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/scaling_resource_audit` | `paper_latex/tables/scaling_resource_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/screen_scale_ultra_scale64_stress` | `paper_latex/tables/screen_scale_ultra_scale64_stress.tex` | True | True | pass |

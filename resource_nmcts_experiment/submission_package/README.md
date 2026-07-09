@@ -35,6 +35,9 @@ noise modeling, or magic-state-factory accounting.
   must be supplied before final upload.
 - `FINAL_SUBMISSION_HANDOFF_zh.md`: Chinese final-upload handoff that turns the
   remaining author/venue gates into an execution order.
+- `COMPARISON_HANDOFF_zh.md`: Chinese comparison-positioning handoff that
+  explains what the method is compared against, why those comparisons are
+  meaningful, and which claims must remain excluded before upload.
 - `cover_letter_template.md`: editor-facing cover-letter draft with author
   fields left blank.
 - `artifact_reproduction_guide.md`: reviewer-facing quick rebuild path,

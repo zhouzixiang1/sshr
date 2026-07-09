@@ -23,9 +23,9 @@
 
 - PDF pages=40/40
 - readiness=66 pass + 1 needs author input
-- payload_files=1028
+- payload_files=1034
 - artifact_registry=25 families / 149 raw CSV / 63357 raw rows
-- source_privacy=0 strict leaks / 55 provenance files / 985 payload text files
+- source_privacy=0 strict leaks / 55 provenance files / 991 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open
@@ -33,7 +33,9 @@
 ## 推荐执行顺序
 
 1. 先读 `target_venue_brief.md`，确定一个目标期刊和一个备选期刊。
-2. 生成结构化元数据私有 starter。该命令会预填当前仓库 URL、commit hash 和环境说明，
+2. 再读 `COMPARISON_HANDOFF_zh.md`，确认投稿系统、cover letter 或回复审稿意见时
+   不会把 weighted-score 胜利写成 CNOT/depth/ancilla 全胜，也不会扩展成硬件映射结论。
+3. 生成结构化元数据私有 starter。该命令会预填当前仓库 URL、commit hash 和环境说明，
    但仍保留作者/期刊字段为 `AUTHOR INPUT REQUIRED`：
 
 ```bash
@@ -46,28 +48,28 @@
 cp submission_package/submission_metadata_template.json submission_package/submission_metadata.json
 ```
 
-3. 填写 `submission_package/submission_metadata.json` 中所有
+4. 填写 `submission_package/submission_metadata.json` 中所有
    `AUTHOR INPUT REQUIRED` 字段。这个文件被 Git 忽略，适合存放私有作者信息。
-4. 从 `resource_nmcts_experiment/` 目录运行：
+5. 从 `resource_nmcts_experiment/` 目录运行：
 
 ```bash
 ./rebuild_submission_package.sh
 ./verify_submission_package.sh
 ```
 
-5. 检查生成的私有预览文件：
+6. 检查生成的私有预览文件：
 
 - `submission_package/generated_author_declarations.md`
 - `submission_package/generated_availability_statements.md`
 - `submission_package/generated_cover_letter.md`
 - `submission_package/generated_submission_text.md`
 
-6. 如果目标期刊要求双盲审稿，使用匿名 PDF 和匿名源码作为投稿稿件，并把数据/代码
+7. 如果目标期刊要求双盲审稿，使用匿名 PDF 和匿名源码作为投稿稿件，并把数据/代码
    链接替换成匿名审稿链接。不要把作者姓名、个人仓库、个人邮箱或可追溯致谢放进
    双盲材料。
-7. 如果目标期刊不要求双盲审稿，使用作者版 PDF 和源码，并把最终 DOI/URL 写入投稿
+8. 如果目标期刊不要求双盲审稿，使用作者版 PDF 和源码，并把最终 DOI/URL 写入投稿
    系统和 manuscript availability 文本中。
-8. 上传前再次运行：
+9. 上传前再次运行：
 
 ```bash
 ./verify_submission_package.sh
@@ -92,6 +94,7 @@ rg -n "needs author input|needs revision|closure_path_ready" results/analysis_su
 
 - `submission_package/AUTHOR_INPUT_REQUIRED.md`
 - `submission_package/submission_checklist.md`
+- `submission_package/COMPARISON_HANDOFF_zh.md`
 - `submission_package/artifact_reproduction_guide.md`
 - `submission_package/editor_screening_brief.md`
 - `submission_package/reviewer_concern_brief.md`
