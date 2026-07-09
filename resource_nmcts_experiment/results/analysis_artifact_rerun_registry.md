@@ -6,7 +6,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 
 - complete: 27
 - unique raw files covered by registry: 160
-- unique raw CSV rows covered by registry: 79073
+- unique raw CSV rows covered by registry: 80135
 
 | evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |
 |---|---|---:|---:|---:|---|---|
@@ -20,7 +20,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | Comparison protocol and claim boundaries | quick comparison audit | 0 | 0 | 3 | complete | Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps. |
 | Novelty and comparison scorecard | quick comparison audit | 0 | 0 | 1 | complete | Quick derived audit; it strengthens reviewer-facing positioning without rerunning raw experiments. |
 | SSHR reproduction-scope audit | quick comparison audit | 3 | 3402 | 4 | complete | Quick scope audit over existing SSHR-facing rows and references; it does not rerun heavy SSHR-I/Gurobi or every published random table. |
-| Resource-weight sensitivity and robustness | quick derived audit | 12 | 19568 | 2 | complete | Post-hoc logical-resource rescoring only; it does not rerun synthesis and is not a hardware cost model. |
+| Resource-weight sensitivity and robustness | quick derived audit | 12 | 20630 | 2 | complete | Post-hoc logical-resource rescoring only; it does not rerun synthesis and is not a hardware cost model. |
 | Traditional logical baselines | raw Python rerun | 5 | 4341 | 4 | complete | Python rerun; ILP-based subbaselines need Gurobi where enabled. |
 | External logical baseline extension | raw Python plus optional solvers | 3 | 2049 | 3 | complete | Python with optional Gurobi/logic-tool components; rows with skips/errors remain explicit. |
 | ROS-style LUT proxy | raw proxy rerun | 6 | 4932 | 5 | complete | Proxy-level LUT and garbage-pressure analysis only; not a full ROS SAT garbage-management rerun. |

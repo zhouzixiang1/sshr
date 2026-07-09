@@ -22,9 +22,9 @@
       "status": "pass"
     },
     {
-      "bytes": "744173",
+      "bytes": "744966",
       "compile_seconds": "not_recorded",
-      "evidence": "stdout_lines=1371; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
+      "evidence": "stdout_lines=1393; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "author payload LaTeX compile",
       "next_action": "Inspect the extracted payload LaTeX log and restore missing table, figure, bibliography, or style dependencies.",
       "pages": "48",
@@ -33,9 +33,9 @@
       "status": "pass"
     },
     {
-      "bytes": "740637",
+      "bytes": "741388",
       "compile_seconds": "not_recorded",
-      "evidence": "stdout_lines=1377; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
+      "evidence": "stdout_lines=1399; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "anonymous payload LaTeX compile",
       "next_action": "Inspect the extracted payload LaTeX log and restore missing table, figure, bibliography, or style dependencies.",
       "pages": "47",
@@ -44,9 +44,9 @@
       "status": "pass"
     },
     {
-      "bytes": "911680",
+      "bytes": "912416",
       "compile_seconds": "not_recorded",
-      "evidence": "stdout_lines=1894; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
+      "evidence": "stdout_lines=1922; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "acm_tqc payload LaTeX compile",
       "next_action": "Inspect the extracted payload LaTeX log and restore missing table, figure, bibliography, or style dependencies.",
       "pages": "47",

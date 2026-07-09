@@ -141,7 +141,7 @@ Expected current state:
 
 - Machine snapshot tokens checked by `analyze_public_handoff_freshness_audit.py`:
   PDF pages=48/47; readiness=72 pass + 1 needs author input;
-  payload_files=1117; artifact_registry=27 families / 160 raw CSV / 79073 raw rows;
+  payload_files=1117; artifact_registry=27 families / 160 raw CSV / 80135 raw rows;
   source_privacy=0 strict leaks / 57 provenance files / 1074 payload text files;
   comparison_validity=8/8 pass; novelty_scorecard=6/6 pass;
   goal_gate=author/venue metadata remains open.

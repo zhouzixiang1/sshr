@@ -5,7 +5,7 @@ It is post-hoc over verified CSV artifacts; it does not rerun synthesis or chang
 
 ## Status counts
 
-- pass: 72
+- pass: 78
 
 ## Weight profiles
 
@@ -31,6 +31,7 @@ It is post-hoc over verified CSV artifacts; it does not rerun synthesis or chang
 | Pareto vs ROS min-line budget | ROS-style garbage-budget proxy | 309 | 309/0/0, -87.93% | 306/0/3, -87.95% | 309/0/0, -86.30% | 309/0/0, -87.04% | 309/0/0, -86.43% | The min-line budget is a reversible-pebbling proxy over LUT DAGs, not full ROS reproduction. |
 | Pareto vs RevKit CLI | exact reversible synthesis probe | 177 | 173/0/4, -67.28% | 173/0/4, -72.59% | 107/63/7, -9.32% | 173/0/4, -56.53% | 173/0/4, -58.54% | RevKit exact-oracle rows test a real reversible toolchain but not routed Clifford+T mapping. |
 | Pareto vs mockturtle XAG | external logic synthesis | 177 | 166/11/0, -31.50% | 59/70/48, +5.72% | 37/139/1, +18.40% | 163/14/0, -26.31% | 177/0/0, -59.81% | mockturtle is a logic-network probe under the paper's logical resource projection. |
+| Pareto vs Caterpillar API | external logic synthesis | 177 | 177/0/0, -47.94% | 169/0/8, -36.63% | 4/173/0, +195.18% | 174/3/0, -34.26% | 177/0/0, -64.84% | Caterpillar API rows are verified ANF-XAG implementation-family probes, not full ROS or hardware mapping. |
 | Pareto vs CirKit AIG/MC | external logic synthesis | 177 | 177/0/0, -62.34% | 177/0/0, -52.94% | 167/9/1, -35.03% | 177/0/0, -56.99% | 177/0/0, -74.69% | CirKit AIG/multiplicative-complexity rows are projected to the same logical resource fields. |
 | n=14 Pareto vs root beam | high-dimensional internal counterpoint | 64 | 60/0/4, -6.31% | 60/0/4, -7.65% | 60/0/4, -5.48% | 60/0/4, -5.35% | 56/4/4, -3.28% | Symbolic high-dimensional evidence, not exhaustive truth-table benchmarking. |
 | n=16 Resource vs root beam | high-dimensional internal counterpoint | 24 | 23/0/1, -4.36% | 23/0/1, -4.70% | 23/0/1, -4.42% | 23/0/1, -4.28% | 23/0/1, -3.43% | Symbolic high-dimensional evidence, not exhaustive truth-table benchmarking. |
@@ -40,7 +41,7 @@ It is post-hoc over verified CSV artifacts; it does not rerun synthesis or chang
 - Paper-score and T-only profiles test the main non-Clifford-resource claim.
 - CNOT-only is included as a deliberate non-dominance check; CNOT-oriented baselines can win there without contradicting the paper's stated claim.
 - CNOT-depth and ancilla-tight profiles test whether weighted-score gains disappear when two common secondary resources are emphasized.
-- ROS and RevKit rows remain proxy/external-toolchain stress tests rather than hardware-mapped or full ROS-reproduction results.
+- ROS, Caterpillar, and RevKit rows remain proxy/external-toolchain stress tests rather than hardware-mapped or full ROS-reproduction results.
 
 ## Full summary rows
 
@@ -100,6 +101,12 @@ It is post-hoc over verified CSV artifacts; it does not rerun synthesis or chang
 | Pareto vs mockturtle XAG | CNOT-depth | n=3-6 | 177 | 163/14/0 | -26.31% | -27.19% | pass |
 | Pareto vs mockturtle XAG | Balanced | n=3-6 | 177 | 163/13/1 | -26.75% | -27.31% | pass |
 | Pareto vs mockturtle XAG | Ancilla-tight | n=3-6 | 177 | 177/0/0 | -59.81% | -61.63% | pass |
+| Pareto vs Caterpillar API | Paper score | n=3-6 | 177 | 177/0/0 | -47.94% | -48.92% | pass |
+| Pareto vs Caterpillar API | T-only | n=3-6 | 177 | 169/0/8 | -36.63% | -37.50% | pass |
+| Pareto vs Caterpillar API | CNOT-only | n=3-6 | 177 | 4/173/0 | +195.18% | +181.25% | pass |
+| Pareto vs Caterpillar API | CNOT-depth | n=3-6 | 177 | 174/3/0 | -34.26% | -34.99% | pass |
+| Pareto vs Caterpillar API | Balanced | n=3-6 | 177 | 177/0/0 | -41.85% | -42.59% | pass |
+| Pareto vs Caterpillar API | Ancilla-tight | n=3-6 | 177 | 177/0/0 | -64.84% | -67.91% | pass |
 | Pareto vs CirKit AIG/MC | Paper score | n=3-6 | 177 | 177/0/0 | -62.34% | -62.35% | pass |
 | Pareto vs CirKit AIG/MC | T-only | n=3-6 | 177 | 177/0/0 | -52.94% | -52.38% | pass |
 | Pareto vs CirKit AIG/MC | CNOT-only | n=3-6 | 177 | 167/9/1 | -35.03% | -34.86% | pass |

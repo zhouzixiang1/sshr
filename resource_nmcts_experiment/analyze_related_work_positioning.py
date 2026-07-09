@@ -38,11 +38,11 @@ ROWS = [
     },
     {
         "line": "Logic and reversible toolchains",
-        "representative_plain": "ABC, EPFL libraries, RevKit, mockturtle, and CirKit",
-        "representative_latex": r"ABC, EPFL libraries, RevKit, mockturtle, and CirKit~\cite{brayton2010abc,soeken2018epfl,soeken2012revkit,revkit,mockturtle,cirkit}",
+        "representative_plain": "ABC, EPFL libraries, RevKit, mockturtle, Caterpillar, and CirKit",
+        "representative_latex": r"ABC, EPFL libraries, RevKit, mockturtle, Caterpillar, and CirKit~\cite{brayton2010abc,soeken2018epfl,soeken2012revkit,revkit,mockturtle,caterpillar,cirkit}",
         "main_lever": "Mature optimization passes and reversible-synthesis flows.",
         "gap": "Tool output defines strong baselines but does not expose the neural/MCTS algebraic action policy.",
-        "paper_use": "Used as external probes and exact-oracle reversible-synthesis comparisons.",
+        "paper_use": "Used as external probes, API-level implementation-family checks, and exact-oracle reversible-synthesis comparisons.",
     },
     {
         "line": "SSHR geometric synthesis",

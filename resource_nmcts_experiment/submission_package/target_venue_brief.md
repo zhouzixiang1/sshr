@@ -25,7 +25,7 @@ The manuscript is strongest when framed as:
 - resource-constrained search over ANF/FPRM term sets;
 - neural/MCTS/search-control assistance with explicit guards;
 - broad comparison against ESOP, SSHR, ABC/BDD, ROS-style LUT, mockturtle,
-  CirKit, RevKit CLI, and phase/Rz probes;
+  Caterpillar API, CirKit, RevKit CLI, and phase/Rz probes;
 - T-count and weighted-score improvements with CNOT, depth, and ancilla
   trade-offs reported separately.
 

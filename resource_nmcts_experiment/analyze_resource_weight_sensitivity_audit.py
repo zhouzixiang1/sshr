@@ -4,7 +4,7 @@
 The older weight-robustness table focuses on internal and high-dimensional
 rows.  This audit is broader: it re-scores the matched comparison set that a
 reviewer is most likely to question, including SSHR-I, ABC-XAG, ROS-style LUT,
-RevKit, mockturtle, and CirKit probes.  It is a post-hoc audit over already
+RevKit, mockturtle, Caterpillar, and CirKit probes.  It is a post-hoc audit over already
 verified CSV rows and does not rerun synthesis.
 """
 from __future__ import annotations
@@ -175,6 +175,16 @@ COMPARISONS = [
         "mockturtle is a logic-network probe under the paper's logical resource projection.",
     ),
     ComparisonSpec(
+        "caterpillar_api",
+        "Pareto vs Caterpillar API",
+        "external logic synthesis",
+        "and_pareto_resource_nmcts",
+        "external_caterpillar_xag_api_best",
+        INTERNAL_SMALL,
+        ("raw_caterpillar_xag_api_best.csv",),
+        "Caterpillar API rows are verified ANF-XAG implementation-family probes, not full ROS or hardware mapping.",
+    ),
+    ComparisonSpec(
         "cirkit_aig_mc",
         "Pareto vs CirKit AIG/MC",
         "external logic synthesis",
@@ -216,6 +226,7 @@ COMPACT_KEYS = [
     "ros_minline",
     "revkit_cli",
     "mockturtle_xag",
+    "caterpillar_api",
     "cirkit_aig_mc",
     "n14_root_beam",
     "n16_root_beam",
@@ -480,7 +491,7 @@ def write_markdown(path: Path, summary_rows: list[dict[str, str]]) -> None:
             "- Paper-score and T-only profiles test the main non-Clifford-resource claim.",
             "- CNOT-only is included as a deliberate non-dominance check; CNOT-oriented baselines can win there without contradicting the paper's stated claim.",
             "- CNOT-depth and ancilla-tight profiles test whether weighted-score gains disappear when two common secondary resources are emphasized.",
-            "- ROS and RevKit rows remain proxy/external-toolchain stress tests rather than hardware-mapped or full ROS-reproduction results.",
+            "- ROS, Caterpillar, and RevKit rows remain proxy/external-toolchain stress tests rather than hardware-mapped or full ROS-reproduction results.",
             "",
             "## Full summary rows",
             "",
@@ -535,6 +546,7 @@ LATEX_LABELS = {
     "ros_minline": "ROS min-line",
     "revkit_cli": "RevKit",
     "mockturtle_xag": "mockturtle",
+    "caterpillar_api": "Caterpillar",
     "cirkit_aig_mc": "CirKit",
     "n14_root_beam": r"$n=14$ root",
     "n16_root_beam": r"$n=16$ root",

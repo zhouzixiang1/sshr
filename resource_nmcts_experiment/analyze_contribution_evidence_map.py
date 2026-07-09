@@ -28,7 +28,7 @@ ROWS = [
     },
     {
         "contribution": "Broad baseline and toolchain comparison",
-        "implementation": "Direct ANF, ESOP beam/MILP, SSHR, ABC/BDD, ROS-style LUT, mockturtle, CirKit, RevKit CLI, and phase/Rz probes.",
+        "implementation": "Direct ANF, ESOP beam/MILP, SSHR, ABC/BDD, ROS-style LUT, mockturtle, Caterpillar API, CirKit, RevKit CLI, and phase/Rz probes.",
         "evidence_latex": r"Tables~\ref{tab:baseline-claim-matrix}, \ref{tab:evidence-matrix}, \ref{tab:paired-statistics}; Fig.~\ref{fig:baselines}",
         "evidence_plain": "baseline claim matrix, evidence matrix, paired statistics, baseline figure",
         "boundary": "Strong T-count and weighted-score evidence, not universal CNOT/depth/ancilla dominance or full ROS reproduction.",

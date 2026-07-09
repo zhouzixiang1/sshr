@@ -110,15 +110,9 @@ echo "==> Building English submission PDF"
 (
   cd paper_latex
   rm -f resource_nmcts_submission_{v1,anonymous,acm_tqc}.{aux,bbl,blg,fdb_latexmk,fls,out,log,toc,lof,lot}
-  "$LATEXMK_BIN" -pdf -interaction=nonstopmode -halt-on-error resource_nmcts_submission_v1.tex
-  "$PDFLATEX_BIN" -interaction=nonstopmode -halt-on-error resource_nmcts_submission_v1.tex
-  "$PDFLATEX_BIN" -interaction=nonstopmode -halt-on-error resource_nmcts_submission_v1.tex
-  "$LATEXMK_BIN" -pdf -interaction=nonstopmode -halt-on-error resource_nmcts_submission_anonymous.tex
-  "$PDFLATEX_BIN" -interaction=nonstopmode -halt-on-error resource_nmcts_submission_anonymous.tex
-  "$PDFLATEX_BIN" -interaction=nonstopmode -halt-on-error resource_nmcts_submission_anonymous.tex
-  "$LATEXMK_BIN" -pdf -interaction=nonstopmode -halt-on-error resource_nmcts_submission_acm_tqc.tex
-  "$PDFLATEX_BIN" -interaction=nonstopmode -halt-on-error resource_nmcts_submission_acm_tqc.tex
-  "$PDFLATEX_BIN" -interaction=nonstopmode -halt-on-error resource_nmcts_submission_acm_tqc.tex
+  "$LATEXMK_BIN" -pdf -g -interaction=nonstopmode -halt-on-error resource_nmcts_submission_v1.tex
+  "$LATEXMK_BIN" -pdf -g -interaction=nonstopmode -halt-on-error resource_nmcts_submission_anonymous.tex
+  "$LATEXMK_BIN" -pdf -g -interaction=nonstopmode -halt-on-error resource_nmcts_submission_acm_tqc.tex
 )
 
 run_py analyze_pdf_visual_audit.py

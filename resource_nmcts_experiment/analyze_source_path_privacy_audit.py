@@ -2,7 +2,7 @@
 """Audit source and payload path/privacy boundaries.
 
 Some result files intentionally record local toolchain paths as provenance for
-ABC, mockturtle, CirKit, RevKit, and model checkpoints.  Those paths are useful
+ABC, mockturtle, Caterpillar, CirKit, RevKit, and model checkpoints.  Those paths are useful
 for reproducibility, but they should not leak into primary manuscript sources,
 submission-support documents, or unsafe payload member names.  This terminal
 audit separates strict privacy/path gates from allowed provenance locations.

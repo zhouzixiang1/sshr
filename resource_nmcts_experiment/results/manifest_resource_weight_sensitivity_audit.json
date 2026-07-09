@@ -2,7 +2,7 @@
   "acm_table_anchor_present": true,
   "anonymous_table_anchor_present": true,
   "boundary": "Post-hoc logical-resource sensitivity audit; no hardware mapping, routing, or full external compiler reproduction is claimed.",
-  "compact_rows": 12,
+  "compact_rows": 13,
   "comparisons": [
     "direct_anf",
     "esop_milp",
@@ -13,6 +13,7 @@
     "ros_minline",
     "revkit_cli",
     "mockturtle_xag",
+    "caterpillar_api",
     "cirkit_aig_mc",
     "n14_root_beam",
     "n16_root_beam"
@@ -33,10 +34,10 @@
     "balanced",
     "ancilla_tight"
   ],
-  "raw_rows": 12732,
+  "raw_rows": 13794,
   "status_counts": {
-    "pass": 72
+    "pass": 78
   },
-  "summary_rows": 72,
+  "summary_rows": 78,
   "table_anchor_present": true
 }

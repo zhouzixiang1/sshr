@@ -26,10 +26,11 @@ leaderboard.
    under the same logical resource model.  This layer supports the main claim:
    the method improves T-count and weighted logical resource score for the
    target oracle-synthesis problem.
-2. External toolchain probes: ROS-style LUT, mockturtle KLUT-to-XAG, CirKit
-   AIG/MC, RevKit CLI exact-oracle, and RevKit phase/Rz probes test whether the
-   advantage persists beyond self-written baselines.  These comparisons support
-   robustness of the logical-layer result, not hardware-mapped optimality.
+2. External toolchain probes: ROS-style LUT, mockturtle KLUT-to-XAG,
+   Caterpillar API, CirKit AIG/MC, RevKit CLI exact-oracle, and RevKit phase/Rz
+   probes test whether the advantage persists beyond self-written baselines.
+   These comparisons support robustness of the logical-layer result, not
+   hardware-mapped optimality.
 3. Internal search ablations: no-MCTS, learned-prior-off, guard-off,
    Pareto-archive-off, depth-frontier, sparse-frontier, and rank-diverse
    pruning runs separate the contribution of the search controller from the

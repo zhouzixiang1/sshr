@@ -39,7 +39,7 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_resource_weight_sensitivity_audit.json; needs_revision_count=0; raw_rows=12732; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_resource_weight_sensitivity_audit.json; needs_revision_count=0; raw_rows=13794; stderr=none",
       "item": "Resource-weight sensitivity audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"

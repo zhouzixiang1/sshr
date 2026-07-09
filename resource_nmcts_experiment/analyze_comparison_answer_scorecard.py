@@ -277,6 +277,7 @@ def build_rows() -> list[dict[str, str]]:
                 + dominance_text("RevKit CLI exact oracle")
                 + "; "
                 + dominance_text("CirKit AIG/MC")
+                + "; Caterpillar CNOT-only 4/173/0 while paper score is 177/0/0"
             ),
             "usable_claim": "The method occupies a strong T/score point while preserving visible CNOT/depth/ancilla and coefficient-sensitivity tradeoffs.",
             "excluded_claim": "Do not turn weighted-score wins into a complete Pareto or hardware-dominance claim.",

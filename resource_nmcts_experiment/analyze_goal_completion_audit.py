@@ -193,12 +193,13 @@ def build_items() -> list[GoalItem]:
                     RESULTS / "analysis_novelty_comparison_scorecard.md",
                     TABLES / "comparison_target_validity_audit.tex",
                     RESULTS / "raw_mockturtle_xag_probe.csv",
+                    RESULTS / "raw_caterpillar_xag_api_best.csv",
                     RESULTS / "raw_cirkit_aig_probe.csv",
                     RESULTS / "raw_revkit_cli_multiflow_traditional.csv",
                     RESULTS / "raw_ros_lut_proxy_best.csv",
                 )
             ),
-            evidence="Comparison evidence, target-validity roles, and the novelty/comparison scorecard cover internal logical baselines, SSHR, ABC/BDD, ROS-style LUT, mockturtle, CirKit, RevKit CLI exact-oracle, controls, and phase/Rz probes.",
+            evidence="Comparison evidence, target-validity roles, and the novelty/comparison scorecard cover internal logical baselines, SSHR, ABC/BDD, ROS-style LUT, mockturtle, Caterpillar API, CirKit, RevKit CLI exact-oracle, controls, and phase/Rz probes.",
             evidence_files=(
                 RESULTS / "analysis_comparison_evidence_matrix.md",
                 RESULTS / "analysis_baseline_comparability_audit.md",
@@ -206,6 +207,7 @@ def build_items() -> list[GoalItem]:
                 RESULTS / "analysis_novelty_comparison_scorecard.md",
                 TABLES / "comparison_target_validity_audit.tex",
                 RESULTS / "raw_mockturtle_xag_probe.csv",
+                RESULTS / "raw_caterpillar_xag_api_best.csv",
                 RESULTS / "raw_cirkit_aig_probe.csv",
                 RESULTS / "raw_revkit_cli_multiflow_traditional.csv",
                 RESULTS / "raw_ros_lut_proxy_best.csv",
@@ -225,7 +227,7 @@ def build_items() -> list[GoalItem]:
                     FIGURES / "fig3_baseline_comparisons.pdf",
                 )
             ),
-            evidence="Paired statistics and bootstrap effect intervals show score/T improvements over direct ANF, ESOP, SSHR variants, ABC-XAG, ROS-style LUT, mockturtle, CirKit, RevKit CLI, and high-dimensional root/fast baselines.",
+            evidence="Paired statistics and bootstrap effect intervals show score/T improvements over direct ANF, ESOP, SSHR variants, ABC-XAG, ROS-style LUT, mockturtle, Caterpillar API, CirKit, RevKit CLI, and high-dimensional root/fast baselines.",
             evidence_files=(
                 RESULTS / "analysis_paired_statistical_evidence.md",
                 RESULTS / "analysis_paired_effect_uncertainty.md",

@@ -23,7 +23,7 @@
 - PDF pages=48/47
 - readiness=72 pass + 1 needs author input
 - payload_files=1117
-- artifact_registry=27 families / 160 raw CSV / 79073 raw rows
+- artifact_registry=27 families / 160 raw CSV / 80135 raw rows
 - source_privacy=0 strict leaks / 57 provenance files / 1074 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
@@ -243,7 +243,7 @@
 - `results/manifest_resource_weight_sensitivity_audit.json`
 - `paper_latex/tables/resource_weight_sensitivity_audit.tex`
 
-该审计不重跑综合，而是在 verified raw CSV 上对 12 类内部/外部对比重新计算 6 套逻辑资源权重：paper score、T-only、CNOT-only、CNOT-depth、balanced 和 ancilla-tight。当前生成 12732 个 pair/profile 行、72 个 summary 行，并接入 author/anonymous/ACM 三套正文表格、rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke、traceability、artifact rerun registry 和 threats-to-validity audit。结论更适合作为投稿说法：在 paper/T/CNOT-depth/ancilla-tight 权重下，Pareto-Resource-NMCTS 对 direct ANF、ESOP-MILP、ABC-XAG、ROS-style LUT、ROS min-line、RevKit CLI、CirKit 和高维 root-beam 对比多数保持优势；但 CNOT-only 下 SSHR-H 为 43/128/6、SSHR-I CNOT 为 0/168/9，mockturtle XAG 在 T-only 与 CNOT-only 也构成边界。这说明本文的对比是有意义的多资源逻辑层搜索对比，而不是宣称全指标、全工具链、硬件映射层面的绝对支配。
+该审计不重跑综合，而是在 verified raw CSV 上对 13 类内部/外部对比重新计算 6 套逻辑资源权重：paper score、T-only、CNOT-only、CNOT-depth、balanced 和 ancilla-tight。当前生成 13794 个 pair/profile 行、78 个 summary 行，并接入 author/anonymous/ACM 三套正文表格、rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke、traceability、artifact rerun registry 和 threats-to-validity audit。结论更适合作为投稿说法：在 paper/T/CNOT-depth/ancilla-tight 权重下，Pareto-Resource-NMCTS 对 direct ANF、ESOP-MILP、ABC-XAG、ROS-style LUT、ROS min-line、RevKit CLI、CirKit、Caterpillar API 和高维 root-beam 对比多数保持优势；但 CNOT-only 下 SSHR-H 为 43/128/6、SSHR-I CNOT 为 0/168/9，Caterpillar API 为 4/173/0，mockturtle XAG 在 T-only 与 CNOT-only 也构成边界。这说明本文的对比是有意义的多资源逻辑层搜索对比，而不是宣称全指标、全工具链、硬件映射层面的绝对支配。
 
 本轮进一步新增 CNOT constraint profile audit，把 CNOT-only 从 post-hoc 重新计分推进到真实重跑搜索 profile：
 

@@ -26,7 +26,8 @@ The expected local audit context records:
 - PyTorch with Apple MPS available
 - Apple M4 Pro CPU/GPU workstation
 - worker counts up to 10 in recorded manifests
-- mockturtle, CirKit, and RevKit provenance for external probes when present
+- mockturtle, Caterpillar, CirKit, and RevKit provenance for external probes
+  when present
 
 The logical resource results do not depend on hardware mapping, routing,
 native-gate scheduling, or physical noise simulation.

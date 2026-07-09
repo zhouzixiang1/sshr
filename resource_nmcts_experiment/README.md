@@ -13,9 +13,9 @@ Comparison scope:
 
 - Boolean-oracle synthesis baselines: direct ANF, logical-AND direct ANF, ESOP
   beam/MILP, BDD, ABC AIG/XAG/LUT/ESOP, XAG, and ROS-style LUT probes.
-- External toolchain probes: official-header mockturtle KLUT-to-XAG, CirKit 3
-  AIG/multiplicative-complexity, RevKit API, and legacy RevKit CLI exact-oracle
-  reversible-synthesis flows.
+- External toolchain probes: official-header mockturtle KLUT-to-XAG,
+  Caterpillar ANF-XAG API, CirKit 3 AIG/multiplicative-complexity, RevKit API,
+  and legacy RevKit CLI exact-oracle reversible-synthesis flows.
 - Search-policy baselines and ablations: greedy/direct construction, beam,
   fixed-coordinate MCTS, neural-prior ablations, Pareto archives,
   depth-frontier policies, stage-gated frontier control, and rank-diverse

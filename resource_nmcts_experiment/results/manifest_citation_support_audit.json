@@ -1,7 +1,8 @@
 {
-  "bib_key_count": 20,
+  "bib_key_count": 21,
   "bib_keys": [
     "brayton2010abc",
+    "caterpillar",
     "cirkit",
     "kremer2025nonclifford",
     "machiya2026monteq",
@@ -22,9 +23,10 @@
     "zheng2025sshr",
     "zhou2022qctmcts"
   ],
-  "cited_key_count": 20,
+  "cited_key_count": 21,
   "cited_keys": [
     "brayton2010abc",
+    "caterpillar",
     "cirkit",
     "kremer2025nonclifford",
     "machiya2026monteq",

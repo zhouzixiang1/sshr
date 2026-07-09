@@ -16,7 +16,7 @@ Manuscript anchors:
 
 ## Are the baselines fair?
 
-The manuscript uses layered comparisons rather than a single universal leaderboard.  Direct ANF, ESOP, BDD/ABC, SSHR, ROS-style LUT, mockturtle, CirKit, RevKit CLI, and phase/Rz probes are assigned different claim roles.  Each row is bounded by task alignment, fairness controls, and residual abstraction risk.
+The manuscript uses layered comparisons rather than a single universal leaderboard.  Direct ANF, ESOP, BDD/ABC, SSHR, ROS-style LUT, mockturtle, Caterpillar API, CirKit, RevKit CLI, and phase/Rz probes are assigned different claim roles.  Each row is bounded by task alignment, fairness controls, and residual abstraction risk.
 The comparison answer scorecard gives the compact quantitative answer to "compared with what?", while the novelty/comparison scorecard condenses method-identity concerns into reviewer questions, evidence anchors, and excluded claims.
 
 Manuscript anchors:

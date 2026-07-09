@@ -15,7 +15,7 @@ archive、神经 action prior、frontier controller 和 baseline-preserving guar
 可以安全使用的核心表述是：
 
 > 本文在逻辑层 Boolean oracle synthesis 任务上，与 Direct ANF、ESOP、
-> SSHR、ABC/BDD、ROS-style LUT、mockturtle、CirKit、RevKit 等分层基线比较；
+> SSHR、ABC/BDD、ROS-style LUT、mockturtle、Caterpillar API、CirKit、RevKit 等分层基线比较；
 > 主张 T-count 和 weighted logical-resource score 的系统性改进，同时明确保留
 > CNOT、depth、ancilla、line count 和 hardware mapping 的边界。
 
@@ -37,7 +37,7 @@ weighted score。不要把这一层写成硬件级全局最优，也不要写成
 
 - ROS-style LUT proxy：检验 LUT/resource-constrained oracle synthesis 路线下的
   资源对比，但不是完整官方 ROS SAT garbage-management 复现。
-- mockturtle KLUT-to-XAG 和 CirKit AIG/MC：检验 XAG/AIG/multiplicative-complexity
+- mockturtle KLUT-to-XAG、Caterpillar API 和 CirKit AIG/MC：检验 XAG/AIG/multiplicative-complexity
   逻辑网络路线是否仍然构成强对照。
 - RevKit CLI exact-oracle：检验精确 reversible-oracle synthesis 下的资源差异。
 - RevKit phase/Rz branch：用于 phase/Rz lower-bound 或 sensitivity probe，不是最终
@@ -78,7 +78,7 @@ depth claim。
 
 > 不是。SSHR 只是 CNOT-oriented small-function counterpoint。主比较层还包括
 > Direct ANF、AND-direct ANF、ESOP beam/MILP、BDD/ABC；外部探针还包括 ROS-style
-> LUT、mockturtle、CirKit 和 RevKit。论文把每类比较绑定到可支持的 claim，并用
+> LUT、mockturtle、Caterpillar API、CirKit 和 RevKit。论文把每类比较绑定到可支持的 claim，并用
 > counterpoint audit 明确哪些资源指标没有全胜。
 
 如果审稿人问“为什么不和硬件编译器比？”，回答：

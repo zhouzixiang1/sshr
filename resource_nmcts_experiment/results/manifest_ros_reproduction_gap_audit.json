@@ -151,8 +151,8 @@
     {
       "audit_status": "pass",
       "coverage_status": "covered",
-      "current_coverage": "Toolchain readiness records ABC, mockturtle, CirKit, RevKit API, and legacy RevKit/CirKit availability and separates them from full ROS.",
-      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none",
+      "current_coverage": "Toolchain readiness records ABC, mockturtle, Caterpillar API, CirKit, RevKit API, and legacy RevKit/CirKit availability and separates them from full ROS.",
+      "evidence": "files_missing=none; tokens=5/5; missing_tokens=none",
       "excluded_claim": "Tool availability is not the same as official ROS reproduction.",
       "item": "External toolchain availability boundary",
       "next_reproduction_step": "Rerun the readiness audit after adding any official ROS source, binary, or independent reimplementation.",

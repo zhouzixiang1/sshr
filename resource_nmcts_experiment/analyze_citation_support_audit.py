@@ -56,7 +56,7 @@ FAMILIES = (
     ),
     CitationFamily(
         item="Logic and reversible toolchains",
-        required_keys=("brayton2010abc", "soeken2018epfl", "soeken2012revkit", "revkit", "mockturtle", "cirkit"),
+        required_keys=("brayton2010abc", "soeken2018epfl", "soeken2012revkit", "revkit", "mockturtle", "caterpillar", "cirkit"),
         anchor="Logic and reversible toolchains",
         role="external synthesis and reversible-toolchain probes",
     ),

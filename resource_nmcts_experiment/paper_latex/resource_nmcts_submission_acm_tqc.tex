@@ -89,10 +89,10 @@ and peak ancilla.
 
 Existing synthesis routes provide strong local solutions.  ESOP, XAG, LUT and
 BDD representations reduce different Boolean resources; ROS makes LUT-based
-oracle synthesis resource-aware; RevKit, mockturtle, CirKit, and ABC provide
+oracle synthesis resource-aware; RevKit, mockturtle, Caterpillar, CirKit, and ABC provide
 mature logic and reversible-synthesis toolchains; and SSHR uses parallelotope
 structures in the Boolean hypercube to target small-scale CNOT-oriented
-synthesis~\cite{meuli2020ros,meuli2022xag,meuli2019multiplicative,wille2009bdd,brayton2010abc,soeken2018epfl,soeken2012revkit,zheng2025sshr,revkit,mockturtle,cirkit}.
+synthesis~\cite{meuli2020ros,meuli2022xag,meuli2019multiplicative,wille2009bdd,brayton2010abc,soeken2018epfl,soeken2012revkit,zheng2025sshr,revkit,mockturtle,caterpillar,cirkit}.
 These methods motivate the baselines used in this paper, but they also expose a
 gap: a fixed representation or a single resource objective may miss useful
 tradeoffs when T-count, CNOTs, depth, gates, and ancilla are optimized
@@ -112,7 +112,7 @@ extension.  Second, it combines Boolean-ring linear-factor screening, neural
 action priors, \mcts{}, depth-frontier policies, Pareto archives, and
 baseline-preserving guards into one logical-layer synthesis workflow.  Third,
 it evaluates the method against ESOP, SSHR, ABC/BDD, ROS-style LUT,
-mockturtle, CirKit, RevKit CLI, and RevKit phase/Rz baselines on matched
+mockturtle, Caterpillar API, CirKit, RevKit CLI, and RevKit phase/Rz baselines on matched
 functions.  Fourth, it separates algorithmic gains from engineering guards
 through ablations and high-dimensional verification bridges.
 
@@ -182,9 +182,9 @@ logical-layer study~\cite{yu2025backend}.
 \subsection{Reversible and logic-synthesis toolchains}
 
 ABC supplies mature AIG, XAG/GIA, LUT, and ESOP optimization flows for
-classical logic~\cite{brayton2010abc}.  mockturtle and CirKit provide reusable
+classical logic~\cite{brayton2010abc}.  mockturtle, Caterpillar, and CirKit provide reusable
 logic-network optimization libraries and shells in the EPFL logic-synthesis
-ecosystem~\cite{soeken2018epfl,mockturtle,cirkit}.  RevKit provides
+ecosystem~\cite{soeken2018epfl,mockturtle,caterpillar,cirkit}.  RevKit provides
 reversible-logic and quantum-compilation functionality,
 including the Python \texttt{oracle\_synth} API and legacy command-line
 reversible synthesis flows~\cite{soeken2012revkit,revkit}.  In this work these
@@ -207,7 +207,7 @@ it is a logical-layer Boolean-oracle synthesizer, not a hardware-routing
 method, not a Hamiltonian-simulation scheduler, not a gate-by-gate unitary
 generator, and not an SSHR parallelotope search.  Its learned component ranks
 verifiable Boolean-algebraic actions, while ESOP, BDD, XAG/LUT, ROS-style,
-SSHR, RevKit, mockturtle, CirKit, and ABC flows define the comparison set.
+SSHR, RevKit, mockturtle, Caterpillar, CirKit, and ABC flows define the comparison set.
 
 Table~\ref{tab:related-positioning} summarizes this positioning.  It is used
 to keep the manuscript's contribution narrow and testable: existing tools and
@@ -552,8 +552,8 @@ The comparison set should therefore be read as layered evidence rather than as
 a single universal leaderboard.  Direct \anf{}, ESOP, ABC/BDD, and related
 representation baselines test matched bit-flip oracle resource efficiency;
 SSHR tests whether the proposed search remains competitive against a
-CNOT-oriented geometric method on small functions; mockturtle, CirKit,
-ROS-style LUT, and RevKit probes test whether the advantage persists outside
+CNOT-oriented geometric method on small functions; mockturtle, Caterpillar API,
+CirKit, ROS-style LUT, and RevKit probes test whether the advantage persists outside
 the project's own implementations; and internal ablations test whether the
 search controls contribute beyond deterministic construction.  The results
 below use each family only for the claim it can support.
@@ -1246,11 +1246,12 @@ values favor \method{} or Pareto-\method{}.}
 We also repeat this sensitivity check over the external comparison rows most
 likely to be questioned by reviewers.  Table~\ref{tab:resource-weight-sensitivity}
 keeps the CNOT-only profile visible: Pareto-\method{} does not dominate
-SSHR-H or SSHR-I on their intended CNOT objective, and mockturtle is competitive
-under pure T-count.  The same table shows that the paper score, CNOT/depth-heavy,
-and ancilla-tight profiles remain favorable against the broader ABC, ROS-style
-LUT, RevKit, mockturtle, CirKit, and high-dimensional root-beam probes.  This is
-therefore evidence for a bounded logical-resource search claim, not a
+SSHR-H or SSHR-I on their intended CNOT objective, Caterpillar API is a strong
+CNOT-only counterpoint, and mockturtle is competitive under pure T-count.  The
+same table shows that the paper score, CNOT/depth-heavy, and ancilla-tight
+profiles remain favorable against the broader ABC, ROS-style LUT, RevKit,
+mockturtle, Caterpillar API, CirKit, and high-dimensional root-beam probes.
+This is therefore evidence for a bounded logical-resource search claim, not a
 single-metric or all-resource leaderboard.
 
 \begin{table}[H]

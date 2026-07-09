@@ -169,7 +169,7 @@
       "evidence_family": "Resource-weight sensitivity and robustness",
       "manifest_files": "2",
       "raw_files": "12",
-      "raw_rows": "19568",
+      "raw_rows": "20630",
       "representative_raw": "results/raw_cirkit_aig_probe.csv; results/raw_external_traditional_resource_n6.csv; results/raw_highdim_resource.csv; results/raw_highdim_scale_resource.csv; +8 more",
       "rerun_tier": "quick derived audit",
       "scripts_missing": "",
@@ -605,5 +605,5 @@
   "rows": 27,
   "script": "analyze_artifact_rerun_registry.py",
   "unique_raw_files": 160,
-  "unique_raw_rows": 79073
+  "unique_raw_rows": 80135
 }
