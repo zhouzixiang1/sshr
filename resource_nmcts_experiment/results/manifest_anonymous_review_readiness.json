@@ -28,6 +28,12 @@
       "status": "needs author input"
     },
     {
+      "evidence": "source_exists=True; author_anonymized=True; author_name_present=False; availability_repo_relative=False; anonymous_wording=True.",
+      "item": "Generated anonymous source draft",
+      "next_action": "Run make_anonymous_review_draft.py and inspect the generated source before double-blind upload.",
+      "status": "pass"
+    },
+    {
       "evidence": "private_files_absent=True; gitignore_covers_private_paths=True; missing_gitignore_entries=none.",
       "item": "Private file boundary for anonymous review",
       "next_action": "Keep submission_metadata.json and generated private previews ignored and out of public payloads.",
@@ -43,6 +49,6 @@
   "script": "analyze_anonymous_review_readiness.py",
   "status_counts": {
     "needs author input": 3,
-    "pass": 2
+    "pass": 3
   }
 }

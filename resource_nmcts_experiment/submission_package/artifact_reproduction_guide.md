@@ -47,7 +47,7 @@ This command regenerates:
   analyses;
 - paper tables under `paper_latex/tables/`;
 - figures and figure source data under `paper_latex/figures/submission_v36/`;
-- the English submission PDF;
+- the English submission PDF and optional anonymous-review PDF;
 - archive and traceability audits;
 - the uploadable payload tarball and SHA256 sidecar;
 - the final readiness audit.
@@ -60,6 +60,7 @@ neural model training.
 After the quick rebuild, the current package should report:
 
 - compiled PDF: `paper_latex/resource_nmcts_submission_v1.pdf`
+- anonymous review PDF: `paper_latex/resource_nmcts_submission_anonymous.pdf`
 - payload archive: `submission_package/dist/resource_nmcts_submission_payload.tar.gz`
 - readiness state in `results/analysis_submission_readiness_audit.md`
 - payload file count and SHA256 in

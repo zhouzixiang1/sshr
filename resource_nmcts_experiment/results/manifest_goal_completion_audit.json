@@ -105,8 +105,8 @@
     },
     {
       "boundary": "This prepares the double-blind path but does not make the current author-labeled manuscript itself double-blind ready.",
-      "evidence": "Anonymous-review audit separates the current author-labeled draft from the extra double-blind steps: venue decision, anonymized author field, and anonymous artifact links.",
-      "evidence_files": "results/analysis_anonymous_review_readiness.md; results/summary_anonymous_review_readiness.csv; results/manifest_anonymous_review_readiness.json",
+      "evidence": "Anonymous-review audit separates the current author-labeled draft from the double-blind path and a generated anonymous source draft is present.",
+      "evidence_files": "results/analysis_anonymous_review_readiness.md; results/summary_anonymous_review_readiness.csv; results/manifest_anonymous_review_readiness.json; paper_latex/resource_nmcts_submission_anonymous.tex; paper_latex/resource_nmcts_submission_anonymous.pdf",
       "next_action": "If the target venue requires double-blind review, create an anonymized manuscript copy and anonymous archive/repository links before upload.",
       "requirement": "Anonymous-review submission path",
       "status": "pass"

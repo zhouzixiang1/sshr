@@ -19,6 +19,8 @@ THIS_DIR = Path(__file__).resolve().parent
 RESULTS = THIS_DIR / "results"
 PAPER = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.tex"
 PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.pdf"
+ANONYMOUS_PAPER = THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.tex"
+ANONYMOUS_PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.pdf"
 REBUILD_SCRIPT = THIS_DIR / "rebuild_submission_package.sh"
 VERIFY_SCRIPT = THIS_DIR / "verify_submission_package.sh"
 ARCHIVE_ANALYSIS = RESULTS / "analysis_submission_archive_manifest.md"
@@ -324,6 +326,12 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "If the selected venue requires double-blind review, produce an anonymized manuscript copy and anonymous artifact links before upload.",
         },
         {
+            "item": "Compiled anonymous review draft",
+            "status": "pass" if ANONYMOUS_PAPER.exists() and ANONYMOUS_PDF.exists() else "needs revision",
+            "evidence": f"anonymous_source_exists={ANONYMOUS_PAPER.exists()}; anonymous_pdf_exists={ANONYMOUS_PDF.exists()}.",
+            "next_action": "Run make_anonymous_review_draft.py and rebuild the PDF if a double-blind venue is selected.",
+        },
+        {
             "item": "Goal completion audit",
             "status": "pass"
             if GOAL_ANALYSIS.exists() and GOAL_SUMMARY.exists() and GOAL_MANIFEST.exists()
@@ -362,7 +370,7 @@ def build_rows() -> list[dict[str, str]]:
             and VERIFIER_SUMMARY.exists()
             and VERIFIER_MANIFEST.exists()
             else "needs revision",
-            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, private-preview protection, private payload exclusion, payload round-trip integrity, and LaTeX log boundaries.",
+            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, private-preview protection, private payload exclusion, payload round-trip integrity, and LaTeX log boundaries.",
             "next_action": "Run verify_submission_package.sh after rebuilding the payload archive.",
         },
         {

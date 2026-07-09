@@ -8,9 +8,9 @@ This terminal audit opens the reviewer/upload tarball and checks manifest agreem
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Payload archive readable | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=844; error=none. | Regenerate the payload archive if it cannot be opened by Python tarfile. |
-| Payload manifest round-trip | pass | manifest_files=844; archive_files=844; missing=none; extra=none. | Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge. |
-| Payload per-file SHA256 | pass | checked=844; mismatches=none. | Regenerate the payload archive and manifest if any archived file digest differs from the manifest. |
+| Payload archive readable | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=847; error=none. | Regenerate the payload archive if it cannot be opened by Python tarfile. |
+| Payload manifest round-trip | pass | manifest_files=847; archive_files=847; missing=none; extra=none. | Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge. |
+| Payload per-file SHA256 | pass | checked=847; mismatches=none. | Regenerate the payload archive and manifest if any archived file digest differs from the manifest. |
 | Payload path hygiene | pass | unsafe_paths=none; private_hits=none. | Remove unsafe, platform-generated, or private files from the payload inputs. |
-| Payload required artifacts | pass | required=10; missing=none. | Ensure the uploadable archive includes manuscript, bibliography, rebuild/verify scripts, handoff docs, and submission audits. |
-| Payload deterministic tar metadata | pass | members_checked=844; metadata_issues=none. | Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads. |
+| Payload required artifacts | pass | required=12; missing=none. | Ensure the uploadable archive includes manuscript, bibliography, rebuild/verify scripts, handoff docs, and submission audits. |
+| Payload deterministic tar metadata | pass | members_checked=847; metadata_issues=none. | Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads. |

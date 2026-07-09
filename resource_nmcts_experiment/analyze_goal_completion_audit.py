@@ -21,6 +21,8 @@ THIS_DIR = Path(__file__).resolve().parent
 RESULTS = THIS_DIR / "results"
 PAPER = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.tex"
 PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.pdf"
+ANONYMOUS_TEX = THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.tex"
+ANONYMOUS_PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.pdf"
 TABLES = THIS_DIR / "paper_latex" / "tables"
 FIGURES = THIS_DIR / "paper_latex" / "figures" / "submission_v36"
 PAYLOAD = THIS_DIR / "submission_package" / "dist" / "resource_nmcts_submission_payload.tar.gz"
@@ -305,13 +307,16 @@ def build_items() -> list[GoalItem]:
                     RESULTS / "analysis_anonymous_review_readiness.md",
                     RESULTS / "summary_anonymous_review_readiness.csv",
                     RESULTS / "manifest_anonymous_review_readiness.json",
+                    ANONYMOUS_TEX,
                 )
             ),
-            evidence="Anonymous-review audit separates the current author-labeled draft from the extra double-blind steps: venue decision, anonymized author field, and anonymous artifact links.",
+            evidence="Anonymous-review audit separates the current author-labeled draft from the double-blind path and a generated anonymous source draft is present.",
             evidence_files=(
                 RESULTS / "analysis_anonymous_review_readiness.md",
                 RESULTS / "summary_anonymous_review_readiness.csv",
                 RESULTS / "manifest_anonymous_review_readiness.json",
+                ANONYMOUS_TEX,
+                ANONYMOUS_PDF,
             ),
             boundary="This prepares the double-blind path but does not make the current author-labeled manuscript itself double-blind ready.",
             next_action="If the target venue requires double-blind review, create an anonymized manuscript copy and anonymous archive/repository links before upload.",

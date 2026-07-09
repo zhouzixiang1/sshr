@@ -20,6 +20,7 @@ from analyze_submission_metadata_audit import METADATA_FILE, METADATA_TEMPLATE, 
 
 RESULTS = THIS_DIR / "results"
 PAPER = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.tex"
+ANONYMOUS_PAPER = THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.tex"
 SUBMISSION_PACKAGE = THIS_DIR / "submission_package"
 README = SUBMISSION_PACKAGE / "README.md"
 CHECKLIST = SUBMISSION_PACKAGE / "submission_checklist.md"
@@ -116,6 +117,23 @@ def availability_row(paper_text: str) -> dict[str, str]:
     )
 
 
+def generated_anonymous_source_row() -> dict[str, str]:
+    text = read_text(ANONYMOUS_PAPER)
+    author = latex_author(text)
+    section = data_code_section(text)
+    author_ready = is_anonymized_author(author)
+    has_author_name = "Zixiang Zhou" in text
+    has_repo_relative = "resource\\_nmcts\\_experiment" in section or "resource_nmcts_experiment" in section
+    has_anonymous_wording = "anonymous review" in section.lower()
+    ready = bool(text) and author_ready and not has_author_name and not has_repo_relative and has_anonymous_wording
+    return row(
+        "Generated anonymous source draft",
+        "pass" if ready else "needs revision",
+        f"source_exists={ANONYMOUS_PAPER.exists()}; author_anonymized={author_ready}; author_name_present={has_author_name}; availability_repo_relative={has_repo_relative}; anonymous_wording={has_anonymous_wording}.",
+        "Run make_anonymous_review_draft.py and inspect the generated source before double-blind upload.",
+    )
+
+
 def private_boundary_row() -> dict[str, str]:
     absent = [not path.exists() for path in PRIVATE_PATHS]
     ignored, missing_ignored = ignored_private_paths()
@@ -152,6 +170,7 @@ def build_rows() -> list[dict[str, str]]:
         metadata_decision_row(),
         manuscript_author_row(paper_text),
         availability_row(paper_text),
+        generated_anonymous_source_row(),
         private_boundary_row(),
         template_fields_row(),
     ]

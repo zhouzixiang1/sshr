@@ -25,6 +25,8 @@ THIS_DIR = Path(__file__).resolve().parent
 RESULTS = THIS_DIR / "results"
 PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.pdf"
 LOG = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.log"
+ANONYMOUS_PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.pdf"
+ANONYMOUS_LOG = THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.log"
 PAYLOAD = THIS_DIR / "submission_package" / "dist" / "resource_nmcts_submission_payload.tar.gz"
 PAYLOAD_SHA = THIS_DIR / "submission_package" / "dist" / "resource_nmcts_submission_payload.tar.gz.sha256"
 READINESS = RESULTS / "summary_submission_readiness_audit.csv"
@@ -98,13 +100,13 @@ def row(item: str, status: str, evidence: str, next_action: str) -> dict[str, st
     return {"item": item, "status": status, "evidence": evidence, "next_action": next_action}
 
 
-def verify_pdf() -> dict[str, str]:
-    pages = pdf_pages(PDF)
+def verify_pdf(path: Path, label: str) -> dict[str, str]:
+    pages = pdf_pages(path)
     status = "pass" if pages not in {"missing", "unknown"} else "needs revision"
     return row(
-        "Compiled PDF",
+        label,
         status,
-        f"{rel(PDF)} pages={pages}, bytes={PDF.stat().st_size if PDF.exists() else 0}.",
+        f"{rel(path)} pages={pages}, bytes={path.stat().st_size if path.exists() else 0}.",
         "Rebuild the submission package and inspect latexmk output if the PDF is missing.",
     )
 
@@ -293,23 +295,23 @@ def verify_payload_roundtrip() -> dict[str, str]:
     )
 
 
-def verify_latex_log() -> dict[str, str]:
-    if not LOG.exists():
-        return row("LaTeX log boundary", "needs revision", "LaTeX log is missing.", "Rebuild the PDF with latexmk.")
+def verify_latex_log(path: Path, label: str) -> dict[str, str]:
+    if not path.exists():
+        return row(label, "needs revision", "LaTeX log is missing.", "Rebuild the PDF with latexmk.")
     bad_patterns = re.compile(r"Warning|Overfull|Underfull|LaTeX Error|Undefined|Rerun")
     allowed = (
         "Package: rerunfilecheck",
         r"LaTeX Warning: Command \showhyphens",
     )
     unexpected: list[str] = []
-    for lineno, line in enumerate(LOG.read_text(encoding="utf-8", errors="replace").splitlines(), start=1):
+    for lineno, line in enumerate(path.read_text(encoding="utf-8", errors="replace").splitlines(), start=1):
         if not bad_patterns.search(line):
             continue
         if any(token in line for token in allowed):
             continue
         unexpected.append(f"{lineno}:{line.strip()}")
     return row(
-        "LaTeX log boundary",
+        label,
         "pass" if not unexpected else "needs revision",
         "Only allowed rerunfilecheck/showhyphens log lines found." if not unexpected else "; ".join(unexpected[:5]),
         "Inspect the LaTeX log and fix unexpected warnings or errors.",
@@ -317,7 +319,10 @@ def verify_latex_log() -> dict[str, str]:
 
 
 def build_rows() -> list[dict[str, str]]:
-    rows = [verify_pdf()]
+    rows = [
+        verify_pdf(PDF, "Compiled author PDF"),
+        verify_pdf(ANONYMOUS_PDF, "Compiled anonymous PDF"),
+    ]
     rows.extend(verify_payload_sha())
     rows.extend(
         [
@@ -330,7 +335,8 @@ def build_rows() -> list[dict[str, str]]:
             verify_text_preview(),
             verify_private_payload_exclusion(),
             verify_payload_roundtrip(),
-            verify_latex_log(),
+            verify_latex_log(LOG, "Author LaTeX log boundary"),
+            verify_latex_log(ANONYMOUS_LOG, "Anonymous LaTeX log boundary"),
         ]
     )
     return rows

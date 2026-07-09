@@ -12,6 +12,10 @@ noise modeling, or magic-state-factory accounting.
 
 - Main manuscript source: `../paper_latex/resource_nmcts_submission_v1.tex`
 - Main manuscript PDF: `../paper_latex/resource_nmcts_submission_v1.pdf`
+- Optional anonymous review source:
+  `../paper_latex/resource_nmcts_submission_anonymous.tex`
+- Optional anonymous review PDF:
+  `../paper_latex/resource_nmcts_submission_anonymous.pdf`
 - Bibliography: `../paper_latex/references.bib`
 - Generated tables: `../paper_latex/tables/*.tex`
 - Generated figures and source data:
@@ -72,8 +76,8 @@ by the author or selected target venue.
 - Confirm venue template, reference style, word limit, supplementary-material
   policy, data/code policy, and anonymous-review policy.
 - If the venue requires double-blind review, produce a venue-specific anonymous
-  manuscript copy and anonymous artifact links; the current source is
-  author-labeled.
+  manuscript copy and anonymous artifact links; the rebuild generates an
+  anonymous review draft, while the current source remains author-labeled.
 
 `submission_metadata.json` is intentionally ignored by Git so private author
 metadata is not committed accidentally.

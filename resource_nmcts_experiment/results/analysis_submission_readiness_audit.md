@@ -5,7 +5,7 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 ## Status counts
 
 - needs author input: 1
-- pass: 27
+- pass: 28
 
 ## Checklist
 
@@ -28,11 +28,12 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 | Submission metadata validator | pass | Private metadata format validator exists; status_counts={'needs author input': 1}; needs_revision_count=0. | Rerun validate_submission_metadata.py after filling private metadata; fix format or consistency rows before upload. |
 | Submission metadata pipeline self-test | pass | Synthetic metadata self-test exercises validator and preview renderers; status_counts={'pass': 14}; needs_revision_count=0; synthetic_only=True; writes_private_outputs=False. | Rerun selftest_submission_metadata_pipeline.py after changing required metadata paths, validators, or preview renderers. |
 | Private submission text preview | pass | Private preview generator audit exists; status_counts={'needs author input': 1}; private_outputs_are_git_ignored=True. | Rerun make_submission_text_preview.py after filling private metadata; generated_*.md files must remain ignored by Git. |
-| Anonymous-review readiness path | pass | Anonymous-review audit exists; status_counts={'needs author input': 3, 'pass': 2}; needs_revision_count=0; needs_author_input_count=3. | If the selected venue requires double-blind review, produce an anonymized manuscript copy and anonymous artifact links before upload. |
+| Anonymous-review readiness path | pass | Anonymous-review audit exists; status_counts={'needs author input': 3, 'pass': 3}; needs_revision_count=0; needs_author_input_count=3. | If the selected venue requires double-blind review, produce an anonymized manuscript copy and anonymous artifact links before upload. |
+| Compiled anonymous review draft | pass | anonymous_source_exists=True; anonymous_pdf_exists=True. | Run make_anonymous_review_draft.py and rebuild the PDF if a double-blind venue is selected. |
 | Goal completion audit | pass | The original project objective is mapped to concrete evidence files, boundaries, and remaining author-gated items. | Rerun analyze_goal_completion_audit.py after adding major evidence or filling author/venue metadata. |
 | Uploadable payload archive | pass | Deterministic submission payload tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present. | Rerun make_submission_payload_archive.py after adding or removing upload payload files. |
 | Payload round-trip integrity | pass | Payload round-trip audit exists; status_counts={'pass': 6}; needs_revision_count=0. | Rerun analyze_payload_roundtrip_audit.py after payload creation and fix any archive/manifest/path/hash issues. |
-| Terminal package verifier | pass | Fast pre-upload verifier script and read-only verifier outputs check PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, private-preview protection, private payload exclusion, payload round-trip integrity, and LaTeX log boundaries. | Run verify_submission_package.sh after rebuilding the payload archive. |
+| Terminal package verifier | pass | Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, private-preview protection, private payload exclusion, payload round-trip integrity, and LaTeX log boundaries. | Run verify_submission_package.sh after rebuilding the payload archive. |
 | Derived package rebuild command | pass | A lightweight rebuild script is present and cited in Data and Code Availability. | Keep the rebuild script aligned with paper-facing analysis, figure, audit, and PDF outputs. |
 | Limitations and failure modes | pass | Discussion names logical-layer, ROS-proxy, RevKit-derived, and high-dimensional bridge boundaries. | Add any new negative result to Discussion rather than hiding it in tables. |
 | Data and code availability | pass | Manuscript has an availability section pointing to scripts, CSVs, manifests, tables, and figures. | Replace repository-relative wording with an archival DOI or anonymous link at submission time if required. |

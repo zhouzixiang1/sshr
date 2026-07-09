@@ -40,11 +40,12 @@ run_py analyze_weight_robustness.py
 run_py analyze_artifact_rerun_registry.py
 run_py analyze_reproducibility_audit.py
 run_py analyze_submission_metadata_audit.py
-run_py analyze_anonymous_review_readiness.py
 run_py validate_submission_metadata.py
 run_py make_author_input_packet.py
 run_py make_submission_text_preview.py
 run_py selftest_submission_metadata_pipeline.py
+run_py make_anonymous_review_draft.py
+run_py analyze_anonymous_review_readiness.py
 run_py analyze_goal_completion_audit.py
 run_py make_submission_figures.py
 run_py analyze_submission_archive_manifest.py
@@ -54,6 +55,7 @@ echo "==> Building English submission PDF"
 (
   cd paper_latex
   "$LATEXMK_BIN" -pdf -interaction=nonstopmode -halt-on-error resource_nmcts_submission_v1.tex
+  "$LATEXMK_BIN" -pdf -interaction=nonstopmode -halt-on-error resource_nmcts_submission_anonymous.tex
 )
 
 run_py make_submission_payload_archive.py

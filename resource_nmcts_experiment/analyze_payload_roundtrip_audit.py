@@ -29,6 +29,8 @@ PRIVATE_BASENAMES = {
 REQUIRED_PAYLOAD_PATHS = {
     "paper_latex/resource_nmcts_submission_v1.tex",
     "paper_latex/resource_nmcts_submission_v1.pdf",
+    "paper_latex/resource_nmcts_submission_anonymous.tex",
+    "paper_latex/resource_nmcts_submission_anonymous.pdf",
     "paper_latex/references.bib",
     "rebuild_submission_package.sh",
     "verify_submission_package.sh",

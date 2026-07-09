@@ -126,6 +126,7 @@ def specs() -> list[CategorySpec]:
             category="Manuscript source",
             explicit=(
                 THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.tex",
+                THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.tex",
                 THIS_DIR / "paper_latex" / "references.bib",
                 THIS_DIR / "paper_latex" / "README.md",
             ),

@@ -18,6 +18,10 @@ Use this checklist immediately before uploading the manuscript.
 - Submission package guide: `submission_package/README.md`
 - Main source: `paper_latex/resource_nmcts_submission_v1.tex`
 - Main PDF: `paper_latex/resource_nmcts_submission_v1.pdf`
+- Optional anonymous review source:
+  `paper_latex/resource_nmcts_submission_anonymous.tex`
+- Optional anonymous review PDF:
+  `paper_latex/resource_nmcts_submission_anonymous.pdf`
 - Bibliography: `paper_latex/references.bib`
 - Generated tables: `paper_latex/tables/*.tex`
 - Generated figures: `paper_latex/figures/submission_v36/`
@@ -71,6 +75,7 @@ Run these from `resource_nmcts_experiment/`:
   validate_submission_metadata.py \
   selftest_submission_metadata_pipeline.py \
   analyze_payload_roundtrip_audit.py \
+  make_anonymous_review_draft.py \
   make_submission_text_preview.py
 ./rebuild_submission_package.sh
 ./verify_submission_package.sh
@@ -88,7 +93,7 @@ Expected current state:
 - Metadata audit: all author- and venue-specific fields are enumerated before upload, and any filled `submission_metadata.json` is checked.
 - Metadata validator: no `needs revision` rows; missing private metadata remains an author-input gate until filled.
 - Metadata pipeline self-test: synthetic non-private metadata exercises validator and preview renderers with no `needs revision` rows.
-- Anonymous-review readiness: no `needs revision` rows; if double-blind review is required, author-labeled source and repository-relative links remain explicit author-input actions.
+- Anonymous-review readiness: no `needs revision` rows; an anonymous review draft is compiled, and final anonymous artifact links remain explicit author-input actions if double-blind review is required.
 - Private submission text preview: public audit exists; generated private Markdown previews remain ignored by Git and excluded from the payload archive.
 - Goal-completion audit: all research/package requirements pass and only author/venue gates remain open.
 - Traceability audit: all claim families complete.
