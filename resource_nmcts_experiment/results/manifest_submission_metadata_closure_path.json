@@ -54,9 +54,9 @@
       "status": "pass"
     },
     {
-      "evidence": "docs=5; missing=none; token_misses=none.",
+      "evidence": "docs=6; missing=none; token_misses=none.",
       "item": "Human handoff document coverage",
-      "next_action": "Keep README, checklist, target-venue brief, handoff, and author packet aligned with the private metadata workflow.",
+      "next_action": "Keep README, checklist, target-venue brief, handoff, questionnaire, and author packet aligned with the private metadata workflow.",
       "status": "pass"
     },
     {

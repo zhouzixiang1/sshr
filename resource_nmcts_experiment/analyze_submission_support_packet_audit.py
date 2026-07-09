@@ -29,6 +29,7 @@ CHECKLIST = SUBMISSION_PACKAGE / "submission_checklist.md"
 FINAL_HANDOFF = SUBMISSION_PACKAGE / "FINAL_SUBMISSION_HANDOFF_zh.md"
 README = SUBMISSION_PACKAGE / "README.md"
 AUTHOR_PACKET = SUBMISSION_PACKAGE / "AUTHOR_INPUT_REQUIRED.md"
+AUTHOR_QUESTIONNAIRE_ZH = SUBMISSION_PACKAGE / "AUTHOR_METADATA_QUESTIONNAIRE_zh.md"
 METADATA_TEMPLATE = SUBMISSION_PACKAGE / "submission_metadata_template.json"
 EDITOR_BRIEF = SUBMISSION_PACKAGE / "editor_screening_brief.md"
 REVIEWER_BRIEF = SUBMISSION_PACKAGE / "reviewer_concern_brief.md"
@@ -187,9 +188,10 @@ def specs() -> list[PacketSpec]:
         PacketSpec(
             item="Author declarations keep private fields explicit",
             upload_risk="Declarations could be mistaken as complete or private author metadata could be committed.",
-            files=(DECLARATIONS, AUTHOR_PACKET, METADATA_TEMPLATE),
+            files=(DECLARATIONS, AUTHOR_PACKET, AUTHOR_QUESTIONNAIRE_ZH, METADATA_TEMPLATE),
             tokens=(
                 "AUTHOR INPUT REQUIRED",
+                "AUTHOR_METADATA_QUESTIONNAIRE_zh.md",
                 "submission_metadata.json",
                 "generated_author_declarations.md",
                 "Competing Interests",
@@ -202,6 +204,32 @@ def specs() -> list[PacketSpec]:
             expected=0,
             supported_use="The declarations packet is a structured intake path rather than a hidden or implicit author task.",
             boundary="Final authorship, funding, conflicts, archive links, and AI disclosure remain human-gated.",
+        ),
+        PacketSpec(
+            item="Chinese metadata questionnaire maps human inputs",
+            upload_risk="The final author/venue gate could remain too abstract for the author to fill in one pass.",
+            files=(AUTHOR_QUESTIONNAIRE_ZH, README, CHECKLIST, AUTHOR_PACKET),
+            tokens=(
+                "AUTHOR_METADATA_QUESTIONNAIRE_zh.md",
+                "target_venue.name",
+                "authors[].name",
+                "corresponding_author.email",
+                "author_contributions.methodology",
+                "funding.statement",
+                "competing_interests.statement",
+                "data_availability.archive_link_or_doi",
+                "code_availability.commit_hash",
+                "ai_assistance.statement",
+                "preprint_and_prior_submission.preprint_url_or_doi",
+                "cover_letter.suggested_reviewers",
+                "permissions.third_party_material_confirmed",
+                "validate_submission_metadata.py",
+            ),
+            manifest_path=METADATA_CLOSURE,
+            manifest_key="needs_revision_count",
+            expected=0,
+            supported_use="The author can answer a Chinese field-by-field questionnaire and transfer the answers to the ignored private metadata JSON.",
+            boundary="The questionnaire is an intake guide only; it does not contain, infer, or commit private author values.",
         ),
         PacketSpec(
             item="Venue policy gate is visible before upload",

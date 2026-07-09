@@ -28,6 +28,7 @@ from analyze_submission_metadata_audit import (
 
 
 AUTHOR_PACKET = SUBMISSION_PACKAGE / "AUTHOR_INPUT_REQUIRED.md"
+AUTHOR_QUESTIONNAIRE_ZH = SUBMISSION_PACKAGE / "AUTHOR_METADATA_QUESTIONNAIRE_zh.md"
 FINAL_HANDOFF = SUBMISSION_PACKAGE / "FINAL_SUBMISSION_HANDOFF_zh.md"
 README = SUBMISSION_PACKAGE / "README.md"
 CHECKLIST = SUBMISSION_PACKAGE / "submission_checklist.md"
@@ -155,14 +156,15 @@ def check_author_packet_coverage() -> dict[str, str]:
 
 
 def check_support_document_visibility() -> dict[str, str]:
-    required_docs = (FINAL_HANDOFF, README, CHECKLIST, AUTHOR_TEMPLATE, COVER_TEMPLATE)
+    required_docs = (FINAL_HANDOFF, README, CHECKLIST, AUTHOR_TEMPLATE, COVER_TEMPLATE, AUTHOR_QUESTIONNAIRE_ZH)
     missing_docs = [rel(path) for path in required_docs if not path.exists()]
     tokens = {
         rel(FINAL_HANDOFF): ("AUTHOR_INPUT_REQUIRED.md", "submission_metadata.json", "needs author input"),
-        rel(README): ("AUTHOR_INPUT_REQUIRED.md", "submission_metadata.json", "generated private previews"),
-        rel(CHECKLIST): ("Required Author Input", "AUTHOR INPUT REQUIRED", "verify_submission_package.sh"),
+        rel(README): ("AUTHOR_INPUT_REQUIRED.md", "AUTHOR_METADATA_QUESTIONNAIRE_zh.md", "submission_metadata.json", "generated private previews"),
+        rel(CHECKLIST): ("Required Author Input", "AUTHOR_METADATA_QUESTIONNAIRE_zh.md", "AUTHOR INPUT REQUIRED", "verify_submission_package.sh"),
         rel(AUTHOR_TEMPLATE): ("AUTHOR INPUT REQUIRED", "Code Availability", "Competing Interests"),
         rel(COVER_TEMPLATE): ("AUTHOR INPUT REQUIRED", "logical-layer", "SSHR"),
+        rel(AUTHOR_QUESTIONNAIRE_ZH): ("target_venue.name", "authors[].name", "validate_submission_metadata.py"),
     }
     missing_tokens: list[str] = []
     for doc_rel, doc_tokens in tokens.items():

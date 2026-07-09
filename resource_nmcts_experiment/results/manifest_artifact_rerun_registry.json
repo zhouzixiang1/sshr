@@ -313,7 +313,7 @@
       "evidence_family": "Phase and affine FPRM branch",
       "manifest_files": "10",
       "raw_files": "8",
-      "raw_rows": "11865",
+      "raw_rows": "11879",
       "representative_raw": "results/raw_phase_affine_policy.csv; results/raw_phase_affine_policy_rank_diverse.csv; results/raw_phase_parity_affine.csv; results/raw_phase_parity_affine_wide128.csv; +4 more",
       "rerun_tier": "raw phase rerun and training",
       "scripts_missing": "",
@@ -598,5 +598,5 @@
   "rows": 27,
   "script": "analyze_artifact_rerun_registry.py",
   "unique_raw_files": 153,
-  "unique_raw_rows": 77628
+  "unique_raw_rows": 77642
 }

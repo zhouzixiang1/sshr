@@ -38,6 +38,7 @@ REQUIRED_PAYLOAD_PATHS = {
     "verify_submission_package.sh",
     "submission_package/README.md",
     "submission_package/AUTHOR_INPUT_REQUIRED.md",
+    "submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md",
     "submission_package/submission_checklist.md",
     "results/analysis_submission_archive_manifest.md",
     "results/analysis_submission_traceability_audit.md",
@@ -300,6 +301,7 @@ TARGET_VENUE_FORMAT_PATHS = {
 SUPPORT_PACKET_PATHS = {
     "analyze_submission_support_packet_audit.py",
     "submission_package/COMPARISON_HANDOFF_zh.md",
+    "submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md",
     "results/analysis_submission_support_packet_audit.md",
     "results/summary_submission_support_packet_audit.csv",
     "results/manifest_submission_support_packet_audit.json",

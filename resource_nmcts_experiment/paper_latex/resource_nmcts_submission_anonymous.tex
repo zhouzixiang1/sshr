@@ -1274,14 +1274,14 @@ remains 17/0/21 against budget-32 with a 2.38\% mean score reduction and stays
 within 0.002\% of wide-128.  This is a stronger sensitivity check than a single
 constant proxy, but it is still a cost model rather than a high-precision
 rotation-synthesis result.  To make this boundary executable rather than only
-verbal, Table~\ref{tab:phase-rotation-sequence-smoke} extracts six
-non-Clifford \rz{} angles that occur in the verified affine phase spectra and
+verbal, Table~\ref{tab:phase-rotation-sequence-smoke} extracts the 20 most
+frequent non-Clifford/non-T-like \rz{} angles that occur in the verified affine phase spectra and
 runs a bounded internal matrix beam search over
 $\{H,S,S^\dagger,T,T^\dagger,X,Z\}$.  The emitted strings are checked with the
 global-phase-invariant error
 $\sqrt{1-\lvert\mathrm{Tr}(U_{\mathrm{seq}}^\dagger U_{\mathrm{target}})\rvert/2}$.
-All six source-derived targets pass a coarse
-$\epsilon_{\mathrm{smoke}}=0.125$ sequence test, while two pass
+All 20 source-derived targets pass a coarse
+$\epsilon_{\mathrm{smoke}}=0.125$ sequence test, while five pass
 $\epsilon=0.05$.  This closes part of the Rz evidence gap, but the bounded beam
 is not Ross--Selinger gridsynth, does not certify optimal T count, and is not
 used for the headline resource claims.
@@ -1424,6 +1424,7 @@ Width-probe symbolic runs & 1512/1512 & Supports the default action width, but r
 $n=21$--$25$ complete bridge & 400/400 & Small generated slices; not exhaustive coverage of all high-dimensional functions. \\
 Exact phase-search rows & 531/531 & Verified up to global phase; no rotation-sequence output. \\
 Phase-policy pruning rows & 7611/7611 & Learned shortlist rows verified up to global phase; still no rotation-sequence output. \\
+Rotation-sequence smoke angles & 20/20 & Source-derived single-qubit Clifford+T strings at coarse tolerance; not high-precision gridsynth. \\
 \bottomrule
 \end{tabularx}
 \end{table}

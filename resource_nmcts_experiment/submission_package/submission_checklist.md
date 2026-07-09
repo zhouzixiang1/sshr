@@ -5,6 +5,7 @@ Use this checklist immediately before uploading the manuscript.
 ## Required Author Input
 
 - AUTHOR INPUT REQUIRED: Work through `submission_package/AUTHOR_INPUT_REQUIRED.md` before uploading.
+- AUTHOR INPUT REQUIRED: Use `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md` as the Chinese field-by-field guide before filling private metadata.
 - If working in Chinese, follow `submission_package/FINAL_SUBMISSION_HANDOFF_zh.md` for the final execution order.
 - AUTHOR INPUT REQUIRED: Choose the target venue using `submission_package/target_venue_brief.md` as a planning aid, then copy the final choice into `submission_package/submission_metadata.json`.
 - AUTHOR INPUT REQUIRED: Run `/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py --write-private`, or copy `submission_package/submission_metadata_template.json` manually, then fill every `AUTHOR INPUT REQUIRED` value in `submission_package/submission_metadata.json`.
@@ -36,6 +37,7 @@ Use this checklist immediately before uploading the manuscript.
 - Fast verifier script: `verify_submission_package.sh`
 - Readiness audit: `results/analysis_submission_readiness_audit.md`
 - Author input packet: `submission_package/AUTHOR_INPUT_REQUIRED.md`
+- Chinese metadata questionnaire: `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md`
 - Chinese final handoff: `submission_package/FINAL_SUBMISSION_HANDOFF_zh.md`
 - Terminal package verifier: `results/analysis_submission_package_verifier.md`
 - Claim-scope lint: `results/analysis_claim_scope_lint.md`
@@ -137,8 +139,8 @@ Expected current state:
 
 - Machine snapshot tokens checked by `analyze_public_handoff_freshness_audit.py`:
   PDF pages=45/45; readiness=70 pass + 1 needs author input;
-  payload_files=1070; artifact_registry=27 families / 153 raw CSV / 77628 raw rows;
-  source_privacy=0 strict leaks / 55 provenance files / 1027 payload text files;
+  payload_files=1071; artifact_registry=27 families / 153 raw CSV / 77642 raw rows;
+  source_privacy=0 strict leaks / 55 provenance files / 1028 payload text files;
   comparison_validity=8/8 pass; novelty_scorecard=6/6 pass;
   goal_gate=author/venue metadata remains open.
 - Archive manifest: all payload groups complete.

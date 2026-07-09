@@ -68,12 +68,26 @@ PHASE_SOURCES = (
 )
 
 TARGETS = (
-    ("den8-small", Fraction(1, 8)),
-    ("den8-mid", Fraction(3, 8)),
-    ("den16-mid-a", Fraction(3, 16)),
-    ("den16-mid-b", Fraction(5, 16)),
-    ("den32-small", Fraction(1, 32)),
-    ("den32-frequent", Fraction(57, 32)),
+    ("freq01-den8-15", Fraction(15, 8)),
+    ("freq02-den8-1", Fraction(1, 8)),
+    ("freq03-den32-57", Fraction(57, 32)),
+    ("freq04-den32-61", Fraction(61, 32)),
+    ("freq05-den32-19", Fraction(19, 32)),
+    ("freq06-den32-59", Fraction(59, 32)),
+    ("freq07-den32-3", Fraction(3, 32)),
+    ("freq08-den32-1", Fraction(1, 32)),
+    ("freq09-den16-31", Fraction(31, 16)),
+    ("freq10-den32-63", Fraction(63, 32)),
+    ("freq11-den32-13", Fraction(13, 32)),
+    ("freq12-den32-17", Fraction(17, 32)),
+    ("freq13-den16-1", Fraction(1, 16)),
+    ("freq14-den32-15", Fraction(15, 32)),
+    ("freq15-den8-3", Fraction(3, 8)),
+    ("freq16-den16-3", Fraction(3, 16)),
+    ("freq17-den16-29", Fraction(29, 16)),
+    ("freq18-den32-11", Fraction(11, 32)),
+    ("freq19-den32-21", Fraction(21, 32)),
+    ("freq20-den8-13", Fraction(13, 8)),
 )
 
 SMOKE_EPSILON = 0.125
@@ -429,6 +443,7 @@ def write_markdown(path: Path, rows: list[dict[str, object]]) -> None:
         "not optimal T-count synthesis, not a high-precision compiler, and not hardware mapping.",
         "",
         f"- target angles: {len(rows)}",
+        "- target selection: top-20 most frequent non-Clifford/non-T-like angles in the verified phase-search outputs",
         f"- smoke epsilon: {SMOKE_EPSILON}",
         f"- smoke passes: {len(pass_rows)}/{len(rows)}",
         f"- tight epsilon: {TIGHT_EPSILON}",
@@ -457,8 +472,8 @@ def write_markdown(path: Path, rows: list[dict[str, object]]) -> None:
             "",
             "## Interpretation",
             "",
-            "- The six target angles are present in the existing phase-search outputs; this is not a synthetic rotation-only benchmark.",
-            "- The bounded beam search closes part of the previous evidence gap by emitting actual Clifford+T strings for representative Rz targets.",
+            "- The 20 target angles are the most frequent non-Clifford/non-T-like angles in the existing phase-search outputs; this is not a synthetic rotation-only benchmark.",
+            "- The bounded beam search closes part of the previous evidence gap by emitting actual Clifford+T strings for source-derived Rz targets.",
             "- The coarse tolerance and non-optimal sequences mean the manuscript should still keep the phase/Rz branch as a logical proxy and cite Ross--Selinger only for the precision-sensitivity model.",
         ]
     )

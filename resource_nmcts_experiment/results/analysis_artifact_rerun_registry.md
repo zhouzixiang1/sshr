@@ -6,7 +6,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 
 - complete: 27
 - unique raw files covered by registry: 153
-- unique raw CSV rows covered by registry: 77628
+- unique raw CSV rows covered by registry: 77642
 
 | evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |
 |---|---|---:|---:|---:|---|---|
@@ -29,7 +29,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | mockturtle KLUT-to-XAG probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded mockturtle checkout/header path; still a logical proxy, not reversible mapping. |
 | CirKit AIG/MC probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded CirKit executable/commit; results are logical estimates, not hardware mapping. |
 | RevKit exact and Rz probes | external toolchain rerun | 5 | 3194 | 5 | complete | Requires RevKit CLI/API availability; Rz rows are phase/sensitivity probes, not final Clifford+T decomposition. |
-| Phase and affine FPRM branch | raw phase rerun and training | 8 | 11865 | 10 | complete | Logical phase verification up to global phase; sequence smoke is coarse and not optimal Ross--Selinger synthesis. |
+| Phase and affine FPRM branch | raw phase rerun and training | 8 | 11879 | 10 | complete | Logical phase verification up to global phase; sequence smoke is coarse and not optimal Ross--Selinger synthesis. |
 | Learned-control and ablations | training plus ablation rerun | 20 | 10883 | 17 | complete | Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only. |
 | Schedule proxy and lifetime tradeoffs | quick derived audit | 3 | 1140 | 1 | complete | Emitted-circuit logical schedule proxies only; not hardware routing, native-gate scheduling, or device execution. |
 | High-dimensional symbolic screen-scale runs | large raw rerun | 77 | 11960 | 26 | complete | Symbolic or generated-instance verification; not exhaustive truth-table enumeration for all large n. |

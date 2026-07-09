@@ -33,6 +33,9 @@ noise modeling, or magic-state-factory accounting.
 
 - `AUTHOR_INPUT_REQUIRED.md`: consolidated author and target-venue fields that
   must be supplied before final upload.
+- `AUTHOR_METADATA_QUESTIONNAIRE_zh.md`: Chinese field-by-field questionnaire
+  that maps the remaining human answers to `submission_metadata.json` paths
+  without storing private values in a tracked file.
 - `FINAL_SUBMISSION_HANDOFF_zh.md`: Chinese final-upload handoff that turns the
   remaining author/venue gates into an execution order.
 - `COMPARISON_HANDOFF_zh.md`: Chinese comparison-positioning handoff that
@@ -139,7 +142,8 @@ by the author or selected target venue.
 - Run `/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py --write-private`
   to create an ignored private `submission_metadata.json` with public
   repository fields prefilled, then fill every remaining `AUTHOR INPUT
-  REQUIRED` value.  Copy the template manually instead if you prefer a blank
+  REQUIRED` value.  Use `AUTHOR_METADATA_QUESTIONNAIRE_zh.md` as the Chinese
+  field-by-field guide, or copy the template manually if you prefer a blank
   file.
 - Confirm author order, affiliations, ORCID IDs, and corresponding-author
   details.

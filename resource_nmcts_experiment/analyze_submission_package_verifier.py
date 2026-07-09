@@ -879,9 +879,9 @@ def verify_phase_rotation_sequence_smoke() -> dict[str, str]:
         "pass"
         if manifest
         and revisions == 0
-        and rows == 6
-        and smoke_pass == 6
-        and tight_pass == 2
+        and rows >= 20
+        and smoke_pass >= 20
+        and tight_pass >= 5
         and max_error <= 0.125
         and denominators >= {8, 16, 32}
         and backend == allowed_backend

@@ -7,7 +7,7 @@
     "table": "paper_latex/tables/submission_support_packet_audit.tex"
   },
   "python": "3.11.15",
-  "rows": 11,
+  "rows": 12,
   "rows_detail": [
     {
       "boundary": "The cover letter still needs author, editor, reviewer, and prior-dissemination fields before upload.",
@@ -56,12 +56,21 @@
     },
     {
       "boundary": "Final authorship, funding, conflicts, archive links, and AI disclosure remain human-gated.",
-      "evidence": "files_missing=none; tokens=7/7; missing_tokens=none; manifest=results/manifest_submission_metadata_closure_path.json::needs_revision_count=0",
+      "evidence": "files_missing=none; tokens=8/8; missing_tokens=none; manifest=results/manifest_submission_metadata_closure_path.json::needs_revision_count=0",
       "item": "Author declarations keep private fields explicit",
       "next_action": "No action needed.",
       "status": "pass",
       "supported_use": "The declarations packet is a structured intake path rather than a hidden or implicit author task.",
       "upload_risk": "Declarations could be mistaken as complete or private author metadata could be committed."
+    },
+    {
+      "boundary": "The questionnaire is an intake guide only; it does not contain, infer, or commit private author values.",
+      "evidence": "files_missing=none; tokens=14/14; missing_tokens=none; manifest=results/manifest_submission_metadata_closure_path.json::needs_revision_count=0",
+      "item": "Chinese metadata questionnaire maps human inputs",
+      "next_action": "No action needed.",
+      "status": "pass",
+      "supported_use": "The author can answer a Chinese field-by-field questionnaire and transfer the answers to the ignored private metadata JSON.",
+      "upload_risk": "The final author/venue gate could remain too abstract for the author to fill in one pass."
     },
     {
       "boundary": "The audit does not choose the journal; it only checks that the choice is explicit and policy-gated.",
@@ -111,6 +120,6 @@
   ],
   "script": "analyze_submission_support_packet_audit.py",
   "status_counts": {
-    "pass": 11
+    "pass": 12
   }
 }

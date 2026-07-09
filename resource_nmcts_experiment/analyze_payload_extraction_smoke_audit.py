@@ -235,7 +235,7 @@ SMOKE_SPECS = (
         expected_key="needs_revision_count",
         expected_value=0,
         minimum_rows_key="smoke_pass_count",
-        minimum_rows=6,
+        minimum_rows=20,
     ),
     SmokeSpec(
         name="Phase policy budget frontier",

@@ -25,6 +25,11 @@ Before editing venue-specific claims, cover-letter language, or reviewer replies
 answer to what the method is compared against, why the comparison set is meaningful,
 and which stronger claims must not be made.
 
+If you want a Chinese field-by-field intake checklist, use
+`submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md` before filling
+`submission_package/submission_metadata.json`.  The questionnaire maps each
+human answer to the corresponding JSON path and does not contain private values.
+
 ## Current Gate
 
 - metadata rows needing author input: 12
@@ -106,11 +111,12 @@ and which stronger claims must not be made.
 12. **Target-venue policy check**
    - source: `submission_package/submission_checklist.md`
    - required fields: formatting policy; reference style; word limit; supplement policy; AI disclosure policy
-   - evidence: 9 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/submission_checklist.md.
+   - evidence: 10 AUTHOR INPUT REQUIRED marker(s) remain in submission_package/submission_checklist.md.
    - next action: Check the target venue guide and update manuscript or support files accordingly.
 
 ## Files To Update After Author Decisions
 
+- `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md` as the Chinese field-by-field intake guide.
 - `submission_package/submission_metadata.json` for the private structured intake.
 - `submission_package/generated_*.md` private previews, generated automatically from the structured intake and intentionally ignored by Git.
 - `submission_package/author_declarations_template.md` if the venue wants declarations in prose form.

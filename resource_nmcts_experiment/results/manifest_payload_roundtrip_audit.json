@@ -148,6 +148,7 @@
     "results/analysis_submission_archive_manifest.md",
     "results/analysis_submission_traceability_audit.md",
     "submission_package/AUTHOR_INPUT_REQUIRED.md",
+    "submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md",
     "submission_package/README.md",
     "submission_package/submission_checklist.md",
     "verify_submission_package.sh"
@@ -196,19 +197,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1070; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1071; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=1070; archive_files=1070; missing=none; extra=none.",
+      "evidence": "manifest_files=1071; archive_files=1071; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=1070; mismatches=none.",
+      "evidence": "checked=1071; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -220,7 +221,7 @@
       "status": "pass"
     },
     {
-      "evidence": "required=14; missing=none.",
+      "evidence": "required=15; missing=none.",
       "item": "Payload required artifacts",
       "next_action": "Ensure the uploadable archive includes manuscript, bibliography, rebuild/verify scripts, handoff docs, and submission audits.",
       "status": "pass"
@@ -370,7 +371,7 @@
       "status": "pass"
     },
     {
-      "evidence": "support_packet_files=6; missing=none.",
+      "evidence": "support_packet_files=7; missing=none.",
       "item": "Payload support packet evidence",
       "next_action": "Ensure the uploadable archive includes the support packet audit script, generated evidence, and support table.",
       "status": "pass"
@@ -412,7 +413,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=1070; metadata_issues=none.",
+      "evidence": "members_checked=1071; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -476,6 +477,7 @@
     "results/analysis_submission_support_packet_audit.md",
     "results/manifest_submission_support_packet_audit.json",
     "results/summary_submission_support_packet_audit.csv",
+    "submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md",
     "submission_package/COMPARISON_HANDOFF_zh.md"
   ],
   "target_venue_decision_paths": [
