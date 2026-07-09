@@ -1,0 +1,23 @@
+{
+  "layers": 7,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_comparison_protocol_audit.md",
+    "manifest": "results/manifest_comparison_protocol_audit.json",
+    "summary": "results/summary_comparison_protocol_audit.csv"
+  },
+  "python": "3.11.15",
+  "script": "analyze_comparison_protocol_audit.py",
+  "source_files": {
+    "claim_matrix": "results/summary_baseline_claim_matrix.csv",
+    "comparability": "results/summary_baseline_comparability_audit.csv",
+    "counterpoint": "results/summary_counterpoint_claim_boundary.csv",
+    "editor_brief": "submission_package/editor_screening_brief.md",
+    "evidence_matrix": "results/summary_comparison_evidence_matrix.csv",
+    "paper": "paper_latex/resource_nmcts_submission_v1.tex",
+    "reviewer_brief": "submission_package/reviewer_concern_brief.md"
+  },
+  "status_counts": {
+    "pass": 7
+  }
+}

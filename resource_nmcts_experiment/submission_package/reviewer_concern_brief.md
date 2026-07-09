@@ -23,6 +23,7 @@ Manuscript anchors:
 - Baseline claim matrix
 - Comparison evidence matrix
 - Baseline comparability audit
+- Comparison protocol audit
 - Counterpoint and claim-boundary audit
 - Raw multi-resource dominance table
 

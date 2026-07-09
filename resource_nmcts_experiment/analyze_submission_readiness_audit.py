@@ -60,6 +60,9 @@ GOAL_MANIFEST = RESULTS / "manifest_goal_completion_audit.json"
 CLAIM_SCOPE_ANALYSIS = RESULTS / "analysis_claim_scope_lint.md"
 CLAIM_SCOPE_SUMMARY = RESULTS / "summary_claim_scope_lint.csv"
 CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
+COMPARISON_PROTOCOL_ANALYSIS = RESULTS / "analysis_comparison_protocol_audit.md"
+COMPARISON_PROTOCOL_SUMMARY = RESULTS / "summary_comparison_protocol_audit.csv"
+COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.json"
 RERUN_REGISTRY_ANALYSIS = RESULTS / "analysis_artifact_rerun_registry.md"
 RERUN_REGISTRY_SUMMARY = RESULTS / "summary_artifact_rerun_registry.csv"
 RERUN_REGISTRY_MANIFEST = RESULTS / "manifest_artifact_rerun_registry.json"
@@ -132,6 +135,11 @@ def build_rows() -> list[dict[str, str]]:
     pages = pdf_pages(PDF)
     claim_scope_manifest = read_json(CLAIM_SCOPE_MANIFEST)
     claim_scope_unresolved = int(claim_scope_manifest.get("unresolved_count", -1)) if claim_scope_manifest else -1
+    comparison_protocol_manifest = read_json(COMPARISON_PROTOCOL_MANIFEST)
+    comparison_protocol_revisions = (
+        int(comparison_protocol_manifest.get("needs_revision_count", -1)) if comparison_protocol_manifest else -1
+    )
+    comparison_protocol_counts = comparison_protocol_manifest.get("status_counts", {}) if comparison_protocol_manifest else {}
     text_preview_manifest = read_json(TEXT_PREVIEW_MANIFEST)
     text_preview_counts = text_preview_manifest.get("status_counts", {}) if text_preview_manifest else {}
     private_outputs_ignored = bool(text_preview_manifest.get("private_outputs_are_git_ignored", False))
@@ -208,6 +216,17 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": "Experimental design includes claim, evidence, and comparability matrices.",
             "next_action": "Keep cross-toolchain claims tied to the comparability audit.",
+        },
+        {
+            "item": "Comparison protocol audit",
+            "status": "pass"
+            if COMPARISON_PROTOCOL_ANALYSIS.exists()
+            and COMPARISON_PROTOCOL_SUMMARY.exists()
+            and COMPARISON_PROTOCOL_MANIFEST.exists()
+            and comparison_protocol_revisions == 0
+            else "needs revision",
+            "evidence": f"Comparison protocol audit checks layered baseline roles, evidence, comparability, counterpoints, and manuscript anchors; status_counts={comparison_protocol_counts}; needs_revision_count={comparison_protocol_revisions}.",
+            "next_action": "Rerun analyze_comparison_protocol_audit.py after changing baseline claims, evidence matrices, counterpoint wording, or comparison-scope text.",
         },
         {
             "item": "Paired effect uncertainty",

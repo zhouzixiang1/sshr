@@ -27,6 +27,7 @@ run_py analyze_baseline_claim_matrix.py
 run_py analyze_comparison_evidence_matrix.py
 run_py analyze_baseline_comparability_audit.py
 run_py analyze_counterpoint_claim_boundary.py
+run_py analyze_comparison_protocol_audit.py
 run_py analyze_claim_scope_lint.py
 run_py analyze_paired_statistical_evidence.py
 run_py analyze_paired_effect_uncertainty.py

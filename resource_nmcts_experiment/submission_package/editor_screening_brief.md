@@ -50,6 +50,9 @@ explanation.
   high-dimensional bridge checks.
 - Baseline comparability audit: records task alignment, fairness controls,
   residual risks, and usable claims for every baseline family.
+- Comparison protocol audit: cross-checks that every comparison layer has a
+  role, evidence, comparability boundary, counterpoint coverage where relevant,
+  and manuscript anchors.
 - Counterpoint and claim-boundary audit: lists the strongest unfavorable metric
   evidence for SSHR, CirKit, RevKit CLI, learned priors, and large-scale
   verification, next to the favorable evidence that keeps each comparison

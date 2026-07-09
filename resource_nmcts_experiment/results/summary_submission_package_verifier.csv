@@ -1,11 +1,12 @@
 item,status,evidence,next_action
 Compiled author PDF,pass,"paper_latex/resource_nmcts_submission_v1.pdf pages=27, bytes=601122.",Rebuild the submission package and inspect latexmk output if the PDF is missing.
 Compiled anonymous PDF,pass,"paper_latex/resource_nmcts_submission_anonymous.pdf pages=27, bytes=597774.",Rebuild the submission package and inspect latexmk output if the PDF is missing.
-Payload SHA sidecar,pass,actual=6efbca08d41ba5626ee3f61dc1f2613834ee97af73c08cbb50819a36ae13967f; sidecar=6efbca08d41ba5626ee3f61dc1f2613834ee97af73c08cbb50819a36ae13967f.,Regenerate the payload archive if the digests differ.
-Payload manifest consistency,pass,summary=6efbca08d41ba5626ee3f61dc1f2613834ee97af73c08cbb50819a36ae13967f; manifest=6efbca08d41ba5626ee3f61dc1f2613834ee97af73c08cbb50819a36ae13967f; file_count=850.,Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree.
-Readiness audit terminal state,pass,"status_counts={'pass': 27, 'needs author input': 1}.",Resolve any needs-revision rows; author-specific declarations remain manual.
+Payload SHA sidecar,pass,actual=323ddd78cffe8d32e680486c3312487164b2bdf77853d5fb06fb3dc9ec9f1d23; sidecar=323ddd78cffe8d32e680486c3312487164b2bdf77853d5fb06fb3dc9ec9f1d23.,Regenerate the payload archive if the digests differ.
+Payload manifest consistency,pass,summary=323ddd78cffe8d32e680486c3312487164b2bdf77853d5fb06fb3dc9ec9f1d23; manifest=323ddd78cffe8d32e680486c3312487164b2bdf77853d5fb06fb3dc9ec9f1d23; file_count=854.,Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree.
+Readiness audit terminal state,pass,"status_counts={'pass': 28, 'needs author input': 1}.",Resolve any needs-revision rows; author-specific declarations remain manual.
 Artifact rerun registry coverage,pass,families=14; registry_raw=144; actual_raw=144.,Rerun analyze_artifact_rerun_registry.py after adding raw CSVs or driver scripts.
 Claim-scope lint,pass,"unresolved_count=0; status_counts={'guarded': 59, 'pass': 5}.","Run analyze_claim_scope_lint.py and revise unguarded hardware-mapping, universal-dominance, optimality, or full-tool-reproduction claims."
+Comparison protocol audit,pass,layers=7; needs_revision_count=0; status_counts={'pass': 7}.,"Run analyze_comparison_protocol_audit.py and restore missing baseline-role, evidence, comparability, counterpoint, or manuscript anchors."
 Metadata starter dry-run,pass,returncode=0; missing_tokens=none; private_preexisting=False; private_created=False; private_modified=False.,Run make_submission_metadata_starter.py without --write-private and keep it read-only until author input is explicit.
 Private metadata validator,pass,needs_revision_count=0; status_counts={'needs author input': 1}.,Run validate_submission_metadata.py and fix metadata format or consistency rows before upload.
 Metadata pipeline self-test,pass,needs_revision_count=0; status_counts={'pass': 14}; synthetic_only=True; writes_private_metadata=False; writes_private_preview_files=False.,Run selftest_submission_metadata_pipeline.py and keep the fixture synthetic and non-private.

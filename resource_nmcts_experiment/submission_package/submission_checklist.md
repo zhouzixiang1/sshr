@@ -39,6 +39,7 @@ Use this checklist immediately before uploading the manuscript.
 - Chinese final handoff: `submission_package/FINAL_SUBMISSION_HANDOFF_zh.md`
 - Terminal package verifier: `results/analysis_submission_package_verifier.md`
 - Claim-scope lint: `results/analysis_claim_scope_lint.md`
+- Comparison protocol audit: `results/analysis_comparison_protocol_audit.md`
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
 - Metadata validator: `results/analysis_submission_metadata_validator.md`
 - Metadata pipeline self-test: `results/analysis_submission_metadata_pipeline_selftest.md`
@@ -70,6 +71,7 @@ Run these from `resource_nmcts_experiment/`:
   analyze_goal_completion_audit.py \
   analyze_submission_archive_manifest.py \
   analyze_claim_scope_lint.py \
+  analyze_comparison_protocol_audit.py \
   analyze_submission_metadata_audit.py \
   analyze_anonymous_review_readiness.py \
   analyze_submission_readiness_audit.py \
@@ -94,6 +96,7 @@ Expected current state:
 - Payload archive: tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.
 - Payload round-trip audit: archive contents match manifest paths and hashes, required files are present, private files are absent, and tar metadata is deterministic.
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
+- Comparison protocol audit: all baseline layers have role, evidence, comparability, counterpoint, artifact, and manuscript-anchor coverage.
 - Metadata audit: all author- and venue-specific fields are enumerated before upload, and any filled `submission_metadata.json` is checked.
 - Metadata validator: no `needs revision` rows; missing private metadata remains an author-input gate until filled.
 - Metadata pipeline self-test: synthetic non-private metadata exercises validator and preview renderers with no `needs revision` rows.

@@ -60,6 +60,9 @@ noise modeling, or magic-state-factory accounting.
 - `submission_checklist.md`: final upload checklist and verification commands.
 - `../results/analysis_claim_scope_lint.md`: automated claim-boundary lint for
   the manuscript and handoff files.
+- `../results/analysis_comparison_protocol_audit.md`: machine-readable audit
+  that checks each baseline layer has a role, evidence, comparability boundary,
+  counterpoint coverage where relevant, and manuscript anchors.
 
 ## Required Author Actions Before Upload
 
@@ -139,6 +142,7 @@ Run these commands from `../` after any payload-affecting edit:
 git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_claim_scope_lint.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_comparison_protocol_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python validate_submission_metadata.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python selftest_submission_metadata_pipeline.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_anonymous_review_readiness.py
@@ -150,6 +154,7 @@ rg -n "Warning|Overfull|Underfull|LaTeX Error|Undefined|Rerun" \
 rg -n "needs author input|pass:|file count|archive sha256|Submission support|unresolved_count" \
   results/analysis_submission_readiness_audit.md \
   results/analysis_claim_scope_lint.md \
+  results/analysis_comparison_protocol_audit.md \
   results/manifest_claim_scope_lint.json \
   results/analysis_submission_metadata_validator.md \
   results/analysis_submission_metadata_pipeline_selftest.md \

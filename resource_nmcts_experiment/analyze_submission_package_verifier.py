@@ -4,8 +4,8 @@
 The verifier runs after the payload archive has been created.  It checks the
 terminal package invariants that are easy to regress during final polishing:
 compiled PDF availability, payload SHA consistency, readiness status, raw rerun
-registry coverage, claim-scope hygiene, private-metadata starter dry-run,
-private-metadata validation,
+registry coverage, claim-scope hygiene, comparison-protocol coverage,
+private-metadata starter dry-run, private-metadata validation,
 synthetic metadata-pipeline self-testing, anonymous-review decision support,
 private-preview protection, private payload exclusion, payload round-trip
 integrity, and LaTeX log cleanliness.  It writes a small audit report but does
@@ -36,6 +36,7 @@ REGISTRY_MANIFEST = RESULTS / "manifest_artifact_rerun_registry.json"
 PAYLOAD_SUMMARY = RESULTS / "summary_submission_payload_archive.csv"
 PAYLOAD_MANIFEST = RESULTS / "manifest_submission_payload_archive.json"
 CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
+COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.json"
 METADATA_VALIDATOR_MANIFEST = RESULTS / "manifest_submission_metadata_validator.json"
 TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
 METADATA_PIPELINE_SELFTEST_MANIFEST = RESULTS / "manifest_submission_metadata_pipeline_selftest.json"
@@ -197,6 +198,20 @@ def verify_claim_scope() -> dict[str, str]:
         status,
         f"unresolved_count={unresolved}; status_counts={counts}.",
         "Run analyze_claim_scope_lint.py and revise unguarded hardware-mapping, universal-dominance, optimality, or full-tool-reproduction claims.",
+    )
+
+
+def verify_comparison_protocol() -> dict[str, str]:
+    manifest = read_json(COMPARISON_PROTOCOL_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    layers = manifest.get("layers", "missing") if manifest else "missing"
+    status = "pass" if manifest and revisions == 0 else "needs revision"
+    return row(
+        "Comparison protocol audit",
+        status,
+        f"layers={layers}; needs_revision_count={revisions}; status_counts={counts}.",
+        "Run analyze_comparison_protocol_audit.py and restore missing baseline-role, evidence, comparability, counterpoint, or manuscript anchors.",
     )
 
 
@@ -379,6 +394,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_readiness(),
             verify_registry(),
             verify_claim_scope(),
+            verify_comparison_protocol(),
             verify_metadata_starter_dry_run(),
             verify_metadata_validator(),
             verify_metadata_pipeline_selftest(),

@@ -63,6 +63,8 @@ After the quick rebuild, the current package should report:
 - anonymous review PDF: `paper_latex/resource_nmcts_submission_anonymous.pdf`
 - payload archive: `submission_package/dist/resource_nmcts_submission_payload.tar.gz`
 - readiness state in `results/analysis_submission_readiness_audit.md`
+- comparison protocol state in
+  `results/analysis_comparison_protocol_audit.md`
 - payload file count and SHA256 in
   `results/analysis_submission_payload_archive.md`
 - submission support-file count in
@@ -101,6 +103,8 @@ layout warnings.
   `results/analysis_comparison_evidence_matrix.md`
 - Baseline comparability:
   `results/analysis_baseline_comparability_audit.md`
+- Comparison protocol audit:
+  `results/analysis_comparison_protocol_audit.md`
 - Paired statistics:
   `results/analysis_paired_statistical_evidence.md`
 - Raw multi-resource tradeoff:
