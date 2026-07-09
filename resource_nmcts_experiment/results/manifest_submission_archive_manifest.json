@@ -2,7 +2,7 @@
   "categories": [
     {
       "boundary": "Compiled PDF is checked by readiness audit to avoid self-referential hashes.",
-      "bytes": 296395,
+      "bytes": 299248,
       "category": "Manuscript source",
       "file_count": 5,
       "files": [
@@ -17,29 +17,29 @@
           "sha256": "418e28ed757e39365ad22746ff1a61fd0f0064c47b3cbab201e2a1062aa7056d"
         },
         {
-          "bytes": 88518,
+          "bytes": 89469,
           "path": "paper_latex/resource_nmcts_submission_acm_tqc.tex",
-          "sha256": "3261e0306f2ceec5c26126e043a91a9206ffb78def4538676ac775679efb519f"
+          "sha256": "9542717776ba8d83d06c196bc7e49c53a908a63733aa0e2fd7f593aae97ba0d9"
         },
         {
-          "bytes": 88014,
+          "bytes": 88965,
           "path": "paper_latex/resource_nmcts_submission_anonymous.tex",
-          "sha256": "2bf1c0e04ca9f10961f694e0e771638497a585b8caafa0102aecc5c2c31aea3c"
+          "sha256": "bf7187a4df7d6f46c41c3b22854c5b1b435f352fe878231f3146d1939bf0a768"
         },
         {
-          "bytes": 89388,
+          "bytes": 90339,
           "path": "paper_latex/resource_nmcts_submission_v1.tex",
-          "sha256": "e0b9578420a57d1812eecd3b64a802f5ea0273f7cd85da24fc729755b1f31e7a"
+          "sha256": "2f1da08cd3bc9a473d0bd66267271ab38f31ee06165d70c70bcdfab235550e4e"
         }
       ],
       "missing": [],
-      "sha256_digest": "f171b1af33f06876220aecbfc30f08b5c4f348086b82d0ccf0640420dbb9c601"
+      "sha256_digest": "1c28db6ee39169769ecd739112eb7eac7a28cdbdb3f33434b0f2f9357a2d61a6"
     },
     {
       "boundary": "Terminal submission audit tables are excluded from the stable payload digest.",
-      "bytes": 231035,
+      "bytes": 231766,
       "category": "Paper tables",
-      "file_count": 201,
+      "file_count": 202,
       "files": [
         {
           "bytes": 3408,
@@ -90,6 +90,11 @@
           "bytes": 480,
           "path": "paper_latex/tables/bitflip_prior_feature_gate_cv.tex",
           "sha256": "66228b2d3840ed51f2ab2bc3424c2a00c135f7ee98083e0f80845ca90763f6eb"
+        },
+        {
+          "bytes": 378,
+          "path": "paper_latex/tables/bitflip_prior_feature_gate_cv_random_control.tex",
+          "sha256": "663b245528c08ae91a41e4a977cb84240d8768fed506a6c3f5bfc71bffdc2707"
         },
         {
           "bytes": 676,
@@ -392,9 +397,9 @@
           "sha256": "251698493e036bb460cd6e3041693706b90ba4977e06d64b1b75610a6c1400b8"
         },
         {
-          "bytes": 2983,
+          "bytes": 3336,
           "path": "paper_latex/tables/learned_control_audit.tex",
-          "sha256": "c67ad5bf283b8bd869e08196407139d2b2571d0ab13234b34a789ac1cb61698a"
+          "sha256": "479512a1693f1433c819e609cc94b64e026eb381c7d43a896477a480174c8a6e"
         },
         {
           "bytes": 2532,
@@ -464,7 +469,7 @@
         {
           "bytes": 2253,
           "path": "paper_latex/tables/neural_mcts_claim_calibration.tex",
-          "sha256": "5dd0a6babbe08b03dbe4959c4c38ec2839ea90c18cf5771d133594e854b25319"
+          "sha256": "ed026ad6182edf9445c95cd2b026f24ec360437a5e9412fd2b877210761042cb"
         },
         {
           "bytes": 270,
@@ -569,7 +574,7 @@
         {
           "bytes": 1354,
           "path": "paper_latex/tables/reproducibility_audit.tex",
-          "sha256": "dd2cf5cbbed60cdf92af84d33f754ebcc99d8ce785001b9c5cabed1b9f0e95f9"
+          "sha256": "842f2f68b388409f3509772cdf93706695df36a7254381c30da44fb70b9238a1"
         },
         {
           "bytes": 517,
@@ -1048,11 +1053,11 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "605f91f084b7929bc57fe015d6553f1b5af0ccf575168f81693d1d2fcb1e0f0c"
+      "sha256_digest": "4d53b2d60a3deb3829dd109c4a171d14e2dc14d3abdd79c10b31d70f7da82d83"
     },
     {
       "boundary": "Includes generated figure assets and plotted source data, not raw benchmark reruns.",
-      "bytes": 1297577,
+      "bytes": 1413906,
       "category": "Submission figures",
       "file_count": 28,
       "files": [
@@ -1147,19 +1152,19 @@
           "sha256": "01f4b6bc2aacb494bd4b602036614ba2493a5565a87437a090f67b8ec5750226"
         },
         {
-          "bytes": 43623,
+          "bytes": 44302,
           "path": "paper_latex/figures/submission_v36/fig7_learned_control_summary.pdf",
-          "sha256": "dcc1513908176bb5d034691575d15b44f598bba89a70cebeb6bdb1c893a1d035"
+          "sha256": "809121a441ae36e214bb99daa37655585f3cbd1643826bb1bea0d93cfa250b1c"
         },
         {
-          "bytes": 136765,
+          "bytes": 248837,
           "path": "paper_latex/figures/submission_v36/fig7_learned_control_summary.png",
-          "sha256": "d6703368a19308fc42aa4d0711f586010365a12efce34f8eb4b49bb2639c17d7"
+          "sha256": "dc5e05d2ed7f3fcc1391f0d3043b34127193b7a63dc2e1d2fdced8fc746c532a"
         },
         {
-          "bytes": 23996,
+          "bytes": 27227,
           "path": "paper_latex/figures/submission_v36/fig7_learned_control_summary.svg",
-          "sha256": "6eb6507faddafad681d7561b2761c9061cecfc6eacb2df2bc59d00e09406c9a3"
+          "sha256": "179e3cbca6fbd40dfd174a4e1e62fcdcd3cf384d1685a2ee3891966a0fd9ebe4"
         },
         {
           "bytes": 304,
@@ -1192,13 +1197,13 @@
           "sha256": "10d13ae9e0fe027b8c47a1d815589dddcd0d2c7671df7a0cf552e3ec05b68e9b"
         },
         {
-          "bytes": 2382,
+          "bytes": 2729,
           "path": "paper_latex/figures/submission_v36/source_data/fig7_learned_control_summary.csv",
-          "sha256": "d1dc207481b51831ef779ab1835987a4883bb8c4d09b29a11cf6c8612f945f81"
+          "sha256": "86eb8edb600662797a97dc061830363102ce51ae4ebab78352bb79b85190275b"
         }
       ],
       "missing": [],
-      "sha256_digest": "b115976593d275f4936eee067189cfc45926d6bcfc0acfa534cfa1bd57865203"
+      "sha256_digest": "30253d5b93681ed7fde9f410533883a293601130414b17d21f0aa3aeeebaef99"
     },
     {
       "boundary": "Raw CSVs are regenerated only by the heavier run scripts, not by the lightweight rebuild.",
@@ -2017,9 +2022,9 @@
     },
     {
       "boundary": "Terminal submission/package outputs are excluded so this manifest remains stable.",
-      "bytes": 4951613,
+      "bytes": 4955161,
       "category": "Derived summaries",
-      "file_count": 454,
+      "file_count": 456,
       "files": [
         {
           "bytes": 30224,
@@ -2037,9 +2042,9 @@
           "sha256": "d18605f22a5193ea396742c0e4c16912ab0e88c8399cd8f3093c270fe3ba9ad8"
         },
         {
-          "bytes": 21675,
+          "bytes": 21732,
           "path": "results/analysis_artifact_rerun_registry.md",
-          "sha256": "dc8884ecd9ef25e89b51993cbffee567c271390225b3b725e4a3725f924617fe"
+          "sha256": "843a7b0dfea690149e8eaed0a626235c5b8b072718447ae603e35fa729ef4990"
         },
         {
           "bytes": 2928,
@@ -2095,6 +2100,11 @@
           "bytes": 1720,
           "path": "results/analysis_bitflip_prior_feature_gate_cv.md",
           "sha256": "988499255a5f55661a7a0a413d795e9e2ca7c3d901b7d22241af667439910864"
+        },
+        {
+          "bytes": 1438,
+          "path": "results/analysis_bitflip_prior_feature_gate_cv_random_control.md",
+          "sha256": "2ecb97c9d5fed33a7711093519abe10aed42fff144f52775b0e3f099c07186d8"
         },
         {
           "bytes": 2160,
@@ -2169,7 +2179,7 @@
         {
           "bytes": 53847,
           "path": "results/analysis_claim_scope_lint.md",
-          "sha256": "a91d0a1449320c45817ae624b5d3873688d2ef9cd7a872bbe30014e2b7ada1b4"
+          "sha256": "e74b1faa2fba8f4eaf0c9d07daa74f6b493aa31756986060a9e7a8ee10b287bc"
         },
         {
           "bytes": 2378,
@@ -2279,7 +2289,7 @@
         {
           "bytes": 1154,
           "path": "results/analysis_figure_asset_audit.md",
-          "sha256": "c43bd133e528578199915646e8775d08ea16d83e8b82521aaf22e3d8f1b8a261"
+          "sha256": "9894c35c4421014839bb52f30c4199e6c527d840866fa4e55f49c9c06742b626"
         },
         {
           "bytes": 686,
@@ -2477,9 +2487,9 @@
           "sha256": "8cc679dfdc3f37001231c2a01f0279189ab69f9e5bb55468de48edd3165faa97"
         },
         {
-          "bytes": 3079,
+          "bytes": 3438,
           "path": "results/analysis_learned_control_audit.md",
-          "sha256": "4cbf79194956741d4b4552568e0406a4f969f80fe773ef425b4efb6e7b25eab2"
+          "sha256": "72eb0b8ad08f23598834d1ef322ca84e565a27fa8b5e0858afac328065314499"
         },
         {
           "bytes": 3562,
@@ -2554,7 +2564,7 @@
         {
           "bytes": 2259,
           "path": "results/analysis_neural_mcts_claim_calibration.md",
-          "sha256": "6cd98ee5ab382341ec9e4862fd26572c2312ed0e9bb2421d931af8485df5790a"
+          "sha256": "03752693158c70e26fd19fde50ae4349e2bcaa0442c0f7108459514ef99d4467"
         },
         {
           "bytes": 2714,
@@ -2664,7 +2674,7 @@
         {
           "bytes": 1333,
           "path": "results/analysis_reproducibility_audit.md",
-          "sha256": "d532a7582f0b89c459da08f285ec0f250e0f4a708e602c39a1b14b933024dcfa"
+          "sha256": "62b3c1f15559b674bc3e5dc1d2898d8983a5fc7c23603bf050b8c95e403efb6a"
         },
         {
           "bytes": 22900,
@@ -2959,7 +2969,7 @@
         {
           "bytes": 1552,
           "path": "results/analysis_target_venue_format_smoke.md",
-          "sha256": "0dfbcd7b01bff994406b77be8bb95ccd91e2b280aadd63e25a4f9592f5abe89d"
+          "sha256": "cb0108eecfa1d7f55f8cb755aeea80ae36ae81ab89122b7a36ff13f0f8100f93"
         },
         {
           "bytes": 2353,
@@ -3112,9 +3122,9 @@
           "sha256": "bea04c1a18037b90b58f25270c05d61118d2f39626cb0d22a682cfc52ded231b"
         },
         {
-          "bytes": 17884,
+          "bytes": 17941,
           "path": "results/summary_artifact_rerun_registry.csv",
-          "sha256": "2c89af692fcfda73c08451638194f48dc08fce10f7ef7bde1d0eb83b35137ee7"
+          "sha256": "6254c1ad59fc62f2c89a7f5fb6567f397ad24b77df77b06f3d0f1b383594607f"
         },
         {
           "bytes": 2485,
@@ -3175,6 +3185,11 @@
           "bytes": 1384,
           "path": "results/summary_bitflip_prior_feature_gate_cv.csv",
           "sha256": "d8d90652f8faed5cbed5e519a9b010405b4008bc01017d381bf533a0858c0f6d"
+        },
+        {
+          "bytes": 1294,
+          "path": "results/summary_bitflip_prior_feature_gate_cv_random_control.csv",
+          "sha256": "aa14c7bcb2edc71ff203abf4c388f7b4dc61540e8829ae0f1508bcbdff4d7bb1"
         },
         {
           "bytes": 2380,
@@ -3259,7 +3274,7 @@
         {
           "bytes": 60995,
           "path": "results/summary_claim_scope_lint.csv",
-          "sha256": "df4bd41053522aabd2e6101263240484d21773fbb9144adce68bfe2b9339f39c"
+          "sha256": "78bb7ba10a0e0bbfd6ac0f538b0b031723e553006cc5c432bfaa216d8300111e"
         },
         {
           "bytes": 896,
@@ -3369,7 +3384,7 @@
         {
           "bytes": 1410,
           "path": "results/summary_figure_asset_audit.csv",
-          "sha256": "31a10e60cfafde59941d0369b46ef049b866ed0c0cd4a9d684de8f4b010456bd"
+          "sha256": "6e0020def68c9306e8fd4c2a4c4be53980ff9c5cab020a62a096611102f7cd93"
         },
         {
           "bytes": 307,
@@ -3632,9 +3647,9 @@
           "sha256": "27ec627a97916dd5f295d1882804f1d14a92096de8b6fcb9defa830a4392053b"
         },
         {
-          "bytes": 2514,
+          "bytes": 2857,
           "path": "results/summary_learned_control_audit.csv",
-          "sha256": "36727dad8795faf567574d22a875a5636843d2d7e5d1c7ddb563de4775bf2ea8"
+          "sha256": "2c2615aab920a07a64b64b9375dc2b2e1854f09e627699247d2e3fa44c7b59b4"
         },
         {
           "bytes": 4274,
@@ -3729,7 +3744,7 @@
         {
           "bytes": 3039,
           "path": "results/summary_neural_mcts_claim_calibration.csv",
-          "sha256": "c392fbe24430d8d5b42d24ac7bc33c5b90ea24f54faee029adb029a21de1529a"
+          "sha256": "c4fb4eef2c2739df86c1f02aab906a969e6b78e1e0677bd00ff7e0eefc150019"
         },
         {
           "bytes": 957,
@@ -3839,7 +3854,7 @@
         {
           "bytes": 1117,
           "path": "results/summary_reproducibility_audit.csv",
-          "sha256": "16a552de12f8ac92255656e0e88062464adf03514aa294950057836616cfc407"
+          "sha256": "763bba129907730907e91a5a1e9a4b7c5cd149ac73613da337390b2e20ec430d"
         },
         {
           "bytes": 17461,
@@ -4134,7 +4149,7 @@
         {
           "bytes": 1334,
           "path": "results/summary_target_venue_format_smoke.csv",
-          "sha256": "ad9cfdb583415aa704c0261af688abd467e82d8da0b18e2f3a5fbd54a098cda9"
+          "sha256": "e62c893d4e4128e29f357d0ef8a6aee33ed698aa7b53c493fc0c35897c5d454b"
         },
         {
           "bytes": 5296,
@@ -4293,13 +4308,13 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "99845b7ddb3df71928291075c55b5541ed8229bbc7d679f157046fa6f3813288"
+      "sha256_digest": "f2acc9d53dacc0aaa56da7f019049b28235a8efdea7d454912d9cd3a0e471eb0"
     },
     {
       "boundary": "Submission-level terminal manifests are excluded from this digest group.",
-      "bytes": 268229,
+      "bytes": 269764,
       "category": "Run manifests",
-      "file_count": 134,
+      "file_count": 135,
       "files": [
         {
           "bytes": 802,
@@ -4317,9 +4332,9 @@
           "sha256": "d4694c927876f027ed7dc8a33cc62b15e0d34efa12caa6e4fc9fb188445c8801"
         },
         {
-          "bytes": 38042,
+          "bytes": 38099,
           "path": "results/manifest_artifact_rerun_registry.json",
-          "sha256": "2ff71d3cb37b49386fcc516d8e7c48954ff574b4bba5c1e13c849b030d0b5c74"
+          "sha256": "da6f20999bad565113ec46929487b8d7d9092952646b493c4027f79fc8480418"
         },
         {
           "bytes": 4191,
@@ -4375,6 +4390,11 @@
           "bytes": 1395,
           "path": "results/manifest_bitflip_prior_feature_gate_cv.json",
           "sha256": "587e84b3e9bb1957881db080023d22b87df3100afd6be2db5e22c4351e32aa91"
+        },
+        {
+          "bytes": 1406,
+          "path": "results/manifest_bitflip_prior_feature_gate_cv_random_control.json",
+          "sha256": "5766272a6ce12c0925eaab05225f1296d608af88cface860def20f490310fb69"
         },
         {
           "bytes": 683,
@@ -4612,9 +4632,9 @@
           "sha256": "cf3a605839890c3d2d4fdbf0f3b95d52b087086a0cd6e23d3d8f68149aab59d8"
         },
         {
-          "bytes": 1288,
+          "bytes": 1360,
           "path": "results/manifest_learned_control_audit.json",
-          "sha256": "1c4919bc6af1bb6ff667a752700865972d5817cd193049f2f0ec459085b73802"
+          "sha256": "82092eda35e7e5046090417c01384c09be9c13730c9214a00fecd379d727d7d8"
         },
         {
           "bytes": 1563,
@@ -4909,7 +4929,7 @@
         {
           "bytes": 2420,
           "path": "results/manifest_target_venue_format_smoke.json",
-          "sha256": "bacc63eb7ccead546f1cae1e043753335f7f70eb1ddbd200fb2b5c8f7c38de9a"
+          "sha256": "fc29dcde0309918318c7fb388c155fcd0a6a854a17e3d8e14f555b15b025cf61"
         },
         {
           "bytes": 7522,
@@ -4973,18 +4993,18 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "2a4bcdc5729492801de4bc439cac766cdf627c743821f767a8d78be84abb26d8"
+      "sha256_digest": "dbe16d060b8abfc71b1342664630baf16321fa44c16fc39e3c409ddecc689c9c"
     },
     {
       "boundary": "Includes reproducible entry points and top-level core implementation modules; raw sweeps still require their individual drivers.",
-      "bytes": 3248339,
+      "bytes": 3270966,
       "category": "Scripts and docs",
-      "file_count": 168,
+      "file_count": 169,
       "files": [
         {
           "bytes": 200589,
           "path": "DELIVERABLE_zh.md",
-          "sha256": "291dd1d47872aac38f0eb3b06de61fe80867f48518f2af22411a2a43c1f1d17d"
+          "sha256": "490b600569d05fb5a1f5b103030692b42a8e596a6dc93247dab60f455d8191b5"
         },
         {
           "bytes": 107099,
@@ -5012,9 +5032,9 @@
           "sha256": "28ed8a005462649db0b3157166e5b34d02de3d468b74ce4748109e7c9199f1d1"
         },
         {
-          "bytes": 48257,
+          "bytes": 48332,
           "path": "analyze_artifact_rerun_registry.py",
-          "sha256": "3bd2c33f6609080815c970fe3be090bb482c810a5e7d9c4ea2ed08ca5530051d"
+          "sha256": "f0909195491dfc4fef1d28f810c1bb3c89c03d5fa5b4d6de3f2718eeb1bf78c7"
         },
         {
           "bytes": 18800,
@@ -5070,6 +5090,11 @@
           "bytes": 19411,
           "path": "analyze_bitflip_prior_feature_gate_cv.py",
           "sha256": "416352580221320325a2127ec8a2ba33fedb46c078830a56abd1cdb961a89503"
+        },
+        {
+          "bytes": 16796,
+          "path": "analyze_bitflip_prior_feature_gate_cv_random_control.py",
+          "sha256": "5387647480bc02ce3bd3e8cb397e621ec970d41d6384b793ea47a6bc6e6f096e"
         },
         {
           "bytes": 13641,
@@ -5217,9 +5242,9 @@
           "sha256": "618b0392337041982fb4cc2174449c632d51347d99b1a0f9a2d2abde0eae5908"
         },
         {
-          "bytes": 21246,
+          "bytes": 23570,
           "path": "analyze_learned_control_audit.py",
-          "sha256": "99b8428b6e26c5c6f71fb9258043a9551502cba8a591f8022210798daf861c3a"
+          "sha256": "eacc819939fe4c3ad5a20f5b03b189dbf2c44edd5462f4e2b03d921dd685378c"
         },
         {
           "bytes": 16674,
@@ -5272,9 +5297,9 @@
           "sha256": "b8aa824b7212e5784999ea1ab5b368ee3fda5add676adcf2571b86663656eb90"
         },
         {
-          "bytes": 25065,
+          "bytes": 25456,
           "path": "analyze_payload_extraction_smoke_audit.py",
-          "sha256": "658caae24314371add4d8ba7920b59121ac259b05f8b2b240729121dc0c2af2b"
+          "sha256": "a7117e5fa6ffb9e5d35e73ea37f3958b0c7eb579adc6d2b664fc57920624876e"
         },
         {
           "bytes": 9055,
@@ -5287,9 +5312,9 @@
           "sha256": "e58ae417355ada77952b38c03ebb151a4496fc30e040e16c28417475f94b900d"
         },
         {
-          "bytes": 48021,
+          "bytes": 48377,
           "path": "analyze_payload_roundtrip_audit.py",
-          "sha256": "50041fbb2e8492ad2f6ec32b632994cfe20e7b420f8cdd5a0bb565b8c9ffdd26"
+          "sha256": "8343213993372b2e23949c932e36f78699ee905152ef164435c36a89097c146b"
         },
         {
           "bytes": 11709,
@@ -5507,9 +5532,9 @@
           "sha256": "99b0514315a254b062a98fe5310f2e7f8bda16a7543b306f90bc9f646fcfecaf"
         },
         {
-          "bytes": 126900,
+          "bytes": 129353,
           "path": "analyze_submission_package_verifier.py",
-          "sha256": "0db19cb11d60217c6ef84a7881b2d35e01c93b2d6fe00a7f66c878f3fea013e1"
+          "sha256": "0c615f9d39805ea331650e6eb025ca7ae79a16aaa1a7eda9c701cf7483142ce4"
         },
         {
           "bytes": 144928,
@@ -5667,9 +5692,9 @@
           "sha256": "14d0ea1b2067f4f847c764a6d802631ea5339142463c4e98410703692b9bad97"
         },
         {
-          "bytes": 7178,
+          "bytes": 7241,
           "path": "rebuild_submission_package.sh",
-          "sha256": "a8a343a27a941430e9608f8ffd6089f2f58cb9445ab656a269ba036696a665e4"
+          "sha256": "f7ddc6604d076825d627947fb8ca8d8ae409d0dd2308e6632ded647869bcdc1b"
         },
         {
           "bytes": 5184,
@@ -5817,13 +5842,13 @@
           "sha256": "f629dc1b27e0b3a29fe05e718f5f18ecaed26ba625207a01a3c955ee4c494e85"
         },
         {
-          "bytes": 11553,
+          "bytes": 11722,
           "path": "verify_submission_package.sh",
-          "sha256": "928f83500180bdd3c1e02bb95e3e30c68dd621a8e4f4144e626a07a8414f4a70"
+          "sha256": "a6468162f323a6e1932fd19a027c89603576507732691f3693ba696eaf97f60b"
         }
       ],
       "missing": [],
-      "sha256_digest": "8f8eedfbe1025ea514c1cf082b7f6ed9ef2c8d3b0aeefc280a70bbc575a4e5fe"
+      "sha256_digest": "56e99fcf775d49899c76d27403909af6b98afd7764734bdfb9e1305d20bf8cbf"
     },
     {
       "boundary": "Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild.",
@@ -5984,7 +6009,7 @@
         {
           "bytes": 6680,
           "path": "submission_package/FINAL_SUBMISSION_HANDOFF_zh.md",
-          "sha256": "7a02aa8e3f4d3d625a7cb8f0d0b4d67a60af3f6515f0897184ccf059b9650227"
+          "sha256": "4f98ef7698110e92ed8a8bd779bc8e32baedcfb7259f6a0b28e41cae3138f9b8"
         },
         {
           "bytes": 4190,
@@ -6029,7 +6054,7 @@
         {
           "bytes": 19719,
           "path": "submission_package/submission_checklist.md",
-          "sha256": "85384117105597ed6c928bddcc3c1c2b2bb05f884d7ddd8c811dc175c29555c6"
+          "sha256": "f7e82bc2c625376556b432d768f83685f3c1ec31801bbeb5c1f76f614381f271"
         },
         {
           "bytes": 3361,
@@ -6048,7 +6073,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "c260c42900575e08da54b0d7f2fcb2c27406582f828e58a629ad27870d5893a9"
+      "sha256_digest": "4980547571ce275c8c323aaaf453d2f6ce83aee06094b1eaf30b447cb6bda259"
     }
   ],
   "note": "Compiled PDF and terminal submission/package outputs are excluded from payload hashes to avoid self-referential digests.",

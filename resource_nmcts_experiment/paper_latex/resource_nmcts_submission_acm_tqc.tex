@@ -1224,6 +1224,27 @@ then evaluates the selected gate only on held-out functions.}
 \input{tables/bitflip_prior_feature_gate_cv}
 \end{table}
 
+Table~\ref{tab:bitflip-prior-feature-gate-random-control} adds a same-width
+random-interval control for the cross-validated ANF-term gate.  The control
+keeps the fold-wise interval widths fixed but randomly shifts their positions
+over the observed ANF-term range.  The learned-support gate retains all
+328 held-out learned-prior score wins, whereas none of the 200 random
+assignments does so.  This makes the gate a feature-stable deployment rule
+rather than an arbitrary post-hoc interval.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.06}
+\caption{Random-interval control for the cross-validated ANF-term feature
+gate.  Random controls keep the same fold-wise widths as the learned-support
+gate but choose interval positions independently over the observed ANF-term
+range.}
+\label{tab:bitflip-prior-feature-gate-random-control}
+\input{tables/bitflip_prior_feature_gate_cv_random_control}
+\end{table}
+
 Table~\ref{tab:frontier-random-depth} applies the same random-control idea to
 the large Boolean-ring frontier policy.  The candidate set is fixed to the
 already verified depth-2/3/4 screens, and only the depth-selection policy is
@@ -1373,9 +1394,9 @@ are small and their runtime overhead is visible.
 
 \begin{table}[H]
 \centering
-\scriptsize
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.08}
+\tiny
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{0.96}
 \caption{Learned-control evidence audit.  Rows marked as limited are reported
 to bound the role of AI rather than promoted as headline improvements.}
 \label{tab:learned-control-audit}

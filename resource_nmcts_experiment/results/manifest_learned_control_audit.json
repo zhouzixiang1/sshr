@@ -1,7 +1,7 @@
 {
-  "bounded_count": 5,
+  "bounded_count": 6,
   "claim_class_counts": {
-    "bounded": 5,
+    "bounded": 6,
     "limited": 2,
     "promoted": 4
   },
@@ -15,7 +15,7 @@
     "table": "paper_latex/tables/learned_control_audit.tex"
   },
   "promoted_count": 4,
-  "rows": 11,
+  "rows": 12,
   "script": "analyze_learned_control_audit.py",
   "sources": [
     "results/summary_boolean_screen_depth_frontier_policy_large.csv",
@@ -29,9 +29,10 @@
     "results/summary_bitflip_neural_budget_sweep.csv",
     "results/summary_bitflip_prior_feature_gate.csv",
     "results/summary_bitflip_prior_feature_gate_cv.csv",
+    "results/summary_bitflip_prior_feature_gate_cv_random_control.csv",
     "results/summary_root_action_ranker_audit.csv"
   ],
   "status_counts": {
-    "pass": 11
+    "pass": 12
   }
 }

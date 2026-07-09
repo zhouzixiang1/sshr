@@ -1,0 +1,32 @@
+{
+  "folds": 5,
+  "inputs": [
+    "results/raw_bitflip_neural_budget_sweep.csv",
+    "results/raw_traditional_resource_learned_prior.csv",
+    "results/raw_traditional_resource_no_prior.csv",
+    "results/analysis_bitflip_prior_feature_gate_cv.md"
+  ],
+  "learned_beats_all_random_retention": true,
+  "learned_overhead_reduction": 0.08944311648686153,
+  "learned_retained_fraction": 1.0,
+  "learned_score_losses": 0,
+  "learned_score_wins": 328,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_bitflip_prior_feature_gate_cv_random_control.md",
+    "manifest": "results/manifest_bitflip_prior_feature_gate_cv_random_control.json",
+    "summary": "results/summary_bitflip_prior_feature_gate_cv_random_control.csv",
+    "table": "paper_latex/tables/bitflip_prior_feature_gate_cv_random_control.tex"
+  },
+  "random_best_retained_fraction": 0.9725609756097561,
+  "random_best_retained_wins": 319,
+  "random_control": "same fold-wise interval widths as the CV support gate, random interval positions",
+  "random_full_retained_count": 0,
+  "random_mean_overhead_reduction": 0.3945987004931224,
+  "random_mean_retained_fraction": 0.6728506097560976,
+  "random_repeats": 200,
+  "script": "analyze_bitflip_prior_feature_gate_cv_random_control.py",
+  "support_margin": 2,
+  "table": "paper_latex/tables/bitflip_prior_feature_gate_cv_random_control.tex",
+  "table_anchor_present": true
+}

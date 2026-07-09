@@ -288,6 +288,7 @@ BITFLIP_PRIOR_FEATURE_GATE_PATHS = {
     "analyze_bitflip_prior_difficulty_slices.py",
     "analyze_bitflip_prior_feature_gate.py",
     "analyze_bitflip_prior_feature_gate_cv.py",
+    "analyze_bitflip_prior_feature_gate_cv_random_control.py",
     "results/summary_bitflip_prior_difficulty_slices.csv",
     "results/analysis_bitflip_prior_difficulty_slices.md",
     "results/manifest_bitflip_prior_difficulty_slices.json",
@@ -297,9 +298,13 @@ BITFLIP_PRIOR_FEATURE_GATE_PATHS = {
     "results/summary_bitflip_prior_feature_gate_cv.csv",
     "results/analysis_bitflip_prior_feature_gate_cv.md",
     "results/manifest_bitflip_prior_feature_gate_cv.json",
+    "results/summary_bitflip_prior_feature_gate_cv_random_control.csv",
+    "results/analysis_bitflip_prior_feature_gate_cv_random_control.md",
+    "results/manifest_bitflip_prior_feature_gate_cv_random_control.json",
     "paper_latex/tables/bitflip_prior_difficulty_slices.tex",
     "paper_latex/tables/bitflip_prior_feature_gate.tex",
     "paper_latex/tables/bitflip_prior_feature_gate_cv.tex",
+    "paper_latex/tables/bitflip_prior_feature_gate_cv_random_control.tex",
 }
 FRONTIER_RANDOM_DEPTH_PATHS = {
     "analyze_frontier_random_depth_control.py",

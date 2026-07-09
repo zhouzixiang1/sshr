@@ -21,6 +21,7 @@ learned-control audit coverage,
 learned-prior difficulty-slice localization,
 learned-prior feature-gate localization,
 learned-prior cross-validated feature-gate localization,
+learned-prior cross-validated feature-gate random control,
 neural/MCTS claim-calibration coverage,
 runtime-envelope feasibility coverage,
 frontier random-depth control coverage,
@@ -162,6 +163,12 @@ BITFLIP_PRIOR_FEATURE_GATE_MANIFEST = RESULTS / "manifest_bitflip_prior_feature_
 BITFLIP_PRIOR_FEATURE_GATE_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_prior_feature_gate.tex"
 BITFLIP_PRIOR_FEATURE_GATE_CV_MANIFEST = RESULTS / "manifest_bitflip_prior_feature_gate_cv.json"
 BITFLIP_PRIOR_FEATURE_GATE_CV_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_prior_feature_gate_cv.tex"
+BITFLIP_PRIOR_FEATURE_GATE_CV_RANDOM_MANIFEST = (
+    RESULTS / "manifest_bitflip_prior_feature_gate_cv_random_control.json"
+)
+BITFLIP_PRIOR_FEATURE_GATE_CV_RANDOM_TABLE = (
+    THIS_DIR / "paper_latex" / "tables" / "bitflip_prior_feature_gate_cv_random_control.tex"
+)
 FRONTIER_RANDOM_DEPTH_MANIFEST = RESULTS / "manifest_frontier_random_depth_control.json"
 FRONTIER_RANDOM_DEPTH_TABLE = THIS_DIR / "paper_latex" / "tables" / "frontier_random_depth_control.tex"
 STOCHASTIC_CONTROL_STABILITY_MANIFEST = RESULTS / "manifest_stochastic_control_stability.json"
@@ -1413,6 +1420,41 @@ def verify_bitflip_prior_feature_gate_cv() -> dict[str, str]:
     )
 
 
+def verify_bitflip_prior_feature_gate_cv_random_control() -> dict[str, str]:
+    manifest = read_json(BITFLIP_PRIOR_FEATURE_GATE_CV_RANDOM_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    repeats = int(manifest.get("random_repeats", -1)) if manifest else -1
+    learned_wins = int(manifest.get("learned_score_wins", -1)) if manifest else -1
+    learned_losses = int(manifest.get("learned_score_losses", -1)) if manifest else -1
+    random_full = int(manifest.get("random_full_retained_count", -1)) if manifest else -1
+    random_best = int(manifest.get("random_best_retained_wins", -1)) if manifest else -1
+    learned_beats = bool(manifest.get("learned_beats_all_random_retention", False)) if manifest else False
+    random_mean_retained = float(manifest.get("random_mean_retained_fraction", -1.0)) if manifest else -1.0
+    table_exists = BITFLIP_PRIOR_FEATURE_GATE_CV_RANDOM_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and repeats >= 200
+        and learned_wins == 328
+        and learned_losses == 0
+        and random_full == 0
+        and random_best < learned_wins
+        and learned_beats
+        and 0.0 < random_mean_retained < 0.9
+        and table_exists
+        and anchor
+        else "needs revision"
+    )
+    return row(
+        "Bit-flip learned-prior CV gate random-interval control",
+        status,
+        f"random_repeats={repeats}; learned_score_wins={learned_wins}; learned_score_losses={learned_losses}; random_full_retained_count={random_full}; random_best_retained_wins={random_best}; random_mean_retained_fraction={random_mean_retained:.4f}; learned_beats_all_random_retention={learned_beats}; needs_revision_count={revisions}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_bitflip_prior_feature_gate_cv_random_control.py and restore the random-interval control table and manuscript anchor.",
+    )
+
+
 def verify_frontier_random_depth() -> dict[str, str]:
     manifest = read_json(FRONTIER_RANDOM_DEPTH_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -2293,6 +2335,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_bitflip_prior_difficulty(),
             verify_bitflip_prior_feature_gate(),
             verify_bitflip_prior_feature_gate_cv(),
+            verify_bitflip_prior_feature_gate_cv_random_control(),
             verify_root_action_ranker(),
             verify_phase_rotation_precision(),
             verify_phase_rotation_sequence_smoke(),

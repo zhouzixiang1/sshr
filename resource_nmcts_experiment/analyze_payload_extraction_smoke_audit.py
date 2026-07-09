@@ -238,6 +238,15 @@ SMOKE_SPECS = (
         minimum_rows=1593,
     ),
     SmokeSpec(
+        name="Bit-flip learned-prior random-interval gate control",
+        script="analyze_bitflip_prior_feature_gate_cv_random_control.py",
+        manifest="results/manifest_bitflip_prior_feature_gate_cv_random_control.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="random_repeats",
+        minimum_rows=200,
+    ),
+    SmokeSpec(
         name="Root-action ranker audit",
         script="analyze_root_action_ranker_audit.py",
         manifest="results/manifest_root_action_ranker_audit.json",

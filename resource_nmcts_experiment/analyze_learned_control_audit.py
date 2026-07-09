@@ -124,6 +124,21 @@ def build_rows() -> list[dict[str, str]]:
         row_type="aggregate",
         fold="all",
     )
+    bitflip_gate_cv_random_rows = read_csv(
+        RESULTS / "summary_bitflip_prior_feature_gate_cv_random_control.csv"
+    )
+    bitflip_gate_cv_random = require_row(
+        bitflip_gate_cv_random_rows,
+        row_type="learned_cv_gate",
+    )
+    bitflip_gate_cv_random_mean = require_row(
+        bitflip_gate_cv_random_rows,
+        row_type="random_mean",
+    )
+    bitflip_gate_cv_random_best = require_row(
+        bitflip_gate_cv_random_rows,
+        row_type="random_best_retention",
+    )
 
     root_ranker = read_csv(RESULTS / "summary_root_action_ranker_audit.csv")
     root_union = require_row(root_ranker, component="Combined heuristic top-4 plus neural top-12 extension")
@@ -289,6 +304,37 @@ def build_rows() -> list[dict[str, str]]:
             ),
         },
         {
+            "component": "Bit-flip CV gate random-interval control",
+            "claim_class": "bounded",
+            "scope": (
+                f"{bitflip_gate_cv_random_mean['random_repeats']} same-width "
+                "random interval assignments"
+            ),
+            "quality": (
+                f"CV gate retains {bitflip_gate_cv_random['score_wins']}/"
+                f"{bitflip_gate_cv_random['learned_score_wins']} learned wins; "
+                f"best random retains {bitflip_gate_cv_random_best['score_wins']}/"
+                f"{bitflip_gate_cv_random_best['learned_score_wins']}; "
+                f"random mean retains "
+                f"{100.0 * float(bitflip_gate_cv_random_mean['retained_learned_win_fraction']):.2f}%"
+            ),
+            "cost": (
+                f"CV overhead cut {pct_ratio(bitflip_gate_cv_random['learned_overhead_reduction'])}; "
+                "random intervals may cut more runtime by skipping useful learned rows"
+            ),
+            "role": "bounded specificity control for the CV input-feature gate",
+            "status": status_from(
+                int(bitflip_gate_cv_random["random_repeats"]) == 1
+                and int(bitflip_gate_cv_random_mean["random_repeats"]) >= 200
+                and int(float(bitflip_gate_cv_random["score_wins"]))
+                == int(float(bitflip_gate_cv_random["learned_score_wins"]))
+                and int(float(bitflip_gate_cv_random["score_losses"])) == 0
+                and int(float(bitflip_gate_cv_random_mean["full_retained_repeats"])) == 0
+                and int(float(bitflip_gate_cv_random_best["score_wins"]))
+                < int(float(bitflip_gate_cv_random["score_wins"]))
+            ),
+        },
+        {
             "component": "Boolean neural guard",
             "claim_class": "limited",
             "scope": "n=16 high-dimensional guard; 24 rows",
@@ -440,6 +486,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
             "results/summary_bitflip_neural_budget_sweep.csv",
             "results/summary_bitflip_prior_feature_gate.csv",
             "results/summary_bitflip_prior_feature_gate_cv.csv",
+            "results/summary_bitflip_prior_feature_gate_cv_random_control.csv",
             "results/summary_root_action_ranker_audit.csv",
         ],
         "outputs": {
