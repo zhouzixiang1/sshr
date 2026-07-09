@@ -81,7 +81,7 @@
     },
     {
       "boundary": "Counts describe manuscript artifacts, not independent experimental datasets.",
-      "evidence": "Current package has 7 submitted figure panels and 158 generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
+      "evidence": "Current package has 7 submitted figure panels and 159 generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
       "evidence_files": "paper_latex/figures/submission_v36; paper_latex/tables; results/analysis_figure_asset_audit.md; results/analysis_reproducibility_audit.md",
       "next_action": "Spot-check figure/table readability after every layout or data update.",
       "requirement": "Rich paper figures and tables",
@@ -89,7 +89,7 @@
     },
     {
       "boundary": "Author names, target-venue formatting choices, and final declarations remain external author inputs.",
-      "evidence": "Compiled submission PDF exists with 28 pages and the TeX source is present.",
+      "evidence": "Compiled submission PDF exists with 29 pages and the TeX source is present.",
       "evidence_files": "paper_latex/resource_nmcts_submission_v1.tex; paper_latex/resource_nmcts_submission_v1.pdf; results/analysis_submission_readiness_audit.md",
       "next_action": "After author metadata is supplied, recompile and rerun readiness checks.",
       "requirement": "Complete LaTeX manuscript draft",

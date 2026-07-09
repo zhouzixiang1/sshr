@@ -4,14 +4,14 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 
 ## Status counts
 
-- pass: 82
+- pass: 84
 
 ## Dependency types
 
 - bibliography: 2
 - figure: 14
 - main_source: 2
-- tex_input: 64
+- tex_input: 66
 
 ## Missing dependencies
 
@@ -27,6 +27,7 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 | author | tex_input | `tables/method_workflow` | `paper_latex/tables/method_workflow.tex` | True | True | pass |
 | author | tex_input | `tables/baseline_claim_matrix` | `paper_latex/tables/baseline_claim_matrix.tex` | True | True | pass |
 | author | tex_input | `tables/comparison_evidence_matrix` | `paper_latex/tables/comparison_evidence_matrix.tex` | True | True | pass |
+| author | tex_input | `tables/comparison_protocol_audit` | `paper_latex/tables/comparison_protocol_audit.tex` | True | True | pass |
 | author | tex_input | `tables/baseline_comparability_audit` | `paper_latex/tables/baseline_comparability_audit.tex` | True | True | pass |
 | author | tex_input | `tables/counterpoint_claim_boundary` | `paper_latex/tables/counterpoint_claim_boundary.tex` | True | True | pass |
 | author | tex_input | `tables/reproducibility_audit` | `paper_latex/tables/reproducibility_audit.tex` | True | True | pass |
@@ -68,6 +69,7 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 | anonymous | tex_input | `tables/method_workflow` | `paper_latex/tables/method_workflow.tex` | True | True | pass |
 | anonymous | tex_input | `tables/baseline_claim_matrix` | `paper_latex/tables/baseline_claim_matrix.tex` | True | True | pass |
 | anonymous | tex_input | `tables/comparison_evidence_matrix` | `paper_latex/tables/comparison_evidence_matrix.tex` | True | True | pass |
+| anonymous | tex_input | `tables/comparison_protocol_audit` | `paper_latex/tables/comparison_protocol_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/baseline_comparability_audit` | `paper_latex/tables/baseline_comparability_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/counterpoint_claim_boundary` | `paper_latex/tables/counterpoint_claim_boundary.tex` | True | True | pass |
 | anonymous | tex_input | `tables/reproducibility_audit` | `paper_latex/tables/reproducibility_audit.tex` | True | True | pass |

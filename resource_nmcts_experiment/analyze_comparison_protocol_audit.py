@@ -18,6 +18,7 @@ from pathlib import Path
 
 THIS_DIR = Path(__file__).resolve().parent
 RESULTS = THIS_DIR / "results"
+TABLES = THIS_DIR / "paper_latex" / "tables"
 PAPER = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.tex"
 REVIEWER_BRIEF = THIS_DIR / "submission_package" / "reviewer_concern_brief.md"
 EDITOR_BRIEF = THIS_DIR / "submission_package" / "editor_screening_brief.md"
@@ -262,6 +263,53 @@ def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def latex_escape(text: str) -> str:
+    return (
+        text.replace("\\", r"\textbackslash{}")
+        .replace("&", r"\&")
+        .replace("%", r"\%")
+        .replace("_", r"\_")
+        .replace("#", r"\#")
+    )
+
+
+def latex_cell(text: str) -> str:
+    escaped = latex_escape(text)
+    replacements = [
+        ("Resource-NMCTS", r"\method{}"),
+        ("MCTS", r"\mcts{}"),
+        ("T-count", r"T-count"),
+        ("CNOT", r"CNOT"),
+        ("Rz", r"\rz{}"),
+        ("n=20", r"$n=20$"),
+        ("n=21", r"$n=21$"),
+    ]
+    for old, new in replacements:
+        escaped = escaped.replace(old, new)
+    return escaped
+
+
+def write_latex(path: Path, rows: list[dict[str, str]]) -> None:
+    TABLES.mkdir(parents=True, exist_ok=True)
+    lines = [
+        r"\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}}",
+        r"\toprule",
+        r"Comparison layer & Reviewer question & Usable conclusion & Excluded conclusion \\",
+        r"\midrule",
+    ]
+    for row in rows:
+        lines.append(
+            "{} & {} & {} & {} \\\\".format(
+                latex_cell(row["layer"]),
+                latex_cell(row["reviewer_question"]),
+                latex_cell(row["usable_conclusion"]),
+                latex_cell(row["excluded_conclusion"]),
+            )
+        )
+    lines.extend([r"\bottomrule", r"\end{tabularx}"])
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
     status_counts = {status: sum(1 for row in rows if row["status"] == status) for status in sorted({row["status"] for row in rows})}
     data = {
@@ -283,6 +331,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
             "summary": "results/summary_comparison_protocol_audit.csv",
             "analysis": "results/analysis_comparison_protocol_audit.md",
             "manifest": "results/manifest_comparison_protocol_audit.json",
+            "table": "paper_latex/tables/comparison_protocol_audit.tex",
         },
     }
     path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -299,6 +348,7 @@ def main() -> int:
     rows = [evaluate(spec, joined, manuscript_text) for spec in spec_rows()]
     write_csv(RESULTS / "summary_comparison_protocol_audit.csv", rows)
     write_markdown(RESULTS / "analysis_comparison_protocol_audit.md", rows)
+    write_latex(TABLES / "comparison_protocol_audit.tex", rows)
     write_manifest(RESULTS / "manifest_comparison_protocol_audit.json", rows)
     failures = sum(1 for row in rows if row["status"] == "needs revision")
     print(f"wrote {len(rows)} comparison protocol rows")

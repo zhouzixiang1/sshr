@@ -4,10 +4,10 @@ This report records the deterministic reviewer/upload archive generated from the
 
 - archive: `submission_package/dist/resource_nmcts_submission_payload.tar.gz`
 - sha256 file: `submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256`
-- file count: 904
+- file count: 905
 - missing expected files: 0
-- input bytes: 107643697
-- archive bytes: 39643772
-- archive sha256: `0e14daee84645dfe28e24c772c7c31d853a89510169463c975be24ca1d5a823d`
+- input bytes: 107660741
+- archive bytes: 39654743
+- archive sha256: `21610c882c232a60bd096c83f5711fad2aea7f9189adf0300e136c7dcdd2fdf7`
 
 The archive excludes itself and the readiness audit; the readiness audit runs after archive creation and checks that this archive exists.

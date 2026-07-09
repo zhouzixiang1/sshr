@@ -54,6 +54,7 @@ PAYLOAD_SUMMARY = RESULTS / "summary_submission_payload_archive.csv"
 PAYLOAD_MANIFEST = RESULTS / "manifest_submission_payload_archive.json"
 CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
 COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.json"
+COMPARISON_PROTOCOL_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_protocol_audit.tex"
 ROS_GAP_MANIFEST = RESULTS / "manifest_ros_reproduction_gap_audit.json"
 SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
 EDITORIAL_SCREENING_MANIFEST = RESULTS / "manifest_editorial_screening_audit.json"
@@ -258,11 +259,12 @@ def verify_comparison_protocol() -> dict[str, str]:
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
     counts = manifest.get("status_counts", {}) if manifest else {}
     layers = manifest.get("layers", "missing") if manifest else "missing"
-    status = "pass" if manifest and revisions == 0 else "needs revision"
+    table_exists = COMPARISON_PROTOCOL_TABLE.exists()
+    status = "pass" if manifest and revisions == 0 and table_exists else "needs revision"
     return row(
         "Comparison protocol audit",
         status,
-        f"layers={layers}; needs_revision_count={revisions}; status_counts={counts}.",
+        f"layers={layers}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
         "Run analyze_comparison_protocol_audit.py and restore missing baseline-role, evidence, comparability, counterpoint, or manuscript anchors.",
     )
 

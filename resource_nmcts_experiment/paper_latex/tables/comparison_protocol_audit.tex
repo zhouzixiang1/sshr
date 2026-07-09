@@ -1,0 +1,13 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}}
+\toprule
+Comparison layer & Reviewer question & Usable conclusion & Excluded conclusion \\
+\midrule
+Primary same-task Boolean-oracle baselines & Is the method only compared with weak or self-written constructions? & Matched bit-flip oracle baselines support lower T-count and weighted score under the paper's logical model. & They do not prove universal CNOT, depth, ancilla, line-count, or hardware-mapped optimality. \\
+External logic-network and LUT/XAG/AIG probes & Does the advantage survive mature external logic-synthesis toolchains? & External probes test whether the score advantage persists beyond the project's internal baselines. & They are not a full ROS SAT garbage-management flow, reversible emission, or hardware-mapped comparison. \\
+Exact reversible-synthesis counterpoint & Is there a reversible-synthesis comparison, not only logic-network proxies? & RevKit CLI supports a genuine exact-oracle reversible-synthesis probe with lower T/score for \method{}. & It does not imply lower auxiliary-line count, routed depth, or mapped Clifford+T cost. \\
+Phase/\rz{} proxy branch & How is the RevKit phase/\rz{} gate-set mismatch handled? & The phase branch supports a logical \rz{}/phase proxy and learned affine shortlist result. & It is not a final approximate-rotation sequence or Clifford+T decomposition. \\
+Internal search-control ablations & Is the AI/\mcts{} contribution separated from the algebraic search space? & Ablations support bounded search-control, pruning, gating, and planning-time gains. & They do not show that deep reinforcement learning alone causes the main resource drop. \\
+Scaling and correctness bridges & Does the work go beyond small truth-table functions while preserving correctness evidence? & Large rows support logical symbolic correctness and bridge-truth-table verification within the stated envelope. & They do not prove exhaustive high-dimensional truth-table optimality or benchmarking completeness. \\
+Trade-off and non-dominance audits & Does the weighted score hide unfavorable CNOT, depth, ancilla, or runtime behavior? & The paper can claim a strong T/weighted-score point while explicitly reporting unfavorable resource dimensions. & It cannot report a single-metric score win as complete Pareto or hardware dominance. \\
+\bottomrule
+\end{tabularx}

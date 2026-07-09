@@ -4,7 +4,8 @@
   "outputs": {
     "analysis": "results/analysis_comparison_protocol_audit.md",
     "manifest": "results/manifest_comparison_protocol_audit.json",
-    "summary": "results/summary_comparison_protocol_audit.csv"
+    "summary": "results/summary_comparison_protocol_audit.csv",
+    "table": "paper_latex/tables/comparison_protocol_audit.tex"
   },
   "python": "3.11.15",
   "script": "analyze_comparison_protocol_audit.py",

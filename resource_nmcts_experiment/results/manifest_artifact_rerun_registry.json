@@ -1,5 +1,5 @@
 {
-  "complete_rows": 18,
+  "complete_rows": 19,
   "families": [
     {
       "analysis_files": "12",
@@ -64,6 +64,22 @@
       "scripts_present": "1",
       "status": "complete",
       "summary_files": "1"
+    },
+    {
+      "analysis_files": "5",
+      "claim_use": "Verifies the reviewer-facing baseline roles, evidence layers, comparability limits, counterpoints, and manuscript table.",
+      "dependency_boundary": "Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps.",
+      "driver_scripts": "analyze_baseline_claim_matrix.py; analyze_comparison_evidence_matrix.py; analyze_baseline_comparability_audit.py; analyze_counterpoint_claim_boundary.py; analyze_comparison_protocol_audit.py",
+      "evidence_family": "Comparison protocol and claim boundaries",
+      "manifest_files": "1",
+      "raw_files": "0",
+      "raw_rows": "0",
+      "representative_raw": "",
+      "rerun_tier": "quick comparison audit",
+      "scripts_missing": "",
+      "scripts_present": "5",
+      "status": "complete",
+      "summary_files": "5"
     },
     {
       "analysis_files": "3",
@@ -442,7 +458,7 @@
     "results/raw_ultra_pairwise_wide_vs_recursive.csv",
     "results/raw_ultra_root_action_pairwise_widths.csv"
   ],
-  "rows": 18,
+  "rows": 19,
   "script": "analyze_artifact_rerun_registry.py",
   "unique_raw_files": 144,
   "unique_raw_rows": 55308

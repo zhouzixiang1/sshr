@@ -78,6 +78,7 @@ CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
 COMPARISON_PROTOCOL_ANALYSIS = RESULTS / "analysis_comparison_protocol_audit.md"
 COMPARISON_PROTOCOL_SUMMARY = RESULTS / "summary_comparison_protocol_audit.csv"
 COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.json"
+COMPARISON_PROTOCOL_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_protocol_audit.tex"
 ROS_GAP_ANALYSIS = RESULTS / "analysis_ros_reproduction_gap_audit.md"
 ROS_GAP_SUMMARY = RESULTS / "summary_ros_reproduction_gap_audit.csv"
 ROS_GAP_MANIFEST = RESULTS / "manifest_ros_reproduction_gap_audit.json"
@@ -391,6 +392,7 @@ def build_rows() -> list[dict[str, str]]:
             if COMPARISON_PROTOCOL_ANALYSIS.exists()
             and COMPARISON_PROTOCOL_SUMMARY.exists()
             and COMPARISON_PROTOCOL_MANIFEST.exists()
+            and COMPARISON_PROTOCOL_TABLE.exists()
             and comparison_protocol_revisions == 0
             else "needs revision",
             "evidence": f"Comparison protocol audit checks layered baseline roles, evidence, comparability, counterpoints, and manuscript anchors; status_counts={comparison_protocol_counts}; needs_revision_count={comparison_protocol_revisions}.",

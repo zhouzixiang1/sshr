@@ -60,6 +60,7 @@ COMPARISON_PROTOCOL_PATHS = {
     "results/analysis_counterpoint_claim_boundary.md",
     "results/analysis_paired_statistical_evidence.md",
     "results/analysis_multimetric_pareto_tradeoff.md",
+    "paper_latex/tables/comparison_protocol_audit.tex",
 }
 ROS_GAP_PATHS = {
     "analyze_ros_reproduction_gap_audit.py",

@@ -358,6 +358,23 @@ scope boundary used by the manuscript claims.}
 \input{tables/comparison_evidence_matrix}
 \end{table}
 
+Table~\ref{tab:comparison-protocol} makes the comparison protocol explicit as
+reviewer-facing questions.  It is included to prevent the baseline set from
+being read as a single leaderboard: each layer has a usable conclusion and a
+stronger conclusion that the evidence does not support.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Comparison protocol audit.  Each comparison layer is tied to the
+reviewer question it answers, the conclusion supported by the current evidence,
+and the stronger claim excluded by the logical-layer experiment design.}
+\label{tab:comparison-protocol}
+\input{tables/comparison_protocol_audit}
+\end{table}
+
 Table~\ref{tab:comparability-audit} makes the fairness boundary explicit.  It
 separates comparisons that share the same bit-flip oracle target from
 logic-network proxies, exact reversible-oracle probes, phase/\rz{} proxies, and
