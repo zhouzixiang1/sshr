@@ -79,6 +79,7 @@ $EDITOR submission_package/submission_metadata_answers.json
 ```bash
 /opt/anaconda3/envs/mcts-qoracle/bin/python validate_submission_metadata.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_text_preview.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python make_final_upload_plan.py
 ./rebuild_submission_package.sh
 ./verify_submission_package.sh
 rg -n "needs author input|needs revision" results/analysis_submission_readiness_audit.md results/analysis_submission_metadata_audit.md results/analysis_submission_metadata_validator.md
