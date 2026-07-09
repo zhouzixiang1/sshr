@@ -248,6 +248,15 @@
 
 该审计调用 Poppler `pdfinfo` 检查作者版和匿名版投稿 PDF 的 Title/Author/Creator/Producer 等元数据、页数、A4 页面尺寸、加密状态、JavaScript、Form 字段和隐私敏感字符串。当前作者版和匿名版均为 27 页、未加密、无 JavaScript、A4，metadata 中没有作者身份、路径、TODO/TBD/placeholder 或 `AUTHOR INPUT REQUIRED` 泄漏。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；与 visual/text 审计一样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包。
 
+本轮新增 source/path privacy audit，把源码和 payload 中的本机路径分成“严格禁止”和“可复现 provenance”两类：
+
+- `analyze_source_path_privacy_audit.py`
+- `results/summary_source_path_privacy_audit.csv`
+- `results/analysis_source_path_privacy_audit.md`
+- `results/manifest_source_path_privacy_audit.json`
+
+该审计检查主稿/匿名稿 TeX、`references.bib`、157 个 LaTeX 表格输入和 11 个公开 submission support Markdown/JSON 文件中是否出现 `/Users/...`、`Desktop/tzb` 或旧 `claude` 路径；同时检查匿名稿 source 是否保留 `Anonymous Authors` 且不含 `Zixiang Zhou` 作者字段，payload manifest 中是否混入 private metadata/previews。当前严格区为 0 个本机路径、0 个旧 `claude` 路径、0 个私有 payload 成员；payload 的 835 个文本文件中有 53 个文件含本机路径、213 个路径命中，均归类为 `results/`、`README.md` 或 `DELIVERABLE_zh.md` 中的工具链/实验 provenance，而不是主稿或投稿支持文件泄漏。该审计已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke。
+
 本轮新增投稿完整性层：英文投稿稿末尾加入 `Data and Code Availability`，明确代码、raw/summary CSV、manifest、LaTeX 表、图源数据和 PDF 均位于 `resource_nmcts_experiment/` artifact package，运行入口为 `run_*.py`、`train_*.py`、`analyze_*.py`，环境为 `mcts-qoracle` 和直接解释器路径 `/opt/anaconda3/envs/mcts-qoracle/bin/python`。同时新增自动 submission-readiness audit：
 
 - `analyze_submission_readiness_audit.py`

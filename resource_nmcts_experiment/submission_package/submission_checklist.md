@@ -47,6 +47,7 @@ Use this checklist immediately before uploading the manuscript.
 - PDF visual render audit: `results/analysis_pdf_visual_audit.md`
 - PDF text/searchability audit: `results/analysis_pdf_text_audit.md`
 - PDF metadata/privacy audit: `results/analysis_pdf_metadata_audit.md`
+- Source/path privacy audit: `results/analysis_source_path_privacy_audit.md`
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
 - Metadata validator: `results/analysis_submission_metadata_validator.md`
 - Author-input closure audit: `results/analysis_author_input_closure_audit.md`
@@ -89,6 +90,7 @@ Run these from `resource_nmcts_experiment/`:
   analyze_pdf_visual_audit.py \
   analyze_pdf_text_audit.py \
   analyze_pdf_metadata_audit.py \
+  analyze_source_path_privacy_audit.py \
   analyze_submission_metadata_audit.py \
   analyze_author_input_closure_audit.py \
   analyze_anonymous_review_readiness.py \
@@ -114,8 +116,8 @@ Expected current state:
 
 - Archive manifest: all payload groups complete.
 - Payload archive: tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.
-- Payload round-trip audit: archive contents match manifest paths and hashes, required files, reviewer entrypoints, comparison-protocol evidence files, citation-support evidence files, author-input closure evidence files, and headline-numeric evidence files are present, private files are absent, and tar metadata is deterministic.
-- Payload extraction smoke audit: the upload tarball extracts safely and runs comparison protocol, citation support, author-input closure, headline numeric consistency, claim-scope lint, and artifact-rerun registry checks from the extracted tree.
+- Payload round-trip audit: archive contents match manifest paths and hashes, required files, reviewer entrypoints, comparison-protocol evidence files, citation-support evidence files, author-input closure evidence files, source/path privacy audit code, and headline-numeric evidence files are present, private files are absent, and tar metadata is deterministic.
+- Payload extraction smoke audit: the upload tarball extracts safely and runs comparison protocol, citation support, source/path privacy, author-input closure, headline numeric consistency, claim-scope lint, and artifact-rerun registry checks from the extracted tree.
 - Payload LaTeX compile audit: the upload tarball extracts safely and rebuilds both author and anonymous PDFs from the extracted LaTeX source tree.
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
 - Comparison protocol audit: all baseline layers have role, evidence, comparability, counterpoint, artifact, and manuscript-anchor coverage.
@@ -126,6 +128,7 @@ Expected current state:
 - PDF visual render audit: every author/anonymous PDF page renders through Poppler with stable dimensions and nonblank visible content.
 - PDF text/searchability audit: every author/anonymous PDF extracts searchable text through Poppler with title, scope, baseline, availability, reference, headline-number, identity, and public-placeholder anchors checked.
 - PDF metadata/privacy audit: every author/anonymous PDF passes `pdfinfo` metadata and flag checks for page geometry, encryption, JavaScript, forms, and privacy-sensitive metadata strings.
+- Source/path privacy audit: manuscript TeX, table inputs, and public submission support files contain no local absolute paths; local toolchain paths in raw/result artifacts are classified as provenance rather than manuscript/support leakage.
 - Metadata audit: all author- and venue-specific fields are enumerated before upload, and any filled `submission_metadata.json` is checked.
 - Metadata validator: no `needs revision` rows; missing private metadata remains an author-input gate until filled.
 - Author-input closure audit: metadata-template placeholders, author-input packet fields, support docs, private Git protection, private-preview gates, and anonymous-review decision gates are mutually consistent.

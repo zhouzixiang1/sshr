@@ -97,6 +97,9 @@ PDF_TEXT_MANIFEST = RESULTS / "manifest_pdf_text_audit.json"
 PDF_METADATA_ANALYSIS = RESULTS / "analysis_pdf_metadata_audit.md"
 PDF_METADATA_SUMMARY = RESULTS / "summary_pdf_metadata_audit.csv"
 PDF_METADATA_MANIFEST = RESULTS / "manifest_pdf_metadata_audit.json"
+SOURCE_PATH_PRIVACY_ANALYSIS = RESULTS / "analysis_source_path_privacy_audit.md"
+SOURCE_PATH_PRIVACY_SUMMARY = RESULTS / "summary_source_path_privacy_audit.csv"
+SOURCE_PATH_PRIVACY_MANIFEST = RESULTS / "manifest_source_path_privacy_audit.json"
 PAIRED_EFFECT_ANALYSIS = RESULTS / "analysis_paired_effect_uncertainty.md"
 PAIRED_EFFECT_SUMMARY = RESULTS / "summary_paired_effect_uncertainty.csv"
 PAIRED_EFFECT_MANIFEST = RESULTS / "manifest_paired_effect_uncertainty.json"
@@ -239,6 +242,17 @@ def build_rows() -> list[dict[str, str]]:
     payload_roundtrip_manifest = read_json(PAYLOAD_ROUNDTRIP_MANIFEST)
     payload_roundtrip_counts = payload_roundtrip_manifest.get("status_counts", {}) if payload_roundtrip_manifest else {}
     payload_roundtrip_revisions = int(payload_roundtrip_manifest.get("needs_revision_count", -1)) if payload_roundtrip_manifest else -1
+    source_path_privacy_manifest = read_json(SOURCE_PATH_PRIVACY_MANIFEST)
+    source_path_privacy_counts = source_path_privacy_manifest.get("status_counts", {}) if source_path_privacy_manifest else {}
+    source_path_privacy_revisions = (
+        int(source_path_privacy_manifest.get("needs_revision_count", -1)) if source_path_privacy_manifest else -1
+    )
+    source_path_privacy_rows = source_path_privacy_manifest.get("rows", "missing") if source_path_privacy_manifest else "missing"
+    source_path_privacy_payload_paths = (
+        source_path_privacy_manifest.get("payload_local_path_files", "missing")
+        if source_path_privacy_manifest
+        else "missing"
+    )
     payload_smoke_manifest = read_json(PAYLOAD_EXTRACTION_SMOKE_MANIFEST)
     payload_smoke_counts = payload_smoke_manifest.get("status_counts", {}) if payload_smoke_manifest else {}
     payload_smoke_revisions = int(payload_smoke_manifest.get("needs_revision_count", -1)) if payload_smoke_manifest else -1
@@ -557,6 +571,17 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_payload_roundtrip_audit.py after payload creation and fix any archive/manifest/path/hash issues.",
         },
         {
+            "item": "Source/path privacy audit",
+            "status": "pass"
+            if SOURCE_PATH_PRIVACY_ANALYSIS.exists()
+            and SOURCE_PATH_PRIVACY_SUMMARY.exists()
+            and SOURCE_PATH_PRIVACY_MANIFEST.exists()
+            and source_path_privacy_revisions == 0
+            else "needs revision",
+            "evidence": f"Source/path privacy audit separates strict manuscript/support path gates from allowed experiment-provenance local paths; rows={source_path_privacy_rows}; payload_local_path_files={source_path_privacy_payload_paths}; status_counts={source_path_privacy_counts}; needs_revision_count={source_path_privacy_revisions}.",
+            "next_action": "Rerun analyze_source_path_privacy_audit.py after payload creation and remove local paths from manuscript/support sources while keeping toolchain paths only in provenance outputs.",
+        },
+        {
             "item": "Payload extraction smoke test",
             "status": "pass"
             if PAYLOAD_EXTRACTION_SMOKE_ANALYSIS.exists()
@@ -586,7 +611,7 @@ def build_rows() -> list[dict[str, str]]:
             and VERIFIER_SUMMARY.exists()
             and VERIFIER_MANIFEST.exists()
             else "needs revision",
-            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, PDF visual rendering, PDF text/searchability, PDF metadata/privacy, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, citation support, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, author-input closure, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, extracted-payload LaTeX compilation, and LaTeX log boundaries.",
+            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, PDF visual rendering, PDF text/searchability, PDF metadata/privacy, source/path privacy, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, citation support, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, author-input closure, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, extracted-payload LaTeX compilation, and LaTeX log boundaries.",
             "next_action": "Run verify_submission_package.sh after rebuilding the payload archive.",
         },
         {

@@ -93,6 +93,15 @@ SMOKE_SPECS = (
         minimum_rows=2,
     ),
     SmokeSpec(
+        name="Source path privacy audit",
+        script="analyze_source_path_privacy_audit.py",
+        manifest="results/manifest_source_path_privacy_audit.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=6,
+    ),
+    SmokeSpec(
         name="Author-input closure audit",
         script="analyze_author_input_closure_audit.py",
         manifest="results/manifest_author_input_closure_audit.json",

@@ -184,6 +184,9 @@ def write_manifest(path: Path, files: list[Path], missing: list[Path], archive_d
             rel(RESULTS / "summary_pdf_metadata_audit.csv"),
             rel(RESULTS / "analysis_pdf_metadata_audit.md"),
             rel(RESULTS / "manifest_pdf_metadata_audit.json"),
+            rel(RESULTS / "summary_source_path_privacy_audit.csv"),
+            rel(RESULTS / "analysis_source_path_privacy_audit.md"),
+            rel(RESULTS / "manifest_source_path_privacy_audit.json"),
         ],
         "files": [
             {

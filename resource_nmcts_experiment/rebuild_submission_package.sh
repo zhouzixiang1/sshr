@@ -70,6 +70,7 @@ run_py analyze_goal_completion_audit.py
 run_py make_submission_payload_archive.py
 run_py analyze_latex_dependency_audit.py
 run_py analyze_payload_roundtrip_audit.py
+run_py analyze_source_path_privacy_audit.py
 run_py analyze_payload_extraction_smoke_audit.py
 run_py analyze_payload_latex_compile_audit.py
 run_py analyze_submission_readiness_audit.py

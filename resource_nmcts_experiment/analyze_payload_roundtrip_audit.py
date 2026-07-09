@@ -79,6 +79,9 @@ AUTHOR_INPUT_CLOSURE_PATHS = {
     "results/summary_author_input_closure_audit.csv",
     "results/manifest_author_input_closure_audit.json",
 }
+SOURCE_PATH_PRIVACY_PATHS = {
+    "analyze_source_path_privacy_audit.py",
+}
 
 
 def rel(path: Path) -> str:
@@ -250,6 +253,16 @@ def build_rows() -> list[dict[str, str]]:
             "pass" if not author_input_missing else "needs revision",
             f"author_input_closure_files={len(AUTHOR_INPUT_CLOSURE_PATHS)}; missing={author_input_missing or 'none'}.",
             "Ensure the uploadable archive includes the author-input closure audit script and generated CSV/Markdown/JSON evidence.",
+        )
+    )
+
+    source_path_missing = sorted(SOURCE_PATH_PRIVACY_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload source/path privacy executable",
+            "pass" if not source_path_missing else "needs revision",
+            f"source_path_privacy_scripts={len(SOURCE_PATH_PRIVACY_PATHS)}; missing={source_path_missing or 'none'}; terminal_outputs_excluded=3.",
+            "Ensure the uploadable archive includes source/path privacy audit code; generated terminal outputs are intentionally excluded and reproduced by the extracted-payload smoke test.",
         )
     )
 

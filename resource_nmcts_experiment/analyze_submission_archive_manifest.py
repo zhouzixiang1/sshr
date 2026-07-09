@@ -70,6 +70,9 @@ TERMINAL_PACKAGE_OUTPUTS = {
     RESULTS / "summary_pdf_metadata_audit.csv",
     RESULTS / "analysis_pdf_metadata_audit.md",
     RESULTS / "manifest_pdf_metadata_audit.json",
+    RESULTS / "summary_source_path_privacy_audit.csv",
+    RESULTS / "analysis_source_path_privacy_audit.md",
+    RESULTS / "manifest_source_path_privacy_audit.json",
     TABLES / "submission_traceability_audit.tex",
 }
 
