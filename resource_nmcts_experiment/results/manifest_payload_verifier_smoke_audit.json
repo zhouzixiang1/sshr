@@ -1,6 +1,6 @@
 {
   "archive": "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
-  "expected_row_delta": "-2_to_1",
+  "expected_row_delta": "0_or_1",
   "needs_revision_count": 0,
   "outputs": {
     "analysis": "results/analysis_payload_verifier_smoke_audit.md",
@@ -23,7 +23,7 @@
     },
     {
       "elapsed_seconds": "not_recorded",
-      "evidence": "verifier_returncode=0; verifier_rows=91; source_verifier_rows=92; row_delta=1; expected_row_delta=-2_to_1; row_delta_reason=archive_absent_by_design_or_preterminal_source_manifest; verifier_needs_revision_count=0; extracted_payload_mode=True; source_needs_revision_count=0; status_counts={'pass': 91}; stdout_lines=558; stderr=none.",
+      "evidence": "verifier_returncode=0; verifier_rows=91; source_verifier_rows=92; row_delta=1; expected_row_delta=0_or_1; row_delta_reason=archive_absent_by_design_or_preterminal_source_manifest; verifier_needs_revision_count=0; extracted_payload_mode=True; source_needs_revision_count=0; status_counts={'pass': 91}; stdout_lines=558; stderr=none.",
       "item": "Extracted payload verifier command",
       "next_action": "Inspect the verifier outputs generated inside the extracted payload directory.",
       "returncode": "0",
