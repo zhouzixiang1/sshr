@@ -48,6 +48,7 @@ COMPARISON_ROUTE_DECISION = RESULTS / "manifest_comparison_route_decision_audit.
 COMPARISON_REFERENCE_INTEGRITY = RESULTS / "manifest_comparison_support_reference_integrity.json"
 NOVELTY_SCORECARD = RESULTS / "manifest_novelty_comparison_scorecard.json"
 BENCHMARK_SUITE = RESULTS / "manifest_benchmark_suite_audit.json"
+BENCHMARK_FUNCTION_DIVERSITY = RESULTS / "manifest_benchmark_function_diversity_audit.json"
 EDITORIAL_SCREENING = RESULTS / "manifest_editorial_screening_audit.json"
 METADATA_CLOSURE = RESULTS / "manifest_submission_metadata_closure_path.json"
 METADATA_ANSWER_TEMPLATE_COVERAGE = RESULTS / "manifest_metadata_answer_template_coverage.json"
@@ -207,6 +208,22 @@ def specs() -> list[PacketSpec]:
             expected=0,
             supported_use="Reviewer-facing entrypoints expose which benchmark suites, n scopes, verification routes, and representativeness boundaries support the comparisons.",
             boundary="The benchmark-suite audit describes existing evidence; it does not expand coverage to all Boolean functions or hardware-mapped benchmarks.",
+        ),
+        PacketSpec(
+            item="Benchmark function-diversity audit is visible",
+            upload_risk="Reviewers could accept the suite counts but still question whether the compared functions are structurally narrow.",
+            files=(ARTIFACT_GUIDE, README, CHECKLIST),
+            tokens=(
+                "analysis_benchmark_function_diversity_audit.md",
+                "analyze_benchmark_function_diversity_audit.py",
+                "Benchmark function-diversity audit",
+                "function-diversity state",
+            ),
+            manifest_path=BENCHMARK_FUNCTION_DIVERSITY,
+            manifest_key="needs_revision_count",
+            expected=0,
+            supported_use="Reviewer-facing entrypoints expose function-family, density, degree, ANF-term, profile, and term-count diversity behind the comparison targets.",
+            boundary="The function-diversity audit is descriptive evidence over existing rows; it does not imply distributional coverage of all Boolean functions.",
         ),
         PacketSpec(
             item="Chinese comparison handoff is visible",

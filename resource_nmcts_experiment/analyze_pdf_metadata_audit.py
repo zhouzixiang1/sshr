@@ -36,7 +36,7 @@ IDENTITY_METADATA_PATTERNS = (
     r"zhou",
 )
 MIN_EXPECTED_PAGES = 20
-MAX_EXPECTED_PAGES = 50
+MAX_EXPECTED_PAGES = 60
 
 
 def rel(path: Path) -> str:

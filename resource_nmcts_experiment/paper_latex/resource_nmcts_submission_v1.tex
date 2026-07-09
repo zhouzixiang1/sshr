@@ -420,6 +420,24 @@ route, and residual representativeness boundary for one benchmark family.}
 \input{tables/benchmark_suite_audit}
 \end{table}
 
+Table~\ref{tab:benchmark-function-diversity-audit} then audits the functions
+inside those suites.  Exact \ttable{} rows are stratified by family, onset
+density, \anf{} degree, and \anf{} term count, while larger symbolic and bridge
+rows are reported by profile and term-count range rather than treated as
+exhaustive large-$n$ truth-table samples.
+
+\begin{table}[H]
+\centering
+\tiny
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{0.94}
+\caption{Benchmark function-diversity audit.  Exact small rows report family,
+density, degree, and \anf{} term-count coverage; large symbolic/bridge rows
+report profile and term-count coverage.}
+\label{tab:benchmark-function-diversity-audit}
+\input{tables/benchmark_function_diversity_audit}
+\end{table}
+
 Because these baselines operate at different abstraction levels,
 Table~\ref{tab:baseline-claim-matrix} first separates their role in the
 argument from the claims they cannot support.  Table~\ref{tab:evidence-matrix}

@@ -22,10 +22,10 @@
 以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，代表当前公开交接状态：
 
 - PDF pages=50/50
-- readiness=79 pass + 1 needs author input
-- payload_files=1169
+- readiness=81 pass + 1 needs author input
+- payload_files=1175
 - artifact_registry=31 families / 161 raw CSV / 80312 raw rows
-- source_privacy=0 strict leaks / 57 provenance files / 1126 payload text files
+- source_privacy=0 strict leaks / 57 provenance files / 1132 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open

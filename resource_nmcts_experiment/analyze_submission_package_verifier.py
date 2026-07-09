@@ -39,6 +39,7 @@ source/path privacy,
 private-metadata starter dry-run, private-metadata validation,
 synthetic metadata-pipeline self-testing, anonymous-review decision support,
 author-input closure,
+final human-gate closure,
 private-preview protection, private payload exclusion, payload round-trip
 integrity, generated-payload Git policy, extracted-payload smoke checks,
 extracted-payload LaTeX compilation, extracted-payload verifier smoke,
@@ -88,6 +89,8 @@ COMPARISON_ROUTE_DECISION_MANIFEST = RESULTS / "manifest_comparison_route_decisi
 COMPARISON_ROUTE_DECISION_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_route_decision_audit.tex"
 BENCHMARK_SUITE_MANIFEST = RESULTS / "manifest_benchmark_suite_audit.json"
 BENCHMARK_SUITE_TABLE = THIS_DIR / "paper_latex" / "tables" / "benchmark_suite_audit.tex"
+BENCHMARK_FUNCTION_DIVERSITY_MANIFEST = RESULTS / "manifest_benchmark_function_diversity_audit.json"
+BENCHMARK_FUNCTION_DIVERSITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "benchmark_function_diversity_audit.tex"
 WEIGHT_ROBUSTNESS_MANIFEST = RESULTS / "manifest_weight_robustness.json"
 WEIGHT_ROBUSTNESS_TABLE = THIS_DIR / "paper_latex" / "tables" / "weight_robustness_compact.tex"
 RESOURCE_WEIGHT_SENSITIVITY_MANIFEST = RESULTS / "manifest_resource_weight_sensitivity_audit.json"
@@ -179,6 +182,7 @@ AUTHOR_QUESTIONNAIRE_COVERAGE_MANIFEST = RESULTS / "manifest_author_questionnair
 AUTHOR_MINIMAL_FORM_COVERAGE_MANIFEST = RESULTS / "manifest_author_minimal_form_coverage.json"
 METADATA_ANSWER_TEMPLATE_MANIFEST = RESULTS / "manifest_metadata_answer_template_coverage.json"
 METADATA_CLOSURE_MANIFEST = RESULTS / "manifest_submission_metadata_closure_path.json"
+FINAL_HUMAN_GATE_MANIFEST = RESULTS / "manifest_final_human_gate_audit.json"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
 PAYLOAD_GIT_POLICY_MANIFEST = RESULTS / "manifest_payload_git_policy_audit.json"
 PAYLOAD_EXTRACTION_SMOKE_MANIFEST = RESULTS / "manifest_payload_extraction_smoke_audit.json"
@@ -488,6 +492,35 @@ def verify_benchmark_suite_audit() -> dict[str, str]:
         status,
         f"rows={rows}; raw_rows={raw_rows}; verified_rows={verified_rows}; scopes={scopes}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
         "Run analyze_benchmark_suite_audit.py and restore benchmark coverage rows, generated table, or manuscript anchor.",
+    )
+
+
+def verify_benchmark_function_diversity_audit() -> dict[str, str]:
+    manifest = read_json(BENCHMARK_FUNCTION_DIVERSITY_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = int(manifest.get("rows", -1)) if manifest else -1
+    exact_core = int(manifest.get("exact_truth_table_core_items", -1)) if manifest else -1
+    scopes = manifest.get("n_scopes", []) if manifest else []
+    table_exists = BENCHMARK_FUNCTION_DIVERSITY_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and rows >= 5
+        and exact_core >= 177
+        and "n=20--64" in scopes
+        and "n=21--30" in scopes
+        and table_exists
+        and anchor
+        else "needs revision"
+    )
+    return row(
+        "Benchmark function diversity audit",
+        status,
+        f"rows={rows}; exact_core={exact_core}; scopes={scopes}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_benchmark_function_diversity_audit.py and restore function-diversity rows, generated table, or manuscript anchor.",
     )
 
 
@@ -1802,6 +1835,30 @@ def verify_metadata_closure_path() -> dict[str, str]:
     )
 
 
+def verify_final_human_gate() -> dict[str, str]:
+    manifest = read_json(FINAL_HUMAN_GATE_MANIFEST)
+    if EXTRACTED_PAYLOAD_MODE and not manifest:
+        return row(
+            "Final human-gate audit",
+            "pass",
+            "extracted_payload_mode=1; final human-gate terminal manifest is intentionally excluded from the upload payload.",
+            "Run analyze_final_human_gate_audit.py in the source worktree after goal, metadata, anonymous-review, payload, or source-privacy audits change.",
+        )
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    human_gate_open = bool(manifest.get("human_gate_open", False)) if manifest else False
+    machine_side_closed = bool(manifest.get("machine_side_closed", False)) if manifest else False
+    blocker = manifest.get("remaining_blocker_class", "missing") if manifest else "missing"
+    status = "pass" if manifest and needs_revision == 0 and human_gate_open and machine_side_closed else "needs revision"
+    return row(
+        "Final human-gate audit",
+        status,
+        f"rows={rows}; needs_revision_count={needs_revision}; human_gate_open={human_gate_open}; machine_side_closed={machine_side_closed}; remaining_blocker_class={blocker}; status_counts={counts}.",
+        "Run analyze_final_human_gate_audit.py after goal, metadata, anonymous-review, payload, or source-privacy audits change.",
+    )
+
+
 def verify_private_payload_exclusion() -> dict[str, str]:
     manifest = read_json(PAYLOAD_MANIFEST)
     if EXTRACTED_PAYLOAD_MODE and not manifest:
@@ -1993,6 +2050,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_comparison_answer_scorecard(),
             verify_comparison_route_decision(),
             verify_benchmark_suite_audit(),
+            verify_benchmark_function_diversity_audit(),
             verify_weight_robustness(),
             verify_resource_weight_sensitivity(),
             verify_cnot_constraint_profile(),
@@ -2049,6 +2107,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_author_minimal_form_coverage(),
             verify_metadata_answer_template_coverage(),
             verify_metadata_closure_path(),
+            verify_final_human_gate(),
             verify_text_preview(),
             verify_private_payload_exclusion(),
             verify_payload_roundtrip(),

@@ -66,6 +66,9 @@ METADATA_ANSWER_TEMPLATE_MANIFEST = RESULTS / "manifest_metadata_answer_template
 METADATA_CLOSURE_ANALYSIS = RESULTS / "analysis_submission_metadata_closure_path.md"
 METADATA_CLOSURE_SUMMARY = RESULTS / "summary_submission_metadata_closure_path.csv"
 METADATA_CLOSURE_MANIFEST = RESULTS / "manifest_submission_metadata_closure_path.json"
+FINAL_HUMAN_GATE_ANALYSIS = RESULTS / "analysis_final_human_gate_audit.md"
+FINAL_HUMAN_GATE_SUMMARY = RESULTS / "summary_final_human_gate_audit.csv"
+FINAL_HUMAN_GATE_MANIFEST = RESULTS / "manifest_final_human_gate_audit.json"
 PAYLOAD_ROUNDTRIP_ANALYSIS = RESULTS / "analysis_payload_roundtrip_audit.md"
 PAYLOAD_ROUNDTRIP_SUMMARY = RESULTS / "summary_payload_roundtrip_audit.csv"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
@@ -107,6 +110,10 @@ BENCHMARK_SUITE_ANALYSIS = RESULTS / "analysis_benchmark_suite_audit.md"
 BENCHMARK_SUITE_SUMMARY = RESULTS / "summary_benchmark_suite_audit.csv"
 BENCHMARK_SUITE_MANIFEST = RESULTS / "manifest_benchmark_suite_audit.json"
 BENCHMARK_SUITE_TABLE = THIS_DIR / "paper_latex" / "tables" / "benchmark_suite_audit.tex"
+BENCHMARK_FUNCTION_DIVERSITY_ANALYSIS = RESULTS / "analysis_benchmark_function_diversity_audit.md"
+BENCHMARK_FUNCTION_DIVERSITY_SUMMARY = RESULTS / "summary_benchmark_function_diversity_audit.csv"
+BENCHMARK_FUNCTION_DIVERSITY_MANIFEST = RESULTS / "manifest_benchmark_function_diversity_audit.json"
+BENCHMARK_FUNCTION_DIVERSITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "benchmark_function_diversity_audit.tex"
 RESOURCE_WEIGHT_SENSITIVITY_ANALYSIS = RESULTS / "analysis_resource_weight_sensitivity_audit.md"
 RESOURCE_WEIGHT_SENSITIVITY_SUMMARY = RESULTS / "summary_resource_weight_sensitivity_audit.csv"
 RESOURCE_WEIGHT_SENSITIVITY_RAW = RESULTS / "raw_resource_weight_sensitivity_audit.csv"
@@ -385,6 +392,21 @@ def build_rows() -> list[dict[str, str]]:
     benchmark_suite_scopes = benchmark_suite_manifest.get("n_scopes", []) if benchmark_suite_manifest else []
     benchmark_suite_anchor = (
         bool(benchmark_suite_manifest.get("table_anchor_present", False)) if benchmark_suite_manifest else False
+    )
+    benchmark_function_manifest = read_json(BENCHMARK_FUNCTION_DIVERSITY_MANIFEST)
+    benchmark_function_revisions = (
+        int(benchmark_function_manifest.get("needs_revision_count", -1)) if benchmark_function_manifest else -1
+    )
+    benchmark_function_counts = benchmark_function_manifest.get("status_counts", {}) if benchmark_function_manifest else {}
+    benchmark_function_rows = benchmark_function_manifest.get("rows", "missing") if benchmark_function_manifest else "missing"
+    benchmark_function_exact_core = (
+        benchmark_function_manifest.get("exact_truth_table_core_items", "missing")
+        if benchmark_function_manifest
+        else "missing"
+    )
+    benchmark_function_scopes = benchmark_function_manifest.get("n_scopes", []) if benchmark_function_manifest else []
+    benchmark_function_anchor = (
+        bool(benchmark_function_manifest.get("table_anchor_present", False)) if benchmark_function_manifest else False
     )
     resource_weight_manifest = read_json(RESOURCE_WEIGHT_SENSITIVITY_MANIFEST)
     resource_weight_revisions = (
@@ -794,6 +816,18 @@ def build_rows() -> list[dict[str, str]]:
     metadata_closure_paths = (
         metadata_closure_manifest.get("required_metadata_paths", "missing") if metadata_closure_manifest else "missing"
     )
+    final_human_gate_manifest = read_json(FINAL_HUMAN_GATE_MANIFEST)
+    final_human_gate_counts = final_human_gate_manifest.get("status_counts", {}) if final_human_gate_manifest else {}
+    final_human_gate_revisions = (
+        int(final_human_gate_manifest.get("needs_revision_count", -1)) if final_human_gate_manifest else -1
+    )
+    final_human_gate_rows = final_human_gate_manifest.get("rows", "missing") if final_human_gate_manifest else "missing"
+    final_human_gate_machine_closed = (
+        bool(final_human_gate_manifest.get("machine_side_closed", False)) if final_human_gate_manifest else False
+    )
+    final_human_gate_blocker = (
+        final_human_gate_manifest.get("remaining_blocker_class", "missing") if final_human_gate_manifest else "missing"
+    )
     editorial_screening_manifest = read_json(EDITORIAL_SCREENING_MANIFEST)
     editorial_screening_counts = (
         editorial_screening_manifest.get("status_counts", {}) if editorial_screening_manifest else {}
@@ -1041,6 +1075,26 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Benchmark suite audit records suite roles, n scopes, item counts, raw rows, checked rows, verification routes, and representativeness boundaries; rows={benchmark_suite_rows}; raw_rows={benchmark_suite_raw_rows}; verified_rows={benchmark_suite_verified_rows}; scopes={benchmark_suite_scopes}; status_counts={benchmark_suite_counts}; needs_revision_count={benchmark_suite_revisions}; table_anchor_present={benchmark_suite_anchor}.",
             "next_action": "Rerun analyze_benchmark_suite_audit.py after changing benchmark generators, raw CSV families, large-scale bridge rows, or representativeness wording.",
+        },
+        {
+            "item": "Benchmark function diversity audit",
+            "status": "pass"
+            if "tab:benchmark-function-diversity-audit" in text
+            and BENCHMARK_FUNCTION_DIVERSITY_ANALYSIS.exists()
+            and BENCHMARK_FUNCTION_DIVERSITY_SUMMARY.exists()
+            and BENCHMARK_FUNCTION_DIVERSITY_MANIFEST.exists()
+            and BENCHMARK_FUNCTION_DIVERSITY_TABLE.exists()
+            and benchmark_function_revisions == 0
+            and isinstance(benchmark_function_rows, int)
+            and benchmark_function_rows >= 5
+            and isinstance(benchmark_function_exact_core, int)
+            and benchmark_function_exact_core >= 177
+            and "n=20--64" in benchmark_function_scopes
+            and "n=21--30" in benchmark_function_scopes
+            and benchmark_function_anchor
+            else "needs revision",
+            "evidence": f"Benchmark function-diversity audit records exact small-function family/density/degree/ANF-term coverage and large symbolic/bridge profile-term coverage; rows={benchmark_function_rows}; exact_core={benchmark_function_exact_core}; scopes={benchmark_function_scopes}; status_counts={benchmark_function_counts}; needs_revision_count={benchmark_function_revisions}; table_anchor_present={benchmark_function_anchor}.",
+            "next_action": "Rerun analyze_benchmark_function_diversity_audit.py after changing benchmark raw CSV families, function generators, or representativeness wording.",
         },
         {
             "item": "Resource-weight sensitivity audit",
@@ -1735,6 +1789,18 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Metadata closure-path audit checks structured intake coverage, safe public starter prefill, Git ignore protection, validator/private-preview gates, synthetic filled-metadata rehearsal, anonymous-review gate, handoff docs, and goal-closure consistency; required_metadata_paths={metadata_closure_paths}; status_counts={metadata_closure_counts}; needs_revision_count={metadata_closure_revisions}; closure_path_ready={metadata_closure_ready}.",
             "next_action": "Rerun analyze_submission_metadata_closure_path.py after changing metadata templates, validator behavior, preview outputs, anonymous-review policy fields, or author handoff docs.",
+        },
+        {
+            "item": "Final human-gate audit",
+            "status": "pass"
+            if FINAL_HUMAN_GATE_ANALYSIS.exists()
+            and FINAL_HUMAN_GATE_SUMMARY.exists()
+            and FINAL_HUMAN_GATE_MANIFEST.exists()
+            and final_human_gate_revisions == 0
+            and final_human_gate_machine_closed
+            else "needs revision",
+            "evidence": f"Final human-gate audit checks that remaining open state is limited to author/venue metadata and target anonymous-review policy; rows={final_human_gate_rows}; status_counts={final_human_gate_counts}; needs_revision_count={final_human_gate_revisions}; machine_side_closed={final_human_gate_machine_closed}; remaining_blocker_class={final_human_gate_blocker}.",
+            "next_action": "Rerun analyze_final_human_gate_audit.py after changing goal closure, metadata validation, anonymous-review, payload, or source-privacy audits.",
         },
         {
             "item": "Compiled anonymous review draft",

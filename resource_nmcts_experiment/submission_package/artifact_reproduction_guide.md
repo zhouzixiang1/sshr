@@ -74,6 +74,8 @@ After the quick rebuild, the current package should report:
   `results/analysis_comparison_route_decision_audit.md`
 - benchmark-suite composition state in
   `results/analysis_benchmark_suite_audit.md`
+- function-diversity state in
+  `results/analysis_benchmark_function_diversity_audit.md`
 - SSHR reproduction-scope state in
   `results/analysis_sshr_reproduction_scope_audit.md`
 - threats-to-validity audit state in
@@ -131,6 +133,7 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_comparison_route_decision_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_benchmark_suite_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_benchmark_function_diversity_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_author_minimal_form_coverage.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_ultra_scale64_stress.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_extraction_smoke_audit.py
@@ -177,6 +180,8 @@ layout warnings.
   `results/analysis_comparison_route_decision_audit.md`
 - Benchmark-suite composition audit:
   `results/analysis_benchmark_suite_audit.md`
+- Benchmark function-diversity audit:
+  `results/analysis_benchmark_function_diversity_audit.md`
 - Citation support audit:
   `results/analysis_citation_support_audit.md`
 - Author-input closure audit:

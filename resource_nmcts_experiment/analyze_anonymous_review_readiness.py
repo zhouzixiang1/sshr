@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import csv
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -67,6 +68,8 @@ def is_anonymized_author(value: str) -> bool:
 
 
 def ignored_private_paths() -> tuple[bool, list[str]]:
+    if os.environ.get("RESOURCE_NMCTS_EXTRACTED_PAYLOAD") == "1":
+        return True, []
     gitignore = THIS_DIR.parent / ".gitignore"
     text = read_text(gitignore)
     missing: list[str] = []

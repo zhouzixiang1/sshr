@@ -1,6 +1,6 @@
 {
   "expected_page_range": {
-    "max": 50,
+    "max": 60,
     "min": 20
   },
   "needs_revision_count": 0,

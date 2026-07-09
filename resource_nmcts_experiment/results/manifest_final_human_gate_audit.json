@@ -1,0 +1,32 @@
+{
+  "allowed_open_goal_requirements": [
+    "Final author and venue metadata",
+    "Overall goal closure gate"
+  ],
+  "human_gate_open": true,
+  "machine_side_closed": true,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_final_human_gate_audit.md",
+    "manifest": "results/manifest_final_human_gate_audit.json",
+    "summary": "results/summary_final_human_gate_audit.csv"
+  },
+  "python": "3.11.15",
+  "remaining_blocker_class": "author/venue metadata and target anonymous-review policy",
+  "rows": 7,
+  "script": "analyze_final_human_gate_audit.py",
+  "source_summaries": [
+    "results/summary_goal_completion_audit.csv",
+    "results/summary_submission_metadata_audit.csv",
+    "results/summary_submission_metadata_validator.csv",
+    "results/summary_submission_text_preview.csv",
+    "results/summary_anonymous_review_readiness.csv",
+    "results/summary_author_input_closure_audit.csv",
+    "results/summary_submission_metadata_closure_path.csv",
+    "results/summary_payload_roundtrip_audit.csv",
+    "results/summary_source_path_privacy_audit.csv"
+  ],
+  "status_counts": {
+    "pass": 7
+  }
+}

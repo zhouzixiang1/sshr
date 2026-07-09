@@ -48,6 +48,7 @@ Use this checklist immediately before uploading the manuscript.
 - Comparison protocol audit: `results/analysis_comparison_protocol_audit.md`
 - Comparison target validity audit: `results/analysis_comparison_target_validity_audit.md`
 - Benchmark-suite composition audit: `results/analysis_benchmark_suite_audit.md`
+- Benchmark function-diversity audit: `results/analysis_benchmark_function_diversity_audit.md`
 - Novelty/comparison scorecard: `results/analysis_novelty_comparison_scorecard.md`
 - Traditional structure mechanism audit: `results/analysis_traditional_structure_mechanism.md`
 - Caterpillar ROS-family source probe: `results/analysis_caterpillar_ros_family_probe.md`
@@ -116,6 +117,7 @@ Run these from `resource_nmcts_experiment/`:
   analyze_editorial_screening_audit.py \
   analyze_target_venue_decision_audit.py \
   analyze_submission_support_packet_audit.py \
+  analyze_benchmark_function_diversity_audit.py \
   analyze_citation_support_audit.py \
   analyze_headline_numeric_consistency.py \
   analyze_figure_asset_audit.py \
@@ -152,9 +154,9 @@ rg -n "Overfull|Underfull|undefined|Undefined|Warning|Error|LaTeX Warning|Rerun"
 Expected current state:
 
 - Machine snapshot tokens checked by `analyze_public_handoff_freshness_audit.py`:
-  PDF pages=50/50; readiness=79 pass + 1 needs author input;
-  payload_files=1169; artifact_registry=31 families / 161 raw CSV / 80312 raw rows;
-  source_privacy=0 strict leaks / 57 provenance files / 1126 payload text files;
+  PDF pages=50/50; readiness=81 pass + 1 needs author input;
+  payload_files=1175; artifact_registry=31 families / 161 raw CSV / 80312 raw rows;
+  source_privacy=0 strict leaks / 57 provenance files / 1132 payload text files;
   comparison_validity=8/8 pass; novelty_scorecard=6/6 pass;
   goal_gate=author/venue metadata remains open.
 - Archive manifest: all payload groups complete.

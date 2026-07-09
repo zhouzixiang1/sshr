@@ -7,7 +7,7 @@
     "table": "paper_latex/tables/submission_support_packet_audit.tex"
   },
   "python": "3.11.15",
-  "rows": 20,
+  "rows": 21,
   "rows_detail": [
     {
       "boundary": "The cover letter still needs author, editor, reviewer, and prior-dissemination fields before upload.",
@@ -62,6 +62,15 @@
       "status": "pass",
       "supported_use": "Reviewer-facing entrypoints expose which benchmark suites, n scopes, verification routes, and representativeness boundaries support the comparisons.",
       "upload_risk": "Reviewers could see comparison outcomes without the benchmark-slice composition and representativeness boundary."
+    },
+    {
+      "boundary": "The function-diversity audit is descriptive evidence over existing rows; it does not imply distributional coverage of all Boolean functions.",
+      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; manifest=results/manifest_benchmark_function_diversity_audit.json::needs_revision_count=0",
+      "item": "Benchmark function-diversity audit is visible",
+      "next_action": "No action needed.",
+      "status": "pass",
+      "supported_use": "Reviewer-facing entrypoints expose function-family, density, degree, ANF-term, profile, and term-count diversity behind the comparison targets.",
+      "upload_risk": "Reviewers could accept the suite counts but still question whether the compared functions are structurally narrow."
     },
     {
       "boundary": "It is a navigation and wording guide over existing evidence; it does not add experiments or replace author/venue metadata.",
@@ -192,6 +201,6 @@
   ],
   "script": "analyze_submission_support_packet_audit.py",
   "status_counts": {
-    "pass": 20
+    "pass": 21
   }
 }

@@ -58,6 +58,9 @@ SELF_OUTPUTS = {
     RESULTS / "summary_public_handoff_freshness_audit.csv",
     RESULTS / "analysis_public_handoff_freshness_audit.md",
     RESULTS / "manifest_public_handoff_freshness_audit.json",
+    RESULTS / "summary_final_human_gate_audit.csv",
+    RESULTS / "analysis_final_human_gate_audit.md",
+    RESULTS / "manifest_final_human_gate_audit.json",
 }
 
 
@@ -174,6 +177,9 @@ def write_manifest(path: Path, files: list[Path], missing: list[Path], archive_d
             rel(RESULTS / "summary_goal_completion_audit.csv"),
             rel(RESULTS / "analysis_goal_completion_audit.md"),
             rel(RESULTS / "manifest_goal_completion_audit.json"),
+            rel(RESULTS / "summary_final_human_gate_audit.csv"),
+            rel(RESULTS / "analysis_final_human_gate_audit.md"),
+            rel(RESULTS / "manifest_final_human_gate_audit.json"),
             rel(RESULTS / "summary_payload_extraction_smoke_audit.csv"),
             rel(RESULTS / "analysis_payload_extraction_smoke_audit.md"),
             rel(RESULTS / "manifest_payload_extraction_smoke_audit.json"),

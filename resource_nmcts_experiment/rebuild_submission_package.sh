@@ -95,6 +95,7 @@ run_py analyze_ultra_scale64_stress.py
 run_py analyze_ultra_scale64_resource_profile.py
 run_py analyze_scaling_resource_audit.py
 run_py analyze_benchmark_suite_audit.py
+run_py analyze_benchmark_function_diversity_audit.py
 run_py analyze_weight_robustness.py
 run_py analyze_resource_weight_sensitivity_audit.py
 run_py analyze_cnot_constraint_profile_audit.py
@@ -145,6 +146,7 @@ run_py analyze_payload_git_policy_audit.py
 run_py analyze_latex_dependency_audit.py
 run_py analyze_payload_roundtrip_audit.py
 run_py analyze_source_path_privacy_audit.py
+run_py analyze_final_human_gate_audit.py
 run_py analyze_payload_extraction_smoke_audit.py
 run_py analyze_payload_latex_compile_audit.py
 run_py analyze_payload_verifier_smoke_audit.py

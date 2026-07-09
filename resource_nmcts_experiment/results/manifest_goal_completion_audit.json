@@ -41,8 +41,8 @@
     },
     {
       "boundary": "External rows are logic-level probes or exact-oracle reversible probes; they are not full ROS or hardware-mapped reproductions.",
-      "evidence": "Comparison evidence, target-validity roles, and the novelty/comparison scorecard cover internal logical baselines, SSHR, ABC/BDD, ROS-style LUT, mockturtle, Caterpillar API, CirKit, RevKit CLI exact-oracle, controls, and phase/Rz probes.",
-      "evidence_files": "results/analysis_comparison_evidence_matrix.md; results/analysis_baseline_comparability_audit.md; results/analysis_comparison_target_validity_audit.md; results/analysis_novelty_comparison_scorecard.md; paper_latex/tables/comparison_target_validity_audit.tex; results/raw_mockturtle_xag_probe.csv; results/raw_caterpillar_xag_api_best.csv; results/raw_cirkit_aig_probe.csv; results/raw_revkit_cli_multiflow_traditional.csv; results/raw_ros_lut_proxy_best.csv",
+      "evidence": "Comparison evidence, target-validity roles, function-diversity auditing, and the novelty/comparison scorecard cover internal logical baselines, SSHR, ABC/BDD, ROS-style LUT, mockturtle, Caterpillar API, CirKit, RevKit CLI exact-oracle, controls, and phase/Rz probes.",
+      "evidence_files": "results/analysis_comparison_evidence_matrix.md; results/analysis_baseline_comparability_audit.md; results/analysis_comparison_target_validity_audit.md; results/analysis_benchmark_function_diversity_audit.md; results/analysis_novelty_comparison_scorecard.md; paper_latex/tables/comparison_target_validity_audit.tex; results/raw_mockturtle_xag_probe.csv; results/raw_caterpillar_xag_api_best.csv; results/raw_cirkit_aig_probe.csv; results/raw_revkit_cli_multiflow_traditional.csv; results/raw_ros_lut_proxy_best.csv",
       "next_action": "Use the comparability audit when writing any baseline claim.",
       "requirement": "Baseline reproduction and comparison breadth",
       "status": "pass"
@@ -65,8 +65,8 @@
     },
     {
       "boundary": "High-dimensional rows outside generated bridge slices are symbolic checks, not exhaustive truth-table enumeration for all n=31--64 functions.",
-      "evidence": "Scaling audit covers n=20,24,28,32,40 plus an n=48,56,64 ultra-scale symbolic stress and resource-profile slice and complete truth-table bridge checks for n=21--30 generated functions.",
-      "evidence_files": "results/analysis_scaling_resource_audit.md; results/analysis_screen_scale_ultra_scale64_stress.md; results/analysis_screen_scale_ultra_scale64_resource_profile.md; results/manifest_screen_scale_ultra_scale64_stress.json; results/manifest_screen_scale_ultra_scale64_resource_profile.json; paper_latex/tables/scaling_resource_audit.tex; paper_latex/tables/screen_scale_ultra_scale64_stress.tex; paper_latex/tables/screen_scale_ultra_scale64_resource_profile.tex; results/raw_screen_scale_ultra_scale64_terms.csv; results/raw_truth_bridge_terms.csv; results/raw_truth_bridge_n24_terms.csv; results/raw_truth_bridge_n25_terms.csv; results/raw_truth_bridge_n26_terms.csv; results/raw_truth_bridge_n27_terms.csv; results/raw_truth_bridge_n28_terms.csv; results/raw_truth_bridge_n29_terms.csv; results/raw_truth_bridge_n30_terms.csv; paper_latex/figures/submission_v36/fig5_validation.pdf",
+      "evidence": "Scaling audit and function-diversity audit cover n=20,24,28,32,40 plus an n=48,56,64 ultra-scale symbolic stress and resource-profile slice and complete truth-table bridge checks for n=21--30 generated functions.",
+      "evidence_files": "results/analysis_scaling_resource_audit.md; results/analysis_screen_scale_ultra_scale64_stress.md; results/analysis_screen_scale_ultra_scale64_resource_profile.md; results/manifest_screen_scale_ultra_scale64_stress.json; results/manifest_screen_scale_ultra_scale64_resource_profile.json; results/analysis_benchmark_function_diversity_audit.md; paper_latex/tables/scaling_resource_audit.tex; paper_latex/tables/screen_scale_ultra_scale64_stress.tex; paper_latex/tables/screen_scale_ultra_scale64_resource_profile.tex; results/raw_screen_scale_ultra_scale64_terms.csv; results/raw_truth_bridge_terms.csv; results/raw_truth_bridge_n24_terms.csv; results/raw_truth_bridge_n25_terms.csv; results/raw_truth_bridge_n26_terms.csv; results/raw_truth_bridge_n27_terms.csv; results/raw_truth_bridge_n28_terms.csv; results/raw_truth_bridge_n29_terms.csv; results/raw_truth_bridge_n30_terms.csv; paper_latex/figures/submission_v36/fig5_validation.pdf",
       "next_action": "Keep large-scale claims tied to the scaling audit and bridge scope.",
       "requirement": "Large-scale and bridge experiments",
       "status": "pass"
@@ -81,7 +81,7 @@
     },
     {
       "boundary": "Counts describe manuscript artifacts, not independent experimental datasets.",
-      "evidence": "Current package has 7 submitted figure panels and 199 generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
+      "evidence": "Current package has 7 submitted figure panels and 200 generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
       "evidence_files": "paper_latex/figures/submission_v36; paper_latex/tables; results/analysis_figure_asset_audit.md; results/analysis_reproducibility_audit.md; results/analysis_runtime_envelope_audit.md",
       "next_action": "Spot-check figure/table readability after every layout or data update.",
       "requirement": "Rich paper figures and tables",
