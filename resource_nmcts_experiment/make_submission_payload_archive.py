@@ -3,8 +3,9 @@
 
 The archive packages the stable source/data payload groups, the compiled
 manuscript PDF, and the package-level traceability/archive audits.  It excludes
-its own tarball and the readiness audit so the final readiness pass can run
-after archive creation without changing the archive's contents.
+its own tarball, the readiness audit, and the goal-completion audit so the
+final terminal checks can run after archive creation without changing the
+archive's contents.
 """
 from __future__ import annotations
 
@@ -162,6 +163,9 @@ def write_manifest(path: Path, files: list[Path], missing: list[Path], archive_d
             rel(RESULTS / "manifest_submission_payload_archive.json"),
             rel(RESULTS / "summary_submission_readiness_audit.csv"),
             rel(RESULTS / "analysis_submission_readiness_audit.md"),
+            rel(RESULTS / "summary_goal_completion_audit.csv"),
+            rel(RESULTS / "analysis_goal_completion_audit.md"),
+            rel(RESULTS / "manifest_goal_completion_audit.json"),
         ],
         "files": [
             {

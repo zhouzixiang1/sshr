@@ -89,7 +89,7 @@
     },
     {
       "boundary": "Author names, target-venue formatting choices, and final declarations remain external author inputs.",
-      "evidence": "Compiled submission PDF exists with 26 pages and the TeX source is present.",
+      "evidence": "Compiled submission PDF exists with 27 pages and the TeX source is present.",
       "evidence_files": "paper_latex/resource_nmcts_submission_v1.tex; paper_latex/resource_nmcts_submission_v1.pdf; results/analysis_submission_readiness_audit.md",
       "next_action": "After author metadata is supplied, recompile and rerun readiness checks.",
       "requirement": "Complete LaTeX manuscript draft",
