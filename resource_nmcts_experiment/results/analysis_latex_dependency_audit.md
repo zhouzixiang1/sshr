@@ -4,14 +4,14 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 
 ## Status counts
 
-- pass: 225
+- pass: 228
 
 ## Dependency types
 
 - bibliography: 3
 - figure: 21
 - main_source: 3
-- tex_input: 198
+- tex_input: 201
 
 ## Missing dependencies
 
@@ -64,6 +64,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/bitflip_neural_budget_sweep` | `paper_latex/tables/bitflip_neural_budget_sweep.tex` | True | True | pass |
 | author | tex_input | `tables/bitflip_prior_difficulty_slices` | `paper_latex/tables/bitflip_prior_difficulty_slices.tex` | True | True | pass |
 | author | tex_input | `tables/bitflip_prior_feature_gate` | `paper_latex/tables/bitflip_prior_feature_gate.tex` | True | True | pass |
+| author | tex_input | `tables/bitflip_prior_feature_gate_cv` | `paper_latex/tables/bitflip_prior_feature_gate_cv.tex` | True | True | pass |
 | author | tex_input | `tables/frontier_random_depth_control` | `paper_latex/tables/frontier_random_depth_control.tex` | True | True | pass |
 | author | tex_input | `tables/stochastic_control_stability` | `paper_latex/tables/stochastic_control_stability.tex` | True | True | pass |
 | author | tex_input | `tables/boolean_ring_structural_evidence` | `paper_latex/tables/boolean_ring_structural_evidence.tex` | True | True | pass |
@@ -139,6 +140,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/bitflip_neural_budget_sweep` | `paper_latex/tables/bitflip_neural_budget_sweep.tex` | True | True | pass |
 | anonymous | tex_input | `tables/bitflip_prior_difficulty_slices` | `paper_latex/tables/bitflip_prior_difficulty_slices.tex` | True | True | pass |
 | anonymous | tex_input | `tables/bitflip_prior_feature_gate` | `paper_latex/tables/bitflip_prior_feature_gate.tex` | True | True | pass |
+| anonymous | tex_input | `tables/bitflip_prior_feature_gate_cv` | `paper_latex/tables/bitflip_prior_feature_gate_cv.tex` | True | True | pass |
 | anonymous | tex_input | `tables/frontier_random_depth_control` | `paper_latex/tables/frontier_random_depth_control.tex` | True | True | pass |
 | anonymous | tex_input | `tables/stochastic_control_stability` | `paper_latex/tables/stochastic_control_stability.tex` | True | True | pass |
 | anonymous | tex_input | `tables/boolean_ring_structural_evidence` | `paper_latex/tables/boolean_ring_structural_evidence.tex` | True | True | pass |
@@ -214,6 +216,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/bitflip_neural_budget_sweep` | `paper_latex/tables/bitflip_neural_budget_sweep.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/bitflip_prior_difficulty_slices` | `paper_latex/tables/bitflip_prior_difficulty_slices.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/bitflip_prior_feature_gate` | `paper_latex/tables/bitflip_prior_feature_gate.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/bitflip_prior_feature_gate_cv` | `paper_latex/tables/bitflip_prior_feature_gate_cv.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/frontier_random_depth_control` | `paper_latex/tables/frontier_random_depth_control.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/stochastic_control_stability` | `paper_latex/tables/stochastic_control_stability.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/boolean_ring_structural_evidence` | `paper_latex/tables/boolean_ring_structural_evidence.tex` | True | True | pass |

@@ -494,10 +494,15 @@ z
    </g>
    <g id="PathCollection_5">
     <g clip-path="url(#p1197e68f9f)">
-     <use xlink:href="#m7246512e9c" x="407.546506" y="167.914196" style="fill: #b56b45; stroke: #1e2329; stroke-width: 0.4"/>
+     <use xlink:href="#m7246512e9c" x="362.278766" y="131.906436" style="fill: #b56b45; stroke: #1e2329; stroke-width: 0.4"/>
     </g>
    </g>
    <g id="PathCollection_6">
+    <g clip-path="url(#p1197e68f9f)">
+     <use xlink:href="#m7246512e9c" x="407.546506" y="167.914196" style="fill: #b56b45; stroke: #1e2329; stroke-width: 0.4"/>
+    </g>
+   </g>
+   <g id="PathCollection_7">
     <g clip-path="url(#p1197e68f9f)">
      <use xlink:href="#m7246512e9c" x="409.452516" y="113.985313" style="fill: #b56b45; stroke: #1e2329; stroke-width: 0.4"/>
     </g>
@@ -535,19 +540,22 @@ L 421.841582 179.62
     <text style="font-size: 6.2px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="363.231771" y="132.39775" transform="rotate(-0 363.231771 132.39775)">Bit-flip ANF-term prior gate</text>
    </g>
    <g id="text_35">
-    <text style="font-size: 6.2px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="408.499511" y="169.480665" transform="rotate(-0 408.499511 169.480665)">neural guard</text>
+    <text style="font-size: 6.2px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="363.231771" y="133.510686" transform="rotate(-0 363.231771 133.510686)">Bit-flip CV ANF-term prior gate</text>
    </g>
    <g id="text_36">
-    <text style="font-size: 6.2px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="410.405521" y="115.588109" transform="rotate(-0 410.405521 115.588109)">Root-action neural candidate extension</text>
+    <text style="font-size: 6.2px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="408.499511" y="169.480665" transform="rotate(-0 408.499511 169.480665)">neural guard</text>
    </g>
    <g id="text_37">
+    <text style="font-size: 6.2px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="410.405521" y="115.588109" transform="rotate(-0 410.405521 115.588109)">Root-action neural candidate extension</text>
+   </g>
+   <g id="text_38">
     <text style="font-weight: 700; font-size: 8.4px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="348.936695" y="42.350625" transform="rotate(-0 348.936695 42.350625)">Diagnostics expose limits.</text>
    </g>
   </g>
-  <g id="text_38">
+  <g id="text_39">
    <text style="font-weight: 700; font-size: 10px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="7.2" y="21.06" transform="rotate(-0 7.2 21.06)">d</text>
   </g>
-  <g id="text_39">
+  <g id="text_40">
    <text style="font-weight: 700; font-size: 8.5px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="276.768" y="13.387734" transform="rotate(-0 276.768 13.387734)">Learned controllers are promoted only where quality and search-effort evidence align.</text>
   </g>
  </g>

@@ -287,14 +287,19 @@ BITFLIP_NEURAL_BUDGET_PATHS = {
 BITFLIP_PRIOR_FEATURE_GATE_PATHS = {
     "analyze_bitflip_prior_difficulty_slices.py",
     "analyze_bitflip_prior_feature_gate.py",
+    "analyze_bitflip_prior_feature_gate_cv.py",
     "results/summary_bitflip_prior_difficulty_slices.csv",
     "results/analysis_bitflip_prior_difficulty_slices.md",
     "results/manifest_bitflip_prior_difficulty_slices.json",
     "results/summary_bitflip_prior_feature_gate.csv",
     "results/analysis_bitflip_prior_feature_gate.md",
     "results/manifest_bitflip_prior_feature_gate.json",
+    "results/summary_bitflip_prior_feature_gate_cv.csv",
+    "results/analysis_bitflip_prior_feature_gate_cv.md",
+    "results/manifest_bitflip_prior_feature_gate_cv.json",
     "paper_latex/tables/bitflip_prior_difficulty_slices.tex",
     "paper_latex/tables/bitflip_prior_feature_gate.tex",
+    "paper_latex/tables/bitflip_prior_feature_gate_cv.tex",
 }
 FRONTIER_RANDOM_DEPTH_PATHS = {
     "analyze_frontier_random_depth_control.py",

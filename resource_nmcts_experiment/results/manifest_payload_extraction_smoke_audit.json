@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1196; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1201; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -135,6 +135,18 @@
       "status": "pass"
     },
     {
+      "evidence": "returncode=0; manifest=results/manifest_bitflip_prior_feature_gate.json; needs_revision_count=0; aggregate_pairs=1593; stderr=none",
+      "item": "Bit-flip learned-prior feature gate",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_bitflip_prior_feature_gate_cv.json; needs_revision_count=0; aggregate_pairs=1593; stderr=none",
+      "item": "Bit-flip learned-prior cross-validated feature gate",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
       "evidence": "returncode=0; manifest=results/manifest_root_action_ranker_audit.json; needs_revision_count=0; rows=5; stderr=none",
       "item": "Root-action ranker audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
@@ -165,7 +177,7 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_learned_control_audit.json; needs_revision_count=0; rows=10; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_learned_control_audit.json; needs_revision_count=0; rows=11; stderr=none",
       "item": "Learned-control audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -441,6 +453,20 @@
     },
     {
       "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_bitflip_prior_feature_gate.json",
+      "minimum_rows_key": "aggregate_pairs",
+      "name": "Bit-flip learned-prior feature gate",
+      "script": "analyze_bitflip_prior_feature_gate.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_bitflip_prior_feature_gate_cv.json",
+      "minimum_rows_key": "aggregate_pairs",
+      "name": "Bit-flip learned-prior cross-validated feature gate",
+      "script": "analyze_bitflip_prior_feature_gate_cv.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
       "manifest": "results/manifest_root_action_ranker_audit.json",
       "minimum_rows_key": "rows",
       "name": "Root-action ranker audit",
@@ -630,6 +656,6 @@
     }
   ],
   "status_counts": {
-    "pass": 48
+    "pass": 50
   }
 }

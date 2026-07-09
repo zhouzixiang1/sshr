@@ -1,0 +1,34 @@
+{
+  "aggregate_always_learned_time_relative": 0.3448931802787153,
+  "aggregate_gate_enabled": 1269,
+  "aggregate_learned_overhead_reduction": 0.08944311648686168,
+  "aggregate_learned_score_wins": 328,
+  "aggregate_mean_score_relative": -0.010652914059532335,
+  "aggregate_mean_time_relative": 0.314044859379522,
+  "aggregate_pairs": 1593,
+  "aggregate_retained_learned_win_fraction": 1.0,
+  "aggregate_retained_learned_wins": true,
+  "aggregate_score_losses": 0,
+  "aggregate_score_wins": 328,
+  "fold_assignment": "sha256(function name) modulo folds",
+  "folds": 5,
+  "input_rows": 3186,
+  "inputs": [
+    "results/raw_bitflip_neural_budget_sweep.csv",
+    "results/raw_traditional_resource_learned_prior.csv",
+    "results/raw_traditional_resource_no_prior.csv"
+  ],
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_bitflip_prior_feature_gate_cv.md",
+    "manifest": "results/manifest_bitflip_prior_feature_gate_cv.json",
+    "summary": "results/summary_bitflip_prior_feature_gate_cv.csv",
+    "table": "paper_latex/tables/bitflip_prior_feature_gate_cv.tex"
+  },
+  "rows": 6,
+  "script": "analyze_bitflip_prior_feature_gate_cv.py",
+  "selection_rule": "training-fold learned-win ANF-term support interval expanded by 2 terms on each side",
+  "support_margin": 2,
+  "table": "paper_latex/tables/bitflip_prior_feature_gate_cv.tex",
+  "table_anchor_present": true
+}

@@ -14,4 +14,4 @@ This audit checks manuscript figure references, generated PDF/PNG/SVG assets, an
 | fig4_phase_affine | pass | author=True; anon=True | save=True; source=True; pages=1 | 41717/102608/18341 | 7 | none |
 | fig5_validation | pass | author=True; anon=True | save=True; source=True; pages=1 | 35604/69390/12222 | 5 | none |
 | fig6_sparse_gate_sensitivity | pass | author=True; anon=True | save=True; source=True; pages=1 | 45480/163341/79801 | 201 | none |
-| fig7_learned_control_summary | pass | author=True; anon=True | save=True; source=True; pages=1 | 42799/133270/23527 | 10 | none |
+| fig7_learned_control_summary | pass | author=True; anon=True | save=True; source=True; pages=1 | 43623/136765/23996 | 11 | none |

@@ -34,14 +34,19 @@
   "bitflip_prior_feature_gate_paths": [
     "analyze_bitflip_prior_difficulty_slices.py",
     "analyze_bitflip_prior_feature_gate.py",
+    "analyze_bitflip_prior_feature_gate_cv.py",
     "paper_latex/tables/bitflip_prior_difficulty_slices.tex",
     "paper_latex/tables/bitflip_prior_feature_gate.tex",
+    "paper_latex/tables/bitflip_prior_feature_gate_cv.tex",
     "results/analysis_bitflip_prior_difficulty_slices.md",
     "results/analysis_bitflip_prior_feature_gate.md",
+    "results/analysis_bitflip_prior_feature_gate_cv.md",
     "results/manifest_bitflip_prior_difficulty_slices.json",
     "results/manifest_bitflip_prior_feature_gate.json",
+    "results/manifest_bitflip_prior_feature_gate_cv.json",
     "results/summary_bitflip_prior_difficulty_slices.csv",
-    "results/summary_bitflip_prior_feature_gate.csv"
+    "results/summary_bitflip_prior_feature_gate.csv",
+    "results/summary_bitflip_prior_feature_gate_cv.csv"
   ],
   "bitflip_random_prior_paths": [
     "analyze_bitflip_random_prior_control.py",
@@ -251,19 +256,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1196; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1201; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=1196; archive_files=1196; missing=none; extra=none.",
+      "evidence": "manifest_files=1201; archive_files=1201; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=1196; mismatches=none.",
+      "evidence": "checked=1201; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -395,7 +400,7 @@
       "status": "pass"
     },
     {
-      "evidence": "bitflip_prior_gate_files=10; missing=none.",
+      "evidence": "bitflip_prior_gate_files=15; missing=none.",
       "item": "Payload bit-flip learned-prior localization and gate evidence",
       "next_action": "Ensure the uploadable archive includes the learned-prior difficulty-slice and ANF-term feature-gate evidence.",
       "status": "pass"
@@ -497,7 +502,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=1196; metadata_issues=none.",
+      "evidence": "members_checked=1201; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"

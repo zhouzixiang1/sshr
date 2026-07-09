@@ -71,6 +71,7 @@ run_py analyze_bitflip_random_prior_control.py
 run_py analyze_bitflip_neural_budget_sweep.py
 run_py analyze_bitflip_prior_difficulty_slices.py
 run_py analyze_bitflip_prior_feature_gate.py
+run_py analyze_bitflip_prior_feature_gate_cv.py
 run_py analyze_frontier_random_depth_control.py
 run_py analyze_phase_policy_random_control.py
 run_py analyze_stochastic_control_stability.py

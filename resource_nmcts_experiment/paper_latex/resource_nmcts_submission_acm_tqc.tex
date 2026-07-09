@@ -1133,7 +1133,13 @@ the interval 6--23 retains all always-learned score wins in the audited rows,
 keeps zero score losses, and reduces measured learned-prior overhead relative
 to always-learned deployment.  The interval is selected from existing evidence,
 so the result is reported as a bounded deployment audit rather than a held-out
-policy claim.
+policy claim.  Table~\ref{tab:bitflip-prior-feature-gate-cv} then removes this
+specific weakness with a five-fold held-out audit: each fold selects the gate
+from the training-fold learned-win ANF-term support expanded by two ANF terms on
+each side, and the resulting gates are evaluated only on held-out functions.
+The cross-validated gates retain every held-out learned score win with zero
+score losses while still reducing the measured overhead relative to always
+enabling the learned prior.
 
 \begin{table}[H]
 \centering
@@ -1193,6 +1199,18 @@ The gate enables the learned prior only when the input ANF contains 6--23
 terms, using a pre-search feature rather than the no-prior score.}
 \label{tab:bitflip-prior-feature-gate}
 \input{tables/bitflip_prior_feature_gate}
+\end{table}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.06}
+\caption{Five-fold held-out ANF-term feature-gate audit.  Each fold chooses the
+gate from training-fold learned-win ANF-term support with a two-term margin,
+then evaluates the selected gate only on held-out functions.}
+\label{tab:bitflip-prior-feature-gate-cv}
+\input{tables/bitflip_prior_feature_gate_cv}
 \end{table}
 
 Table~\ref{tab:frontier-random-depth} applies the same random-control idea to
@@ -1332,8 +1350,9 @@ routing, or native-gate scheduling results.}
 
 Table~\ref{tab:learned-control-audit} separates promoted learned-control
 components from bounded controls and limited diagnostics.  The frontier policies, sparse depth-4
-gate, phase shortlist, low-budget bit-flip prior, and ANF-term prior gate
-provide the strongest paper-facing learned-control evidence.  The root-action
+gate, phase shortlist, low-budget bit-flip prior, static ANF-term gate, and
+held-out ANF-term gate provide the strongest paper-facing learned-control
+evidence.  The root-action
 neural component is reported only as a bounded candidate-extension signal: it preserves the
 deterministic heuristic top-4 root window and adds learned top-12 actions,
 giving a combined 8/0/25 score W/L/T diagnostic over the heuristic root window
