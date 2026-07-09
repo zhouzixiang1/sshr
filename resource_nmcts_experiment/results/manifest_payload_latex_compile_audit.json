@@ -11,9 +11,9 @@
   "rows": 3,
   "rows_detail": [
     {
-      "bytes": "953",
+      "bytes": "963",
       "compile_seconds": "0.000",
-      "evidence": "extracted_files=953; error=none.",
+      "evidence": "extracted_files=963; error=none.",
       "item": "Payload extraction for LaTeX compile",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "pages": "n/a",
@@ -22,23 +22,23 @@
       "status": "pass"
     },
     {
-      "bytes": "621272",
+      "bytes": "627751",
       "compile_seconds": "not_recorded",
-      "evidence": "stdout_lines=1127; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
+      "evidence": "stdout_lines=1200; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "author payload LaTeX compile",
       "next_action": "Inspect the extracted payload LaTeX log and restore missing table, figure, bibliography, or style dependencies.",
-      "pages": "33",
+      "pages": "35",
       "returncode": "0",
       "source": "paper_latex/resource_nmcts_submission_v1.tex",
       "status": "pass"
     },
     {
-      "bytes": "617826",
+      "bytes": "624305",
       "compile_seconds": "not_recorded",
-      "evidence": "stdout_lines=1134; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
+      "evidence": "stdout_lines=1207; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "anonymous payload LaTeX compile",
       "next_action": "Inspect the extracted payload LaTeX log and restore missing table, figure, bibliography, or style dependencies.",
-      "pages": "33",
+      "pages": "35",
       "returncode": "0",
       "source": "paper_latex/resource_nmcts_submission_anonymous.tex",
       "status": "pass"

@@ -17,8 +17,10 @@ Manuscript anchors:
 ## Are the baselines fair?
 
 The manuscript uses layered comparisons rather than a single universal leaderboard.  Direct ANF, ESOP, BDD/ABC, SSHR, ROS-style LUT, mockturtle, CirKit, RevKit CLI, and phase/Rz probes are assigned different claim roles.  Each row is bounded by task alignment, fairness controls, and residual abstraction risk.
+The novelty/comparison scorecard condenses this into reviewer questions, evidence anchors, and excluded claims.
 
 Manuscript anchors:
+- Novelty/comparison scorecard
 - Experimental Design
 - Baseline claim matrix
 - Comparison evidence matrix
@@ -43,7 +45,7 @@ Manuscript anchors:
 
 The manuscript separates the algebraic search-space contribution from learned-control effects.  Neural priors and learned gates are treated as bounded controls.  Limited diagnostics that do not improve quality or runtime are kept as limitations rather than headline claims.  The counterpoint audit also reports the learned-prior row as incremental search control, not as evidence that deep learning alone explains the resource reduction.
 
-The search-control baseline audit further separates heuristic-only, beam-only, no-MCTS portfolio, Resource-NMCTS, Pareto archive, learned-prior/no-prior, and phase random-control rows.  Its role is to make clear that MCTS and learned priors add bounded increments on top of deterministic algebraic search, while same-budget random controls currently apply to the phase/Rz shortlist branch rather than the bit-flip branch.
+The search-control baseline audit further separates heuristic-only, beam-only, no-MCTS portfolio, Resource-NMCTS, Pareto archive, learned-prior/no-prior, bit-flip random-prior, frontier random-depth, and phase random-control rows.  Its role is to make clear that MCTS and learned priors add bounded increments on top of deterministic algebraic search, while random controls support ranking, pruning, or budget-allocation claims rather than a deep-learning-only explanation.
 
 Manuscript anchors:
 - Search contribution decomposition

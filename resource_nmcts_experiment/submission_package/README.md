@@ -200,6 +200,7 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_claim_scope_lint.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_comparison_protocol_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_comparison_target_validity_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_ros_reproduction_gap_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_editorial_screening_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_support_packet_audit.py

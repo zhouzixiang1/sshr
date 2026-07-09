@@ -40,6 +40,8 @@ Use this checklist immediately before uploading the manuscript.
 - Terminal package verifier: `results/analysis_submission_package_verifier.md`
 - Claim-scope lint: `results/analysis_claim_scope_lint.md`
 - Comparison protocol audit: `results/analysis_comparison_protocol_audit.md`
+- Comparison target validity audit: `results/analysis_comparison_target_validity_audit.md`
+- Novelty/comparison scorecard: `results/analysis_novelty_comparison_scorecard.md`
 - ROS reproduction gap audit: `results/analysis_ros_reproduction_gap_audit.md`
 - Search-control baseline audit: `results/analysis_search_control_baseline_audit.md`
 - Frontier random-depth control: `results/analysis_frontier_random_depth_control.md`
@@ -91,6 +93,8 @@ Run these from `resource_nmcts_experiment/`:
   analyze_submission_archive_manifest.py \
   analyze_claim_scope_lint.py \
   analyze_comparison_protocol_audit.py \
+  analyze_comparison_target_validity_audit.py \
+  analyze_novelty_comparison_scorecard.py \
   analyze_ros_reproduction_gap_audit.py \
   analyze_frontier_random_depth_control.py \
   analyze_search_control_baseline_audit.py \
@@ -131,12 +135,14 @@ Expected current state:
 
 - Archive manifest: all payload groups complete.
 - Payload archive: tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.
-- Payload round-trip audit: archive contents match manifest paths and hashes, required files, reviewer entrypoints, comparison-protocol evidence files, ROS reproduction-boundary evidence files, editorial-screening evidence files, support-packet evidence files, citation-support evidence files, author-input closure evidence files, source/path privacy audit code, and headline-numeric evidence files are present, private files are absent, and tar metadata is deterministic.
-- Payload extraction smoke audit: the upload tarball extracts safely and runs comparison protocol, ROS reproduction gap, editorial screening, support-packet, citation support, source/path privacy, author-input closure, headline numeric consistency, claim-scope lint, and artifact-rerun registry checks from the extracted tree.
+- Payload round-trip audit: archive contents match manifest paths and hashes, required files, reviewer entrypoints, comparison-protocol evidence files, comparison-target validity files, novelty/comparison scorecard files, ROS reproduction-boundary evidence files, editorial-screening evidence files, support-packet evidence files, citation-support evidence files, author-input closure evidence files, source/path privacy audit code, and headline-numeric evidence files are present, private files are absent, and tar metadata is deterministic.
+- Payload extraction smoke audit: the upload tarball extracts safely and runs comparison protocol, comparison-target validity, novelty/comparison scorecard, ROS reproduction gap, editorial screening, support-packet, citation support, source/path privacy, author-input closure, headline numeric consistency, claim-scope lint, and artifact-rerun registry checks from the extracted tree.
 - Payload verifier smoke audit: the upload tarball extracts safely and `verify_submission_package.sh` passes from inside the extracted payload tree.
 - Payload LaTeX compile audit: the upload tarball extracts safely and rebuilds both author and anonymous PDFs from the extracted LaTeX source tree.
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
 - Comparison protocol audit: all baseline layers have role, evidence, comparability, counterpoint, artifact, and manuscript-anchor coverage.
+- Comparison target validity audit: comparison families are explicitly labeled as primary benchmark, external stress test, exact reversible counterpoint, phase proxy, causal control, scalability verification, or non-dominance boundary.
+- Novelty/comparison scorecard: reviewer-facing method identity, baseline meaning, external probe, tradeoff, AI/MCTS, and scale-boundary questions all pass with manuscript and support-brief anchors.
 - ROS reproduction gap audit: ROS-style LUT and line-sensitivity are proxy evidence; the official ROS SAT garbage-management component is not reproduced and must not be claimed.
 - Search-control baseline audit: heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, bit-flip random-prior, frontier random-depth, and phase random-control rows all pass.
 - Frontier random-depth control: same-candidate depth-2/3/4 random controls pass on held-out, scale, and truth-table bridge slices; the result is a quality/budget-allocation claim, not a runtime claim.

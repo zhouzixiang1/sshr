@@ -5,9 +5,9 @@
     "table": "paper_latex/tables/submission_traceability_audit.tex"
   },
   "python": "3.11.15",
-  "rows": 11,
+  "rows": 12,
   "script": "analyze_submission_traceability_audit.py",
   "status_counts": {
-    "complete": 11
+    "complete": 12
   }
 }

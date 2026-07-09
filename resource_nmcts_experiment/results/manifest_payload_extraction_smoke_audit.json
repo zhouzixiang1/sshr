@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=953; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=963; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -17,6 +17,18 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_comparison_protocol_audit.json; needs_revision_count=0; layers=7; stderr=none",
       "item": "Comparison protocol audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_comparison_target_validity_audit.json; needs_revision_count=0; rows=7; stderr=none",
+      "item": "Comparison target validity audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_novelty_comparison_scorecard.json; needs_revision_count=0; rows=6; stderr=none",
+      "item": "Novelty/comparison scorecard",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -57,7 +69,7 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_editorial_screening_audit.json; needs_revision_count=0; rows=8; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_editorial_screening_audit.json; needs_revision_count=0; rows=9; stderr=none",
       "item": "Editorial screening audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -69,7 +81,7 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_submission_support_packet_audit.json; needs_revision_count=0; rows=8; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_submission_support_packet_audit.json; needs_revision_count=0; rows=10; stderr=none",
       "item": "Submission support packet audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -135,7 +147,7 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=22; rows=22; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=23; rows=23; stderr=none",
       "item": "Artifact rerun registry",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -149,6 +161,20 @@
       "minimum_rows_key": "layers",
       "name": "Comparison protocol audit",
       "script": "analyze_comparison_protocol_audit.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_comparison_target_validity_audit.json",
+      "minimum_rows_key": "rows",
+      "name": "Comparison target validity audit",
+      "script": "analyze_comparison_target_validity_audit.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_novelty_comparison_scorecard.json",
+      "minimum_rows_key": "rows",
+      "name": "Novelty/comparison scorecard",
+      "script": "analyze_novelty_comparison_scorecard.py"
     },
     {
       "expected_key": "needs_revision_count",
@@ -292,6 +318,6 @@
     }
   ],
   "status_counts": {
-    "pass": 22
+    "pass": 24
   }
 }

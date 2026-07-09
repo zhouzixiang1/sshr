@@ -1,0 +1,20 @@
+{
+  "comparison_protocol_needs_revision_count": 0,
+  "needs_revision_count": 0,
+  "roles": [
+    "causal control",
+    "exact reversible counterpoint",
+    "external stress test",
+    "non-dominance boundary",
+    "phase proxy",
+    "primary benchmark",
+    "scalability verification"
+  ],
+  "rows": 7,
+  "script": "analyze_comparison_target_validity_audit.py",
+  "status_counts": {
+    "pass": 7
+  },
+  "table": "paper_latex/tables/comparison_target_validity_audit.tex",
+  "table_anchor_present": true
+}

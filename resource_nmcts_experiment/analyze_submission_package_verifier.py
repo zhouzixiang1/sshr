@@ -5,6 +5,8 @@ The verifier runs after the payload archive has been created.  It checks the
 terminal package invariants that are easy to regress during final polishing:
 compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, comparison-protocol coverage,
+comparison-target validity,
+novelty/comparison scorecard coverage,
 search-control baseline coverage,
 frontier random-depth control coverage,
 editorial screening support,
@@ -57,6 +59,10 @@ PAYLOAD_MANIFEST = RESULTS / "manifest_submission_payload_archive.json"
 CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
 COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.json"
 COMPARISON_PROTOCOL_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_protocol_audit.tex"
+COMPARISON_TARGET_VALIDITY_MANIFEST = RESULTS / "manifest_comparison_target_validity_audit.json"
+COMPARISON_TARGET_VALIDITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_target_validity_audit.tex"
+NOVELTY_SCORECARD_MANIFEST = RESULTS / "manifest_novelty_comparison_scorecard.json"
+NOVELTY_SCORECARD_TABLE = THIS_DIR / "paper_latex" / "tables" / "novelty_comparison_scorecard.tex"
 ROS_GAP_MANIFEST = RESULTS / "manifest_ros_reproduction_gap_audit.json"
 SEARCH_BUDGET_MANIFEST = RESULTS / "manifest_search_budget_contract.json"
 SEARCH_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "search_budget_contract.tex"
@@ -279,6 +285,38 @@ def verify_comparison_protocol() -> dict[str, str]:
         status,
         f"layers={layers}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
         "Run analyze_comparison_protocol_audit.py and restore missing baseline-role, evidence, comparability, counterpoint, or manuscript anchors.",
+    )
+
+
+def verify_comparison_target_validity() -> dict[str, str]:
+    manifest = read_json(COMPARISON_TARGET_VALIDITY_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    roles = manifest.get("roles", []) if manifest else []
+    table_exists = COMPARISON_TARGET_VALIDITY_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = "pass" if manifest and revisions == 0 and table_exists and anchor else "needs revision"
+    return row(
+        "Comparison target validity audit",
+        status,
+        f"rows={rows}; roles={roles}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_comparison_target_validity_audit.py and restore comparison-role labels, evidence gates, and manuscript table anchors.",
+    )
+
+
+def verify_novelty_scorecard() -> dict[str, str]:
+    manifest = read_json(NOVELTY_SCORECARD_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    table_exists = NOVELTY_SCORECARD_TABLE.exists()
+    status = "pass" if manifest and revisions == 0 and table_exists else "needs revision"
+    return row(
+        "Novelty/comparison scorecard",
+        status,
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
+        "Run analyze_novelty_comparison_scorecard.py and restore missing novelty/comparison artifacts, manuscript anchors, or reviewer/editor brief anchors.",
     )
 
 
@@ -865,6 +903,8 @@ def build_rows() -> list[dict[str, str]]:
             verify_registry(),
             verify_claim_scope(),
             verify_comparison_protocol(),
+            verify_comparison_target_validity(),
+            verify_novelty_scorecard(),
             verify_ros_gap(),
             verify_search_budget_contract(),
             verify_schedule_proxy(),

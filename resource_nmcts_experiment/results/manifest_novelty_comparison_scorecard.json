@@ -1,0 +1,16 @@
+{
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_novelty_comparison_scorecard.md",
+    "manifest": "results/manifest_novelty_comparison_scorecard.json",
+    "summary": "results/summary_novelty_comparison_scorecard.csv",
+    "table": "paper_latex/tables/novelty_comparison_scorecard.tex"
+  },
+  "pass_count": 6,
+  "python": "3.11.15",
+  "rows": 6,
+  "script": "analyze_novelty_comparison_scorecard.py",
+  "status_counts": {
+    "pass": 6
+  }
+}

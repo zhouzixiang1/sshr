@@ -74,6 +74,10 @@ Current source evidence:
   `../results/summary_comparison_evidence_matrix.csv`
 - comparison evidence matrix analysis:
   `../results/analysis_comparison_evidence_matrix.md`
+- comparison target validity audit CSV:
+  `../results/summary_comparison_target_validity_audit.csv`
+- comparison target validity audit analysis:
+  `../results/analysis_comparison_target_validity_audit.md`
 - baseline comparability audit CSV:
   `../results/summary_baseline_comparability_audit.csv`
 - baseline comparability audit analysis:

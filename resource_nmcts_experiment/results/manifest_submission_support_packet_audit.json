@@ -7,7 +7,7 @@
     "table": "paper_latex/tables/submission_support_packet_audit.tex"
   },
   "python": "3.11.15",
-  "rows": 8,
+  "rows": 10,
   "rows_detail": [
     {
       "boundary": "The cover letter still needs author, editor, reviewer, and prior-dissemination fields before upload.",
@@ -26,6 +26,24 @@
       "status": "pass",
       "supported_use": "The cover letter summarizes layered baselines and directs editors to the comparison evidence.",
       "upload_risk": "Editor may see only a narrow SSHR comparison or miss external-toolchain evidence."
+    },
+    {
+      "boundary": "The scorecard indexes existing evidence; it does not add a new metric or broaden the logical-layer claim.",
+      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; manifest=results/manifest_novelty_comparison_scorecard.json::needs_revision_count=0",
+      "item": "Novelty/comparison scorecard is visible",
+      "next_action": "No action needed.",
+      "status": "pass",
+      "supported_use": "The support packet gives editors and reviewers a compact route from comparison questions to evidence and limitations.",
+      "upload_risk": "Reviewer-facing comparison meaning could be scattered across too many tables and briefs."
+    },
+    {
+      "boundary": "The validity audit classifies existing comparisons; it does not convert secondary probes into full hardware-mapped baselines.",
+      "evidence": "files_missing=none; tokens=2/2; missing_tokens=none; manifest=results/manifest_comparison_target_validity_audit.json::needs_revision_count=0",
+      "item": "Comparison target validity audit is visible",
+      "next_action": "No action needed.",
+      "status": "pass",
+      "supported_use": "The support packet gives reviewers a direct route from comparison targets to role labels and excluded claims.",
+      "upload_risk": "Reviewer may not know which comparisons are primary benchmarks, external probes, controls, or counterpoints."
     },
     {
       "boundary": "Final authorship, funding, conflicts, archive links, and AI disclosure remain human-gated.",
@@ -84,6 +102,6 @@
   ],
   "script": "analyze_submission_support_packet_audit.py",
   "status_counts": {
-    "pass": 8
+    "pass": 10
   }
 }

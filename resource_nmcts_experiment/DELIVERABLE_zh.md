@@ -137,6 +137,16 @@
 
 该表已接入英文投稿稿 Experimental Design。它按七层对比逐项列出 reviewer question、usable conclusion 和 excluded conclusion：same-task Boolean-oracle baselines、external LUT/XAG/AIG probes、exact reversible-synthesis counterpoint、phase/Rz proxy、internal search-control ablations、scaling/correctness bridges、trade-off/non-dominance audits。这样论文的对比意义不再只靠段落解释，而是有可复现表格和 manifest gate 支撑；同时该 evidence family 已接入 artifact rerun registry、payload round-trip、readiness 和 terminal package verifier。
 
+本轮进一步新增 comparison target validity audit，专门回答“我的方法到底在和谁比、这些对比有没有意义”：
+
+- `analyze_comparison_target_validity_audit.py`
+- `results/summary_comparison_target_validity_audit.csv`
+- `results/analysis_comparison_target_validity_audit.md`
+- `results/manifest_comparison_target_validity_audit.json`
+- `paper_latex/tables/comparison_target_validity_audit.tex`
+
+该审计把对比对象标成七类角色：primary benchmark、external stress test、exact reversible counterpoint、phase proxy、causal control、scalability verification 和 non-dominance boundary。它从 baseline claim matrix、comparison evidence matrix、comparability audit、counterpoint audit、related-work positioning 和 search-control audit 交叉检查每类比较是否有证据、文献/工具链动机、fairness boundary 和 excluded claim。当前 7/7 行 pass；正文中新增 `tab:comparison-target-validity`，明确 SSHR 只是 CNOT-oriented 小规模 counterpoint，ROS/XAG/LUT/AIG/RevKit 是外部逻辑层压力测试或可逆综合探针，AI/search 消融是因果控制而不是独立 oracle synthesizer 竞争者。
+
 本轮进一步补充了 paired statistical evidence 层，避免论文只依赖均值叙述：
 
 - `analyze_paired_statistical_evidence.py`

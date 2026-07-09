@@ -27,6 +27,7 @@ README = THIS_DIR / "submission_package" / "README.md"
 CHECKLIST = THIS_DIR / "submission_package" / "submission_checklist.md"
 
 COMPARISON_PROTOCOL = RESULTS / "manifest_comparison_protocol_audit.json"
+COMPARISON_TARGET_VALIDITY = RESULTS / "manifest_comparison_target_validity_audit.json"
 CLAIM_SCOPE = RESULTS / "manifest_claim_scope_lint.json"
 CITATION_SUPPORT = RESULTS / "manifest_citation_support_audit.json"
 COUNTERPOINT = RESULTS / "analysis_counterpoint_claim_boundary.md"
@@ -117,6 +118,17 @@ def specs() -> list[ScreeningSpec]:
             expected_value=0,
             supported_decision="The screening package explains why SSHR is a baseline and why comparisons are layered.",
             boundary="The claim is not universal superiority over every synthesis method.",
+        ),
+        ScreeningSpec(
+            item="Comparison target roles visible",
+            risk="Editor or reviewer may treat controls, probes, and counterpoints as if they were all primary benchmarks.",
+            files=(PAPER, README, CHECKLIST),
+            tokens=("Comparison target validity audit", "primary benchmark", "external stress test", "causal control"),
+            manifest_path=COMPARISON_TARGET_VALIDITY,
+            manifest_key="needs_revision_count",
+            expected_value=0,
+            supported_decision="The package makes comparison roles explicit before the results are read as a universal leaderboard.",
+            boundary="Role labels clarify the current evidence; they do not broaden any comparison beyond the logical-layer claim.",
         ),
         ScreeningSpec(
             item="Counterpoint and negative-result visibility",

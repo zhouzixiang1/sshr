@@ -59,6 +59,15 @@ The comparison evidence scope is materialized by
 `results/summary_comparison_evidence_matrix.csv`,
 `results/analysis_comparison_evidence_matrix.md`, and
 `paper_latex/tables/comparison_evidence_matrix.tex` for the submission draft.
+The comparison target validity audit is materialized by
+`analyze_comparison_target_validity_audit.py`, which writes
+`results/summary_comparison_target_validity_audit.csv`,
+`results/analysis_comparison_target_validity_audit.md`,
+`results/manifest_comparison_target_validity_audit.json`, and
+`paper_latex/tables/comparison_target_validity_audit.tex`.  It labels each
+comparison family as a primary benchmark, external stress test, exact
+reversible counterpoint, phase proxy, causal control, scalability
+verification, or non-dominance boundary.
 The baseline comparability audit is materialized by
 `analyze_baseline_comparability_audit.py`, which writes
 `results/summary_baseline_comparability_audit.csv`,

@@ -62,6 +62,20 @@ COMPARISON_PROTOCOL_PATHS = {
     "results/analysis_multimetric_pareto_tradeoff.md",
     "paper_latex/tables/comparison_protocol_audit.tex",
 }
+COMPARISON_TARGET_VALIDITY_PATHS = {
+    "analyze_comparison_target_validity_audit.py",
+    "results/analysis_comparison_target_validity_audit.md",
+    "results/summary_comparison_target_validity_audit.csv",
+    "results/manifest_comparison_target_validity_audit.json",
+    "paper_latex/tables/comparison_target_validity_audit.tex",
+}
+NOVELTY_SCORECARD_PATHS = {
+    "analyze_novelty_comparison_scorecard.py",
+    "results/analysis_novelty_comparison_scorecard.md",
+    "results/summary_novelty_comparison_scorecard.csv",
+    "results/manifest_novelty_comparison_scorecard.json",
+    "paper_latex/tables/novelty_comparison_scorecard.tex",
+}
 ROS_GAP_PATHS = {
     "analyze_ros_reproduction_gap_audit.py",
     "results/analysis_ros_reproduction_gap_audit.md",
@@ -305,6 +319,26 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    comparison_target_validity_missing = sorted(COMPARISON_TARGET_VALIDITY_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload comparison target validity evidence",
+            "pass" if not comparison_target_validity_missing else "needs revision",
+            f"comparison_target_validity_files={len(COMPARISON_TARGET_VALIDITY_PATHS)}; missing={comparison_target_validity_missing or 'none'}.",
+            "Ensure the uploadable archive includes the comparison target validity audit script, generated evidence, and manuscript table.",
+        )
+    )
+
+    novelty_missing = sorted(NOVELTY_SCORECARD_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload novelty/comparison scorecard",
+            "pass" if not novelty_missing else "needs revision",
+            f"novelty_scorecard_files={len(NOVELTY_SCORECARD_PATHS)}; missing={novelty_missing or 'none'}.",
+            "Ensure the uploadable archive includes the novelty/comparison scorecard script, generated evidence, and manuscript table.",
+        )
+    )
+
     ros_gap_missing = sorted(ROS_GAP_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -537,6 +571,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "required_payload_paths": sorted(REQUIRED_PAYLOAD_PATHS),
         "reviewer_entrypoint_paths": sorted(REVIEWER_ENTRYPOINT_PATHS),
         "comparison_protocol_paths": sorted(COMPARISON_PROTOCOL_PATHS),
+        "comparison_target_validity_paths": sorted(COMPARISON_TARGET_VALIDITY_PATHS),
         "ros_gap_paths": sorted(ROS_GAP_PATHS),
         "schedule_proxy_paths": sorted(SCHEDULE_PROXY_PATHS),
         "search_budget_paths": sorted(SEARCH_BUDGET_PATHS),

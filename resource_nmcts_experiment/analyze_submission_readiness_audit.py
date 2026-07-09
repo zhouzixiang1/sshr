@@ -82,6 +82,14 @@ COMPARISON_PROTOCOL_ANALYSIS = RESULTS / "analysis_comparison_protocol_audit.md"
 COMPARISON_PROTOCOL_SUMMARY = RESULTS / "summary_comparison_protocol_audit.csv"
 COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.json"
 COMPARISON_PROTOCOL_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_protocol_audit.tex"
+COMPARISON_TARGET_VALIDITY_ANALYSIS = RESULTS / "analysis_comparison_target_validity_audit.md"
+COMPARISON_TARGET_VALIDITY_SUMMARY = RESULTS / "summary_comparison_target_validity_audit.csv"
+COMPARISON_TARGET_VALIDITY_MANIFEST = RESULTS / "manifest_comparison_target_validity_audit.json"
+COMPARISON_TARGET_VALIDITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_target_validity_audit.tex"
+NOVELTY_SCORECARD_ANALYSIS = RESULTS / "analysis_novelty_comparison_scorecard.md"
+NOVELTY_SCORECARD_SUMMARY = RESULTS / "summary_novelty_comparison_scorecard.csv"
+NOVELTY_SCORECARD_MANIFEST = RESULTS / "manifest_novelty_comparison_scorecard.json"
+NOVELTY_SCORECARD_TABLE = THIS_DIR / "paper_latex" / "tables" / "novelty_comparison_scorecard.tex"
 ALGORITHM_CONTRACT_ANALYSIS = RESULTS / "analysis_algorithm_contract.md"
 ALGORITHM_CONTRACT_SUMMARY = RESULTS / "summary_algorithm_contract.csv"
 ALGORITHM_CONTRACT_MANIFEST = RESULTS / "manifest_algorithm_contract.json"
@@ -223,6 +231,32 @@ def build_rows() -> list[dict[str, str]]:
         int(comparison_protocol_manifest.get("needs_revision_count", -1)) if comparison_protocol_manifest else -1
     )
     comparison_protocol_counts = comparison_protocol_manifest.get("status_counts", {}) if comparison_protocol_manifest else {}
+    comparison_target_validity_manifest = read_json(COMPARISON_TARGET_VALIDITY_MANIFEST)
+    comparison_target_validity_revisions = (
+        int(comparison_target_validity_manifest.get("needs_revision_count", -1))
+        if comparison_target_validity_manifest
+        else -1
+    )
+    comparison_target_validity_counts = (
+        comparison_target_validity_manifest.get("status_counts", {}) if comparison_target_validity_manifest else {}
+    )
+    comparison_target_validity_rows = (
+        comparison_target_validity_manifest.get("rows", "missing") if comparison_target_validity_manifest else "missing"
+    )
+    comparison_target_validity_roles = (
+        comparison_target_validity_manifest.get("roles", []) if comparison_target_validity_manifest else []
+    )
+    comparison_target_validity_anchor = (
+        bool(comparison_target_validity_manifest.get("table_anchor_present", False))
+        if comparison_target_validity_manifest
+        else False
+    )
+    novelty_scorecard_manifest = read_json(NOVELTY_SCORECARD_MANIFEST)
+    novelty_scorecard_revisions = (
+        int(novelty_scorecard_manifest.get("needs_revision_count", -1)) if novelty_scorecard_manifest else -1
+    )
+    novelty_scorecard_counts = novelty_scorecard_manifest.get("status_counts", {}) if novelty_scorecard_manifest else {}
+    novelty_scorecard_rows = novelty_scorecard_manifest.get("rows", "missing") if novelty_scorecard_manifest else "missing"
     algorithm_contract_manifest = read_json(ALGORITHM_CONTRACT_MANIFEST)
     algorithm_contract_revisions = (
         int(algorithm_contract_manifest.get("needs_revision_count", -1)) if algorithm_contract_manifest else -1
@@ -492,6 +526,33 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Comparison protocol audit checks layered baseline roles, evidence, comparability, counterpoints, and manuscript anchors; status_counts={comparison_protocol_counts}; needs_revision_count={comparison_protocol_revisions}.",
             "next_action": "Rerun analyze_comparison_protocol_audit.py after changing baseline claims, evidence matrices, counterpoint wording, or comparison-scope text.",
+        },
+        {
+            "item": "Comparison target validity audit",
+            "status": "pass"
+            if "tab:comparison-target-validity" in text
+            and COMPARISON_TARGET_VALIDITY_ANALYSIS.exists()
+            and COMPARISON_TARGET_VALIDITY_SUMMARY.exists()
+            and COMPARISON_TARGET_VALIDITY_MANIFEST.exists()
+            and COMPARISON_TARGET_VALIDITY_TABLE.exists()
+            and comparison_target_validity_revisions == 0
+            and comparison_target_validity_anchor
+            else "needs revision",
+            "evidence": f"Comparison target validity audit labels primary benchmarks, external probes, exact reversible counterpoints, phase proxies, causal controls, scalability checks, and non-dominance boundaries; rows={comparison_target_validity_rows}; roles={comparison_target_validity_roles}; status_counts={comparison_target_validity_counts}; needs_revision_count={comparison_target_validity_revisions}; table_anchor_present={comparison_target_validity_anchor}.",
+            "next_action": "Rerun analyze_comparison_target_validity_audit.py after changing comparison targets, role labels, claim boundaries, or baseline-scope manuscript text.",
+        },
+        {
+            "item": "Novelty/comparison scorecard",
+            "status": "pass"
+            if "tab:novelty-comparison-scorecard" in text
+            and NOVELTY_SCORECARD_ANALYSIS.exists()
+            and NOVELTY_SCORECARD_SUMMARY.exists()
+            and NOVELTY_SCORECARD_MANIFEST.exists()
+            and NOVELTY_SCORECARD_TABLE.exists()
+            and novelty_scorecard_revisions == 0
+            else "needs revision",
+            "evidence": f"Novelty/comparison scorecard checks reviewer-facing method identity, baseline meaning, external probes, tradeoff visibility, AI/MCTS isolation, and scale boundary; rows={novelty_scorecard_rows}; status_counts={novelty_scorecard_counts}; needs_revision_count={novelty_scorecard_revisions}.",
+            "next_action": "Rerun analyze_novelty_comparison_scorecard.py after changing contribution wording, comparison claims, reviewer/editor briefs, or baseline-scope tables.",
         },
         {
             "item": "ROS reproduction gap audit",

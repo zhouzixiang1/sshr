@@ -65,6 +65,8 @@ After the quick rebuild, the current package should report:
 - readiness state in `results/analysis_submission_readiness_audit.md`
 - comparison protocol state in
   `results/analysis_comparison_protocol_audit.md`
+- comparison target validity state in
+  `results/analysis_comparison_target_validity_audit.md`
 - ROS reproduction-boundary state in
   `results/analysis_ros_reproduction_gap_audit.md`
 - editorial screening state in

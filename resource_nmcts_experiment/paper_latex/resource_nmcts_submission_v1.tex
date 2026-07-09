@@ -133,6 +133,23 @@ claim from being overstated.}
 \input{tables/contribution_evidence_map}
 \end{table}
 
+Table~\ref{tab:novelty-comparison-scorecard} then rewrites the same positioning
+as reviewer-facing questions.  Its purpose is not to add a new metric, but to
+show why the comparison set is meaningful while preserving the limitations that
+make each comparison fair.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Novelty and comparison scorecard.  Each row answers a reviewer-facing
+comparison or novelty concern, points to the manuscript evidence, and states the
+boundary that prevents overclaiming.}
+\label{tab:novelty-comparison-scorecard}
+\input{tables/novelty_comparison_scorecard}
+\end{table}
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{fig1_pipeline.pdf}
@@ -415,6 +432,28 @@ reviewer question it answers, the conclusion supported by the current evidence,
 and the stronger claim excluded by the logical-layer experiment design.}
 \label{tab:comparison-protocol}
 \input{tables/comparison_protocol_audit}
+\end{table}
+
+Table~\ref{tab:comparison-target-validity} answers the narrower question of
+whether each target family is a meaningful comparison for the claim being
+made.  It labels the comparison role explicitly: primary benchmark, external
+stress test, exact reversible counterpoint, phase proxy, causal control,
+scalability verification, or non-dominance boundary.  The labels are used in
+the results discussion so that SSHR is not treated as the whole story, ROS and
+XAG/LUT/AIG flows are not treated as full hardware-mapped reproductions, and
+AI ablations are not treated as competing oracle synthesizers.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Comparison target validity audit.  Each target family is assigned the
+role it plays in the manuscript, the reason the comparison is meaningful, and
+the stronger conclusion that the row does not support.  The corresponding CSV
+keeps the full method/control list for each family.}
+\label{tab:comparison-target-validity}
+\input{tables/comparison_target_validity_audit}
 \end{table}
 
 Table~\ref{tab:comparability-audit} makes the fairness boundary explicit.  It

@@ -7,7 +7,7 @@
     "table": "paper_latex/tables/editorial_screening_audit.tex"
   },
   "python": "3.11.15",
-  "rows": 8,
+  "rows": 9,
   "rows_detail": [
     {
       "boundary": "Do not imply hardware routing, native-gate scheduling, noise modeling, or device execution.",
@@ -26,6 +26,15 @@
       "risk": "Editor may see the work as only an SSHR variant or as a weak-baseline comparison.",
       "status": "pass",
       "supported_decision": "The screening package explains why SSHR is a baseline and why comparisons are layered."
+    },
+    {
+      "boundary": "Role labels clarify the current evidence; they do not broaden any comparison beyond the logical-layer claim.",
+      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; manifest=results/manifest_comparison_target_validity_audit.json::needs_revision_count=0",
+      "item": "Comparison target roles visible",
+      "next_action": "No action needed.",
+      "risk": "Editor or reviewer may treat controls, probes, and counterpoints as if they were all primary benchmarks.",
+      "status": "pass",
+      "supported_decision": "The package makes comparison roles explicit before the results are read as a universal leaderboard."
     },
     {
       "boundary": "Weighted-score wins must stay separated from raw resource dominance.",
@@ -84,6 +93,6 @@
   ],
   "script": "analyze_editorial_screening_audit.py",
   "status_counts": {
-    "pass": 8
+    "pass": 9
   }
 }

@@ -1,5 +1,5 @@
 {
-  "complete_rows": 22,
+  "complete_rows": 23,
   "families": [
     {
       "analysis_files": "12",
@@ -98,20 +98,36 @@
       "summary_files": "3"
     },
     {
-      "analysis_files": "5",
+      "analysis_files": "6",
       "claim_use": "Verifies the reviewer-facing baseline roles, evidence layers, comparability limits, counterpoints, and manuscript table.",
       "dependency_boundary": "Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps.",
-      "driver_scripts": "analyze_baseline_claim_matrix.py; analyze_comparison_evidence_matrix.py; analyze_baseline_comparability_audit.py; analyze_counterpoint_claim_boundary.py; analyze_comparison_protocol_audit.py",
+      "driver_scripts": "analyze_baseline_claim_matrix.py; analyze_comparison_evidence_matrix.py; analyze_baseline_comparability_audit.py; analyze_counterpoint_claim_boundary.py; analyze_comparison_protocol_audit.py; analyze_comparison_target_validity_audit.py",
       "evidence_family": "Comparison protocol and claim boundaries",
+      "manifest_files": "2",
+      "raw_files": "0",
+      "raw_rows": "0",
+      "representative_raw": "",
+      "rerun_tier": "quick comparison audit",
+      "scripts_missing": "",
+      "scripts_present": "6",
+      "status": "complete",
+      "summary_files": "6"
+    },
+    {
+      "analysis_files": "1",
+      "claim_use": "Checks that reviewer-facing novelty/comparison questions are tied to manuscript evidence, support-brief anchors, and explicit limitations.",
+      "dependency_boundary": "Quick derived audit; it strengthens reviewer-facing positioning without rerunning raw experiments.",
+      "driver_scripts": "analyze_novelty_comparison_scorecard.py",
+      "evidence_family": "Novelty and comparison scorecard",
       "manifest_files": "1",
       "raw_files": "0",
       "raw_rows": "0",
       "representative_raw": "",
       "rerun_tier": "quick comparison audit",
       "scripts_missing": "",
-      "scripts_present": "5",
+      "scripts_present": "1",
       "status": "complete",
-      "summary_files": "5"
+      "summary_files": "1"
     },
     {
       "analysis_files": "3",
@@ -507,7 +523,7 @@
     "results/raw_ultra_pairwise_wide_vs_recursive.csv",
     "results/raw_ultra_root_action_pairwise_widths.csv"
   ],
-  "rows": 22,
+  "rows": 23,
   "script": "analyze_artifact_rerun_registry.py",
   "unique_raw_files": 145,
   "unique_raw_rows": 59556

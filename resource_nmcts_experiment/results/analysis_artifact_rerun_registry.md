@@ -4,7 +4,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 
 ## Status counts
 
-- complete: 22
+- complete: 23
 - unique raw files covered by registry: 145
 - unique raw CSV rows covered by registry: 59556
 
@@ -16,7 +16,8 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | Editorial screening and reviewer-risk support | quick submission-support audit | 0 | 0 | 1 | complete | Does not change scientific results; checks public submission-support consistency against existing audit outputs. |
 | Cover-letter and venue support packet | quick submission-support audit | 0 | 0 | 2 | complete | Does not choose a venue or fill private metadata; checks public upload-support consistency against existing audits. |
 | Method workflow, algorithm, and budget contracts | quick method audit | 0 | 0 | 2 | complete | Quick derived audit; checks implementation anchors and manuscript method exposition, not raw benchmark outcomes. |
-| Comparison protocol and claim boundaries | quick comparison audit | 0 | 0 | 1 | complete | Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps. |
+| Comparison protocol and claim boundaries | quick comparison audit | 0 | 0 | 2 | complete | Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps. |
+| Novelty and comparison scorecard | quick comparison audit | 0 | 0 | 1 | complete | Quick derived audit; it strengthens reviewer-facing positioning without rerunning raw experiments. |
 | Traditional logical baselines | raw Python rerun | 4 | 4071 | 4 | complete | Python rerun; ILP-based subbaselines need Gurobi where enabled. |
 | External logical baseline extension | raw Python plus optional solvers | 3 | 2049 | 3 | complete | Python with optional Gurobi/logic-tool components; rows with skips/errors remain explicit. |
 | ROS-style LUT proxy | raw proxy rerun | 3 | 2472 | 2 | complete | Proxy-level LUT analysis only; not a full ROS SAT garbage-management rerun. |
@@ -61,7 +62,11 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - representative raw: not applicable for this tier
 - **Comparison protocol and claim boundaries**
   - claim use: Verifies the reviewer-facing baseline roles, evidence layers, comparability limits, counterpoints, and manuscript table.
-  - scripts: `analyze_baseline_claim_matrix.py; analyze_comparison_evidence_matrix.py; analyze_baseline_comparability_audit.py; analyze_counterpoint_claim_boundary.py; analyze_comparison_protocol_audit.py`
+  - scripts: `analyze_baseline_claim_matrix.py; analyze_comparison_evidence_matrix.py; analyze_baseline_comparability_audit.py; analyze_counterpoint_claim_boundary.py; analyze_comparison_protocol_audit.py; analyze_comparison_target_validity_audit.py`
+  - representative raw: not applicable for this tier
+- **Novelty and comparison scorecard**
+  - claim use: Checks that reviewer-facing novelty/comparison questions are tied to manuscript evidence, support-brief anchors, and explicit limitations.
+  - scripts: `analyze_novelty_comparison_scorecard.py`
   - representative raw: not applicable for this tier
 - **Traditional logical baselines**
   - claim use: Primary n<=6 same-task resource comparison against direct, AND-direct, ESOP, SSHR, affine, MCTS, and Pareto variants.

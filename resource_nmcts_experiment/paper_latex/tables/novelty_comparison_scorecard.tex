@@ -1,0 +1,12 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}}
+\toprule
+Reviewer question & Answer & Evidence & Boundary \\
+\midrule
+Is this only an SSHR variant? & No. \method{} searches \anf{}/\fprm{} and Boolean-ring actions; SSHR is a CNOT-oriented small-function counterpoint. & Tables~\ref{tab:contribution-map}, \ref{tab:counterpoint-boundary} & SSHR remains a strong CNOT reference; the paper claims T-count and weighted-score gains, not CNOT dominance. \\
+Are the primary baselines matched to the oracle task? & Yes. Direct \anf{}, AND-direct \anf{}, ESOP/MILP, BDD/ABC, and SSHR rows are paired on the same Boolean-oracle functions and resource score. & Tables~\ref{tab:evidence-matrix}, \ref{tab:paired-statistics} & These prove matched logical-resource improvements, not hardware-mapped optimality. \\
+Does the comparison go beyond internal baselines? & Yes. The package includes ROS-style LUT, mockturtle, CirKit, RevKit CLI, ABC/BDD, and RevKit phase/Rz probes. & Fig.~\ref{fig:baselines}; Tables~\ref{tab:ros-line}, \ref{tab:revkit-cli} & External rows are logic-level or exact-oracle probes; they are not full hardware mapping or full ROS reproduction. \\
+Does a score win hide unfavorable resources? & No. Counterpoint, Pareto, and schedule-proxy audits report where SSHR, CirKit, and RevKit remain strong. & Tables~\ref{tab:counterpoint-boundary}, \ref{tab:multimetric-nondominated}, \ref{tab:schedule-proxy-audit} & The correct claim is a strong T/weighted-score point with explicit CNOT, depth, ancilla, and runtime tradeoffs. \\
+Is AI/\mcts{} actually isolated from deterministic search? & Yes. The search-control audit separates heuristic, beam, no-\mcts{}, \mcts{}, Pareto, learned-prior, random-prior, random-depth, and phase controls. & Tables~\ref{tab:search-control-baseline-audit}, \ref{tab:learned-control-audit} & The learned components are promoted only where they give bounded quality, pruning, or budget-allocation evidence. \\
+Does the study go beyond small truth-table functions? & Yes. Large $n=20$--$40$ symbolic term-set runs are paired with $n=21$--$25$ complete truth-table bridge slices. & Table~\ref{tab:scale-audit}; Fig.~\ref{fig:validation} & Large-dimensional evidence is symbolic plus bridge-verified, not exhaustive truth-table benchmarking for all large n. \\
+\bottomrule
+\end{tabularx}

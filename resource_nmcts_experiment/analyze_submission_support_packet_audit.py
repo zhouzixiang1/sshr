@@ -35,6 +35,8 @@ REVIEWER_BRIEF = SUBMISSION_PACKAGE / "reviewer_concern_brief.md"
 
 CLAIM_SCOPE = RESULTS / "manifest_claim_scope_lint.json"
 COMPARISON_PROTOCOL = RESULTS / "manifest_comparison_protocol_audit.json"
+COMPARISON_TARGET_VALIDITY = RESULTS / "manifest_comparison_target_validity_audit.json"
+NOVELTY_SCORECARD = RESULTS / "manifest_novelty_comparison_scorecard.json"
 EDITORIAL_SCREENING = RESULTS / "manifest_editorial_screening_audit.json"
 METADATA_CLOSURE = RESULTS / "manifest_submission_metadata_closure_path.json"
 TEXT_PREVIEW = RESULTS / "manifest_submission_text_preview.json"
@@ -128,6 +130,36 @@ def specs() -> list[PacketSpec]:
             expected=0,
             supported_use="The cover letter summarizes layered baselines and directs editors to the comparison evidence.",
             boundary="It should not be read as universal dominance over every synthesis or compilation method.",
+        ),
+        PacketSpec(
+            item="Novelty/comparison scorecard is visible",
+            upload_risk="Reviewer-facing comparison meaning could be scattered across too many tables and briefs.",
+            files=(CHECKLIST, EDITOR_BRIEF, REVIEWER_BRIEF),
+            tokens=(
+                "Novelty/comparison scorecard",
+                "Why the Comparison Is Meaningful",
+                "Is this only an SSHR variant?",
+                "Does the method dominate every resource?",
+            ),
+            manifest_path=NOVELTY_SCORECARD,
+            manifest_key="needs_revision_count",
+            expected=0,
+            supported_use="The support packet gives editors and reviewers a compact route from comparison questions to evidence and limitations.",
+            boundary="The scorecard indexes existing evidence; it does not add a new metric or broaden the logical-layer claim.",
+        ),
+        PacketSpec(
+            item="Comparison target validity audit is visible",
+            upload_risk="Reviewer may not know which comparisons are primary benchmarks, external probes, controls, or counterpoints.",
+            files=(CHECKLIST, README),
+            tokens=(
+                "Comparison target validity audit",
+                "analyze_comparison_target_validity_audit.py",
+            ),
+            manifest_path=COMPARISON_TARGET_VALIDITY,
+            manifest_key="needs_revision_count",
+            expected=0,
+            supported_use="The support packet gives reviewers a direct route from comparison targets to role labels and excluded claims.",
+            boundary="The validity audit classifies existing comparisons; it does not convert secondary probes into full hardware-mapped baselines.",
         ),
         PacketSpec(
             item="Author declarations keep private fields explicit",

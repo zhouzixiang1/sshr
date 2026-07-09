@@ -9,8 +9,8 @@
   "rows": [
     {
       "boundary": "This establishes a manuscript framing and comparison map, not a claim that every cited system was fully reproduced.",
-      "evidence": "Related-work and contribution matrices position the method against BDD, LUT/ROS, XAG/MC, ABC/RevKit/mockturtle/CirKit, SSHR, and learning-guided synthesis.",
-      "evidence_files": "results/analysis_related_work_positioning.md; results/analysis_contribution_evidence_map.md; paper_latex/tables/related_work_positioning.tex; paper_latex/tables/contribution_evidence_map.tex",
+      "evidence": "Related-work, contribution, and novelty/comparison scorecard matrices position the method against BDD, LUT/ROS, XAG/MC, ABC/RevKit/mockturtle/CirKit, SSHR, and learning-guided synthesis.",
+      "evidence_files": "results/analysis_related_work_positioning.md; results/analysis_contribution_evidence_map.md; results/analysis_novelty_comparison_scorecard.md; paper_latex/tables/related_work_positioning.tex; paper_latex/tables/contribution_evidence_map.tex; paper_latex/tables/novelty_comparison_scorecard.tex",
       "next_action": "Update this row only if the manuscript's claimed novelty or related-work scope changes.",
       "requirement": "Design and literature positioning",
       "status": "pass"
@@ -41,8 +41,8 @@
     },
     {
       "boundary": "External rows are logic-level probes or exact-oracle reversible probes; they are not full ROS or hardware-mapped reproductions.",
-      "evidence": "Comparison evidence covers internal logical baselines, SSHR, ABC/BDD, ROS-style LUT, mockturtle, CirKit, RevKit CLI exact-oracle, and phase/Rz probes.",
-      "evidence_files": "results/analysis_comparison_evidence_matrix.md; results/analysis_baseline_comparability_audit.md; results/raw_mockturtle_xag_probe.csv; results/raw_cirkit_aig_probe.csv; results/raw_revkit_cli_multiflow_traditional.csv; results/raw_ros_lut_proxy_best.csv",
+      "evidence": "Comparison evidence, target-validity roles, and the novelty/comparison scorecard cover internal logical baselines, SSHR, ABC/BDD, ROS-style LUT, mockturtle, CirKit, RevKit CLI exact-oracle, controls, and phase/Rz probes.",
+      "evidence_files": "results/analysis_comparison_evidence_matrix.md; results/analysis_baseline_comparability_audit.md; results/analysis_comparison_target_validity_audit.md; results/analysis_novelty_comparison_scorecard.md; paper_latex/tables/comparison_target_validity_audit.tex; results/raw_mockturtle_xag_probe.csv; results/raw_cirkit_aig_probe.csv; results/raw_revkit_cli_multiflow_traditional.csv; results/raw_ros_lut_proxy_best.csv",
       "next_action": "Use the comparability audit when writing any baseline claim.",
       "requirement": "Baseline reproduction and comparison breadth",
       "status": "pass"
@@ -81,7 +81,7 @@
     },
     {
       "boundary": "Counts describe manuscript artifacts, not independent experimental datasets.",
-      "evidence": "Current package has 7 submitted figure panels and 165 generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
+      "evidence": "Current package has 7 submitted figure panels and 167 generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
       "evidence_files": "paper_latex/figures/submission_v36; paper_latex/tables; results/analysis_figure_asset_audit.md; results/analysis_reproducibility_audit.md",
       "next_action": "Spot-check figure/table readability after every layout or data update.",
       "requirement": "Rich paper figures and tables",
@@ -89,7 +89,7 @@
     },
     {
       "boundary": "Author names, target-venue formatting choices, and final declarations remain external author inputs.",
-      "evidence": "Compiled submission PDF exists with 33 pages and the TeX source is present.",
+      "evidence": "Compiled submission PDF exists with 35 pages and the TeX source is present.",
       "evidence_files": "paper_latex/resource_nmcts_submission_v1.tex; paper_latex/resource_nmcts_submission_v1.pdf; results/analysis_submission_readiness_audit.md",
       "next_action": "After author metadata is supplied, recompile and rerun readiness checks.",
       "requirement": "Complete LaTeX manuscript draft",

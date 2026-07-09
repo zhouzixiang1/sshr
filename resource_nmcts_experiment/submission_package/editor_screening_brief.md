@@ -50,6 +50,9 @@ explanation.
   high-dimensional bridge checks.
 - Baseline comparability audit: records task alignment, fairness controls,
   residual risks, and usable claims for every baseline family.
+- Novelty/comparison scorecard: answers the compact reviewer questions
+  "what is this compared with, why is that meaningful, and what claim remains
+  outside the evidence?"
 - Comparison protocol audit: cross-checks that every comparison layer has a
   role, evidence, comparability boundary, counterpoint coverage where relevant,
   and manuscript anchors.
