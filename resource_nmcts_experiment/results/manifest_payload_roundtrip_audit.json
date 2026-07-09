@@ -152,6 +152,14 @@
     "submission_package/submission_checklist.md",
     "verify_submission_package.sh"
   ],
+  "resource_weight_sensitivity_paths": [
+    "analyze_resource_weight_sensitivity_audit.py",
+    "paper_latex/tables/resource_weight_sensitivity_audit.tex",
+    "results/analysis_resource_weight_sensitivity_audit.md",
+    "results/manifest_resource_weight_sensitivity_audit.json",
+    "results/raw_resource_weight_sensitivity_audit.csv",
+    "results/summary_resource_weight_sensitivity_audit.csv"
+  ],
   "reviewer_entrypoint_paths": [
     "results/analysis_artifact_rerun_registry.md",
     "results/analysis_figure_asset_audit.md",
@@ -182,19 +190,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1052; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1059; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=1052; archive_files=1052; missing=none; extra=none.",
+      "evidence": "manifest_files=1059; archive_files=1059; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=1052; mismatches=none.",
+      "evidence": "checked=1059; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -233,6 +241,18 @@
       "evidence": "comparison_answer_files=5; missing=none.",
       "item": "Payload comparison answer scorecard",
       "next_action": "Ensure the uploadable archive includes the comparison answer scorecard script, generated evidence, and manuscript table.",
+      "status": "pass"
+    },
+    {
+      "evidence": "weight_robustness_files=5; missing=none.",
+      "item": "Payload score-weight robustness evidence",
+      "next_action": "Ensure the uploadable archive includes the score-weight robustness script, generated evidence, manifest, and manuscript table.",
+      "status": "pass"
+    },
+    {
+      "evidence": "resource_weight_sensitivity_files=6; missing=none.",
+      "item": "Payload resource-weight sensitivity evidence",
+      "next_action": "Ensure the uploadable archive includes the broader resource-weight sensitivity audit script, raw rows, generated evidence, manifest, and manuscript table.",
       "status": "pass"
     },
     {
@@ -380,7 +400,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=1052; metadata_issues=none.",
+      "evidence": "members_checked=1059; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -405,7 +425,7 @@
     "results/summary_search_budget_contract.csv"
   ],
   "status_counts": {
-    "pass": 34
+    "pass": 36
   },
   "stg_benchmark_paths": [
     "analyze_stg_published_benchmark.py",
@@ -445,5 +465,12 @@
     "results/analysis_threats_to_validity_audit.md",
     "results/manifest_threats_to_validity_audit.json",
     "results/summary_threats_to_validity_audit.csv"
+  ],
+  "weight_robustness_paths": [
+    "analyze_weight_robustness.py",
+    "paper_latex/tables/weight_robustness_compact.tex",
+    "results/analysis_weight_robustness.md",
+    "results/manifest_weight_robustness.json",
+    "results/summary_weight_robustness.csv"
   ]
 }

@@ -90,6 +90,11 @@ COMPARISON_ANSWER_ANALYSIS = RESULTS / "analysis_comparison_answer_scorecard.md"
 COMPARISON_ANSWER_SUMMARY = RESULTS / "summary_comparison_answer_scorecard.csv"
 COMPARISON_ANSWER_MANIFEST = RESULTS / "manifest_comparison_answer_scorecard.json"
 COMPARISON_ANSWER_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_answer_scorecard.tex"
+RESOURCE_WEIGHT_SENSITIVITY_ANALYSIS = RESULTS / "analysis_resource_weight_sensitivity_audit.md"
+RESOURCE_WEIGHT_SENSITIVITY_SUMMARY = RESULTS / "summary_resource_weight_sensitivity_audit.csv"
+RESOURCE_WEIGHT_SENSITIVITY_RAW = RESULTS / "raw_resource_weight_sensitivity_audit.csv"
+RESOURCE_WEIGHT_SENSITIVITY_MANIFEST = RESULTS / "manifest_resource_weight_sensitivity_audit.json"
+RESOURCE_WEIGHT_SENSITIVITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "resource_weight_sensitivity_audit.tex"
 THREATS_VALIDITY_ANALYSIS = RESULTS / "analysis_threats_to_validity_audit.md"
 THREATS_VALIDITY_SUMMARY = RESULTS / "summary_threats_to_validity_audit.csv"
 THREATS_VALIDITY_MANIFEST = RESULTS / "manifest_threats_to_validity_audit.json"
@@ -312,6 +317,20 @@ def build_rows() -> list[dict[str, str]]:
     )
     comparison_answer_anchor = (
         bool(comparison_answer_manifest.get("table_anchor_present", False)) if comparison_answer_manifest else False
+    )
+    resource_weight_manifest = read_json(RESOURCE_WEIGHT_SENSITIVITY_MANIFEST)
+    resource_weight_revisions = (
+        int(resource_weight_manifest.get("needs_revision_count", -1)) if resource_weight_manifest else -1
+    )
+    resource_weight_counts = resource_weight_manifest.get("status_counts", {}) if resource_weight_manifest else {}
+    resource_weight_raw_rows = resource_weight_manifest.get("raw_rows", "missing") if resource_weight_manifest else "missing"
+    resource_weight_summary_rows = (
+        resource_weight_manifest.get("summary_rows", "missing") if resource_weight_manifest else "missing"
+    )
+    resource_weight_comparisons = resource_weight_manifest.get("comparisons", []) if resource_weight_manifest else []
+    resource_weight_profiles = resource_weight_manifest.get("profiles", []) if resource_weight_manifest else []
+    resource_weight_anchor = (
+        bool(resource_weight_manifest.get("table_anchor_present", False)) if resource_weight_manifest else False
     )
     threats_validity_manifest = read_json(THREATS_VALIDITY_MANIFEST)
     threats_validity_revisions = (
@@ -763,6 +782,27 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Comparison answer scorecard gives reviewer-facing quantitative answers for comparison targets, evidence rows, outcomes, and excluded claims; rows={comparison_answer_rows}; questions={comparison_answer_questions}; status_counts={comparison_answer_counts}; needs_revision_count={comparison_answer_revisions}; table_anchor_present={comparison_answer_anchor}.",
             "next_action": "Rerun analyze_comparison_answer_scorecard.py after changing comparison outcomes, search-control rows, dominance rows, or comparison-scope manuscript text.",
+        },
+        {
+            "item": "Resource-weight sensitivity audit",
+            "status": "pass"
+            if "tab:resource-weight-sensitivity" in text
+            and RESOURCE_WEIGHT_SENSITIVITY_ANALYSIS.exists()
+            and RESOURCE_WEIGHT_SENSITIVITY_SUMMARY.exists()
+            and RESOURCE_WEIGHT_SENSITIVITY_RAW.exists()
+            and RESOURCE_WEIGHT_SENSITIVITY_MANIFEST.exists()
+            and RESOURCE_WEIGHT_SENSITIVITY_TABLE.exists()
+            and resource_weight_revisions == 0
+            and isinstance(resource_weight_raw_rows, int)
+            and resource_weight_raw_rows >= 12000
+            and isinstance(resource_weight_summary_rows, int)
+            and resource_weight_summary_rows >= 72
+            and len(resource_weight_comparisons) >= 12
+            and len(resource_weight_profiles) >= 6
+            and resource_weight_anchor
+            else "needs revision",
+            "evidence": f"Resource-weight sensitivity audit recomputes matched internal/external baselines under alternative logical-resource profiles; raw_rows={resource_weight_raw_rows}; summary_rows={resource_weight_summary_rows}; comparisons={len(resource_weight_comparisons)}; profiles={resource_weight_profiles}; status_counts={resource_weight_counts}; needs_revision_count={resource_weight_revisions}; table_anchor_present={resource_weight_anchor}.",
+            "next_action": "Rerun analyze_resource_weight_sensitivity_audit.py after changing weighted-score claims, comparison targets, or resource-sensitivity manuscript text.",
         },
         {
             "item": "Threats-to-validity audit",

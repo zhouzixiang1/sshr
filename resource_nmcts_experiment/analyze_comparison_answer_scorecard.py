@@ -25,6 +25,7 @@ PAIRED = RESULTS / "summary_paired_statistical_evidence.csv"
 SEARCH_CONTROL = RESULTS / "summary_search_control_baseline_audit.csv"
 DOMINANCE = RESULTS / "summary_multimetric_pairwise_dominance.csv"
 NONDOMINATED = RESULTS / "summary_multimetric_nondominated.csv"
+RESOURCE_WEIGHT_SENSITIVITY = RESULTS / "manifest_resource_weight_sensitivity_audit.json"
 
 SUMMARY = RESULTS / "summary_comparison_answer_scorecard.csv"
 ANALYSIS = RESULTS / "analysis_comparison_answer_scorecard.md"
@@ -81,6 +82,18 @@ def nondominated(method: str) -> str:
     if not row:
         return f"{method}: missing"
     return f"{row['nondominated']}/{row['available']} non-dominated"
+
+
+def resource_weight_evidence() -> str:
+    if not RESOURCE_WEIGHT_SENSITIVITY.exists():
+        return "resource-weight sensitivity: missing"
+    manifest = json.loads(RESOURCE_WEIGHT_SENSITIVITY.read_text(encoding="utf-8"))
+    return (
+        "resource-weight sensitivity "
+        f"{manifest.get('raw_rows', 'missing')} pair/profile rows; "
+        f"{len(manifest.get('comparisons', []))} comparisons; "
+        f"{len(manifest.get('profiles', []))} profiles"
+    )
 
 
 def dominance_text(baseline: str) -> str:
@@ -224,9 +237,9 @@ def build_rows() -> list[dict[str, str]]:
         },
         {
             "reviewer_question": "Does weighted score hide bad tradeoffs?",
-            "comparison_target": "Four-resource dominance and non-dominated method pool",
+            "comparison_target": "Four-resource dominance, non-dominated pool, and resource-weight sensitivity",
             "role": "non-dominance boundary",
-            "verified_evidence": "12-method n<=6 dominance pool; 177 matched functions",
+            "verified_evidence": "12-method n<=6 dominance pool; 177 matched functions; " + resource_weight_evidence(),
             "headline_answer": (
                 "Pareto-Resource-NMCTS is "
                 + nondominated("Pareto-Resource-NMCTS")
@@ -235,9 +248,9 @@ def build_rows() -> list[dict[str, str]]:
                 + "; "
                 + dominance_text("CirKit AIG/MC")
             ),
-            "usable_claim": "The method occupies a strong T/score point while preserving visible CNOT/depth/ancilla tradeoffs.",
+            "usable_claim": "The method occupies a strong T/score point while preserving visible CNOT/depth/ancilla and coefficient-sensitivity tradeoffs.",
             "excluded_claim": "Do not turn weighted-score wins into a complete Pareto or hardware-dominance claim.",
-            "sources": "summary_multimetric_pairwise_dominance.csv; summary_multimetric_nondominated.csv",
+            "sources": "summary_multimetric_pairwise_dominance.csv; summary_multimetric_nondominated.csv; manifest_resource_weight_sensitivity_audit.json",
         },
     ]
     for row in rows:

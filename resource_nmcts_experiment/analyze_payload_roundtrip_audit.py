@@ -78,6 +78,21 @@ COMPARISON_ANSWER_SCORECARD_PATHS = {
     "results/manifest_comparison_answer_scorecard.json",
     "paper_latex/tables/comparison_answer_scorecard.tex",
 }
+WEIGHT_ROBUSTNESS_PATHS = {
+    "analyze_weight_robustness.py",
+    "results/analysis_weight_robustness.md",
+    "results/summary_weight_robustness.csv",
+    "results/manifest_weight_robustness.json",
+    "paper_latex/tables/weight_robustness_compact.tex",
+}
+RESOURCE_WEIGHT_SENSITIVITY_PATHS = {
+    "analyze_resource_weight_sensitivity_audit.py",
+    "results/raw_resource_weight_sensitivity_audit.csv",
+    "results/analysis_resource_weight_sensitivity_audit.md",
+    "results/summary_resource_weight_sensitivity_audit.csv",
+    "results/manifest_resource_weight_sensitivity_audit.json",
+    "paper_latex/tables/resource_weight_sensitivity_audit.tex",
+}
 NOVELTY_SCORECARD_PATHS = {
     "analyze_novelty_comparison_scorecard.py",
     "results/analysis_novelty_comparison_scorecard.md",
@@ -449,6 +464,26 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    weight_robustness_missing = sorted(WEIGHT_ROBUSTNESS_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload score-weight robustness evidence",
+            "pass" if not weight_robustness_missing else "needs revision",
+            f"weight_robustness_files={len(WEIGHT_ROBUSTNESS_PATHS)}; missing={weight_robustness_missing or 'none'}.",
+            "Ensure the uploadable archive includes the score-weight robustness script, generated evidence, manifest, and manuscript table.",
+        )
+    )
+
+    resource_weight_missing = sorted(RESOURCE_WEIGHT_SENSITIVITY_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload resource-weight sensitivity evidence",
+            "pass" if not resource_weight_missing else "needs revision",
+            f"resource_weight_sensitivity_files={len(RESOURCE_WEIGHT_SENSITIVITY_PATHS)}; missing={resource_weight_missing or 'none'}.",
+            "Ensure the uploadable archive includes the broader resource-weight sensitivity audit script, raw rows, generated evidence, manifest, and manuscript table.",
+        )
+    )
+
     novelty_missing = sorted(NOVELTY_SCORECARD_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -763,6 +798,8 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "comparison_protocol_paths": sorted(COMPARISON_PROTOCOL_PATHS),
         "comparison_target_validity_paths": sorted(COMPARISON_TARGET_VALIDITY_PATHS),
         "comparison_answer_scorecard_paths": sorted(COMPARISON_ANSWER_SCORECARD_PATHS),
+        "weight_robustness_paths": sorted(WEIGHT_ROBUSTNESS_PATHS),
+        "resource_weight_sensitivity_paths": sorted(RESOURCE_WEIGHT_SENSITIVITY_PATHS),
         "threats_validity_paths": sorted(THREATS_VALIDITY_PATHS),
         "ros_gap_paths": sorted(ROS_GAP_PATHS),
         "stg_benchmark_paths": sorted(STG_BENCHMARK_PATHS),
