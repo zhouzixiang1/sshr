@@ -23,15 +23,17 @@ RESULTS = THIS_DIR / "results"
 AUTHOR_PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.pdf"
 ANONYMOUS_PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.pdf"
 
-FORBIDDEN_METADATA_PATTERNS = (
-    r"zixiang",
-    r"zhou",
+COMMON_FORBIDDEN_METADATA_PATTERNS = (
     r"author input required",
     r"\btodo\b",
     r"\btbd\b",
     r"\bplaceholder\b",
     r"/users/",
     r"desktop/tzb",
+)
+IDENTITY_METADATA_PATTERNS = (
+    r"zixiang",
+    r"zhou",
 )
 
 
@@ -94,7 +96,12 @@ def audit_pdf(label: str, pdf_path: Path) -> dict[str, str]:
     blob = metadata_blob(fields)
     forbidden_hits = [
         pattern
-        for pattern in FORBIDDEN_METADATA_PATTERNS
+        for pattern in COMMON_FORBIDDEN_METADATA_PATTERNS
+        if re.search(pattern, blob, flags=re.IGNORECASE)
+    ]
+    identity_hits = [
+        pattern
+        for pattern in IDENTITY_METADATA_PATTERNS
         if re.search(pattern, blob, flags=re.IGNORECASE)
     ]
     failures: list[str] = []
@@ -114,8 +121,8 @@ def audit_pdf(label: str, pdf_path: Path) -> dict[str, str]:
         failures.append(f"page_size={fields.get('Page size', 'missing')}")
     if forbidden_hits:
         failures.append(f"forbidden metadata={','.join(forbidden_hits)}")
-    if label == "anonymous" and re.search(r"zixiang|zhou", blob, flags=re.IGNORECASE):
-        failures.append("anonymous metadata identity leak")
+    if label == "anonymous" and identity_hits:
+        failures.append(f"anonymous metadata identity={','.join(identity_hits)}")
     status = "pass" if not failures else "needs revision"
     return {
         "manuscript": label,
@@ -131,6 +138,7 @@ def audit_pdf(label: str, pdf_path: Path) -> dict[str, str]:
         "creator": fields.get("Creator", ""),
         "producer": fields.get("Producer", ""),
         "forbidden_metadata_hits": "; ".join(forbidden_hits) if forbidden_hits else "none",
+        "identity_metadata_hits": "; ".join(identity_hits) if identity_hits else "none",
         "pdfinfo_returncode": str(returncode),
         "stderr": stderr[:240] if stderr else "none",
         "failures": "; ".join(failures) if failures else "none",
@@ -161,6 +169,7 @@ def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
         "creator",
         "producer",
         "forbidden_metadata_hits",
+        "identity_metadata_hits",
         "pdfinfo_returncode",
         "stderr",
         "failures",
@@ -187,13 +196,13 @@ def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
     lines.extend(
         [
             "",
-            "| manuscript | status | pages | encrypted | javascript | page size | title | author | forbidden metadata | failures |",
-            "|---|---|---:|---|---|---|---|---|---|---|",
+            "| manuscript | status | pages | encrypted | javascript | page size | title | author | forbidden metadata | identity metadata | failures |",
+            "|---|---|---:|---|---|---|---|---|---|---|---|",
         ]
     )
     for row in rows:
         lines.append(
-            "| {manuscript} | {status} | {pages} | {encrypted} | {javascript} | {page_size} | {title} | {author} | {forbidden_metadata_hits} | {failures} |".format(
+            "| {manuscript} | {status} | {pages} | {encrypted} | {javascript} | {page_size} | {title} | {author} | {forbidden_metadata_hits} | {identity_metadata_hits} | {failures} |".format(
                 **{key: value.replace("|", "\\|") for key, value in row.items()}
             )
         )

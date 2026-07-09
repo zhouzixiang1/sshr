@@ -3782,7 +3782,7 @@
     },
     {
       "boundary": "Documents reproducible entry points; raw sweeps still require their individual drivers.",
-      "bytes": 1620917,
+      "bytes": 1621271,
       "category": "Scripts and docs",
       "file_count": 90,
       "files": [
@@ -3957,9 +3957,9 @@
           "sha256": "ea8790d69b39012b8d253d61c8a1bfa04ccc993ebe461fdf6c5270a14420b87c"
         },
         {
-          "bytes": 8262,
+          "bytes": 8616,
           "path": "analyze_pdf_metadata_audit.py",
-          "sha256": "228a31fe73ae02bd572c692556e4024205fe7546e220d653c38031fd263472ea"
+          "sha256": "cec29156611d7bd0c88e3a0b623d684512c27abb6d0900638f210af60bb227e2"
         },
         {
           "bytes": 10022,
@@ -4238,7 +4238,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "84a796d6d84836a9f6b4dc65ada86519f26f6b77f9925155f7be2a513cc3d22d"
+      "sha256_digest": "53b4406e2c5206b23b330b5fec6fe1b691c3ca4704f7abba00434b6ee4d2bb70"
     },
     {
       "boundary": "Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild.",

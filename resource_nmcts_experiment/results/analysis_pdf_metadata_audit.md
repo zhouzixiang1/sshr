@@ -6,7 +6,7 @@ This terminal audit checks author and anonymous PDF metadata with Poppler pdfinf
 
 - pass: 2
 
-| manuscript | status | pages | encrypted | javascript | page size | title | author | forbidden metadata | failures |
-|---|---|---:|---|---|---|---|---|---|---|
-| author | pass | 27 | no | no | 595.276 x 841.89 pts (A4) |  |  | none | none |
-| anonymous | pass | 27 | no | no | 595.276 x 841.89 pts (A4) |  |  | none | none |
+| manuscript | status | pages | encrypted | javascript | page size | title | author | forbidden metadata | identity metadata | failures |
+|---|---|---:|---|---|---|---|---|---|---|---|
+| author | pass | 27 | no | no | 595.276 x 841.89 pts (A4) |  |  | none | none | none |
+| anonymous | pass | 27 | no | no | 595.276 x 841.89 pts (A4) |  |  | none | none | none |

@@ -8,10 +8,10 @@ This read-only verifier checks the terminal package invariants after the payload
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Compiled author PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=27, bytes=601122. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
+| Compiled author PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=27, bytes=601127. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
 | Compiled anonymous PDF | pass | paper_latex/resource_nmcts_submission_anonymous.pdf pages=27, bytes=597774. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
-| Payload SHA sidecar | pass | actual=37c2a75f0e493105e576824926ea7cfa09b080eca1cf27343f6ca02ab4634bb5; sidecar=37c2a75f0e493105e576824926ea7cfa09b080eca1cf27343f6ca02ab4634bb5. | Regenerate the payload archive if the digests differ. |
-| Payload manifest consistency | pass | summary=37c2a75f0e493105e576824926ea7cfa09b080eca1cf27343f6ca02ab4634bb5; manifest=37c2a75f0e493105e576824926ea7cfa09b080eca1cf27343f6ca02ab4634bb5; file_count=876. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
+| Payload SHA sidecar | pass | actual=7b27d1af584de86a0abbe4c7ab52ec63efc6daf10a7db74a6fde406242a5847e; sidecar=7b27d1af584de86a0abbe4c7ab52ec63efc6daf10a7db74a6fde406242a5847e. | Regenerate the payload archive if the digests differ. |
+| Payload manifest consistency | pass | summary=7b27d1af584de86a0abbe4c7ab52ec63efc6daf10a7db74a6fde406242a5847e; manifest=7b27d1af584de86a0abbe4c7ab52ec63efc6daf10a7db74a6fde406242a5847e; file_count=876. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
 | Readiness audit terminal state | pass | status_counts={'pass': 38, 'needs author input': 1}. | Resolve any needs-revision rows; author-specific declarations remain manual. |
 | Artifact rerun registry coverage | pass | families=14; registry_raw=144; actual_raw=144. | Rerun analyze_artifact_rerun_registry.py after adding raw CSVs or driver scripts. |
 | Claim-scope lint | pass | unresolved_count=0; status_counts={'guarded': 59, 'pass': 5}. | Run analyze_claim_scope_lint.py and revise unguarded hardware-mapping, universal-dominance, optimality, or full-tool-reproduction claims. |
