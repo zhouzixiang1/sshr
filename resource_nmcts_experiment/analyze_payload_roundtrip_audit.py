@@ -152,6 +152,9 @@ METADATA_CLOSURE_PATHS = {
 SOURCE_PATH_PRIVACY_PATHS = {
     "analyze_source_path_privacy_audit.py",
 }
+PAYLOAD_GIT_POLICY_PATHS = {
+    "analyze_payload_git_policy_audit.py",
+}
 PAYLOAD_EXTRACTION_SMOKE_PATHS = {
     "analyze_payload_extraction_smoke_audit.py",
 }
@@ -429,6 +432,16 @@ def build_rows() -> list[dict[str, str]]:
             "pass" if not source_path_missing else "needs revision",
             f"source_path_privacy_scripts={len(SOURCE_PATH_PRIVACY_PATHS)}; missing={source_path_missing or 'none'}; terminal_outputs_excluded=3.",
             "Ensure the uploadable archive includes source/path privacy audit code; generated terminal outputs are intentionally excluded and reproduced by the extracted-payload smoke test.",
+        )
+    )
+
+    payload_git_policy_missing = sorted(PAYLOAD_GIT_POLICY_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload Git-policy executable",
+            "pass" if not payload_git_policy_missing else "needs revision",
+            f"payload_git_policy_scripts={len(PAYLOAD_GIT_POLICY_PATHS)}; missing={payload_git_policy_missing or 'none'}; terminal_outputs_excluded=3.",
+            "Ensure the uploadable archive includes payload Git-policy audit code; generated terminal outputs are intentionally excluded and regenerated from the source tree.",
         )
     )
 

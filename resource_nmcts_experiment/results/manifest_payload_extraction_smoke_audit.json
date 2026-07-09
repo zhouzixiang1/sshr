@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=952; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=953; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -129,7 +129,13 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=21; rows=21; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_payload_git_policy_audit.json; needs_revision_count=0; rows=2; stderr=none",
+      "item": "Payload Git policy audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=22; rows=22; stderr=none",
       "item": "Artifact rerun registry",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -271,6 +277,13 @@
       "script": "analyze_claim_scope_lint.py"
     },
     {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_payload_git_policy_audit.json",
+      "minimum_rows_key": "rows",
+      "name": "Payload Git policy audit",
+      "script": "analyze_payload_git_policy_audit.py"
+    },
+    {
       "expected_key": "complete_rows",
       "manifest": "results/manifest_artifact_rerun_registry.json",
       "minimum_rows_key": "rows",
@@ -279,6 +292,6 @@
     }
   ],
   "status_counts": {
-    "pass": 21
+    "pass": 22
   }
 }

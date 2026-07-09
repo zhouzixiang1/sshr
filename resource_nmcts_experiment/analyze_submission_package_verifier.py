@@ -23,8 +23,8 @@ private-metadata starter dry-run, private-metadata validation,
 synthetic metadata-pipeline self-testing, anonymous-review decision support,
 author-input closure,
 private-preview protection, private payload exclusion, payload round-trip
-integrity, extracted-payload smoke checks, extracted-payload LaTeX compilation,
-extracted-payload verifier smoke,
+integrity, generated-payload Git policy, extracted-payload smoke checks,
+extracted-payload LaTeX compilation, extracted-payload verifier smoke,
 and LaTeX log cleanliness.  It
 writes a small audit report but does not rerun experiments or alter manuscript
 sources.
@@ -86,6 +86,7 @@ ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 AUTHOR_INPUT_CLOSURE_MANIFEST = RESULTS / "manifest_author_input_closure_audit.json"
 METADATA_CLOSURE_MANIFEST = RESULTS / "manifest_submission_metadata_closure_path.json"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
+PAYLOAD_GIT_POLICY_MANIFEST = RESULTS / "manifest_payload_git_policy_audit.json"
 PAYLOAD_EXTRACTION_SMOKE_MANIFEST = RESULTS / "manifest_payload_extraction_smoke_audit.json"
 PAYLOAD_VERIFIER_SMOKE_MANIFEST = RESULTS / "manifest_payload_verifier_smoke_audit.json"
 PAYLOAD_LATEX_COMPILE_MANIFEST = RESULTS / "manifest_payload_latex_compile_audit.json"
@@ -731,6 +732,28 @@ def verify_payload_roundtrip() -> dict[str, str]:
     )
 
 
+def verify_payload_git_policy() -> dict[str, str]:
+    manifest = read_json(PAYLOAD_GIT_POLICY_MANIFEST)
+    if EXTRACTED_PAYLOAD_MODE and not manifest:
+        return row(
+            "Generated payload Git policy",
+            "pass",
+            "extracted_payload_mode=1; source-worktree Git-policy manifest is intentionally excluded from the extracted upload payload.",
+            "Run analyze_payload_git_policy_audit.py from the source worktree where the tarball exists.",
+        )
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    extracted = manifest.get("extracted_payload_mode", "missing") if manifest else "missing"
+    status = "pass" if manifest and needs_revision == 0 else "needs revision"
+    return row(
+        "Generated payload Git policy",
+        status,
+        f"rows={rows}; needs_revision_count={needs_revision}; status_counts={counts}; extracted_payload_mode={extracted}.",
+        "Run analyze_payload_git_policy_audit.py after payload creation and keep generated tarballs ignored and out of Git.",
+    )
+
+
 def verify_payload_extraction_smoke() -> dict[str, str]:
     manifest = read_json(PAYLOAD_EXTRACTION_SMOKE_MANIFEST)
     if EXTRACTED_PAYLOAD_MODE and not manifest:
@@ -868,6 +891,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_text_preview(),
             verify_private_payload_exclusion(),
             verify_payload_roundtrip(),
+            verify_payload_git_policy(),
             verify_payload_extraction_smoke(),
             verify_payload_verifier_smoke(),
             verify_payload_latex_compile(),

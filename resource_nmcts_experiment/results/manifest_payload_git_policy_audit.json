@@ -1,0 +1,17 @@
+{
+  "archive": "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
+  "extracted_payload_mode": false,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_payload_git_policy_audit.md",
+    "manifest": "results/manifest_payload_git_policy_audit.json",
+    "summary": "results/summary_payload_git_policy_audit.csv"
+  },
+  "python": "3.11.15",
+  "rows": 4,
+  "script": "analyze_payload_git_policy_audit.py",
+  "sha256_file": "submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256",
+  "status_counts": {
+    "pass": 4
+  }
+}

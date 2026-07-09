@@ -3,12 +3,12 @@
 Payload group & Files & Missing & Digest & Boundary \\
 \midrule
 Manuscript source & 4 & 0 & \texttt{1c4fbd7299af} & Compiled PDF is checked by readiness audit to avoid self-referential hashes. \\
-Paper tables & 163 & 0 & \texttt{86f5407828a3} & Terminal submission audit tables are excluded from the stable payload digest. \\
+Paper tables & 163 & 0 & \texttt{41b19bf5baf5} & Terminal submission audit tables are excluded from the stable payload digest. \\
 Submission figures & 28 & 0 & \texttt{a9bdb91e8e03} & Includes generated figure assets and plotted source data, not raw benchmark reruns. \\
 Raw measurements & 145 & 0 & \texttt{a868b9542153} & Raw CSVs are regenerated only by the heavier run scripts, not by the lightweight rebuild. \\
-Derived summaries & 360 & 0 & \texttt{d034d8579d1d} & Terminal submission/package outputs are excluded so this manifest remains stable. \\
-Run manifests & 91 & 0 & \texttt{82ac16fc4670} & Submission-level terminal manifests are excluded from this digest group. \\
-Scripts and docs & 119 & 0 & \texttt{5904ae212489} & Includes reproducible entry points and top-level core implementation modules; raw sweeps still require their individual drivers. \\
+Derived summaries & 360 & 0 & \texttt{6e60c4848bf3} & Terminal submission/package outputs are excluded so this manifest remains stable. \\
+Run manifests & 91 & 0 & \texttt{d7b7f49de0f5} & Submission-level terminal manifests are excluded from this digest group. \\
+Scripts and docs & 120 & 0 & \texttt{b38be3703cbc} & Includes reproducible entry points and top-level core implementation modules; raw sweeps still require their individual drivers. \\
 Models & 20 & 0 & \texttt{4c5c2a1bfc19} & Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild. \\
 External adapters & 1 & 0 & \texttt{de5aa3b78998} & Includes local adapter source files used for external toolchain probes, not vendored tool repositories. \\
 Submission support & 11 & 0 & \texttt{49b34c13ee40} & Includes public package README, author-input packet, artifact guide, cover-letter, declaration, checklist, reviewer-brief, editor-screening, venue-selection, and structured metadata templates; ignored generated private submission text is excluded. \\

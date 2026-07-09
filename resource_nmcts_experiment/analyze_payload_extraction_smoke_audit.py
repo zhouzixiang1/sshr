@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import csv
 import json
+import os
 import subprocess
 import sys
 import tarfile
@@ -210,6 +211,15 @@ SMOKE_SPECS = (
         minimum_rows=5,
     ),
     SmokeSpec(
+        name="Payload Git policy audit",
+        script="analyze_payload_git_policy_audit.py",
+        manifest="results/manifest_payload_git_policy_audit.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=2,
+    ),
+    SmokeSpec(
         name="Artifact rerun registry",
         script="analyze_artifact_rerun_registry.py",
         manifest="results/manifest_artifact_rerun_registry.json",
@@ -292,6 +302,9 @@ def smoke_script(payload_dir: Path, spec: SmokeSpec) -> dict[str, str]:
             "Regenerate the payload archive so the extracted smoke-test script is present.",
         )
     try:
+        env = None
+        if spec.script == "analyze_payload_git_policy_audit.py":
+            env = {**dict(os.environ), "RESOURCE_NMCTS_EXTRACTED_PAYLOAD": "1"}
         proc = subprocess.run(
             [sys.executable, str(script_path)],
             cwd=payload_dir,
@@ -300,6 +313,7 @@ def smoke_script(payload_dir: Path, spec: SmokeSpec) -> dict[str, str]:
             stderr=subprocess.PIPE,
             text=True,
             timeout=spec.timeout_seconds,
+            env=env,
         )
     except Exception as exc:
         return row(

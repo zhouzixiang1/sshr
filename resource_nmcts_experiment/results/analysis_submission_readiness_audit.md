@@ -5,7 +5,7 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 ## Status counts
 
 - needs author input: 1
-- pass: 52
+- pass: 53
 
 ## Checklist
 
@@ -52,9 +52,10 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 | Compiled anonymous review draft | pass | anonymous_source_exists=True; anonymous_pdf_exists=True. | Run make_anonymous_review_draft.py and rebuild the PDF if a double-blind venue is selected. |
 | Goal completion audit | pass | The original project objective is mapped to concrete evidence files, boundaries, and remaining author-gated items. | Rerun analyze_goal_completion_audit.py after adding major evidence or filling author/venue metadata. |
 | Uploadable payload archive | pass | Deterministic submission payload tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present. | Rerun make_submission_payload_archive.py after adding or removing upload payload files. |
-| Payload round-trip integrity | pass | Payload round-trip audit exists; status_counts={'pass': 23}; needs_revision_count=0. | Rerun analyze_payload_roundtrip_audit.py after payload creation and fix any archive/manifest/path/hash issues. |
+| Payload round-trip integrity | pass | Payload round-trip audit exists; status_counts={'pass': 24}; needs_revision_count=0. | Rerun analyze_payload_roundtrip_audit.py after payload creation and fix any archive/manifest/path/hash issues. |
+| Generated payload Git policy | pass | Payload tarball/sidecar are generated local artifacts, present after rebuild, SHA-checked, and excluded from Git; rows=4; status_counts={'pass': 4}; needs_revision_count=0. | Rerun analyze_payload_git_policy_audit.py after payload creation and keep dist/*.tar.gz out of the Git index. |
 | Source/path privacy audit | pass | Source/path privacy audit separates strict manuscript/support path gates from allowed experiment-provenance local paths; rows=6; payload_local_path_files=53; status_counts={'pass': 6}; needs_revision_count=0. | Rerun analyze_source_path_privacy_audit.py after payload creation and remove local paths from manuscript/support sources while keeping toolchain paths only in provenance outputs. |
-| Payload extraction smoke test | pass | Payload extraction smoke audit runs lightweight checks from an extracted payload tree; status_counts={'pass': 21}; needs_revision_count=0. | Rerun analyze_payload_extraction_smoke_audit.py after payload creation and fix extraction or in-payload script execution failures. |
+| Payload extraction smoke test | pass | Payload extraction smoke audit runs lightweight checks from an extracted payload tree; status_counts={'pass': 22}; needs_revision_count=0. | Rerun analyze_payload_extraction_smoke_audit.py after payload creation and fix extraction or in-payload script execution failures. |
 | Payload verifier smoke audit | pass | Payload verifier smoke audit extracts the upload tarball and runs verify_submission_package.sh inside the extracted payload tree; verifier_returncode=0; status_counts={'pass': 2}; needs_revision_count=0. | Rerun analyze_payload_verifier_smoke_audit.py after payload creation and fix extracted one-command verifier failures. |
 | Payload LaTeX compile audit | pass | Payload LaTeX compile audit extracts the upload tarball and rebuilds author/anonymous PDFs from the extracted TeX sources; compiled_manuscripts=2; status_counts={'pass': 3}; needs_revision_count=0. | Rerun analyze_payload_latex_compile_audit.py after payload creation and restore missing extracted-payload LaTeX dependencies. |
 | Terminal package verifier | pass | Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, PDF visual rendering, PDF text/searchability, PDF metadata/privacy, source/path privacy, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, citation support, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, author-input closure, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, extracted-payload LaTeX compilation, extracted-payload verifier smoke, and LaTeX log boundaries. | Run verify_submission_package.sh after rebuilding the payload archive. |

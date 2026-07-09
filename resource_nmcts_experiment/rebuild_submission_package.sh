@@ -95,6 +95,7 @@ run_py analyze_editorial_screening_audit.py
 run_py analyze_target_venue_decision_audit.py
 run_py analyze_submission_support_packet_audit.py
 run_py make_submission_payload_archive.py
+run_py analyze_payload_git_policy_audit.py
 run_py analyze_latex_dependency_audit.py
 run_py analyze_payload_roundtrip_audit.py
 run_py analyze_source_path_privacy_audit.py

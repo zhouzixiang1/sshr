@@ -4,11 +4,11 @@ This terminal audit extracts the reviewer/upload payload into a temporary direct
 
 ## Status counts
 
-- pass: 21
+- pass: 22
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Payload extraction | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=952; error=none. | Regenerate the payload archive if it cannot be safely extracted. |
+| Payload extraction | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=953; error=none. | Regenerate the payload archive if it cannot be safely extracted. |
 | Comparison protocol audit | pass | returncode=0; manifest=results/manifest_comparison_protocol_audit.json; needs_revision_count=0; layers=7; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | ROS reproduction gap audit | pass | returncode=0; manifest=results/manifest_ros_reproduction_gap_audit.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Schedule-proxy tradeoff audit | pass | returncode=0; manifest=results/manifest_schedule_proxy_audit.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
@@ -28,4 +28,5 @@ This terminal audit extracts the reviewer/upload payload into a temporary direct
 | Author-input closure audit | pass | returncode=0; manifest=results/manifest_author_input_closure_audit.json; needs_revision_count=0; rows=7; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Submission metadata closure path | pass | returncode=0; manifest=results/manifest_submission_metadata_closure_path.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Claim-scope lint | pass | returncode=0; manifest=results/manifest_claim_scope_lint.json; unresolved_count=0; required_boundary_count=5; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
-| Artifact rerun registry | pass | returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=21; rows=21; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
+| Payload Git policy audit | pass | returncode=0; manifest=results/manifest_payload_git_policy_audit.json; needs_revision_count=0; rows=2; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
+| Artifact rerun registry | pass | returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=22; rows=22; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |

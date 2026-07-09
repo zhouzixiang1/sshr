@@ -305,6 +305,15 @@ payload 后可以从解包目录运行一键 verifier。
 
 该 tarball 打包稳定源码/数据载荷、最终 PDF、archive/traceability 审计和投稿支持文件；为避免归档自引用，它不把 tarball 自身、SHA256 sidecar 和 readiness audit 放进包内。readiness audit 在 tarball 生成之后运行，负责检查 tarball、SHA256 sidecar、CSV/Markdown/JSON manifest 是否存在。由于当前 tarball 约 39.9 MB，`submission_package/dist/*.tar.gz` 与对应 `.sha256` 作为本地 rebuild 生成的上传产物保留在工作区并被 `.gitignore` 排除，不再作为 Git blob 推送；远端源码通过 `./rebuild_submission_package.sh` 可重新生成同一路径的上传包。
 
+本轮新增 payload Git-policy audit，把上述大文件策略转成机器门禁：
+
+- `analyze_payload_git_policy_audit.py`
+- `results/summary_payload_git_policy_audit.csv`
+- `results/analysis_payload_git_policy_audit.md`
+- `results/manifest_payload_git_policy_audit.json`
+
+该审计检查 upload tarball 与 SHA256 sidecar 是否在本地 rebuild 后存在、digest 是否一致、是否不在 Git index 中、以及 `.gitignore` 是否覆盖这两个生成产物。它已接入 rebuild、verify、readiness、terminal package verifier、payload round-trip、payload extraction smoke 和 artifact rerun registry，用于保证“可上传产物可生成、可校验，但不作为大二进制 Git blob 推送”这一交付策略不会漂移。
+
 本轮新增 PDF visual render audit，把 PDF 检查从 `pdfinfo` 页数和 LaTeX log 推进到全页渲染层：
 
 - `analyze_pdf_visual_audit.py`

@@ -4,16 +4,16 @@ This read-only verifier checks the terminal package invariants after the payload
 
 ## Status counts
 
-- pass: 39
+- pass: 40
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Compiled author PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=33, bytes=621263. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
-| Compiled anonymous PDF | pass | paper_latex/resource_nmcts_submission_anonymous.pdf pages=33, bytes=617828. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
-| Payload SHA sidecar | pass | actual=a1c6a84a58dd4715235c97ec82799eb43b1f0cd65b53b529d4935c4c6347b360; sidecar=a1c6a84a58dd4715235c97ec82799eb43b1f0cd65b53b529d4935c4c6347b360. | Regenerate the payload archive if the digests differ. |
-| Payload manifest consistency | pass | summary=a1c6a84a58dd4715235c97ec82799eb43b1f0cd65b53b529d4935c4c6347b360; manifest=a1c6a84a58dd4715235c97ec82799eb43b1f0cd65b53b529d4935c4c6347b360; file_count=952. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
-| Readiness audit terminal state | pass | status_counts={'pass': 51, 'needs author input': 1}; terminal_verifier_self_row_excluded=True. | Resolve any needs-revision rows; author-specific declarations remain manual. |
-| Artifact rerun registry coverage | pass | families=21; registry_raw=145; actual_raw=145. | Rerun analyze_artifact_rerun_registry.py after adding raw CSVs or driver scripts. |
+| Compiled author PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=33, bytes=621272. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
+| Compiled anonymous PDF | pass | paper_latex/resource_nmcts_submission_anonymous.pdf pages=33, bytes=617826. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
+| Payload SHA sidecar | pass | actual=568b6d85a71314fe099f19af24a27575587a264d866a999cfb4bf656d81dc5f3; sidecar=568b6d85a71314fe099f19af24a27575587a264d866a999cfb4bf656d81dc5f3. | Regenerate the payload archive if the digests differ. |
+| Payload manifest consistency | pass | summary=568b6d85a71314fe099f19af24a27575587a264d866a999cfb4bf656d81dc5f3; manifest=568b6d85a71314fe099f19af24a27575587a264d866a999cfb4bf656d81dc5f3; file_count=953. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
+| Readiness audit terminal state | pass | status_counts={'pass': 52, 'needs author input': 1}; terminal_verifier_self_row_excluded=True. | Resolve any needs-revision rows; author-specific declarations remain manual. |
+| Artifact rerun registry coverage | pass | families=22; registry_raw=145; actual_raw=145. | Rerun analyze_artifact_rerun_registry.py after adding raw CSVs or driver scripts. |
 | Claim-scope lint | pass | unresolved_count=0; status_counts={'guarded': 65, 'pass': 5}. | Run analyze_claim_scope_lint.py and revise unguarded hardware-mapping, universal-dominance, optimality, or full-tool-reproduction claims. |
 | Comparison protocol audit | pass | layers=7; needs_revision_count=0; status_counts={'pass': 7}; table_exists=True. | Run analyze_comparison_protocol_audit.py and restore missing baseline-role, evidence, comparability, counterpoint, or manuscript anchors. |
 | ROS reproduction gap audit | pass | rows=8; needs_revision_count=0; status_counts={'pass': 8}; coverage_counts={'covered': 4, 'not reproduced': 1, 'partial': 3}; official_ros_fully_reproduced=False; full_ros_boundary_is_explicit=True. | Run analyze_ros_lut_line_sensitivity.py and analyze_ros_reproduction_gap_audit.py and restore ROS proxy/full-reproduction boundary anchors. |
@@ -41,8 +41,9 @@ This read-only verifier checks the terminal package invariants after the payload
 | Submission metadata closure path | pass | needs_revision_count=0; required_metadata_paths=50; metadata_present=False; closure_path_ready=True; status_counts={'pass': 8}. | Run analyze_submission_metadata_closure_path.py and keep the final author/venue metadata path explicit, ignored, and machine-checkable. |
 | Private submission text preview | pass | status_counts={'needs author input': 1}; private_outputs_are_git_ignored=True. | Run make_submission_text_preview.py and keep generated private Markdown files ignored by Git. |
 | Private metadata payload exclusion | pass | private_payload_hits=none; checked_basenames=['generated_author_declarations.md', 'generated_availability_statements.md', 'generated_cover_letter.md', 'generated_submission_text.md', 'submission_metadata.json']. | Regenerate the payload after removing ignored private metadata or preview files from package inputs. |
-| Payload round-trip audit | pass | needs_revision_count=0; status_counts={'pass': 23}. | Run analyze_payload_roundtrip_audit.py after payload creation and fix any archive/manifest/path/hash issues. |
-| Payload extraction smoke audit | pass | needs_revision_count=0; status_counts={'pass': 21}; smoke_scripts=20. | Run analyze_payload_extraction_smoke_audit.py after payload creation and fix extracted-payload script failures. |
+| Payload round-trip audit | pass | needs_revision_count=0; status_counts={'pass': 24}. | Run analyze_payload_roundtrip_audit.py after payload creation and fix any archive/manifest/path/hash issues. |
+| Generated payload Git policy | pass | rows=4; needs_revision_count=0; status_counts={'pass': 4}; extracted_payload_mode=False. | Run analyze_payload_git_policy_audit.py after payload creation and keep generated tarballs ignored and out of Git. |
+| Payload extraction smoke audit | pass | needs_revision_count=0; status_counts={'pass': 22}; smoke_scripts=21. | Run analyze_payload_extraction_smoke_audit.py after payload creation and fix extracted-payload script failures. |
 | Payload verifier smoke audit | pass | needs_revision_count=0; verifier_returncode=0; rows=2; status_counts={'pass': 2}. | Run analyze_payload_verifier_smoke_audit.py after payload creation and fix extracted one-command verifier failures. |
 | Payload LaTeX compile audit | pass | needs_revision_count=0; compiled_manuscripts=2; status_counts={'pass': 3}. | Run analyze_payload_latex_compile_audit.py and restore missing extracted-payload TeX, table, figure, or bibliography dependencies. |
 | Author LaTeX log boundary | pass | Only allowed rerunfilecheck/showhyphens log lines found. | Inspect the LaTeX log and fix unexpected warnings or errors. |

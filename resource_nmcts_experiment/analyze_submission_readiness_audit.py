@@ -60,6 +60,9 @@ METADATA_CLOSURE_MANIFEST = RESULTS / "manifest_submission_metadata_closure_path
 PAYLOAD_ROUNDTRIP_ANALYSIS = RESULTS / "analysis_payload_roundtrip_audit.md"
 PAYLOAD_ROUNDTRIP_SUMMARY = RESULTS / "summary_payload_roundtrip_audit.csv"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
+PAYLOAD_GIT_POLICY_ANALYSIS = RESULTS / "analysis_payload_git_policy_audit.md"
+PAYLOAD_GIT_POLICY_SUMMARY = RESULTS / "summary_payload_git_policy_audit.csv"
+PAYLOAD_GIT_POLICY_MANIFEST = RESULTS / "manifest_payload_git_policy_audit.json"
 PAYLOAD_EXTRACTION_SMOKE_ANALYSIS = RESULTS / "analysis_payload_extraction_smoke_audit.md"
 PAYLOAD_EXTRACTION_SMOKE_SUMMARY = RESULTS / "summary_payload_extraction_smoke_audit.csv"
 PAYLOAD_EXTRACTION_SMOKE_MANIFEST = RESULTS / "manifest_payload_extraction_smoke_audit.json"
@@ -363,6 +366,12 @@ def build_rows() -> list[dict[str, str]]:
     payload_roundtrip_manifest = read_json(PAYLOAD_ROUNDTRIP_MANIFEST)
     payload_roundtrip_counts = payload_roundtrip_manifest.get("status_counts", {}) if payload_roundtrip_manifest else {}
     payload_roundtrip_revisions = int(payload_roundtrip_manifest.get("needs_revision_count", -1)) if payload_roundtrip_manifest else -1
+    payload_git_policy_manifest = read_json(PAYLOAD_GIT_POLICY_MANIFEST)
+    payload_git_policy_counts = payload_git_policy_manifest.get("status_counts", {}) if payload_git_policy_manifest else {}
+    payload_git_policy_revisions = (
+        int(payload_git_policy_manifest.get("needs_revision_count", -1)) if payload_git_policy_manifest else -1
+    )
+    payload_git_policy_rows = payload_git_policy_manifest.get("rows", "missing") if payload_git_policy_manifest else "missing"
     source_path_privacy_manifest = read_json(SOURCE_PATH_PRIVACY_MANIFEST)
     source_path_privacy_counts = source_path_privacy_manifest.get("status_counts", {}) if source_path_privacy_manifest else {}
     source_path_privacy_revisions = (
@@ -839,6 +848,17 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Payload round-trip audit exists; status_counts={payload_roundtrip_counts}; needs_revision_count={payload_roundtrip_revisions}.",
             "next_action": "Rerun analyze_payload_roundtrip_audit.py after payload creation and fix any archive/manifest/path/hash issues.",
+        },
+        {
+            "item": "Generated payload Git policy",
+            "status": "pass"
+            if PAYLOAD_GIT_POLICY_ANALYSIS.exists()
+            and PAYLOAD_GIT_POLICY_SUMMARY.exists()
+            and PAYLOAD_GIT_POLICY_MANIFEST.exists()
+            and payload_git_policy_revisions == 0
+            else "needs revision",
+            "evidence": f"Payload tarball/sidecar are generated local artifacts, present after rebuild, SHA-checked, and excluded from Git; rows={payload_git_policy_rows}; status_counts={payload_git_policy_counts}; needs_revision_count={payload_git_policy_revisions}.",
+            "next_action": "Rerun analyze_payload_git_policy_audit.py after payload creation and keep dist/*.tar.gz out of the Git index.",
         },
         {
             "item": "Source/path privacy audit",
