@@ -137,6 +137,19 @@ def build_rows() -> list[dict[str, str]]:
             "Treats comparisons as layered evidence with explicit roles and reports unfavorable metric counterpoints rather than a universal leaderboard.",
         ),
         row(
+            "Threats to validity",
+            "Links the main reviewer-facing validity threats to mitigation evidence and residual boundaries.",
+            [
+                THIS_DIR / "analyze_threats_to_validity_audit.py",
+                RESULTS / "summary_threats_to_validity_audit.csv",
+                RESULTS / "analysis_threats_to_validity_audit.md",
+                RESULTS / "manifest_threats_to_validity_audit.json",
+                TABLES / "threats_to_validity_audit.tex",
+            ],
+            "Discussion, Table threats-validity",
+            "Names limitations and mitigations; it does not remove the logical-layer, proxy-baseline, or generated-slice boundaries.",
+        ),
+        row(
             "External toolchain probes",
             "Traces ROS-style LUT, mockturtle, CirKit, and RevKit CLI comparison evidence.",
             [

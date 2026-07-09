@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=991; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=997; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -35,6 +35,12 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_novelty_comparison_scorecard.json; needs_revision_count=0; rows=6; stderr=none",
       "item": "Novelty/comparison scorecard",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_threats_to_validity_audit.json; needs_revision_count=0; rows=7; stderr=none",
+      "item": "Threats-to-validity audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -71,6 +77,12 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_search_control_baseline_audit.json; needs_revision_count=0; rows=10; stderr=none",
       "item": "Search-control baseline audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_learned_control_audit.json; needs_revision_count=0; rows=8; stderr=none",
+      "item": "Learned-control audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -209,6 +221,13 @@
     },
     {
       "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_threats_to_validity_audit.json",
+      "minimum_rows_key": "rows",
+      "name": "Threats-to-validity audit",
+      "script": "analyze_threats_to_validity_audit.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
       "manifest": "results/manifest_ros_reproduction_gap_audit.json",
       "minimum_rows_key": "rows",
       "name": "ROS reproduction gap audit",
@@ -248,6 +267,13 @@
       "minimum_rows_key": "rows",
       "name": "Search-control baseline audit",
       "script": "analyze_search_control_baseline_audit.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_learned_control_audit.json",
+      "minimum_rows_key": "rows",
+      "name": "Learned-control audit",
+      "script": "analyze_learned_control_audit.py"
     },
     {
       "expected_key": "needs_revision_count",
@@ -370,6 +396,6 @@
     }
   ],
   "status_counts": {
-    "pass": 28
+    "pass": 30
   }
 }

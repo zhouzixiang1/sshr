@@ -6,9 +6,11 @@ terminal package invariants that are easy to regress during final polishing:
 compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, comparison-protocol coverage,
 comparison-target validity,
+threats-to-validity coverage,
 novelty/comparison scorecard coverage,
 public handoff freshness,
 search-control baseline coverage,
+learned-control audit coverage,
 frontier random-depth control coverage,
 ultra-scale n=48--64 stress coverage,
 ultra-scale n=48--64 resource-profile coverage,
@@ -66,6 +68,8 @@ COMPARISON_TARGET_VALIDITY_MANIFEST = RESULTS / "manifest_comparison_target_vali
 COMPARISON_TARGET_VALIDITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_target_validity_audit.tex"
 COMPARISON_ANSWER_SCORECARD_MANIFEST = RESULTS / "manifest_comparison_answer_scorecard.json"
 COMPARISON_ANSWER_SCORECARD_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_answer_scorecard.tex"
+THREATS_VALIDITY_MANIFEST = RESULTS / "manifest_threats_to_validity_audit.json"
+THREATS_VALIDITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "threats_to_validity_audit.tex"
 NOVELTY_SCORECARD_MANIFEST = RESULTS / "manifest_novelty_comparison_scorecard.json"
 NOVELTY_SCORECARD_TABLE = THIS_DIR / "paper_latex" / "tables" / "novelty_comparison_scorecard.tex"
 PUBLIC_HANDOFF_MANIFEST = RESULTS / "manifest_public_handoff_freshness_audit.json"
@@ -79,6 +83,8 @@ ULTRA_SCALE64_TABLE = THIS_DIR / "paper_latex" / "tables" / "screen_scale_ultra_
 ULTRA_SCALE64_PROFILE_MANIFEST = RESULTS / "manifest_screen_scale_ultra_scale64_resource_profile.json"
 ULTRA_SCALE64_PROFILE_TABLE = THIS_DIR / "paper_latex" / "tables" / "screen_scale_ultra_scale64_resource_profile.tex"
 SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
+LEARNED_CONTROL_MANIFEST = RESULTS / "manifest_learned_control_audit.json"
+LEARNED_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "learned_control_audit.tex"
 BITFLIP_RANDOM_PRIOR_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control.json"
 BITFLIP_RANDOM_PRIOR_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_random_prior_control.tex"
 FRONTIER_RANDOM_DEPTH_MANIFEST = RESULTS / "manifest_frontier_random_depth_control.json"
@@ -335,6 +341,23 @@ def verify_comparison_answer_scorecard() -> dict[str, str]:
     )
 
 
+def verify_threats_to_validity() -> dict[str, str]:
+    manifest = read_json(THREATS_VALIDITY_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    threats = manifest.get("threats", []) if manifest else []
+    table_exists = THREATS_VALIDITY_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = "pass" if manifest and revisions == 0 and table_exists and anchor else "needs revision"
+    return row(
+        "Threats-to-validity audit",
+        status,
+        f"rows={rows}; threats={threats}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_threats_to_validity_audit.py and restore validity-threat rows, generated table, or manuscript anchor.",
+    )
+
+
 def verify_novelty_scorecard() -> dict[str, str]:
     manifest = read_json(NOVELTY_SCORECARD_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -486,6 +509,28 @@ def verify_search_control() -> dict[str, str]:
         status,
         f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}.",
         "Run analyze_search_control_baseline_audit.py and restore heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, bit-flip random-prior, frontier random-depth, and phase random-control evidence rows.",
+    )
+
+
+def verify_learned_control() -> dict[str, str]:
+    manifest = read_json(LEARNED_CONTROL_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    class_counts = manifest.get("claim_class_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    promoted = int(manifest.get("promoted_count", -1)) if manifest else -1
+    limited = int(manifest.get("limited_count", -1)) if manifest else -1
+    table_exists = LEARNED_CONTROL_TABLE.exists()
+    status = (
+        "pass"
+        if manifest and revisions == 0 and rows == 8 and promoted >= 4 and limited >= 2 and table_exists
+        else "needs revision"
+    )
+    return row(
+        "Learned-control audit",
+        status,
+        f"rows={rows}; promoted_count={promoted}; limited_count={limited}; needs_revision_count={revisions}; status_counts={counts}; claim_class_counts={class_counts}; table_exists={table_exists}.",
+        "Run analyze_learned_control_audit.py and restore promoted/bounded/limited learned-control classifications and the manuscript table.",
     )
 
 
@@ -1041,6 +1086,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_comparison_protocol(),
             verify_comparison_target_validity(),
             verify_comparison_answer_scorecard(),
+            verify_threats_to_validity(),
             verify_novelty_scorecard(),
             verify_public_handoff_freshness(),
             verify_ros_gap(),
@@ -1049,6 +1095,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_ultra_scale64(),
             verify_ultra_scale64_resource_profile(),
             verify_search_control(),
+            verify_learned_control(),
             verify_bitflip_random_prior(),
             verify_frontier_random_depth(),
             verify_editorial_screening(),

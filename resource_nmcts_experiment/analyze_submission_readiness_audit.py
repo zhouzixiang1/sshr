@@ -90,6 +90,10 @@ COMPARISON_ANSWER_ANALYSIS = RESULTS / "analysis_comparison_answer_scorecard.md"
 COMPARISON_ANSWER_SUMMARY = RESULTS / "summary_comparison_answer_scorecard.csv"
 COMPARISON_ANSWER_MANIFEST = RESULTS / "manifest_comparison_answer_scorecard.json"
 COMPARISON_ANSWER_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_answer_scorecard.tex"
+THREATS_VALIDITY_ANALYSIS = RESULTS / "analysis_threats_to_validity_audit.md"
+THREATS_VALIDITY_SUMMARY = RESULTS / "summary_threats_to_validity_audit.csv"
+THREATS_VALIDITY_MANIFEST = RESULTS / "manifest_threats_to_validity_audit.json"
+THREATS_VALIDITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "threats_to_validity_audit.tex"
 NOVELTY_SCORECARD_ANALYSIS = RESULTS / "analysis_novelty_comparison_scorecard.md"
 NOVELTY_SCORECARD_SUMMARY = RESULTS / "summary_novelty_comparison_scorecard.csv"
 NOVELTY_SCORECARD_MANIFEST = RESULTS / "manifest_novelty_comparison_scorecard.json"
@@ -155,6 +159,10 @@ SEARCH_CONTROL_ANALYSIS = RESULTS / "analysis_search_control_baseline_audit.md"
 SEARCH_CONTROL_SUMMARY = RESULTS / "summary_search_control_baseline_audit.csv"
 SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
 SEARCH_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "search_control_baseline_audit.tex"
+LEARNED_CONTROL_ANALYSIS = RESULTS / "analysis_learned_control_audit.md"
+LEARNED_CONTROL_SUMMARY = RESULTS / "summary_learned_control_audit.csv"
+LEARNED_CONTROL_MANIFEST = RESULTS / "manifest_learned_control_audit.json"
+LEARNED_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "learned_control_audit.tex"
 BITFLIP_RANDOM_PRIOR_ANALYSIS = RESULTS / "analysis_bitflip_random_prior_control.md"
 BITFLIP_RANDOM_PRIOR_SUMMARY = RESULTS / "summary_bitflip_random_prior_control.csv"
 BITFLIP_RANDOM_PRIOR_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control.json"
@@ -281,6 +289,16 @@ def build_rows() -> list[dict[str, str]]:
     comparison_answer_anchor = (
         bool(comparison_answer_manifest.get("table_anchor_present", False)) if comparison_answer_manifest else False
     )
+    threats_validity_manifest = read_json(THREATS_VALIDITY_MANIFEST)
+    threats_validity_revisions = (
+        int(threats_validity_manifest.get("needs_revision_count", -1)) if threats_validity_manifest else -1
+    )
+    threats_validity_counts = threats_validity_manifest.get("status_counts", {}) if threats_validity_manifest else {}
+    threats_validity_rows = threats_validity_manifest.get("rows", "missing") if threats_validity_manifest else "missing"
+    threats_validity_threats = threats_validity_manifest.get("threats", []) if threats_validity_manifest else []
+    threats_validity_anchor = (
+        bool(threats_validity_manifest.get("table_anchor_present", False)) if threats_validity_manifest else False
+    )
     novelty_scorecard_manifest = read_json(NOVELTY_SCORECARD_MANIFEST)
     novelty_scorecard_revisions = (
         int(novelty_scorecard_manifest.get("needs_revision_count", -1)) if novelty_scorecard_manifest else -1
@@ -378,6 +396,18 @@ def build_rows() -> list[dict[str, str]]:
     )
     search_control_counts = search_control_manifest.get("status_counts", {}) if search_control_manifest else {}
     search_control_rows = search_control_manifest.get("rows", "missing") if search_control_manifest else "missing"
+    learned_control_manifest = read_json(LEARNED_CONTROL_MANIFEST)
+    learned_control_revisions = (
+        int(learned_control_manifest.get("needs_revision_count", -1)) if learned_control_manifest else -1
+    )
+    learned_control_counts = learned_control_manifest.get("status_counts", {}) if learned_control_manifest else {}
+    learned_control_class_counts = (
+        learned_control_manifest.get("claim_class_counts", {}) if learned_control_manifest else {}
+    )
+    learned_control_rows = learned_control_manifest.get("rows", "missing") if learned_control_manifest else "missing"
+    learned_control_promoted = (
+        learned_control_manifest.get("promoted_count", "missing") if learned_control_manifest else "missing"
+    )
     bitflip_random_manifest = read_json(BITFLIP_RANDOM_PRIOR_MANIFEST)
     bitflip_random_revisions = (
         int(bitflip_random_manifest.get("needs_revision_count", -1)) if bitflip_random_manifest else -1
@@ -651,6 +681,20 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_comparison_answer_scorecard.py after changing comparison outcomes, search-control rows, dominance rows, or comparison-scope manuscript text.",
         },
         {
+            "item": "Threats-to-validity audit",
+            "status": "pass"
+            if "tab:threats-validity" in text
+            and THREATS_VALIDITY_ANALYSIS.exists()
+            and THREATS_VALIDITY_SUMMARY.exists()
+            and THREATS_VALIDITY_MANIFEST.exists()
+            and THREATS_VALIDITY_TABLE.exists()
+            and threats_validity_revisions == 0
+            and threats_validity_anchor
+            else "needs revision",
+            "evidence": f"Threats-to-validity audit names reviewer risks, mitigation evidence, and residual boundaries; rows={threats_validity_rows}; threats={threats_validity_threats}; status_counts={threats_validity_counts}; needs_revision_count={threats_validity_revisions}; table_anchor_present={threats_validity_anchor}.",
+            "next_action": "Rerun analyze_threats_to_validity_audit.py after changing limitations, claim boundaries, verification scope, or reproducibility artifacts.",
+        },
+        {
             "item": "Novelty/comparison scorecard",
             "status": "pass"
             if "tab:novelty-comparison-scorecard" in text
@@ -740,6 +784,22 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Search-control audit separates heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, high-dimensional guard, bit-flip random-prior, frontier random-depth, and phase random-control evidence; rows={search_control_rows}; status_counts={search_control_counts}; needs_revision_count={search_control_revisions}.",
             "next_action": "Rerun analyze_search_control_baseline_audit.py after changing search ablations, learned-prior rows, bit-flip/frontier/phase random controls, or search-control manuscript claims.",
+        },
+        {
+            "item": "Learned-control audit",
+            "status": "pass"
+            if "tab:learned-control-audit" in text
+            and LEARNED_CONTROL_ANALYSIS.exists()
+            and LEARNED_CONTROL_SUMMARY.exists()
+            and LEARNED_CONTROL_MANIFEST.exists()
+            and LEARNED_CONTROL_TABLE.exists()
+            and learned_control_revisions == 0
+            and learned_control_rows == 8
+            and isinstance(learned_control_promoted, int)
+            and learned_control_promoted >= 4
+            else "needs revision",
+            "evidence": f"Learned-control audit classifies promoted, bounded, limited, and not-promoted AI/search controls; rows={learned_control_rows}; promoted_count={learned_control_promoted}; claim_class_counts={learned_control_class_counts}; status_counts={learned_control_counts}; needs_revision_count={learned_control_revisions}.",
+            "next_action": "Rerun analyze_learned_control_audit.py after changing learned frontier policies, sparse depth gates, phase shortlist controls, neural guard/prior results, or AI-claim manuscript text.",
         },
         {
             "item": "Bit-flip random-prior control",

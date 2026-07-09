@@ -50,20 +50,20 @@
       "summary_files": "1"
     },
     {
-      "analysis_files": "1",
-      "claim_use": "Verifies that the editor/reviewer support package exposes scope, novelty, comparison, counterpoint, AI, scale, reproducibility, and author-gate boundaries.",
+      "analysis_files": "2",
+      "claim_use": "Verifies that the editor/reviewer support package exposes scope, novelty, comparison, counterpoint, AI, scale, validity-threat, reproducibility, and author-gate boundaries.",
       "dependency_boundary": "Does not change scientific results; checks public submission-support consistency against existing audit outputs.",
-      "driver_scripts": "analyze_editorial_screening_audit.py",
+      "driver_scripts": "analyze_editorial_screening_audit.py; analyze_threats_to_validity_audit.py",
       "evidence_family": "Editorial screening and reviewer-risk support",
-      "manifest_files": "1",
+      "manifest_files": "2",
       "raw_files": "0",
       "raw_rows": "0",
       "representative_raw": "",
       "rerun_tier": "quick submission-support audit",
       "scripts_missing": "",
-      "scripts_present": "1",
+      "scripts_present": "2",
       "status": "complete",
-      "summary_files": "1"
+      "summary_files": "2"
     },
     {
       "analysis_files": "3",
@@ -279,7 +279,7 @@
       "dependency_boundary": "Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only.",
       "driver_scripts": "train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; run_bitflip_random_prior_control.py; analyze_bitflip_random_prior_control.py; analyze_frontier_random_depth_control.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py",
       "evidence_family": "Learned-control and ablations",
-      "manifest_files": "12",
+      "manifest_files": "13",
       "raw_files": "14",
       "raw_rows": "8207",
       "representative_raw": "results/raw_bitflip_random_prior_control.csv; results/raw_highdim_neural_prior_boolean_guard.csv; results/raw_highdim_neural_prior_learned_prior.csv; results/raw_highdim_neural_prior_no_prior.csv; +10 more",
@@ -287,7 +287,7 @@
       "scripts_missing": "",
       "scripts_present": "9",
       "status": "complete",
-      "summary_files": "22"
+      "summary_files": "23"
     },
     {
       "analysis_files": "2",

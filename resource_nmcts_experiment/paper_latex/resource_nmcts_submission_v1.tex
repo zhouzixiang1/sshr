@@ -1234,6 +1234,25 @@ branch should be read as learned pruning evidence rather than as a solved
 rotation-synthesis policy.  The next target is rotation-spectrum-aware
 optimization and sequence-level audit.
 
+Table~\ref{tab:threats-validity} collects the main threats to validity and the
+audit evidence that mitigates them.  It is included to make the limitation
+boundary explicit before the final conclusion: the paper is a logical-layer
+resource study with layered baselines, bounded learned-control claims,
+symbolic large-instance verification, and reproducible packaging, not a
+hardware-mapped compiler or universal optimality result.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Threats-to-validity and mitigation audit.  Each row names a reviewer
+risk, points to the generated evidence that mitigates it, and preserves the
+residual boundary that the current experiments do not cross.}
+\label{tab:threats-validity}
+\input{tables/threats_to_validity_audit}
+\end{table}
+
 Several limitations are deliberate.  All results are logical-layer estimates;
 the paper does not model routing, hardware connectivity, native gate sets,
 noise, or magic-state factories.  The ROS-style LUT result is a proxy rather

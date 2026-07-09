@@ -83,11 +83,13 @@ run_py make_submission_figures.py
 run_py analyze_figure_asset_audit.py
 run_py analyze_headline_numeric_consistency.py
 run_py analyze_submission_archive_manifest.py
+run_py analyze_threats_to_validity_audit.py
 run_py analyze_submission_traceability_audit.py
 
 echo "==> Building English submission PDF"
 (
   cd paper_latex
+  rm -f resource_nmcts_submission_{v1,anonymous,acm_tqc}.{aux,bbl,blg,fdb_latexmk,fls,out}
   "$LATEXMK_BIN" -pdf -interaction=nonstopmode -halt-on-error resource_nmcts_submission_v1.tex
   "$LATEXMK_BIN" -pdf -interaction=nonstopmode -halt-on-error resource_nmcts_submission_anonymous.tex
   "$LATEXMK_BIN" -pdf -interaction=nonstopmode -halt-on-error resource_nmcts_submission_acm_tqc.tex

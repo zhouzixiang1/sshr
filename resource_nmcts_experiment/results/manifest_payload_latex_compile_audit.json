@@ -11,9 +11,9 @@
   "rows": 4,
   "rows_detail": [
     {
-      "bytes": "991",
+      "bytes": "997",
       "compile_seconds": "0.000",
-      "evidence": "extracted_files=991; error=none.",
+      "evidence": "extracted_files=997; error=none.",
       "item": "Payload extraction for LaTeX compile",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "pages": "n/a",
@@ -22,34 +22,34 @@
       "status": "pass"
     },
     {
-      "bytes": "634812",
+      "bytes": "638692",
       "compile_seconds": "not_recorded",
-      "evidence": "stdout_lines=1236; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
+      "evidence": "stdout_lines=1246; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "author payload LaTeX compile",
       "next_action": "Inspect the extracted payload LaTeX log and restore missing table, figure, bibliography, or style dependencies.",
-      "pages": "37",
+      "pages": "38",
       "returncode": "0",
       "source": "paper_latex/resource_nmcts_submission_v1.tex",
       "status": "pass"
     },
     {
-      "bytes": "631030",
+      "bytes": "635364",
       "compile_seconds": "not_recorded",
-      "evidence": "stdout_lines=1242; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
+      "evidence": "stdout_lines=1254; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "anonymous payload LaTeX compile",
       "next_action": "Inspect the extracted payload LaTeX log and restore missing table, figure, bibliography, or style dependencies.",
-      "pages": "36",
+      "pages": "38",
       "returncode": "0",
       "source": "paper_latex/resource_nmcts_submission_anonymous.tex",
       "status": "pass"
     },
     {
-      "bytes": "829748",
+      "bytes": "833237",
       "compile_seconds": "not_recorded",
-      "evidence": "stdout_lines=1724; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
+      "evidence": "stdout_lines=1734; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "acm_tqc payload LaTeX compile",
       "next_action": "Inspect the extracted payload LaTeX log and restore missing table, figure, bibliography, or style dependencies.",
-      "pages": "35",
+      "pages": "36",
       "returncode": "0",
       "source": "paper_latex/resource_nmcts_submission_acm_tqc.tex",
       "status": "pass"

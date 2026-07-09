@@ -69,6 +69,8 @@ After the quick rebuild, the current package should report:
   `results/analysis_comparison_target_validity_audit.md`
 - comparison answer scorecard state in
   `results/analysis_comparison_answer_scorecard.md`
+- threats-to-validity audit state in
+  `results/analysis_threats_to_validity_audit.md`
 - ROS reproduction-boundary state in
   `results/analysis_ros_reproduction_gap_audit.md`
 - editorial screening state in

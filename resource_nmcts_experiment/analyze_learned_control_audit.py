@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import csv
+import json
+from collections import Counter
 from pathlib import Path
 
 
@@ -39,6 +41,10 @@ def wlt(row: dict[str, str], *, prefix: str = "") -> str:
     if prefix:
         return f"{row[prefix + 'wins']}/{row[prefix + 'losses']}/{row[prefix + 'ties']}"
     return f"{row['wins']}/{row['losses']}/{row['ties']}"
+
+
+def status_from(condition: bool) -> str:
+    return "pass" if condition else "needs revision"
 
 
 def build_rows() -> list[dict[str, str]]:
@@ -103,13 +109,20 @@ def build_rows() -> list[dict[str, str]]:
     return [
         {
             "component": "Depth-frontier policy",
+            "claim_class": "promoted",
             "scope": "held-out n=28,40; 48 rows",
             "quality": f"vs oracle frontier {frontier_oracle['score_wins']}/{frontier_oracle['score_losses']}/{frontier_oracle['score_ties']}, {pct(frontier_oracle['mean_rel_score'])}",
             "cost": f"{pct(frontier_oracle['mean_rel_time'])} time vs all-depth frontier",
             "role": "promoted quality/time selector",
+            "status": status_from(
+                int(frontier_oracle["score_losses"]) <= 3
+                and abs(float(frontier_oracle["mean_rel_score"])) <= 0.001
+                and float(frontier_oracle["mean_rel_time"]) < 0.0
+            ),
         },
         {
             "component": "Frontier random-depth control",
+            "claim_class": "bounded",
             "scope": "held-out/scale/n=23; 8 random-depth repeats",
             "quality": (
                 f"scale {frontier_random_scale['score_wins']}/{frontier_random_scale['score_losses']}/{frontier_random_scale['score_ties']}, "
@@ -120,30 +133,56 @@ def build_rows() -> list[dict[str, str]]:
             ),
             "cost": f"{pct_ratio(frontier_random_scale['mean_time_relative'])} scale planning time vs random-depth mean",
             "role": "quality-oriented budget allocation; not runtime claim",
+            "status": status_from(
+                int(frontier_random_scale["score_wins"]) > int(frontier_random_scale["score_losses"])
+                and int(frontier_random_scale["seed_means_beaten"]) == int(frontier_random_scale["random_repeats"])
+                and int(frontier_random_bridge["seed_means_beaten"]) == int(frontier_random_bridge["random_repeats"])
+                and float(frontier_random_scale["mean_score_relative"]) < 0.0
+                and float(frontier_random_bridge["mean_score_relative"]) < 0.0
+            ),
         },
         {
             "component": "Stage-gated frontier",
+            "claim_class": "promoted",
             "scope": "independent n=24,28,32,40; 96 rows",
             "quality": f"vs all-depth {staged_scale['score_wins']}/{staged_scale['score_losses']}/{staged_scale['score_ties']}, {pct(staged_scale['mean_rel_score'])}",
             "cost": f"{pct(staged_scale['mean_rel_time'])} staged planning time",
             "role": "promoted validation-calibrated guard",
+            "status": status_from(
+                int(staged_scale["score_losses"]) <= 4
+                and abs(float(staged_scale["mean_rel_score"])) <= 0.001
+                and float(staged_scale["mean_rel_time"]) < 0.0
+            ),
         },
         {
             "component": "Sparse depth-4 gate",
+            "claim_class": "promoted",
             "scope": "multi-seed n=24,28,32,40; 144 pairs",
             "quality": f"vs sparse frontier {sparse_gate_all['score_wlt_vs_sparse']}, {pct(sparse_gate_all['mean_rel_score_vs_sparse'])}; false skips {sparse_gate_all['false_skips']}",
             "cost": f"{pct(sparse_gate_all['mean_rel_time_vs_sparse'])} time vs sparse frontier",
             "role": "promoted budget gate after depth-2",
+            "status": status_from(
+                sparse_gate_all["score_wlt_vs_sparse"] == "0/0/144"
+                and int(sparse_gate_all["false_skips"]) == 0
+                and float(sparse_gate_all["mean_rel_time_vs_sparse"]) < 0.0
+            ),
         },
         {
             "component": "Rank-diverse phase shortlist",
+            "claim_class": "promoted",
             "scope": "held-out n=6 phase search; 38 rows",
             "quality": f"vs budget-32 {wlt(phase_budget)}, {pct(phase_budget['mean_relative'])}; vs wide-128 {wlt(phase_wide)}, {pct(phase_wide['mean_relative'])}",
             "cost": "512/8192 exact forms per function",
             "role": "promoted phase-search pruning",
+            "status": status_from(
+                int(phase_budget["wins"]) > int(phase_budget["losses"])
+                and int(phase_budget["losses"]) == 0
+                and abs(float(phase_wide["mean_relative"])) <= 0.001
+            ),
         },
         {
             "component": "Bit-flip learned prior",
+            "claim_class": "limited",
             "scope": "177 n<=6 functions; 8 random-prior repeats",
             "quality": (
                 f"vs random mean {bitflip_score['learned_wins']}/{bitflip_score['learned_losses']}/{bitflip_score['ties']}, "
@@ -152,26 +191,39 @@ def build_rows() -> list[dict[str, str]]:
             ),
             "cost": f"{pct_ratio(bitflip_time['mean_relative'])} runtime vs random-prior mean",
             "role": "limited quality signal, not runtime claim",
+            "status": status_from(
+                int(bitflip_score["random_repeats"]) >= 8
+                and int(bitflip_score["seed_means_beaten"]) == int(bitflip_score["random_repeats"])
+                and float(bitflip_score["mean_relative"]) < 0.0
+            ),
         },
         {
             "component": "Boolean neural guard",
+            "claim_class": "limited",
             "scope": "n=16 high-dimensional guard; 24 rows",
             "quality": f"vs deterministic {wlt(boolean_score)}, {pct_plain(boolean_score['mean_relative_pct'])}",
             "cost": f"{pct_plain(boolean_time['mean_relative_pct'])} runtime",
             "role": "limited quality guard, not runtime claim",
+            "status": status_from(
+                int(boolean_score["wins"]) > int(boolean_score["losses"])
+                and float(boolean_score["mean_relative_pct"]) < 0.0
+                and float(boolean_time["mean_relative_pct"]) > 0.0
+            ),
         },
         {
             "component": "Root-action neural ranker",
+            "claim_class": "not promoted",
             "scope": "n=14 root-action diagnostic; 10 rows",
             "quality": f"vs beam4 {100.0 * neural_vs_beam:+.2f}%; oracle24 headroom {100.0 * oracle_vs_neural:+.2f}%",
             "cost": f"{100.0 * neural_time_vs_beam:+.2f}% ranking time vs beam4 eval",
             "role": "not promoted; future root-ranker target",
+            "status": status_from(neural_vs_beam >= 0.0 and neural_time_vs_beam < 0.0),
         },
     ]
 
 
 def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
-    fields = ["component", "scope", "quality", "cost", "role"]
+    fields = ["component", "claim_class", "scope", "quality", "cost", "role", "status"]
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
@@ -180,19 +232,43 @@ def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
 
 
 def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
+    counts = Counter(row["status"] for row in rows)
+    class_counts = Counter(row["claim_class"] for row in rows)
     lines = [
         "# Learned-Control Evidence Audit",
         "",
         "This table separates promoted learned/search-control components from limited diagnostics.",
         "It is intentionally conservative: small or runtime-negative AI components are labeled as limited rather than promoted.",
         "",
-        "| component | scope | quality evidence | cost/evaluation evidence | paper role |",
-        "|---|---|---|---|---|",
+        "## Status counts",
+        "",
     ]
+    for status in sorted(counts):
+        lines.append(f"- {status}: {counts[status]}")
+    lines.extend(["", "## Claim-class counts", ""])
+    for claim_class in sorted(class_counts):
+        lines.append(f"- {claim_class}: {class_counts[claim_class]}")
+    lines.extend(
+        [
+            "",
+            "| component | claim class | scope | quality evidence | cost/evaluation evidence | paper role | status |",
+            "|---|---|---|---|---|---|---|",
+        ]
+    )
     for row in rows:
         lines.append(
             "| "
-            + " | ".join([row["component"], row["scope"], row["quality"], row["cost"], row["role"]])
+            + " | ".join(
+                [
+                    row["component"],
+                    row["claim_class"],
+                    row["scope"],
+                    row["quality"],
+                    row["cost"],
+                    row["role"],
+                    row["status"],
+                ]
+            )
             + " |"
         )
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -221,9 +297,9 @@ def tex_escape(text: str) -> str:
 
 def write_latex(path: Path, rows: list[dict[str, str]]) -> None:
     lines = [
-        r"\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}X}",
+        r"\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}X}",
         r"\toprule",
-        r"Component & Scope & Quality evidence & Cost evidence & Paper role \\",
+        r"Component & Class & Scope & Quality evidence & Cost evidence & Paper role \\",
         r"\midrule",
     ]
     for row in rows:
@@ -231,6 +307,7 @@ def write_latex(path: Path, rows: list[dict[str, str]]) -> None:
             " & ".join(
                 [
                     tex_escape(row["component"]),
+                    tex_escape(row["claim_class"]),
                     tex_escape(row["scope"]),
                     tex_escape(row["quality"]),
                     tex_escape(row["cost"]),
@@ -244,11 +321,44 @@ def write_latex(path: Path, rows: list[dict[str, str]]) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
+    status_counts = Counter(row["status"] for row in rows)
+    class_counts = Counter(row["claim_class"] for row in rows)
+    data = {
+        "script": Path(__file__).name,
+        "rows": len(rows),
+        "status_counts": dict(sorted(status_counts.items())),
+        "claim_class_counts": dict(sorted(class_counts.items())),
+        "needs_revision_count": status_counts.get("needs revision", 0),
+        "promoted_count": class_counts.get("promoted", 0),
+        "limited_count": class_counts.get("limited", 0),
+        "not_promoted_count": class_counts.get("not promoted", 0),
+        "sources": [
+            "results/summary_boolean_screen_depth_frontier_policy_large.csv",
+            "results/summary_frontier_random_depth_control.csv",
+            "results/summary_stage_gated_frontier.csv",
+            "results/summary_sparse_depth4_gate_generalization.csv",
+            "results/summary_phase_affine_policy_rank_diverse.csv",
+            "results/summary_boolean_neural_guard_vs_deterministic.csv",
+            "results/summary_bitflip_random_prior_control.csv",
+            "results/summary_highdim_root_action_oracle.csv",
+        ],
+        "outputs": {
+            "summary": "results/summary_learned_control_audit.csv",
+            "analysis": "results/analysis_learned_control_audit.md",
+            "manifest": "results/manifest_learned_control_audit.json",
+            "table": "paper_latex/tables/learned_control_audit.tex",
+        },
+    }
+    path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
 def main() -> int:
     rows = build_rows()
     write_csv(RESULTS / "summary_learned_control_audit.csv", rows)
     write_markdown(RESULTS / "analysis_learned_control_audit.md", rows)
     write_latex(TABLES / "learned_control_audit.tex", rows)
+    write_manifest(RESULTS / "manifest_learned_control_audit.json", rows)
     print(f"wrote {len(rows)} learned-control audit rows")
     return 0
 

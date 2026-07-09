@@ -30,6 +30,16 @@ Manuscript anchors:
 - Counterpoint and claim-boundary audit
 - Raw multi-resource dominance table
 
+## Are the validity threats explicit?
+
+Yes.  The threats-to-validity audit groups the main risks into logical-layer abstraction, weighted-score aggregation, baseline comparability, AI/MCTS attribution, high-dimensional verification, statistical representativeness, and reproducibility drift.  Each row points to mitigation evidence and preserves a residual boundary.
+
+Manuscript anchors:
+- Threats-to-validity audit
+- Discussion limitations paragraph
+- Claim-scope lint
+- Reproducibility and archive manifests
+
 ## Does the method dominate every resource?
 
 No.  The paper claims strong T-count and weighted-score advantages, not universal dominance.  It explicitly reports tradeoffs: SSHR remains a strong CNOT counterpoint, CirKit is often shallower, and RevKit CLI often uses fewer auxiliary lines.  The counterpoint and claim-boundary audit reports these unfavorable metrics next to the favorable score evidence so that the comparison is not presented as a one-metric victory.

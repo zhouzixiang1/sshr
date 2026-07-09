@@ -70,6 +70,13 @@
     "results/manifest_headline_numeric_consistency.json",
     "results/summary_headline_numeric_consistency.csv"
   ],
+  "learned_control_paths": [
+    "analyze_learned_control_audit.py",
+    "paper_latex/tables/learned_control_audit.tex",
+    "results/analysis_learned_control_audit.md",
+    "results/manifest_learned_control_audit.json",
+    "results/summary_learned_control_audit.csv"
+  ],
   "needs_revision_count": 0,
   "outputs": {
     "analysis": "results/analysis_payload_roundtrip_audit.md",
@@ -124,19 +131,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=991; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=997; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=991; archive_files=991; missing=none; extra=none.",
+      "evidence": "manifest_files=997; archive_files=997; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=991; mismatches=none.",
+      "evidence": "checked=997; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -184,6 +191,12 @@
       "status": "pass"
     },
     {
+      "evidence": "threats_validity_files=5; missing=none.",
+      "item": "Payload threats-to-validity audit",
+      "next_action": "Ensure the uploadable archive includes the threats-to-validity audit script, generated evidence, and manuscript table.",
+      "status": "pass"
+    },
+    {
       "evidence": "ros_gap_files=5; missing=none.",
       "item": "Payload ROS reproduction-boundary evidence",
       "next_action": "Ensure the uploadable archive includes the ROS reproduction gap audit script, generated evidence, and support table.",
@@ -205,6 +218,12 @@
       "evidence": "search_budget_files=5; missing=none.",
       "item": "Payload search-budget contract evidence",
       "next_action": "Ensure the uploadable archive includes the search-budget contract script, generated evidence, and manuscript table.",
+      "status": "pass"
+    },
+    {
+      "evidence": "learned_control_files=5; missing=none.",
+      "item": "Payload learned-control evidence",
+      "next_action": "Ensure the uploadable archive includes the learned-control audit script, generated evidence, manifest, and manuscript table.",
       "status": "pass"
     },
     {
@@ -292,7 +311,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=991; metadata_issues=none.",
+      "evidence": "members_checked=997; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -317,7 +336,7 @@
     "results/summary_search_budget_contract.csv"
   ],
   "status_counts": {
-    "pass": 29
+    "pass": 31
   },
   "support_packet_paths": [
     "analyze_submission_support_packet_audit.py",
@@ -341,5 +360,12 @@
     "results/analysis_target_venue_format_smoke.md",
     "results/manifest_target_venue_format_smoke.json",
     "results/summary_target_venue_format_smoke.csv"
+  ],
+  "threats_validity_paths": [
+    "analyze_threats_to_validity_audit.py",
+    "paper_latex/tables/threats_to_validity_audit.tex",
+    "results/analysis_threats_to_validity_audit.md",
+    "results/manifest_threats_to_validity_audit.json",
+    "results/summary_threats_to_validity_audit.csv"
   ]
 }

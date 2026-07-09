@@ -85,6 +85,13 @@ NOVELTY_SCORECARD_PATHS = {
     "results/manifest_novelty_comparison_scorecard.json",
     "paper_latex/tables/novelty_comparison_scorecard.tex",
 }
+THREATS_VALIDITY_PATHS = {
+    "analyze_threats_to_validity_audit.py",
+    "results/analysis_threats_to_validity_audit.md",
+    "results/summary_threats_to_validity_audit.csv",
+    "results/manifest_threats_to_validity_audit.json",
+    "paper_latex/tables/threats_to_validity_audit.tex",
+}
 ROS_GAP_PATHS = {
     "analyze_ros_reproduction_gap_audit.py",
     "results/analysis_ros_reproduction_gap_audit.md",
@@ -126,6 +133,13 @@ SEARCH_BUDGET_PATHS = {
     "results/summary_search_budget_contract.csv",
     "results/manifest_search_budget_contract.json",
     "paper_latex/tables/search_budget_contract.tex",
+}
+LEARNED_CONTROL_PATHS = {
+    "analyze_learned_control_audit.py",
+    "results/analysis_learned_control_audit.md",
+    "results/summary_learned_control_audit.csv",
+    "results/manifest_learned_control_audit.json",
+    "paper_latex/tables/learned_control_audit.tex",
 }
 BITFLIP_RANDOM_PRIOR_PATHS = {
     "run_bitflip_random_prior_control.py",
@@ -385,6 +399,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    threats_missing = sorted(THREATS_VALIDITY_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload threats-to-validity audit",
+            "pass" if not threats_missing else "needs revision",
+            f"threats_validity_files={len(THREATS_VALIDITY_PATHS)}; missing={threats_missing or 'none'}.",
+            "Ensure the uploadable archive includes the threats-to-validity audit script, generated evidence, and manuscript table.",
+        )
+    )
+
     ros_gap_missing = sorted(ROS_GAP_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -422,6 +446,16 @@ def build_rows() -> list[dict[str, str]]:
             "pass" if not search_budget_missing else "needs revision",
             f"search_budget_files={len(SEARCH_BUDGET_PATHS)}; missing={search_budget_missing or 'none'}.",
             "Ensure the uploadable archive includes the search-budget contract script, generated evidence, and manuscript table.",
+        )
+    )
+
+    learned_control_missing = sorted(LEARNED_CONTROL_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload learned-control evidence",
+            "pass" if not learned_control_missing else "needs revision",
+            f"learned_control_files={len(LEARNED_CONTROL_PATHS)}; missing={learned_control_missing or 'none'}.",
+            "Ensure the uploadable archive includes the learned-control audit script, generated evidence, manifest, and manuscript table.",
         )
     )
 
@@ -639,9 +673,11 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "comparison_protocol_paths": sorted(COMPARISON_PROTOCOL_PATHS),
         "comparison_target_validity_paths": sorted(COMPARISON_TARGET_VALIDITY_PATHS),
         "comparison_answer_scorecard_paths": sorted(COMPARISON_ANSWER_SCORECARD_PATHS),
+        "threats_validity_paths": sorted(THREATS_VALIDITY_PATHS),
         "ros_gap_paths": sorted(ROS_GAP_PATHS),
         "schedule_proxy_paths": sorted(SCHEDULE_PROXY_PATHS),
         "search_budget_paths": sorted(SEARCH_BUDGET_PATHS),
+        "learned_control_paths": sorted(LEARNED_CONTROL_PATHS),
         "bitflip_random_prior_paths": sorted(BITFLIP_RANDOM_PRIOR_PATHS),
         "frontier_random_depth_paths": sorted(FRONTIER_RANDOM_DEPTH_PATHS),
         "headline_numeric_paths": sorted(HEADLINE_NUMERIC_PATHS),

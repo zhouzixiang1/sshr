@@ -1,9 +1,9 @@
-component,scope,quality,cost,role
-Depth-frontier policy,"held-out n=28,40; 48 rows","vs oracle frontier 0/3/45, +0.04%",-51.30% time vs all-depth frontier,promoted quality/time selector
-Frontier random-depth control,held-out/scale/n=23; 8 random-depth repeats,"scale 55/3/38, -1.12%; n23 5/0/1, -0.89%; seed means beaten 8/8",+58.78% scale planning time vs random-depth mean,quality-oriented budget allocation; not runtime claim
-Stage-gated frontier,"independent n=24,28,32,40; 96 rows","vs all-depth 0/4/92, +0.04%",-25.43% staged planning time,promoted validation-calibrated guard
-Sparse depth-4 gate,"multi-seed n=24,28,32,40; 144 pairs","vs sparse frontier 0/0/144, +0.00%; false skips 0",-13.43% time vs sparse frontier,promoted budget gate after depth-2
-Rank-diverse phase shortlist,held-out n=6 phase search; 38 rows,"vs budget-32 17/0/21, -2.48%; vs wide-128 0/7/31, +0.00%",512/8192 exact forms per function,promoted phase-search pruning
-Bit-flip learned prior,177 n<=6 functions; 8 random-prior repeats,"vs random mean 17/8/152, -0.15%; seed means beaten 8/8",+48.05% runtime vs random-prior mean,"limited quality signal, not runtime claim"
-Boolean neural guard,n=16 high-dimensional guard; 24 rows,"vs deterministic 4/0/20, -0.12%",+94.49% runtime,"limited quality guard, not runtime claim"
-Root-action neural ranker,n=14 root-action diagnostic; 10 rows,vs beam4 +0.03%; oracle24 headroom -0.12%,-98.06% ranking time vs beam4 eval,not promoted; future root-ranker target
+component,claim_class,scope,quality,cost,role,status
+Depth-frontier policy,promoted,"held-out n=28,40; 48 rows","vs oracle frontier 0/3/45, +0.04%",-51.30% time vs all-depth frontier,promoted quality/time selector,pass
+Frontier random-depth control,bounded,held-out/scale/n=23; 8 random-depth repeats,"scale 55/3/38, -1.12%; n23 5/0/1, -0.89%; seed means beaten 8/8",+58.78% scale planning time vs random-depth mean,quality-oriented budget allocation; not runtime claim,pass
+Stage-gated frontier,promoted,"independent n=24,28,32,40; 96 rows","vs all-depth 0/4/92, +0.04%",-25.43% staged planning time,promoted validation-calibrated guard,pass
+Sparse depth-4 gate,promoted,"multi-seed n=24,28,32,40; 144 pairs","vs sparse frontier 0/0/144, +0.00%; false skips 0",-13.43% time vs sparse frontier,promoted budget gate after depth-2,pass
+Rank-diverse phase shortlist,promoted,held-out n=6 phase search; 38 rows,"vs budget-32 17/0/21, -2.48%; vs wide-128 0/7/31, +0.00%",512/8192 exact forms per function,promoted phase-search pruning,pass
+Bit-flip learned prior,limited,177 n<=6 functions; 8 random-prior repeats,"vs random mean 17/8/152, -0.15%; seed means beaten 8/8",+48.05% runtime vs random-prior mean,"limited quality signal, not runtime claim",pass
+Boolean neural guard,limited,n=16 high-dimensional guard; 24 rows,"vs deterministic 4/0/20, -0.12%",+94.49% runtime,"limited quality guard, not runtime claim",pass
+Root-action neural ranker,not promoted,n=14 root-action diagnostic; 10 rows,vs beam4 +0.03%; oracle24 headroom -0.12%,-98.06% ranking time vs beam4 eval,not promoted; future root-ranker target,pass

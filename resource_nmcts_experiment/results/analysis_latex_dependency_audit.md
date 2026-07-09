@@ -4,14 +4,14 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 
 ## Status counts
 
-- pass: 156
+- pass: 159
 
 ## Dependency types
 
 - bibliography: 3
 - figure: 21
 - main_source: 3
-- tex_input: 129
+- tex_input: 132
 
 ## Missing dependencies
 
@@ -65,6 +65,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/scaling_resource_audit` | `paper_latex/tables/scaling_resource_audit.tex` | True | True | pass |
 | author | tex_input | `tables/screen_scale_ultra_scale64_stress` | `paper_latex/tables/screen_scale_ultra_scale64_stress.tex` | True | True | pass |
 | author | tex_input | `tables/screen_scale_ultra_scale64_resource_profile` | `paper_latex/tables/screen_scale_ultra_scale64_resource_profile.tex` | True | True | pass |
+| author | tex_input | `tables/threats_to_validity_audit` | `paper_latex/tables/threats_to_validity_audit.tex` | True | True | pass |
 | author | figure | `fig1_pipeline.pdf` | `paper_latex/figures/submission_v36/fig1_pipeline.pdf` | True | True | pass |
 | author | figure | `fig2_traditional_resources.pdf` | `paper_latex/figures/submission_v36/fig2_traditional_resources.pdf` | True | True | pass |
 | author | figure | `fig3_baseline_comparisons.pdf` | `paper_latex/figures/submission_v36/fig3_baseline_comparisons.pdf` | True | True | pass |
@@ -117,6 +118,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/scaling_resource_audit` | `paper_latex/tables/scaling_resource_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/screen_scale_ultra_scale64_stress` | `paper_latex/tables/screen_scale_ultra_scale64_stress.tex` | True | True | pass |
 | anonymous | tex_input | `tables/screen_scale_ultra_scale64_resource_profile` | `paper_latex/tables/screen_scale_ultra_scale64_resource_profile.tex` | True | True | pass |
+| anonymous | tex_input | `tables/threats_to_validity_audit` | `paper_latex/tables/threats_to_validity_audit.tex` | True | True | pass |
 | anonymous | figure | `fig1_pipeline.pdf` | `paper_latex/figures/submission_v36/fig1_pipeline.pdf` | True | True | pass |
 | anonymous | figure | `fig2_traditional_resources.pdf` | `paper_latex/figures/submission_v36/fig2_traditional_resources.pdf` | True | True | pass |
 | anonymous | figure | `fig3_baseline_comparisons.pdf` | `paper_latex/figures/submission_v36/fig3_baseline_comparisons.pdf` | True | True | pass |
@@ -169,6 +171,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/scaling_resource_audit` | `paper_latex/tables/scaling_resource_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/screen_scale_ultra_scale64_stress` | `paper_latex/tables/screen_scale_ultra_scale64_stress.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/screen_scale_ultra_scale64_resource_profile` | `paper_latex/tables/screen_scale_ultra_scale64_resource_profile.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/threats_to_validity_audit` | `paper_latex/tables/threats_to_validity_audit.tex` | True | True | pass |
 | acm_tqc | figure | `fig1_pipeline.pdf` | `paper_latex/figures/submission_v36/fig1_pipeline.pdf` | True | True | pass |
 | acm_tqc | figure | `fig2_traditional_resources.pdf` | `paper_latex/figures/submission_v36/fig2_traditional_resources.pdf` | True | True | pass |
 | acm_tqc | figure | `fig3_baseline_comparisons.pdf` | `paper_latex/figures/submission_v36/fig3_baseline_comparisons.pdf` | True | True | pass |
