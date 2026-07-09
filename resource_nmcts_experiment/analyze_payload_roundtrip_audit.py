@@ -69,6 +69,16 @@ ROS_GAP_PATHS = {
     "results/manifest_ros_reproduction_gap_audit.json",
     "paper_latex/tables/ros_reproduction_gap_audit.tex",
 }
+SCHEDULE_PROXY_PATHS = {
+    "analyze_schedule_metrics.py",
+    "analyze_schedule_proxy_audit.py",
+    "results/analysis_schedule_metrics.md",
+    "results/summary_schedule_metrics.csv",
+    "results/analysis_schedule_proxy_audit.md",
+    "results/summary_schedule_proxy_audit.csv",
+    "results/manifest_schedule_proxy_audit.json",
+    "paper_latex/tables/schedule_proxy_audit.tex",
+}
 HEADLINE_NUMERIC_PATHS = {
     "analyze_headline_numeric_consistency.py",
     "results/analysis_headline_numeric_consistency.md",
@@ -270,6 +280,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    schedule_proxy_missing = sorted(SCHEDULE_PROXY_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload schedule-proxy evidence",
+            "pass" if not schedule_proxy_missing else "needs revision",
+            f"schedule_proxy_files={len(SCHEDULE_PROXY_PATHS)}; missing={schedule_proxy_missing or 'none'}.",
+            "Ensure the uploadable archive includes the schedule metrics scripts, compact audit outputs, and manuscript schedule-proxy table.",
+        )
+    )
+
     headline_missing = sorted(HEADLINE_NUMERIC_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -433,6 +453,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "reviewer_entrypoint_paths": sorted(REVIEWER_ENTRYPOINT_PATHS),
         "comparison_protocol_paths": sorted(COMPARISON_PROTOCOL_PATHS),
         "ros_gap_paths": sorted(ROS_GAP_PATHS),
+        "schedule_proxy_paths": sorted(SCHEDULE_PROXY_PATHS),
         "headline_numeric_paths": sorted(HEADLINE_NUMERIC_PATHS),
         "citation_support_paths": sorted(CITATION_SUPPORT_PATHS),
         "editorial_screening_paths": sorted(EDITORIAL_SCREENING_PATHS),

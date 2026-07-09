@@ -1,5 +1,5 @@
 {
-  "complete_rows": 19,
+  "complete_rows": 21,
   "families": [
     {
       "analysis_files": "12",
@@ -64,6 +64,22 @@
       "scripts_present": "1",
       "status": "complete",
       "summary_files": "1"
+    },
+    {
+      "analysis_files": "2",
+      "claim_use": "Verifies that the method description is connected to executable stages, source anchors, and semantic/resource guarantees.",
+      "dependency_boundary": "Quick derived audit; checks implementation anchors and manuscript method exposition, not raw benchmark outcomes.",
+      "driver_scripts": "analyze_method_workflow_table.py; analyze_algorithm_contract_table.py",
+      "evidence_family": "Method workflow and algorithm contract",
+      "manifest_files": "1",
+      "raw_files": "0",
+      "raw_rows": "0",
+      "representative_raw": "",
+      "rerun_tier": "quick method audit",
+      "scripts_missing": "",
+      "scripts_present": "2",
+      "status": "complete",
+      "summary_files": "2"
     },
     {
       "analysis_files": "5",
@@ -224,6 +240,22 @@
       "scripts_present": "6",
       "status": "complete",
       "summary_files": "19"
+    },
+    {
+      "analysis_files": "2",
+      "claim_use": "Checks logic-level T-depth proxy and explicit auxiliary-lifetime tradeoffs for the high-dimensional frontier controllers.",
+      "dependency_boundary": "Emitted-circuit logical schedule proxies only; not hardware routing, native-gate scheduling, or device execution.",
+      "driver_scripts": "analyze_schedule_metrics.py; analyze_schedule_proxy_audit.py",
+      "evidence_family": "Schedule proxy and lifetime tradeoffs",
+      "manifest_files": "1",
+      "raw_files": "3",
+      "raw_rows": "1140",
+      "representative_raw": "results/raw_schedule_truth_bridge_n23_terms.csv; results/raw_schedule_truth_bridge_terms.csv; results/raw_screen_scale_schedule_depth_frontier_policy_generalization_terms.csv",
+      "rerun_tier": "quick derived audit",
+      "scripts_missing": "",
+      "scripts_present": "2",
+      "status": "complete",
+      "summary_files": "2"
     },
     {
       "analysis_files": "58",
@@ -458,7 +490,7 @@
     "results/raw_ultra_pairwise_wide_vs_recursive.csv",
     "results/raw_ultra_root_action_pairwise_widths.csv"
   ],
-  "rows": 19,
+  "rows": 21,
   "script": "analyze_artifact_rerun_registry.py",
   "unique_raw_files": 144,
   "unique_raw_rows": 55308

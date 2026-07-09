@@ -1,0 +1,15 @@
+{
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_algorithm_contract.md",
+    "manifest": "results/manifest_algorithm_contract.json",
+    "summary": "results/summary_algorithm_contract.csv",
+    "table": "paper_latex/tables/algorithm_contract.tex"
+  },
+  "python": "3.11.15",
+  "rows": 7,
+  "script": "analyze_algorithm_contract_table.py",
+  "status_counts": {
+    "pass": 7
+  }
+}

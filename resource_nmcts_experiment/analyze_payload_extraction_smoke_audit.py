@@ -57,6 +57,15 @@ SMOKE_SPECS = (
         minimum_rows=8,
     ),
     SmokeSpec(
+        name="Schedule-proxy tradeoff audit",
+        script="analyze_schedule_proxy_audit.py",
+        manifest="results/manifest_schedule_proxy_audit.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=8,
+    ),
+    SmokeSpec(
         name="Search-control baseline audit",
         script="analyze_search_control_baseline_audit.py",
         manifest="results/manifest_search_control_baseline_audit.json",

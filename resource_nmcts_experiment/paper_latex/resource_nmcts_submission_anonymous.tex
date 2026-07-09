@@ -263,6 +263,28 @@ analysis.}
 \input{tables/method_workflow}
 \end{table}
 
+Table~\ref{tab:algorithm-contract} gives the algorithmic contract used by the
+implementation.  It is written as a source-anchored contract rather than as
+language-only pseudocode: each row identifies the implementation anchors that
+make the corresponding method statement executable and auditable.  This is
+important for the learning components, because the neural scorer and learned
+frontier gates are only allowed to change ranking, budget allocation, or
+skipping decisions; correctness and final resource reporting remain attached
+to explicit algebraic expansions, guarded candidate selection, and semantic
+verification.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Algorithm contract for \method{}.  The table converts the method
+description into implementation-anchored operational rules and reviewer-facing
+guarantees.}
+\label{tab:algorithm-contract}
+\input{tables/algorithm_contract}
+\end{table}
+
 \subsection{Boolean-ring linear factors}
 
 A key extension is allowing the linear factor and the quotient to share
@@ -816,6 +838,30 @@ calibrated search-budget controller rather than as an unguarded depth-4 skip.}
 on validation data and applied unchanged to scale and truth-bridge rows.}
 \label{tab:stage-frontier}
 \input{tables/stage_gated_frontier}
+\end{table}
+
+Table~\ref{tab:schedule-proxy-audit} reports a compact schedule-proxy view of
+the same high-dimensional frontier family.  The metrics are computed from the
+emitted logical X/CNOT/\mct{} circuits before hardware mapping.  Lower values
+are better.  Relative to the cheap depth-2 screen, the frontier policy reduces
+score and T-depth proxy but increases explicit auxiliary lifetime area.  Relative
+to the full all-depth frontier, it accepts a small score/T-depth gap while
+reducing auxiliary lifetime area.  This is the intended resource-constrained
+interpretation: the learned controller moves along a quality--search-budget--
+auxiliary-lifetime frontier rather than claiming hardware-scheduled depth
+dominance.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Logic-level schedule-proxy audit.  Entries show win/loss/tie counts
+and mean relative change for the first method versus the second.  The metrics
+are backend-relevant logical proxies only; they are not hardware mapping,
+routing, or native-gate scheduling results.}
+\label{tab:schedule-proxy-audit}
+\input{tables/schedule_proxy_audit}
 \end{table}
 
 Table~\ref{tab:learned-control-audit} separates promoted learned-control

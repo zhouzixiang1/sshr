@@ -1,0 +1,19 @@
+{
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_schedule_proxy_audit.md",
+    "manifest": "results/manifest_schedule_proxy_audit.json",
+    "summary": "results/summary_schedule_proxy_audit.csv",
+    "table": "paper_latex/tables/schedule_proxy_audit.tex"
+  },
+  "python": "3.11.15",
+  "rows": 8,
+  "script": "analyze_schedule_proxy_audit.py",
+  "source_files": {
+    "analysis_schedule_metrics": "results/analysis_schedule_metrics.md",
+    "summary_schedule_metrics": "results/summary_schedule_metrics.csv"
+  },
+  "status_counts": {
+    "pass": 8
+  }
+}

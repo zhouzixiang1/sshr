@@ -126,15 +126,19 @@ def build_items() -> list[GoalItem]:
             status=status_if(
                 (
                     RESULTS / "analysis_method_workflow.md",
+                    RESULTS / "analysis_algorithm_contract.md",
                     TABLES / "method_workflow.tex",
+                    TABLES / "algorithm_contract.tex",
                     RESULTS / "raw_traditional_resource.csv",
                     RESULTS / "manifest_traditional_resource.json",
                 )
             ),
-            evidence="The method workflow covers input normalization, candidate generation, neural/MCTS/beam control, guarded selection, circuit emission, and verification/reporting.",
+            evidence="The method workflow and source-anchored algorithm contract cover input normalization, candidate generation, neural/MCTS/beam control, guarded selection, Pareto archiving, circuit emission, and verification/reporting.",
             evidence_files=(
                 RESULTS / "analysis_method_workflow.md",
+                RESULTS / "analysis_algorithm_contract.md",
                 TABLES / "method_workflow.tex",
+                TABLES / "algorithm_contract.tex",
                 RESULTS / "raw_traditional_resource.csv",
                 RESULTS / "manifest_traditional_resource.json",
             ),
@@ -216,17 +220,23 @@ def build_items() -> list[GoalItem]:
             status=status_if(
                 (
                     RESULTS / "analysis_multimetric_pareto_tradeoff.md",
+                    RESULTS / "analysis_schedule_metrics.md",
+                    RESULTS / "analysis_schedule_proxy_audit.md",
                     TABLES / "multimetric_pairwise_dominance.tex",
                     TABLES / "multimetric_nondominated.tex",
+                    TABLES / "schedule_proxy_audit.tex",
                 )
             ),
-            evidence="Raw Pareto dominance is computed separately on T-count, CNOT, depth, and peak ancilla so weighted-score wins are not overstated.",
+            evidence="Raw Pareto dominance and compact schedule-proxy audits are computed separately on T-count, CNOT, depth, peak ancilla, T-depth proxy, and explicit auxiliary lifetime so weighted-score wins are not overstated.",
             evidence_files=(
                 RESULTS / "analysis_multimetric_pareto_tradeoff.md",
+                RESULTS / "analysis_schedule_metrics.md",
+                RESULTS / "analysis_schedule_proxy_audit.md",
                 TABLES / "multimetric_pairwise_dominance.tex",
                 TABLES / "multimetric_nondominated.tex",
+                TABLES / "schedule_proxy_audit.tex",
             ),
-            boundary="Many strong baselines remain incomparable on raw resources; this is a controlled limitation rather than hidden negative evidence.",
+            boundary="Many strong baselines remain incomparable on raw resources; schedule metrics are logical proxies before routing/native scheduling.",
             next_action="Do not convert weighted-score wins into universal raw-resource dominance claims.",
         ),
         GoalItem(

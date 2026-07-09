@@ -6,6 +6,7 @@ Lightweight paper-facing rebuild & quick rebuild & 0 & 0 & Python, latexmk, and 
 Submission metadata closure path & quick metadata audit & 0 & 0 & Does not require private author metadata; filled metadata remains ignored and untracked until author approval. \\
 Editorial screening and reviewer-risk support & quick submission-support audit & 0 & 0 & Does not change scientific results; checks public submission-support consistency against existing audit outputs. \\
 Cover-letter and venue support packet & quick submission-support audit & 0 & 0 & Does not choose a venue or fill private metadata; checks public upload-support consistency against existing audits. \\
+Method workflow and algorithm contract & quick method audit & 0 & 0 & Quick derived audit; checks implementation anchors and manuscript method exposition, not raw benchmark outcomes. \\
 Comparison protocol and claim boundaries & quick comparison audit & 0 & 0 & Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps. \\
 Traditional logical baselines & raw Python rerun & 4 & 4071 & Python rerun; ILP-based subbaselines need Gurobi where enabled. \\
 External logical baseline extension & raw Python plus optional solvers & 3 & 2049 & Python with optional Gurobi/logic-tool components; rows with skips/errors remain explicit. \\
@@ -16,6 +17,7 @@ CirKit AIG/MC probe & external toolchain rerun & 2 & 241 & Requires the recorded
 RevKit exact and Rz probes & external toolchain rerun & 5 & 3194 & Requires RevKit CLI/API availability; Rz rows are phase/sensitivity probes, not final Clifford+T decomposition. \\
 Phase and affine FPRM branch & raw phase rerun and training & 7 & 11859 & Logical phase verification up to global phase; not approximate rotation synthesis. \\
 Learned-control and ablations & training plus ablation rerun & 13 & 3959 & Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only. \\
+Schedule proxy and lifetime tradeoffs & quick derived audit & 3 & 1140 & Emitted-circuit logical schedule proxies only; not hardware routing, native-gate scheduling, or device execution. \\
 High-dimensional symbolic screen-scale runs & large raw rerun & 76 & 11480 & Symbolic or generated-instance verification; not exhaustive truth-table enumeration for all large n. \\
 External high-dimensional resource extensions & large raw rerun & 4 & 528 & Generated large-instance comparisons; external availability and timeout behavior are recorded in manifests. \\
 Boolean screen, frontier, and gate auxiliaries & training plus ablation rerun & 11 & 2170 & Auxiliary policy-selection evidence; not all rows are promoted as final-quality gains. \\

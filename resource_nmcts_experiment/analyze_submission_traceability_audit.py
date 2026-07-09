@@ -54,15 +54,19 @@ def build_rows() -> list[dict[str, str]]:
     return [
         row(
             "Method formulation",
-            "Defines Resource-NMCTS as a logical ANF/FPRM search workflow.",
+            "Defines Resource-NMCTS as a source-anchored logical ANF/FPRM search workflow.",
             [
                 THIS_DIR / "analyze_method_workflow_table.py",
+                THIS_DIR / "analyze_algorithm_contract_table.py",
                 RESULTS / "summary_method_workflow.csv",
+                RESULTS / "summary_algorithm_contract.csv",
                 RESULTS / "analysis_method_workflow.md",
+                RESULTS / "analysis_algorithm_contract.md",
                 TABLES / "method_workflow.tex",
+                TABLES / "algorithm_contract.tex",
             ],
-            "Method, Table method-workflow",
-            "Establishes the executable workflow, not a hardware compiler.",
+            "Method, Tables method-workflow and algorithm-contract",
+            "Establishes executable stages and semantic/resource guarantees, not a hardware compiler.",
         ),
         row(
             "Contribution mapping",
@@ -127,15 +131,21 @@ def build_rows() -> list[dict[str, str]]:
         ),
         row(
             "Multi-resource tradeoff",
-            "Audits whether weighted-score wins imply raw-resource dominance.",
+            "Audits whether weighted-score wins imply raw-resource, schedule-proxy, or auxiliary-lifetime dominance.",
             [
                 THIS_DIR / "analyze_multimetric_pareto_tradeoff.py",
+                THIS_DIR / "analyze_schedule_metrics.py",
+                THIS_DIR / "analyze_schedule_proxy_audit.py",
                 RESULTS / "analysis_multimetric_pareto_tradeoff.md",
+                RESULTS / "analysis_schedule_metrics.md",
+                RESULTS / "analysis_schedule_proxy_audit.md",
+                RESULTS / "summary_schedule_proxy_audit.csv",
                 TABLES / "multimetric_pairwise_dominance.tex",
                 TABLES / "multimetric_nondominated.tex",
+                TABLES / "schedule_proxy_audit.tex",
             ],
-            "Results, raw multi-resource dominance",
-            "Dominance uses T-count, CNOT, depth, and peak ancilla, not weighted score.",
+            "Results, raw multi-resource dominance and schedule-proxy audit",
+            "Dominance uses logical T-count, CNOT, depth, peak ancilla, T-depth proxy, and auxiliary lifetime; no routing or native-gate scheduling is claimed.",
         ),
         row(
             "Learned-control contribution",

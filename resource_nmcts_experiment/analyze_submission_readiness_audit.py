@@ -79,10 +79,18 @@ COMPARISON_PROTOCOL_ANALYSIS = RESULTS / "analysis_comparison_protocol_audit.md"
 COMPARISON_PROTOCOL_SUMMARY = RESULTS / "summary_comparison_protocol_audit.csv"
 COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.json"
 COMPARISON_PROTOCOL_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_protocol_audit.tex"
+ALGORITHM_CONTRACT_ANALYSIS = RESULTS / "analysis_algorithm_contract.md"
+ALGORITHM_CONTRACT_SUMMARY = RESULTS / "summary_algorithm_contract.csv"
+ALGORITHM_CONTRACT_MANIFEST = RESULTS / "manifest_algorithm_contract.json"
+ALGORITHM_CONTRACT_TABLE = THIS_DIR / "paper_latex" / "tables" / "algorithm_contract.tex"
 ROS_GAP_ANALYSIS = RESULTS / "analysis_ros_reproduction_gap_audit.md"
 ROS_GAP_SUMMARY = RESULTS / "summary_ros_reproduction_gap_audit.csv"
 ROS_GAP_MANIFEST = RESULTS / "manifest_ros_reproduction_gap_audit.json"
 ROS_GAP_TABLE = THIS_DIR / "paper_latex" / "tables" / "ros_reproduction_gap_audit.tex"
+SCHEDULE_PROXY_ANALYSIS = RESULTS / "analysis_schedule_proxy_audit.md"
+SCHEDULE_PROXY_SUMMARY = RESULTS / "summary_schedule_proxy_audit.csv"
+SCHEDULE_PROXY_MANIFEST = RESULTS / "manifest_schedule_proxy_audit.json"
+SCHEDULE_PROXY_TABLE = THIS_DIR / "paper_latex" / "tables" / "schedule_proxy_audit.tex"
 CITATION_SUPPORT_ANALYSIS = RESULTS / "analysis_citation_support_audit.md"
 CITATION_SUPPORT_SUMMARY = RESULTS / "summary_citation_support_audit.csv"
 CITATION_SUPPORT_MANIFEST = RESULTS / "manifest_citation_support_audit.json"
@@ -196,6 +204,12 @@ def build_rows() -> list[dict[str, str]]:
         int(comparison_protocol_manifest.get("needs_revision_count", -1)) if comparison_protocol_manifest else -1
     )
     comparison_protocol_counts = comparison_protocol_manifest.get("status_counts", {}) if comparison_protocol_manifest else {}
+    algorithm_contract_manifest = read_json(ALGORITHM_CONTRACT_MANIFEST)
+    algorithm_contract_revisions = (
+        int(algorithm_contract_manifest.get("needs_revision_count", -1)) if algorithm_contract_manifest else -1
+    )
+    algorithm_contract_counts = algorithm_contract_manifest.get("status_counts", {}) if algorithm_contract_manifest else {}
+    algorithm_contract_rows = algorithm_contract_manifest.get("rows", "missing") if algorithm_contract_manifest else "missing"
     ros_gap_manifest = read_json(ROS_GAP_MANIFEST)
     ros_gap_counts = ros_gap_manifest.get("status_counts", {}) if ros_gap_manifest else {}
     ros_gap_coverage = ros_gap_manifest.get("coverage_counts", {}) if ros_gap_manifest else {}
@@ -203,6 +217,10 @@ def build_rows() -> list[dict[str, str]]:
     ros_gap_rows = ros_gap_manifest.get("rows", "missing") if ros_gap_manifest else "missing"
     ros_gap_fully_reproduced = bool(ros_gap_manifest.get("official_ros_fully_reproduced", True)) if ros_gap_manifest else True
     ros_gap_boundary_explicit = bool(ros_gap_manifest.get("full_ros_boundary_is_explicit", False)) if ros_gap_manifest else False
+    schedule_proxy_manifest = read_json(SCHEDULE_PROXY_MANIFEST)
+    schedule_proxy_revisions = int(schedule_proxy_manifest.get("needs_revision_count", -1)) if schedule_proxy_manifest else -1
+    schedule_proxy_counts = schedule_proxy_manifest.get("status_counts", {}) if schedule_proxy_manifest else {}
+    schedule_proxy_rows = schedule_proxy_manifest.get("rows", "missing") if schedule_proxy_manifest else "missing"
     citation_support_manifest = read_json(CITATION_SUPPORT_MANIFEST)
     citation_support_revisions = (
         int(citation_support_manifest.get("needs_revision_count", -1)) if citation_support_manifest else -1
@@ -379,6 +397,19 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Keep the workflow table aligned with new candidate generators or verification stages.",
         },
         {
+            "item": "Algorithm contract table",
+            "status": "pass"
+            if "tab:algorithm-contract" in text
+            and ALGORITHM_CONTRACT_ANALYSIS.exists()
+            and ALGORITHM_CONTRACT_SUMMARY.exists()
+            and ALGORITHM_CONTRACT_MANIFEST.exists()
+            and ALGORITHM_CONTRACT_TABLE.exists()
+            and algorithm_contract_revisions == 0
+            else "needs revision",
+            "evidence": f"Method includes a source-anchored algorithm contract; rows={algorithm_contract_rows}; status_counts={algorithm_contract_counts}; needs_revision_count={algorithm_contract_revisions}.",
+            "next_action": "Rerun analyze_algorithm_contract_table.py after changing core search implementation, method text, or source anchors.",
+        },
+        {
             "item": "Baseline fairness and scope",
             "status": "pass"
             if contains_all(text, ["tab:baseline-claim-matrix", "tab:evidence-matrix", "tab:comparability-audit"])
@@ -411,6 +442,19 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"ROS gap audit separates verified ROS-style LUT proxy evidence from full official ROS reproduction; rows={ros_gap_rows}; status_counts={ros_gap_counts}; coverage_counts={ros_gap_coverage}; official_ros_fully_reproduced={ros_gap_fully_reproduced}; full_ros_boundary_is_explicit={ros_gap_boundary_explicit}; needs_revision_count={ros_gap_revisions}.",
             "next_action": "Rerun analyze_ros_lut_line_sensitivity.py and analyze_ros_reproduction_gap_audit.py after changing ROS-style LUT proxy results, line-sensitivity rows, or ROS/full-tool reproduction wording.",
+        },
+        {
+            "item": "Schedule-proxy tradeoff audit",
+            "status": "pass"
+            if "tab:schedule-proxy-audit" in text
+            and SCHEDULE_PROXY_ANALYSIS.exists()
+            and SCHEDULE_PROXY_SUMMARY.exists()
+            and SCHEDULE_PROXY_MANIFEST.exists()
+            and SCHEDULE_PROXY_TABLE.exists()
+            and schedule_proxy_revisions == 0
+            else "needs revision",
+            "evidence": f"Schedule-proxy audit checks score, T-depth proxy, and explicit auxiliary lifetime tradeoffs before hardware mapping; rows={schedule_proxy_rows}; status_counts={schedule_proxy_counts}; needs_revision_count={schedule_proxy_revisions}.",
+            "next_action": "Rerun analyze_schedule_metrics.py and analyze_schedule_proxy_audit.py after changing high-dimensional frontier, truth-bridge, schedule-proxy, or auxiliary-lifetime claims.",
         },
         {
             "item": "Search-control baseline audit",

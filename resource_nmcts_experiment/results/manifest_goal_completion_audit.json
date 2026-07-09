@@ -25,8 +25,8 @@
     },
     {
       "boundary": "Correctness is tied to ANF, emitted-circuit, truth-table, or phase checks; learned components only rank, gate, or allocate search.",
-      "evidence": "The method workflow covers input normalization, candidate generation, neural/MCTS/beam control, guarded selection, circuit emission, and verification/reporting.",
-      "evidence_files": "results/analysis_method_workflow.md; paper_latex/tables/method_workflow.tex; results/raw_traditional_resource.csv; results/manifest_traditional_resource.json",
+      "evidence": "The method workflow and source-anchored algorithm contract cover input normalization, candidate generation, neural/MCTS/beam control, guarded selection, Pareto archiving, circuit emission, and verification/reporting.",
+      "evidence_files": "results/analysis_method_workflow.md; results/analysis_algorithm_contract.md; paper_latex/tables/method_workflow.tex; paper_latex/tables/algorithm_contract.tex; results/raw_traditional_resource.csv; results/manifest_traditional_resource.json",
       "next_action": "Keep workflow artifacts aligned with any new candidate generator or verification stage.",
       "requirement": "Implemented Resource-NMCTS workflow",
       "status": "pass"
@@ -56,9 +56,9 @@
       "status": "pass"
     },
     {
-      "boundary": "Many strong baselines remain incomparable on raw resources; this is a controlled limitation rather than hidden negative evidence.",
-      "evidence": "Raw Pareto dominance is computed separately on T-count, CNOT, depth, and peak ancilla so weighted-score wins are not overstated.",
-      "evidence_files": "results/analysis_multimetric_pareto_tradeoff.md; paper_latex/tables/multimetric_pairwise_dominance.tex; paper_latex/tables/multimetric_nondominated.tex",
+      "boundary": "Many strong baselines remain incomparable on raw resources; schedule metrics are logical proxies before routing/native scheduling.",
+      "evidence": "Raw Pareto dominance and compact schedule-proxy audits are computed separately on T-count, CNOT, depth, peak ancilla, T-depth proxy, and explicit auxiliary lifetime so weighted-score wins are not overstated.",
+      "evidence_files": "results/analysis_multimetric_pareto_tradeoff.md; results/analysis_schedule_metrics.md; results/analysis_schedule_proxy_audit.md; paper_latex/tables/multimetric_pairwise_dominance.tex; paper_latex/tables/multimetric_nondominated.tex; paper_latex/tables/schedule_proxy_audit.tex",
       "next_action": "Do not convert weighted-score wins into universal raw-resource dominance claims.",
       "requirement": "Multi-resource tradeoff audit",
       "status": "pass"
@@ -81,7 +81,7 @@
     },
     {
       "boundary": "Counts describe manuscript artifacts, not independent experimental datasets.",
-      "evidence": "Current package has 7 submitted figure panels and 159 generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
+      "evidence": "Current package has 7 submitted figure panels and 161 generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
       "evidence_files": "paper_latex/figures/submission_v36; paper_latex/tables; results/analysis_figure_asset_audit.md; results/analysis_reproducibility_audit.md",
       "next_action": "Spot-check figure/table readability after every layout or data update.",
       "requirement": "Rich paper figures and tables",
@@ -89,7 +89,7 @@
     },
     {
       "boundary": "Author names, target-venue formatting choices, and final declarations remain external author inputs.",
-      "evidence": "Compiled submission PDF exists with 29 pages and the TeX source is present.",
+      "evidence": "Compiled submission PDF exists with 31 pages and the TeX source is present.",
       "evidence_files": "paper_latex/resource_nmcts_submission_v1.tex; paper_latex/resource_nmcts_submission_v1.pdf; results/analysis_submission_readiness_audit.md",
       "next_action": "After author metadata is supplied, recompile and rerun readiness checks.",
       "requirement": "Complete LaTeX manuscript draft",

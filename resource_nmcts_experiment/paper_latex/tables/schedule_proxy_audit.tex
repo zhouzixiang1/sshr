@@ -1,0 +1,14 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.17\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}X}
+\toprule
+Evidence slice & Comparison & Score & T-depth proxy & Aux. lifetime area & Boundary \\
+\midrule
+$n=24,28,32,40$ scale & learned frontier vs cheap depth-2 & 40/0/56; -1.85\% & 40/0/56; -1.85\% & 0/40/56; +20.09\% & quality gain with more auxiliary lifetime \\
+$n=24,28,32,40$ scale & learned frontier vs all-depth ceiling & 0/19/77; +0.61\% & 0/19/77; +0.55\% & 19/0/77; -5.42\% & near-ceiling quality with lower lifetime \\
+$n=21,22$ bridge & complete-truth bridge vs cheap depth-2 & 8/0/4; -3.50\% & 8/0/4; -3.32\% & 0/8/4; +32.93\% & truth-checked quality gain with lifetime cost \\
+$n=21,22$ bridge & complete-truth bridge vs all-depth ceiling & 0/2/10; +0.32\% & 0/2/10; +0.32\% & 2/0/10; -4.01\% & small score gap with lower lifetime \\
+$n=23$ bridge & larger truth bridge vs cheap depth-2 & 4/0/2; -1.88\% & 4/0/2; -1.69\% & 0/4/2; +29.49\% & quality gain with lifetime cost \\
+$n=23$ bridge & larger truth bridge vs all-depth ceiling & 0/1/5; +0.61\% & 0/1/5; +0.52\% & 1/0/5; -5.09\% & small score gap with lower lifetime \\
+$n=24,28,32,40$ scale & all-depth ceiling vs cheap depth-2 & 58/0/38; -2.44\% & 58/0/38; -2.37\% & 0/58/38; +27.81\% & quality ceiling increases lifetime \\
+$n=23$ bridge & bridge all-depth ceiling vs cheap depth-2 & 5/0/1; -2.47\% & 5/0/1; -2.20\% & 0/5/1; +36.83\% & truth-checked ceiling increases lifetime \\
+\bottomrule
+\end{tabularx}

@@ -4,14 +4,14 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 
 ## Status counts
 
-- pass: 84
+- pass: 88
 
 ## Dependency types
 
 - bibliography: 2
 - figure: 14
 - main_source: 2
-- tex_input: 66
+- tex_input: 70
 
 ## Missing dependencies
 
@@ -25,6 +25,7 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 | author | tex_input | `tables/contribution_evidence_map` | `paper_latex/tables/contribution_evidence_map.tex` | True | True | pass |
 | author | tex_input | `tables/related_work_positioning` | `paper_latex/tables/related_work_positioning.tex` | True | True | pass |
 | author | tex_input | `tables/method_workflow` | `paper_latex/tables/method_workflow.tex` | True | True | pass |
+| author | tex_input | `tables/algorithm_contract` | `paper_latex/tables/algorithm_contract.tex` | True | True | pass |
 | author | tex_input | `tables/baseline_claim_matrix` | `paper_latex/tables/baseline_claim_matrix.tex` | True | True | pass |
 | author | tex_input | `tables/comparison_evidence_matrix` | `paper_latex/tables/comparison_evidence_matrix.tex` | True | True | pass |
 | author | tex_input | `tables/comparison_protocol_audit` | `paper_latex/tables/comparison_protocol_audit.tex` | True | True | pass |
@@ -48,6 +49,7 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 | author | tex_input | `tables/sparse_depth4_gate` | `paper_latex/tables/sparse_depth4_gate.tex` | True | True | pass |
 | author | tex_input | `tables/sparse_depth4_gate_generalization` | `paper_latex/tables/sparse_depth4_gate_generalization.tex` | True | True | pass |
 | author | tex_input | `tables/stage_gated_frontier` | `paper_latex/tables/stage_gated_frontier.tex` | True | True | pass |
+| author | tex_input | `tables/schedule_proxy_audit` | `paper_latex/tables/schedule_proxy_audit.tex` | True | True | pass |
 | author | tex_input | `tables/learned_control_audit` | `paper_latex/tables/learned_control_audit.tex` | True | True | pass |
 | author | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
 | author | tex_input | `tables/phase_parity_affine` | `paper_latex/tables/phase_parity_affine.tex` | True | True | pass |
@@ -67,6 +69,7 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 | anonymous | tex_input | `tables/contribution_evidence_map` | `paper_latex/tables/contribution_evidence_map.tex` | True | True | pass |
 | anonymous | tex_input | `tables/related_work_positioning` | `paper_latex/tables/related_work_positioning.tex` | True | True | pass |
 | anonymous | tex_input | `tables/method_workflow` | `paper_latex/tables/method_workflow.tex` | True | True | pass |
+| anonymous | tex_input | `tables/algorithm_contract` | `paper_latex/tables/algorithm_contract.tex` | True | True | pass |
 | anonymous | tex_input | `tables/baseline_claim_matrix` | `paper_latex/tables/baseline_claim_matrix.tex` | True | True | pass |
 | anonymous | tex_input | `tables/comparison_evidence_matrix` | `paper_latex/tables/comparison_evidence_matrix.tex` | True | True | pass |
 | anonymous | tex_input | `tables/comparison_protocol_audit` | `paper_latex/tables/comparison_protocol_audit.tex` | True | True | pass |
@@ -90,6 +93,7 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 | anonymous | tex_input | `tables/sparse_depth4_gate` | `paper_latex/tables/sparse_depth4_gate.tex` | True | True | pass |
 | anonymous | tex_input | `tables/sparse_depth4_gate_generalization` | `paper_latex/tables/sparse_depth4_gate_generalization.tex` | True | True | pass |
 | anonymous | tex_input | `tables/stage_gated_frontier` | `paper_latex/tables/stage_gated_frontier.tex` | True | True | pass |
+| anonymous | tex_input | `tables/schedule_proxy_audit` | `paper_latex/tables/schedule_proxy_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/learned_control_audit` | `paper_latex/tables/learned_control_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
 | anonymous | tex_input | `tables/phase_parity_affine` | `paper_latex/tables/phase_parity_affine.tex` | True | True | pass |

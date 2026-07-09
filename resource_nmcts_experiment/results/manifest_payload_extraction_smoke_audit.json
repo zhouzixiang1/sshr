@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=905; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=915; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -23,6 +23,12 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_ros_reproduction_gap_audit.json; needs_revision_count=0; rows=8; stderr=none",
       "item": "ROS reproduction gap audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_schedule_proxy_audit.json; needs_revision_count=0; rows=8; stderr=none",
+      "item": "Schedule-proxy tradeoff audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -99,7 +105,7 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=19; rows=19; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=21; rows=21; stderr=none",
       "item": "Artifact rerun registry",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -120,6 +126,13 @@
       "minimum_rows_key": "rows",
       "name": "ROS reproduction gap audit",
       "script": "analyze_ros_reproduction_gap_audit.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_schedule_proxy_audit.json",
+      "minimum_rows_key": "rows",
+      "name": "Schedule-proxy tradeoff audit",
+      "script": "analyze_schedule_proxy_audit.py"
     },
     {
       "expected_key": "needs_revision_count",
@@ -214,6 +227,6 @@
     }
   ],
   "status_counts": {
-    "pass": 16
+    "pass": 17
   }
 }

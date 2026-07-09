@@ -56,6 +56,8 @@ CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
 COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.json"
 COMPARISON_PROTOCOL_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_protocol_audit.tex"
 ROS_GAP_MANIFEST = RESULTS / "manifest_ros_reproduction_gap_audit.json"
+SCHEDULE_PROXY_MANIFEST = RESULTS / "manifest_schedule_proxy_audit.json"
+SCHEDULE_PROXY_TABLE = THIS_DIR / "paper_latex" / "tables" / "schedule_proxy_audit.tex"
 SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
 EDITORIAL_SCREENING_MANIFEST = RESULTS / "manifest_editorial_screening_audit.json"
 SUPPORT_PACKET_MANIFEST = RESULTS / "manifest_submission_support_packet_audit.json"
@@ -283,6 +285,21 @@ def verify_ros_gap() -> dict[str, str]:
         status,
         f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; coverage_counts={coverage}; official_ros_fully_reproduced={full_ros}; full_ros_boundary_is_explicit={boundary_explicit}.",
         "Run analyze_ros_lut_line_sensitivity.py and analyze_ros_reproduction_gap_audit.py and restore ROS proxy/full-reproduction boundary anchors.",
+    )
+
+
+def verify_schedule_proxy() -> dict[str, str]:
+    manifest = read_json(SCHEDULE_PROXY_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    table_exists = SCHEDULE_PROXY_TABLE.exists()
+    status = "pass" if manifest and revisions == 0 and table_exists else "needs revision"
+    return row(
+        "Schedule-proxy tradeoff audit",
+        status,
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
+        "Run analyze_schedule_metrics.py and analyze_schedule_proxy_audit.py and restore schedule-proxy table anchors.",
     )
 
 
@@ -754,6 +771,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_claim_scope(),
             verify_comparison_protocol(),
             verify_ros_gap(),
+            verify_schedule_proxy(),
             verify_search_control(),
             verify_editorial_screening(),
             verify_support_packet(),

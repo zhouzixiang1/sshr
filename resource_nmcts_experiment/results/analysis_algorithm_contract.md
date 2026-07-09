@@ -1,0 +1,17 @@
+# Algorithm Contract Table
+
+This audit converts the Resource-NMCTS method description into implementation-anchored algorithm contracts. Each row records the operational rule, source anchors, and reviewer-facing guarantee.
+
+## Status counts
+
+- pass: 7
+
+| stage | operational rule | source anchors | guarantee | status |
+|---|---|---|---|---|
+| Canonical state | Normalize a truth table, exported benchmark, or supplied term list into a square-free ANF monomial set; direct ANF remains the fallback plan at every state. | `synthesizers.py: anf_monomials; factor_plan.py: frozenset, direct_plan` | The search starts from the same Boolean function as the baseline and always has a syntactically valid logical oracle construction. | pass |
+| Action generation | Generate monomial factors, linear/Boolean-ring factors, FPRM polarity actions, and affine/linear-pair candidates only when they have an explicit GF(2) expansion. | `factor_plan.py: candidate_actions, linear_factor_actions, _linear_boolean_expansion; synthesizers.py: affine_linear_pair_beam_plan` | Learning never invents a semantic rule; it can only rank or select among algebraic actions that the emitter and verifier can expand. | pass |
+| Prior-guided tree search | Use the neural scorer to bias action priors, then run PUCT/MCTS recursion with greedy rollouts and bounded candidate_top_k expansion. | `neural_policy.py: NeuralScorer, score_many; nmcts_solver.py: NeuralMCTSSolver, c_puct; factor_plan.py: candidate_top_k` | The neural component is a budget-allocation prior, not a correctness oracle or an unrestricted circuit generator. | pass |
+| Baseline guard | Evaluate deterministic, beam, MCTS, neural, and screen candidates as a portfolio; guarded neural variants return the better of the baseline and learned candidate. | `synthesizers.py: _run_child_portfolio, min([baseline, neural_plan], _portfolio_result, direct_anf` | A learned or expensive branch is allowed to help but is not allowed to replace a stronger verified deterministic candidate in guarded rows. | pass |
+| Pareto archive | Collect candidates from multiple resource profiles, remove candidates dominated in T, CNOT, depth, gates, and peak ancilla, then select by the active score. | `synthesizers.py: _pareto_front, _dominates, _resource_selection_key, pareto_resource_nmcts` | Weighted-score wins are kept separate from multi-resource dominance, which is why tradeoff tables remain part of the Results section. | pass |
+| Large-scale controllers | Use depth-frontier policies and sparse gates to decide which high-dimensional Boolean-ring screens to evaluate, with deterministic sparse/full frontiers kept as references. | `run_truth_bridge_terms.py: load_depth2_guard, load_frontier_policy, depth_frontier_policy, screen_depth4` | High-dimensional controllers are planning-time controls over symbolic term-set verification, not hardware schedulers or exhaustive truth-table solvers. | pass |
+| Emission and verification | Emit X/CNOT/MCT compute-action-uncompute circuits, verify ANF semantics symbolically, and use complete truth-table or phase checks where feasible before writing raw result rows. | `factor_plan.py: emit_plan_to_circuit, verify_plan_anf, verify_circuit_anf, verify_oracle; run_experiments.py: correct` | Paper comparisons consume matched rows that passed the relevant semantic check; skipped, errored, or timed-out rows are not silently counted. | pass |
