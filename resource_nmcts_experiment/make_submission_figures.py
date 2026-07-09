@@ -185,7 +185,7 @@ def fig_pipeline() -> None:
     checks = [
         ("Plan ANF", "symbolic expansion"),
         ("Circuit ANF", "emitted-circuit simulation"),
-        ("Truth table", "complete bridge n=21--28"),
+        ("Truth table", "complete bridge n=21--30"),
     ]
     for j, (title, text) in enumerate(checks):
         x = 0.19 + j * 0.22
@@ -610,7 +610,7 @@ def validation_rows() -> list[dict[str, object]]:
             "summary_screen_scale_width12_probe_terms.csv",
             "summary_screen_scale_width24_probe_terms.csv",
         ]),
-        ("truth bridge n=21-28", "truth_verified_rows", [
+        ("truth bridge n=21-30", "truth_verified_rows", [
             "summary_truth_bridge_terms.csv",
             "summary_truth_bridge_n23_terms.csv",
             "summary_truth_bridge_n23_large_frontier_terms.csv",
@@ -620,6 +620,8 @@ def validation_rows() -> list[dict[str, object]]:
             "summary_truth_bridge_n26_terms.csv",
             "summary_truth_bridge_n27_terms.csv",
             "summary_truth_bridge_n28_terms.csv",
+            "summary_truth_bridge_n29_terms.csv",
+            "summary_truth_bridge_n30_terms.csv",
         ]),
         ("phase exact search", "verified_up_to_global_phase", ["raw_phase_parity_affine.csv"]),
         ("phase policy pruning", "verified_up_to_global_phase", ["raw_phase_affine_policy_rank_diverse.csv"]),

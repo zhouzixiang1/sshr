@@ -11,7 +11,7 @@
   "rows_detail": [
     {
       "elapsed_seconds": "0.000",
-      "evidence": "extracted_files=1083; error=none.",
+      "evidence": "extracted_files=1091; error=none.",
       "item": "Payload extraction for verifier smoke",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "returncode": "n/a",

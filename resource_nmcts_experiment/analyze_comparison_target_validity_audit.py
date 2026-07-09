@@ -193,7 +193,7 @@ def specs() -> list[TargetSpec]:
         TargetSpec(
             family="Scaling and correctness bridges",
             role="scalability verification",
-            compared_against="n=20,24,28,32,40 symbolic term-set runs, n=48,56,64 ultra-scale symbolic stress, and n=21-28 complete truth-table bridge rows",
+            compared_against="n=20,24,28,32,40 symbolic term-set runs, n=48,56,64 ultra-scale symbolic stress, and n=21-30 complete truth-table bridge rows",
             meaning_test="These rows test whether emitted logical oracles remain verifiable beyond the small truth-table benchmark slice.",
             required_claim_tokens=("Scaling and correctness bridges",),
             required_evidence_tokens=("High-dimensional frontier search", "Complete truth-table bridges"),
@@ -207,6 +207,8 @@ def specs() -> list[TargetSpec]:
                 RESULTS / "raw_truth_bridge_n26_terms.csv",
                 RESULTS / "raw_truth_bridge_n27_terms.csv",
                 RESULTS / "raw_truth_bridge_n28_terms.csv",
+                RESULTS / "raw_truth_bridge_n29_terms.csv",
+                RESULTS / "raw_truth_bridge_n30_terms.csv",
                 RESULTS / "analysis_scaling_resource_audit.md",
             ),
             supported_statement="Evidence for logical-layer scaling and semantic verification within the symbolic/bridge envelope.",
@@ -300,7 +302,7 @@ def latex_cell(text: str) -> str:
         ("CNOT", "CNOT"),
         ("n=20,24,28,32,40", r"$n=20$, 24, 28, 32, 40"),
         ("n=48,56,64", r"$n=48$, 56, 64"),
-        ("n=21-28", r"$n=21$--$28$"),
+        ("n=21-30", r"$n=21$--$30$"),
         ("n=21-25", r"$n=21$--$25$"),
     ]
     for old, new in replacements:

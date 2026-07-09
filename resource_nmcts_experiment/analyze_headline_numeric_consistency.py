@@ -183,15 +183,15 @@ def sparse_frontier_claim() -> Claim:
     min_value = values[0] if values else float("nan")
     max_value = values[-1] if values else float("nan")
     all_tied = bool(bridge) and all(row.get("score_wlt") in {"0/0/6", "0/0/72", "0/0/96"} for row in rows)
-    numeric_ok = len(bridge) == 6 and float_close(min_value, 24.94) and float_close(max_value, 29.23) and all_tied
+    numeric_ok = len(bridge) == 8 and float_close(min_value, 24.94) and float_close(max_value, 30.28) and all_tied
     return Claim(
         claim="sparse depth-2/4 frontier bridge time reduction",
         computed=f"bridge_rows={len(bridge)}; time_range={pct(min_value)}--{pct(max_value)}; score_tied={all_tied}",
-        expected="bridge_rows=6; time_range=24.94%--29.23%; score_tied=True",
+        expected="bridge_rows=8; time_range=24.94%--30.28%; score_tied=True",
         source="results/summary_sparse_depth_frontier.csv",
-        tokens=("24.94--29.23%",),
+        tokens=("24.94--30.28%",),
         numeric_ok=numeric_ok,
-        evidence_note="Range is computed from truth-bridge n=23, n=24, n=25, n=26, n=27, and n=28 rows.",
+        evidence_note="Range is computed from truth-bridge n=23 through n=30 rows.",
     )
 
 
@@ -243,16 +243,16 @@ def validation_scale_claim() -> Claim:
     ]
     verified_total = sum(int(by_group[group]["verified"]) for group in headline_groups if group in by_group)
     total_total = sum(int(by_group[group]["total"]) for group in headline_groups if group in by_group)
-    bridge = by_group.get("truth bridge n=21-28", {})
-    bridge_ok = bridge.get("verified") == "580" and bridge.get("total") == "580"
+    bridge = by_group.get("truth bridge n=21-30", {})
+    bridge_ok = bridge.get("verified") == "700" and bridge.get("total") == "700"
     all_exact = verified_total == total_total and bridge_ok
     numeric_ok = verified_total == 15774 and all_exact
     return Claim(
         claim="headline verification row count",
-        computed=f"verified_total={verified_total:,}; bridge_580_580={bridge_ok}; all_exact={all_exact}",
-        expected="verified_total=15,774; bridge_580_580=True; all_exact=True",
+        computed=f"verified_total={verified_total:,}; bridge_700_700={bridge_ok}; all_exact={all_exact}",
+        expected="verified_total=15,774; bridge_700_700=True; all_exact=True",
         source="paper_latex/figures/submission_v36/source_data/fig5_validation.csv",
-        tokens=("15,774", "580/580"),
+        tokens=("15,774", "700/700"),
         numeric_ok=numeric_ok,
         evidence_note="Sums symbolic and phase-policy validation rows in Fig.5 source data; bridge rows are reported separately.",
     )

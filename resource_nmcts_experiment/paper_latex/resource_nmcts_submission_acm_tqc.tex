@@ -61,11 +61,11 @@ auxiliary lines on most small functions.  In the phase branch, a rank-trained sh
 scores 512 of 8192 affine forms per held-out $n=6$ function and matches the
 wide-search mean within 0.01\% under the $T/R_z=30$ proxy.  For larger term-set
 instances, a sparse depth-2/4 frontier matches the measured depth-2/3/4
-frontier while reducing evaluation time by 24.94--29.23\%, and a learned
+frontier while reducing evaluation time by 24.94--30.28\%, and a learned
 depth-4 gate preserves sparse-frontier score on a 144-pair multi-seed
 $n=24,28,32,40$ audit while saving 13.43\%.  Correctness is supported by
-15,774 symbolic, phase-search, and policy-pruning rows, plus 580/580 complete
-\ttable{}-bridge rows for $n=21$--$28$.  The contribution is a verified
+15,774 symbolic, phase-search, and policy-pruning rows, plus 700/700 complete
+\ttable{}-bridge rows for $n=21$--$30$.  The contribution is a verified
 logical-layer search method with strong T-count and weighted-score advantages,
 not a hardware-mapped, depth-only, or universal-dominance claim.
 \end{abstract}
@@ -912,7 +912,7 @@ from being reduced to a neural-prior claim or overstated as a universal screen
 improvement.  Table~\ref{tab:sparse-frontier} then compresses the expensive
 depth-frontier itself.  On the listed scale and truth-bridge slices, evaluating
 only depth 2 and depth 4 exactly matches the full depth-2/3/4 frontier while
-removing 24.94--29.23\% of frontier evaluation time.  Table
+removing 24.94--30.28\% of frontier evaluation time.  Table
 \ref{tab:sparse-depth4-gate} adds a learned gate on top of this sparse
 frontier.  Trained on generated $n=16,20,24$ term sets and applied unchanged to
 held-out $n=28,40$ term sets, it runs depth 4 on 32/48 test pairs, records zero
@@ -1352,8 +1352,8 @@ sign test.  Negative $\Delta$ mean favors the learned shortlist.}
 Figure~\ref{fig:validation} summarizes the current verification envelope.
 The manuscript-level evidence includes 6120/6120 item-level symbolic runs for
 $n=20$--$64$, 1512/1512 width-probe symbolic runs, 531/531 exact phase-search
-rows, 7611/7611 phase-policy pruning rows, and 580/580 complete \ttable{}
-bridge method rows.  The complete bridge spans $n=21$--$28$ and checks the
+rows, 7611/7611 phase-policy pruning rows, and 700/700 complete \ttable{}
+bridge method rows.  The complete bridge spans $n=21$--$30$ and checks the
 oracle relation, the expanded \anf{} plan, and the emitted-circuit symbolic
 semantics.  The additional $n=48,56,64$ stress slice keeps the same symbolic
 plan and emitted-circuit checks, but is not a complete truth-table benchmark.
@@ -1424,7 +1424,7 @@ Check & Current coverage & Boundary \\
 \midrule
  $n=20$--$64$ item-level symbolic runs & 6120/6120 & Not full truth-table enumeration. \\
 Width-probe symbolic runs & 1512/1512 & Supports the default action width, but remains term-set validation. \\
-$n=21$--$28$ complete bridge & 580/580 & Small generated slices; not exhaustive coverage of all high-dimensional functions. \\
+$n=21$--$30$ complete bridge & 700/700 & Small generated slices; not exhaustive coverage of all high-dimensional functions. \\
 Exact phase-search rows & 531/531 & Verified up to global phase; no rotation-sequence output. \\
 Phase-policy pruning rows & 7611/7611 & Learned shortlist rows verified up to global phase; still no rotation-sequence output. \\
 Rotation-sequence smoke angles & 20/20 & Source-derived single-qubit Clifford+T strings at coarse tolerance; not high-precision gridsynth. \\
@@ -1511,7 +1511,7 @@ ESOP, SSHR-H, and ESOP-MILP baselines.  On external probes based on
 ROS-style LUT mapping, mockturtle, CirKit, and legacy RevKit CLI reversible
 synthesis, the method retains a strong weighted-score advantage while exposing
 clear depth and ancilla tradeoffs.  Large symbolic experiments and
-$n=21$--$28$ complete truth-table bridges support the semantic correctness of
+$n=21$--$30$ complete truth-table bridges support the semantic correctness of
 the logical-layer circuits.  The sparse depth-frontier analysis further reduces
 high-dimensional planning cost by skipping depth 3 in the audited frontier, and
 the learned sparse depth-4 gate preserves sparse-frontier score across both

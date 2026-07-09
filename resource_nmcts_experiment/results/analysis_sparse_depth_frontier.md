@@ -14,6 +14,8 @@ then selects the lower-score plan.  It is compared against the full
 | truth-bridge-n26 | 26 | 6 | 0/0/6 | +0.00% | -27.21% | 3/0/3 | 2 | 18/18 |
 | truth-bridge-n27 | 27 | 6 | 0/0/6 | +0.00% | -28.19% | 3/0/3 | 3 | 18/18 |
 | truth-bridge-n28 | 28 | 6 | 0/0/6 | +0.00% | -29.23% | 2/0/4 | 3 | 18/18 |
+| truth-bridge-n29 | 29 | 6 | 0/0/6 | +0.00% | -30.28% | 3/0/3 | 1 | 18/18 |
+| truth-bridge-n30 | 30 | 6 | 0/0/6 | +0.00% | -26.41% | 4/0/2 | 1 | 18/18 |
 
 Interpretation:
 

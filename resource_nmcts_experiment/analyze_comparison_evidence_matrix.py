@@ -162,7 +162,7 @@ def latex_cell(text: str) -> str:
         ("n=20,24,28,32,40", r"$n=20$, 24, 28, 32, 40"),
         ("n=48,56,64", r"$n=48$, 56, 64"),
         ("n=3,4,5,6,14", r"$n=3$--$6$, 14"),
-        ("n=21-28", r"$n=21$--$28$"),
+        ("n=21-30", r"$n=21$--$30$"),
         ("n=21-25", r"$n=21$--$25$"),
         ("n=3-6", r"$n=3$--$6$"),
         ("n<=6", r"$n\leq6$"),
@@ -197,6 +197,8 @@ def build_matrix() -> list[dict[str, str]]:
         RESULTS / "raw_truth_bridge_n26_terms.csv",
         RESULTS / "raw_truth_bridge_n27_terms.csv",
         RESULTS / "raw_truth_bridge_n28_terms.csv",
+        RESULTS / "raw_truth_bridge_n29_terms.csv",
+        RESULTS / "raw_truth_bridge_n30_terms.csv",
     ]
     screen_scale = [
         RESULTS / "raw_screen_scale_depth_frontier_policy_large_generalization_terms.csv",
@@ -401,7 +403,7 @@ def build_matrix() -> list[dict[str, str]]:
             "evidence_block": "Complete truth-table bridges",
             "scope": scope,
             "verified_rows": f"{usable}/{total}",
-            "main_result": "Bridge rows verify plan, emitted symbolic circuit, and complete truth table for n=21-28.",
+            "main_result": "Bridge rows verify plan, emitted symbolic circuit, and complete truth table for n=21-30.",
             "boundary": "Bridge set is intentionally narrow because complete truth tables grow exponentially.",
             "sources": csv_join(truth_bridge),
         }

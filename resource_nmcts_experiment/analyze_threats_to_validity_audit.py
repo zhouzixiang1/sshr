@@ -124,7 +124,7 @@ def specs() -> list[ThreatSpec]:
             ),
             required_tokens=("symbolic", "truth", "n=48", "bridge"),
             mitigation="Scaling, ultra-scale, resource-profile, and truth-bridge audits separate symbolic verification from complete truth-table checks.",
-            residual_boundary="Complete truth-table verification is limited to generated n=21--28 bridge slices; n=29--64 rows are not exhaustive truth-table enumerations.",
+            residual_boundary="Complete truth-table verification is limited to generated n=21--30 bridge slices; n=31--64 rows are not exhaustive truth-table enumerations.",
             next_action="Label any new large-n result as symbolic, bridge, or complete-truth-table evidence according to its verifier.",
         ),
         ThreatSpec(
@@ -193,8 +193,8 @@ def latex_cell(text: str) -> str:
         "T-count": r"T-count",
         "CNOT": r"CNOT",
         "MCTS": r"\mcts{}",
-        "n=21--28": r"$n=21$--$28$",
-        "n=29--64": r"$n=29$--$64$",
+        "n=21--30": r"$n=21$--$30$",
+        "n=31--64": r"$n=31$--$64$",
         "n=26--64": r"$n=26$--$64$",
         "n=48": r"$n=48$",
     }

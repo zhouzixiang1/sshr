@@ -223,7 +223,7 @@ def build_rows() -> list[dict[str, str]]:
         },
         {
             "reviewer_question": "Is the evidence only small-scale?",
-            "comparison_target": "n=20--64 symbolic runs and n=21--28 complete truth-table bridges",
+            "comparison_target": "n=20--64 symbolic runs and n=21--30 complete truth-table bridges",
             "role": "scaling and correctness verification",
             "verified_evidence": verified("High-dimensional frontier search", "Complete truth-table bridges"),
             "headline_answer": (
@@ -291,7 +291,7 @@ def latex_cell(text: str) -> str:
         "FPRM": r"\fprm{}",
         "Rz": r"\rz{}",
         "n=20--64": r"$n=20$--$64$",
-        "n=21--28": r"$n=21$--$28$",
+        "n=21--30": r"$n=21$--$30$",
         "n=3-6": r"$n=3$--$6$",
         "n<=6": r"$n\leq6$",
     }

@@ -221,6 +221,8 @@ def build_rows() -> list[dict[str, str]]:
             "raw_truth_bridge_n26_terms.csv",
             "raw_truth_bridge_n27_terms.csv",
             "raw_truth_bridge_n28_terms.csv",
+            "raw_truth_bridge_n29_terms.csv",
+            "raw_truth_bridge_n30_terms.csv",
         )
     )
 
