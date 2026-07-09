@@ -93,6 +93,15 @@ SMOKE_SPECS = (
         minimum_rows=18,
     ),
     SmokeSpec(
+        name="Frontier random-depth control",
+        script="analyze_frontier_random_depth_control.py",
+        manifest="results/manifest_frontier_random_depth_control.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=3,
+    ),
+    SmokeSpec(
         name="Editorial screening audit",
         script="analyze_editorial_screening_audit.py",
         manifest="results/manifest_editorial_screening_audit.json",
@@ -100,6 +109,15 @@ SMOKE_SPECS = (
         expected_value=0,
         minimum_rows_key="rows",
         minimum_rows=8,
+    ),
+    SmokeSpec(
+        name="Target venue decision audit",
+        script="analyze_target_venue_decision_audit.py",
+        manifest="results/manifest_target_venue_decision_audit.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=5,
     ),
     SmokeSpec(
         name="Submission support packet audit",

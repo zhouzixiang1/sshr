@@ -6,7 +6,9 @@ terminal package invariants that are easy to regress during final polishing:
 compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, comparison-protocol coverage,
 search-control baseline coverage,
+frontier random-depth control coverage,
 editorial screening support,
+target-venue decision support,
 submission support packet coverage,
 ROS reproduction-boundary support,
 citation support,
@@ -63,7 +65,11 @@ SCHEDULE_PROXY_TABLE = THIS_DIR / "paper_latex" / "tables" / "schedule_proxy_aud
 SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
 BITFLIP_RANDOM_PRIOR_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control.json"
 BITFLIP_RANDOM_PRIOR_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_random_prior_control.tex"
+FRONTIER_RANDOM_DEPTH_MANIFEST = RESULTS / "manifest_frontier_random_depth_control.json"
+FRONTIER_RANDOM_DEPTH_TABLE = THIS_DIR / "paper_latex" / "tables" / "frontier_random_depth_control.tex"
 EDITORIAL_SCREENING_MANIFEST = RESULTS / "manifest_editorial_screening_audit.json"
+TARGET_VENUE_DECISION_MANIFEST = RESULTS / "manifest_target_venue_decision_audit.json"
+TARGET_VENUE_DECISION_TABLE = THIS_DIR / "paper_latex" / "tables" / "target_venue_decision_audit.tex"
 SUPPORT_PACKET_MANIFEST = RESULTS / "manifest_submission_support_packet_audit.json"
 CITATION_SUPPORT_MANIFEST = RESULTS / "manifest_citation_support_audit.json"
 HEADLINE_NUMERIC_MANIFEST = RESULTS / "manifest_headline_numeric_consistency.json"
@@ -332,7 +338,7 @@ def verify_search_control() -> dict[str, str]:
         "Search-control baseline audit",
         status,
         f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}.",
-        "Run analyze_search_control_baseline_audit.py and restore heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, bit-flip random-prior, and phase random-control evidence rows.",
+        "Run analyze_search_control_baseline_audit.py and restore heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, bit-flip random-prior, frontier random-depth, and phase random-control evidence rows.",
     )
 
 
@@ -351,6 +357,21 @@ def verify_bitflip_random_prior() -> dict[str, str]:
     )
 
 
+def verify_frontier_random_depth() -> dict[str, str]:
+    manifest = read_json(FRONTIER_RANDOM_DEPTH_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    table_exists = FRONTIER_RANDOM_DEPTH_TABLE.exists()
+    status = "pass" if manifest and revisions == 0 and table_exists else "needs revision"
+    return row(
+        "Frontier random-depth control",
+        status,
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
+        "Run analyze_frontier_random_depth_control.py and restore the frontier random-depth manuscript table.",
+    )
+
+
 def verify_editorial_screening() -> dict[str, str]:
     manifest = read_json(EDITORIAL_SCREENING_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -362,6 +383,23 @@ def verify_editorial_screening() -> dict[str, str]:
         status,
         f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}.",
         "Run analyze_editorial_screening_audit.py and restore scope, novelty, comparison, counterpoint, AI-boundary, scale-boundary, reproducibility, author-gate, or editor-reading anchors.",
+    )
+
+
+def verify_target_venue_decision() -> dict[str, str]:
+    manifest = read_json(TARGET_VENUE_DECISION_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    first = manifest.get("recommended_first_choice", "missing") if manifest else "missing"
+    strong = manifest.get("strong_fit_count", "missing") if manifest else "missing"
+    table_exists = TARGET_VENUE_DECISION_TABLE.exists()
+    status = "pass" if manifest and revisions == 0 and table_exists else "needs revision"
+    return row(
+        "Target-venue decision audit",
+        status,
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; recommended_first_choice={first}; strong_fit_count={strong}; table_exists={table_exists}.",
+        "Run analyze_target_venue_decision_audit.py and restore the source-backed target-venue decision packet.",
     )
 
 
@@ -809,7 +847,9 @@ def build_rows() -> list[dict[str, str]]:
             verify_schedule_proxy(),
             verify_search_control(),
             verify_bitflip_random_prior(),
+            verify_frontier_random_depth(),
             verify_editorial_screening(),
+            verify_target_venue_decision(),
             verify_support_packet(),
             verify_citation_support(),
             verify_headline_numeric(),

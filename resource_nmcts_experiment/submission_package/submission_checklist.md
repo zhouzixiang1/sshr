@@ -41,7 +41,10 @@ Use this checklist immediately before uploading the manuscript.
 - Claim-scope lint: `results/analysis_claim_scope_lint.md`
 - Comparison protocol audit: `results/analysis_comparison_protocol_audit.md`
 - ROS reproduction gap audit: `results/analysis_ros_reproduction_gap_audit.md`
+- Search-control baseline audit: `results/analysis_search_control_baseline_audit.md`
+- Frontier random-depth control: `results/analysis_frontier_random_depth_control.md`
 - Editorial screening audit: `results/analysis_editorial_screening_audit.md`
+- Target-venue decision audit: `results/analysis_target_venue_decision_audit.md`
 - Submission support packet audit: `results/analysis_submission_support_packet_audit.md`
 - Citation support audit: `results/analysis_citation_support_audit.md`
 - Headline numeric consistency audit: `results/analysis_headline_numeric_consistency.md`
@@ -89,7 +92,10 @@ Run these from `resource_nmcts_experiment/`:
   analyze_claim_scope_lint.py \
   analyze_comparison_protocol_audit.py \
   analyze_ros_reproduction_gap_audit.py \
+  analyze_frontier_random_depth_control.py \
+  analyze_search_control_baseline_audit.py \
   analyze_editorial_screening_audit.py \
+  analyze_target_venue_decision_audit.py \
   analyze_submission_support_packet_audit.py \
   analyze_citation_support_audit.py \
   analyze_headline_numeric_consistency.py \
@@ -132,7 +138,10 @@ Expected current state:
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
 - Comparison protocol audit: all baseline layers have role, evidence, comparability, counterpoint, artifact, and manuscript-anchor coverage.
 - ROS reproduction gap audit: ROS-style LUT and line-sensitivity are proxy evidence; the official ROS SAT garbage-management component is not reproduced and must not be claimed.
+- Search-control baseline audit: heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, bit-flip random-prior, frontier random-depth, and phase random-control rows all pass.
+- Frontier random-depth control: same-candidate depth-2/3/4 random controls pass on held-out, scale, and truth-table bridge slices; the result is a quality/budget-allocation claim, not a runtime claim.
 - Editorial screening audit: scope, novelty, comparison route, negative-result visibility, AI-boundary, large-scale boundary, reproducibility path, and author/venue gate all pass.
+- Target-venue decision audit: source-backed venue fit, recommended order, metadata gate, anonymous-review policy gate, and AI-disclosure policy gate all pass while the final target venue remains author input.
 - Submission support packet audit: cover letter, declarations, target-venue brief, checklist, handoff, private-preview gate, anonymous-review fork, and editor/reviewer triage all pass.
 - Citation support audit: related-work families, cited BibTeX keys, bibliography entries, and DOI/URL/eprint locators are all closed.
 - Headline numeric consistency audit: all abstract-level numbers match generated CSV evidence and both author/anonymous TeX sources.

@@ -3,6 +3,7 @@
 Component & Scope & Quality evidence & Cost evidence & Paper role \\
 \midrule
 Depth-frontier policy & held-out $n=28,40$; 48 rows & vs oracle frontier 0/3/45, +0.04\% & -51.30\% time vs all-depth frontier & promoted quality/time selector \\
+Frontier random-depth control & held-out/scale/$n=23$; 8 random-depth repeats & scale 55/3/38, -1.12\%; $n=23$ 5/0/1, -0.89\%; seed means beaten 8/8 & +58.78\% scale planning time vs random-depth mean & quality-oriented budget allocation; not runtime claim \\
 Stage-gated frontier & independent $n=24,28,32,40$; 96 rows & vs all-depth 0/4/92, +0.04\% & -25.43\% staged planning time & promoted validation-calibrated guard \\
 Sparse depth-4 gate & multi-seed $n=24,28,32,40$; 144 pairs & vs sparse frontier 0/0/144, +0.00\%; false skips 0 & -13.43\% time vs sparse frontier & promoted budget gate after depth-2 \\
 Rank-diverse phase shortlist & held-out $n=6$ phase search; 38 rows & vs budget-32 17/0/21, -2.48\%; vs wide-128 0/7/31, +0.00\% & 512/8192 exact forms per function & promoted phase-search pruning \\

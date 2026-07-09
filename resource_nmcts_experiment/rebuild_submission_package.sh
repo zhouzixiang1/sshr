@@ -46,6 +46,7 @@ run_py analyze_paired_effect_uncertainty.py
 run_py analyze_multimetric_pareto_tradeoff.py
 run_py analyze_search_contribution.py
 run_py analyze_bitflip_random_prior_control.py
+run_py analyze_frontier_random_depth_control.py
 run_py analyze_search_control_baseline_audit.py
 run_py analyze_boolean_ring_structural_evidence.py
 run_py analyze_sparse_depth_frontier.py
@@ -91,6 +92,7 @@ run_py analyze_pdf_metadata_audit.py
 run_py analyze_goal_completion_audit.py
 run_py analyze_submission_metadata_closure_path.py
 run_py analyze_editorial_screening_audit.py
+run_py analyze_target_venue_decision_audit.py
 run_py analyze_submission_support_packet_audit.py
 run_py make_submission_payload_archive.py
 run_py analyze_latex_dependency_audit.py

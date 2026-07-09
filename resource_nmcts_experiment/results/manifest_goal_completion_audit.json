@@ -33,8 +33,8 @@
     },
     {
       "boundary": "The evidence supports bounded neural/search-control contributions, not a claim that deep RL alone explains all gains.",
-      "evidence": "Search-control, bit-flip random-prior, and learned-control audits separate heuristic/beam/no-MCTS/MCTS/Pareto/prior comparisons, same-budget random-prior controls, promoted frontier/gating/phase-pruning controls, and limited diagnostics.",
-      "evidence_files": "results/analysis_search_control_baseline_audit.md; paper_latex/tables/search_control_baseline_audit.tex; results/analysis_bitflip_random_prior_control.md; paper_latex/tables/bitflip_random_prior_control.tex; results/analysis_learned_control_audit.md; paper_latex/tables/learned_control_audit.tex; paper_latex/figures/submission_v36/fig7_learned_control_summary.pdf",
+      "evidence": "Search-control, bit-flip random-prior, frontier random-depth, and learned-control audits separate heuristic/beam/no-MCTS/MCTS/Pareto/prior comparisons, same-budget random-prior controls, same-candidate frontier budget controls, promoted frontier/gating/phase-pruning controls, and limited diagnostics.",
+      "evidence_files": "results/analysis_search_control_baseline_audit.md; paper_latex/tables/search_control_baseline_audit.tex; results/analysis_bitflip_random_prior_control.md; paper_latex/tables/bitflip_random_prior_control.tex; results/analysis_frontier_random_depth_control.md; paper_latex/tables/frontier_random_depth_control.tex; results/analysis_learned_control_audit.md; paper_latex/tables/learned_control_audit.tex; paper_latex/figures/submission_v36/fig7_learned_control_summary.pdf",
       "next_action": "Do not promote runtime-negative or quality-weak neural diagnostics as main contributions.",
       "requirement": "Neural/MCTS and learned-control evidence",
       "status": "pass"
@@ -81,7 +81,7 @@
     },
     {
       "boundary": "Counts describe manuscript artifacts, not independent experimental datasets.",
-      "evidence": "Current package has 7 submitted figure panels and 163 generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
+      "evidence": "Current package has 7 submitted figure panels and 165 generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
       "evidence_files": "paper_latex/figures/submission_v36; paper_latex/tables; results/analysis_figure_asset_audit.md; results/analysis_reproducibility_audit.md",
       "next_action": "Spot-check figure/table readability after every layout or data update.",
       "requirement": "Rich paper figures and tables",
@@ -89,7 +89,7 @@
     },
     {
       "boundary": "Author names, target-venue formatting choices, and final declarations remain external author inputs.",
-      "evidence": "Compiled submission PDF exists with 32 pages and the TeX source is present.",
+      "evidence": "Compiled submission PDF exists with 33 pages and the TeX source is present.",
       "evidence_files": "paper_latex/resource_nmcts_submission_v1.tex; paper_latex/resource_nmcts_submission_v1.pdf; results/analysis_submission_readiness_audit.md",
       "next_action": "After author metadata is supplied, recompile and rerun readiness checks.",
       "requirement": "Complete LaTeX manuscript draft",
@@ -113,8 +113,8 @@
     },
     {
       "boundary": "These fields cannot be inferred from code or experiments and must be confirmed by the author or target venue.",
-      "evidence": "Submission metadata audit reports 12 author/venue field group(s) needing author input; private metadata validation, synthetic metadata-pipeline self-testing, metadata-closure-path auditing, and text-preview generation are prepared for filled metadata.",
-      "evidence_files": "results/analysis_submission_metadata_audit.md; results/analysis_submission_metadata_validator.md; results/analysis_submission_metadata_pipeline_selftest.md; results/analysis_submission_metadata_closure_path.md; results/analysis_submission_text_preview.md; results/analysis_anonymous_review_readiness.md; submission_package/author_declarations_template.md; submission_package/cover_letter_template.md; submission_package/submission_checklist.md",
+      "evidence": "Submission metadata audit reports 12 author/venue field group(s) needing author input; target-venue decision auditing, private metadata validation, synthetic metadata-pipeline self-testing, metadata-closure-path auditing, and text-preview generation are prepared for filled metadata.",
+      "evidence_files": "results/analysis_target_venue_decision_audit.md; results/analysis_submission_metadata_audit.md; results/analysis_submission_metadata_validator.md; results/analysis_submission_metadata_pipeline_selftest.md; results/analysis_submission_metadata_closure_path.md; results/analysis_submission_text_preview.md; results/analysis_anonymous_review_readiness.md; submission_package/target_venue_brief.md; submission_package/author_declarations_template.md; submission_package/cover_letter_template.md; submission_package/submission_checklist.md",
       "next_action": "Fill author order, affiliations, ORCIDs, funding, acknowledgements, competing interests, archive links, license, disclosure, and target-venue fields, then review generated private submission text previews.",
       "requirement": "Final author and venue metadata",
       "status": "needs author input"

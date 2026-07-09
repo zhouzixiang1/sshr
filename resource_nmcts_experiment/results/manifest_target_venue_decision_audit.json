@@ -1,0 +1,35 @@
+{
+  "checked_date": "2026-07-09",
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_target_venue_decision_audit.md",
+    "manifest": "results/manifest_target_venue_decision_audit.json",
+    "summary": "results/summary_target_venue_decision_audit.csv",
+    "table": "paper_latex/tables/target_venue_decision_audit.tex"
+  },
+  "python": "3.11.15",
+  "recommended_first_choice": "ACM Transactions on Quantum Computing",
+  "required_target_metadata_fields": [
+    "target_venue.name",
+    "target_venue.manuscript_type",
+    "target_venue.formatting_policy_checked",
+    "target_venue.reference_style_checked",
+    "target_venue.word_limit_checked",
+    "target_venue.supplementary_material_policy_checked",
+    "target_venue.ai_disclosure_policy_checked",
+    "target_venue.anonymous_review_required"
+  ],
+  "rows": 5,
+  "script": "analyze_target_venue_decision_audit.py",
+  "sources": [
+    "https://acm-stoc.org/stoc2020/acm-journals/tqc-new-announcement-06-2020.pdf",
+    "https://quantum-journal.org/instructions/authors/",
+    "https://tqe.ieee.org/",
+    "https://ieee-ceda.org/publications/tcad/tcad-paper-submissions",
+    "https://publishingsupport.iopscience.iop.org/journals/quantum-science-technology/"
+  ],
+  "status_counts": {
+    "pass": 5
+  },
+  "strong_fit_count": 2
+}

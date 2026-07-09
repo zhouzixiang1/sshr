@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=942; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=952; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -39,7 +39,7 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_search_control_baseline_audit.json; needs_revision_count=0; rows=9; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_search_control_baseline_audit.json; needs_revision_count=0; rows=10; stderr=none",
       "item": "Search-control baseline audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -51,8 +51,20 @@
       "status": "pass"
     },
     {
+      "evidence": "returncode=0; manifest=results/manifest_frontier_random_depth_control.json; needs_revision_count=0; rows=3; stderr=none",
+      "item": "Frontier random-depth control",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
       "evidence": "returncode=0; manifest=results/manifest_editorial_screening_audit.json; needs_revision_count=0; rows=8; stderr=none",
       "item": "Editorial screening audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_target_venue_decision_audit.json; needs_revision_count=0; rows=5; stderr=none",
+      "item": "Target venue decision audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -169,10 +181,24 @@
     },
     {
       "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_frontier_random_depth_control.json",
+      "minimum_rows_key": "rows",
+      "name": "Frontier random-depth control",
+      "script": "analyze_frontier_random_depth_control.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
       "manifest": "results/manifest_editorial_screening_audit.json",
       "minimum_rows_key": "rows",
       "name": "Editorial screening audit",
       "script": "analyze_editorial_screening_audit.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_target_venue_decision_audit.json",
+      "minimum_rows_key": "rows",
+      "name": "Target venue decision audit",
+      "script": "analyze_target_venue_decision_audit.py"
     },
     {
       "expected_key": "needs_revision_count",
@@ -253,6 +279,6 @@
     }
   ],
   "status_counts": {
-    "pass": 19
+    "pass": 21
   }
 }

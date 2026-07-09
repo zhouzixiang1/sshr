@@ -38,7 +38,7 @@
     },
     {
       "boundary": "The audit does not choose the journal; it only checks that the choice is explicit and policy-gated.",
-      "evidence": "files_missing=none; tokens=8/8; missing_tokens=none; manifest=results/manifest_submission_metadata_closure_path.json::closure_path_ready=True",
+      "evidence": "files_missing=none; tokens=12/12; missing_tokens=none; manifest=results/manifest_target_venue_decision_audit.json::needs_revision_count=0",
       "item": "Venue policy gate is visible before upload",
       "next_action": "No action needed.",
       "status": "pass",

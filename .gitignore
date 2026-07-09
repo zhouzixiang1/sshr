@@ -26,6 +26,8 @@ resource_nmcts_experiment/submission_package/generated_author_declarations.md
 resource_nmcts_experiment/submission_package/generated_availability_statements.md
 resource_nmcts_experiment/submission_package/generated_cover_letter.md
 resource_nmcts_experiment/submission_package/generated_submission_text.md
+resource_nmcts_experiment/submission_package/dist/resource_nmcts_submission_payload.tar.gz
+resource_nmcts_experiment/submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256
 tmp/abc/
 tmp/bin/
 tmp/cirkit/

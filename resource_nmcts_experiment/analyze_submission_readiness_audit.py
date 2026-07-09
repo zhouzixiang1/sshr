@@ -135,10 +135,18 @@ BITFLIP_RANDOM_PRIOR_ANALYSIS = RESULTS / "analysis_bitflip_random_prior_control
 BITFLIP_RANDOM_PRIOR_SUMMARY = RESULTS / "summary_bitflip_random_prior_control.csv"
 BITFLIP_RANDOM_PRIOR_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control.json"
 BITFLIP_RANDOM_PRIOR_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_random_prior_control.tex"
+FRONTIER_RANDOM_DEPTH_ANALYSIS = RESULTS / "analysis_frontier_random_depth_control.md"
+FRONTIER_RANDOM_DEPTH_SUMMARY = RESULTS / "summary_frontier_random_depth_control.csv"
+FRONTIER_RANDOM_DEPTH_MANIFEST = RESULTS / "manifest_frontier_random_depth_control.json"
+FRONTIER_RANDOM_DEPTH_TABLE = THIS_DIR / "paper_latex" / "tables" / "frontier_random_depth_control.tex"
 EDITORIAL_SCREENING_ANALYSIS = RESULTS / "analysis_editorial_screening_audit.md"
 EDITORIAL_SCREENING_SUMMARY = RESULTS / "summary_editorial_screening_audit.csv"
 EDITORIAL_SCREENING_MANIFEST = RESULTS / "manifest_editorial_screening_audit.json"
 EDITORIAL_SCREENING_TABLE = THIS_DIR / "paper_latex" / "tables" / "editorial_screening_audit.tex"
+TARGET_VENUE_DECISION_ANALYSIS = RESULTS / "analysis_target_venue_decision_audit.md"
+TARGET_VENUE_DECISION_SUMMARY = RESULTS / "summary_target_venue_decision_audit.csv"
+TARGET_VENUE_DECISION_MANIFEST = RESULTS / "manifest_target_venue_decision_audit.json"
+TARGET_VENUE_DECISION_TABLE = THIS_DIR / "paper_latex" / "tables" / "target_venue_decision_audit.tex"
 SUPPORT_PACKET_ANALYSIS = RESULTS / "analysis_submission_support_packet_audit.md"
 SUPPORT_PACKET_SUMMARY = RESULTS / "summary_submission_support_packet_audit.csv"
 SUPPORT_PACKET_MANIFEST = RESULTS / "manifest_submission_support_packet_audit.json"
@@ -252,6 +260,12 @@ def build_rows() -> list[dict[str, str]]:
     )
     bitflip_random_counts = bitflip_random_manifest.get("status_counts", {}) if bitflip_random_manifest else {}
     bitflip_random_rows = bitflip_random_manifest.get("rows", "missing") if bitflip_random_manifest else "missing"
+    frontier_random_manifest = read_json(FRONTIER_RANDOM_DEPTH_MANIFEST)
+    frontier_random_revisions = (
+        int(frontier_random_manifest.get("needs_revision_count", -1)) if frontier_random_manifest else -1
+    )
+    frontier_random_counts = frontier_random_manifest.get("status_counts", {}) if frontier_random_manifest else {}
+    frontier_random_rows = frontier_random_manifest.get("rows", "missing") if frontier_random_manifest else "missing"
     figure_asset_manifest = read_json(FIGURE_ASSET_MANIFEST)
     figure_asset_revisions = int(figure_asset_manifest.get("needs_revision_count", -1)) if figure_asset_manifest else -1
     figure_asset_counts = figure_asset_manifest.get("status_counts", {}) if figure_asset_manifest else {}
@@ -330,6 +344,16 @@ def build_rows() -> list[dict[str, str]]:
         int(editorial_screening_manifest.get("needs_revision_count", -1)) if editorial_screening_manifest else -1
     )
     editorial_screening_rows = editorial_screening_manifest.get("rows", "missing") if editorial_screening_manifest else "missing"
+    target_venue_manifest = read_json(TARGET_VENUE_DECISION_MANIFEST)
+    target_venue_counts = target_venue_manifest.get("status_counts", {}) if target_venue_manifest else {}
+    target_venue_revisions = (
+        int(target_venue_manifest.get("needs_revision_count", -1)) if target_venue_manifest else -1
+    )
+    target_venue_rows = target_venue_manifest.get("rows", "missing") if target_venue_manifest else "missing"
+    target_venue_first = (
+        target_venue_manifest.get("recommended_first_choice", "missing") if target_venue_manifest else "missing"
+    )
+    target_venue_strong = target_venue_manifest.get("strong_fit_count", "missing") if target_venue_manifest else "missing"
     support_packet_manifest = read_json(SUPPORT_PACKET_MANIFEST)
     support_packet_counts = support_packet_manifest.get("status_counts", {}) if support_packet_manifest else {}
     support_packet_revisions = (
@@ -497,8 +521,8 @@ def build_rows() -> list[dict[str, str]]:
             and SEARCH_CONTROL_TABLE.exists()
             and search_control_revisions == 0
             else "needs revision",
-            "evidence": f"Search-control audit separates heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, high-dimensional guard, bit-flip random-prior, and phase random-control evidence; rows={search_control_rows}; status_counts={search_control_counts}; needs_revision_count={search_control_revisions}.",
-            "next_action": "Rerun analyze_search_control_baseline_audit.py after changing search ablations, learned-prior rows, bit-flip/phase random controls, or search-control manuscript claims.",
+            "evidence": f"Search-control audit separates heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, high-dimensional guard, bit-flip random-prior, frontier random-depth, and phase random-control evidence; rows={search_control_rows}; status_counts={search_control_counts}; needs_revision_count={search_control_revisions}.",
+            "next_action": "Rerun analyze_search_control_baseline_audit.py after changing search ablations, learned-prior rows, bit-flip/frontier/phase random controls, or search-control manuscript claims.",
         },
         {
             "item": "Bit-flip random-prior control",
@@ -512,6 +536,19 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Same-budget bit-flip random-prior control is manuscript-visible; rows={bitflip_random_rows}; status_counts={bitflip_random_counts}; needs_revision_count={bitflip_random_revisions}.",
             "next_action": "Rerun run_bitflip_random_prior_control.py and analyze_bitflip_random_prior_control.py after changing the neural prior, action features, or bit-flip learned-prior claims.",
+        },
+        {
+            "item": "Frontier random-depth control",
+            "status": "pass"
+            if "tab:frontier-random-depth" in text
+            and FRONTIER_RANDOM_DEPTH_ANALYSIS.exists()
+            and FRONTIER_RANDOM_DEPTH_SUMMARY.exists()
+            and FRONTIER_RANDOM_DEPTH_MANIFEST.exists()
+            and FRONTIER_RANDOM_DEPTH_TABLE.exists()
+            and frontier_random_revisions == 0
+            else "needs revision",
+            "evidence": f"Same-candidate frontier random-depth control is manuscript-visible; rows={frontier_random_rows}; status_counts={frontier_random_counts}; needs_revision_count={frontier_random_revisions}.",
+            "next_action": "Rerun analyze_frontier_random_depth_control.py after changing frontier policy rows, depth-2/3/4 screen candidates, or learned budget-allocation claims.",
         },
         {
             "item": "Citation support audit",
@@ -664,6 +701,18 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Editorial screening audit checks scope, novelty, comparison route, counterpoints, AI-claim boundary, large-scale verification boundary, reproducibility path, author/venue gate, and editor reading path; rows={editorial_screening_rows}; status_counts={editorial_screening_counts}; needs_revision_count={editorial_screening_revisions}.",
             "next_action": "Rerun analyze_editorial_screening_audit.py after changing editor/reviewer briefs, claim-scope text, comparison protocol, metadata closure, or submission support docs.",
+        },
+        {
+            "item": "Target-venue decision audit",
+            "status": "pass"
+            if TARGET_VENUE_DECISION_ANALYSIS.exists()
+            and TARGET_VENUE_DECISION_SUMMARY.exists()
+            and TARGET_VENUE_DECISION_MANIFEST.exists()
+            and TARGET_VENUE_DECISION_TABLE.exists()
+            and target_venue_revisions == 0
+            else "needs revision",
+            "evidence": f"Target-venue audit checks source-backed fit, risk, policy gates, metadata fields, and recommended order; rows={target_venue_rows}; status_counts={target_venue_counts}; recommended_first_choice={target_venue_first}; strong_fit_count={target_venue_strong}; needs_revision_count={target_venue_revisions}.",
+            "next_action": "Rerun analyze_target_venue_decision_audit.py after changing target_venue_brief.md, metadata template fields, or venue shortlist/order.",
         },
         {
             "item": "Submission support packet audit",

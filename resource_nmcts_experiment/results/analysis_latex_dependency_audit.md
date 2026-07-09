@@ -4,14 +4,14 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 
 ## Status counts
 
-- pass: 92
+- pass: 94
 
 ## Dependency types
 
 - bibliography: 2
 - figure: 14
 - main_source: 2
-- tex_input: 74
+- tex_input: 76
 
 ## Missing dependencies
 
@@ -46,6 +46,7 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 | author | tex_input | `tables/search_contribution_decomposition` | `paper_latex/tables/search_contribution_decomposition.tex` | True | True | pass |
 | author | tex_input | `tables/search_control_baseline_audit` | `paper_latex/tables/search_control_baseline_audit.tex` | True | True | pass |
 | author | tex_input | `tables/bitflip_random_prior_control` | `paper_latex/tables/bitflip_random_prior_control.tex` | True | True | pass |
+| author | tex_input | `tables/frontier_random_depth_control` | `paper_latex/tables/frontier_random_depth_control.tex` | True | True | pass |
 | author | tex_input | `tables/boolean_ring_structural_evidence` | `paper_latex/tables/boolean_ring_structural_evidence.tex` | True | True | pass |
 | author | tex_input | `tables/sparse_depth_frontier` | `paper_latex/tables/sparse_depth_frontier.tex` | True | True | pass |
 | author | tex_input | `tables/sparse_depth4_gate` | `paper_latex/tables/sparse_depth4_gate.tex` | True | True | pass |
@@ -92,6 +93,7 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 | anonymous | tex_input | `tables/search_contribution_decomposition` | `paper_latex/tables/search_contribution_decomposition.tex` | True | True | pass |
 | anonymous | tex_input | `tables/search_control_baseline_audit` | `paper_latex/tables/search_control_baseline_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/bitflip_random_prior_control` | `paper_latex/tables/bitflip_random_prior_control.tex` | True | True | pass |
+| anonymous | tex_input | `tables/frontier_random_depth_control` | `paper_latex/tables/frontier_random_depth_control.tex` | True | True | pass |
 | anonymous | tex_input | `tables/boolean_ring_structural_evidence` | `paper_latex/tables/boolean_ring_structural_evidence.tex` | True | True | pass |
 | anonymous | tex_input | `tables/sparse_depth_frontier` | `paper_latex/tables/sparse_depth_frontier.tex` | True | True | pass |
 | anonymous | tex_input | `tables/sparse_depth4_gate` | `paper_latex/tables/sparse_depth4_gate.tex` | True | True | pass |

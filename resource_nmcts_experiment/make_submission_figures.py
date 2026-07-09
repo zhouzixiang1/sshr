@@ -479,6 +479,7 @@ def learned_control_rows() -> list[dict[str, object]]:
             cost_saving = -first_percent(cost)
         short = {
             "Depth-frontier policy": "frontier",
+            "Frontier random-depth control": "random depth",
             "Stage-gated frontier": "stage gate",
             "Sparse depth-4 gate": "sparse gate",
             "Rank-diverse phase shortlist": "phase shortlist",
@@ -573,7 +574,7 @@ def fig_learned_control_summary() -> None:
         ax.text(x + 0.02, yv, str(row["short"]), va="center", fontsize=6.2)
     ax.axvline(0, color="#30343B", linewidth=0.7)
     ax.axhline(0, color="#30343B", linewidth=0.7)
-    ax.set_xlim(-0.25, 0.18)
+    ax.set_xlim(-1.35, 0.18)
     ax.set_ylim(-115, 115)
     ax.set_xlabel("Score change (%)")
     ax.set_ylabel("Time/eval saved (%)")

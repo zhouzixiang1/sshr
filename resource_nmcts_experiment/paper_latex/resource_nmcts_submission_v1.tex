@@ -804,6 +804,28 @@ negative score changes favor the learned prior.}
 \input{tables/bitflip_random_prior_control}
 \end{table}
 
+Table~\ref{tab:frontier-random-depth} applies the same random-control idea to
+the large Boolean-ring frontier policy.  The candidate set is fixed to the
+already verified depth-2/3/4 screens, and only the depth-selection policy is
+replaced by eight deterministic random choices.  The learned policy beats the
+random-depth mean on held-out, independent scale, and $n=23$ truth-bridge rows,
+but it spends more planning time because it selects deeper screens more often.
+We therefore use this control as quality-oriented evidence for learned budget
+allocation, not as a runtime claim.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.08}
+\caption{Same-candidate random-depth control for the Boolean-ring frontier
+policy.  W/L/T compares the learned large frontier policy with the
+per-function mean over eight deterministic random depth choices among the
+already verified depth-2/3/4 candidates.}
+\label{tab:frontier-random-depth}
+\input{tables/frontier_random_depth_control}
+\end{table}
+
 \begin{table}[H]
 \centering
 \scriptsize

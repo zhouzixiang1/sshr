@@ -97,6 +97,13 @@ BITFLIP_RANDOM_PRIOR_PATHS = {
     "results/manifest_bitflip_random_prior_control.json",
     "paper_latex/tables/bitflip_random_prior_control.tex",
 }
+FRONTIER_RANDOM_DEPTH_PATHS = {
+    "analyze_frontier_random_depth_control.py",
+    "results/summary_frontier_random_depth_control.csv",
+    "results/analysis_frontier_random_depth_control.md",
+    "results/manifest_frontier_random_depth_control.json",
+    "paper_latex/tables/frontier_random_depth_control.tex",
+}
 HEADLINE_NUMERIC_PATHS = {
     "analyze_headline_numeric_consistency.py",
     "results/analysis_headline_numeric_consistency.md",
@@ -115,6 +122,13 @@ EDITORIAL_SCREENING_PATHS = {
     "results/summary_editorial_screening_audit.csv",
     "results/manifest_editorial_screening_audit.json",
     "paper_latex/tables/editorial_screening_audit.tex",
+}
+TARGET_VENUE_DECISION_PATHS = {
+    "analyze_target_venue_decision_audit.py",
+    "results/analysis_target_venue_decision_audit.md",
+    "results/summary_target_venue_decision_audit.csv",
+    "results/manifest_target_venue_decision_audit.json",
+    "paper_latex/tables/target_venue_decision_audit.tex",
 }
 SUPPORT_PACKET_PATHS = {
     "analyze_submission_support_packet_audit.py",
@@ -328,6 +342,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    frontier_random_missing = sorted(FRONTIER_RANDOM_DEPTH_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload frontier random-depth evidence",
+            "pass" if not frontier_random_missing else "needs revision",
+            f"frontier_random_depth_files={len(FRONTIER_RANDOM_DEPTH_PATHS)}; missing={frontier_random_missing or 'none'}.",
+            "Ensure the uploadable archive includes the frontier random-depth analysis script, generated evidence, and manuscript table.",
+        )
+    )
+
     headline_missing = sorted(HEADLINE_NUMERIC_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -355,6 +379,16 @@ def build_rows() -> list[dict[str, str]]:
             "pass" if not editorial_missing else "needs revision",
             f"editorial_screening_files={len(EDITORIAL_SCREENING_PATHS)}; missing={editorial_missing or 'none'}.",
             "Ensure the uploadable archive includes the editorial screening audit script, generated evidence, and support table.",
+        )
+    )
+
+    target_venue_missing = sorted(TARGET_VENUE_DECISION_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload target-venue decision evidence",
+            "pass" if not target_venue_missing else "needs revision",
+            f"target_venue_decision_files={len(TARGET_VENUE_DECISION_PATHS)}; missing={target_venue_missing or 'none'}.",
+            "Ensure the uploadable archive includes the target-venue decision audit script, generated evidence, and support table.",
         )
     )
 
@@ -494,9 +528,11 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "schedule_proxy_paths": sorted(SCHEDULE_PROXY_PATHS),
         "search_budget_paths": sorted(SEARCH_BUDGET_PATHS),
         "bitflip_random_prior_paths": sorted(BITFLIP_RANDOM_PRIOR_PATHS),
+        "frontier_random_depth_paths": sorted(FRONTIER_RANDOM_DEPTH_PATHS),
         "headline_numeric_paths": sorted(HEADLINE_NUMERIC_PATHS),
         "citation_support_paths": sorted(CITATION_SUPPORT_PATHS),
         "editorial_screening_paths": sorted(EDITORIAL_SCREENING_PATHS),
+        "target_venue_decision_paths": sorted(TARGET_VENUE_DECISION_PATHS),
         "support_packet_paths": sorted(SUPPORT_PACKET_PATHS),
         "author_input_closure_paths": sorted(AUTHOR_INPUT_CLOSURE_PATHS),
         "payload_extraction_smoke_paths": sorted(PAYLOAD_EXTRACTION_SMOKE_PATHS),

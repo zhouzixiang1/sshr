@@ -1,0 +1,30 @@
+{
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_frontier_random_depth_control.md",
+    "manifest": "results/manifest_frontier_random_depth_control.json",
+    "summary": "results/summary_frontier_random_depth_control.csv",
+    "table": "paper_latex/tables/frontier_random_depth_control.tex"
+  },
+  "python": "3.11.15",
+  "random_seeds": [
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008
+  ],
+  "rows": 3,
+  "script": "analyze_frontier_random_depth_control.py",
+  "source_files": [
+    "results/raw_boolean_screen_depth_frontier_policy_large.csv",
+    "results/raw_screen_scale_depth_frontier_policy_large_generalization_terms.csv",
+    "results/raw_truth_bridge_n23_large_frontier_terms.csv"
+  ],
+  "status_counts": {
+    "pass": 3
+  }
+}

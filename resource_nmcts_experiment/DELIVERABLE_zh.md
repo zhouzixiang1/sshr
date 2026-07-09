@@ -76,6 +76,16 @@
 
 该实验复用 traditional learned-prior manifest 的同一 `SearchConfig`，对 `and_affine_nmcts`、`and_resource_nmcts` 和 `and_pareto_resource_nmcts` 三个 bit-flip 方法各跑 8 个 deterministic random-prior seed，形成 177 个函数 × 3 个方法 × 8 个 seed = 4248/4248 usable rows。分析表已接入 author/anonymous 两套英文投稿稿 search contribution 段落，并被 rebuild、readiness、terminal package verifier、payload round-trip、payload extraction smoke、traceability、goal-completion 和 artifact rerun registry 覆盖。结果显示 learned prior 相对 random-prior mean 的 score 改善幅度较小（Affine -0.12%、Resource -0.15%、Pareto -0.03%），但三组均不退化，并且 Resource-NMCTS 击败 8/8 个 random seed means。论文中应把它写成“same-budget 稳健性控制”，不能写成主要收益来源。
 
+本轮继续新增 frontier same-candidate random-depth 控制实验，用于补强高维 Boolean-ring frontier policy 的“学习预算分配优于随机选择”证据：
+
+- `analyze_frontier_random_depth_control.py`
+- `results/summary_frontier_random_depth_control.csv`
+- `results/analysis_frontier_random_depth_control.md`
+- `results/manifest_frontier_random_depth_control.json`
+- `paper_latex/tables/frontier_random_depth_control.tex`
+
+该实验不重新综合线路，而是复用 large frontier 已经验证过的 depth-2/3/4 screen 候选，只把 learned depth-frontier policy 替换为 8 组 deterministic random depth 选择。因此它比普通固定深度对照更直接地测试“在同一候选集合内，学习策略是否比随机预算分配更好”。当前结果为：held-out `n=28,40` 上 24/1/23、score -0.78%；独立 `n=24,28,32,40` scale 上 55/3/38、score -1.12%、T-depth proxy -1.10%；`n=23` 完整 truth-table bridge 上 5/0/1、score -0.89%。三组均击败 8/8 个 random seed means。但由于 learned policy 更常选择深层 screen，scale planning time 相对 random-depth mean 为 +58.78%，所以论文中应写成“质量型 learned budget allocation 控制”，不能写成速度提升。
+
 本轮进一步把 related work 定位固化为可复现矩阵：
 
 - `analyze_related_work_positioning.py`
@@ -173,7 +183,7 @@
 - `results/manifest_search_control_baseline_audit.json`
 - `paper_latex/tables/search_control_baseline_audit.tex`
 
-该审计把“我的方法到底和什么搜索策略比”压缩成审稿人可读表：bit-flip 主线明确对比 heuristic-only、beam-only、no-MCTS portfolio、Resource-NMCTS、Pareto-Resource-NMCTS、learned-prior/no-prior 和 same-budget random-prior；phase/Rz 分支保留 same-budget random shortlist control。关键结论是：Resource-NMCTS 相对强化 no-MCTS portfolio 为 54/0/123、score -1.44%，Pareto-Resource-NMCTS 相对 no-MCTS 为 106/0/71、score -4.69%，learned prior 相对 no-prior 为 39/0/138、score -1.10% 但 runtime 增加；新增 bit-flip random-prior control 显示 Resource-NMCTS learned prior 相对 8 组 deterministic random-prior mean 为 17/8/152、score -0.15%，并击败 8/8 个 random seed mean，但 runtime +48.05%，因此只能写成质量排序信号，不能写成速度主张或 AI 单独贡献；phase diverse top-512 相对 8 组 random mean 为 17/0/21、score -0.012%。这张表已接入英文投稿稿，用来直接回答“AI/MCTS 有什么增量、哪些只是确定性结构搜索、random control 在哪个分支有效”。
+该审计把“我的方法到底和什么搜索策略比”压缩成审稿人可读表：bit-flip 主线明确对比 heuristic-only、beam-only、no-MCTS portfolio、Resource-NMCTS、Pareto-Resource-NMCTS、learned-prior/no-prior 和 same-budget random-prior；高维 frontier 分支新增 same-candidate random-depth control；phase/Rz 分支保留 same-budget random shortlist control。关键结论是：Resource-NMCTS 相对强化 no-MCTS portfolio 为 54/0/123、score -1.44%，Pareto-Resource-NMCTS 相对 no-MCTS 为 106/0/71、score -4.69%，learned prior 相对 no-prior 为 39/0/138、score -1.10% 但 runtime 增加；bit-flip random-prior control 显示 Resource-NMCTS learned prior 相对 8 组 deterministic random-prior mean 为 17/8/152、score -0.15%，并击败 8/8 个 random seed mean，但 runtime +48.05%；frontier random-depth control 在独立 `n=24,28,32,40` scale 上为 55/3/38、score -1.12%，击败 8/8 个 random seed means，但 planning time +58.78%；phase diverse top-512 相对 8 组 random mean 为 17/0/21、score -0.012%。这张表已接入英文投稿稿，用来直接回答“AI/MCTS 有什么增量、哪些只是确定性结构搜索、random control 在哪个分支有效”，其中 random-control 结果均应按质量/预算分配信号写，不能写成速度主张。
 
 - `analyze_learned_control_audit.py`
 - `results/summary_learned_control_audit.csv`
@@ -182,7 +192,7 @@
 - `paper_latex/figures/submission_v36/fig7_learned_control_summary.pdf`
 - `paper_latex/figures/submission_v36/source_data/fig7_learned_control_summary.csv`
 
-该表把 AI/学习控制组件分成两类：可作为论文证据的 depth-frontier policy、stage-gated frontier、sparse depth-4 gate、rank-diverse phase shortlist；以及只能作为有限证据或未来工作的 bit-flip learned prior、boolean neural guard、root-action neural ranker。关键数值：frontier policy 在 held-out `n=28,40` 上相对 oracle frontier 为 0/3/45、+0.04% score，但减少 51.30% all-depth frontier evaluation time；stage-gated frontier 在独立 `n=24,28,32,40` 上相对 all-depth 为 0/4/92、+0.04% score，减少 25.43% staged planning time；sparse depth-4 gate 在三组独立 seed 的 `n=24,28,32,40` 共 144 个 pair 上相对 deterministic sparse frontier 为 0/0/144、0 false skip，并减少 13.43% sparse-frontier evaluation time，阈值扫描显示 zero-false-skip plateau 可到 -14.92% time，允许 1 个 false skip 时为 -15.49% time 且 score gap 仅 +0.01%；rank-diverse phase shortlist 在 held-out `n=6` 上用 512/8192 exact forms/function 贴近 wide-128。另一方面，bit-flip learned prior 只有 -0.15% score 且 runtime +48.05%，boolean neural guard 只有 -0.12% score 但 +94.49% runtime，root-action neural ranker质量未超过 beam4，因此这些不能作为主贡献夸大。
+该表把 AI/学习控制组件分成三类：可作为质量/时间主证据的 depth-frontier policy、stage-gated frontier、sparse depth-4 gate、rank-diverse phase shortlist；可作为质量型随机控制证据但不能写成速度收益的 frontier random-depth control；以及只能作为有限证据或未来工作的 bit-flip learned prior、boolean neural guard、root-action neural ranker。关键数值：frontier policy 在 held-out `n=28,40` 上相对 oracle frontier 为 0/3/45、+0.04% score，但减少 51.30% all-depth frontier evaluation time；frontier random-depth control 在独立 `n=24,28,32,40` scale 上相对 same-candidate random depth 为 55/3/38、score -1.12%、T-depth proxy -1.10%，并击败 8/8 个 random seed means，但 planning time +58.78%；stage-gated frontier 在独立 `n=24,28,32,40` 上相对 all-depth 为 0/4/92、+0.04% score，减少 25.43% staged planning time；sparse depth-4 gate 在三组独立 seed 的 `n=24,28,32,40` 共 144 个 pair 上相对 deterministic sparse frontier 为 0/0/144、0 false skip，并减少 13.43% sparse-frontier evaluation time，阈值扫描显示 zero-false-skip plateau 可到 -14.92% time，允许 1 个 false skip 时为 -15.49% time 且 score gap 仅 +0.01%；rank-diverse phase shortlist 在 held-out `n=6` 上用 512/8192 exact forms/function 贴近 wide-128。另一方面，bit-flip learned prior 只有 -0.15% score 且 runtime +48.05%，boolean neural guard 只有 -0.12% score 但 +94.49% runtime，root-action neural ranker质量未超过 beam4，因此这些不能作为主贡献夸大。
 
 新增 summary figure 将上述边界可视化：promoted controls 同时满足 score 不显著变差/有改善与搜索开销下降，limited diagnostics 则落在“质量弱或运行时间反向”的区域，用于防止把所有 AI 组件都写成主贡献。
 
@@ -203,7 +213,7 @@
 - `results/manifest_reproducibility_audit.json`
 - `paper_latex/tables/reproducibility_audit.tex`
 
-该审计记录当前工作站为 Apple M4 Pro，14 CPU cores，24.0 GiB RAM，20-core Metal GPU；`mcts-qoracle` 环境中 Python 3.11.15、PyTorch 2.12.0、MPS=True、CUDA=False。manifest 层面有 54 个运行记录包含 worker count，最大 workers=10；代表性流程包括 traditional resource 10 workers/1770 rows、RevKit CLI 8 workers/708 rows、ROS-style LUT 8 workers/927 rows、CirKit 8 workers/177 rows、mockturtle 4 workers/177 rows。重新生成后的 artifact coverage 为 87 个顶层 run/train/analyze 脚本、144 个 raw CSV、199 个 summary CSV、98 个 manifest、159 张 paper table 和 7 个 figure panel。论文中应把 runtime/time 结果限定在这个工作站上下文；可移植主张仍是逻辑资源数量和验证通过率。
+该审计记录当前工作站为 Apple M4 Pro，14 CPU cores，24.0 GiB RAM，20-core Metal GPU；`mcts-qoracle` 环境中 Python 3.11.15、PyTorch 2.12.0、MPS=True、CUDA=False。manifest 层面有 55 个运行记录包含 worker count，最大 workers=10；代表性流程包括 traditional resource 10 workers/1770 rows、RevKit CLI 8 workers/708 rows、ROS-style LUT 8 workers/927 rows、CirKit 8 workers/177 rows、mockturtle 4 workers/177 rows。重新生成后的 artifact coverage 为 94 个顶层 run/train/analyze 脚本、145 个 raw CSV、206 个 summary CSV、105 个 manifest、165 张 paper table 和 7 个 figure panel。论文中应把 runtime/time 结果限定在这个工作站上下文；可移植主张仍是逻辑资源数量和验证通过率。
 
 本轮新增轻量投稿包再生成入口：
 
@@ -251,6 +261,16 @@
 
 该审计逐项列出 author identity、CRediT contribution、funding、acknowledgements、competing interests、data/code availability archive link、license/repository metadata、AI-assistance disclosure、preprint/prior submission、cover-letter routing fields 和 target-venue policy check。当前这些项仍保持 `needs author input`，但已经从模糊“还差作者信息”变成可填写、可复查、可归档的最终投稿元数据清单。新增 `target_venue_brief.md` 把 ACM TQC、Quantum、IEEE TQE、TCAD 和 QST 的适配口径与投稿前动作列成选刊简报。后续只需先确定目标期刊，再把 `submission_metadata_template.json` 复制为被 Git 忽略的 `submission_metadata.json`，填完所有 `AUTHOR INPUT REQUIRED` 值后重跑 `./rebuild_submission_package.sh`，审计就会指出剩余未填路径或转为 pass。
 
+本轮进一步新增 target-venue decision audit，把目标期刊选择从手工简报推进到可机器检查的选刊支持包：
+
+- `analyze_target_venue_decision_audit.py`
+- `results/summary_target_venue_decision_audit.csv`
+- `results/analysis_target_venue_decision_audit.md`
+- `results/manifest_target_venue_decision_audit.json`
+- `paper_latex/tables/target_venue_decision_audit.tex`
+
+该审计逐项检查 ACM TQC、Quantum、IEEE TQE、IEEE TCAD 和 QST 的 fit、pre-upload action、policy gate 与 source URL，并把推荐顺序写入 CSV/Markdown/JSON/LaTeX 表。当前 5/5 项 pass，recommended first choice 为 ACM Transactions on Quantum Computing，strong-fit venue 为 ACM TQC 和 Quantum。它只支持选刊决策与投稿前 policy check，不替作者决定最终期刊，也不填写私有 metadata、funding、APC 或匿名审稿字段。
+
 本轮新增 goal-completion audit，把最初目标拆成目标级证据矩阵：
 
 - `analyze_goal_completion_audit.py`
@@ -283,7 +303,7 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/analysis_submission_payload_archive.md`
 - `results/manifest_submission_payload_archive.json`
 
-该 tarball 打包稳定源码/数据载荷、最终 PDF、archive/traceability 审计和投稿支持文件；为避免归档自引用，它不把 tarball 自身、SHA256 sidecar 和 readiness audit 放进包内。readiness audit 在 tarball 生成之后运行，负责检查 tarball、SHA256 sidecar、CSV/Markdown/JSON manifest 是否存在。
+该 tarball 打包稳定源码/数据载荷、最终 PDF、archive/traceability 审计和投稿支持文件；为避免归档自引用，它不把 tarball 自身、SHA256 sidecar 和 readiness audit 放进包内。readiness audit 在 tarball 生成之后运行，负责检查 tarball、SHA256 sidecar、CSV/Markdown/JSON manifest 是否存在。由于当前 tarball 约 39.9 MB，`submission_package/dist/*.tar.gz` 与对应 `.sha256` 作为本地 rebuild 生成的上传产物保留在工作区并被 `.gitignore` 排除，不再作为 Git blob 推送；远端源码通过 `./rebuild_submission_package.sh` 可重新生成同一路径的上传包。
 
 本轮新增 PDF visual render audit，把 PDF 检查从 `pdfinfo` 页数和 LaTeX log 推进到全页渲染层：
 
@@ -310,7 +330,7 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/analysis_pdf_metadata_audit.md`
 - `results/manifest_pdf_metadata_audit.json`
 
-该审计调用 Poppler `pdfinfo` 检查作者版和匿名版投稿 PDF 的 Title/Author/Creator/Producer 等元数据、页数、A4 页面尺寸、加密状态、JavaScript、Form 字段和隐私敏感字符串。当前作者版和匿名版均为 31 页、未加密、无 JavaScript、A4，metadata 中没有作者身份、路径、TODO/TBD/placeholder 或 `AUTHOR INPUT REQUIRED` 泄漏。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；与 visual/text 审计一样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包。
+该审计调用 Poppler `pdfinfo` 检查作者版和匿名版投稿 PDF 的 Title/Author/Creator/Producer 等元数据、页数、A4 页面尺寸、加密状态、JavaScript、Form 字段和隐私敏感字符串。当前作者版和匿名版均为 33 页、未加密、无 JavaScript、A4，metadata 中没有作者身份、路径、TODO/TBD/placeholder 或 `AUTHOR INPUT REQUIRED` 泄漏。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；与 visual/text 审计一样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包。
 
 本轮新增 source/path privacy audit，把源码和 payload 中的本机路径分成“严格禁止”和“可复现 provenance”两类：
 
@@ -319,7 +339,7 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/analysis_source_path_privacy_audit.md`
 - `results/manifest_source_path_privacy_audit.json`
 
-该审计检查主稿/匿名稿 TeX、`references.bib`、生成表格输入和 11 个公开 submission support Markdown/JSON 文件中是否出现 `/Users/...`、`Desktop/tzb` 或旧 `claude` 路径；同时检查匿名稿 source 是否保留 `Anonymous Authors` 且不含 `Zixiang Zhou` 作者字段，payload manifest 中是否混入 private metadata/previews。当前严格区为 0 个本机路径、0 个旧 `claude` 路径、0 个私有 payload 成员；主稿/匿名稿、bibliography 和表格输入共 164 个文件通过严格检查；payload 的 873 个文本文件中有 53 个文件含本机路径、213 个路径命中，均归类为 `results/`、`README.md` 或 `DELIVERABLE_zh.md` 中的工具链/实验 provenance，而不是主稿或投稿支持文件泄漏。该审计已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke。
+该审计检查主稿/匿名稿 TeX、`references.bib`、生成表格输入和 11 个公开 submission support Markdown/JSON 文件中是否出现 `/Users/...`、`Desktop/tzb` 或旧 `claude` 路径；同时检查匿名稿 source 是否保留 `Anonymous Authors` 且不含 `Zixiang Zhou` 作者字段，payload manifest 中是否混入 private metadata/previews。当前严格区为 0 个本机路径、0 个旧 `claude` 路径、0 个私有 payload 成员；主稿/匿名稿、bibliography 和表格输入共 168 个文件通过严格检查；payload 的 910 个文本文件中有 53 个文件含本机路径、213 个路径命中，均归类为 `results/`、`README.md` 或 `DELIVERABLE_zh.md` 中的工具链/实验 provenance，而不是主稿或投稿支持文件泄漏；payload manifest 当前含 952 个成员。该审计已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke。
 
 本轮新增投稿完整性层：英文投稿稿末尾加入 `Data and Code Availability`，明确代码、raw/summary CSV、manifest、LaTeX 表、图源数据和 PDF 均位于 `resource_nmcts_experiment/` artifact package，运行入口为 `run_*.py`、`train_*.py`、`analyze_*.py`，环境为 `mcts-qoracle` 和直接解释器路径 `/opt/anaconda3/envs/mcts-qoracle/bin/python`。同时新增自动 submission-readiness audit：
 
@@ -335,9 +355,9 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/manifest_editorial_screening_audit.json`
 - `paper_latex/tables/editorial_screening_audit.tex`
 
-该审计逐项检查 logical-layer scope、novelty/comparison route、counterpoint/negative-result visibility、AI/MCTS claim boundary、large-scale verification boundary、reproducibility path、author/venue gate 和 editorial reading path。当前 8/8 项 pass；它已接入 rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke 和 artifact rerun registry。artifact registry 现在覆盖 21 个 evidence family、144 个 raw CSV、55308 行 raw CSV。
+该审计逐项检查 logical-layer scope、novelty/comparison route、counterpoint/negative-result visibility、AI/MCTS claim boundary、large-scale verification boundary、reproducibility path、author/venue gate 和 editorial reading path。当前 8/8 项 pass；它已接入 rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke 和 artifact rerun registry。artifact registry 现在覆盖 21 个 evidence family、156 个 raw-file references、63228 行 raw-row references；按文件唯一计数，当前 payload/reproducibility 侧有 145 个 raw CSV。
 
-当前 submission-readiness 审计结果为 48 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、algorithm contract、baseline fairness/scope、comparison/search-control/citation/editorial screening/ROS reproduction-boundary/schedule-proxy/submission support-packet audits、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、uploadable payload archive、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder、compiled PDF 和 payload smoke/compile/verifier 检查。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
+当前 submission-readiness 审计结果为 52 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、algorithm contract、search-budget contract、baseline fairness/scope、comparison/search-control/citation/editorial screening/target-venue/ROS reproduction-boundary/schedule-proxy/submission support-packet audits、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、uploadable payload archive、payload round-trip/extraction/verifier/LaTeX compile checks、terminal package verifier、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder 和 compiled PDF 检查。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
 
 ## 2. 当前已完成内容
 

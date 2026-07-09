@@ -43,6 +43,13 @@
     "results/manifest_editorial_screening_audit.json",
     "results/summary_editorial_screening_audit.csv"
   ],
+  "frontier_random_depth_paths": [
+    "analyze_frontier_random_depth_control.py",
+    "paper_latex/tables/frontier_random_depth_control.tex",
+    "results/analysis_frontier_random_depth_control.md",
+    "results/manifest_frontier_random_depth_control.json",
+    "results/summary_frontier_random_depth_control.csv"
+  ],
   "headline_numeric_paths": [
     "analyze_headline_numeric_consistency.py",
     "results/analysis_headline_numeric_consistency.md",
@@ -101,19 +108,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=942; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=952; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=942; archive_files=942; missing=none; extra=none.",
+      "evidence": "manifest_files=952; archive_files=952; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=942; mismatches=none.",
+      "evidence": "checked=952; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -167,6 +174,12 @@
       "status": "pass"
     },
     {
+      "evidence": "frontier_random_depth_files=5; missing=none.",
+      "item": "Payload frontier random-depth evidence",
+      "next_action": "Ensure the uploadable archive includes the frontier random-depth analysis script, generated evidence, and manuscript table.",
+      "status": "pass"
+    },
+    {
       "evidence": "headline_numeric_files=4; missing=none.",
       "item": "Payload headline numeric evidence",
       "next_action": "Ensure the uploadable archive includes the headline numeric audit script and generated CSV/Markdown/JSON evidence.",
@@ -182,6 +195,12 @@
       "evidence": "editorial_screening_files=5; missing=none.",
       "item": "Payload editorial screening evidence",
       "next_action": "Ensure the uploadable archive includes the editorial screening audit script, generated evidence, and support table.",
+      "status": "pass"
+    },
+    {
+      "evidence": "target_venue_decision_files=5; missing=none.",
+      "item": "Payload target-venue decision evidence",
+      "next_action": "Ensure the uploadable archive includes the target-venue decision audit script, generated evidence, and support table.",
       "status": "pass"
     },
     {
@@ -221,7 +240,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=942; metadata_issues=none.",
+      "evidence": "members_checked=952; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -246,7 +265,7 @@
     "results/summary_search_budget_contract.csv"
   ],
   "status_counts": {
-    "pass": 21
+    "pass": 23
   },
   "support_packet_paths": [
     "analyze_submission_support_packet_audit.py",
@@ -254,5 +273,12 @@
     "results/analysis_submission_support_packet_audit.md",
     "results/manifest_submission_support_packet_audit.json",
     "results/summary_submission_support_packet_audit.csv"
+  ],
+  "target_venue_decision_paths": [
+    "analyze_target_venue_decision_audit.py",
+    "paper_latex/tables/target_venue_decision_audit.tex",
+    "results/analysis_target_venue_decision_audit.md",
+    "results/manifest_target_venue_decision_audit.json",
+    "results/summary_target_venue_decision_audit.csv"
   ]
 }

@@ -47,6 +47,9 @@ def build_rows() -> list[dict[str, str]]:
         frontier,
         comparison="frontier_policy_vs_oracle_depth-2_3_4_frontier",
     )
+    frontier_random = read_csv(RESULTS / "summary_frontier_random_depth_control.csv")
+    frontier_random_scale = require_row(frontier_random, source="scale generalization")
+    frontier_random_bridge = require_row(frontier_random, source="truth-table bridge")
 
     staged = read_csv(RESULTS / "summary_stage_gated_frontier.csv")
     staged_scale = require_row(
@@ -104,6 +107,19 @@ def build_rows() -> list[dict[str, str]]:
             "quality": f"vs oracle frontier {frontier_oracle['score_wins']}/{frontier_oracle['score_losses']}/{frontier_oracle['score_ties']}, {pct(frontier_oracle['mean_rel_score'])}",
             "cost": f"{pct(frontier_oracle['mean_rel_time'])} time vs all-depth frontier",
             "role": "promoted quality/time selector",
+        },
+        {
+            "component": "Frontier random-depth control",
+            "scope": "held-out/scale/n=23; 8 random-depth repeats",
+            "quality": (
+                f"scale {frontier_random_scale['score_wins']}/{frontier_random_scale['score_losses']}/{frontier_random_scale['score_ties']}, "
+                f"{pct_ratio(frontier_random_scale['mean_score_relative'])}; "
+                f"n23 {frontier_random_bridge['score_wins']}/{frontier_random_bridge['score_losses']}/{frontier_random_bridge['score_ties']}, "
+                f"{pct_ratio(frontier_random_bridge['mean_score_relative'])}; "
+                f"seed means beaten {frontier_random_scale['seed_means_beaten']}/{frontier_random_scale['random_repeats']}"
+            ),
+            "cost": f"{pct_ratio(frontier_random_scale['mean_time_relative'])} scale planning time vs random-depth mean",
+            "role": "quality-oriented budget allocation; not runtime claim",
         },
         {
             "component": "Stage-gated frontier",
@@ -195,6 +211,8 @@ def tex_escape(text: str) -> str:
         ("n=16", r"$n=16$"),
         ("n=14", r"$n=14$"),
         ("n=6", r"$n=6$"),
+        ("n=23", r"$n=23$"),
+        ("n23", r"$n=23$"),
     ]
     for old, new in replacements:
         escaped = escaped.replace(old, new)

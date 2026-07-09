@@ -1,3 +1,3 @@
 manuscript,status,pdf,pages,rendered_pages,dimensions,min_ink_fraction,max_ink_fraction,min_page_bytes,max_page_bytes,render_seconds,failures,next_action
-author,pass,paper_latex/resource_nmcts_submission_v1.pdf,32,32,596x842,0.062260,0.163678,1505511,1505511,0.801,none,No action needed.
-anonymous,pass,paper_latex/resource_nmcts_submission_anonymous.pdf,32,32,596x842,0.062260,0.163678,1505511,1505511,0.843,none,No action needed.
+author,pass,paper_latex/resource_nmcts_submission_v1.pdf,33,33,596x842,0.052346,0.163678,1505511,1505511,0.929,none,No action needed.
+anonymous,pass,paper_latex/resource_nmcts_submission_anonymous.pdf,33,33,596x842,0.027896,0.163678,1505511,1505511,0.925,none,No action needed.

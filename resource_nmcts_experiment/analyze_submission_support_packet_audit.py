@@ -39,6 +39,7 @@ EDITORIAL_SCREENING = RESULTS / "manifest_editorial_screening_audit.json"
 METADATA_CLOSURE = RESULTS / "manifest_submission_metadata_closure_path.json"
 TEXT_PREVIEW = RESULTS / "manifest_submission_text_preview.json"
 ANONYMOUS_REVIEW = RESULTS / "manifest_anonymous_review_readiness.json"
+TARGET_VENUE_DECISION = RESULTS / "manifest_target_venue_decision_audit.json"
 
 
 @dataclass(frozen=True)
@@ -156,14 +157,18 @@ def specs() -> list[PacketSpec]:
                 "target_venue.manuscript_type",
                 "anonymous_review_required",
                 "ai_disclosure_policy_checked",
+                "Target venue decision audit",
+                "recommended_first_choice",
+                "fit_score",
+                "source_url",
                 "ACM Transactions on Quantum Computing",
                 "Quantum",
                 "IEEE Transactions on Quantum Engineering",
                 "TCAD",
             ),
-            manifest_path=METADATA_CLOSURE,
-            manifest_key="closure_path_ready",
-            expected=True,
+            manifest_path=TARGET_VENUE_DECISION,
+            manifest_key="needs_revision_count",
+            expected=0,
             supported_use="The venue-choice step is concrete enough for the author to fill the private metadata file.",
             boundary="The audit does not choose the journal; it only checks that the choice is explicit and policy-gated.",
         ),

@@ -92,6 +92,7 @@ def build_rows() -> list[dict[str, str]]:
     search = read_csv(RESULTS / "summary_search_contribution.csv")
     prior_raw = read_csv(RESULTS / "raw_neural_prior_ablation.csv")
     bitflip_random = read_csv(RESULTS / "summary_bitflip_random_prior_control.csv")
+    frontier_random = read_csv(RESULTS / "summary_frontier_random_depth_control.csv")
     phase_random = read_csv(RESULTS / "summary_phase_policy_random_control.csv")
 
     def search_row(
@@ -133,6 +134,8 @@ def build_rows() -> list[dict[str, str]]:
     )
     bitflip_random_score = require_row(bitflip_random, method="and_resource_nmcts", metric="score")
     bitflip_random_time = require_row(bitflip_random, method="and_resource_nmcts", metric="time_s")
+    frontier_random_scale = require_row(frontier_random, source="scale generalization")
+    frontier_random_bridge = require_row(frontier_random, source="truth-table bridge")
     phase = require_row(phase_random, policy="diverse", topk="512")
 
     rows = [
@@ -199,6 +202,27 @@ def build_rows() -> list[dict[str, str]]:
             if int(bitflip_random_score["pairs"]) == 177
             and int(bitflip_random_score["random_repeats"]) >= 8
             and float(bitflip_random_score["mean_relative"]) < 0.0
+            else "needs revision",
+        },
+        {
+            "layer": "frontier random-depth control",
+            "evidence_source": "frontier same-candidate random-depth audit",
+            "comparison": "Large frontier policy vs same-candidate random depth",
+            "scope": f"{frontier_random_scale['pairs']} n=24,28,32,40 scale rows; {frontier_random_bridge['pairs']} n=23 truth-bridge rows; eight random-depth repeats",
+            "pairs": str(int(frontier_random_scale["pairs"]) + int(frontier_random_bridge["pairs"])),
+            "score_wlt": f"{frontier_random_scale['score_wins']}/{frontier_random_scale['score_losses']}/{frontier_random_scale['score_ties']}; {frontier_random_bridge['score_wins']}/{frontier_random_bridge['score_losses']}/{frontier_random_bridge['score_ties']}",
+            "mean_score_change": pct_ratio(frontier_random_scale["mean_score_relative"]),
+            "cost_or_runtime": f"time {pct_ratio(frontier_random_scale['mean_time_relative'])}",
+            "supported_conclusion": "The large frontier policy allocates depth budget better than random selection among the same verified candidates on scale and bridge slices.",
+            "boundary": "The control is quality-positive but runtime-negative against random depth; it is not a speed, hardware-scheduling, or global-optimality claim.",
+            "status": "pass"
+            if int(frontier_random_scale["pairs"]) >= 96
+            and int(frontier_random_scale["random_repeats"]) >= 8
+            and int(frontier_random_scale["score_wins"]) > int(frontier_random_scale["score_losses"])
+            and int(frontier_random_scale["seed_means_beaten"]) == int(frontier_random_scale["random_repeats"])
+            and int(frontier_random_bridge["seed_means_beaten"]) == int(frontier_random_bridge["random_repeats"])
+            and float(frontier_random_scale["mean_score_relative"]) < 0.0
+            and float(frontier_random_bridge["mean_score_relative"]) < 0.0
             else "needs revision",
         },
         search_row(
@@ -288,7 +312,7 @@ def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
             "## Interpretation",
             "",
             "- The bit-flip branch compares against heuristic-only, beam-only, no-MCTS, MCTS, Pareto, learned-prior/no-prior, and same-budget random-prior controls.",
-            "- Random controls now cover both the bit-flip action-prior scorer and the phase/Rz shortlist branch; they support bounded ranking/pruning claims, not runtime or full-causality claims.",
+            "- Random controls now cover the bit-flip action-prior scorer, the high-dimensional frontier depth allocator, and the phase/Rz shortlist branch; they support bounded ranking/pruning/budget-allocation claims, not runtime or full-causality claims.",
             "- The evidence supports resource-aware search control, not a claim that reinforcement learning alone causes the full improvement.",
         ]
     )
@@ -302,7 +326,7 @@ def tex_escape(text: str) -> str:
         .replace("%", r"\%")
         .replace("_", r"\_")
     )
-    for token in ["n<=6", "n=14", "n=6"]:
+    for token in ["n<=6", "n=24,28,32,40", "n=23", "n=14", "n=6"]:
         escaped = escaped.replace(token, f"${token}$")
     return escaped
 
@@ -344,6 +368,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
             "results/summary_search_contribution.csv",
             "results/raw_neural_prior_ablation.csv",
             "results/summary_bitflip_random_prior_control.csv",
+            "results/summary_frontier_random_depth_control.csv",
             "results/summary_phase_policy_random_control.csv",
         ],
         "outputs": {
