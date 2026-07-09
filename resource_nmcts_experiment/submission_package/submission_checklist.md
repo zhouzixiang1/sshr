@@ -94,7 +94,7 @@ Expected current state:
 
 - Archive manifest: all payload groups complete.
 - Payload archive: tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.
-- Payload round-trip audit: archive contents match manifest paths and hashes, required files are present, private files are absent, and tar metadata is deterministic.
+- Payload round-trip audit: archive contents match manifest paths and hashes, required files, reviewer entrypoints, and comparison-protocol evidence files are present, private files are absent, and tar metadata is deterministic.
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
 - Comparison protocol audit: all baseline layers have role, evidence, comparability, counterpoint, artifact, and manuscript-anchor coverage.
 - Metadata audit: all author- and venue-specific fields are enumerated before upload, and any filled `submission_metadata.json` is checked.

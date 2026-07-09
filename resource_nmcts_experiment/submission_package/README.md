@@ -56,7 +56,8 @@ noise modeling, or magic-state-factory accounting.
   private generated submission-system text previews.
 - `../results/analysis_payload_roundtrip_audit.md`: terminal check that opens
   the upload tarball and verifies internal paths, hashes, required artifacts,
-  and deterministic tar metadata.
+  reviewer entrypoints, comparison-protocol evidence files, and deterministic
+  tar metadata.
 - `submission_checklist.md`: final upload checklist and verification commands.
 - `../results/analysis_claim_scope_lint.md`: automated claim-boundary lint for
   the manuscript and handoff files.

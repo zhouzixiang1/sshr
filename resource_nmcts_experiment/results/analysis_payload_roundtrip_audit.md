@@ -4,7 +4,7 @@ This terminal audit opens the reviewer/upload tarball and checks manifest agreem
 
 ## Status counts
 
-- pass: 6
+- pass: 8
 
 | item | status | evidence | next action |
 |---|---|---|---|
@@ -13,4 +13,6 @@ This terminal audit opens the reviewer/upload tarball and checks manifest agreem
 | Payload per-file SHA256 | pass | checked=854; mismatches=none. | Regenerate the payload archive and manifest if any archived file digest differs from the manifest. |
 | Payload path hygiene | pass | unsafe_paths=none; private_hits=none. | Remove unsafe, platform-generated, or private files from the payload inputs. |
 | Payload required artifacts | pass | required=12; missing=none. | Ensure the uploadable archive includes manuscript, bibliography, rebuild/verify scripts, handoff docs, and submission audits. |
+| Payload reviewer entrypoints | pass | reviewer_entries=6; missing=none. | Ensure the uploadable archive includes reviewer-facing guide, editor/reviewer briefs, venue brief, registry, and reproducibility audit. |
+| Payload comparison protocol evidence | pass | comparison_protocol_files=10; missing=none. | Ensure the uploadable archive includes the comparison protocol audit plus its claim, evidence, comparability, counterpoint, statistical, and tradeoff sources. |
 | Payload deterministic tar metadata | pass | members_checked=854; metadata_issues=none. | Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads. |

@@ -1,5 +1,17 @@
 {
   "archive": "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
+  "comparison_protocol_paths": [
+    "analyze_comparison_protocol_audit.py",
+    "results/analysis_baseline_claim_matrix.md",
+    "results/analysis_baseline_comparability_audit.md",
+    "results/analysis_comparison_evidence_matrix.md",
+    "results/analysis_comparison_protocol_audit.md",
+    "results/analysis_counterpoint_claim_boundary.md",
+    "results/analysis_multimetric_pareto_tradeoff.md",
+    "results/analysis_paired_statistical_evidence.md",
+    "results/manifest_comparison_protocol_audit.json",
+    "results/summary_comparison_protocol_audit.csv"
+  ],
   "needs_revision_count": 0,
   "outputs": {
     "analysis": "results/analysis_payload_roundtrip_audit.md",
@@ -27,6 +39,14 @@
     "submission_package/README.md",
     "submission_package/submission_checklist.md",
     "verify_submission_package.sh"
+  ],
+  "reviewer_entrypoint_paths": [
+    "results/analysis_artifact_rerun_registry.md",
+    "results/analysis_reproducibility_audit.md",
+    "submission_package/artifact_reproduction_guide.md",
+    "submission_package/editor_screening_brief.md",
+    "submission_package/reviewer_concern_brief.md",
+    "submission_package/target_venue_brief.md"
   ],
   "rows": [
     {
@@ -60,6 +80,18 @@
       "status": "pass"
     },
     {
+      "evidence": "reviewer_entries=6; missing=none.",
+      "item": "Payload reviewer entrypoints",
+      "next_action": "Ensure the uploadable archive includes reviewer-facing guide, editor/reviewer briefs, venue brief, registry, and reproducibility audit.",
+      "status": "pass"
+    },
+    {
+      "evidence": "comparison_protocol_files=10; missing=none.",
+      "item": "Payload comparison protocol evidence",
+      "next_action": "Ensure the uploadable archive includes the comparison protocol audit plus its claim, evidence, comparability, counterpoint, statistical, and tradeoff sources.",
+      "status": "pass"
+    },
+    {
       "evidence": "members_checked=854; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
@@ -68,6 +100,6 @@
   ],
   "script": "analyze_payload_roundtrip_audit.py",
   "status_counts": {
-    "pass": 6
+    "pass": 8
   }
 }

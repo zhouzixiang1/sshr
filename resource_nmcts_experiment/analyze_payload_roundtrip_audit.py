@@ -40,6 +40,26 @@ REQUIRED_PAYLOAD_PATHS = {
     "results/analysis_submission_archive_manifest.md",
     "results/analysis_submission_traceability_audit.md",
 }
+REVIEWER_ENTRYPOINT_PATHS = {
+    "submission_package/artifact_reproduction_guide.md",
+    "submission_package/editor_screening_brief.md",
+    "submission_package/reviewer_concern_brief.md",
+    "submission_package/target_venue_brief.md",
+    "results/analysis_artifact_rerun_registry.md",
+    "results/analysis_reproducibility_audit.md",
+}
+COMPARISON_PROTOCOL_PATHS = {
+    "analyze_comparison_protocol_audit.py",
+    "results/analysis_comparison_protocol_audit.md",
+    "results/summary_comparison_protocol_audit.csv",
+    "results/manifest_comparison_protocol_audit.json",
+    "results/analysis_baseline_claim_matrix.md",
+    "results/analysis_comparison_evidence_matrix.md",
+    "results/analysis_baseline_comparability_audit.md",
+    "results/analysis_counterpoint_claim_boundary.md",
+    "results/analysis_paired_statistical_evidence.md",
+    "results/analysis_multimetric_pareto_tradeoff.md",
+}
 
 
 def rel(path: Path) -> str:
@@ -164,6 +184,26 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    entry_missing = sorted(REVIEWER_ENTRYPOINT_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload reviewer entrypoints",
+            "pass" if not entry_missing else "needs revision",
+            f"reviewer_entries={len(REVIEWER_ENTRYPOINT_PATHS)}; missing={entry_missing or 'none'}.",
+            "Ensure the uploadable archive includes reviewer-facing guide, editor/reviewer briefs, venue brief, registry, and reproducibility audit.",
+        )
+    )
+
+    comparison_missing = sorted(COMPARISON_PROTOCOL_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload comparison protocol evidence",
+            "pass" if not comparison_missing else "needs revision",
+            f"comparison_protocol_files={len(COMPARISON_PROTOCOL_PATHS)}; missing={comparison_missing or 'none'}.",
+            "Ensure the uploadable archive includes the comparison protocol audit plus its claim, evidence, comparability, counterpoint, statistical, and tradeoff sources.",
+        )
+    )
+
     metadata_bad: list[str] = []
     for member in members:
         if not member.name.startswith(f"{PAYLOAD_ROOT}/"):
@@ -234,6 +274,8 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "status_counts": counts,
         "needs_revision_count": counts.get("needs revision", 0),
         "required_payload_paths": sorted(REQUIRED_PAYLOAD_PATHS),
+        "reviewer_entrypoint_paths": sorted(REVIEWER_ENTRYPOINT_PATHS),
+        "comparison_protocol_paths": sorted(COMPARISON_PROTOCOL_PATHS),
         "private_basenames": sorted(PRIVATE_BASENAMES),
         "rows": rows,
         "outputs": {
