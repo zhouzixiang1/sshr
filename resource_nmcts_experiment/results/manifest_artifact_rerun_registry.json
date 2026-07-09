@@ -2,12 +2,12 @@
   "complete_rows": 14,
   "families": [
     {
-      "analysis_files": "8",
+      "analysis_files": "9",
       "claim_use": "Regenerates manuscript-facing analyses, figures, audits, PDF, archive manifest, and payload from existing artifacts.",
       "dependency_boundary": "Python, latexmk, and existing raw artifacts; does not rerun raw sweeps or external probes.",
       "driver_scripts": "rebuild_submission_package.sh",
       "evidence_family": "Lightweight paper-facing rebuild",
-      "manifest_files": "7",
+      "manifest_files": "8",
       "raw_files": "0",
       "raw_rows": "0",
       "representative_raw": "",
@@ -15,7 +15,7 @@
       "scripts_missing": "",
       "scripts_present": "1",
       "status": "complete",
-      "summary_files": "8"
+      "summary_files": "9"
     },
     {
       "analysis_files": "3",

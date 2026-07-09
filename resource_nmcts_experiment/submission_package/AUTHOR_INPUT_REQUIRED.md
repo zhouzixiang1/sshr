@@ -15,10 +15,14 @@ $EDITOR submission_package/submission_metadata.json
 When the metadata file is complete, the rebuild also creates ignored private previews:
 `generated_author_declarations.md`, `generated_availability_statements.md`,
 `generated_cover_letter.md`, and `generated_submission_text.md`.
+Before generating final upload text, `validate_submission_metadata.py` checks common
+format issues without writing private values to tracked files.
 
 ## Current Gate
 
 - metadata rows needing author input: 12
+- metadata validator rows needing author input: 1
+- metadata validator rows needing revision: 0
 - research, experiment, manuscript, archive, payload, and verifier checks are handled by the generated audits.
 - final goal closure should not be marked complete until these fields are filled and the rebuild/verifier pass again.
 

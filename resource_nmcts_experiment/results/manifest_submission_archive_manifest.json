@@ -434,7 +434,7 @@
         {
           "bytes": 1352,
           "path": "paper_latex/tables/reproducibility_audit.tex",
-          "sha256": "f2b9333fea22d6493a450cebd1cba663a37ccf08d11430f63626faa80cb76a8a"
+          "sha256": "2dfc73b45409c7085656d9ef169788c1a4531ec1434899335757ace0ff0c396f"
         },
         {
           "bytes": 517,
@@ -783,7 +783,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "69187b5a07f35309e7902a8fef8113962ac63ecc4f0454368fcfad643074dff2"
+      "sha256_digest": "3a2178959fb742726eef5f1f695a2c74c3ed0d708afd7f6ea046304a9550d48d"
     },
     {
       "boundary": "Includes generated figure assets and plotted source data, not raw benchmark reruns.",
@@ -1667,9 +1667,9 @@
     },
     {
       "boundary": "Terminal submission/package outputs are excluded so this manifest remains stable.",
-      "bytes": 4418565,
+      "bytes": 4419592,
       "category": "Derived summaries",
-      "file_count": 319,
+      "file_count": 321,
       "files": [
         {
           "bytes": 30224,
@@ -1679,7 +1679,7 @@
         {
           "bytes": 8927,
           "path": "results/analysis_artifact_rerun_registry.md",
-          "sha256": "3ef8af3b3c6a72a14db4ee8b0a1badb3a9256ad05ccd2df4fddef93386ec4f45"
+          "sha256": "7c924343ff93e924cc640a1bdaf22d0c5629ceaaabfd02988f42407d939d4ab0"
         },
         {
           "bytes": 2328,
@@ -1742,9 +1742,9 @@
           "sha256": "f24ad4391979e30bf864d2d74f5197655216bcd2d72e4e0fa3e6a1ca98a3b47d"
         },
         {
-          "bytes": 31180,
+          "bytes": 31183,
           "path": "results/analysis_claim_scope_lint.md",
-          "sha256": "4534c5f49a318f1fe2652c47042aa975e226e9b46e3d0809983ece1fa96c9e75"
+          "sha256": "45e1065143757824b960ee4befbd2f0cb48e0cc832b942967424f5d9d6eaf5c8"
         },
         {
           "bytes": 3720,
@@ -1937,9 +1937,9 @@
           "sha256": "3274439bbe884618464e974ca35a31d4ba4c7e0980c6bc1f384e57009d5cb9bf"
         },
         {
-          "bytes": 8983,
+          "bytes": 9109,
           "path": "results/analysis_goal_completion_audit.md",
-          "sha256": "2c209229305a004851f29fea80d4ae8f0a8ab57308a41645185aba40504927a6"
+          "sha256": "ce4c19a91b049de347c23fc19e819bf22bce231e8b0bd8fde35b577c6fc2cf45"
         },
         {
           "bytes": 946,
@@ -2139,7 +2139,7 @@
         {
           "bytes": 1331,
           "path": "results/analysis_reproducibility_audit.md",
-          "sha256": "164773a3b069bf9e3e1785f3c0e2f312b17d823877e2d029705c5a903220583c"
+          "sha256": "147c70a29aa7d61c2b0a70ba86633f6c02202d0304bb84adc20aa0e6ce9ac5e2"
         },
         {
           "bytes": 18485,
@@ -2317,6 +2317,11 @@
           "sha256": "b187305b71656ca84f50bc33616ac89ba4fce605a6c826cad23ef5013f86cf88"
         },
         {
+          "bytes": 499,
+          "path": "results/analysis_submission_metadata_validator.md",
+          "sha256": "683053d43eba4fb4409682fe7ddc2b4ec8298b4b605d54b6c8318957e469e1bc"
+        },
+        {
           "bytes": 969,
           "path": "results/analysis_submission_text_preview.md",
           "sha256": "4ceae95b745428c36946efc0f07f7c7bf1cb9972293a40a93342bd8fae6bf16c"
@@ -2424,7 +2429,7 @@
         {
           "bytes": 7171,
           "path": "results/summary_artifact_rerun_registry.csv",
-          "sha256": "8214c7bd81efecdbd00e0f55b40fdf2be122e96a5b47f20c0bb8536417126a39"
+          "sha256": "842103b99ddfe24d0c7c6517d4790f871833977251a9cbbd9cc020c8482afae5"
         },
         {
           "bytes": 2936,
@@ -2492,9 +2497,9 @@
           "sha256": "03f80069b5d51bd79092304be93abb0e88d985f437f0aaf754928c7e5f2b034e"
         },
         {
-          "bytes": 35218,
+          "bytes": 35221,
           "path": "results/summary_claim_scope_lint.csv",
-          "sha256": "9ac6f77c5adcbd36dd80ae840305780350fe7b8949edb09b88226041ccbcbcdd"
+          "sha256": "a4c48b4e26152f3f95e801460877bc9883db3586faddd244d55a142a6f1273e3"
         },
         {
           "bytes": 3117,
@@ -2727,9 +2732,9 @@
           "sha256": "239851a4e45235ac2f4546d4adc9d76cb98466054c2252ad8150570e8a51bc00"
         },
         {
-          "bytes": 8006,
+          "bytes": 8132,
           "path": "results/summary_goal_completion_audit.csv",
-          "sha256": "af947f36ff5a56e55992f6eec770c44b967cfc7aead9ed7b6ddd895c26c13f37"
+          "sha256": "dd83326ee56ac8dc5ea8193e49e43f8519c0a8edee50947320ea49a03608607b"
         },
         {
           "bytes": 435,
@@ -2974,7 +2979,7 @@
         {
           "bytes": 1115,
           "path": "results/summary_reproducibility_audit.csv",
-          "sha256": "8580d3042e9fa54dad0ab2b0fae6764cf173c6dd003861f0a7f41b532ebe9266"
+          "sha256": "110631cf1c0752514e4d96fec0368b85a68eb32ee43955f92d1a1e69989c3b60"
         },
         {
           "bytes": 16230,
@@ -3147,6 +3152,11 @@
           "sha256": "a42cccb8ceae1c60ce3a934e4002900f1009e74708e954fd11e4421ba27efc70"
         },
         {
+          "bytes": 270,
+          "path": "results/summary_submission_metadata_validator.csv",
+          "sha256": "c81b3896b60e87992493fe2479f42c1980fc69baa3d7927b1bd028220d15b1b8"
+        },
+        {
           "bytes": 599,
           "path": "results/summary_submission_text_preview.csv",
           "sha256": "fc3b1be822d7baa1bd58bc77711e39cd3d5626f385393c0045e9bea8be2645ad"
@@ -3268,13 +3278,13 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "76f8df448c4d445724686d664c86e5e2507d8b1cdb9d30101b0379ee61aa1c06"
+      "sha256_digest": "32fb423fe4d49165233f3874903a9233f028dd1a0be99b799fabf31bb37660fe"
     },
     {
       "boundary": "Submission-level terminal manifests are excluded from this digest group.",
-      "bytes": 119706,
+      "bytes": 120781,
       "category": "Run manifests",
-      "file_count": 71,
+      "file_count": 72,
       "files": [
         {
           "bytes": 802,
@@ -3284,12 +3294,12 @@
         {
           "bytes": 20176,
           "path": "results/manifest_artifact_rerun_registry.json",
-          "sha256": "34c15a5a5994229d64d5a7adf96422a998b4e57aafa6570bf2f4ee40955a93b8"
+          "sha256": "793e2e204dceb3238cbfb0d6dd76f2185271801f40609d356c88ea238b647913"
         },
         {
-          "bytes": 3454,
+          "bytes": 3574,
           "path": "results/manifest_author_input_packet.json",
-          "sha256": "43f7567beb48a55ae8d607f5969dc85ab3610d73ab74e2c829f9f2c4ee0adeae"
+          "sha256": "51b6a1f337448051e6f3590159854ec599b281bb5fcc0bb0b31ac8cf8400975b"
         },
         {
           "bytes": 1284,
@@ -3397,9 +3407,9 @@
           "sha256": "9f9f367e772de60658bc85d8d24da77ad9fc72693aad4362b0d0e7696767e986"
         },
         {
-          "bytes": 10374,
+          "bytes": 10500,
           "path": "results/manifest_goal_completion_audit.json",
-          "sha256": "3fdc8e4170827269e2241daa23af971538491444e26b22f194ab2e378300215f"
+          "sha256": "41c14cdd97f1dccc4a290537f522b25bfb2ba8b8a373cc178f15c7e3a8b11cdb"
         },
         {
           "bytes": 914,
@@ -3587,6 +3597,11 @@
           "sha256": "8c1ae01f1c7cb5478a0dc8101edc68a883543e308b22cbb3d05a50320ac9d1d4"
         },
         {
+          "bytes": 829,
+          "path": "results/manifest_submission_metadata_validator.json",
+          "sha256": "12cd0e0faf8077d3b6cddfede8d67fe30bb01ecbe56ed6808b756d608c53e05e"
+        },
+        {
           "bytes": 1337,
           "path": "results/manifest_submission_text_preview.json",
           "sha256": "de0ca0d966ad952dc6424e7f3b26b8cf6a2c1cebd870960b69cd67a91cc56ac6"
@@ -3633,11 +3648,11 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "a6a6fc95d830ee3accafa0db3e54bc620acf1092b67846fc545d215a578643eb"
+      "sha256_digest": "f11c628ea9dacc001a93f734fab254f605338de6ba697a24d7ba1718366f6a5f"
     },
     {
       "boundary": "Documents reproducible entry points; raw sweeps still require their individual drivers.",
-      "bytes": 1384410,
+      "bytes": 1388641,
       "category": "Scripts and docs",
       "file_count": 73,
       "files": [
@@ -3712,9 +3727,9 @@
           "sha256": "3d0672851e5cc2ee231fb8886a64b3b718be94e12a3373f1245eb1b6a13def9b"
         },
         {
-          "bytes": 20406,
+          "bytes": 20572,
           "path": "analyze_goal_completion_audit.py",
-          "sha256": "d1270cbed8ffb0d3f60070ccd5e8605167fceb31df8f17854b89c59581a009cc"
+          "sha256": "cab00647236b9ef7e02987a3a90e719818da7eee31dc5c9f681d4ca8facee2c5"
         },
         {
           "bytes": 20516,
@@ -3847,14 +3862,14 @@
           "sha256": "d7c12eaf1d3ef2c6e85b69db2906d7cd314e798425b53edcee8c5461c267f90d"
         },
         {
-          "bytes": 11216,
+          "bytes": 11956,
           "path": "analyze_submission_package_verifier.py",
-          "sha256": "28bdd69e37a37f30fa7dc68883765a04aa6e9bfc61bdcf75acdd23f67f470136"
+          "sha256": "a7b58ffff5f8ec7b9b08b74f18d91f2c24d7b6d9922912d6473016b3a8727abd"
         },
         {
-          "bytes": 18314,
+          "bytes": 19589,
           "path": "analyze_submission_readiness_audit.py",
-          "sha256": "c14859358bf1b3b051d7a5c15db4a8b38e49377107f12bf818d2cee5b13e0443"
+          "sha256": "8e496dec454cd158703b3e2a6b5dde6d17dc9d71046f31add6f96b9862a3c0c9"
         },
         {
           "bytes": 13173,
@@ -3872,9 +3887,9 @@
           "sha256": "f3fd9f822e6eb9b0a80ce0b3662791d674927ebae3adf981f86c45f2493f07b1"
         },
         {
-          "bytes": 6044,
+          "bytes": 7070,
           "path": "make_author_input_packet.py",
-          "sha256": "feb063f2dfcbd19babadd52b7043c53c6fe01c990e4cffbf4fe52c3b63504258"
+          "sha256": "99ec60e5715e6d6966f24c1dc73023e1bb581fc58a3875e6d1bbc054264e07ca"
         },
         {
           "bytes": 30860,
@@ -3887,14 +3902,14 @@
           "sha256": "df9fe8aa90d3678a8c9ea94046766c5c110f1af64204ff0e3af2839308a5e771"
         },
         {
-          "bytes": 16980,
+          "bytes": 17879,
           "path": "make_submission_text_preview.py",
-          "sha256": "44b4cb0a70048d56dab88b5ea37bf20eaf23a236ac6991a98862fdae2118667c"
+          "sha256": "05bd6be23b49ab6c6ac65da94a185deccb15ba02c6428f2f51110713d178574f"
         },
         {
-          "bytes": 2050,
+          "bytes": 2089,
           "path": "rebuild_submission_package.sh",
-          "sha256": "e65a3e5929571496b7942a2fd936d27fbd38fd1a13609a09d1a509b1d45e37f6"
+          "sha256": "57abc51477ba5478b998f7bb2d71748736116aa012e87d8705d7c365666ee812"
         },
         {
           "bytes": 24403,
@@ -4002,13 +4017,13 @@
           "sha256": "5823c0425649700f793535d71ba2b1d2d1a082987dfbaf7b4072066489c8055d"
         },
         {
-          "bytes": 1103,
+          "bytes": 1189,
           "path": "verify_submission_package.sh",
-          "sha256": "aa62bc74e67b92dd831624efeee65b47df9b0d4c64eb6ac535659544cdfeb160"
+          "sha256": "475743dc0eaf0818eb1d10b4e8537cb88097045fc9b03a2131258241bfed6e14"
         }
       ],
       "missing": [],
-      "sha256_digest": "5f1b25602a14caeeb271b2919057372894f908034425ae96a0813d9a51344ac3"
+      "sha256_digest": "f7ca85e1f81c96d15731cf41e3b657fe3edd2bf72417920a0d39d2a6e9120555"
     },
     {
       "boundary": "Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild.",
@@ -4137,19 +4152,19 @@
     },
     {
       "boundary": "Includes public package README, author-input packet, artifact guide, cover-letter, declaration, checklist, reviewer-brief, editor-screening, venue-selection, and structured metadata templates; ignored generated private submission text is excluded.",
-      "bytes": 50454,
+      "bytes": 51608,
       "category": "Submission support",
       "file_count": 10,
       "files": [
         {
-          "bytes": 8335,
+          "bytes": 8579,
           "path": "submission_package/AUTHOR_INPUT_REQUIRED.md",
-          "sha256": "2028817ed80d6ab2ee893b77977b5e0d457f42dfd7ea206946fe5c74ea3f4f95"
+          "sha256": "709602671d06f813b047bfadde61787cfa05681a200c110be8717a7176352b4b"
         },
         {
-          "bytes": 5605,
+          "bytes": 6137,
           "path": "submission_package/README.md",
-          "sha256": "9083a01252d7f54c8584d77a95a6dd20e211ae1709650136ee4ff1e7a573225b"
+          "sha256": "c41ee721dc2b46e9c3fd72ca614e5d820ecffdf717eb7e5d75ed9d4b2f21c0c2"
         },
         {
           "bytes": 6237,
@@ -4157,9 +4172,9 @@
           "sha256": "4638c7e8eb55742187f72eb1db4464d1b7e9e2ad43e82ef495046cd400706c8a"
         },
         {
-          "bytes": 4440,
+          "bytes": 4592,
           "path": "submission_package/author_declarations_template.md",
-          "sha256": "a2ceb28a47a26ced637d4ad34a97a0cb4080336a63d7bbb4b55305054fd8ca05"
+          "sha256": "f31441563de7d4b21dfccfea32ea4f67d96923a7d937513183d1cad4dc811e39"
         },
         {
           "bytes": 2621,
@@ -4177,9 +4192,9 @@
           "sha256": "072775b7ea4984b46672c99d6b7755cfd6dd0cd667e9958cc533b66cd8e4ff06"
         },
         {
-          "bytes": 6236,
+          "bytes": 6462,
           "path": "submission_package/submission_checklist.md",
-          "sha256": "356f3aded9f720655e0a27fdd022a7d0eaf11cd066580b4fa8257030967639ef"
+          "sha256": "14ffac12e3fcae7a8ae4f41fcc61e073046685e43b03ff7ac5040da109c8ca94"
         },
         {
           "bytes": 4069,
@@ -4193,7 +4208,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "e1242de26939d70ca112e38f098a4be28552933b094e759f5c971d132dfb20ef"
+      "sha256_digest": "d1e9bdd8e42e9a6f4558bcdee1a1ac74f3a8bf43bececbb2fec46e9add870137"
     }
   ],
   "note": "Compiled PDF and terminal submission/package outputs are excluded from payload hashes to avoid self-referential digests.",

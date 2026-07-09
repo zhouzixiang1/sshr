@@ -1,0 +1,25 @@
+{
+  "metadata_present": false,
+  "metadata_private": true,
+  "needs_author_input_count": 1,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_submission_metadata_validator.md",
+    "manifest": "results/manifest_submission_metadata_validator.json",
+    "summary": "results/summary_submission_metadata_validator.csv"
+  },
+  "python": "3.11.15",
+  "rows": [
+    {
+      "evidence": "submission_package/submission_metadata.json is missing.",
+      "field_names": "submission_metadata.json",
+      "item": "Metadata file presence",
+      "next_action": "Copy submission_metadata_template.json to submission_metadata.json, fill it, and rerun the rebuild.",
+      "status": "needs author input"
+    }
+  ],
+  "script": "validate_submission_metadata.py",
+  "status_counts": {
+    "needs author input": 1
+  }
+}

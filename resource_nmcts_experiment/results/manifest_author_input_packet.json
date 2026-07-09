@@ -74,6 +74,9 @@
     }
   ],
   "metadata_rows": 12,
+  "metadata_validator_needs_author_input": 1,
+  "metadata_validator_needs_revision": 0,
+  "metadata_validator_rows": 1,
   "needs_author_input": 12,
   "output": "submission_package/AUTHOR_INPUT_REQUIRED.md",
   "python": "3.11.15",

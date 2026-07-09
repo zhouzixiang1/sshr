@@ -10,7 +10,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 
 | evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |
 |---|---|---:|---:|---:|---|---|
-| Lightweight paper-facing rebuild | quick rebuild | 0 | 0 | 7 | complete | Python, latexmk, and existing raw artifacts; does not rerun raw sweeps or external probes. |
+| Lightweight paper-facing rebuild | quick rebuild | 0 | 0 | 8 | complete | Python, latexmk, and existing raw artifacts; does not rerun raw sweeps or external probes. |
 | Traditional logical baselines | raw Python rerun | 4 | 4071 | 4 | complete | Python rerun; ILP-based subbaselines need Gurobi where enabled. |
 | External logical baseline extension | raw Python plus optional solvers | 3 | 2049 | 3 | complete | Python with optional Gurobi/logic-tool components; rows with skips/errors remain explicit. |
 | ROS-style LUT proxy | raw proxy rerun | 3 | 2472 | 2 | complete | Proxy-level LUT analysis only; not a full ROS SAT garbage-management rerun. |

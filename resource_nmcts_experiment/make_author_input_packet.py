@@ -18,6 +18,7 @@ THIS_DIR = Path(__file__).resolve().parent
 RESULTS = THIS_DIR / "results"
 SUBMISSION_PACKAGE = THIS_DIR / "submission_package"
 SUMMARY = RESULTS / "summary_submission_metadata_audit.csv"
+VALIDATOR_SUMMARY = RESULTS / "summary_submission_metadata_validator.csv"
 OUTPUT = SUBMISSION_PACKAGE / "AUTHOR_INPUT_REQUIRED.md"
 MANIFEST = RESULTS / "manifest_author_input_packet.json"
 
@@ -35,6 +36,9 @@ def read_rows(path: Path) -> list[dict[str, str]]:
 
 def write_packet(rows: list[dict[str, str]]) -> None:
     needs = [row for row in rows if row.get("status") != "pass"]
+    validator_rows = read_rows(VALIDATOR_SUMMARY)
+    validator_revisions = [row for row in validator_rows if row.get("status") == "needs revision"]
+    validator_author_input = [row for row in validator_rows if row.get("status") == "needs author input"]
     lines = [
         "# Author Input Required",
         "",
@@ -53,10 +57,14 @@ def write_packet(rows: list[dict[str, str]]) -> None:
         "When the metadata file is complete, the rebuild also creates ignored private previews:",
         "`generated_author_declarations.md`, `generated_availability_statements.md`,",
         "`generated_cover_letter.md`, and `generated_submission_text.md`.",
+        "Before generating final upload text, `validate_submission_metadata.py` checks common",
+        "format issues without writing private values to tracked files.",
         "",
         "## Current Gate",
         "",
         f"- metadata rows needing author input: {len(needs)}",
+        f"- metadata validator rows needing author input: {len(validator_author_input)}",
+        f"- metadata validator rows needing revision: {len(validator_revisions)}",
         "- research, experiment, manuscript, archive, payload, and verifier checks are handled by the generated audits.",
         "- final goal closure should not be marked complete until these fields are filled and the rebuild/verifier pass again.",
         "",
@@ -109,6 +117,7 @@ def write_packet(rows: list[dict[str, str]]) -> None:
 
 def write_manifest(rows: list[dict[str, str]]) -> None:
     needs = [row for row in rows if row.get("status") != "pass"]
+    validator_rows = read_rows(VALIDATOR_SUMMARY)
     data = {
         "script": Path(__file__).name,
         "python": sys.version.split()[0],
@@ -116,6 +125,9 @@ def write_manifest(rows: list[dict[str, str]]) -> None:
         "output": rel(OUTPUT),
         "metadata_rows": len(rows),
         "needs_author_input": len(needs),
+        "metadata_validator_rows": len(validator_rows),
+        "metadata_validator_needs_revision": sum(1 for row in validator_rows if row.get("status") == "needs revision"),
+        "metadata_validator_needs_author_input": sum(1 for row in validator_rows if row.get("status") == "needs author input"),
         "items": [
             {
                 "item": row.get("item", ""),

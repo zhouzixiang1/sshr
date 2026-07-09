@@ -34,6 +34,7 @@ AVAILABILITY_STATEMENTS = SUBMISSION_PACKAGE / "generated_availability_statement
 COVER_LETTER = SUBMISSION_PACKAGE / "generated_cover_letter.md"
 SUBMISSION_TEXT = SUBMISSION_PACKAGE / "generated_submission_text.md"
 PRIVATE_OUTPUTS = (AUTHOR_DECLARATIONS, AVAILABILITY_STATEMENTS, COVER_LETTER, SUBMISSION_TEXT)
+VALIDATOR_MANIFEST = RESULTS / "manifest_submission_metadata_validator.json"
 
 
 def stringify(value: object) -> str:
@@ -337,6 +338,21 @@ def build_rows() -> list[dict[str, str]]:
                 "private_outputs": "; ".join(rel(path) for path in PRIVATE_OUTPUTS),
                 "evidence": f"{len(missing)} required metadata path(s) remain incomplete; removed stale private output files={removed}.",
                 "next_action": "Fill: " + "; ".join(missing[:8]) + ("; ..." if len(missing) > 8 else ""),
+            }
+        ]
+
+    validator = read_json(VALIDATOR_MANIFEST)
+    needs_revision = int(validator.get("needs_revision_count", -1)) if isinstance(validator, dict) else -1
+    if needs_revision != 0:
+        removed = clear_private_outputs()
+        return [
+            {
+                "item": "Private submission text preview",
+                "status": "needs revision",
+                "source": rel(METADATA_FILE),
+                "private_outputs": "; ".join(rel(path) for path in PRIVATE_OUTPUTS),
+                "evidence": f"Metadata validator reports needs_revision_count={needs_revision}; removed stale private output files={removed}.",
+                "next_action": "Fix results/analysis_submission_metadata_validator.md rows, rerun the rebuild script, then review generated private preview files.",
             }
         ]
 

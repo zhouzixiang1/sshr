@@ -39,6 +39,7 @@ run_py analyze_weight_robustness.py
 run_py analyze_artifact_rerun_registry.py
 run_py analyze_reproducibility_audit.py
 run_py analyze_submission_metadata_audit.py
+run_py validate_submission_metadata.py
 run_py make_author_input_packet.py
 run_py make_submission_text_preview.py
 run_py analyze_goal_completion_audit.py

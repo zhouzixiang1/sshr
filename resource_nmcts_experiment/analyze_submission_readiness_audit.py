@@ -37,6 +37,9 @@ VERIFIER_MANIFEST = RESULTS / "manifest_submission_package_verifier.json"
 METADATA_ANALYSIS = RESULTS / "analysis_submission_metadata_audit.md"
 METADATA_SUMMARY = RESULTS / "summary_submission_metadata_audit.csv"
 METADATA_MANIFEST = RESULTS / "manifest_submission_metadata_audit.json"
+METADATA_VALIDATOR_ANALYSIS = RESULTS / "analysis_submission_metadata_validator.md"
+METADATA_VALIDATOR_SUMMARY = RESULTS / "summary_submission_metadata_validator.csv"
+METADATA_VALIDATOR_MANIFEST = RESULTS / "manifest_submission_metadata_validator.json"
 TEXT_PREVIEW_ANALYSIS = RESULTS / "analysis_submission_text_preview.md"
 TEXT_PREVIEW_SUMMARY = RESULTS / "summary_submission_text_preview.csv"
 TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
@@ -116,6 +119,9 @@ def build_rows() -> list[dict[str, str]]:
     text_preview_manifest = read_json(TEXT_PREVIEW_MANIFEST)
     text_preview_counts = text_preview_manifest.get("status_counts", {}) if text_preview_manifest else {}
     private_outputs_ignored = bool(text_preview_manifest.get("private_outputs_are_git_ignored", False))
+    metadata_validator_manifest = read_json(METADATA_VALIDATOR_MANIFEST)
+    metadata_validator_revisions = int(metadata_validator_manifest.get("needs_revision_count", -1)) if metadata_validator_manifest else -1
+    metadata_validator_counts = metadata_validator_manifest.get("status_counts", {}) if metadata_validator_manifest else {}
     lower = text.lower()
     todo_hits = re.findall(r"\b(?:todo|tbd|placeholder)\b", lower)
     abstract_words = abstract_word_count(text)
@@ -233,6 +239,17 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_submission_metadata_audit.py after filling author declarations or choosing a target venue.",
         },
         {
+            "item": "Submission metadata validator",
+            "status": "pass"
+            if METADATA_VALIDATOR_ANALYSIS.exists()
+            and METADATA_VALIDATOR_SUMMARY.exists()
+            and METADATA_VALIDATOR_MANIFEST.exists()
+            and metadata_validator_revisions == 0
+            else "needs revision",
+            "evidence": f"Private metadata format validator exists; status_counts={metadata_validator_counts}; needs_revision_count={metadata_validator_revisions}.",
+            "next_action": "Rerun validate_submission_metadata.py after filling private metadata; fix format or consistency rows before upload.",
+        },
+        {
             "item": "Private submission text preview",
             "status": "pass"
             if TEXT_PREVIEW_ANALYSIS.exists()
@@ -271,7 +288,7 @@ def build_rows() -> list[dict[str, str]]:
             and VERIFIER_SUMMARY.exists()
             and VERIFIER_MANIFEST.exists()
             else "needs revision",
-            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private-preview protection, and LaTeX log boundaries.",
+            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, private metadata validation, private-preview protection, and LaTeX log boundaries.",
             "next_action": "Run verify_submission_package.sh after rebuilding the payload archive.",
         },
         {
