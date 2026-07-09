@@ -1,0 +1,38 @@
+{
+  "budgets": {
+    "top12_s12_n16": {
+      "candidate_top_k": 12,
+      "max_polarities": 8,
+      "mcts_simulations": 12,
+      "neural_mcts_simulations": 16
+    },
+    "top8_s8_n12": {
+      "candidate_top_k": 8,
+      "max_polarities": 8,
+      "mcts_simulations": 8,
+      "neural_mcts_simulations": 12
+    }
+  },
+  "functions": 177,
+  "methods": [
+    "and_affine_nmcts",
+    "and_resource_nmcts",
+    "and_pareto_resource_nmcts"
+  ],
+  "outputs": {
+    "manifest": "results/manifest_bitflip_neural_budget_sweep_run.json",
+    "raw": "results/raw_bitflip_neural_budget_sweep.csv",
+    "summary": "results/summary_bitflip_neural_budget_sweep_run.csv"
+  },
+  "preset": "traditional_resource",
+  "raw_rows": 2124,
+  "script": "run_bitflip_neural_budget_sweep.py",
+  "seconds_current_run": 190.03851413726807,
+  "seed": 42,
+  "usable_rows": 2124,
+  "variants": [
+    "learned_prior",
+    "no_prior"
+  ],
+  "workers": 10
+}

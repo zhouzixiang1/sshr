@@ -91,20 +91,26 @@ def build_rows() -> list[dict[str, str]]:
     bitflip_random = read_csv(RESULTS / "summary_bitflip_random_prior_control.csv")
     bitflip_score = require_row(bitflip_random, method="and_resource_nmcts", metric="score")
     bitflip_time = require_row(bitflip_random, method="and_resource_nmcts", metric="time_s")
+    bitflip_budget = read_csv(RESULTS / "summary_bitflip_neural_budget_sweep.csv")
+    low_budget_score_rows = [
+        row
+        for row in bitflip_budget
+        if row["budget"] in {"top8_s8_n12", "top12_s12_n16"} and row["metric"] == "score"
+    ]
+    low_budget_time_rows = [
+        row
+        for row in bitflip_budget
+        if row["budget"] in {"top8_s8_n12", "top12_s12_n16"} and row["metric"] == "time_s"
+    ]
+    low_budget_pairs = sum(int(row["pairs"]) for row in low_budget_score_rows)
+    low_budget_wins = sum(int(row["learned_wins"]) for row in low_budget_score_rows)
+    low_budget_losses = sum(int(row["learned_losses"]) for row in low_budget_score_rows)
+    low_budget_ties = sum(int(row["ties"]) for row in low_budget_score_rows)
+    low_budget_mean_rel = sum(float(row["mean_relative"]) for row in low_budget_score_rows) / max(len(low_budget_score_rows), 1)
+    low_budget_mean_time = sum(float(row["mean_relative"]) for row in low_budget_time_rows) / max(len(low_budget_time_rows), 1)
 
-    root_means = read_csv(RESULTS / "summary_highdim_root_action_oracle.csv")
-    root_neural = require_row(root_means, method="root_neural_top4")
-    root_beam = require_row(root_means, method="root_beam4_oracle_eval")
-    root_oracle = require_row(root_means, method="root_oracle24")
-    neural_vs_beam = (float(root_neural["mean_score"]) - float(root_beam["mean_score"])) / max(
-        float(root_beam["mean_score"]), 1.0
-    )
-    oracle_vs_neural = (float(root_oracle["mean_score"]) - float(root_neural["mean_score"])) / max(
-        float(root_neural["mean_score"]), 1.0
-    )
-    neural_time_vs_beam = (
-        float(root_neural["mean_time_s"]) - float(root_beam["mean_time_s"])
-    ) / max(float(root_beam["mean_time_s"]), 1e-9)
+    root_ranker = read_csv(RESULTS / "summary_root_action_ranker_audit.csv")
+    root_union = require_row(root_ranker, component="Combined heuristic top-4 plus neural top-12 extension")
 
     return [
         {
@@ -198,6 +204,24 @@ def build_rows() -> list[dict[str, str]]:
             ),
         },
         {
+            "component": "Bit-flip low-budget prior",
+            "claim_class": "bounded",
+            "scope": "top-8/top-12 budgets; 6 score rows; 1062 pairs",
+            "quality": (
+                f"learned vs no-prior {low_budget_wins}/{low_budget_losses}/{low_budget_ties}, "
+                f"{pct_ratio(low_budget_mean_rel)}"
+            ),
+            "cost": f"{pct_ratio(low_budget_mean_time)} runtime vs no-prior",
+            "role": "bounded low-budget quality evidence, not speed claim",
+            "status": status_from(
+                len(low_budget_score_rows) == 6
+                and low_budget_pairs == 6 * 177
+                and low_budget_losses == 0
+                and low_budget_wins > 0
+                and low_budget_mean_rel < 0.0
+            ),
+        },
+        {
             "component": "Boolean neural guard",
             "claim_class": "limited",
             "scope": "n=16 high-dimensional guard; 24 rows",
@@ -211,13 +235,16 @@ def build_rows() -> list[dict[str, str]]:
             ),
         },
         {
-            "component": "Root-action neural ranker",
-            "claim_class": "not promoted",
-            "scope": "n=14 root-action diagnostic; 10 rows",
-            "quality": f"vs beam4 {100.0 * neural_vs_beam:+.2f}%; oracle24 headroom {100.0 * oracle_vs_neural:+.2f}%",
-            "cost": f"{100.0 * neural_time_vs_beam:+.2f}% ranking time vs beam4 eval",
-            "role": "not promoted; future root-ranker target",
-            "status": status_from(neural_vs_beam >= 0.0 and neural_time_vs_beam < 0.0),
+            "component": "Root-action neural candidate extension",
+            "claim_class": "bounded",
+            "scope": f"{root_union['scope']}; {root_union['pairs']} pairs",
+            "quality": (
+                f"union top-4+neural12 vs beam4 {root_union['score_wlt']}, "
+                f"{root_union['mean_relative_score_pct']}; oracle24 headroom {root_union['oracle_headroom_pct']}"
+            ),
+            "cost": "root-only one-step audit; runtime not claimed",
+            "role": "bounded candidate-extension evidence",
+            "status": status_from(root_union["status"] == "pass"),
         },
     ]
 
@@ -331,6 +358,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "claim_class_counts": dict(sorted(class_counts.items())),
         "needs_revision_count": status_counts.get("needs revision", 0),
         "promoted_count": class_counts.get("promoted", 0),
+        "bounded_count": class_counts.get("bounded", 0),
         "limited_count": class_counts.get("limited", 0),
         "not_promoted_count": class_counts.get("not promoted", 0),
         "sources": [
@@ -341,7 +369,8 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
             "results/summary_phase_affine_policy_rank_diverse.csv",
             "results/summary_boolean_neural_guard_vs_deterministic.csv",
             "results/summary_bitflip_random_prior_control.csv",
-            "results/summary_highdim_root_action_oracle.csv",
+            "results/summary_bitflip_neural_budget_sweep.csv",
+            "results/summary_root_action_ranker_audit.csv",
         ],
         "outputs": {
             "summary": "results/summary_learned_control_audit.csv",

@@ -5,8 +5,8 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 ## Status counts
 
 - complete: 25
-- unique raw files covered by registry: 148
-- unique raw CSV rows covered by registry: 61233
+- unique raw files covered by registry: 149
+- unique raw CSV rows covered by registry: 63357
 
 | evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |
 |---|---|---:|---:|---:|---|---|
@@ -28,7 +28,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | CirKit AIG/MC probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded CirKit executable/commit; results are logical estimates, not hardware mapping. |
 | RevKit exact and Rz probes | external toolchain rerun | 5 | 3194 | 5 | complete | Requires RevKit CLI/API availability; Rz rows are phase/sensitivity probes, not final Clifford+T decomposition. |
 | Phase and affine FPRM branch | raw phase rerun and training | 7 | 11859 | 7 | complete | Logical phase verification up to global phase; not approximate rotation synthesis. |
-| Learned-control and ablations | training plus ablation rerun | 14 | 8207 | 14 | complete | Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only. |
+| Learned-control and ablations | training plus ablation rerun | 20 | 10883 | 17 | complete | Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only. |
 | Schedule proxy and lifetime tradeoffs | quick derived audit | 3 | 1140 | 1 | complete | Emitted-circuit logical schedule proxies only; not hardware routing, native-gate scheduling, or device execution. |
 | High-dimensional symbolic screen-scale runs | large raw rerun | 77 | 11960 | 26 | complete | Symbolic or generated-instance verification; not exhaustive truth-table enumeration for all large n. |
 | External high-dimensional resource extensions | large raw rerun | 4 | 528 | 4 | complete | Generated large-instance comparisons; external availability and timeout behavior are recorded in manifests. |
@@ -112,8 +112,8 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - representative raw: `results/raw_phase_affine_policy.csv; results/raw_phase_affine_policy_rank_diverse.csv; results/raw_phase_parity_affine.csv; results/raw_phase_parity_affine_wide128.csv; +3 more`
 - **Learned-control and ablations**
   - claim use: Separates neural/search-control effects from deterministic algebraic construction and guarded portfolio selection.
-  - scripts: `train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; run_bitflip_random_prior_control.py; analyze_bitflip_random_prior_control.py; analyze_frontier_random_depth_control.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py; analyze_neural_mcts_claim_calibration.py`
-  - representative raw: `results/raw_bitflip_random_prior_control.csv; results/raw_highdim_neural_prior_boolean_guard.csv; results/raw_highdim_neural_prior_learned_prior.csv; results/raw_highdim_neural_prior_no_prior.csv; +10 more`
+  - scripts: `train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; run_bitflip_random_prior_control.py; analyze_bitflip_random_prior_control.py; run_bitflip_neural_budget_sweep.py; analyze_bitflip_neural_budget_sweep.py; analyze_frontier_random_depth_control.py; analyze_root_action_ranker_audit.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py; analyze_neural_mcts_claim_calibration.py`
+  - representative raw: `results/raw_bitflip_neural_budget_sweep.csv; results/raw_bitflip_random_prior_control.csv; results/raw_highdim_neural_prior_boolean_guard.csv; results/raw_highdim_neural_prior_learned_prior.csv; +16 more`
 - **Schedule proxy and lifetime tradeoffs**
   - claim use: Checks logic-level T-depth proxy and explicit auxiliary-lifetime tradeoffs for the high-dimensional frontier controllers.
   - scripts: `analyze_schedule_metrics.py; analyze_schedule_proxy_audit.py`

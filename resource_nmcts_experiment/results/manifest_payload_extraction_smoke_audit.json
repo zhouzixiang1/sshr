@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1014; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1028; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -87,13 +87,25 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_search_control_baseline_audit.json; needs_revision_count=0; rows=10; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_search_control_baseline_audit.json; needs_revision_count=0; rows=11; stderr=none",
       "item": "Search-control baseline audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_learned_control_audit.json; needs_revision_count=0; rows=8; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_bitflip_neural_budget_sweep.json; needs_revision_count=0; raw_rows=2124; stderr=none",
+      "item": "Bit-flip low-budget learned-prior sweep",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_root_action_ranker_audit.json; needs_revision_count=0; rows=5; stderr=none",
+      "item": "Root-action ranker audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_learned_control_audit.json; needs_revision_count=0; rows=9; stderr=none",
       "item": "Learned-control audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -302,6 +314,20 @@
     },
     {
       "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_bitflip_neural_budget_sweep.json",
+      "minimum_rows_key": "raw_rows",
+      "name": "Bit-flip low-budget learned-prior sweep",
+      "script": "analyze_bitflip_neural_budget_sweep.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_root_action_ranker_audit.json",
+      "minimum_rows_key": "rows",
+      "name": "Root-action ranker audit",
+      "script": "analyze_root_action_ranker_audit.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
       "manifest": "results/manifest_learned_control_audit.json",
       "minimum_rows_key": "rows",
       "name": "Learned-control audit",
@@ -435,6 +461,6 @@
     }
   ],
   "status_counts": {
-    "pass": 33
+    "pass": 35
   }
 }

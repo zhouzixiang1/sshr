@@ -1,0 +1,22 @@
+{
+  "combined_mean_relative_score_pct": "-0.08%",
+  "combined_oracle_headroom_pct": "-0.10%",
+  "combined_pairs": 33,
+  "combined_score_wlt": "8/0/25",
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_root_action_ranker_audit.md",
+    "manifest": "results/manifest_root_action_ranker_audit.json",
+    "summary": "results/summary_root_action_ranker_audit.csv",
+    "table": "paper_latex/tables/root_action_ranker_audit.tex"
+  },
+  "rows": 5,
+  "script": "analyze_root_action_ranker_audit.py",
+  "sources": [
+    "results/raw_highdim_root_action_pairwise_widths.csv",
+    "results/raw_ultra_root_action_pairwise_widths.csv"
+  ],
+  "status_counts": {
+    "pass": 5
+  }
+}

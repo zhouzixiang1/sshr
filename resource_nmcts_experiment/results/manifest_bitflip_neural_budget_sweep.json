@@ -1,0 +1,25 @@
+{
+  "full_budget_rows_reused": 1062,
+  "input_raw": [
+    "results/raw_bitflip_neural_budget_sweep.csv",
+    "results/raw_traditional_resource_learned_prior.csv",
+    "results/raw_traditional_resource_no_prior.csv"
+  ],
+  "low_budget_score_rows": 6,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_bitflip_neural_budget_sweep.md",
+    "manifest": "results/manifest_bitflip_neural_budget_sweep.json",
+    "summary": "results/summary_bitflip_neural_budget_sweep.csv",
+    "table": "paper_latex/tables/bitflip_neural_budget_sweep.tex"
+  },
+  "paired_rows": 54,
+  "positive_low_budget_score_rows": 6,
+  "raw_rows": 2124,
+  "script": "analyze_bitflip_neural_budget_sweep.py",
+  "status_counts": {
+    "pass": 2124
+  },
+  "table": "paper_latex/tables/bitflip_neural_budget_sweep.tex",
+  "table_anchor_present": true
+}

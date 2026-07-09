@@ -9,6 +9,7 @@ MCTS over deterministic portfolio & Resource-NMCTS over no-MCTS portfolio & 177 
 Pareto search control & Pareto Resource-NMCTS over no-MCTS portfolio & 177 & 106/0/71 & -4.69\% & Ancilla tradeoffs still need separate reporting. \\
 learned prior & Learned prior for Resource-NMCTS & 177 & 39/0/138 & -1.10\% & It is not a runtime claim and should not be promoted as the main source of improvement. \\
 bit-flip random control & Learned bit-flip prior vs same-budget random-prior mean & 177 & 17/8/152 & -0.15\% & The margin is small and runtime-negative; this is not a claim that neural ranking explains the full gain. \\
+bit-flip low-budget control & Learned prior vs no-prior under compressed candidate/MCTS budgets & 1062 & 218/0/844 & -1.04\% & The same rows still show runtime overhead, so this is budget-allocation quality evidence rather than a speedup claim. \\
 frontier random-depth control & Large frontier policy vs same-candidate random depth & 102 & 55/3/38; 5/0/1 & -1.12\% & The control is quality-positive but runtime-negative against random depth; it is not a speed, hardware-scheduling, or global-optimality claim. \\
 high-dimensional deterministic control & Highdim no-MCTS portfolio over root beam & 16 & 14/0/2 & -6.25\% & This is symbolic/high-dimensional evidence, not exhaustive truth-table optimality. \\
 phase random control & Diverse phase shortlist top-512 vs same-budget random mean & 38 & 17/0/21 & -0.012\% & This is a phase/Rz proxy control, not a bit-flip random baseline or rotation synthesis. \\

@@ -6,8 +6,8 @@
     "summary": "results/summary_target_venue_format_smoke.csv"
   },
   "pdf": "paper_latex/resource_nmcts_submission_acm_tqc.pdf",
-  "pdf_bytes": 841770,
-  "pdf_pages": 39,
+  "pdf_bytes": 845579,
+  "pdf_pages": 40,
   "python": "3.11.15",
   "rows": 5,
   "rows_detail": [
@@ -24,13 +24,13 @@
       "status": "pass"
     },
     {
-      "evidence": "pdf_exists=True; pages=39; bytes=841770; rendered_sample_pages=3; ink_range=0.062325--0.130306; unexpected_log_lines=none; render_issues=none.",
+      "evidence": "pdf_exists=True; pages=40; bytes=845579; rendered_sample_pages=3; ink_range=0.062325--0.130319; unexpected_log_lines=none; render_issues=none.",
       "item": "ACM TQC compiled PDF",
       "next_action": "Compile paper_latex/resource_nmcts_submission_acm_tqc.tex and inspect unexpected log, blank-page, or render failures.",
       "status": "pass"
     },
     {
-      "evidence": "characters=132964; missing_text=none; forbidden_text=none.",
+      "evidence": "characters=135551; missing_text=none; forbidden_text=none.",
       "item": "ACM TQC text anchors",
       "next_action": "Regenerate and recompile the ACM/TQC draft if title, method, scope, anonymity, or availability text is missing.",
       "status": "pass"

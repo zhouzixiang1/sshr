@@ -92,6 +92,7 @@ def build_rows() -> list[dict[str, str]]:
     search = read_csv(RESULTS / "summary_search_contribution.csv")
     prior_raw = read_csv(RESULTS / "raw_neural_prior_ablation.csv")
     bitflip_random = read_csv(RESULTS / "summary_bitflip_random_prior_control.csv")
+    bitflip_budget = read_csv(RESULTS / "summary_bitflip_neural_budget_sweep.csv")
     frontier_random = read_csv(RESULTS / "summary_frontier_random_depth_control.csv")
     phase_random = read_csv(RESULTS / "summary_phase_policy_random_control.csv")
 
@@ -134,6 +135,22 @@ def build_rows() -> list[dict[str, str]]:
     )
     bitflip_random_score = require_row(bitflip_random, method="and_resource_nmcts", metric="score")
     bitflip_random_time = require_row(bitflip_random, method="and_resource_nmcts", metric="time_s")
+    low_budget_score_rows = [
+        row
+        for row in bitflip_budget
+        if row["budget"] in {"top8_s8_n12", "top12_s12_n16"} and row["metric"] == "score"
+    ]
+    low_budget_time_rows = [
+        row
+        for row in bitflip_budget
+        if row["budget"] in {"top8_s8_n12", "top12_s12_n16"} and row["metric"] == "time_s"
+    ]
+    low_budget_pairs = sum(int(row["pairs"]) for row in low_budget_score_rows)
+    low_budget_wins = sum(int(row["learned_wins"]) for row in low_budget_score_rows)
+    low_budget_losses = sum(int(row["learned_losses"]) for row in low_budget_score_rows)
+    low_budget_ties = sum(int(row["ties"]) for row in low_budget_score_rows)
+    low_budget_mean_rel = sum(float(row["mean_relative"]) for row in low_budget_score_rows) / max(len(low_budget_score_rows), 1)
+    low_budget_mean_time = sum(float(row["mean_relative"]) for row in low_budget_time_rows) / max(len(low_budget_time_rows), 1)
     frontier_random_scale = require_row(frontier_random, source="scale generalization")
     frontier_random_bridge = require_row(frontier_random, source="truth-table bridge")
     phase = require_row(phase_random, policy="diverse", topk="512")
@@ -202,6 +219,25 @@ def build_rows() -> list[dict[str, str]]:
             if int(bitflip_random_score["pairs"]) == 177
             and int(bitflip_random_score["random_repeats"]) >= 8
             and float(bitflip_random_score["mean_relative"]) < 0.0
+            else "needs revision",
+        },
+        {
+            "layer": "bit-flip low-budget control",
+            "evidence_source": "bit-flip neural budget sweep",
+            "comparison": "Learned prior vs no-prior under compressed candidate/MCTS budgets",
+            "scope": "2 budgets x 3 methods x 177 n<=6 functions",
+            "pairs": str(low_budget_pairs),
+            "score_wlt": f"{low_budget_wins}/{low_budget_losses}/{low_budget_ties}",
+            "mean_score_change": pct_ratio(low_budget_mean_rel),
+            "cost_or_runtime": f"time {pct_ratio(low_budget_mean_time)}",
+            "supported_conclusion": "The learned prior remains a positive quality signal when candidate and MCTS budgets are tightened.",
+            "boundary": "The same rows still show runtime overhead, so this is budget-allocation quality evidence rather than a speedup claim.",
+            "status": "pass"
+            if len(low_budget_score_rows) == 6
+            and low_budget_pairs == 6 * 177
+            and low_budget_losses == 0
+            and low_budget_wins > 0
+            and low_budget_mean_rel < 0.0
             else "needs revision",
         },
         {

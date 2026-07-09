@@ -150,10 +150,15 @@ SEARCH_BUDGET_PATHS = {
 }
 LEARNED_CONTROL_PATHS = {
     "analyze_learned_control_audit.py",
+    "analyze_root_action_ranker_audit.py",
     "results/analysis_learned_control_audit.md",
+    "results/analysis_root_action_ranker_audit.md",
     "results/summary_learned_control_audit.csv",
+    "results/summary_root_action_ranker_audit.csv",
     "results/manifest_learned_control_audit.json",
+    "results/manifest_root_action_ranker_audit.json",
     "paper_latex/tables/learned_control_audit.tex",
+    "paper_latex/tables/root_action_ranker_audit.tex",
 }
 NEURAL_MCTS_CLAIM_CALIBRATION_PATHS = {
     "analyze_neural_mcts_claim_calibration.py",
@@ -172,6 +177,17 @@ BITFLIP_RANDOM_PRIOR_PATHS = {
     "results/analysis_bitflip_random_prior_control.md",
     "results/manifest_bitflip_random_prior_control.json",
     "paper_latex/tables/bitflip_random_prior_control.tex",
+}
+BITFLIP_NEURAL_BUDGET_PATHS = {
+    "run_bitflip_neural_budget_sweep.py",
+    "analyze_bitflip_neural_budget_sweep.py",
+    "results/raw_bitflip_neural_budget_sweep.csv",
+    "results/summary_bitflip_neural_budget_sweep_run.csv",
+    "results/manifest_bitflip_neural_budget_sweep_run.json",
+    "results/summary_bitflip_neural_budget_sweep.csv",
+    "results/analysis_bitflip_neural_budget_sweep.md",
+    "results/manifest_bitflip_neural_budget_sweep.json",
+    "paper_latex/tables/bitflip_neural_budget_sweep.tex",
 }
 FRONTIER_RANDOM_DEPTH_PATHS = {
     "analyze_frontier_random_depth_control.py",
@@ -510,6 +526,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    bitflip_budget_missing = sorted(BITFLIP_NEURAL_BUDGET_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload bit-flip low-budget learned-prior evidence",
+            "pass" if not bitflip_budget_missing else "needs revision",
+            f"bitflip_neural_budget_files={len(BITFLIP_NEURAL_BUDGET_PATHS)}; missing={bitflip_budget_missing or 'none'}.",
+            "Ensure the uploadable archive includes the low-budget learned-prior run script, raw rows, analysis outputs, and manuscript table.",
+        )
+    )
+
     frontier_random_missing = sorted(FRONTIER_RANDOM_DEPTH_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -722,6 +748,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "learned_control_paths": sorted(LEARNED_CONTROL_PATHS),
         "neural_mcts_claim_calibration_paths": sorted(NEURAL_MCTS_CLAIM_CALIBRATION_PATHS),
         "bitflip_random_prior_paths": sorted(BITFLIP_RANDOM_PRIOR_PATHS),
+        "bitflip_neural_budget_paths": sorted(BITFLIP_NEURAL_BUDGET_PATHS),
         "frontier_random_depth_paths": sorted(FRONTIER_RANDOM_DEPTH_PATHS),
         "headline_numeric_paths": sorted(HEADLINE_NUMERIC_PATHS),
         "citation_support_paths": sorted(CITATION_SUPPORT_PATHS),

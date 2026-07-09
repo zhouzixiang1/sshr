@@ -5,13 +5,12 @@ It is intentionally conservative: small or runtime-negative AI components are la
 
 ## Status counts
 
-- pass: 8
+- pass: 9
 
 ## Claim-class counts
 
-- bounded: 1
+- bounded: 3
 - limited: 2
-- not promoted: 1
 - promoted: 4
 
 | component | claim class | scope | quality evidence | cost/evaluation evidence | paper role | status |
@@ -22,5 +21,6 @@ It is intentionally conservative: small or runtime-negative AI components are la
 | Sparse depth-4 gate | promoted | multi-seed n=24,28,32,40; 144 pairs | vs sparse frontier 0/0/144, +0.00%; false skips 0 | -13.43% time vs sparse frontier | promoted budget gate after depth-2 | pass |
 | Rank-diverse phase shortlist | promoted | held-out n=6 phase search; 38 rows | vs budget-32 17/0/21, -2.48%; vs wide-128 0/7/31, +0.00% | 512/8192 exact forms per function | promoted phase-search pruning | pass |
 | Bit-flip learned prior | limited | 177 n<=6 functions; 8 random-prior repeats | vs random mean 17/8/152, -0.15%; seed means beaten 8/8 | +48.05% runtime vs random-prior mean | limited quality signal, not runtime claim | pass |
+| Bit-flip low-budget prior | bounded | top-8/top-12 budgets; 6 score rows; 1062 pairs | learned vs no-prior 218/0/844, -1.04% | +24.22% runtime vs no-prior | bounded low-budget quality evidence, not speed claim | pass |
 | Boolean neural guard | limited | n=16 high-dimensional guard; 24 rows | vs deterministic 4/0/20, -0.12% | +94.49% runtime | limited quality guard, not runtime claim | pass |
-| Root-action neural ranker | not promoted | n=14 root-action diagnostic; 10 rows | vs beam4 +0.03%; oracle24 headroom -0.12% | -98.06% ranking time vs beam4 eval | not promoted; future root-ranker target | pass |
+| Root-action neural candidate extension | bounded | n=14 and n=16 root-action slices; 33 pairs | union top-4+neural12 vs beam4 8/0/25, -0.08%; oracle24 headroom -0.10% | root-only one-step audit; runtime not claimed | bounded candidate-extension evidence | pass |

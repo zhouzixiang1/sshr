@@ -51,6 +51,7 @@ run_py analyze_paired_effect_uncertainty.py
 run_py analyze_multimetric_pareto_tradeoff.py
 run_py analyze_search_contribution.py
 run_py analyze_bitflip_random_prior_control.py
+run_py analyze_bitflip_neural_budget_sweep.py
 run_py analyze_frontier_random_depth_control.py
 run_py analyze_search_control_baseline_audit.py
 run_py analyze_boolean_ring_structural_evidence.py
@@ -65,6 +66,7 @@ echo "==> ${PYTHON_BIN} analyze_schedule_metrics.py"
   --out results/analysis_schedule_metrics.md \
   --latex-out paper_latex/tables/schedule_metrics.tex
 run_py analyze_schedule_proxy_audit.py
+run_py analyze_root_action_ranker_audit.py
 run_py analyze_learned_control_audit.py
 run_py analyze_ultra_scale64_stress.py
 run_py analyze_ultra_scale64_resource_profile.py

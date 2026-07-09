@@ -171,6 +171,10 @@ LEARNED_CONTROL_ANALYSIS = RESULTS / "analysis_learned_control_audit.md"
 LEARNED_CONTROL_SUMMARY = RESULTS / "summary_learned_control_audit.csv"
 LEARNED_CONTROL_MANIFEST = RESULTS / "manifest_learned_control_audit.json"
 LEARNED_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "learned_control_audit.tex"
+ROOT_ACTION_RANKER_ANALYSIS = RESULTS / "analysis_root_action_ranker_audit.md"
+ROOT_ACTION_RANKER_SUMMARY = RESULTS / "summary_root_action_ranker_audit.csv"
+ROOT_ACTION_RANKER_MANIFEST = RESULTS / "manifest_root_action_ranker_audit.json"
+ROOT_ACTION_RANKER_TABLE = THIS_DIR / "paper_latex" / "tables" / "root_action_ranker_audit.tex"
 NEURAL_MCTS_CLAIM_ANALYSIS = RESULTS / "analysis_neural_mcts_claim_calibration.md"
 NEURAL_MCTS_CLAIM_SUMMARY = RESULTS / "summary_neural_mcts_claim_calibration.csv"
 NEURAL_MCTS_CLAIM_MANIFEST = RESULTS / "manifest_neural_mcts_claim_calibration.json"
@@ -179,6 +183,10 @@ BITFLIP_RANDOM_PRIOR_ANALYSIS = RESULTS / "analysis_bitflip_random_prior_control
 BITFLIP_RANDOM_PRIOR_SUMMARY = RESULTS / "summary_bitflip_random_prior_control.csv"
 BITFLIP_RANDOM_PRIOR_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control.json"
 BITFLIP_RANDOM_PRIOR_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_random_prior_control.tex"
+BITFLIP_BUDGET_ANALYSIS = RESULTS / "analysis_bitflip_neural_budget_sweep.md"
+BITFLIP_BUDGET_SUMMARY = RESULTS / "summary_bitflip_neural_budget_sweep.csv"
+BITFLIP_BUDGET_MANIFEST = RESULTS / "manifest_bitflip_neural_budget_sweep.json"
+BITFLIP_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_neural_budget_sweep.tex"
 FRONTIER_RANDOM_DEPTH_ANALYSIS = RESULTS / "analysis_frontier_random_depth_control.md"
 FRONTIER_RANDOM_DEPTH_SUMMARY = RESULTS / "summary_frontier_random_depth_control.csv"
 FRONTIER_RANDOM_DEPTH_MANIFEST = RESULTS / "manifest_frontier_random_depth_control.json"
@@ -432,6 +440,18 @@ def build_rows() -> list[dict[str, str]]:
     learned_control_promoted = (
         learned_control_manifest.get("promoted_count", "missing") if learned_control_manifest else "missing"
     )
+    learned_control_bounded = (
+        learned_control_manifest.get("bounded_count", "missing") if learned_control_manifest else "missing"
+    )
+    learned_control_limited = (
+        learned_control_manifest.get("limited_count", "missing") if learned_control_manifest else "missing"
+    )
+    root_action_manifest = read_json(ROOT_ACTION_RANKER_MANIFEST)
+    root_action_revisions = int(root_action_manifest.get("needs_revision_count", -1)) if root_action_manifest else -1
+    root_action_counts = root_action_manifest.get("status_counts", {}) if root_action_manifest else {}
+    root_action_rows = root_action_manifest.get("rows", "missing") if root_action_manifest else "missing"
+    root_action_pairs = root_action_manifest.get("combined_pairs", "missing") if root_action_manifest else "missing"
+    root_action_wlt = root_action_manifest.get("combined_score_wlt", "missing") if root_action_manifest else "missing"
     neural_mcts_claim_manifest = read_json(NEURAL_MCTS_CLAIM_MANIFEST)
     neural_mcts_claim_revisions = (
         int(neural_mcts_claim_manifest.get("needs_revision_count", -1)) if neural_mcts_claim_manifest else -1
@@ -450,6 +470,22 @@ def build_rows() -> list[dict[str, str]]:
     )
     bitflip_random_counts = bitflip_random_manifest.get("status_counts", {}) if bitflip_random_manifest else {}
     bitflip_random_rows = bitflip_random_manifest.get("rows", "missing") if bitflip_random_manifest else "missing"
+    bitflip_budget_manifest = read_json(BITFLIP_BUDGET_MANIFEST)
+    bitflip_budget_revisions = int(bitflip_budget_manifest.get("needs_revision_count", -1)) if bitflip_budget_manifest else -1
+    bitflip_budget_counts = bitflip_budget_manifest.get("status_counts", {}) if bitflip_budget_manifest else {}
+    bitflip_budget_raw_rows = bitflip_budget_manifest.get("raw_rows", "missing") if bitflip_budget_manifest else "missing"
+    bitflip_budget_paired_rows = bitflip_budget_manifest.get("paired_rows", "missing") if bitflip_budget_manifest else "missing"
+    bitflip_budget_low_rows = (
+        bitflip_budget_manifest.get("low_budget_score_rows", "missing") if bitflip_budget_manifest else "missing"
+    )
+    bitflip_budget_positive_rows = (
+        bitflip_budget_manifest.get("positive_low_budget_score_rows", "missing")
+        if bitflip_budget_manifest
+        else "missing"
+    )
+    bitflip_budget_anchor = (
+        bool(bitflip_budget_manifest.get("table_anchor_present", False)) if bitflip_budget_manifest else False
+    )
     frontier_random_manifest = read_json(FRONTIER_RANDOM_DEPTH_MANIFEST)
     frontier_random_revisions = (
         int(frontier_random_manifest.get("needs_revision_count", -1)) if frontier_random_manifest else -1
@@ -862,12 +898,34 @@ def build_rows() -> list[dict[str, str]]:
             and LEARNED_CONTROL_MANIFEST.exists()
             and LEARNED_CONTROL_TABLE.exists()
             and learned_control_revisions == 0
-            and learned_control_rows == 8
+            and isinstance(learned_control_rows, int)
+            and learned_control_rows >= 9
             and isinstance(learned_control_promoted, int)
             and learned_control_promoted >= 4
+            and isinstance(learned_control_bounded, int)
+            and learned_control_bounded >= 2
+            and isinstance(learned_control_limited, int)
+            and learned_control_limited >= 2
             else "needs revision",
-            "evidence": f"Learned-control audit classifies promoted, bounded, limited, and not-promoted AI/search controls; rows={learned_control_rows}; promoted_count={learned_control_promoted}; claim_class_counts={learned_control_class_counts}; status_counts={learned_control_counts}; needs_revision_count={learned_control_revisions}.",
+            "evidence": f"Learned-control audit classifies promoted, bounded, and limited AI/search controls; rows={learned_control_rows}; promoted_count={learned_control_promoted}; bounded_count={learned_control_bounded}; limited_count={learned_control_limited}; claim_class_counts={learned_control_class_counts}; status_counts={learned_control_counts}; needs_revision_count={learned_control_revisions}.",
             "next_action": "Rerun analyze_learned_control_audit.py after changing learned frontier policies, sparse depth gates, phase shortlist controls, neural guard/prior results, or AI-claim manuscript text.",
+        },
+        {
+            "item": "Root-action ranker audit",
+            "status": "pass"
+            if ROOT_ACTION_RANKER_ANALYSIS.exists()
+            and ROOT_ACTION_RANKER_SUMMARY.exists()
+            and ROOT_ACTION_RANKER_MANIFEST.exists()
+            and ROOT_ACTION_RANKER_TABLE.exists()
+            and root_action_revisions == 0
+            and isinstance(root_action_rows, int)
+            and root_action_rows >= 5
+            and isinstance(root_action_pairs, int)
+            and root_action_pairs >= 30
+            and root_action_wlt == "8/0/25"
+            else "needs revision",
+            "evidence": f"Root-action audit checks bounded learned candidate extension over n=14/n=16 root-action slices; rows={root_action_rows}; combined_pairs={root_action_pairs}; combined_score_wlt={root_action_wlt}; status_counts={root_action_counts}; needs_revision_count={root_action_revisions}.",
+            "next_action": "Rerun analyze_root_action_ranker_audit.py after changing high-dimensional root-action ranker evidence or learned-control wording.",
         },
         {
             "item": "Neural/MCTS claim calibration",
@@ -896,6 +954,28 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Same-budget bit-flip random-prior control is manuscript-visible; rows={bitflip_random_rows}; status_counts={bitflip_random_counts}; needs_revision_count={bitflip_random_revisions}.",
             "next_action": "Rerun run_bitflip_random_prior_control.py and analyze_bitflip_random_prior_control.py after changing the neural prior, action features, or bit-flip learned-prior claims.",
+        },
+        {
+            "item": "Bit-flip neural budget sweep",
+            "status": "pass"
+            if "tab:bitflip-budget-sweep" in text
+            and BITFLIP_BUDGET_ANALYSIS.exists()
+            and BITFLIP_BUDGET_SUMMARY.exists()
+            and BITFLIP_BUDGET_MANIFEST.exists()
+            and BITFLIP_BUDGET_TABLE.exists()
+            and bitflip_budget_revisions == 0
+            and isinstance(bitflip_budget_raw_rows, int)
+            and bitflip_budget_raw_rows == 2124
+            and isinstance(bitflip_budget_paired_rows, int)
+            and bitflip_budget_paired_rows == 54
+            and isinstance(bitflip_budget_low_rows, int)
+            and bitflip_budget_low_rows == 6
+            and isinstance(bitflip_budget_positive_rows, int)
+            and bitflip_budget_positive_rows == 6
+            and bitflip_budget_anchor
+            else "needs revision",
+            "evidence": f"Low-budget learned-prior sweep checks learned vs no-prior under compressed candidate/MCTS budgets; raw_rows={bitflip_budget_raw_rows}; paired_rows={bitflip_budget_paired_rows}; low_budget_score_rows={bitflip_budget_low_rows}; positive_low_budget_score_rows={bitflip_budget_positive_rows}; status_counts={bitflip_budget_counts}; table_anchor_present={bitflip_budget_anchor}; needs_revision_count={bitflip_budget_revisions}.",
+            "next_action": "Rerun analyze_bitflip_neural_budget_sweep.py after changing low-budget learned-prior raw rows, budget labels, or manuscript table anchors.",
         },
         {
             "item": "Frontier random-depth control",

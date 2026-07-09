@@ -31,6 +31,7 @@ SEARCH_CONTROL_SUMMARY = RESULTS / "summary_search_control_baseline_audit.csv"
 LEARNED_CONTROL_MANIFEST = RESULTS / "manifest_learned_control_audit.json"
 LEARNED_CONTROL_SUMMARY = RESULTS / "summary_learned_control_audit.csv"
 BITFLIP_RANDOM_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control.json"
+BITFLIP_BUDGET_MANIFEST = RESULTS / "manifest_bitflip_neural_budget_sweep.json"
 FRONTIER_RANDOM_MANIFEST = RESULTS / "manifest_frontier_random_depth_control.json"
 ALGORITHM_CONTRACT_MANIFEST = RESULTS / "manifest_algorithm_contract.json"
 SEARCH_BUDGET_MANIFEST = RESULTS / "manifest_search_budget_contract.json"
@@ -99,6 +100,7 @@ def build_rows() -> list[dict[str, str]]:
 
     learned_manifest = read_json(LEARNED_CONTROL_MANIFEST)
     promoted = int(learned_manifest.get("promoted_count", -1)) if learned_manifest else -1
+    bounded = int(learned_manifest.get("bounded_count", -1)) if learned_manifest else -1
     limited = int(learned_manifest.get("limited_count", -1)) if learned_manifest else -1
     not_promoted = int(learned_manifest.get("not_promoted_count", -1)) if learned_manifest else -1
 
@@ -107,13 +109,13 @@ def build_rows() -> list[dict[str, str]]:
             "claim_anchor": "Neural component in the title",
             "evidence_gate": (
                 f"learned-control rows={manifest_rows(LEARNED_CONTROL_MANIFEST)}, "
-                f"promoted={promoted}, limited={limited}, not_promoted={not_promoted}"
+                f"promoted={promoted}, bounded={bounded}, limited={limited}, not_promoted={not_promoted}"
             ),
             "condition": (
                 manifest_revision_count(LEARNED_CONTROL_MANIFEST) == 0
                 and promoted >= 4
+                and bounded >= 2
                 and limited >= 2
-                and not_promoted >= 1
                 and not missing_tokens(paper, ("Learned-control evidence audit", "limited diagnostics"))
                 and not missing_tokens(support, ("Is the AI contribution overstated?", "bounded controls"))
             ),
@@ -149,18 +151,21 @@ def build_rows() -> list[dict[str, str]]:
             "claim_anchor": "Causal search-control isolation",
             "evidence_gate": (
                 f"bit-flip random rows={manifest_rows(BITFLIP_RANDOM_MANIFEST)}, "
+                f"budget-sweep raw rows={manifest_rows(BITFLIP_BUDGET_MANIFEST)}, "
                 f"frontier random rows={manifest_rows(FRONTIER_RANDOM_MANIFEST)}"
             ),
             "condition": (
                 manifest_revision_count(BITFLIP_RANDOM_MANIFEST) == 0
+                and manifest_revision_count(BITFLIP_BUDGET_MANIFEST) == 0
                 and manifest_revision_count(FRONTIER_RANDOM_MANIFEST) == 0
-                and not missing_tokens(paper, ("random-prior", "random-depth", "same candidate"))
+                and not missing_tokens(paper, ("random-prior", "bitflip-budget-sweep", "random-depth", "same candidate"))
                 and not missing_tokens(support, ("random controls", "ranking, pruning, or budget-allocation"))
             ),
-            "allowed_claim": "Same-budget and same-candidate random controls support ranking and budget-allocation claims.",
+            "allowed_claim": "Same-budget, low-budget, and same-candidate controls support ranking and budget-allocation claims.",
             "excluded_claim": "Do not use random-control rows as speed, hardware-scheduling, or deep-RL-only evidence.",
             "evidence_files": (
                 BITFLIP_RANDOM_MANIFEST,
+                BITFLIP_BUDGET_MANIFEST,
                 FRONTIER_RANDOM_MANIFEST,
                 REVIEWER_BRIEF,
             ),

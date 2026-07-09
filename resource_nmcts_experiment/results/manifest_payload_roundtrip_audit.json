@@ -6,6 +6,17 @@
     "results/manifest_author_input_closure_audit.json",
     "results/summary_author_input_closure_audit.csv"
   ],
+  "bitflip_neural_budget_paths": [
+    "analyze_bitflip_neural_budget_sweep.py",
+    "paper_latex/tables/bitflip_neural_budget_sweep.tex",
+    "results/analysis_bitflip_neural_budget_sweep.md",
+    "results/manifest_bitflip_neural_budget_sweep.json",
+    "results/manifest_bitflip_neural_budget_sweep_run.json",
+    "results/raw_bitflip_neural_budget_sweep.csv",
+    "results/summary_bitflip_neural_budget_sweep.csv",
+    "results/summary_bitflip_neural_budget_sweep_run.csv",
+    "run_bitflip_neural_budget_sweep.py"
+  ],
   "bitflip_random_prior_paths": [
     "analyze_bitflip_random_prior_control.py",
     "paper_latex/tables/bitflip_random_prior_control.tex",
@@ -72,10 +83,15 @@
   ],
   "learned_control_paths": [
     "analyze_learned_control_audit.py",
+    "analyze_root_action_ranker_audit.py",
     "paper_latex/tables/learned_control_audit.tex",
+    "paper_latex/tables/root_action_ranker_audit.tex",
     "results/analysis_learned_control_audit.md",
+    "results/analysis_root_action_ranker_audit.md",
     "results/manifest_learned_control_audit.json",
-    "results/summary_learned_control_audit.csv"
+    "results/manifest_root_action_ranker_audit.json",
+    "results/summary_learned_control_audit.csv",
+    "results/summary_root_action_ranker_audit.csv"
   ],
   "needs_revision_count": 0,
   "neural_mcts_claim_calibration_paths": [
@@ -144,19 +160,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1014; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1028; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=1014; archive_files=1014; missing=none; extra=none.",
+      "evidence": "manifest_files=1028; archive_files=1028; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=1014; mismatches=none.",
+      "evidence": "checked=1028; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -240,7 +256,7 @@
       "status": "pass"
     },
     {
-      "evidence": "learned_control_files=5; missing=none.",
+      "evidence": "learned_control_files=10; missing=none.",
       "item": "Payload learned-control evidence",
       "next_action": "Ensure the uploadable archive includes the learned-control audit script, generated evidence, manifest, and manuscript table.",
       "status": "pass"
@@ -255,6 +271,12 @@
       "evidence": "bitflip_random_prior_files=9; missing=none.",
       "item": "Payload bit-flip random-prior evidence",
       "next_action": "Ensure the uploadable archive includes the bit-flip random-prior run script, analysis outputs, raw CSV, and manuscript table.",
+      "status": "pass"
+    },
+    {
+      "evidence": "bitflip_neural_budget_files=9; missing=none.",
+      "item": "Payload bit-flip low-budget learned-prior evidence",
+      "next_action": "Ensure the uploadable archive includes the low-budget learned-prior run script, raw rows, analysis outputs, and manuscript table.",
       "status": "pass"
     },
     {
@@ -336,7 +358,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=1014; metadata_issues=none.",
+      "evidence": "members_checked=1028; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -361,7 +383,7 @@
     "results/summary_search_budget_contract.csv"
   ],
   "status_counts": {
-    "pass": 33
+    "pass": 34
   },
   "stg_benchmark_paths": [
     "analyze_stg_published_benchmark.py",

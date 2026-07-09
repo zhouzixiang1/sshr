@@ -4,14 +4,14 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 
 ## Status counts
 
-- pass: 168
+- pass: 171
 
 ## Dependency types
 
 - bibliography: 3
 - figure: 21
 - main_source: 3
-- tex_input: 141
+- tex_input: 144
 
 ## Missing dependencies
 
@@ -51,6 +51,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/search_contribution_decomposition` | `paper_latex/tables/search_contribution_decomposition.tex` | True | True | pass |
 | author | tex_input | `tables/search_control_baseline_audit` | `paper_latex/tables/search_control_baseline_audit.tex` | True | True | pass |
 | author | tex_input | `tables/bitflip_random_prior_control` | `paper_latex/tables/bitflip_random_prior_control.tex` | True | True | pass |
+| author | tex_input | `tables/bitflip_neural_budget_sweep` | `paper_latex/tables/bitflip_neural_budget_sweep.tex` | True | True | pass |
 | author | tex_input | `tables/frontier_random_depth_control` | `paper_latex/tables/frontier_random_depth_control.tex` | True | True | pass |
 | author | tex_input | `tables/boolean_ring_structural_evidence` | `paper_latex/tables/boolean_ring_structural_evidence.tex` | True | True | pass |
 | author | tex_input | `tables/sparse_depth_frontier` | `paper_latex/tables/sparse_depth_frontier.tex` | True | True | pass |
@@ -107,6 +108,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/search_contribution_decomposition` | `paper_latex/tables/search_contribution_decomposition.tex` | True | True | pass |
 | anonymous | tex_input | `tables/search_control_baseline_audit` | `paper_latex/tables/search_control_baseline_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/bitflip_random_prior_control` | `paper_latex/tables/bitflip_random_prior_control.tex` | True | True | pass |
+| anonymous | tex_input | `tables/bitflip_neural_budget_sweep` | `paper_latex/tables/bitflip_neural_budget_sweep.tex` | True | True | pass |
 | anonymous | tex_input | `tables/frontier_random_depth_control` | `paper_latex/tables/frontier_random_depth_control.tex` | True | True | pass |
 | anonymous | tex_input | `tables/boolean_ring_structural_evidence` | `paper_latex/tables/boolean_ring_structural_evidence.tex` | True | True | pass |
 | anonymous | tex_input | `tables/sparse_depth_frontier` | `paper_latex/tables/sparse_depth_frontier.tex` | True | True | pass |
@@ -163,6 +165,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/search_contribution_decomposition` | `paper_latex/tables/search_contribution_decomposition.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/search_control_baseline_audit` | `paper_latex/tables/search_control_baseline_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/bitflip_random_prior_control` | `paper_latex/tables/bitflip_random_prior_control.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/bitflip_neural_budget_sweep` | `paper_latex/tables/bitflip_neural_budget_sweep.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/frontier_random_depth_control` | `paper_latex/tables/frontier_random_depth_control.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/boolean_ring_structural_evidence` | `paper_latex/tables/boolean_ring_structural_evidence.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/sparse_depth_frontier` | `paper_latex/tables/sparse_depth_frontier.tex` | True | True | pass |

@@ -91,10 +91,14 @@ ULTRA_SCALE64_PROFILE_TABLE = THIS_DIR / "paper_latex" / "tables" / "screen_scal
 SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
 LEARNED_CONTROL_MANIFEST = RESULTS / "manifest_learned_control_audit.json"
 LEARNED_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "learned_control_audit.tex"
+ROOT_ACTION_RANKER_MANIFEST = RESULTS / "manifest_root_action_ranker_audit.json"
+ROOT_ACTION_RANKER_TABLE = THIS_DIR / "paper_latex" / "tables" / "root_action_ranker_audit.tex"
 NEURAL_MCTS_CLAIM_MANIFEST = RESULTS / "manifest_neural_mcts_claim_calibration.json"
 NEURAL_MCTS_CLAIM_TABLE = THIS_DIR / "paper_latex" / "tables" / "neural_mcts_claim_calibration.tex"
 BITFLIP_RANDOM_PRIOR_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control.json"
 BITFLIP_RANDOM_PRIOR_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_random_prior_control.tex"
+BITFLIP_NEURAL_BUDGET_MANIFEST = RESULTS / "manifest_bitflip_neural_budget_sweep.json"
+BITFLIP_NEURAL_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_neural_budget_sweep.tex"
 FRONTIER_RANDOM_DEPTH_MANIFEST = RESULTS / "manifest_frontier_random_depth_control.json"
 FRONTIER_RANDOM_DEPTH_TABLE = THIS_DIR / "paper_latex" / "tables" / "frontier_random_depth_control.tex"
 EDITORIAL_SCREENING_MANIFEST = RESULTS / "manifest_editorial_screening_audit.json"
@@ -584,18 +588,39 @@ def verify_learned_control() -> dict[str, str]:
     class_counts = manifest.get("claim_class_counts", {}) if manifest else {}
     rows = manifest.get("rows", "missing") if manifest else "missing"
     promoted = int(manifest.get("promoted_count", -1)) if manifest else -1
+    bounded = int(manifest.get("bounded_count", -1)) if manifest else -1
     limited = int(manifest.get("limited_count", -1)) if manifest else -1
     table_exists = LEARNED_CONTROL_TABLE.exists()
     status = (
         "pass"
-        if manifest and revisions == 0 and rows == 8 and promoted >= 4 and limited >= 2 and table_exists
+        if manifest and revisions == 0 and isinstance(rows, int) and rows >= 9 and promoted >= 4 and bounded >= 2 and limited >= 2 and table_exists
         else "needs revision"
     )
     return row(
         "Learned-control audit",
         status,
-        f"rows={rows}; promoted_count={promoted}; limited_count={limited}; needs_revision_count={revisions}; status_counts={counts}; claim_class_counts={class_counts}; table_exists={table_exists}.",
+        f"rows={rows}; promoted_count={promoted}; bounded_count={bounded}; limited_count={limited}; needs_revision_count={revisions}; status_counts={counts}; claim_class_counts={class_counts}; table_exists={table_exists}.",
         "Run analyze_learned_control_audit.py and restore promoted/bounded/limited learned-control classifications and the manuscript table.",
+    )
+
+
+def verify_root_action_ranker() -> dict[str, str]:
+    manifest = read_json(ROOT_ACTION_RANKER_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    rows = int(manifest.get("rows", -1)) if manifest else -1
+    pairs = int(manifest.get("combined_pairs", -1)) if manifest else -1
+    score_wlt = manifest.get("combined_score_wlt", "missing") if manifest else "missing"
+    table_exists = ROOT_ACTION_RANKER_TABLE.exists()
+    status = (
+        "pass"
+        if manifest and revisions == 0 and rows >= 5 and pairs >= 30 and score_wlt == "8/0/25" and table_exists
+        else "needs revision"
+    )
+    return row(
+        "Root-action ranker audit",
+        status,
+        f"rows={rows}; combined_pairs={pairs}; combined_score_wlt={score_wlt}; needs_revision_count={revisions}; table_exists={table_exists}.",
+        "Run analyze_root_action_ranker_audit.py and restore the bounded root-action candidate-extension evidence.",
     )
 
 
@@ -628,6 +653,35 @@ def verify_bitflip_random_prior() -> dict[str, str]:
         status,
         f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
         "Run analyze_bitflip_random_prior_control.py and restore the bit-flip random-prior manuscript table.",
+    )
+
+
+def verify_bitflip_neural_budget() -> dict[str, str]:
+    manifest = read_json(BITFLIP_NEURAL_BUDGET_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    paired_rows = int(manifest.get("paired_rows", -1)) if manifest else -1
+    raw_rows = int(manifest.get("raw_rows", -1)) if manifest else -1
+    low_budget_rows = int(manifest.get("low_budget_score_rows", -1)) if manifest else -1
+    positive_rows = int(manifest.get("positive_low_budget_score_rows", -1)) if manifest else -1
+    table_exists = BITFLIP_NEURAL_BUDGET_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and paired_rows >= 54
+        and raw_rows >= 2124
+        and low_budget_rows == 6
+        and positive_rows == 6
+        and table_exists
+        and anchor
+        else "needs revision"
+    )
+    return row(
+        "Bit-flip low-budget learned-prior sweep",
+        status,
+        f"paired_rows={paired_rows}; raw_rows={raw_rows}; low_budget_score_rows={low_budget_rows}; positive_low_budget_score_rows={positive_rows}; needs_revision_count={revisions}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_bitflip_neural_budget_sweep.py and restore the low-budget learned-prior table and manuscript anchor.",
     )
 
 
@@ -1179,6 +1233,8 @@ def build_rows() -> list[dict[str, str]]:
             verify_ultra_scale64(),
             verify_ultra_scale64_resource_profile(),
             verify_search_control(),
+            verify_bitflip_neural_budget(),
+            verify_root_action_ranker(),
             verify_learned_control(),
             verify_neural_mcts_claim_calibration(),
             verify_bitflip_random_prior(),

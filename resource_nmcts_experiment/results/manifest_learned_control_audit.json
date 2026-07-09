@@ -1,13 +1,13 @@
 {
+  "bounded_count": 3,
   "claim_class_counts": {
-    "bounded": 1,
+    "bounded": 3,
     "limited": 2,
-    "not promoted": 1,
     "promoted": 4
   },
   "limited_count": 2,
   "needs_revision_count": 0,
-  "not_promoted_count": 1,
+  "not_promoted_count": 0,
   "outputs": {
     "analysis": "results/analysis_learned_control_audit.md",
     "manifest": "results/manifest_learned_control_audit.json",
@@ -15,7 +15,7 @@
     "table": "paper_latex/tables/learned_control_audit.tex"
   },
   "promoted_count": 4,
-  "rows": 8,
+  "rows": 9,
   "script": "analyze_learned_control_audit.py",
   "sources": [
     "results/summary_boolean_screen_depth_frontier_policy_large.csv",
@@ -25,9 +25,10 @@
     "results/summary_phase_affine_policy_rank_diverse.csv",
     "results/summary_boolean_neural_guard_vs_deterministic.csv",
     "results/summary_bitflip_random_prior_control.csv",
-    "results/summary_highdim_root_action_oracle.csv"
+    "results/summary_bitflip_neural_budget_sweep.csv",
+    "results/summary_root_action_ranker_audit.csv"
   ],
   "status_counts": {
-    "pass": 8
+    "pass": 9
   }
 }

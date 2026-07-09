@@ -886,7 +886,13 @@ the same candidate legality and semantic checks, and is compared with eight
 deterministic random-prior repeats per function.  The effect is intentionally
 reported as small: learned scores are non-degrading and beat the random-prior
 mean, but the largest resource gains still depend on the algebraic action space
-and baseline-preserving guards.
+and baseline-preserving guards.  Table~\ref{tab:bitflip-budget-sweep} then
+compresses the bit-flip search budget itself.  With top-8 or top-12 candidate
+expansion and 8/12 or 12/16 \mcts{} simulations, the learned prior has 6/6
+positive score rows across Affine-\method{}, \method{}, and Pareto-\method{}
+against matched no-prior searches.  This supports a bounded quality claim for
+neural budget allocation under tight search budgets, while the reported runtime
+overhead prevents interpreting the scorer as a speedup.
 
 \begin{table}[H]
 \centering
@@ -910,6 +916,18 @@ prior with the per-function mean over eight deterministic random-prior repeats;
 negative score changes favor the learned prior.}
 \label{tab:bitflip-random-prior}
 \input{tables/bitflip_random_prior_control}
+\end{table}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.06}
+\caption{Low-budget learned-prior sweep for the bit-flip branch.  Learned and
+no-prior rows use the same functions, methods, candidate legality checks, and
+verification route; only the action-prior scorer and search budget differ.}
+\label{tab:bitflip-budget-sweep}
+\input{tables/bitflip_neural_budget_sweep}
 \end{table}
 
 Table~\ref{tab:frontier-random-depth} applies the same random-control idea to
@@ -1028,12 +1046,15 @@ routing, or native-gate scheduling results.}
 \end{table}
 
 Table~\ref{tab:learned-control-audit} separates promoted learned-control
-components from limited diagnostics.  The frontier policies, sparse depth-4
-gate, and phase shortlist provide the paper-facing learned-control evidence.
-In contrast, the current
-Boolean-neural guard and root-action neural ranker are kept as bounded
-diagnostics: they show small quality or evaluation-cost signals, but not enough
-quality/runtime advantage to carry the main claim.
+components from bounded controls and limited diagnostics.  The frontier policies, sparse depth-4
+gate, phase shortlist, and low-budget bit-flip prior provide the strongest
+paper-facing learned-control evidence.  The root-action neural component is
+reported only as a bounded candidate-extension signal: it preserves the
+deterministic heuristic top-4 root window and adds learned top-12 actions,
+giving a combined 8/0/25 score W/L/T diagnostic over the heuristic root window
+on the audited $n=14$ and $n=16$ slices.  The Boolean-neural guard and the
+generic bit-flip prior remain limited diagnostics because their quality gains
+are small and their runtime overhead is visible.
 
 \begin{table}[H]
 \centering
