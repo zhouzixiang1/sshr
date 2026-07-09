@@ -4887,14 +4887,14 @@
     },
     {
       "boundary": "Includes reproducible entry points and top-level core implementation modules; raw sweeps still require their individual drivers.",
-      "bytes": 3148511,
+      "bytes": 3149445,
       "category": "Scripts and docs",
       "file_count": 163,
       "files": [
         {
-          "bytes": 199655,
+          "bytes": 200589,
           "path": "DELIVERABLE_zh.md",
-          "sha256": "4b14dbd0873cdbfbf15ec2d6cef1cf9beb0c23e213738a7e57d52d0f60a94e3e"
+          "sha256": "fb6e33a4d13f467faf247912226e2d732939aa94d0e695769ef25bc85137e9a4"
         },
         {
           "bytes": 107099,
@@ -5708,7 +5708,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "5cbb2518612ca312314793e23aacf04bbb89a80180f4427ddae3d4aa19218ec5"
+      "sha256_digest": "35a01c9ee3c6177498c983cce32f05b918018c390730cb479f6e13f49110325f"
     },
     {
       "boundary": "Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild.",
