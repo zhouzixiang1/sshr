@@ -6,7 +6,7 @@
     "summary": "results/summary_target_venue_format_smoke.csv"
   },
   "pdf": "paper_latex/resource_nmcts_submission_acm_tqc.pdf",
-  "pdf_bytes": 952842,
+  "pdf_bytes": 952841,
   "pdf_pages": 51,
   "python": "3.11.15",
   "rows": 6,
@@ -24,7 +24,7 @@
       "status": "pass"
     },
     {
-      "evidence": "pdf_exists=True; pages=51; bytes=952842; rendered_sample_pages=3; ink_range=0.096760--0.129085; unexpected_log_lines=none; render_issues=none.",
+      "evidence": "pdf_exists=True; pages=51; bytes=952841; rendered_sample_pages=3; ink_range=0.096760--0.129085; unexpected_log_lines=none; render_issues=none.",
       "item": "ACM TQC compiled PDF",
       "next_action": "Compile paper_latex/resource_nmcts_submission_acm_tqc.tex and inspect unexpected log, blank-page, or render failures.",
       "status": "pass"
