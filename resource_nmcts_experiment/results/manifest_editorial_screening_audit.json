@@ -59,7 +59,7 @@
       "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; manifest=not_applicable",
       "item": "Large-scale verification boundary visible",
       "next_action": "No action needed.",
-      "risk": "Reviewer may object that n=20--40 rows are not exhaustive truth-table checks.",
+      "risk": "Reviewer may object that the n=48--64 symbolic stress rows are not exhaustive truth-table checks.",
       "status": "pass",
       "supported_decision": "Large-scale evidence is framed as symbolic verification plus bounded truth-table bridges."
     },

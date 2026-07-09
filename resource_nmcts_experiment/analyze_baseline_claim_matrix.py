@@ -54,7 +54,7 @@ ROWS = [
     },
     {
         "comparison_role": "Scaling and correctness bridges",
-        "methods": "n=20-40 term-set symbolic runs; n=21-25 complete truth-table bridge rows",
+        "methods": "n=20,24,28,32,40 term-set symbolic runs; n=48,56,64 ultra-scale symbolic stress; n=21-25 complete truth-table bridge rows",
         "why_it_matters": "They push semantic checks beyond the small truth-table slice while keeping full verification where still feasible.",
         "supported_claim": "The emitted logical-layer circuits remain symbolically and bridge-truth-table verified at larger dimensions.",
         "excluded_claim": "Does not make exhaustive high-dimensional truth-table benchmarking feasible or complete.",
@@ -87,7 +87,8 @@ def latex_cell(text: str) -> str:
         ("MCTS", r"\mcts{}"),
         ("SSHR-H/SSHR-I", r"SSHR-H/SSHR-I"),
         ("Rz", r"\rz{}"),
-        ("n=20-40", r"$n=20$--$40$"),
+        ("n=20,24,28,32,40", r"$n=20$, 24, 28, 32, 40"),
+        ("n=48,56,64", r"$n=48$, 56, 64"),
         ("n=21-25", r"$n=21$--$25$"),
         ("T-count", r"T-count"),
         ("CNOT", r"CNOT"),
@@ -101,7 +102,7 @@ def latex_cell(text: str) -> str:
 def write_csv(path: Path) -> None:
     RESULTS.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=list(ROWS[0]))
+        writer = csv.DictWriter(f, fieldnames=list(ROWS[0]), lineterminator="\n")
         writer.writeheader()
         writer.writerows(ROWS)
 

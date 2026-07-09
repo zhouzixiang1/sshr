@@ -79,8 +79,9 @@ explanation.
 - Evidence that the advantage is not limited to a single self-written baseline.
 - Explicit counterpoint evidence showing where SSHR, CirKit, and RevKit remain
   strong under individual resource metrics.
-- High-dimensional symbolic and bridge-truth-table verification of emitted
-  logical circuits within the stated scope.
+- High-dimensional symbolic verification through the $n=48,56,64$ stress
+  slice, plus bridge-truth-table verification of emitted logical circuits
+  within the stated scope.
 - Bounded learned-control benefits and planning-time savings from frontier and
   guard policies.
 
@@ -94,7 +95,8 @@ explanation.
 - No claim that RevKit `oracle_synth` is a finished Clifford+T comparison; it
   is treated as a phase/Rz lower-bound and sensitivity probe.
 - No claim that high-dimensional exhaustive truth-table benchmarking is
-  feasible beyond the bridge slices reported in the manuscript.
+  feasible beyond the bridge slices reported in the manuscript; the
+  $n=48,56,64$ rows are symbolic stress evidence.
 
 ## Recommended Editorial Reading Path
 

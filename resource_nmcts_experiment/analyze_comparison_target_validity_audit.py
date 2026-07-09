@@ -173,7 +173,7 @@ def specs() -> list[TargetSpec]:
         TargetSpec(
             family="Scaling and correctness bridges",
             role="scalability verification",
-            compared_against="n=20-40 symbolic term-set runs and n=21-25 complete truth-table bridge rows",
+            compared_against="n=20,24,28,32,40 symbolic term-set runs, n=48,56,64 ultra-scale symbolic stress, and n=21-25 complete truth-table bridge rows",
             meaning_test="These rows test whether emitted logical oracles remain verifiable beyond the small truth-table benchmark slice.",
             required_claim_tokens=("Scaling and correctness bridges",),
             required_evidence_tokens=("High-dimensional frontier search", "Complete truth-table bridges"),
@@ -275,7 +275,8 @@ def latex_cell(text: str) -> str:
         ("Rz", r"\rz{}"),
         ("T-count", "T-count"),
         ("CNOT", "CNOT"),
-        ("n=20-40", r"$n=20$--$40$"),
+        ("n=20,24,28,32,40", r"$n=20$, 24, 28, 32, 40"),
+        ("n=48,56,64", r"$n=48$, 56, 64"),
         ("n=21-25", r"$n=21$--$25$"),
     ]
     for old, new in replacements:

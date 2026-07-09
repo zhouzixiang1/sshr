@@ -124,18 +124,20 @@ ROWS = (
     ),
     ScorecardRow(
         question="Does the study go beyond small truth-table functions?",
-        answer="Yes. Large n=20--40 symbolic term-set runs are paired with n=21--25 complete truth-table bridge slices.",
+        answer="Yes. Large n=20,24,28,32,40 symbolic term-set runs and an n=48,56,64 ultra-scale stress slice are paired with n=21--25 complete truth-table bridge slices.",
         artifacts=(
             "results/analysis_scaling_resource_audit.md",
             "results/raw_truth_bridge_terms.csv",
             "results/raw_truth_bridge_n24_terms.csv",
             "results/raw_truth_bridge_n25_terms.csv",
+            "results/analysis_screen_scale_ultra_scale64_stress.md",
             "paper_latex/tables/scaling_resource_audit.tex",
+            "paper_latex/tables/screen_scale_ultra_scale64_stress.tex",
             "paper_latex/figures/submission_v36/fig5_validation.pdf",
         ),
-        manuscript_tokens=("$n=20$", "$40$", "$n=21$--$25$", "complete truth-table bridge"),
+        manuscript_tokens=("$n=20,24,28,32,40$", "$n=48,56,64$", "$n=21$--$25$", "complete truth-table bridge"),
         support_tokens=("Complete truth-table checks are used only for bridge slices", "logical-layer"),
-        evidence_latex=r"Table~\ref{tab:scale-audit}; Fig.~\ref{fig:validation}",
+        evidence_latex=r"Tables~\ref{tab:scale-audit}, \ref{tab:ultra-scale64-stress}; Fig.~\ref{fig:validation}",
         limitation="Large-dimensional evidence is symbolic plus bridge-verified, not exhaustive truth-table benchmarking for all large n.",
     ),
 )
@@ -166,7 +168,8 @@ def latex_cell(text: str) -> str:
         .replace("ANF", r"\anf{}")
         .replace("FPRM", r"\fprm{}")
         .replace("MCTS", r"\mcts{}")
-        .replace("n=20--40", r"$n=20$--$40$")
+        .replace("n=20,24,28,32,40", r"$n=20$, 24, 28, 32, 40")
+        .replace("n=48,56,64", r"$n=48$, 56, 64")
         .replace("n=21--25", r"$n=21$--$25$")
     )
 

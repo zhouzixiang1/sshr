@@ -35,8 +35,8 @@ ROWS = [
     },
     {
         "contribution": "High-dimensional and phase-search verification envelope",
-        "implementation": "n=20--40 symbolic term-set checks, n=21--25 complete truth-table bridges, Affine-FPRM phase search, learned phase shortlist.",
-        "evidence_latex": r"Tables~\ref{tab:scale-audit}, \ref{tab:validation}, \ref{tab:phase-policy-random}; Fig.~\ref{fig:validation}",
+        "implementation": "n=20,24,28,32,40 symbolic term-set checks, n=48,56,64 ultra-scale symbolic stress, n=21--25 complete truth-table bridges, Affine-FPRM phase search, learned phase shortlist.",
+        "evidence_latex": r"Tables~\ref{tab:scale-audit}, \ref{tab:ultra-scale64-stress}, \ref{tab:validation}, \ref{tab:phase-policy-random}; Fig.~\ref{fig:validation}",
         "evidence_plain": "scale audit, validation table, phase random-control table, validation figure",
         "boundary": "Large rows are logically and symbolically verified; complete truth-table enumeration remains limited to bridge slices.",
     },
@@ -59,7 +59,8 @@ def latex_cell(text: str) -> str:
         .replace("FPRM", r"\fprm{}")
         .replace("MCTS", r"\mcts{}")
         .replace("CNOT", r"CNOT")
-        .replace("n=20--40", r"$n=20$--$40$")
+        .replace("n=20,24,28,32,40", r"$n=20$, 24, 28, 32, 40")
+        .replace("n=48,56,64", r"$n=48$, 56, 64")
         .replace("n=21--25", r"$n=21$--$25$")
     )
 

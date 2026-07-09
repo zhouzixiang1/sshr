@@ -20,7 +20,7 @@
     },
     {
       "elapsed_seconds": "not_recorded",
-      "evidence": "verifier_returncode=0; verifier_rows=43; verifier_needs_revision_count=0; extracted_payload_mode=True; status_counts={'pass': 43}; stdout_lines=173; stderr=none.",
+      "evidence": "verifier_returncode=0; verifier_rows=43; verifier_needs_revision_count=0; extracted_payload_mode=True; status_counts={'pass': 43}; stdout_lines=174; stderr=none.",
       "item": "Extracted payload verifier command",
       "next_action": "Inspect the verifier outputs generated inside the extracted payload directory.",
       "returncode": "0",

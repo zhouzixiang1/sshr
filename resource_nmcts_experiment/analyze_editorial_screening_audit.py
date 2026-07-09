@@ -154,7 +154,7 @@ def specs() -> list[ScreeningSpec]:
         ),
         ScreeningSpec(
             item="Large-scale verification boundary visible",
-            risk="Reviewer may object that n=20--40 rows are not exhaustive truth-table checks.",
+            risk="Reviewer may object that the n=48--64 symbolic stress rows are not exhaustive truth-table checks.",
             files=(PAPER, REVIEWER_BRIEF, SCALING),
             tokens=("symbolic", "complete truth-table", "exponential", "bridge"),
             manifest_path=None,

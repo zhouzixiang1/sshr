@@ -158,7 +158,9 @@ def latex_cell(text: str) -> str:
     escaped = latex_escape(text)
     replacements = [
         ("n=3,4,5,6,14,15,16,18", r"$n=3$--$6$, 14, 15, 16, 18"),
+        ("n=20,24,28,32,40,48,56,64", r"$n=20$, 24, 28, 32, 40, 48, 56, 64"),
         ("n=20,24,28,32,40", r"$n=20$, 24, 28, 32, 40"),
+        ("n=48,56,64", r"$n=48$, 56, 64"),
         ("n=3,4,5,6,14", r"$n=3$--$6$, 14"),
         ("n=21-25", r"$n=21$--$25$"),
         ("n=3-6", r"$n=3$--$6$"),
@@ -191,6 +193,7 @@ def build_matrix() -> list[dict[str, str]]:
     screen_scale = [
         RESULTS / "raw_screen_scale_depth_frontier_policy_large_generalization_terms.csv",
         RESULTS / "raw_screen_scale_depth_frontier_terms.csv",
+        RESULTS / "raw_screen_scale_ultra_scale64_terms.csv",
     ]
 
     rows: list[dict[str, str]] = []
@@ -358,7 +361,8 @@ def build_matrix() -> list[dict[str, str]]:
                 "scale_generalization",
                 "stage_gated_frontier",
                 "adaptive_all_depth",
-            ),
+            )
+            + "; ultra n=48,56,64 stress 480/480 plan+circuit verified",
             "boundary": "Term-set symbolic verification with emitted-circuit ANF checks; depth frontier is a planning guard, not a hardware scheduler.",
             "sources": csv_join(screen_scale),
         }
