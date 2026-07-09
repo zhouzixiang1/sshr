@@ -6,6 +6,7 @@ terminal package invariants that are easy to regress during final polishing:
 compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, comparison-protocol coverage,
 comparison-target validity,
+score-weight robustness,
 threats-to-validity coverage,
 novelty/comparison scorecard coverage,
 public handoff freshness,
@@ -70,6 +71,10 @@ COMPARISON_TARGET_VALIDITY_MANIFEST = RESULTS / "manifest_comparison_target_vali
 COMPARISON_TARGET_VALIDITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_target_validity_audit.tex"
 COMPARISON_ANSWER_SCORECARD_MANIFEST = RESULTS / "manifest_comparison_answer_scorecard.json"
 COMPARISON_ANSWER_SCORECARD_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_answer_scorecard.tex"
+WEIGHT_ROBUSTNESS_MANIFEST = RESULTS / "manifest_weight_robustness.json"
+WEIGHT_ROBUSTNESS_TABLE = THIS_DIR / "paper_latex" / "tables" / "weight_robustness_compact.tex"
+RESOURCE_WEIGHT_SENSITIVITY_MANIFEST = RESULTS / "manifest_resource_weight_sensitivity_audit.json"
+RESOURCE_WEIGHT_SENSITIVITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "resource_weight_sensitivity_audit.tex"
 THREATS_VALIDITY_MANIFEST = RESULTS / "manifest_threats_to_validity_audit.json"
 THREATS_VALIDITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "threats_to_validity_audit.tex"
 NOVELTY_SCORECARD_MANIFEST = RESULTS / "manifest_novelty_comparison_scorecard.json"
@@ -358,6 +363,67 @@ def verify_comparison_answer_scorecard() -> dict[str, str]:
         status,
         f"rows={rows}; questions={questions}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
         "Run analyze_comparison_answer_scorecard.py and restore comparison-answer rows, generated table, or manuscript anchor.",
+    )
+
+
+def verify_weight_robustness() -> dict[str, str]:
+    manifest = read_json(WEIGHT_ROBUSTNESS_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    summary_rows = int(manifest.get("summary_rows", -1)) if manifest else -1
+    compact_checks = int(manifest.get("compact_checks", -1)) if manifest else -1
+    profile_count = int(manifest.get("profile_count", -1)) if manifest else -1
+    min_pairs = int(manifest.get("min_compact_pairs", -1)) if manifest else -1
+    profiles = manifest.get("profiles", []) if manifest else []
+    table_exists = WEIGHT_ROBUSTNESS_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and summary_rows >= 115
+        and compact_checks >= 28
+        and profile_count >= 5
+        and min_pairs >= 12
+        and table_exists
+        and anchor
+        else "needs revision"
+    )
+    return row(
+        "Score-weight robustness audit",
+        status,
+        f"summary_rows={summary_rows}; compact_checks={compact_checks}; profiles={profiles}; min_compact_pairs={min_pairs}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_weight_robustness.py and restore the post-hoc resource-weight sensitivity table and manifest.",
+    )
+
+
+def verify_resource_weight_sensitivity() -> dict[str, str]:
+    manifest = read_json(RESOURCE_WEIGHT_SENSITIVITY_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    raw_rows = int(manifest.get("raw_rows", -1)) if manifest else -1
+    summary_rows = int(manifest.get("summary_rows", -1)) if manifest else -1
+    comparisons = manifest.get("comparisons", []) if manifest else []
+    profiles = manifest.get("profiles", []) if manifest else []
+    table_exists = RESOURCE_WEIGHT_SENSITIVITY_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and raw_rows >= 12000
+        and summary_rows >= 72
+        and len(comparisons) >= 12
+        and len(profiles) >= 6
+        and table_exists
+        and anchor
+        else "needs revision"
+    )
+    return row(
+        "Resource-weight sensitivity audit",
+        status,
+        f"raw_rows={raw_rows}; summary_rows={summary_rows}; comparisons={len(comparisons)}; profiles={profiles}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_resource_weight_sensitivity_audit.py and restore the internal/external resource-weight sensitivity table and manuscript anchor.",
     )
 
 
@@ -1357,6 +1423,8 @@ def build_rows() -> list[dict[str, str]]:
             verify_comparison_protocol(),
             verify_comparison_target_validity(),
             verify_comparison_answer_scorecard(),
+            verify_weight_robustness(),
+            verify_resource_weight_sensitivity(),
             verify_threats_to_validity(),
             verify_novelty_scorecard(),
             verify_public_handoff_freshness(),

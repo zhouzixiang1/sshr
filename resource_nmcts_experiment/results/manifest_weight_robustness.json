@@ -1,0 +1,41 @@
+{
+  "boundary": "Post-hoc logical-resource rescoring only; it does not rerun synthesis and is not a hardware cost model.",
+  "compact_checks": 28,
+  "compact_profiles": [
+    "paper",
+    "t_only",
+    "cnot_depth",
+    "ancilla_tight"
+  ],
+  "compact_rows": 7,
+  "datasets": [
+    "n14",
+    "n15",
+    "n16",
+    "n18",
+    "traditional"
+  ],
+  "min_compact_pairs": 12,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_weight_robustness.md",
+    "manifest": "results/manifest_weight_robustness.json",
+    "summary": "results/summary_weight_robustness.csv",
+    "table": "paper_latex/tables/weight_robustness_compact.tex"
+  },
+  "profile_count": 5,
+  "profiles": [
+    "paper",
+    "t_only",
+    "t_heavy",
+    "cnot_depth",
+    "ancilla_tight"
+  ],
+  "python": "3.11.15",
+  "script": "analyze_weight_robustness.py",
+  "status_counts": {
+    "pass": 28
+  },
+  "summary_rows": 115,
+  "table_anchor_present": true
+}

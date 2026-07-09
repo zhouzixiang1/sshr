@@ -4,14 +4,14 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 
 ## Status counts
 
-- pass: 180
+- pass: 183
 
 ## Dependency types
 
 - bibliography: 3
 - figure: 21
 - main_source: 3
-- tex_input: 153
+- tex_input: 156
 
 ## Missing dependencies
 
@@ -63,6 +63,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/learned_control_audit` | `paper_latex/tables/learned_control_audit.tex` | True | True | pass |
 | author | tex_input | `tables/neural_mcts_claim_calibration` | `paper_latex/tables/neural_mcts_claim_calibration.tex` | True | True | pass |
 | author | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
+| author | tex_input | `tables/resource_weight_sensitivity_audit` | `paper_latex/tables/resource_weight_sensitivity_audit.tex` | True | True | pass |
 | author | tex_input | `tables/phase_parity_affine` | `paper_latex/tables/phase_parity_affine.tex` | True | True | pass |
 | author | tex_input | `tables/phase_affine_budget_wide128_vs_32` | `paper_latex/tables/phase_affine_budget_wide128_vs_32.tex` | True | True | pass |
 | author | tex_input | `tables/phase_policy_budget_frontier` | `paper_latex/tables/phase_policy_budget_frontier.tex` | True | True | pass |
@@ -123,6 +124,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/learned_control_audit` | `paper_latex/tables/learned_control_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/neural_mcts_claim_calibration` | `paper_latex/tables/neural_mcts_claim_calibration.tex` | True | True | pass |
 | anonymous | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
+| anonymous | tex_input | `tables/resource_weight_sensitivity_audit` | `paper_latex/tables/resource_weight_sensitivity_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/phase_parity_affine` | `paper_latex/tables/phase_parity_affine.tex` | True | True | pass |
 | anonymous | tex_input | `tables/phase_affine_budget_wide128_vs_32` | `paper_latex/tables/phase_affine_budget_wide128_vs_32.tex` | True | True | pass |
 | anonymous | tex_input | `tables/phase_policy_budget_frontier` | `paper_latex/tables/phase_policy_budget_frontier.tex` | True | True | pass |
@@ -183,6 +185,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/learned_control_audit` | `paper_latex/tables/learned_control_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/neural_mcts_claim_calibration` | `paper_latex/tables/neural_mcts_claim_calibration.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/resource_weight_sensitivity_audit` | `paper_latex/tables/resource_weight_sensitivity_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/phase_parity_affine` | `paper_latex/tables/phase_parity_affine.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/phase_affine_budget_wide128_vs_32` | `paper_latex/tables/phase_affine_budget_wide128_vs_32.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/phase_policy_budget_frontier` | `paper_latex/tables/phase_policy_budget_frontier.tex` | True | True | pass |

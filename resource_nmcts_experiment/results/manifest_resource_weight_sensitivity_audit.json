@@ -1,0 +1,42 @@
+{
+  "acm_table_anchor_present": true,
+  "anonymous_table_anchor_present": true,
+  "boundary": "Post-hoc logical-resource sensitivity audit; no hardware mapping, routing, or full external compiler reproduction is claimed.",
+  "compact_rows": 12,
+  "comparisons": [
+    "direct_anf",
+    "esop_milp",
+    "sshr_h",
+    "sshr_i_cnot",
+    "abc_xag",
+    "ros_best_k",
+    "ros_minline",
+    "revkit_cli",
+    "mockturtle_xag",
+    "cirkit_aig_mc",
+    "n14_root_beam",
+    "n16_root_beam"
+  ],
+  "name": "resource_weight_sensitivity_audit",
+  "needs_revision_count": 0,
+  "outputs": [
+    "results/raw_resource_weight_sensitivity_audit.csv",
+    "results/summary_resource_weight_sensitivity_audit.csv",
+    "results/analysis_resource_weight_sensitivity_audit.md",
+    "paper_latex/tables/resource_weight_sensitivity_audit.tex"
+  ],
+  "profiles": [
+    "paper",
+    "t_only",
+    "cnot_only",
+    "cnot_depth",
+    "balanced",
+    "ancilla_tight"
+  ],
+  "raw_rows": 12732,
+  "status_counts": {
+    "pass": 72
+  },
+  "summary_rows": 72,
+  "table_anchor_present": true
+}

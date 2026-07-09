@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import csv
+import json
 import math
 import sys
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from statistics import mean
@@ -13,6 +15,11 @@ from statistics import mean
 THIS_DIR = Path(__file__).resolve().parent
 RESULTS = THIS_DIR / "results"
 PAPER_TABLES = THIS_DIR / "paper_latex" / "tables"
+PAPER = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.tex"
+SUMMARY_OUT = RESULTS / "summary_weight_robustness.csv"
+ANALYSIS_OUT = RESULTS / "analysis_weight_robustness.md"
+MANIFEST_OUT = RESULTS / "manifest_weight_robustness.json"
+TABLE_OUT = PAPER_TABLES / "weight_robustness_compact.tex"
 
 
 def raise_csv_field_limit() -> None:
@@ -130,6 +137,7 @@ COMPACT_ROWS = [
     ("n18", "and_fprm_root_beam"),
     ("n18", "and_fprm_linear_pair_fast"),
 ]
+COMPACT_PROFILES = ("paper", "t_only", "cnot_depth", "ancilla_tight")
 
 
 def fnum(row: dict[str, str], key: str) -> float:
@@ -257,6 +265,54 @@ def compact_cell(rows: list[dict[str, str]], dataset: str, baseline: str, profil
         if row["dataset"] == dataset and row["baseline_method"] == baseline and row["profile"] == profile:
             return f"{row['score_wlt']}, {fmt_pct(row['mean_relative_pct'])}"
     return "--"
+
+
+def compact_check_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    out: list[dict[str, str]] = []
+    by_key = {
+        (row["dataset"], row["baseline_method"], row["profile"]): row
+        for row in rows
+    }
+    for dataset, baseline in COMPACT_ROWS:
+        for profile in COMPACT_PROFILES:
+            data = by_key.get((dataset, baseline, profile))
+            if data is None:
+                out.append(
+                    {
+                        "dataset": dataset,
+                        "baseline": baseline,
+                        "profile": profile,
+                        "pairs": "0",
+                        "wins": "0",
+                        "losses": "0",
+                        "ties": "0",
+                        "mean_relative_pct": "nan",
+                        "status": "needs revision",
+                        "evidence": "missing compact comparison row",
+                    }
+                )
+                continue
+            wins = int(data["wins"])
+            losses = int(data["losses"])
+            mean_relative = float(data["mean_relative_pct"])
+            ok = wins >= losses and mean_relative <= 0.0
+            out.append(
+                {
+                    "dataset": dataset,
+                    "baseline": baseline,
+                    "profile": profile,
+                    "pairs": data["pairs"],
+                    "wins": data["wins"],
+                    "losses": data["losses"],
+                    "ties": data["ties"],
+                    "mean_relative_pct": data["mean_relative_pct"],
+                    "status": "pass" if ok else "needs revision",
+                    "evidence": (
+                        f"W/L/T={data['score_wlt']}; mean_relative={float(data['mean_relative_pct']):+.2f}%"
+                    ),
+                }
+            )
+    return out
 
 
 def write_markdown(rows: list[dict[str, str]], path: Path) -> None:
@@ -388,16 +444,50 @@ def write_latex(rows: list[dict[str, str]], path: Path) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def write_manifest(rows: list[dict[str, str]], path: Path) -> None:
+    check_rows = compact_check_rows(rows)
+    counts = Counter(row["status"] for row in check_rows)
+    profiles = [profile.key for profile in PROFILES]
+    datasets = sorted({row["dataset"] for row in rows})
+    min_pairs = min((int(row["pairs"]) for row in check_rows), default=0)
+    table_anchor_present = "tab:weight-robustness" in PAPER.read_text(encoding="utf-8") if PAPER.exists() else False
+    data = {
+        "script": Path(__file__).name,
+        "python": sys.version.split()[0],
+        "summary_rows": len(rows),
+        "datasets": datasets,
+        "profiles": profiles,
+        "profile_count": len(profiles),
+        "compact_rows": len(COMPACT_ROWS),
+        "compact_profiles": list(COMPACT_PROFILES),
+        "compact_checks": len(check_rows),
+        "min_compact_pairs": min_pairs,
+        "status_counts": dict(sorted(counts.items())),
+        "needs_revision_count": counts.get("needs revision", 0),
+        "table_anchor_present": table_anchor_present,
+        "outputs": {
+            "summary": "results/summary_weight_robustness.csv",
+            "analysis": "results/analysis_weight_robustness.md",
+            "manifest": "results/manifest_weight_robustness.json",
+            "table": "paper_latex/tables/weight_robustness_compact.tex",
+        },
+        "boundary": "Post-hoc logical-resource rescoring only; it does not rerun synthesis and is not a hardware cost model.",
+    }
+    path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
 def main() -> int:
     raise_csv_field_limit()
 
     rows = build_rows()
-    write_csv(rows, RESULTS / "summary_weight_robustness.csv")
-    write_markdown(rows, RESULTS / "analysis_weight_robustness.md")
-    write_latex(rows, PAPER_TABLES / "weight_robustness_compact.tex")
-    print(f"wrote {RESULTS / 'summary_weight_robustness.csv'}")
-    print(f"wrote {RESULTS / 'analysis_weight_robustness.md'}")
-    print(f"wrote {PAPER_TABLES / 'weight_robustness_compact.tex'}")
+    write_csv(rows, SUMMARY_OUT)
+    write_markdown(rows, ANALYSIS_OUT)
+    write_latex(rows, TABLE_OUT)
+    write_manifest(rows, MANIFEST_OUT)
+    print(f"wrote {SUMMARY_OUT}")
+    print(f"wrote {ANALYSIS_OUT}")
+    print(f"wrote {TABLE_OUT}")
+    print(f"wrote {MANIFEST_OUT}")
     return 0
 
 

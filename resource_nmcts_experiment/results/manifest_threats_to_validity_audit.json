@@ -15,6 +15,7 @@
     "results/analysis_paired_effect_uncertainty.md",
     "results/analysis_paired_statistical_evidence.md",
     "results/analysis_reproducibility_audit.md",
+    "results/analysis_resource_weight_sensitivity_audit.md",
     "results/analysis_ros_reproduction_gap_audit.md",
     "results/analysis_scaling_resource_audit.md",
     "results/analysis_schedule_proxy_audit.md",

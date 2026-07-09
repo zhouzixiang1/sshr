@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1052; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1059; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -29,6 +29,18 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_comparison_answer_scorecard.json; needs_revision_count=0; rows=8; stderr=none",
       "item": "Comparison answer scorecard",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_weight_robustness.json; needs_revision_count=0; compact_checks=28; stderr=none",
+      "item": "Score-weight robustness audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_resource_weight_sensitivity_audit.json; needs_revision_count=0; raw_rows=12732; stderr=none",
+      "item": "Resource-weight sensitivity audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -237,7 +249,7 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=25; rows=25; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=26; rows=26; stderr=none",
       "item": "Artifact rerun registry",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -265,6 +277,20 @@
       "minimum_rows_key": "rows",
       "name": "Comparison answer scorecard",
       "script": "analyze_comparison_answer_scorecard.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_weight_robustness.json",
+      "minimum_rows_key": "compact_checks",
+      "name": "Score-weight robustness audit",
+      "script": "analyze_weight_robustness.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_resource_weight_sensitivity_audit.json",
+      "minimum_rows_key": "raw_rows",
+      "name": "Resource-weight sensitivity audit",
+      "script": "analyze_resource_weight_sensitivity_audit.py"
     },
     {
       "expected_key": "needs_revision_count",
@@ -513,6 +539,6 @@
     }
   ],
   "status_counts": {
-    "pass": 39
+    "pass": 41
   }
 }

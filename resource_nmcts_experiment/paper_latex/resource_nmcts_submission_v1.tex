@@ -1146,6 +1146,29 @@ values favor \method{} or Pareto-\method{}.}
 \input{tables/weight_robustness_compact}
 \end{table}
 
+We also repeat this sensitivity check over the external comparison rows most
+likely to be questioned by reviewers.  Table~\ref{tab:resource-weight-sensitivity}
+keeps the CNOT-only profile visible: Pareto-\method{} does not dominate
+SSHR-H or SSHR-I on their intended CNOT objective, and mockturtle is competitive
+under pure T-count.  The same table shows that the paper score, CNOT/depth-heavy,
+and ancilla-tight profiles remain favorable against the broader ABC, ROS-style
+LUT, RevKit, mockturtle, CirKit, and high-dimensional root-beam probes.  This is
+therefore evidence for a bounded logical-resource search claim, not a
+single-metric or all-resource leaderboard.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.08}
+\caption{Resource-weight sensitivity over internal and external baselines.
+Each cell reports score win/loss/tie counts and mean relative score change
+after recomputing the matched rows under the listed logical-resource profile;
+negative values favor \method{} or Pareto-\method{}.}
+\label{tab:resource-weight-sensitivity}
+\input{tables/resource_weight_sensitivity_audit}
+\end{table}
+
 \subsection{Phase/Rz search}
 
 RevKit Python \texttt{oracle\_synth} returns on all 177 traditional functions,
