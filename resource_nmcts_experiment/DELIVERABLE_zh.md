@@ -221,6 +221,15 @@
 
 该 tarball 打包稳定源码/数据载荷、最终 PDF、archive/traceability 审计和投稿支持文件；为避免归档自引用，它不把 tarball 自身、SHA256 sidecar 和 readiness audit 放进包内。readiness audit 在 tarball 生成之后运行，负责检查 tarball、SHA256 sidecar、CSV/Markdown/JSON manifest 是否存在。
 
+本轮新增 PDF visual render audit，把 PDF 检查从 `pdfinfo` 页数和 LaTeX log 推进到全页渲染层：
+
+- `analyze_pdf_visual_audit.py`
+- `results/summary_pdf_visual_audit.csv`
+- `results/analysis_pdf_visual_audit.md`
+- `results/manifest_pdf_visual_audit.json`
+
+该审计调用 Poppler `pdftoppm` 渲染作者版和匿名版投稿 PDF 的每一页，检查渲染页数、页面尺寸、非空 ink coverage、页面字节数和渲染错误。它作为 terminal audit 接入 rebuild、readiness、package verifier 和 payload extraction smoke；输出不进入稳定 payload digest，避免 PDF/审计之间形成自引用，但脚本本身会随 payload 打包，审稿人解包后也能复现渲染检查。
+
 本轮新增投稿完整性层：英文投稿稿末尾加入 `Data and Code Availability`，明确代码、raw/summary CSV、manifest、LaTeX 表、图源数据和 PDF 均位于 `resource_nmcts_experiment/` artifact package，运行入口为 `run_*.py`、`train_*.py`、`analyze_*.py`，环境为 `mcts-qoracle` 和直接解释器路径 `/opt/anaconda3/envs/mcts-qoracle/bin/python`。同时新增自动 submission-readiness audit：
 
 - `analyze_submission_readiness_audit.py`

@@ -73,6 +73,12 @@ CITATION_SUPPORT_PATHS = {
     "results/summary_citation_support_audit.csv",
     "results/manifest_citation_support_audit.json",
 }
+AUTHOR_INPUT_CLOSURE_PATHS = {
+    "analyze_author_input_closure_audit.py",
+    "results/analysis_author_input_closure_audit.md",
+    "results/summary_author_input_closure_audit.csv",
+    "results/manifest_author_input_closure_audit.json",
+}
 
 
 def rel(path: Path) -> str:
@@ -237,6 +243,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    author_input_missing = sorted(AUTHOR_INPUT_CLOSURE_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload author-input closure evidence",
+            "pass" if not author_input_missing else "needs revision",
+            f"author_input_closure_files={len(AUTHOR_INPUT_CLOSURE_PATHS)}; missing={author_input_missing or 'none'}.",
+            "Ensure the uploadable archive includes the author-input closure audit script and generated CSV/Markdown/JSON evidence.",
+        )
+    )
+
     metadata_bad: list[str] = []
     for member in members:
         if not member.name.startswith(f"{PAYLOAD_ROOT}/"):
@@ -311,6 +327,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "comparison_protocol_paths": sorted(COMPARISON_PROTOCOL_PATHS),
         "headline_numeric_paths": sorted(HEADLINE_NUMERIC_PATHS),
         "citation_support_paths": sorted(CITATION_SUPPORT_PATHS),
+        "author_input_closure_paths": sorted(AUTHOR_INPUT_CLOSURE_PATHS),
         "private_basenames": sorted(PRIVATE_BASENAMES),
         "rows": rows,
         "outputs": {

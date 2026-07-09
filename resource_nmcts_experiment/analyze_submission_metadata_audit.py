@@ -38,25 +38,44 @@ REQUIRED_METADATA_PATHS = (
     "corresponding_author.name",
     "corresponding_author.email",
     "corresponding_author.affiliation",
+    "corresponding_author.postal_address",
     "author_contributions.conceptualization",
     "author_contributions.methodology",
     "author_contributions.software",
     "author_contributions.validation",
+    "author_contributions.formal_analysis",
+    "author_contributions.investigation",
+    "author_contributions.data_curation",
     "author_contributions.writing_original_draft",
     "author_contributions.writing_review_editing",
+    "author_contributions.visualization",
+    "author_contributions.supervision",
+    "author_contributions.funding_acquisition",
     "funding.statement",
+    "funding.grant_numbers",
     "acknowledgements.statement",
     "competing_interests.statement",
     "data_availability.archive_link_or_doi",
+    "data_availability.anonymous_review_link",
+    "data_availability.access_restrictions",
     "data_availability.statement",
     "code_availability.repository_url",
     "code_availability.commit_hash",
     "code_availability.license",
+    "code_availability.environment_notes",
+    "code_availability.anonymous_review_link",
     "code_availability.statement",
     "ai_assistance.statement",
+    "preprint_and_prior_submission.preprint_url_or_doi",
+    "preprint_and_prior_submission.prior_submission_history",
+    "preprint_and_prior_submission.related_manuscripts",
     "preprint_and_prior_submission.statement",
+    "cover_letter.target_editor",
+    "cover_letter.suggested_reviewers",
+    "cover_letter.excluded_reviewers",
     "cover_letter.editorial_routing_statement",
     "permissions.third_party_material_confirmed",
+    "permissions.statement",
 )
 
 
@@ -115,7 +134,7 @@ def has_author_placeholder(value: object) -> bool:
         return True
     if isinstance(value, str):
         stripped = value.strip()
-        return not stripped or "AUTHOR INPUT REQUIRED" in stripped
+        return not stripped or stripped == "AUTHOR INPUT REQUIRED"
     if isinstance(value, list):
         return not value or any(has_author_placeholder(item) for item in value)
     if isinstance(value, dict):

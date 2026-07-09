@@ -9,8 +9,10 @@ citation support,
 headline-numeric consistency,
 figure-asset coverage,
 LaTeX dependency closure,
+PDF visual rendering,
 private-metadata starter dry-run, private-metadata validation,
 synthetic metadata-pipeline self-testing, anonymous-review decision support,
+author-input closure,
 private-preview protection, private payload exclusion, payload round-trip
 integrity, extracted-payload smoke checks, and LaTeX log cleanliness.  It
 writes a small audit report but does not rerun experiments or alter manuscript
@@ -46,10 +48,12 @@ CITATION_SUPPORT_MANIFEST = RESULTS / "manifest_citation_support_audit.json"
 HEADLINE_NUMERIC_MANIFEST = RESULTS / "manifest_headline_numeric_consistency.json"
 FIGURE_ASSET_MANIFEST = RESULTS / "manifest_figure_asset_audit.json"
 LATEX_DEPENDENCY_MANIFEST = RESULTS / "manifest_latex_dependency_audit.json"
+PDF_VISUAL_MANIFEST = RESULTS / "manifest_pdf_visual_audit.json"
 METADATA_VALIDATOR_MANIFEST = RESULTS / "manifest_submission_metadata_validator.json"
 TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
 METADATA_PIPELINE_SELFTEST_MANIFEST = RESULTS / "manifest_submission_metadata_pipeline_selftest.json"
 ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
+AUTHOR_INPUT_CLOSURE_MANIFEST = RESULTS / "manifest_author_input_closure_audit.json"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
 PAYLOAD_EXTRACTION_SMOKE_MANIFEST = RESULTS / "manifest_payload_extraction_smoke_audit.json"
 METADATA_STARTER = THIS_DIR / "make_submission_metadata_starter.py"
@@ -284,6 +288,20 @@ def verify_latex_dependencies() -> dict[str, str]:
     )
 
 
+def verify_pdf_visual() -> dict[str, str]:
+    manifest = read_json(PDF_VISUAL_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    status = "pass" if manifest and revisions == 0 else "needs revision"
+    return row(
+        "PDF visual render audit",
+        status,
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}.",
+        "Run analyze_pdf_visual_audit.py and inspect rendered PDF pages for blank, clipped, or overfilled output.",
+    )
+
+
 def verify_text_preview() -> dict[str, str]:
     manifest = read_json(TEXT_PREVIEW_MANIFEST)
     counts = manifest.get("status_counts", {}) if manifest else {}
@@ -395,6 +413,21 @@ def verify_anonymous_review_audit() -> dict[str, str]:
     )
 
 
+def verify_author_input_closure() -> dict[str, str]:
+    manifest = read_json(AUTHOR_INPUT_CLOSURE_MANIFEST)
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    required_paths = manifest.get("required_metadata_paths", "missing") if manifest else "missing"
+    metadata_present = bool(manifest.get("metadata_present", False)) if manifest else False
+    status = "pass" if manifest and needs_revision == 0 else "needs revision"
+    return row(
+        "Author-input closure audit",
+        status,
+        f"needs_revision_count={needs_revision}; required_metadata_paths={required_paths}; metadata_present={metadata_present}; status_counts={counts}.",
+        "Run analyze_author_input_closure_audit.py and restore author-packet coverage, private metadata protection, or support-document visibility.",
+    )
+
+
 def verify_private_payload_exclusion() -> dict[str, str]:
     manifest = read_json(PAYLOAD_MANIFEST)
     files = manifest.get("files", []) if manifest else []
@@ -483,10 +516,12 @@ def build_rows() -> list[dict[str, str]]:
             verify_headline_numeric(),
             verify_figure_assets(),
             verify_latex_dependencies(),
+            verify_pdf_visual(),
             verify_metadata_starter_dry_run(),
             verify_metadata_validator(),
             verify_metadata_pipeline_selftest(),
             verify_anonymous_review_audit(),
+            verify_author_input_closure(),
             verify_text_preview(),
             verify_private_payload_exclusion(),
             verify_payload_roundtrip(),

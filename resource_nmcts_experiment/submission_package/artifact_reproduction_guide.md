@@ -67,10 +67,13 @@ After the quick rebuild, the current package should report:
   `results/analysis_comparison_protocol_audit.md`
 - citation support state in
   `results/analysis_citation_support_audit.md`
+- author-input closure state in
+  `results/analysis_author_input_closure_audit.md`
 - headline numeric consistency in
   `results/analysis_headline_numeric_consistency.md`
 - figure asset state in `results/analysis_figure_asset_audit.md`
 - LaTeX dependency state in `results/analysis_latex_dependency_audit.md`
+- PDF visual render state in `results/analysis_pdf_visual_audit.md`
 - payload file count and SHA256 in
   `results/analysis_submission_payload_archive.md`
 - payload extraction smoke status in
@@ -92,8 +95,10 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_extraction_smoke_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_citation_support_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_author_input_closure_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_headline_numeric_consistency.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_latex_dependency_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_pdf_visual_audit.py
 pdfinfo paper_latex/resource_nmcts_submission_v1.pdf | sed -n '1,20p'
 rg -n "Warning|Overfull|Underfull|LaTeX Error|Undefined|Rerun" \
   paper_latex/resource_nmcts_submission_v1.log
@@ -119,12 +124,16 @@ layout warnings.
   `results/analysis_comparison_protocol_audit.md`
 - Citation support audit:
   `results/analysis_citation_support_audit.md`
+- Author-input closure audit:
+  `results/analysis_author_input_closure_audit.md`
 - Headline numeric consistency audit:
   `results/analysis_headline_numeric_consistency.md`
 - Figure asset audit:
   `results/analysis_figure_asset_audit.md`
 - LaTeX dependency audit:
   `results/analysis_latex_dependency_audit.md`
+- PDF visual render audit:
+  `results/analysis_pdf_visual_audit.md`
 - Paired statistics:
   `results/analysis_paired_statistical_evidence.md`
 - Raw multi-resource tradeoff:

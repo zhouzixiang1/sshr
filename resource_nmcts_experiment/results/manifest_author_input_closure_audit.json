@@ -1,0 +1,68 @@
+{
+  "metadata_gate_filled": false,
+  "metadata_present": false,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_author_input_closure_audit.md",
+    "manifest": "results/manifest_author_input_closure_audit.json",
+    "summary": "results/summary_author_input_closure_audit.csv"
+  },
+  "private_outputs": [
+    "submission_package/submission_metadata.json",
+    "submission_package/generated_author_declarations.md",
+    "submission_package/generated_availability_statements.md",
+    "submission_package/generated_cover_letter.md",
+    "submission_package/generated_submission_text.md"
+  ],
+  "python": "3.11.15",
+  "required_metadata_paths": 50,
+  "rows": 7,
+  "rows_detail": [
+    {
+      "evidence": "placeholders=53; required_paths=50; uncovered=none.",
+      "item": "Metadata template placeholder coverage",
+      "next_action": "Add every template AUTHOR INPUT REQUIRED path to REQUIRED_METADATA_PATHS, or cover it with an explicit parent field.",
+      "status": "pass"
+    },
+    {
+      "evidence": "packet_exists=True; required_paths=50; missing=none; needs_author_input=12.",
+      "item": "Author packet required-field coverage",
+      "next_action": "Rerun make_author_input_packet.py after changing metadata requirements.",
+      "status": "pass"
+    },
+    {
+      "evidence": "missing_docs=none; missing_tokens=none.",
+      "item": "Support document author-gate visibility",
+      "next_action": "Keep README, checklist, handoff, declaration template, and cover-letter template aligned with the private metadata workflow.",
+      "status": "pass"
+    },
+    {
+      "evidence": "ignored=5/5; tracked=none; existing_private=none.",
+      "item": "Private author metadata git protection",
+      "next_action": "Keep submission_metadata.json and generated private previews ignored and untracked.",
+      "status": "pass"
+    },
+    {
+      "evidence": "metadata_filled=False; validator_counts={'needs author input': 1}; preview_counts={'needs author input': 1}; private_outputs_are_git_ignored=True.",
+      "item": "Validator and private-preview gate",
+      "next_action": "Rerun validate_submission_metadata.py and make_submission_text_preview.py; fix needs-revision rows before upload.",
+      "status": "pass"
+    },
+    {
+      "evidence": "needs_revision_count=0; needs_author_input_count=3; status_counts={'needs author input': 3, 'pass': 3}.",
+      "item": "Anonymous-review decision gate",
+      "next_action": "Keep the anonymous-review audit aligned with target_venue.anonymous_review_required and anonymous artifact-link instructions.",
+      "status": "pass"
+    },
+    {
+      "evidence": "metadata_counts={'needs author input': 12}; author_packet_needs_author_input=12.",
+      "item": "Metadata audit and packet count consistency",
+      "next_action": "Rerun analyze_submission_metadata_audit.py and make_author_input_packet.py if counts diverge.",
+      "status": "pass"
+    }
+  ],
+  "script": "analyze_author_input_closure_audit.py",
+  "status_counts": {
+    "pass": 7
+  }
+}

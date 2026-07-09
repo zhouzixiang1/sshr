@@ -8,7 +8,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "31/31 required paths present.",
+      "evidence": "50/50 required paths present.",
       "item": "required path fixture coverage",
       "next_action": "Update synthetic fixture when required metadata paths change.",
       "status": "pass"

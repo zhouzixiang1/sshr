@@ -70,7 +70,8 @@ def missing_paths(data: object) -> list[str]:
 
 def placeholder_paths(value: object, prefix: str = "") -> list[str]:
     if isinstance(value, str):
-        if "AUTHOR INPUT REQUIRED" in value or not value.strip():
+        stripped = value.strip()
+        if not stripped or stripped == "AUTHOR INPUT REQUIRED":
             return [prefix or "<root>"]
         return []
     if isinstance(value, list):

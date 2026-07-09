@@ -58,6 +58,9 @@ TERMINAL_PACKAGE_OUTPUTS = {
     RESULTS / "summary_latex_dependency_audit.csv",
     RESULTS / "analysis_latex_dependency_audit.md",
     RESULTS / "manifest_latex_dependency_audit.json",
+    RESULTS / "summary_pdf_visual_audit.csv",
+    RESULTS / "analysis_pdf_visual_audit.md",
+    RESULTS / "manifest_pdf_visual_audit.json",
     TABLES / "submission_traceability_audit.tex",
 }
 

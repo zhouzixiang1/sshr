@@ -86,7 +86,8 @@ def as_string(value: object) -> str:
 
 def placeholder_paths(data: object, prefix: str = "") -> list[str]:
     if isinstance(data, str):
-        return [prefix or "<root>"] if "AUTHOR INPUT REQUIRED" in data or not data.strip() else []
+        stripped = data.strip()
+        return [prefix or "<root>"] if not stripped or stripped == "AUTHOR INPUT REQUIRED" else []
     if isinstance(data, list):
         if not data:
             return [prefix or "<root>"]

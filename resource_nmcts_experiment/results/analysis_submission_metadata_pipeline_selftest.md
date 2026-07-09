@@ -10,7 +10,7 @@ It does not create `submission_metadata.json` and does not write `generated_*.md
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| required path fixture coverage | pass | 31/31 required paths present. | Update synthetic fixture when required metadata paths change. |
+| required path fixture coverage | pass | 50/50 required paths present. | Update synthetic fixture when required metadata paths change. |
 | placeholder-free fixture | pass | 0 placeholder or empty field(s) remain. | Remove placeholders from the synthetic fixture. |
 | validator: Required metadata completeness | pass | 0 required or placeholder field(s) remain incomplete. fields=none | Fill every AUTHOR INPUT REQUIRED field before generating final submission text. |
 | validator: Target policy flags | pass | 7/7 policy flag(s) are parseable as checked/yes/no/not-applicable values. fields=none | Use explicit yes/no/checked/not applicable wording for target-venue policy fields. |

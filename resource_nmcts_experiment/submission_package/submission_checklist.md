@@ -44,8 +44,10 @@ Use this checklist immediately before uploading the manuscript.
 - Headline numeric consistency audit: `results/analysis_headline_numeric_consistency.md`
 - Figure asset audit: `results/analysis_figure_asset_audit.md`
 - LaTeX dependency audit: `results/analysis_latex_dependency_audit.md`
+- PDF visual render audit: `results/analysis_pdf_visual_audit.md`
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
 - Metadata validator: `results/analysis_submission_metadata_validator.md`
+- Author-input closure audit: `results/analysis_author_input_closure_audit.md`
 - Metadata pipeline self-test: `results/analysis_submission_metadata_pipeline_selftest.md`
 - Anonymous-review readiness audit: `results/analysis_anonymous_review_readiness.md`
 - Private submission text preview audit: `results/analysis_submission_text_preview.md`
@@ -81,7 +83,9 @@ Run these from `resource_nmcts_experiment/`:
   analyze_headline_numeric_consistency.py \
   analyze_figure_asset_audit.py \
   analyze_latex_dependency_audit.py \
+  analyze_pdf_visual_audit.py \
   analyze_submission_metadata_audit.py \
+  analyze_author_input_closure_audit.py \
   analyze_anonymous_review_readiness.py \
   analyze_submission_readiness_audit.py \
   analyze_submission_traceability_audit.py \
@@ -104,16 +108,18 @@ Expected current state:
 
 - Archive manifest: all payload groups complete.
 - Payload archive: tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present.
-- Payload round-trip audit: archive contents match manifest paths and hashes, required files, reviewer entrypoints, comparison-protocol evidence files, citation-support evidence files, and headline-numeric evidence files are present, private files are absent, and tar metadata is deterministic.
-- Payload extraction smoke audit: the upload tarball extracts safely and runs comparison protocol, citation support, headline numeric consistency, claim-scope lint, and artifact-rerun registry checks from the extracted tree.
+- Payload round-trip audit: archive contents match manifest paths and hashes, required files, reviewer entrypoints, comparison-protocol evidence files, citation-support evidence files, author-input closure evidence files, and headline-numeric evidence files are present, private files are absent, and tar metadata is deterministic.
+- Payload extraction smoke audit: the upload tarball extracts safely and runs comparison protocol, citation support, author-input closure, headline numeric consistency, claim-scope lint, and artifact-rerun registry checks from the extracted tree.
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
 - Comparison protocol audit: all baseline layers have role, evidence, comparability, counterpoint, artifact, and manuscript-anchor coverage.
 - Citation support audit: related-work families, cited BibTeX keys, bibliography entries, and DOI/URL/eprint locators are all closed.
 - Headline numeric consistency audit: all abstract-level numbers match generated CSV evidence and both author/anonymous TeX sources.
 - Figure asset audit: every manuscript figure has generated PDF/PNG/SVG assets and non-empty source-data CSV.
 - LaTeX dependency audit: every author/anonymous TeX input, figure reference, and bibliography file exists locally and is included in the upload payload.
+- PDF visual render audit: every author/anonymous PDF page renders through Poppler with stable dimensions and nonblank visible content.
 - Metadata audit: all author- and venue-specific fields are enumerated before upload, and any filled `submission_metadata.json` is checked.
 - Metadata validator: no `needs revision` rows; missing private metadata remains an author-input gate until filled.
+- Author-input closure audit: metadata-template placeholders, author-input packet fields, support docs, private Git protection, private-preview gates, and anonymous-review decision gates are mutually consistent.
 - Metadata pipeline self-test: synthetic non-private metadata exercises validator and preview renderers with no `needs revision` rows.
 - Anonymous-review readiness: no `needs revision` rows; an anonymous review draft is compiled, and final anonymous artifact links remain explicit author-input actions if double-blind review is required.
 - Private submission text preview: public audit exists; generated private Markdown previews remain ignored by Git and excluded from the payload archive.

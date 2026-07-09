@@ -1,0 +1,8 @@
+item,status,evidence,next_action
+Metadata template placeholder coverage,pass,placeholders=53; required_paths=50; uncovered=none.,"Add every template AUTHOR INPUT REQUIRED path to REQUIRED_METADATA_PATHS, or cover it with an explicit parent field."
+Author packet required-field coverage,pass,packet_exists=True; required_paths=50; missing=none; needs_author_input=12.,Rerun make_author_input_packet.py after changing metadata requirements.
+Support document author-gate visibility,pass,missing_docs=none; missing_tokens=none.,"Keep README, checklist, handoff, declaration template, and cover-letter template aligned with the private metadata workflow."
+Private author metadata git protection,pass,ignored=5/5; tracked=none; existing_private=none.,Keep submission_metadata.json and generated private previews ignored and untracked.
+Validator and private-preview gate,pass,metadata_filled=False; validator_counts={'needs author input': 1}; preview_counts={'needs author input': 1}; private_outputs_are_git_ignored=True.,Rerun validate_submission_metadata.py and make_submission_text_preview.py; fix needs-revision rows before upload.
+Anonymous-review decision gate,pass,"needs_revision_count=0; needs_author_input_count=3; status_counts={'needs author input': 3, 'pass': 3}.",Keep the anonymous-review audit aligned with target_venue.anonymous_review_required and anonymous artifact-link instructions.
+Metadata audit and packet count consistency,pass,metadata_counts={'needs author input': 12}; author_packet_needs_author_input=12.,Rerun analyze_submission_metadata_audit.py and make_author_input_packet.py if counts diverge.

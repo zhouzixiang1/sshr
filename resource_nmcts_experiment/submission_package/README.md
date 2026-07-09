@@ -47,6 +47,11 @@ noise modeling, or magic-state-factory accounting.
   venue fields that must be filled before upload.
 - `../results/analysis_submission_metadata_validator.md`: public, redacted
   format/consistency validation for the private metadata file.
+- `../results/analysis_author_input_closure_audit.md`: audit that checks
+  metadata-template placeholder coverage, author-input packet coverage,
+  support-document visibility, private metadata Git protection, private-preview
+  gates, anonymous-review decision state, and metadata/packet count
+  consistency.
 - `../results/analysis_submission_metadata_pipeline_selftest.md`: synthetic,
   non-private self-test for the metadata validator and private-preview
   renderers.
@@ -78,6 +83,9 @@ noise modeling, or magic-state-factory accounting.
 - `../results/analysis_latex_dependency_audit.md`: terminal audit that checks
   author/anonymous TeX inputs, figure references, and bibliography files exist
   locally and are included in the upload payload.
+- `../results/analysis_pdf_visual_audit.md`: terminal audit that renders every
+  page of the author and anonymous PDFs with Poppler and checks for readable,
+  nonblank page images.
 
 ## Required Author Actions Before Upload
 
@@ -107,7 +115,7 @@ by the author or selected target venue.
 `submission_metadata.json` is intentionally ignored by Git so private author
 metadata is not committed accidentally.
 After it is complete, `./rebuild_submission_package.sh` generates ignored
-private previews:
+generated private previews:
 
 - `generated_author_declarations.md`
 - `generated_availability_statements.md`
@@ -162,7 +170,9 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_headline_numeric_consistency.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_figure_asset_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_latex_dependency_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_pdf_visual_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python validate_submission_metadata.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_author_input_closure_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python selftest_submission_metadata_pipeline.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_anonymous_review_readiness.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_text_preview.py
@@ -179,8 +189,10 @@ rg -n "needs author input|pass:|file count|archive sha256|Submission support|unr
   results/analysis_headline_numeric_consistency.md \
   results/analysis_figure_asset_audit.md \
   results/analysis_latex_dependency_audit.md \
+  results/analysis_pdf_visual_audit.md \
   results/manifest_claim_scope_lint.json \
   results/analysis_submission_metadata_validator.md \
+  results/analysis_author_input_closure_audit.md \
   results/analysis_submission_metadata_pipeline_selftest.md \
   results/analysis_anonymous_review_readiness.md \
   results/analysis_submission_text_preview.md \

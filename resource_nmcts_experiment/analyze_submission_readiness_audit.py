@@ -51,6 +51,9 @@ METADATA_PIPELINE_SELFTEST_MANIFEST = RESULTS / "manifest_submission_metadata_pi
 ANONYMOUS_REVIEW_ANALYSIS = RESULTS / "analysis_anonymous_review_readiness.md"
 ANONYMOUS_REVIEW_SUMMARY = RESULTS / "summary_anonymous_review_readiness.csv"
 ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
+AUTHOR_INPUT_CLOSURE_ANALYSIS = RESULTS / "analysis_author_input_closure_audit.md"
+AUTHOR_INPUT_CLOSURE_SUMMARY = RESULTS / "summary_author_input_closure_audit.csv"
+AUTHOR_INPUT_CLOSURE_MANIFEST = RESULTS / "manifest_author_input_closure_audit.json"
 PAYLOAD_ROUNDTRIP_ANALYSIS = RESULTS / "analysis_payload_roundtrip_audit.md"
 PAYLOAD_ROUNDTRIP_SUMMARY = RESULTS / "summary_payload_roundtrip_audit.csv"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
@@ -82,6 +85,9 @@ HEADLINE_NUMERIC_MANIFEST = RESULTS / "manifest_headline_numeric_consistency.jso
 LATEX_DEPENDENCY_ANALYSIS = RESULTS / "analysis_latex_dependency_audit.md"
 LATEX_DEPENDENCY_SUMMARY = RESULTS / "summary_latex_dependency_audit.csv"
 LATEX_DEPENDENCY_MANIFEST = RESULTS / "manifest_latex_dependency_audit.json"
+PDF_VISUAL_ANALYSIS = RESULTS / "analysis_pdf_visual_audit.md"
+PDF_VISUAL_SUMMARY = RESULTS / "summary_pdf_visual_audit.csv"
+PDF_VISUAL_MANIFEST = RESULTS / "manifest_pdf_visual_audit.json"
 PAIRED_EFFECT_ANALYSIS = RESULTS / "analysis_paired_effect_uncertainty.md"
 PAIRED_EFFECT_SUMMARY = RESULTS / "summary_paired_effect_uncertainty.csv"
 PAIRED_EFFECT_MANIFEST = RESULTS / "manifest_paired_effect_uncertainty.json"
@@ -181,6 +187,10 @@ def build_rows() -> list[dict[str, str]]:
     latex_dependency_types = (
         latex_dependency_manifest.get("dependency_type_counts", {}) if latex_dependency_manifest else {}
     )
+    pdf_visual_manifest = read_json(PDF_VISUAL_MANIFEST)
+    pdf_visual_revisions = int(pdf_visual_manifest.get("needs_revision_count", -1)) if pdf_visual_manifest else -1
+    pdf_visual_counts = pdf_visual_manifest.get("status_counts", {}) if pdf_visual_manifest else {}
+    pdf_visual_rows = pdf_visual_manifest.get("rows", "missing") if pdf_visual_manifest else "missing"
     text_preview_manifest = read_json(TEXT_PREVIEW_MANIFEST)
     text_preview_counts = text_preview_manifest.get("status_counts", {}) if text_preview_manifest else {}
     private_outputs_ignored = bool(text_preview_manifest.get("private_outputs_are_git_ignored", False))
@@ -198,6 +208,16 @@ def build_rows() -> list[dict[str, str]]:
     anonymous_counts = anonymous_manifest.get("status_counts", {}) if anonymous_manifest else {}
     anonymous_revisions = int(anonymous_manifest.get("needs_revision_count", -1)) if anonymous_manifest else -1
     anonymous_author_input = int(anonymous_manifest.get("needs_author_input_count", -1)) if anonymous_manifest else -1
+    author_input_closure_manifest = read_json(AUTHOR_INPUT_CLOSURE_MANIFEST)
+    author_input_closure_counts = author_input_closure_manifest.get("status_counts", {}) if author_input_closure_manifest else {}
+    author_input_closure_revisions = (
+        int(author_input_closure_manifest.get("needs_revision_count", -1)) if author_input_closure_manifest else -1
+    )
+    author_input_required_paths = (
+        author_input_closure_manifest.get("required_metadata_paths", "missing")
+        if author_input_closure_manifest
+        else "missing"
+    )
     payload_roundtrip_manifest = read_json(PAYLOAD_ROUNDTRIP_MANIFEST)
     payload_roundtrip_counts = payload_roundtrip_manifest.get("status_counts", {}) if payload_roundtrip_manifest else {}
     payload_roundtrip_revisions = int(payload_roundtrip_manifest.get("needs_revision_count", -1)) if payload_roundtrip_manifest else -1
@@ -346,6 +366,17 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun make_submission_payload_archive.py and analyze_latex_dependency_audit.py after editing TeX inputs, figures, bibliography, or payload packaging.",
         },
         {
+            "item": "PDF visual render audit",
+            "status": "pass"
+            if PDF_VISUAL_ANALYSIS.exists()
+            and PDF_VISUAL_SUMMARY.exists()
+            and PDF_VISUAL_MANIFEST.exists()
+            and pdf_visual_revisions == 0
+            else "needs revision",
+            "evidence": f"PDF visual audit renders every author/anonymous page with Poppler and checks page count, dimensions, nonblank ink coverage, and render errors; rows={pdf_visual_rows}; status_counts={pdf_visual_counts}; needs_revision_count={pdf_visual_revisions}.",
+            "next_action": "Rerun analyze_pdf_visual_audit.py after rebuilding PDFs; inspect rendered pages if any page is blank, clipped, or overfilled.",
+        },
+        {
             "item": "Raw rerun registry",
             "status": "pass"
             if RERUN_REGISTRY_ANALYSIS.exists()
@@ -434,6 +465,17 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "If the selected venue requires double-blind review, produce an anonymized manuscript copy and anonymous artifact links before upload.",
         },
         {
+            "item": "Author-input closure audit",
+            "status": "pass"
+            if AUTHOR_INPUT_CLOSURE_ANALYSIS.exists()
+            and AUTHOR_INPUT_CLOSURE_SUMMARY.exists()
+            and AUTHOR_INPUT_CLOSURE_MANIFEST.exists()
+            and author_input_closure_revisions == 0
+            else "needs revision",
+            "evidence": f"Author-input closure audit checks metadata-template placeholder coverage, author packet coverage, support-document visibility, private Git protection, private-preview gates, anonymous-review decision gate, and metadata/packet count consistency; required_metadata_paths={author_input_required_paths}; status_counts={author_input_closure_counts}; needs_revision_count={author_input_closure_revisions}.",
+            "next_action": "Rerun analyze_author_input_closure_audit.py after changing author/venue metadata fields, private-output names, support docs, or anonymous-review gates.",
+        },
+        {
             "item": "Compiled anonymous review draft",
             "status": "pass" if ANONYMOUS_PAPER.exists() and ANONYMOUS_PDF.exists() else "needs revision",
             "evidence": f"anonymous_source_exists={ANONYMOUS_PAPER.exists()}; anonymous_pdf_exists={ANONYMOUS_PDF.exists()}.",
@@ -489,7 +531,7 @@ def build_rows() -> list[dict[str, str]]:
             and VERIFIER_SUMMARY.exists()
             and VERIFIER_MANIFEST.exists()
             else "needs revision",
-            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, citation support, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, and LaTeX log boundaries.",
+            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, PDF visual rendering, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, citation support, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, author-input closure, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, and LaTeX log boundaries.",
             "next_action": "Run verify_submission_package.sh after rebuilding the payload archive.",
         },
         {
