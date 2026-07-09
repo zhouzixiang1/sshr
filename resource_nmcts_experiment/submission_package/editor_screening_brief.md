@@ -35,6 +35,12 @@ leaderboard.
    pruning runs separate the contribution of the search controller from the
    algebraic candidate space and the resource score.
 
+The manuscript then reports a separate counterpoint and claim-boundary audit:
+SSHR is treated as the CNOT counterpoint, CirKit as the depth counterpoint,
+RevKit CLI as the auxiliary-line counterpoint, and the learned-prior rows as
+bounded evidence for search control rather than for a deep-learning-only
+explanation.
+
 ## Main Evidence to Check
 
 - Baseline claim matrix: maps each comparison family to the claim it can and
@@ -44,6 +50,10 @@ leaderboard.
   high-dimensional bridge checks.
 - Baseline comparability audit: records task alignment, fairness controls,
   residual risks, and usable claims for every baseline family.
+- Counterpoint and claim-boundary audit: lists the strongest unfavorable metric
+  evidence for SSHR, CirKit, RevKit CLI, learned priors, and large-scale
+  verification, next to the favorable evidence that keeps each comparison
+  meaningful.
 - Paired statistical evidence: reports paired wins/losses/ties, mean and median
   relative score changes, and exact sign-test evidence.
 - Multi-resource tradeoff audit: reports raw T/CNOT/depth/ancilla Pareto
@@ -61,6 +71,8 @@ leaderboard.
 - Strong T-count and weighted-score improvements on matched small functions
   against algebraic, ESOP, SSHR, ABC/BDD, and external probe baselines.
 - Evidence that the advantage is not limited to a single self-written baseline.
+- Explicit counterpoint evidence showing where SSHR, CirKit, and RevKit remain
+  strong under individual resource metrics.
 - High-dimensional symbolic and bridge-truth-table verification of emitted
   logical circuits within the stated scope.
 - Bounded learned-control benefits and planning-time savings from frontier and
@@ -83,7 +95,8 @@ leaderboard.
 1. Read the abstract, contribution-to-evidence map, and first-pages scope
    paragraph to confirm the logical-layer boundary.
 2. Inspect the baseline claim matrix and baseline comparability audit before
-   judging whether the comparisons are fair.
+   judging whether the comparisons are fair, then read the counterpoint and
+   claim-boundary audit to see which resource metrics remain unfavorable.
 3. Use the paired statistical and multi-resource tradeoff tables together:
    the manuscript claims strong T-count and weighted-score gains, while
    reporting CNOT/depth/ancilla tradeoffs instead of hiding them.

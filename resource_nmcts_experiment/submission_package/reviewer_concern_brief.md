@@ -12,6 +12,7 @@ Manuscript anchors:
 - Related-work positioning matrix
 - Baseline claim matrix
 - Baseline comparability audit
+- Counterpoint and claim-boundary audit
 
 ## Are the baselines fair?
 
@@ -22,26 +23,29 @@ Manuscript anchors:
 - Baseline claim matrix
 - Comparison evidence matrix
 - Baseline comparability audit
+- Counterpoint and claim-boundary audit
 - Raw multi-resource dominance table
 
 ## Does the method dominate every resource?
 
-No.  The paper claims strong T-count and weighted-score advantages, not universal dominance.  It explicitly reports tradeoffs: SSHR remains a strong CNOT counterpoint, CirKit is often shallower, and RevKit CLI often uses fewer auxiliary lines.
+No.  The paper claims strong T-count and weighted-score advantages, not universal dominance.  It explicitly reports tradeoffs: SSHR remains a strong CNOT counterpoint, CirKit is often shallower, and RevKit CLI often uses fewer auxiliary lines.  The counterpoint and claim-boundary audit reports these unfavorable metrics next to the favorable score evidence so that the comparison is not presented as a one-metric victory.
 
 Manuscript anchors:
 - Abstract
 - Traditional functions result
 - External toolchain result
+- Counterpoint and claim-boundary audit
 - Multi-resource tradeoff result
 - Discussion
 
 ## Is the AI contribution overstated?
 
-The manuscript separates the algebraic search-space contribution from learned-control effects.  Neural priors and learned gates are treated as bounded controls.  Limited diagnostics that do not improve quality or runtime are kept as limitations rather than headline claims.
+The manuscript separates the algebraic search-space contribution from learned-control effects.  Neural priors and learned gates are treated as bounded controls.  Limited diagnostics that do not improve quality or runtime are kept as limitations rather than headline claims.  The counterpoint audit also reports the learned-prior row as incremental search control, not as evidence that deep learning alone explains the resource reduction.
 
 Manuscript anchors:
 - Search contribution decomposition
 - Learned-control audit
+- Counterpoint and claim-boundary audit
 - Sparse depth-frontier analysis
 - Discussion
 
