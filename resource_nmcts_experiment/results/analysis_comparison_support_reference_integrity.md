@@ -4,12 +4,13 @@ This audit checks that the Chinese comparison handoff files and reviewer brief p
 
 ## Status counts
 
-- pass: 31
+- pass: 34
 
 | source file | reference | resolved path | status | role |
 |---|---|---|---|---|
 | submission_package/COMPARISON_HANDOFF_zh.md | `results/analysis_comparison_answer_scorecard.md` | results/analysis_comparison_answer_scorecard.md | pass | comparison evidence entrypoint |
 | submission_package/COMPARISON_HANDOFF_zh.md | `results/analysis_comparison_target_validity_audit.md` | results/analysis_comparison_target_validity_audit.md | pass | comparison evidence entrypoint |
+| submission_package/COMPARISON_HANDOFF_zh.md | `results/analysis_comparison_route_decision_audit.md` | results/analysis_comparison_route_decision_audit.md | pass | comparison evidence entrypoint |
 | submission_package/COMPARISON_HANDOFF_zh.md | `results/analysis_baseline_claim_matrix.md` | results/analysis_baseline_claim_matrix.md | pass | comparison evidence entrypoint |
 | submission_package/COMPARISON_HANDOFF_zh.md | `results/analysis_comparison_evidence_matrix.md` | results/analysis_comparison_evidence_matrix.md | pass | comparison evidence entrypoint |
 | submission_package/COMPARISON_HANDOFF_zh.md | `results/analysis_baseline_comparability_audit.md` | results/analysis_baseline_comparability_audit.md | pass | comparison evidence entrypoint |
@@ -18,6 +19,7 @@ This audit checks that the Chinese comparison handoff files and reviewer brief p
 | submission_package/COMPARISON_HANDOFF_zh.md | `results/analysis_claim_scope_lint.md` | results/analysis_claim_scope_lint.md | pass | comparison evidence entrypoint |
 | submission_package/COMPARISON_HANDOFF_zh.md | `submission_package/editor_screening_brief.md` | submission_package/editor_screening_brief.md | pass | comparison evidence entrypoint |
 | submission_package/COMPARISON_HANDOFF_zh.md | `submission_package/reviewer_concern_brief.md` | submission_package/reviewer_concern_brief.md | pass | comparison evidence entrypoint |
+| submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md | `analysis_comparison_route_decision_audit.md` | results/analysis_comparison_route_decision_audit.md | pass | comparison evidence entrypoint |
 | submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md | `analysis_comparison_answer_scorecard.md` | results/analysis_comparison_answer_scorecard.md | pass | comparison evidence entrypoint |
 | submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md | `analysis_paired_statistical_evidence.md` | results/analysis_paired_statistical_evidence.md | pass | comparison evidence entrypoint |
 | submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md | `analysis_sshr_reproduction_scope_audit.md` | results/analysis_sshr_reproduction_scope_audit.md | pass | comparison evidence entrypoint |
@@ -38,4 +40,5 @@ This audit checks that the Chinese comparison handoff files and reviewer brief p
 | submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md | `COMPARISON_HANDOFF_zh.md` | submission_package/COMPARISON_HANDOFF_zh.md | pass | comparison evidence entrypoint |
 | submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md | `reviewer_concern_brief.md` | submission_package/reviewer_concern_brief.md | pass | comparison evidence entrypoint |
 | submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md | `analysis_comparison_answer_scorecard.md` | results/analysis_comparison_answer_scorecard.md | pass | comparison evidence entrypoint |
+| submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md | `analysis_comparison_route_decision_audit.md` | results/analysis_comparison_route_decision_audit.md | pass | comparison evidence entrypoint |
 | submission_package/reviewer_concern_brief.md | `COMPARISON_SIGNIFICANCE_MATRIX_zh.md` | submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md | pass | comparison evidence entrypoint |

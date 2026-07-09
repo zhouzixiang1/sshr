@@ -489,6 +489,23 @@ keeps the full method/control list for each family.}
 \input{tables/comparison_target_validity_audit}
 \end{table}
 
+Table~\ref{tab:comparison-route-decision} gives the corresponding route map:
+each claim is tied to the comparator family that can answer it and to the
+over-claim that remains excluded, so the layered comparison set is not read as
+a single leaderboard.
+
+\begin{table}[H]
+\centering
+\tiny
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{0.94}
+\caption{Comparison-route decision audit.  Each row states which comparator
+family should be used for a reviewer-facing claim and which stronger
+interpretation is excluded by the current logical-layer evidence.}
+\label{tab:comparison-route-decision}
+\input{tables/comparison_route_decision_audit}
+\end{table}
+
 Table~\ref{tab:comparison-answer-scorecard} turns the role audit into a
 quantitative answer to what the proposed method is compared against.  It
 combines the verified-row counts, paired score outcomes, search-control

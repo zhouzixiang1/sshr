@@ -1,0 +1,33 @@
+{
+  "acm_table_anchor_present": true,
+  "anonymous_table_anchor_present": true,
+  "needs_revision_count": 0,
+  "python": "3.11.15",
+  "questions": [
+    "Are the gains only over weak algebraic baselines?",
+    "Is SSHR the whole comparison target?",
+    "Does the advantage survive mature logic synthesis?",
+    "What does RevKit test?",
+    "Does it beat published tiny-function optima?",
+    "What part is actually AI or MCTS?",
+    "Is the evidence only small-scale?",
+    "Does weighted score hide bad tradeoffs?"
+  ],
+  "routes": [
+    "Main same-task resource claim",
+    "CNOT-oriented geometric counterpoint",
+    "External logical-toolchain stress test",
+    "Exact reversible and phase counterpoint",
+    "Tiny optimum-library boundary",
+    "AI/MCTS attribution",
+    "Large-scale semantic verification",
+    "Weighted-score and tradeoff boundary"
+  ],
+  "rows": 8,
+  "script": "analyze_comparison_route_decision_audit.py",
+  "status_counts": {
+    "pass": 8
+  },
+  "table": "paper_latex/tables/comparison_route_decision_audit.tex",
+  "table_anchor_present": true
+}

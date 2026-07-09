@@ -39,6 +39,7 @@ Use this checklist immediately before uploading the manuscript.
 - Readiness audit: `results/analysis_submission_readiness_audit.md`
 - Author input packet: `submission_package/AUTHOR_INPUT_REQUIRED.md`
 - Chinese metadata questionnaire: `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md`
+- Chinese minimal response form: `submission_package/AUTHOR_MINIMAL_RESPONSE_FORM_zh.md`
 - Target venue policy checklist: `submission_package/TARGET_VENUE_POLICY_CHECKLIST_zh.md`
 - Chinese final handoff: `submission_package/FINAL_SUBMISSION_HANDOFF_zh.md`
 - Chinese comparison significance matrix: `submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md`
@@ -46,6 +47,7 @@ Use this checklist immediately before uploading the manuscript.
 - Claim-scope lint: `results/analysis_claim_scope_lint.md`
 - Comparison protocol audit: `results/analysis_comparison_protocol_audit.md`
 - Comparison target validity audit: `results/analysis_comparison_target_validity_audit.md`
+- Benchmark-suite composition audit: `results/analysis_benchmark_suite_audit.md`
 - Novelty/comparison scorecard: `results/analysis_novelty_comparison_scorecard.md`
 - Traditional structure mechanism audit: `results/analysis_traditional_structure_mechanism.md`
 - Caterpillar ROS-family source probe: `results/analysis_caterpillar_ros_family_probe.md`
@@ -67,6 +69,7 @@ Use this checklist immediately before uploading the manuscript.
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
 - Metadata validator: `results/analysis_submission_metadata_validator.md`
 - Metadata answer-template coverage audit: `results/analysis_metadata_answer_template_coverage.md`
+- Author minimal response-form coverage audit: `results/analysis_author_minimal_form_coverage.md`
 - Author-input closure audit: `results/analysis_author_input_closure_audit.md`
 - Metadata closure-path audit: `results/analysis_submission_metadata_closure_path.md`
 - Metadata pipeline self-test: `results/analysis_submission_metadata_pipeline_selftest.md`
@@ -149,9 +152,9 @@ rg -n "Overfull|Underfull|undefined|Undefined|Warning|Error|LaTeX Warning|Rerun"
 Expected current state:
 
 - Machine snapshot tokens checked by `analyze_public_handoff_freshness_audit.py`:
-  PDF pages=50/50; readiness=78 pass + 1 needs author input;
-  payload_files=1164; artifact_registry=31 families / 161 raw CSV / 80312 raw rows;
-  source_privacy=0 strict leaks / 57 provenance files / 1121 payload text files;
+  PDF pages=50/50; readiness=79 pass + 1 needs author input;
+  payload_files=1169; artifact_registry=31 families / 161 raw CSV / 80312 raw rows;
+  source_privacy=0 strict leaks / 57 provenance files / 1126 payload text files;
   comparison_validity=8/8 pass; novelty_scorecard=6/6 pass;
   goal_gate=author/venue metadata remains open.
 - Archive manifest: all payload groups complete.

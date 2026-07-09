@@ -11,9 +11,9 @@
   "rows": 4,
   "rows_detail": [
     {
-      "bytes": "1164",
+      "bytes": "1169",
       "compile_seconds": "0.000",
-      "evidence": "extracted_files=1164; error=none.",
+      "evidence": "extracted_files=1169; error=none.",
       "item": "Payload extraction for LaTeX compile",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "pages": "n/a",
@@ -22,9 +22,9 @@
       "status": "pass"
     },
     {
-      "bytes": "756440",
+      "bytes": "757835",
       "compile_seconds": "not_recorded",
-      "evidence": "stdout_lines=1518; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
+      "evidence": "stdout_lines=1525; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "author payload LaTeX compile",
       "next_action": "Inspect the extracted payload LaTeX log and restore missing table, figure, bibliography, or style dependencies.",
       "pages": "50",
@@ -33,9 +33,9 @@
       "status": "pass"
     },
     {
-      "bytes": "753248",
+      "bytes": "754629",
       "compile_seconds": "not_recorded",
-      "evidence": "stdout_lines=1526; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
+      "evidence": "stdout_lines=1533; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "anonymous payload LaTeX compile",
       "next_action": "Inspect the extracted payload LaTeX log and restore missing table, figure, bibliography, or style dependencies.",
       "pages": "50",
@@ -44,9 +44,9 @@
       "status": "pass"
     },
     {
-      "bytes": "926538",
+      "bytes": "927305",
       "compile_seconds": "not_recorded",
-      "evidence": "stdout_lines=2044; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
+      "evidence": "stdout_lines=2048; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "acm_tqc payload LaTeX compile",
       "next_action": "Inspect the extracted payload LaTeX log and restore missing table, figure, bibliography, or style dependencies.",
       "pages": "49",

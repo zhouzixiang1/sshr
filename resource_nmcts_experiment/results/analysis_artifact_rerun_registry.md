@@ -18,7 +18,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | Public handoff freshness | quick submission-support audit | 0 | 0 | 1 | complete | Does not change scientific results; checks that public handoff counters are refreshed after rebuilds. |
 | Runtime envelope and execution cost | quick derived audit | 20 | 7582 | 1 | complete | Derived from existing raw timing columns; it records workstation feasibility and does not claim portable runtime speedups. |
 | Method workflow, algorithm, and budget contracts | quick method audit | 0 | 0 | 2 | complete | Quick derived audit; checks implementation anchors and manuscript method exposition, not raw benchmark outcomes. |
-| Comparison protocol and claim boundaries | quick comparison audit | 0 | 0 | 3 | complete | Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps. |
+| Comparison protocol and claim boundaries | quick comparison audit | 0 | 0 | 4 | complete | Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps. |
 | Benchmark suite composition and representativeness | quick benchmark audit | 51 | 34954 | 1 | complete | Descriptive derived audit over existing raw CSVs; it records coverage and verification routes but does not rerun synthesis, training, or external toolchains. |
 | Novelty and comparison scorecard | quick comparison audit | 0 | 0 | 1 | complete | Quick derived audit; it strengthens reviewer-facing positioning without rerunning raw experiments. |
 | Related-work and citation verification | quick literature audit | 0 | 0 | 2 | complete | Offline locator and scope-boundary audit; it records source-backed related-work positioning but does not claim that adjacent AI/MCTS systems are same-task baselines. |
@@ -78,7 +78,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - representative raw: not applicable for this tier
 - **Comparison protocol and claim boundaries**
   - claim use: Verifies the reviewer-facing baseline roles, evidence layers, comparability limits, counterpoints, and manuscript table.
-  - scripts: `analyze_baseline_claim_matrix.py; analyze_comparison_evidence_matrix.py; analyze_baseline_comparability_audit.py; analyze_counterpoint_claim_boundary.py; analyze_comparison_protocol_audit.py; analyze_comparison_target_validity_audit.py; analyze_comparison_answer_scorecard.py`
+  - scripts: `analyze_baseline_claim_matrix.py; analyze_comparison_evidence_matrix.py; analyze_baseline_comparability_audit.py; analyze_counterpoint_claim_boundary.py; analyze_comparison_protocol_audit.py; analyze_comparison_target_validity_audit.py; analyze_comparison_answer_scorecard.py; analyze_comparison_route_decision_audit.py`
   - representative raw: not applicable for this tier
 - **Benchmark suite composition and representativeness**
   - claim use: Summarizes benchmark-family roles, n ranges, instance counts, raw/verified rows, verification routes, and residual representativeness boundaries.

@@ -6,6 +6,7 @@ terminal package invariants that are easy to regress during final polishing:
 compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, comparison-protocol coverage,
 comparison-target validity,
+comparison-route decision support,
 benchmark-suite composition,
 score-weight robustness,
 rerun CNOT-constraint profile,
@@ -83,6 +84,8 @@ COMPARISON_TARGET_VALIDITY_MANIFEST = RESULTS / "manifest_comparison_target_vali
 COMPARISON_TARGET_VALIDITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_target_validity_audit.tex"
 COMPARISON_ANSWER_SCORECARD_MANIFEST = RESULTS / "manifest_comparison_answer_scorecard.json"
 COMPARISON_ANSWER_SCORECARD_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_answer_scorecard.tex"
+COMPARISON_ROUTE_DECISION_MANIFEST = RESULTS / "manifest_comparison_route_decision_audit.json"
+COMPARISON_ROUTE_DECISION_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_route_decision_audit.tex"
 BENCHMARK_SUITE_MANIFEST = RESULTS / "manifest_benchmark_suite_audit.json"
 BENCHMARK_SUITE_TABLE = THIS_DIR / "paper_latex" / "tables" / "benchmark_suite_audit.tex"
 WEIGHT_ROBUSTNESS_MANIFEST = RESULTS / "manifest_weight_robustness.json"
@@ -437,6 +440,23 @@ def verify_comparison_answer_scorecard() -> dict[str, str]:
         status,
         f"rows={rows}; questions={questions}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
         "Run analyze_comparison_answer_scorecard.py and restore comparison-answer rows, generated table, or manuscript anchor.",
+    )
+
+
+def verify_comparison_route_decision() -> dict[str, str]:
+    manifest = read_json(COMPARISON_ROUTE_DECISION_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = int(manifest.get("rows", -1)) if manifest else -1
+    routes = manifest.get("routes", []) if manifest else []
+    table_exists = COMPARISON_ROUTE_DECISION_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = "pass" if manifest and revisions == 0 and rows >= 8 and table_exists and anchor else "needs revision"
+    return row(
+        "Comparison route decision audit",
+        status,
+        f"rows={rows}; routes={routes}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_comparison_route_decision_audit.py and restore route-decision rows, generated table, or manuscript anchor.",
     )
 
 
@@ -1971,6 +1991,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_comparison_protocol(),
             verify_comparison_target_validity(),
             verify_comparison_answer_scorecard(),
+            verify_comparison_route_decision(),
             verify_benchmark_suite_audit(),
             verify_weight_robustness(),
             verify_resource_weight_sensitivity(),

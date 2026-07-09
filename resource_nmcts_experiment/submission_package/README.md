@@ -72,6 +72,9 @@ noise modeling, or magic-state-factory accounting.
   support-document visibility, private metadata Git protection, private-preview
   gates, anonymous-review decision state, and metadata/packet count
   consistency.
+- `../results/analysis_author_minimal_form_coverage.md`: audit that checks the
+  shortest Chinese author response form covers every required author/venue
+  metadata path before private answers are filled.
 - `../results/analysis_submission_metadata_closure_path.md`: audit that checks
   the final author/venue metadata closure path, including safe starter prefill,
   private-file Git protection, validator/preview gates, synthetic rehearsal,
@@ -123,6 +126,12 @@ noise modeling, or magic-state-factory accounting.
 - `../results/analysis_comparison_protocol_audit.md`: machine-readable audit
   that checks each baseline layer has a role, evidence, comparability boundary,
   counterpoint coverage where relevant, and manuscript anchors.
+- `../results/analysis_comparison_route_decision_audit.md`: comparison-route
+  decision audit that maps each reviewer-facing claim to the comparator family
+  that can answer it and the stronger conclusion that remains excluded.
+- `../results/analysis_benchmark_suite_audit.md`: benchmark-suite composition
+  audit that records suite roles, n scopes, item counts, verified rows,
+  verification routes, and representativeness boundaries.
 - `../results/analysis_comparison_answer_scorecard.md`: quantitative answer to
   "compared with what?", aligned with `COMPARISON_SIGNIFICANCE_MATRIX_zh.md`.
 - `../results/analysis_sshr_reproduction_scope_audit.md`: audit that separates
@@ -244,6 +253,7 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_claim_scope_lint.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_comparison_protocol_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_comparison_target_validity_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_comparison_route_decision_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_sshr_reproduction_scope_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_caterpillar_ros_family_probe.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python run_caterpillar_xag_api_probe.py

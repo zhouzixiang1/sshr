@@ -99,6 +99,10 @@ COMPARISON_ANSWER_ANALYSIS = RESULTS / "analysis_comparison_answer_scorecard.md"
 COMPARISON_ANSWER_SUMMARY = RESULTS / "summary_comparison_answer_scorecard.csv"
 COMPARISON_ANSWER_MANIFEST = RESULTS / "manifest_comparison_answer_scorecard.json"
 COMPARISON_ANSWER_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_answer_scorecard.tex"
+COMPARISON_ROUTE_ANALYSIS = RESULTS / "analysis_comparison_route_decision_audit.md"
+COMPARISON_ROUTE_SUMMARY = RESULTS / "summary_comparison_route_decision_audit.csv"
+COMPARISON_ROUTE_MANIFEST = RESULTS / "manifest_comparison_route_decision_audit.json"
+COMPARISON_ROUTE_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_route_decision_audit.tex"
 BENCHMARK_SUITE_ANALYSIS = RESULTS / "analysis_benchmark_suite_audit.md"
 BENCHMARK_SUITE_SUMMARY = RESULTS / "summary_benchmark_suite_audit.csv"
 BENCHMARK_SUITE_MANIFEST = RESULTS / "manifest_benchmark_suite_audit.json"
@@ -357,6 +361,16 @@ def build_rows() -> list[dict[str, str]]:
     )
     comparison_answer_anchor = (
         bool(comparison_answer_manifest.get("table_anchor_present", False)) if comparison_answer_manifest else False
+    )
+    comparison_route_manifest = read_json(COMPARISON_ROUTE_MANIFEST)
+    comparison_route_revisions = (
+        int(comparison_route_manifest.get("needs_revision_count", -1)) if comparison_route_manifest else -1
+    )
+    comparison_route_counts = comparison_route_manifest.get("status_counts", {}) if comparison_route_manifest else {}
+    comparison_route_rows = comparison_route_manifest.get("rows", "missing") if comparison_route_manifest else "missing"
+    comparison_route_routes = comparison_route_manifest.get("routes", []) if comparison_route_manifest else []
+    comparison_route_anchor = (
+        bool(comparison_route_manifest.get("table_anchor_present", False)) if comparison_route_manifest else False
     )
     benchmark_suite_manifest = read_json(BENCHMARK_SUITE_MANIFEST)
     benchmark_suite_revisions = (
@@ -989,6 +1003,22 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Comparison answer scorecard gives reviewer-facing quantitative answers for comparison targets, evidence rows, outcomes, and excluded claims; rows={comparison_answer_rows}; questions={comparison_answer_questions}; status_counts={comparison_answer_counts}; needs_revision_count={comparison_answer_revisions}; table_anchor_present={comparison_answer_anchor}.",
             "next_action": "Rerun analyze_comparison_answer_scorecard.py after changing comparison outcomes, search-control rows, dominance rows, or comparison-scope manuscript text.",
+        },
+        {
+            "item": "Comparison route decision audit",
+            "status": "pass"
+            if "tab:comparison-route-decision" in text
+            and COMPARISON_ROUTE_ANALYSIS.exists()
+            and COMPARISON_ROUTE_SUMMARY.exists()
+            and COMPARISON_ROUTE_MANIFEST.exists()
+            and COMPARISON_ROUTE_TABLE.exists()
+            and comparison_route_revisions == 0
+            and isinstance(comparison_route_rows, int)
+            and comparison_route_rows >= 8
+            and comparison_route_anchor
+            else "needs revision",
+            "evidence": f"Comparison route decision audit maps reviewer-facing claims to the right comparator families and excluded over-claims; rows={comparison_route_rows}; routes={comparison_route_routes}; status_counts={comparison_route_counts}; needs_revision_count={comparison_route_revisions}; table_anchor_present={comparison_route_anchor}.",
+            "next_action": "Rerun analyze_comparison_route_decision_audit.py after changing comparison-scorecard rows, target-validity roles, benchmark-suite roles, or baseline-scope manuscript text.",
         },
         {
             "item": "Benchmark suite composition audit",

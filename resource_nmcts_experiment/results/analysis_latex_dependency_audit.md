@@ -4,14 +4,14 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 
 ## Status counts
 
-- pass: 213
+- pass: 216
 
 ## Dependency types
 
 - bibliography: 3
 - figure: 21
 - main_source: 3
-- tex_input: 186
+- tex_input: 189
 
 ## Missing dependencies
 
@@ -33,6 +33,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/comparison_evidence_matrix` | `paper_latex/tables/comparison_evidence_matrix.tex` | True | True | pass |
 | author | tex_input | `tables/comparison_protocol_audit` | `paper_latex/tables/comparison_protocol_audit.tex` | True | True | pass |
 | author | tex_input | `tables/comparison_target_validity_audit` | `paper_latex/tables/comparison_target_validity_audit.tex` | True | True | pass |
+| author | tex_input | `tables/comparison_route_decision_audit` | `paper_latex/tables/comparison_route_decision_audit.tex` | True | True | pass |
 | author | tex_input | `tables/comparison_answer_scorecard` | `paper_latex/tables/comparison_answer_scorecard.tex` | True | True | pass |
 | author | tex_input | `tables/sshr_reproduction_scope_audit` | `paper_latex/tables/sshr_reproduction_scope_audit.tex` | True | True | pass |
 | author | tex_input | `tables/baseline_comparability_audit` | `paper_latex/tables/baseline_comparability_audit.tex` | True | True | pass |
@@ -104,6 +105,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/comparison_evidence_matrix` | `paper_latex/tables/comparison_evidence_matrix.tex` | True | True | pass |
 | anonymous | tex_input | `tables/comparison_protocol_audit` | `paper_latex/tables/comparison_protocol_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/comparison_target_validity_audit` | `paper_latex/tables/comparison_target_validity_audit.tex` | True | True | pass |
+| anonymous | tex_input | `tables/comparison_route_decision_audit` | `paper_latex/tables/comparison_route_decision_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/comparison_answer_scorecard` | `paper_latex/tables/comparison_answer_scorecard.tex` | True | True | pass |
 | anonymous | tex_input | `tables/sshr_reproduction_scope_audit` | `paper_latex/tables/sshr_reproduction_scope_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/baseline_comparability_audit` | `paper_latex/tables/baseline_comparability_audit.tex` | True | True | pass |
@@ -175,6 +177,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/comparison_evidence_matrix` | `paper_latex/tables/comparison_evidence_matrix.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/comparison_protocol_audit` | `paper_latex/tables/comparison_protocol_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/comparison_target_validity_audit` | `paper_latex/tables/comparison_target_validity_audit.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/comparison_route_decision_audit` | `paper_latex/tables/comparison_route_decision_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/comparison_answer_scorecard` | `paper_latex/tables/comparison_answer_scorecard.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/sshr_reproduction_scope_audit` | `paper_latex/tables/sshr_reproduction_scope_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/baseline_comparability_audit` | `paper_latex/tables/baseline_comparability_audit.tex` | True | True | pass |

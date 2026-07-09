@@ -26,6 +26,12 @@
 
 ## 比较矩阵
 
+先按 `analysis_comparison_route_decision_audit.md` 的比较路线读表：同任务资源结论看
+ANF/ESOP/ABC/BDD/SSHR 小函数行，外部稳健性看 ROS-style LUT、mockturtle、
+Caterpillar、CirKit 和 RevKit probe，AI/MCTS 贡献看 no-MCTS/random/learned-control
+消融，大规模可行性看 symbolic stress 和 truth-table bridge。不要把这些比较层合并成一个
+universal leaderboard。
+
 | 比较层 | 代表对象 | 为什么有意义 | 可以支撑的结论 | 不能支撑的结论 | 主要证据入口 |
 |---|---|---|---|---|---|
 | 同任务主基线 | Direct ANF, AND-direct ANF, ESOP beam/MILP, BDD/ABC | 解决同一个 bit-flip Boolean-oracle task，资源模型一致或可直接导出比较 | 本文不是只优化直接 ANF；在 T-count 和 weighted score 上优于常见代数/逻辑网络基线 | 不能证明硬件映射最优、所有 raw resource 全胜或全局最优 | `analysis_comparison_answer_scorecard.md`, `analysis_paired_statistical_evidence.md` |
@@ -63,3 +69,4 @@
 - 本文件：把每个比较对象压缩成“意义、能证明、不能证明、证据入口”的矩阵。
 - `reviewer_concern_brief.md`：英文 reviewer-facing 风险和 manuscript anchors。
 - `analysis_comparison_answer_scorecard.md`：机器生成的定量 answer scorecard，是本文件的主要证据源之一。
+- `analysis_comparison_route_decision_audit.md`：机器生成的 comparison-route decision 表，说明每个 reviewer-facing claim 应该读哪类 comparator。

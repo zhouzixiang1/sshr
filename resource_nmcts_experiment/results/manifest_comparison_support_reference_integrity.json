@@ -12,9 +12,9 @@
     "summary": "results/summary_comparison_support_reference_integrity.csv"
   },
   "python": "3.11.15",
-  "reference_count": 31,
+  "reference_count": 34,
   "script": "analyze_comparison_support_reference_integrity.py",
   "status_counts": {
-    "pass": 31
+    "pass": 34
   }
 }

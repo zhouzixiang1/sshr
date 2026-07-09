@@ -70,6 +70,10 @@ After the quick rebuild, the current package should report:
   `results/analysis_comparison_target_validity_audit.md`
 - comparison answer scorecard state in
   `results/analysis_comparison_answer_scorecard.md`
+- comparison-route decision state in
+  `results/analysis_comparison_route_decision_audit.md`
+- benchmark-suite composition state in
+  `results/analysis_benchmark_suite_audit.md`
 - SSHR reproduction-scope state in
   `results/analysis_sshr_reproduction_scope_audit.md`
 - threats-to-validity audit state in
@@ -90,6 +94,8 @@ After the quick rebuild, the current package should report:
   `results/analysis_citation_support_audit.md`
 - author-input closure state in
   `results/analysis_author_input_closure_audit.md`
+- author minimal response-form coverage state in
+  `results/analysis_author_minimal_form_coverage.md`
 - headline numeric consistency in
   `results/analysis_headline_numeric_consistency.md`
 - figure asset state in `results/analysis_figure_asset_audit.md`
@@ -123,6 +129,9 @@ Run these from `resource_nmcts_experiment/`:
 git diff --check
 ./verify_submission_package.sh
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_comparison_route_decision_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_benchmark_suite_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_author_minimal_form_coverage.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_ultra_scale64_stress.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_extraction_smoke_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_verifier_smoke_audit.py
@@ -164,10 +173,16 @@ layout warnings.
   `results/analysis_baseline_comparability_audit.md`
 - Comparison protocol audit:
   `results/analysis_comparison_protocol_audit.md`
+- Comparison-route decision audit:
+  `results/analysis_comparison_route_decision_audit.md`
+- Benchmark-suite composition audit:
+  `results/analysis_benchmark_suite_audit.md`
 - Citation support audit:
   `results/analysis_citation_support_audit.md`
 - Author-input closure audit:
   `results/analysis_author_input_closure_audit.md`
+- Author minimal response-form coverage:
+  `results/analysis_author_minimal_form_coverage.md`
 - Headline numeric consistency audit:
   `results/analysis_headline_numeric_consistency.md`
 - Figure asset audit:
@@ -184,6 +199,8 @@ layout warnings.
   `results/analysis_source_path_privacy_audit.md`
 - Paired statistics:
   `results/analysis_paired_statistical_evidence.md`
+- Paired effect uncertainty:
+  `results/analysis_paired_effect_uncertainty.md`
 - Raw multi-resource tradeoff:
   `results/analysis_multimetric_pareto_tradeoff.md`
 - Learned-control contribution:

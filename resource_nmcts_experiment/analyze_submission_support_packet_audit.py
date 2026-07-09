@@ -29,6 +29,7 @@ TARGET_POLICY_CHECKLIST_ZH = SUBMISSION_PACKAGE / "TARGET_VENUE_POLICY_CHECKLIST
 CHECKLIST = SUBMISSION_PACKAGE / "submission_checklist.md"
 FINAL_HANDOFF = SUBMISSION_PACKAGE / "FINAL_SUBMISSION_HANDOFF_zh.md"
 README = SUBMISSION_PACKAGE / "README.md"
+ARTIFACT_GUIDE = SUBMISSION_PACKAGE / "artifact_reproduction_guide.md"
 AUTHOR_PACKET = SUBMISSION_PACKAGE / "AUTHOR_INPUT_REQUIRED.md"
 AUTHOR_QUESTIONNAIRE_ZH = SUBMISSION_PACKAGE / "AUTHOR_METADATA_QUESTIONNAIRE_zh.md"
 AUTHOR_MINIMAL_FORM_ZH = SUBMISSION_PACKAGE / "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md"
@@ -43,8 +44,10 @@ CLAIM_SCOPE = RESULTS / "manifest_claim_scope_lint.json"
 COMPARISON_PROTOCOL = RESULTS / "manifest_comparison_protocol_audit.json"
 COMPARISON_TARGET_VALIDITY = RESULTS / "manifest_comparison_target_validity_audit.json"
 COMPARISON_ANSWER_SCORECARD = RESULTS / "manifest_comparison_answer_scorecard.json"
+COMPARISON_ROUTE_DECISION = RESULTS / "manifest_comparison_route_decision_audit.json"
 COMPARISON_REFERENCE_INTEGRITY = RESULTS / "manifest_comparison_support_reference_integrity.json"
 NOVELTY_SCORECARD = RESULTS / "manifest_novelty_comparison_scorecard.json"
+BENCHMARK_SUITE = RESULTS / "manifest_benchmark_suite_audit.json"
 EDITORIAL_SCREENING = RESULTS / "manifest_editorial_screening_audit.json"
 METADATA_CLOSURE = RESULTS / "manifest_submission_metadata_closure_path.json"
 METADATA_ANSWER_TEMPLATE_COVERAGE = RESULTS / "manifest_metadata_answer_template_coverage.json"
@@ -172,6 +175,38 @@ def specs() -> list[PacketSpec]:
             expected=0,
             supported_use="The support packet gives reviewers a direct route from comparison targets to role labels and excluded claims.",
             boundary="The validity audit classifies existing comparisons; it does not convert secondary probes into full hardware-mapped baselines.",
+        ),
+        PacketSpec(
+            item="Comparison route decision audit is visible",
+            upload_risk="Reviewer may know the baseline names but still read all comparator families as one universal leaderboard.",
+            files=(ARTIFACT_GUIDE, README, COMPARISON_SIGNIFICANCE_ZH),
+            tokens=(
+                "analysis_comparison_route_decision_audit.md",
+                "analyze_comparison_route_decision_audit.py",
+                "comparison-route decision",
+                "比较路线",
+            ),
+            manifest_path=COMPARISON_ROUTE_DECISION,
+            manifest_key="needs_revision_count",
+            expected=0,
+            supported_use="The support packet maps each reviewer-facing claim to the comparator family that can answer it and the over-claim that remains excluded.",
+            boundary="The route audit indexes existing comparison evidence; it does not add a new result or broaden the logical-layer claim.",
+        ),
+        PacketSpec(
+            item="Benchmark-suite audit is visible from reviewer entrypoints",
+            upload_risk="Reviewers could see comparison outcomes without the benchmark-slice composition and representativeness boundary.",
+            files=(ARTIFACT_GUIDE, README, CHECKLIST),
+            tokens=(
+                "analysis_benchmark_suite_audit.md",
+                "analyze_benchmark_suite_audit.py",
+                "Benchmark-suite composition audit",
+                "benchmark-suite composition state",
+            ),
+            manifest_path=BENCHMARK_SUITE,
+            manifest_key="needs_revision_count",
+            expected=0,
+            supported_use="Reviewer-facing entrypoints expose which benchmark suites, n scopes, verification routes, and representativeness boundaries support the comparisons.",
+            boundary="The benchmark-suite audit describes existing evidence; it does not expand coverage to all Boolean functions or hardware-mapped benchmarks.",
         ),
         PacketSpec(
             item="Chinese comparison handoff is visible",
@@ -309,6 +344,22 @@ def specs() -> list[PacketSpec]:
             expected=0,
             supported_use="The concise Chinese response form is machine-checked against every required metadata path before authors transfer answers to ignored private JSON.",
             boundary="The short form still contains prompts only; real author and venue values remain private and human-provided.",
+        ),
+        PacketSpec(
+            item="Minimal response-form coverage is visible from reviewer entrypoints",
+            upload_risk="The short author form could be present but its machine-checked required-field coverage could be hard to find.",
+            files=(ARTIFACT_GUIDE, README, CHECKLIST),
+            tokens=(
+                "analysis_author_minimal_form_coverage.md",
+                "analyze_author_minimal_form_coverage.py",
+                "Author minimal response-form coverage",
+                "author minimal response-form coverage state",
+            ),
+            manifest_path=AUTHOR_MINIMAL_FORM_COVERAGE,
+            manifest_key="needs_revision_count",
+            expected=0,
+            supported_use="The public guide, README, and checklist now point to the machine check proving the concise author-intake form covers every required metadata path.",
+            boundary="This only audits public prompts; private author and venue values remain outside the repository.",
         ),
         PacketSpec(
             item="Short answer template covers metadata fields",

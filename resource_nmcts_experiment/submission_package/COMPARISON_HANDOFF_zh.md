@@ -107,6 +107,7 @@ depth claim。
 
 - `results/analysis_comparison_answer_scorecard.md`
 - `results/analysis_comparison_target_validity_audit.md`
+- `results/analysis_comparison_route_decision_audit.md`
 - `results/analysis_baseline_claim_matrix.md`
 - `results/analysis_comparison_evidence_matrix.md`
 - `results/analysis_baseline_comparability_audit.md`
