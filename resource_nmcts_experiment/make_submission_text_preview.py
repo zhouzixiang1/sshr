@@ -309,7 +309,7 @@ def build_rows() -> list[dict[str, str]]:
                 "source": rel(METADATA_TEMPLATE),
                 "private_outputs": "; ".join(rel(path) for path in PRIVATE_OUTPUTS),
                 "evidence": f"{rel(METADATA_FILE)} is missing; removed stale private output files={removed}.",
-                "next_action": "Copy submission_metadata_template.json to submission_metadata.json, fill every AUTHOR INPUT REQUIRED value, then rerun the rebuild script.",
+                "next_action": "Run /opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py --write-private, or copy submission_metadata_template.json manually, fill every AUTHOR INPUT REQUIRED value, then rerun the rebuild script.",
             }
         ]
 

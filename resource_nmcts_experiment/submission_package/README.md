@@ -69,8 +69,11 @@ by the author or selected target venue.
 - Choose the target venue and manuscript type.
 - Use `FINAL_SUBMISSION_HANDOFF_zh.md` as the final Chinese execution checklist
   if working through the upload process in Chinese.
-- Copy `submission_metadata_template.json` to `submission_metadata.json`, then
-  fill every `AUTHOR INPUT REQUIRED` value.
+- Run `/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py --write-private`
+  to create an ignored private `submission_metadata.json` with public
+  repository fields prefilled, then fill every remaining `AUTHOR INPUT
+  REQUIRED` value.  Copy the template manually instead if you prefer a blank
+  file.
 - Confirm author order, affiliations, ORCID IDs, and corresponding-author
   details.
 - Complete funding, acknowledgements, author contributions, competing

@@ -5,13 +5,15 @@ This packet lists the remaining author- and venue-specific fields that cannot be
 Do not fill private author metadata into tracked files unless the target venue requires it.  The preferred private intake path is:
 
 ```bash
-cp submission_package/submission_metadata_template.json submission_package/submission_metadata.json
+/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py --write-private
 $EDITOR submission_package/submission_metadata.json
 ./rebuild_submission_package.sh
 ./verify_submission_package.sh
 ```
 
-`submission_metadata.json` is ignored by Git so private author metadata is not committed accidentally.
+Use `cp submission_package/submission_metadata_template.json submission_package/submission_metadata.json`
+instead if you prefer a completely blank template.  `submission_metadata.json`
+is ignored by Git so private author metadata is not committed accidentally.
 When the metadata file is complete, the rebuild also creates ignored private previews:
 `generated_author_declarations.md`, `generated_availability_statements.md`,
 `generated_cover_letter.md`, and `generated_submission_text.md`.

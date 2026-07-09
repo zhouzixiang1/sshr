@@ -14,7 +14,7 @@
       "evidence": "submission_package/submission_metadata.json is missing.",
       "field_names": "submission_metadata.json",
       "item": "Metadata file presence",
-      "next_action": "Copy submission_metadata_template.json to submission_metadata.json, fill it, and rerun the rebuild.",
+      "next_action": "Run /opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py --write-private, or copy submission_metadata_template.json manually, fill submission_metadata.json, and rerun the rebuild.",
       "status": "needs author input"
     }
   ],

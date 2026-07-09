@@ -1682,7 +1682,7 @@
     },
     {
       "boundary": "Terminal submission/package outputs are excluded so this manifest remains stable.",
-      "bytes": 4428976,
+      "bytes": 4429360,
       "category": "Derived summaries",
       "file_count": 327,
       "files": [
@@ -1764,7 +1764,7 @@
         {
           "bytes": 34950,
           "path": "results/analysis_claim_scope_lint.md",
-          "sha256": "611ac49fd957fa1c940b6000a76f5fd15cc0eeb4cf404254a6c381640946f0ac"
+          "sha256": "e6bd371d6b4fe4ea80a892ccaae9b569191dec6e6176d742f1b5ae99c9a1d88b"
         },
         {
           "bytes": 3720,
@@ -2347,14 +2347,14 @@
           "sha256": "d191f03b67cb0c2db53baae1c3ebb3f3c476d3b19933370ef3da4cb89b1209b4"
         },
         {
-          "bytes": 499,
+          "bytes": 606,
           "path": "results/analysis_submission_metadata_validator.md",
-          "sha256": "683053d43eba4fb4409682fe7ddc2b4ec8298b4b605d54b6c8318957e469e1bc"
+          "sha256": "da26e4047c7eb4ec063f582d4c4eb924b56c5dfdaaf19aee985392cda4418edb"
         },
         {
-          "bytes": 969,
+          "bytes": 1054,
           "path": "results/analysis_submission_text_preview.md",
-          "sha256": "4ceae95b745428c36946efc0f07f7c7bf1cb9972293a40a93342bd8fae6bf16c"
+          "sha256": "fe2a3cce6382887c305038e2bec0107382e9a5e27b06ea6479026e9268e7d5f1"
         },
         {
           "bytes": 7221,
@@ -2534,7 +2534,7 @@
         {
           "bytes": 39450,
           "path": "results/summary_claim_scope_lint.csv",
-          "sha256": "d6aae7b06233c1a83c1a46902d603b0f03081faee086da42435283dc88c97d0d"
+          "sha256": "5513974c5d35940ea363fad45ae265a53e34984173f17872d07db9ae7d4ec275"
         },
         {
           "bytes": 3117,
@@ -3197,14 +3197,14 @@
           "sha256": "b13c6c5a8e660961395f12b73021b464c6cbb800931346257b353c84e3e95321"
         },
         {
-          "bytes": 270,
+          "bytes": 377,
           "path": "results/summary_submission_metadata_validator.csv",
-          "sha256": "c81b3896b60e87992493fe2479f42c1980fc69baa3d7927b1bd028220d15b1b8"
+          "sha256": "bbb7a30dba8dccfdd053d6d98f1f863fef584f92741f6d64f703f12b7e981e74"
         },
         {
-          "bytes": 599,
+          "bytes": 684,
           "path": "results/summary_submission_text_preview.csv",
-          "sha256": "fc3b1be822d7baa1bd58bc77711e39cd3d5626f385393c0045e9bea8be2645ad"
+          "sha256": "f4081fee3090601cfd6581069f621b146d9c1f4c77fec878911afb6fb80023d3"
         },
         {
           "bytes": 4072,
@@ -3323,11 +3323,11 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "7c66cd6f0bb90048f856bebeae42240fa32807eb6c0d805accf2918805654ee3"
+      "sha256_digest": "e1a9e7e86fc74b906c6c49b8947b5684ec46786fbeb9bb86075821a97bdf24e3"
     },
     {
       "boundary": "Submission-level terminal manifests are excluded from this digest group.",
-      "bytes": 117693,
+      "bytes": 117885,
       "category": "Run manifests",
       "file_count": 74,
       "files": [
@@ -3652,14 +3652,14 @@
           "sha256": "ece77474584e53cfc5e91c8b2e1c69019460cee61834b14a2ef733cb6cd4e92e"
         },
         {
-          "bytes": 829,
+          "bytes": 936,
           "path": "results/manifest_submission_metadata_validator.json",
-          "sha256": "12cd0e0faf8077d3b6cddfede8d67fe30bb01ecbe56ed6808b756d608c53e05e"
+          "sha256": "4784ffd49844e2c130d2a28c91a352dc824bf69f8dbaa0b017a310d05eaf361f"
         },
         {
-          "bytes": 1337,
+          "bytes": 1422,
           "path": "results/manifest_submission_text_preview.json",
-          "sha256": "de0ca0d966ad952dc6424e7f3b26b8cf6a2c1cebd870960b69cd67a91cc56ac6"
+          "sha256": "384c5ce51687b5ff2c4ab8e0253e44b23c21d6e690c5c85fba1b96cf429d0cd0"
         },
         {
           "bytes": 1303,
@@ -3703,13 +3703,13 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "a518027574a3d4b1ef7a79b282e3009ea01596dbdb27aada7da4e6bbe0c24070"
+      "sha256_digest": "e3c00a1b3ec60caaa5b199ede7ca562a53067708d8c632e9320165db749758a4"
     },
     {
       "boundary": "Documents reproducible entry points; raw sweeps still require their individual drivers.",
-      "bytes": 1448440,
+      "bytes": 1453763,
       "category": "Scripts and docs",
-      "file_count": 78,
+      "file_count": 79,
       "files": [
         {
           "bytes": 154984,
@@ -3967,9 +3967,9 @@
           "sha256": "c0178c8dae488326a2ffb580fbcca098f6dd06ca999569512014b4d8dca2c300"
         },
         {
-          "bytes": 7858,
+          "bytes": 8034,
           "path": "make_author_input_packet.py",
-          "sha256": "4bff19ce4572dd84ee25cedca62c4240f6b3ff0350eaef580a82cb35ca6cab03"
+          "sha256": "2d63a32d759dd89887d6375df99510380f69e290891324484b8dabc02123d772"
         },
         {
           "bytes": 30860,
@@ -3977,14 +3977,19 @@
           "sha256": "73c13888f7699a90f632da4ec39139cf071ff41e8ec0837b0b8a24bf68e83ea8"
         },
         {
+          "bytes": 5062,
+          "path": "make_submission_metadata_starter.py",
+          "sha256": "996ab46bbcebbcd30c8686e621cc48698f09b715348d0017d4df31d06d945b01"
+        },
+        {
           "bytes": 7516,
           "path": "make_submission_payload_archive.py",
           "sha256": "790ada2f5bdf5ad66daf59daed57d79f6c862f2bd48c01e1eabac6f5dce6a29c"
         },
         {
-          "bytes": 17879,
+          "bytes": 17964,
           "path": "make_submission_text_preview.py",
-          "sha256": "05bd6be23b49ab6c6ac65da94a185deccb15ba02c6428f2f51110713d178574f"
+          "sha256": "afecc8bf3a34e92211810ef54ede2935d3100ed7958fe66191b0b494a174f832"
         },
         {
           "bytes": 2454,
@@ -4103,7 +4108,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "6130f9cd8cdc4279e0227bc0a9cd4871e6d7e42ca762259177de6f872ace0d60"
+      "sha256_digest": "47f37378565982c987fb3628f1e20d83a04647e45a6df3542af7a11f70708488"
     },
     {
       "boundary": "Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild.",
@@ -4232,24 +4237,24 @@
     },
     {
       "boundary": "Includes public package README, author-input packet, artifact guide, cover-letter, declaration, checklist, reviewer-brief, editor-screening, venue-selection, and structured metadata templates; ignored generated private submission text is excluded.",
-      "bytes": 60736,
+      "bytes": 61651,
       "category": "Submission support",
       "file_count": 11,
       "files": [
         {
-          "bytes": 8797,
+          "bytes": 8951,
           "path": "submission_package/AUTHOR_INPUT_REQUIRED.md",
-          "sha256": "67da70643832f472ac38e4c655f0e33790b0b762667cd3619f34ee6df988f3c2"
+          "sha256": "387214d38c2b63ff8afa02318f1ccec28a113636af6bcf71d979c12578ede43c"
         },
         {
-          "bytes": 4284,
+          "bytes": 4601,
           "path": "submission_package/FINAL_SUBMISSION_HANDOFF_zh.md",
-          "sha256": "8a9b2221a2814cca53b7cb124787ae7f10ca4e1072034bdb22cbda6e81304c4a"
+          "sha256": "aa42650f4c10f1e505f3c148d46d8a587d5efa6a231965033f5b409f67f190cc"
         },
         {
-          "bytes": 7921,
+          "bytes": 8128,
           "path": "submission_package/README.md",
-          "sha256": "43b191825f64b38980dd40c4a662f70dc5d0b27781c121b8ed1262be476d38c4"
+          "sha256": "0cbf6b5318a6eb9f4a945c0227e49445df565414d8164b8e1b4862ce6a35403c"
         },
         {
           "bytes": 6349,
@@ -4277,9 +4282,9 @@
           "sha256": "df55205451df6e308dc041ec5e7020a5730b4effa72a312f11d64241a2e8dae1"
         },
         {
-          "bytes": 7751,
+          "bytes": 7988,
           "path": "submission_package/submission_checklist.md",
-          "sha256": "7b6c3f9319f010bad49a051ca040b35aef05bfa2d2c175dbb743ad28acb6b3fb"
+          "sha256": "4a8d170908c3acb3e3d19db7ca51cda1c726532d7735811d4b14d551131c7ee7"
         },
         {
           "bytes": 4069,
@@ -4293,7 +4298,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "68c8bbbe97ce2c9680431e06961e88441cdc39f94fc0bd17d53450b4d9b1f399"
+      "sha256_digest": "f0b2b19fbf2fa7c44be454b626286dcf5cf1e43ff65410da1feecc24d451991b"
     }
   ],
   "note": "Compiled PDF and terminal submission/package outputs are excluded from payload hashes to avoid self-referential digests.",

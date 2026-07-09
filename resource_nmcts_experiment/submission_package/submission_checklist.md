@@ -7,7 +7,7 @@ Use this checklist immediately before uploading the manuscript.
 - AUTHOR INPUT REQUIRED: Work through `submission_package/AUTHOR_INPUT_REQUIRED.md` before uploading.
 - If working in Chinese, follow `submission_package/FINAL_SUBMISSION_HANDOFF_zh.md` for the final execution order.
 - AUTHOR INPUT REQUIRED: Choose the target venue using `submission_package/target_venue_brief.md` as a planning aid, then copy the final choice into `submission_package/submission_metadata.json`.
-- AUTHOR INPUT REQUIRED: Copy `submission_package/submission_metadata_template.json` to `submission_package/submission_metadata.json` and fill every `AUTHOR INPUT REQUIRED` value.
+- AUTHOR INPUT REQUIRED: Run `/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py --write-private`, or copy `submission_package/submission_metadata_template.json` manually, then fill every `AUTHOR INPUT REQUIRED` value in `submission_package/submission_metadata.json`.
 - AUTHOR INPUT REQUIRED: Confirm author order, affiliations, ORCID IDs, and corresponding author details.
 - AUTHOR INPUT REQUIRED: Complete funding, acknowledgements, author contributions, and competing-interest statements.
 - AUTHOR INPUT REQUIRED: Replace repository-relative availability wording with the target venue's required archive DOI, repository URL, or anonymous review link.
@@ -75,12 +75,14 @@ Run these from `resource_nmcts_experiment/`:
   analyze_submission_readiness_audit.py \
   analyze_submission_traceability_audit.py \
   validate_submission_metadata.py \
+  make_submission_metadata_starter.py \
   selftest_submission_metadata_pipeline.py \
   analyze_payload_roundtrip_audit.py \
   make_anonymous_review_draft.py \
   make_submission_text_preview.py
 ./rebuild_submission_package.sh
 ./verify_submission_package.sh
+/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
 rg -n "Overfull|Underfull|undefined|Undefined|Warning|Error|LaTeX Warning|Rerun" \
   paper_latex/resource_nmcts_submission_v1.log

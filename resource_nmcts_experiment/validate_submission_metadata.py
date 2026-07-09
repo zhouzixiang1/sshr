@@ -317,7 +317,7 @@ def build_rows() -> list[dict[str, str]]:
                 "Metadata file presence",
                 "needs author input",
                 f"{rel(METADATA_FILE)} is missing.",
-                "Copy submission_metadata_template.json to submission_metadata.json, fill it, and rerun the rebuild.",
+                "Run /opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py --write-private, or copy submission_metadata_template.json manually, fill submission_metadata.json, and rerun the rebuild.",
                 ["submission_metadata.json"],
             )
         ]

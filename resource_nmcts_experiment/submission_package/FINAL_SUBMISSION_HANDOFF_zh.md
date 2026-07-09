@@ -20,7 +20,14 @@
 ## 推荐执行顺序
 
 1. 先读 `target_venue_brief.md`，确定一个目标期刊和一个备选期刊。
-2. 复制结构化元数据模板：
+2. 生成结构化元数据私有 starter。该命令会预填当前仓库 URL、commit hash 和环境说明，
+   但仍保留作者/期刊字段为 `AUTHOR INPUT REQUIRED`：
+
+```bash
+/opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_metadata_starter.py --write-private
+```
+
+   如果你想从完全空白的模板开始，也可以改用：
 
 ```bash
 cp submission_package/submission_metadata_template.json submission_package/submission_metadata.json
