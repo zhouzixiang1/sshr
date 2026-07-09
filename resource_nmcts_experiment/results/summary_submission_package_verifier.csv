@@ -1,8 +1,8 @@
 item,status,evidence,next_action
 Compiled author PDF,pass,"paper_latex/resource_nmcts_submission_v1.pdf pages=39, bytes=644490.",Rebuild the submission package and inspect latexmk output if the PDF is missing.
 Compiled anonymous PDF,pass,"paper_latex/resource_nmcts_submission_anonymous.pdf pages=39, bytes=641078.",Rebuild the submission package and inspect latexmk output if the PDF is missing.
-Payload SHA sidecar,pass,actual=66cd9801d17e57dfefb27f72f33dc273e26ea5ead6a979e7fca9ea0629bccce6; sidecar=66cd9801d17e57dfefb27f72f33dc273e26ea5ead6a979e7fca9ea0629bccce6.,Regenerate the payload archive if the digests differ.
-Payload manifest consistency,pass,summary=66cd9801d17e57dfefb27f72f33dc273e26ea5ead6a979e7fca9ea0629bccce6; manifest=66cd9801d17e57dfefb27f72f33dc273e26ea5ead6a979e7fca9ea0629bccce6; file_count=1008.,Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree.
+Payload SHA sidecar,pass,actual=e9f67a1748f324f7e06934befe36af29dee6a766080837df850eb7e2d18b9555; sidecar=e9f67a1748f324f7e06934befe36af29dee6a766080837df850eb7e2d18b9555.,Regenerate the payload archive if the digests differ.
+Payload manifest consistency,pass,summary=e9f67a1748f324f7e06934befe36af29dee6a766080837df850eb7e2d18b9555; manifest=e9f67a1748f324f7e06934befe36af29dee6a766080837df850eb7e2d18b9555; file_count=1008.,Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree.
 Readiness audit terminal state,pass,"status_counts={'pass': 62, 'needs author input': 1}; terminal_verifier_self_row_excluded=True.",Resolve any needs-revision rows; author-specific declarations remain manual.
 Artifact rerun registry coverage,pass,families=25; registry_raw=147; actual_raw=147.,Rerun analyze_artifact_rerun_registry.py after adding raw CSVs or driver scripts.
 Claim-scope lint,pass,"unresolved_count=0; status_counts={'guarded': 72, 'pass': 5}.","Run analyze_claim_scope_lint.py and revise unguarded hardware-mapping, universal-dominance, optimality, or full-tool-reproduction claims."

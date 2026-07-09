@@ -1,6 +1,6 @@
 {
   "archive": "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
-  "archive_bytes": 40894297,
+  "archive_bytes": 40894224,
   "excluded_from_payload": [
     "submission_package/dist/resource_nmcts_submission_payload.tar.gz",
     "submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256",
@@ -286,9 +286,9 @@
       "sha256": "b1ee8348cc3db69cb2f4ff7a6fe00413496eb7d096dbb7b12b88a8da48a307ee"
     },
     {
-      "bytes": 10284,
+      "bytes": 10212,
       "path": "analyze_pdf_visual_audit.py",
-      "sha256": "7f27e68e900a2ed680f32265a593504c0d3d75094f994b356ddbb25bb3d8bb11"
+      "sha256": "d68f092609f562748288329fb4b6ff988980ad827b4133c28a864ed71042914b"
     },
     {
       "bytes": 7720,
@@ -5086,10 +5086,10 @@
       "sha256": "a21fceb1dd3d902c581f16a0ee174b55a25aa57d8ca9faf31eda23a963f33794"
     }
   ],
-  "input_bytes": 110194108,
+  "input_bytes": 110194036,
   "missing": [],
   "python": "3.11.15",
   "script": "make_submission_payload_archive.py",
-  "sha256": "66cd9801d17e57dfefb27f72f33dc273e26ea5ead6a979e7fca9ea0629bccce6",
+  "sha256": "e9f67a1748f324f7e06934befe36af29dee6a766080837df850eb7e2d18b9555",
   "sha256_file": "submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256"
 }

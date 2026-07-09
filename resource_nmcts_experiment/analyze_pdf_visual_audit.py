@@ -15,7 +15,6 @@ import shutil
 import subprocess
 import sys
 import tempfile
-import time
 from collections import Counter
 from pathlib import Path
 
@@ -131,7 +130,6 @@ def render_pdf(label: str, pdf_path: Path) -> dict[str, str]:
             "next_action": "Rebuild the PDF and inspect pdfinfo output.",
         }
 
-    start = time.time()
     failures: list[str] = []
     widths: set[int] = set()
     heights: set[int] = set()
@@ -168,7 +166,6 @@ def render_pdf(label: str, pdf_path: Path) -> dict[str, str]:
                 failures.append(f"{page_path.name}:near-blank ink={ink:.6f}")
             if ink > 0.75:
                 failures.append(f"{page_path.name}:overfilled ink={ink:.6f}")
-    elapsed = time.time() - start
     dimensions = "x".join([str(next(iter(widths))) if len(widths) == 1 else f"mixed:{sorted(widths)}", str(next(iter(heights))) if len(heights) == 1 else f"mixed:{sorted(heights)}"])
     status = "pass" if not failures and len(ink_fractions) == pages else "needs revision"
     return {
@@ -182,7 +179,7 @@ def render_pdf(label: str, pdf_path: Path) -> dict[str, str]:
         "max_ink_fraction": f"{max(ink_fractions):.6f}" if ink_fractions else "nan",
         "min_page_bytes": str(min(page_bytes)) if page_bytes else "0",
         "max_page_bytes": str(max(page_bytes)) if page_bytes else "0",
-        "render_seconds": f"{elapsed:.3f}",
+        "render_seconds": "not_recorded",
         "failures": "; ".join(failures) if failures else "none",
         "next_action": "No action needed." if status == "pass" else "Inspect the rendered PDF pages and fix missing, blank, clipped, or overfilled output.",
     }
