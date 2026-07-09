@@ -33,6 +33,7 @@ from make_submission_text_preview import PRIVATE_OUTPUTS
 RESULTS = THIS_DIR / "results"
 AUTHOR_PACKET = SUBMISSION_PACKAGE / "AUTHOR_INPUT_REQUIRED.md"
 AUTHOR_QUESTIONNAIRE_ZH = SUBMISSION_PACKAGE / "AUTHOR_METADATA_QUESTIONNAIRE_zh.md"
+AUTHOR_MINIMAL_FORM_ZH = SUBMISSION_PACKAGE / "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md"
 README = SUBMISSION_PACKAGE / "README.md"
 CHECKLIST = SUBMISSION_PACKAGE / "submission_checklist.md"
 TARGET_VENUE_BRIEF = SUBMISSION_PACKAGE / "target_venue_brief.md"
@@ -265,12 +266,21 @@ def check_anonymous_gate() -> dict[str, str]:
 
 
 def check_support_docs() -> dict[str, str]:
-    required_docs = (AUTHOR_PACKET, AUTHOR_QUESTIONNAIRE_ZH, README, CHECKLIST, TARGET_VENUE_BRIEF, FINAL_HANDOFF)
+    required_docs = (
+        AUTHOR_PACKET,
+        AUTHOR_QUESTIONNAIRE_ZH,
+        AUTHOR_MINIMAL_FORM_ZH,
+        README,
+        CHECKLIST,
+        TARGET_VENUE_BRIEF,
+        FINAL_HANDOFF,
+    )
     missing = [rel(path) for path in required_docs if not path.exists()]
     required_tokens = {
-        rel(AUTHOR_PACKET): ("AUTHOR_METADATA_QUESTIONNAIRE_zh.md", "submission_metadata.json", "generated_", "verify_submission_package.sh"),
+        rel(AUTHOR_PACKET): ("AUTHOR_METADATA_QUESTIONNAIRE_zh.md", "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md", "submission_metadata.json", "generated_", "verify_submission_package.sh"),
         rel(AUTHOR_QUESTIONNAIRE_ZH): ("target_venue.name", "authors[].name", "code_availability.commit_hash", "validate_submission_metadata.py"),
-        rel(README): ("AUTHOR_METADATA_QUESTIONNAIRE_zh.md", "submission_metadata.json", "generated_", "validate_submission_metadata.py"),
+        rel(AUTHOR_MINIMAL_FORM_ZH): ("target_venue.*", "authors[]", "code_availability.*", "validate_submission_metadata.py", "不要把真实私人信息写进 tracked 文件"),
+        rel(README): ("AUTHOR_METADATA_QUESTIONNAIRE_zh.md", "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md", "submission_metadata.json", "generated_", "validate_submission_metadata.py"),
         rel(CHECKLIST): ("AUTHOR_METADATA_QUESTIONNAIRE_zh.md", "AUTHOR INPUT REQUIRED", "submission_metadata.json", "generated_*.md"),
         rel(TARGET_VENUE_BRIEF): ("target_venue.name", "anonymous_review_required"),
         rel(FINAL_HANDOFF): ("submission_metadata.json", "generated_", "needs author input"),
@@ -285,7 +295,7 @@ def check_support_docs() -> dict[str, str]:
         "Human handoff document coverage",
         "pass" if not missing and not token_misses else "needs revision",
         f"docs={len(required_docs)}; missing={missing or 'none'}; token_misses={token_misses[:5] or 'none'}.",
-        "Keep README, checklist, target-venue brief, handoff, questionnaire, and author packet aligned with the private metadata workflow.",
+        "Keep README, checklist, target-venue brief, handoff, questionnaire, minimal response form, and author packet aligned with the private metadata workflow.",
     )
 
 

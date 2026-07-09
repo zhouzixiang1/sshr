@@ -30,14 +30,17 @@ FINAL_HANDOFF = SUBMISSION_PACKAGE / "FINAL_SUBMISSION_HANDOFF_zh.md"
 README = SUBMISSION_PACKAGE / "README.md"
 AUTHOR_PACKET = SUBMISSION_PACKAGE / "AUTHOR_INPUT_REQUIRED.md"
 AUTHOR_QUESTIONNAIRE_ZH = SUBMISSION_PACKAGE / "AUTHOR_METADATA_QUESTIONNAIRE_zh.md"
+AUTHOR_MINIMAL_FORM_ZH = SUBMISSION_PACKAGE / "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md"
 METADATA_TEMPLATE = SUBMISSION_PACKAGE / "submission_metadata_template.json"
 EDITOR_BRIEF = SUBMISSION_PACKAGE / "editor_screening_brief.md"
 REVIEWER_BRIEF = SUBMISSION_PACKAGE / "reviewer_concern_brief.md"
 COMPARISON_HANDOFF_ZH = SUBMISSION_PACKAGE / "COMPARISON_HANDOFF_zh.md"
+COMPARISON_SIGNIFICANCE_ZH = SUBMISSION_PACKAGE / "COMPARISON_SIGNIFICANCE_MATRIX_zh.md"
 
 CLAIM_SCOPE = RESULTS / "manifest_claim_scope_lint.json"
 COMPARISON_PROTOCOL = RESULTS / "manifest_comparison_protocol_audit.json"
 COMPARISON_TARGET_VALIDITY = RESULTS / "manifest_comparison_target_validity_audit.json"
+COMPARISON_ANSWER_SCORECARD = RESULTS / "manifest_comparison_answer_scorecard.json"
 NOVELTY_SCORECARD = RESULTS / "manifest_novelty_comparison_scorecard.json"
 EDITORIAL_SCREENING = RESULTS / "manifest_editorial_screening_audit.json"
 METADATA_CLOSURE = RESULTS / "manifest_submission_metadata_closure_path.json"
@@ -167,12 +170,14 @@ def specs() -> list[PacketSpec]:
         PacketSpec(
             item="Chinese comparison handoff is visible",
             upload_risk="Author-side upload text or reviewer replies could overstate SSHR, ROS, RevKit, or AI/MCTS claims.",
-            files=(README, AUTHOR_PACKET, FINAL_HANDOFF, COMPARISON_HANDOFF_ZH),
+            files=(README, AUTHOR_PACKET, FINAL_HANDOFF, COMPARISON_HANDOFF_ZH, COMPARISON_SIGNIFICANCE_ZH),
             tokens=(
                 "COMPARISON_HANDOFF_zh.md",
+                "COMPARISON_SIGNIFICANCE_MATRIX_zh.md",
                 "主比较对象",
                 "二级外部探针",
                 "反例边界",
+                "比较矩阵",
                 "AI/MCTS 口径",
                 "审稿问答口径",
                 "不能说",
@@ -187,12 +192,35 @@ def specs() -> list[PacketSpec]:
             boundary="It is a navigation and wording guide over existing evidence; it does not add experiments or replace author/venue metadata.",
         ),
         PacketSpec(
+            item="Chinese comparison significance matrix is visible",
+            upload_risk="The author may know the baseline names but not which conclusion each comparison can legitimately support.",
+            files=(README, CHECKLIST, FINAL_HANDOFF, REVIEWER_BRIEF, COMPARISON_SIGNIFICANCE_ZH),
+            tokens=(
+                "COMPARISON_SIGNIFICANCE_MATRIX_zh.md",
+                "比较对象与意义矩阵",
+                "同任务主基线",
+                "SSHR 小函数对照",
+                "外部逻辑工具链",
+                "精确可逆综合对照",
+                "AI/MCTS 因果消融",
+                "禁止扩展的说法",
+                "hardware mapping",
+                "full ROS reproduction",
+            ),
+            manifest_path=COMPARISON_ANSWER_SCORECARD,
+            manifest_key="needs_revision_count",
+            expected=0,
+            supported_use="The author can map each baseline family to its role, supported conclusion, invalid conclusion, and evidence entry point before drafting upload text or rebuttals.",
+            boundary="The matrix summarizes existing verified comparison evidence; it does not introduce a new result or broaden the comparison scope.",
+        ),
+        PacketSpec(
             item="Author declarations keep private fields explicit",
             upload_risk="Declarations could be mistaken as complete or private author metadata could be committed.",
-            files=(DECLARATIONS, AUTHOR_PACKET, AUTHOR_QUESTIONNAIRE_ZH, METADATA_TEMPLATE),
+            files=(DECLARATIONS, AUTHOR_PACKET, AUTHOR_QUESTIONNAIRE_ZH, AUTHOR_MINIMAL_FORM_ZH, METADATA_TEMPLATE),
             tokens=(
                 "AUTHOR INPUT REQUIRED",
                 "AUTHOR_METADATA_QUESTIONNAIRE_zh.md",
+                "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md",
                 "submission_metadata.json",
                 "generated_author_declarations.md",
                 "Competing Interests",
@@ -209,9 +237,10 @@ def specs() -> list[PacketSpec]:
         PacketSpec(
             item="Chinese metadata questionnaire maps human inputs",
             upload_risk="The final author/venue gate could remain too abstract for the author to fill in one pass.",
-            files=(AUTHOR_QUESTIONNAIRE_ZH, README, CHECKLIST, AUTHOR_PACKET),
+            files=(AUTHOR_QUESTIONNAIRE_ZH, AUTHOR_MINIMAL_FORM_ZH, README, CHECKLIST, AUTHOR_PACKET),
             tokens=(
                 "AUTHOR_METADATA_QUESTIONNAIRE_zh.md",
+                "AUTHOR_MINIMAL_RESPONSE_FORM_zh.md",
                 "target_venue.name",
                 "authors[].name",
                 "corresponding_author.email",

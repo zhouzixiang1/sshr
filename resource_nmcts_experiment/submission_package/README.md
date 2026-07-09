@@ -36,11 +36,17 @@ noise modeling, or magic-state-factory accounting.
 - `AUTHOR_METADATA_QUESTIONNAIRE_zh.md`: Chinese field-by-field questionnaire
   that maps the remaining human answers to `submission_metadata.json` paths
   without storing private values in a tracked file.
+- `AUTHOR_MINIMAL_RESPONSE_FORM_zh.md`: shortest Chinese response form for
+  collecting the final author/venue answers in one pass before filling the
+  ignored private metadata JSON.
 - `FINAL_SUBMISSION_HANDOFF_zh.md`: Chinese final-upload handoff that turns the
   remaining author/venue gates into an execution order.
 - `COMPARISON_HANDOFF_zh.md`: Chinese comparison-positioning handoff that
   explains what the method is compared against, why those comparisons are
   meaningful, and which claims must remain excluded before upload.
+- `COMPARISON_SIGNIFICANCE_MATRIX_zh.md`: Chinese comparison matrix that maps
+  each baseline family to its role, supported conclusion, invalid conclusion,
+  and main evidence entry points.
 - `cover_letter_template.md`: editor-facing cover-letter draft with author
   fields left blank.
 - `artifact_reproduction_guide.md`: reviewer-facing quick rebuild path,
@@ -110,6 +116,8 @@ noise modeling, or magic-state-factory accounting.
 - `../results/analysis_comparison_protocol_audit.md`: machine-readable audit
   that checks each baseline layer has a role, evidence, comparability boundary,
   counterpoint coverage where relevant, and manuscript anchors.
+- `../results/analysis_comparison_answer_scorecard.md`: quantitative answer to
+  "compared with what?", aligned with `COMPARISON_SIGNIFICANCE_MATRIX_zh.md`.
 - `../results/analysis_sshr_reproduction_scope_audit.md`: audit that separates
   source-anchored SSHR paper references, same-function SSHR-H rows, timed
   SSHR-I rows, exact n<=4 pilot checks, and excluded full-paper SSHR reruns.

@@ -11,9 +11,9 @@
   "rows": 4,
   "rows_detail": [
     {
-      "bytes": "1133",
+      "bytes": "1135",
       "compile_seconds": "0.000",
-      "evidence": "extracted_files=1133; error=none.",
+      "evidence": "extracted_files=1135; error=none.",
       "item": "Payload extraction for LaTeX compile",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "pages": "n/a",
@@ -22,7 +22,7 @@
       "status": "pass"
     },
     {
-      "bytes": "752241",
+      "bytes": "752244",
       "compile_seconds": "not_recorded",
       "evidence": "stdout_lines=1502; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "author payload LaTeX compile",
@@ -33,7 +33,7 @@
       "status": "pass"
     },
     {
-      "bytes": "749032",
+      "bytes": "749028",
       "compile_seconds": "not_recorded",
       "evidence": "stdout_lines=1510; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "anonymous payload LaTeX compile",

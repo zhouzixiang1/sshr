@@ -39,6 +39,7 @@ Use this checklist immediately before uploading the manuscript.
 - Author input packet: `submission_package/AUTHOR_INPUT_REQUIRED.md`
 - Chinese metadata questionnaire: `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md`
 - Chinese final handoff: `submission_package/FINAL_SUBMISSION_HANDOFF_zh.md`
+- Chinese comparison significance matrix: `submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md`
 - Terminal package verifier: `results/analysis_submission_package_verifier.md`
 - Claim-scope lint: `results/analysis_claim_scope_lint.md`
 - Comparison protocol audit: `results/analysis_comparison_protocol_audit.md`
@@ -142,8 +143,8 @@ Expected current state:
 
 - Machine snapshot tokens checked by `analyze_public_handoff_freshness_audit.py`:
   PDF pages=49/49; readiness=73 pass + 1 needs author input;
-  payload_files=1133; artifact_registry=30 families / 161 raw CSV / 80312 raw rows;
-  source_privacy=0 strict leaks / 57 provenance files / 1090 payload text files;
+  payload_files=1135; artifact_registry=30 families / 161 raw CSV / 80312 raw rows;
+  source_privacy=0 strict leaks / 57 provenance files / 1092 payload text files;
   comparison_validity=8/8 pass; novelty_scorecard=6/6 pass;
   goal_gate=author/venue metadata remains open.
 - Archive manifest: all payload groups complete.

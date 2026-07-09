@@ -24,11 +24,16 @@ Before editing venue-specific claims, cover-letter language, or reviewer replies
 `submission_package/COMPARISON_HANDOFF_zh.md`.  It gives the Chinese author-facing
 answer to what the method is compared against, why the comparison set is meaningful,
 and which stronger claims must not be made.
+For a compact matrix of baseline roles, supported claims, excluded claims, and
+evidence entry points, use `submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md`.
 
 If you want a Chinese field-by-field intake checklist, use
 `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md` before filling
 `submission_package/submission_metadata.json`.  The questionnaire maps each
 human answer to the corresponding JSON path and does not contain private values.
+For the shortest possible reply format, use
+`submission_package/AUTHOR_MINIMAL_RESPONSE_FORM_zh.md`; it compresses the same
+remaining author/venue gate into ten answer groups.
 
 ## Current Gate
 
@@ -117,6 +122,7 @@ human answer to the corresponding JSON path and does not contain private values.
 ## Files To Update After Author Decisions
 
 - `submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md` as the Chinese field-by-field intake guide.
+- `submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md` as the Chinese comparison-role matrix before editing cover-letter, response, or venue-system claim text.
 - `submission_package/submission_metadata.json` for the private structured intake.
 - `submission_package/generated_*.md` private previews, generated automatically from the structured intake and intentionally ignored by Git.
 - `submission_package/author_declarations_template.md` if the venue wants declarations in prose form.

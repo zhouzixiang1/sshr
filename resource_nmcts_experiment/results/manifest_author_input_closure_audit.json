@@ -33,7 +33,7 @@
     {
       "evidence": "missing_docs=none; missing_tokens=none.",
       "item": "Support document author-gate visibility",
-      "next_action": "Keep README, checklist, handoff, declaration template, and cover-letter template aligned with the private metadata workflow.",
+      "next_action": "Keep README, checklist, handoff, declaration template, cover-letter template, questionnaire, and minimal response form aligned with the private metadata workflow.",
       "status": "pass"
     },
     {

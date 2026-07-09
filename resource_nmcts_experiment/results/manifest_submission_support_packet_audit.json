@@ -7,7 +7,7 @@
     "table": "paper_latex/tables/submission_support_packet_audit.tex"
   },
   "python": "3.11.15",
-  "rows": 12,
+  "rows": 13,
   "rows_detail": [
     {
       "boundary": "The cover letter still needs author, editor, reviewer, and prior-dissemination fields before upload.",
@@ -47,7 +47,7 @@
     },
     {
       "boundary": "It is a navigation and wording guide over existing evidence; it does not add experiments or replace author/venue metadata.",
-      "evidence": "files_missing=none; tokens=10/10; missing_tokens=none; manifest=results/manifest_comparison_target_validity_audit.json::needs_revision_count=0",
+      "evidence": "files_missing=none; tokens=12/12; missing_tokens=none; manifest=results/manifest_comparison_target_validity_audit.json::needs_revision_count=0",
       "item": "Chinese comparison handoff is visible",
       "next_action": "No action needed.",
       "status": "pass",
@@ -55,8 +55,17 @@
       "upload_risk": "Author-side upload text or reviewer replies could overstate SSHR, ROS, RevKit, or AI/MCTS claims."
     },
     {
+      "boundary": "The matrix summarizes existing verified comparison evidence; it does not introduce a new result or broaden the comparison scope.",
+      "evidence": "files_missing=none; tokens=10/10; missing_tokens=none; manifest=results/manifest_comparison_answer_scorecard.json::needs_revision_count=0",
+      "item": "Chinese comparison significance matrix is visible",
+      "next_action": "No action needed.",
+      "status": "pass",
+      "supported_use": "The author can map each baseline family to its role, supported conclusion, invalid conclusion, and evidence entry point before drafting upload text or rebuttals.",
+      "upload_risk": "The author may know the baseline names but not which conclusion each comparison can legitimately support."
+    },
+    {
       "boundary": "Final authorship, funding, conflicts, archive links, and AI disclosure remain human-gated.",
-      "evidence": "files_missing=none; tokens=8/8; missing_tokens=none; manifest=results/manifest_submission_metadata_closure_path.json::needs_revision_count=0",
+      "evidence": "files_missing=none; tokens=9/9; missing_tokens=none; manifest=results/manifest_submission_metadata_closure_path.json::needs_revision_count=0",
       "item": "Author declarations keep private fields explicit",
       "next_action": "No action needed.",
       "status": "pass",
@@ -65,7 +74,7 @@
     },
     {
       "boundary": "The questionnaire is an intake guide only; it does not contain, infer, or commit private author values.",
-      "evidence": "files_missing=none; tokens=14/14; missing_tokens=none; manifest=results/manifest_author_questionnaire_coverage.json::needs_revision_count=0",
+      "evidence": "files_missing=none; tokens=15/15; missing_tokens=none; manifest=results/manifest_author_questionnaire_coverage.json::needs_revision_count=0",
       "item": "Chinese metadata questionnaire maps human inputs",
       "next_action": "No action needed.",
       "status": "pass",
@@ -120,6 +129,6 @@
   ],
   "script": "analyze_submission_support_packet_audit.py",
   "status_counts": {
-    "pass": 12
+    "pass": 13
   }
 }

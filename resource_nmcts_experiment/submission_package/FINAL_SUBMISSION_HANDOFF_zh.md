@@ -23,9 +23,9 @@
 
 - PDF pages=49/49
 - readiness=73 pass + 1 needs author input
-- payload_files=1133
+- payload_files=1135
 - artifact_registry=30 families / 161 raw CSV / 80312 raw rows
-- source_privacy=0 strict leaks / 57 provenance files / 1090 payload text files
+- source_privacy=0 strict leaks / 57 provenance files / 1092 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open
@@ -33,8 +33,9 @@
 ## 推荐执行顺序
 
 1. 先读 `target_venue_brief.md`，确定一个目标期刊和一个备选期刊。
-2. 再读 `COMPARISON_HANDOFF_zh.md`，确认投稿系统、cover letter 或回复审稿意见时
-   不会把 weighted-score 胜利写成 CNOT/depth/ancilla 全胜，也不会扩展成硬件映射结论。
+2. 再读 `COMPARISON_HANDOFF_zh.md` 和 `COMPARISON_SIGNIFICANCE_MATRIX_zh.md`，
+   确认投稿系统、cover letter 或回复审稿意见时不会把 weighted-score 胜利写成
+   CNOT/depth/ancilla 全胜，也不会扩展成硬件映射结论。
 3. 生成结构化元数据私有 starter。该命令会预填当前仓库 URL、commit hash 和环境说明，
    但仍保留作者/期刊字段为 `AUTHOR INPUT REQUIRED`：
 
@@ -95,6 +96,7 @@ rg -n "needs author input|needs revision|closure_path_ready" results/analysis_su
 - `submission_package/AUTHOR_INPUT_REQUIRED.md`
 - `submission_package/submission_checklist.md`
 - `submission_package/COMPARISON_HANDOFF_zh.md`
+- `submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md`
 - `submission_package/artifact_reproduction_guide.md`
 - `submission_package/editor_screening_brief.md`
 - `submission_package/reviewer_concern_brief.md`
