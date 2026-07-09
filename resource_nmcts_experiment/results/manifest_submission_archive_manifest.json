@@ -3979,7 +3979,7 @@
         {
           "bytes": 588,
           "path": "results/manifest_ros_lut_line_sensitivity.json",
-          "sha256": "0fadefc9ee56dc59f25ce294c5f307ac015f9f51e74982713825e9bbea1b9545"
+          "sha256": "a8189c542f5e55ed063b32d62797470f6d1caf44c08befd5e4f6baa5c7b902bc"
         },
         {
           "bytes": 1040,
@@ -4118,18 +4118,18 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "53021e8eb98a02808eab825c4082e61852981ac0f8a125e1372eb02ee45fb0d1"
+      "sha256_digest": "1ce80fb594bc9b0e0408d55001b205b3473c82ddf9cd21c6f3947007cb2ef481"
     },
     {
       "boundary": "Includes reproducible entry points and top-level core implementation modules; raw sweeps still require their individual drivers.",
-      "bytes": 2253630,
+      "bytes": 2253648,
       "category": "Scripts and docs",
       "file_count": 125,
       "files": [
         {
-          "bytes": 175380,
+          "bytes": 175398,
           "path": "DELIVERABLE_zh.md",
-          "sha256": "a6dd4a1b1b5ae650b569258d08f1bf4599c9dde9049228c0142e5b25c5d699d7"
+          "sha256": "4a89084868bd0d36dde4f833939be422dae858579c4018c934ba1a8504dea96c"
         },
         {
           "bytes": 102470,
@@ -4753,7 +4753,7 @@
         }
       ],
       "missing": [],
-      "sha256_digest": "cae7f7b0fa00a1a9645123ac9fea3ccbfbbc893c749fbee7c7f9dfc54dacb468"
+      "sha256_digest": "4757a5c739d2ba5bde3dcddbdd11f643fb0ff81046d6081f5a78ad6bd4a49276"
     },
     {
       "boundary": "Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild.",
