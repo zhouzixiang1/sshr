@@ -370,20 +370,20 @@
       "summary_files": "12"
     },
     {
-      "analysis_files": "28",
+      "analysis_files": "29",
       "claim_use": "Separates neural/search-control effects from deterministic algebraic construction and guarded portfolio selection.",
       "dependency_boundary": "Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only.",
-      "driver_scripts": "train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; run_bitflip_random_prior_control.py; analyze_bitflip_random_prior_control.py; run_bitflip_neural_budget_sweep.py; analyze_bitflip_neural_budget_sweep.py; analyze_bitflip_prior_difficulty_slices.py; analyze_bitflip_prior_feature_gate.py; analyze_bitflip_prior_feature_gate_cv.py; analyze_bitflip_prior_feature_gate_cv_random_control.py; analyze_frontier_random_depth_control.py; analyze_phase_rotation_precision_audit.py; analyze_phase_rotation_sequence_smoke_audit.py; analyze_rotation_synthesis_backend_audit.py; analyze_phase_policy_budget_frontier.py; analyze_phase_policy_random_control.py; analyze_root_action_ranker_audit.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py; analyze_stochastic_control_stability.py; analyze_neural_mcts_claim_calibration.py",
+      "driver_scripts": "train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; run_bitflip_random_prior_control.py; analyze_bitflip_random_prior_control.py; run_bitflip_neural_budget_sweep.py; analyze_bitflip_neural_budget_sweep.py; analyze_bitflip_prior_difficulty_slices.py; analyze_bitflip_prior_feature_gate.py; analyze_bitflip_prior_feature_gate_cv.py; analyze_bitflip_prior_feature_gate_cv_random_control.py; analyze_frontier_random_depth_control.py; analyze_phase_rotation_precision_audit.py; analyze_phase_rotation_sequence_smoke_audit.py; analyze_rotation_synthesis_backend_audit.py; analyze_phase_policy_budget_frontier.py; analyze_phase_policy_random_control.py; analyze_root_action_ranker_audit.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py; analyze_limited_learned_control_boundary.py; analyze_stochastic_control_stability.py; analyze_neural_mcts_claim_calibration.py",
       "evidence_family": "Learned-control and ablations",
-      "manifest_files": "22",
+      "manifest_files": "23",
       "raw_files": "20",
       "raw_rows": "10883",
       "representative_raw": "results/raw_bitflip_neural_budget_sweep.csv; results/raw_bitflip_random_prior_control.csv; results/raw_highdim_neural_prior_boolean_guard.csv; results/raw_highdim_neural_prior_learned_prior.csv; +16 more",
       "rerun_tier": "training plus ablation rerun",
       "scripts_missing": "",
-      "scripts_present": "23",
+      "scripts_present": "24",
       "status": "complete",
-      "summary_files": "38"
+      "summary_files": "39"
     },
     {
       "analysis_files": "2",

@@ -54,6 +54,7 @@ author,tex_input,tables/sparse_depth4_gate_generalization,paper_latex/tables/spa
 author,tex_input,tables/stage_gated_frontier,paper_latex/tables/stage_gated_frontier.tex,True,True,pass,No action needed.
 author,tex_input,tables/schedule_proxy_audit,paper_latex/tables/schedule_proxy_audit.tex,True,True,pass,No action needed.
 author,tex_input,tables/learned_control_audit,paper_latex/tables/learned_control_audit.tex,True,True,pass,No action needed.
+author,tex_input,tables/limited_learned_control_boundary,paper_latex/tables/limited_learned_control_boundary.tex,True,True,pass,No action needed.
 author,tex_input,tables/neural_mcts_claim_calibration,paper_latex/tables/neural_mcts_claim_calibration.tex,True,True,pass,No action needed.
 author,tex_input,tables/weight_robustness_compact,paper_latex/tables/weight_robustness_compact.tex,True,True,pass,No action needed.
 author,tex_input,tables/resource_weight_sensitivity_audit,paper_latex/tables/resource_weight_sensitivity_audit.tex,True,True,pass,No action needed.
@@ -132,6 +133,7 @@ anonymous,tex_input,tables/sparse_depth4_gate_generalization,paper_latex/tables/
 anonymous,tex_input,tables/stage_gated_frontier,paper_latex/tables/stage_gated_frontier.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/schedule_proxy_audit,paper_latex/tables/schedule_proxy_audit.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/learned_control_audit,paper_latex/tables/learned_control_audit.tex,True,True,pass,No action needed.
+anonymous,tex_input,tables/limited_learned_control_boundary,paper_latex/tables/limited_learned_control_boundary.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/neural_mcts_claim_calibration,paper_latex/tables/neural_mcts_claim_calibration.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/weight_robustness_compact,paper_latex/tables/weight_robustness_compact.tex,True,True,pass,No action needed.
 anonymous,tex_input,tables/resource_weight_sensitivity_audit,paper_latex/tables/resource_weight_sensitivity_audit.tex,True,True,pass,No action needed.
@@ -210,6 +212,7 @@ acm_tqc,tex_input,tables/sparse_depth4_gate_generalization,paper_latex/tables/sp
 acm_tqc,tex_input,tables/stage_gated_frontier,paper_latex/tables/stage_gated_frontier.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/schedule_proxy_audit,paper_latex/tables/schedule_proxy_audit.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/learned_control_audit,paper_latex/tables/learned_control_audit.tex,True,True,pass,No action needed.
+acm_tqc,tex_input,tables/limited_learned_control_boundary,paper_latex/tables/limited_learned_control_boundary.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/neural_mcts_claim_calibration,paper_latex/tables/neural_mcts_claim_calibration.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/weight_robustness_compact,paper_latex/tables/weight_robustness_compact.tex,True,True,pass,No action needed.
 acm_tqc,tex_input,tables/resource_weight_sensitivity_audit,paper_latex/tables/resource_weight_sensitivity_audit.tex,True,True,pass,No action needed.

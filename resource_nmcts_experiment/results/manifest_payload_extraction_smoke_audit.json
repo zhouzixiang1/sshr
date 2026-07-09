@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1211; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1216; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -185,6 +185,12 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_learned_control_audit.json; needs_revision_count=0; rows=12; stderr=none",
       "item": "Learned-control audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_limited_learned_control_boundary.json; needs_revision_count=0; rows=6; stderr=none",
+      "item": "Limited learned-control boundary",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -528,6 +534,13 @@
     },
     {
       "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_limited_learned_control_boundary.json",
+      "minimum_rows_key": "rows",
+      "name": "Limited learned-control boundary",
+      "script": "analyze_limited_learned_control_boundary.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
       "manifest": "results/manifest_neural_mcts_claim_calibration.json",
       "minimum_rows_key": "rows",
       "name": "Neural/MCTS claim calibration",
@@ -682,6 +695,6 @@
     }
   ],
   "status_counts": {
-    "pass": 52
+    "pass": 53
   }
 }

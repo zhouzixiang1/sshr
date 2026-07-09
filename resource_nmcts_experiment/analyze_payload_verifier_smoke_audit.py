@@ -151,12 +151,19 @@ def run_verifier(payload_dir: Path) -> dict[str, str]:
     source_rows = int_or_none(source_manifest.get("rows")) if source_manifest else None
     source_needs_revision = int_or_none(source_manifest.get("needs_revision_count")) if source_manifest else None
     extracted_archive_absent = not (payload_dir / "submission_package" / "dist" / "resource_nmcts_submission_payload.tar.gz").exists()
-    expected_delta: int | str = 1 if extracted_archive_absent else 0
+    expected_delta: int | str = "0_or_1" if extracted_archive_absent else 0
     row_delta: int | str = "missing"
     row_delta_ok = True
     if source_rows is not None and rows >= 0:
         row_delta = source_rows - rows
-        row_delta_ok = row_delta == expected_delta
+        if extracted_archive_absent:
+            # During rebuild this audit runs before the source-tree terminal
+            # verifier rewrites its own manifest.  The source manifest may
+            # therefore be either the preterminal one (delta 0) or the final
+            # one with the source-only archive/self-smoke row (delta 1).
+            row_delta_ok = row_delta in (0, 1)
+        else:
+            row_delta_ok = row_delta == expected_delta
     stderr_lines = proc.stderr.strip().splitlines()
     status = (
         "pass"
@@ -174,7 +181,7 @@ def run_verifier(payload_dir: Path) -> dict[str, str]:
         f"verifier_returncode={proc.returncode}; verifier_rows={rows}; "
         f"source_verifier_rows={source_rows if source_rows is not None else 'missing'}; "
         f"row_delta={row_delta}; expected_row_delta={expected_delta}; "
-        f"row_delta_reason={'archive_absent_by_design' if extracted_archive_absent else 'none'}; "
+        f"row_delta_reason={'archive_absent_by_design_or_preterminal_source_manifest' if extracted_archive_absent else 'none'}; "
         f"verifier_needs_revision_count={needs_revision}; extracted_payload_mode={extracted_mode}; "
         f"source_needs_revision_count={source_needs_revision if source_needs_revision is not None else 'missing'}; "
         f"status_counts={status_counts}; stdout_lines={len(proc.stdout.splitlines())}; "

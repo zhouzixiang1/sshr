@@ -4,14 +4,14 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 
 ## Status counts
 
-- pass: 234
+- pass: 237
 
 ## Dependency types
 
 - bibliography: 3
 - figure: 21
 - main_source: 3
-- tex_input: 207
+- tex_input: 210
 
 ## Missing dependencies
 
@@ -76,6 +76,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/stage_gated_frontier` | `paper_latex/tables/stage_gated_frontier.tex` | True | True | pass |
 | author | tex_input | `tables/schedule_proxy_audit` | `paper_latex/tables/schedule_proxy_audit.tex` | True | True | pass |
 | author | tex_input | `tables/learned_control_audit` | `paper_latex/tables/learned_control_audit.tex` | True | True | pass |
+| author | tex_input | `tables/limited_learned_control_boundary` | `paper_latex/tables/limited_learned_control_boundary.tex` | True | True | pass |
 | author | tex_input | `tables/neural_mcts_claim_calibration` | `paper_latex/tables/neural_mcts_claim_calibration.tex` | True | True | pass |
 | author | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
 | author | tex_input | `tables/resource_weight_sensitivity_audit` | `paper_latex/tables/resource_weight_sensitivity_audit.tex` | True | True | pass |
@@ -154,6 +155,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/stage_gated_frontier` | `paper_latex/tables/stage_gated_frontier.tex` | True | True | pass |
 | anonymous | tex_input | `tables/schedule_proxy_audit` | `paper_latex/tables/schedule_proxy_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/learned_control_audit` | `paper_latex/tables/learned_control_audit.tex` | True | True | pass |
+| anonymous | tex_input | `tables/limited_learned_control_boundary` | `paper_latex/tables/limited_learned_control_boundary.tex` | True | True | pass |
 | anonymous | tex_input | `tables/neural_mcts_claim_calibration` | `paper_latex/tables/neural_mcts_claim_calibration.tex` | True | True | pass |
 | anonymous | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
 | anonymous | tex_input | `tables/resource_weight_sensitivity_audit` | `paper_latex/tables/resource_weight_sensitivity_audit.tex` | True | True | pass |
@@ -232,6 +234,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/stage_gated_frontier` | `paper_latex/tables/stage_gated_frontier.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/schedule_proxy_audit` | `paper_latex/tables/schedule_proxy_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/learned_control_audit` | `paper_latex/tables/learned_control_audit.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/limited_learned_control_boundary` | `paper_latex/tables/limited_learned_control_boundary.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/neural_mcts_claim_calibration` | `paper_latex/tables/neural_mcts_claim_calibration.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/weight_robustness_compact` | `paper_latex/tables/weight_robustness_compact.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/resource_weight_sensitivity_audit` | `paper_latex/tables/resource_weight_sensitivity_audit.tex` | True | True | pass |

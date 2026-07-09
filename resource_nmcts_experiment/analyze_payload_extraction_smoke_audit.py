@@ -301,6 +301,15 @@ SMOKE_SPECS = (
         minimum_rows=9,
     ),
     SmokeSpec(
+        name="Limited learned-control boundary",
+        script="analyze_limited_learned_control_boundary.py",
+        manifest="results/manifest_limited_learned_control_boundary.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=6,
+    ),
+    SmokeSpec(
         name="Neural/MCTS claim calibration",
         script="analyze_neural_mcts_claim_calibration.py",
         manifest="results/manifest_neural_mcts_claim_calibration.json",

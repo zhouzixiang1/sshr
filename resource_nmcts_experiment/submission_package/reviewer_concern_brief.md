@@ -59,10 +59,13 @@ The manuscript separates the algebraic search-space contribution from learned-co
 
 The search-control baseline audit further separates heuristic-only, beam-only, no-MCTS portfolio, Resource-NMCTS, Pareto archive, learned-prior/no-prior, bit-flip random-prior, frontier random-depth, and phase random-control rows.  Its role is to make clear that MCTS and learned priors add bounded increments on top of deterministic algebraic search, while random controls support ranking, pruning, or budget-allocation claims rather than a deep-learning-only explanation.
 
+The limited learned-control boundary audit adds a direct gate for this point: the generic bit-flip learned prior and Boolean neural guard must remain limited diagnostics with their runtime overhead visible, and cannot be promoted as headline neural/MCTS evidence.
+
 Manuscript anchors:
 - Search contribution decomposition
 - Search-control baseline audit
 - Learned-control audit
+- Limited learned-control boundary audit
 - Neural/MCTS claim-calibration audit
 - Counterpoint and claim-boundary audit
 - Sparse depth-frontier analysis

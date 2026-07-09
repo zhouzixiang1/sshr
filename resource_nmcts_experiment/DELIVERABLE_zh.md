@@ -21,10 +21,10 @@
 以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，用于防止交付说明和机器审计结果漂移：
 
 - PDF pages=54/54
-- readiness=85 pass + 1 needs author input
-- payload_files=1211
+- readiness=86 pass + 1 needs author input
+- payload_files=1216
 - artifact_registry=31 families / 161 raw CSV / 80312 raw rows
-- source_privacy=0 strict leaks / 57 provenance files / 1168 payload text files
+- source_privacy=0 strict leaks / 57 provenance files / 1173 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open
@@ -469,7 +469,7 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/analysis_pdf_metadata_audit.md`
 - `results/manifest_pdf_metadata_audit.json`
 
-该审计调用 Poppler `pdfinfo` 检查作者版和匿名版投稿 PDF 的 Title/Author/Creator/Producer 等元数据、页数、A4 页面尺寸、加密状态、JavaScript、Form 字段和隐私敏感字符串。当前作者版和匿名版均为 51 页，均未加密、无 JavaScript、A4，metadata 中没有作者身份、路径、TODO/TBD/placeholder 或 `AUTHOR INPUT REQUIRED` 泄漏。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；与 visual/text 审计一样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包。
+该审计调用 Poppler `pdfinfo` 检查作者版和匿名版投稿 PDF 的 Title/Author/Creator/Producer 等元数据、页数、A4 页面尺寸、加密状态、JavaScript、Form 字段和隐私敏感字符串。当前作者版和匿名版均为 54 页，均未加密、无 JavaScript、A4，metadata 中没有作者身份、路径、TODO/TBD/placeholder 或 `AUTHOR INPUT REQUIRED` 泄漏。它已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke；与 visual/text 审计一样作为 terminal audit 排除出稳定 payload digest，但脚本随 payload 打包。
 
 本轮新增 source/path privacy audit，把源码和 payload 中的本机路径分成“严格禁止”和“可复现 provenance”两类：
 
@@ -478,7 +478,7 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/analysis_source_path_privacy_audit.md`
 - `results/manifest_source_path_privacy_audit.json`
 
-该审计检查主稿/匿名稿/ACM-TQC 匿名格式稿 TeX、`references.bib`、生成表格输入和公开 submission support Markdown/JSON 文件中是否出现 `/Users/...`、`Desktop/tzb` 或旧 `claude` 路径；同时检查匿名稿 source 是否保留 `Anonymous Authors` 且不含 `Zixiang Zhou` 作者字段，payload manifest 中是否混入 private metadata/previews。当前严格区为 0 个本机路径、0 个旧 `claude` 路径、0 个私有 payload 成员；主稿/匿名稿/ACM-TQC 稿、bibliography 和表格输入共 204 个文件通过严格检查，18 个公开 support 文件通过路径检查；payload 的 1148 个文本文件中有 57 个 provenance 文件含本机路径、228 个路径命中，均归类为 `results/`、`README.md` 或 `DELIVERABLE_zh.md` 中的工具链/实验 provenance，而不是主稿或投稿支持文件泄漏；payload manifest 当前含 1191 个成员。该审计已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke。
+该审计检查主稿/匿名稿/ACM-TQC 匿名格式稿 TeX、`references.bib`、生成表格输入和公开 submission support Markdown/JSON 文件中是否出现 `/Users/...`、`Desktop/tzb` 或旧 `claude` 路径；同时检查匿名稿 source 是否保留 `Anonymous Authors` 且不含 `Zixiang Zhou` 作者字段，payload manifest 中是否混入 private metadata/previews。当前严格区为 0 个本机路径、0 个旧 `claude` 路径、0 个私有 payload 成员；主稿/匿名稿/ACM-TQC 稿、bibliography 和表格输入共 210 个文件通过严格检查，18 个公开 support 文件通过路径检查；payload 的 1173 个文本文件中有 57 个 provenance 文件含本机路径、228 个路径命中，均归类为 `results/`、`README.md` 或 `DELIVERABLE_zh.md` 中的工具链/实验 provenance，而不是主稿或投稿支持文件泄漏；payload manifest 当前含 1216 个成员。该审计已接入 rebuild、verify、readiness、package verifier 和 payload extraction smoke。
 
 本轮新增投稿完整性层：英文投稿稿末尾加入 `Data and Code Availability`，明确代码、raw/summary CSV、manifest、LaTeX 表、图源数据和 PDF 均位于 `resource_nmcts_experiment/` artifact package，运行入口为 `run_*.py`、`train_*.py`、`analyze_*.py`，环境为 `mcts-qoracle` 和直接解释器路径 `/opt/anaconda3/envs/mcts-qoracle/bin/python`。同时新增自动 submission-readiness audit：
 
@@ -496,7 +496,7 @@ payload 后可以从解包目录运行一键 verifier。
 
 该审计逐项检查 logical-layer scope、novelty/comparison route、comparison target roles、counterpoint/negative-result visibility、AI/MCTS claim boundary、large-scale verification boundary、reproducibility path、author/venue gate 和 editorial reading path。当前 9/9 项 pass；它已接入 rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke 和 artifact rerun registry。artifact registry 现在覆盖 31 个 evidence family、161 个 raw CSV、80312 行 unique raw-row references。
 
-当前 submission-readiness 审计结果为 83 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、algorithm contract、search-budget contract、baseline fairness/scope、comparison answer/resource-weight sensitivity/CNOT constraint/SSHR reproduction/threats-to-validity/search-control/learned-control/stochastic-control stability/neural-MCTS claim-calibration/citation/editorial screening/target-venue/ROS reproduction-boundary/schedule-proxy/runtime-envelope/submission support-packet audits、ACM/TQC target-format smoke、ultra-scale symbolic stress/resource-profile audits、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、final upload sequence audit、upload bundle matrix audit、uploadable payload archive、payload round-trip/extraction/verifier/LaTeX compile checks、terminal package verifier、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder 和 compiled PDF 检查。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
+当前 submission-readiness 审计结果为 86 项 pass、1 项 needs author input。英文投稿稿摘要已压缩并加入自动 abstract concision 检查；当前审计计数为 287 words。已通过项包括 bounded abstract claim、abstract concision、first-pages scope and assumptions、contribution-to-evidence chain、executable method workflow、algorithm contract、search-budget contract、baseline fairness/scope、comparison answer/resource-weight sensitivity/CNOT constraint/SSHR reproduction/threats-to-validity/search-control/learned-control/limited learned-control boundary/stochastic-control stability/neural-MCTS claim-calibration/citation/editorial screening/target-venue/ROS reproduction-boundary/schedule-proxy/runtime-envelope/submission support-packet audits、ACM/TQC target-format smoke、ultra-scale symbolic stress/resource-profile audits、reproducibility evidence、claim-to-artifact traceability、archive package manifest、submission support templates、submission metadata audit、goal completion audit、final upload sequence audit、upload bundle matrix audit、uploadable payload archive、payload round-trip/extraction/verifier/LaTeX compile checks、terminal package verifier、derived package rebuild command、limitations/failure modes、data/code availability、无 TODO/TBD/placeholder 和 compiled PDF 检查。唯一保留项是作者特定的 funding、acknowledgements、author metadata、competing interests、target-venue fields 和最终归档链接，需要在确定目标期刊/投稿系统时由作者填写。
 
 本轮新增 upload bundle matrix audit，用于把“能投稿”进一步拆成可执行上传包选择：
 
@@ -505,7 +505,7 @@ payload 后可以从解包目录运行一键 verifier。
 - `results/analysis_upload_bundle_matrix_audit.md`
 - `results/manifest_upload_bundle_matrix_audit.json`
 
-该审计把作者版 manuscript bundle、generic anonymous-review bundle、ACM/TQC review-format bundle、source/data payload bundle、support/declaration templates、private local-only metadata boundary 和 venue decision/final-sequence gate 分成 7 行检查。当前 7/7 pass；source/data payload bundle 对应 1191 个文件，private metadata/previews 不进入 payload，作者仍需要根据目标 venue 选择作者版、匿名版或 ACM/TQC 路由并填写私有元数据。
+该审计把作者版 manuscript bundle、generic anonymous-review bundle、ACM/TQC review-format bundle、source/data payload bundle、support/declaration templates、private local-only metadata boundary 和 venue decision/final-sequence gate 分成 7 行检查。当前 7/7 pass；source/data payload bundle 对应 1216 个文件，private metadata/previews 不进入 payload，作者仍需要根据目标 venue 选择作者版、匿名版或 ACM/TQC 路由并填写私有元数据。
 
 ## 2. 当前已完成内容
 

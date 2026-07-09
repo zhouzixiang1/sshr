@@ -167,10 +167,12 @@ def build_items() -> list[GoalItem]:
                     TABLES / "stochastic_control_stability.tex",
                     RESULTS / "analysis_learned_control_audit.md",
                     TABLES / "learned_control_audit.tex",
+                    RESULTS / "analysis_limited_learned_control_boundary.md",
+                    TABLES / "limited_learned_control_boundary.tex",
                     FIGURES / "fig7_learned_control_summary.pdf",
                 )
             ),
-            evidence="Search-control, bit-flip random-prior, frontier random-depth, stochastic-control stability, and learned-control audits separate heuristic/beam/no-MCTS/MCTS/Pareto/prior comparisons, same-budget random-prior controls, same-candidate frontier budget controls, independent-seed checks, promoted frontier/gating/phase-pruning controls, and limited diagnostics.",
+            evidence="Search-control, bit-flip random-prior, frontier random-depth, stochastic-control stability, learned-control, and limited-boundary audits separate heuristic/beam/no-MCTS/MCTS/Pareto/prior comparisons, same-budget random-prior controls, same-candidate frontier budget controls, independent-seed checks, promoted frontier/gating/phase-pruning controls, and runtime-negative limited diagnostics.",
             evidence_files=(
                 RESULTS / "analysis_search_control_baseline_audit.md",
                 TABLES / "search_control_baseline_audit.tex",
@@ -182,6 +184,8 @@ def build_items() -> list[GoalItem]:
                 TABLES / "stochastic_control_stability.tex",
                 RESULTS / "analysis_learned_control_audit.md",
                 TABLES / "learned_control_audit.tex",
+                RESULTS / "analysis_limited_learned_control_boundary.md",
+                TABLES / "limited_learned_control_boundary.tex",
                 FIGURES / "fig7_learned_control_summary.pdf",
             ),
             boundary="The evidence supports bounded neural/search-control contributions, not a claim that deep RL alone explains all gains.",

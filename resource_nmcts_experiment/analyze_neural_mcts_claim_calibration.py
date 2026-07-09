@@ -30,6 +30,8 @@ SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json
 SEARCH_CONTROL_SUMMARY = RESULTS / "summary_search_control_baseline_audit.csv"
 LEARNED_CONTROL_MANIFEST = RESULTS / "manifest_learned_control_audit.json"
 LEARNED_CONTROL_SUMMARY = RESULTS / "summary_learned_control_audit.csv"
+LIMITED_LEARNED_BOUNDARY_MANIFEST = RESULTS / "manifest_limited_learned_control_boundary.json"
+LIMITED_LEARNED_BOUNDARY_SUMMARY = RESULTS / "summary_limited_learned_control_boundary.csv"
 BITFLIP_RANDOM_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control.json"
 BITFLIP_BUDGET_MANIFEST = RESULTS / "manifest_bitflip_neural_budget_sweep.json"
 FRONTIER_RANDOM_MANIFEST = RESULTS / "manifest_frontier_random_depth_control.json"
@@ -109,21 +111,39 @@ def build_rows() -> list[dict[str, str]]:
             "claim_anchor": "Neural component in the title",
             "evidence_gate": (
                 f"learned-control rows={manifest_rows(LEARNED_CONTROL_MANIFEST)}, "
-                f"promoted={promoted}, bounded={bounded}, limited={limited}, not_promoted={not_promoted}"
+                f"promoted={promoted}, bounded={bounded}, limited={limited}, not_promoted={not_promoted}; "
+                f"limited-boundary rows={manifest_rows(LIMITED_LEARNED_BOUNDARY_MANIFEST)}"
             ),
             "condition": (
                 manifest_revision_count(LEARNED_CONTROL_MANIFEST) == 0
+                and manifest_revision_count(LIMITED_LEARNED_BOUNDARY_MANIFEST) == 0
                 and promoted >= 4
                 and bounded >= 2
                 and limited >= 2
-                and not missing_tokens(paper, ("Learned-control evidence audit", "limited diagnostics"))
-                and not missing_tokens(support, ("Is the AI contribution overstated?", "bounded controls"))
+                and not missing_tokens(
+                    paper,
+                    (
+                        "Learned-control evidence audit",
+                        "limited diagnostics",
+                        "Limited learned-control boundary audit",
+                    ),
+                )
+                and not missing_tokens(
+                    support,
+                    (
+                        "Is the AI contribution overstated?",
+                        "bounded controls",
+                        "Limited learned-control boundary audit",
+                    ),
+                )
             ),
             "allowed_claim": "Neural policies and learned gates are bounded ranking, pruning, or budget-allocation controls with promoted and limited evidence classes.",
             "excluded_claim": "Do not claim that deep learning alone explains the resource reduction.",
             "evidence_files": (
                 LEARNED_CONTROL_MANIFEST,
                 LEARNED_CONTROL_SUMMARY,
+                LIMITED_LEARNED_BOUNDARY_MANIFEST,
+                LIMITED_LEARNED_BOUNDARY_SUMMARY,
                 REVIEWER_BRIEF,
             ),
         },

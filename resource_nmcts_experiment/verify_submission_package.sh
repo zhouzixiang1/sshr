@@ -70,6 +70,7 @@ fi
 "$PYTHON_BIN" analyze_rotation_synthesis_backend_audit.py
 "$PYTHON_BIN" analyze_phase_policy_budget_frontier.py
 "$PYTHON_BIN" analyze_learned_control_audit.py
+"$PYTHON_BIN" analyze_limited_learned_control_boundary.py
 "$PYTHON_BIN" analyze_runtime_envelope_audit.py
 "$PYTHON_BIN" analyze_threats_to_validity_audit.py
 "$PYTHON_BIN" analyze_ultra_scale64_stress.py

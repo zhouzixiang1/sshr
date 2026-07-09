@@ -238,6 +238,10 @@ LEARNED_CONTROL_ANALYSIS = RESULTS / "analysis_learned_control_audit.md"
 LEARNED_CONTROL_SUMMARY = RESULTS / "summary_learned_control_audit.csv"
 LEARNED_CONTROL_MANIFEST = RESULTS / "manifest_learned_control_audit.json"
 LEARNED_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "learned_control_audit.tex"
+LIMITED_LEARNED_BOUNDARY_ANALYSIS = RESULTS / "analysis_limited_learned_control_boundary.md"
+LIMITED_LEARNED_BOUNDARY_SUMMARY = RESULTS / "summary_limited_learned_control_boundary.csv"
+LIMITED_LEARNED_BOUNDARY_MANIFEST = RESULTS / "manifest_limited_learned_control_boundary.json"
+LIMITED_LEARNED_BOUNDARY_TABLE = THIS_DIR / "paper_latex" / "tables" / "limited_learned_control_boundary.tex"
 ROOT_ACTION_RANKER_ANALYSIS = RESULTS / "analysis_root_action_ranker_audit.md"
 ROOT_ACTION_RANKER_SUMMARY = RESULTS / "summary_root_action_ranker_audit.csv"
 ROOT_ACTION_RANKER_MANIFEST = RESULTS / "manifest_root_action_ranker_audit.json"
@@ -676,6 +680,27 @@ def build_rows() -> list[dict[str, str]]:
     )
     learned_control_limited = (
         learned_control_manifest.get("limited_count", "missing") if learned_control_manifest else "missing"
+    )
+    limited_learned_boundary_manifest = read_json(LIMITED_LEARNED_BOUNDARY_MANIFEST)
+    limited_learned_boundary_revisions = (
+        int(limited_learned_boundary_manifest.get("needs_revision_count", -1))
+        if limited_learned_boundary_manifest
+        else -1
+    )
+    limited_learned_boundary_counts = (
+        limited_learned_boundary_manifest.get("status_counts", {})
+        if limited_learned_boundary_manifest
+        else {}
+    )
+    limited_learned_boundary_rows = (
+        limited_learned_boundary_manifest.get("rows", "missing")
+        if limited_learned_boundary_manifest
+        else "missing"
+    )
+    limited_learned_boundary_count = (
+        limited_learned_boundary_manifest.get("limited_boundary_count", "missing")
+        if limited_learned_boundary_manifest
+        else "missing"
     )
     root_action_manifest = read_json(ROOT_ACTION_RANKER_MANIFEST)
     root_action_revisions = int(root_action_manifest.get("needs_revision_count", -1)) if root_action_manifest else -1
@@ -1467,6 +1492,22 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Learned-control audit classifies promoted, bounded, and limited AI/search controls; rows={learned_control_rows}; promoted_count={learned_control_promoted}; bounded_count={learned_control_bounded}; limited_count={learned_control_limited}; claim_class_counts={learned_control_class_counts}; status_counts={learned_control_counts}; needs_revision_count={learned_control_revisions}.",
             "next_action": "Rerun analyze_learned_control_audit.py after changing learned frontier policies, sparse depth gates, phase shortlist controls, neural guard/prior results, or AI-claim manuscript text.",
+        },
+        {
+            "item": "Limited learned-control boundary",
+            "status": "pass"
+            if "tab:limited-learned-control-boundary" in text
+            and LIMITED_LEARNED_BOUNDARY_ANALYSIS.exists()
+            and LIMITED_LEARNED_BOUNDARY_SUMMARY.exists()
+            and LIMITED_LEARNED_BOUNDARY_MANIFEST.exists()
+            and LIMITED_LEARNED_BOUNDARY_TABLE.exists()
+            and limited_learned_boundary_revisions == 0
+            and isinstance(limited_learned_boundary_rows, int)
+            and limited_learned_boundary_rows >= 6
+            and limited_learned_boundary_count == 2
+            else "needs revision",
+            "evidence": f"Limited learned-control boundary audit keeps runtime-negative or weak learned diagnostics out of headline AI claims; rows={limited_learned_boundary_rows}; limited_boundary_count={limited_learned_boundary_count}; status_counts={limited_learned_boundary_counts}; needs_revision_count={limited_learned_boundary_revisions}.",
+            "next_action": "Rerun analyze_limited_learned_control_boundary.py after changing learned-control classifications, AI claim wording, or reviewer-support text.",
         },
         {
             "item": "Root-action ranker audit",

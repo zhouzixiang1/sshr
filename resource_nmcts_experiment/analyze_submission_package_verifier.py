@@ -18,6 +18,7 @@ published STG counterpoint,
 traditional structure-mechanism support,
 search-control baseline coverage,
 learned-control audit coverage,
+limited learned-control boundary coverage,
 learned-prior difficulty-slice localization,
 learned-prior feature-gate localization,
 learned-prior cross-validated feature-gate localization,
@@ -139,6 +140,8 @@ ULTRA_SCALE64_PROFILE_TABLE = THIS_DIR / "paper_latex" / "tables" / "screen_scal
 SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
 LEARNED_CONTROL_MANIFEST = RESULTS / "manifest_learned_control_audit.json"
 LEARNED_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "learned_control_audit.tex"
+LIMITED_LEARNED_BOUNDARY_MANIFEST = RESULTS / "manifest_limited_learned_control_boundary.json"
+LIMITED_LEARNED_BOUNDARY_TABLE = THIS_DIR / "paper_latex" / "tables" / "limited_learned_control_boundary.tex"
 RUNTIME_ENVELOPE_MANIFEST = RESULTS / "manifest_runtime_envelope_audit.json"
 RUNTIME_ENVELOPE_TABLE = THIS_DIR / "paper_latex" / "tables" / "runtime_envelope_audit.tex"
 ROOT_ACTION_RANKER_MANIFEST = RESULTS / "manifest_root_action_ranker_audit.json"
@@ -1094,6 +1097,31 @@ def verify_learned_control() -> dict[str, str]:
         status,
         f"rows={rows}; promoted_count={promoted}; bounded_count={bounded}; limited_count={limited}; needs_revision_count={revisions}; status_counts={counts}; claim_class_counts={class_counts}; table_exists={table_exists}.",
         "Run analyze_learned_control_audit.py and restore promoted/bounded/limited learned-control classifications and the manuscript table.",
+    )
+
+
+def verify_limited_learned_boundary() -> dict[str, str]:
+    manifest = read_json(LIMITED_LEARNED_BOUNDARY_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    limited_count = int(manifest.get("limited_boundary_count", -1)) if manifest else -1
+    table_exists = LIMITED_LEARNED_BOUNDARY_TABLE.exists()
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and isinstance(rows, int)
+        and rows >= 6
+        and limited_count == 2
+        and table_exists
+        else "needs revision"
+    )
+    return row(
+        "Limited learned-control boundary",
+        status,
+        f"rows={rows}; limited_boundary_count={limited_count}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
+        "Run analyze_limited_learned_control_boundary.py and keep runtime-negative learned diagnostics bounded rather than promoted.",
     )
 
 
@@ -2365,6 +2393,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_rotation_synthesis_backend(),
             verify_phase_policy_budget_frontier(),
             verify_learned_control(),
+            verify_limited_learned_boundary(),
             verify_neural_mcts_claim_calibration(),
             verify_runtime_envelope(),
             verify_bitflip_random_prior(),

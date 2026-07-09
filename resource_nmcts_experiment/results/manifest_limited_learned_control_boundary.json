@@ -1,0 +1,26 @@
+{
+  "expected_limited_components": [
+    "Bit-flip learned prior",
+    "Boolean neural guard"
+  ],
+  "limited_boundary_count": 2,
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_limited_learned_control_boundary.md",
+    "manifest": "results/manifest_limited_learned_control_boundary.json",
+    "summary": "results/summary_limited_learned_control_boundary.csv",
+    "table": "paper_latex/tables/limited_learned_control_boundary.tex"
+  },
+  "rows": 6,
+  "script": "analyze_limited_learned_control_boundary.py",
+  "sources": [
+    "results/summary_learned_control_audit.csv",
+    "results/manifest_learned_control_audit.json",
+    "paper_latex/resource_nmcts_submission_v1.tex",
+    "submission_package/reviewer_concern_brief.md",
+    "submission_package/editor_screening_brief.md"
+  ],
+  "status_counts": {
+    "pass": 6
+  }
+}
