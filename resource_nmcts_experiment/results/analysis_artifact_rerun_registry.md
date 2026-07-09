@@ -5,8 +5,8 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 ## Status counts
 
 - complete: 27
-- unique raw files covered by registry: 153
-- unique raw CSV rows covered by registry: 77642
+- unique raw files covered by registry: 154
+- unique raw CSV rows covered by registry: 77702
 
 | evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |
 |---|---|---:|---:|---:|---|---|
@@ -36,7 +36,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | External high-dimensional resource extensions | large raw rerun | 4 | 528 | 4 | complete | Generated large-instance comparisons; external availability and timeout behavior are recorded in manifests. |
 | Boolean screen, frontier, and gate auxiliaries | training plus ablation rerun | 11 | 2170 | 3 | complete | Auxiliary policy-selection evidence; not all rows are promoted as final-quality gains. |
 | Exact, resource-sweep, and development probes | auxiliary raw rerun | 11 | 12524 | 6 | complete | Development and auxiliary evidence retained in the payload; not all rows correspond to headline manuscript claims. |
-| Complete truth-table bridge slices | bridge raw rerun | 8 | 580 | 0 | complete | Narrow bridge slices because full truth tables grow exponentially. |
+| Complete truth-table bridge slices | bridge raw rerun | 9 | 640 | 0 | complete | Narrow bridge slices because full truth tables grow exponentially. |
 
 ## Driver scripts and representative raw artifacts
 
@@ -145,6 +145,6 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - scripts: `analyze_exact_fprm_dp.py; analyze_exact_xag_mc.py; run_resource_sweep.py; analyze_resource_sweep.py`
   - representative raw: `results/raw_ablation_affine.csv; results/raw_evidence.csv; results/raw_evidence_affine.csv; results/raw_exact_fprm_dp.csv; +7 more`
 - **Complete truth-table bridge slices**
-  - claim use: Connects high-dimensional symbolic plans to complete truth-table simulation on n=21-25 bridge rows.
+  - claim use: Connects high-dimensional symbolic plans to complete truth-table simulation on n=21-26 bridge rows.
   - scripts: `run_truth_bridge_terms.py`
-  - representative raw: `results/raw_schedule_truth_bridge_n23_terms.csv; results/raw_schedule_truth_bridge_terms.csv; results/raw_truth_bridge_n23_cost_time003_frontier_terms.csv; results/raw_truth_bridge_n23_large_frontier_terms.csv; +4 more`
+  - representative raw: `results/raw_schedule_truth_bridge_n23_terms.csv; results/raw_schedule_truth_bridge_terms.csv; results/raw_truth_bridge_n23_cost_time003_frontier_terms.csv; results/raw_truth_bridge_n23_large_frontier_terms.csv; +5 more`

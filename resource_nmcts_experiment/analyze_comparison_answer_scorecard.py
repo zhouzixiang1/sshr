@@ -223,7 +223,7 @@ def build_rows() -> list[dict[str, str]]:
         },
         {
             "reviewer_question": "Is the evidence only small-scale?",
-            "comparison_target": "n=20--64 symbolic runs and n=21--25 complete truth-table bridges",
+            "comparison_target": "n=20--64 symbolic runs and n=21--26 complete truth-table bridges",
             "role": "scaling and correctness verification",
             "verified_evidence": verified("High-dimensional frontier search", "Complete truth-table bridges"),
             "headline_answer": (
@@ -290,12 +290,10 @@ def latex_cell(text: str) -> str:
         "ANF": r"\anf{}",
         "FPRM": r"\fprm{}",
         "Rz": r"\rz{}",
+        "n=20--64": r"$n=20$--$64$",
+        "n=21--26": r"$n=21$--$26$",
         "n=3-6": r"$n=3$--$6$",
         "n<=6": r"$n\leq6$",
-        "n=20": r"$n=20$",
-        "n=21": r"$n=21$",
-        "n=25": r"$n=25$",
-        "n=64": r"$n=64$",
     }
     for old, new in replacements.items():
         escaped = escaped.replace(old, new)

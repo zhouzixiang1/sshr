@@ -33,6 +33,7 @@ tmp/bin/
 tmp/cirkit/
 tmp/cirkit_legacy/
 tmp/cirkit_probe/
+tmp/caterpillar/
 tmp/mockturtle/
 resource_nmcts_experiment.zip
 

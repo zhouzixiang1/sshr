@@ -209,6 +209,43 @@
           "commit": "104eb35f1933b080aa228ad419756f04682d4a2e"
         }
       ]
+    },
+    {
+      "name": "caterpillar",
+      "kind": "cxx_source_library",
+      "role": "open-source LSI quantum Boolean synthesis library with XAG synthesis and SAT-based pebbling components; source/build probe only, not standalone ROS CLI",
+      "source_url": "https://github.com/gmeuli/caterpillar",
+      "remote": "https://github.com/gmeuli/caterpillar.git",
+      "install": [
+        "git clone --depth 1 https://github.com/gmeuli/caterpillar.git tmp/caterpillar",
+        "cmake -S tmp/caterpillar -B tmp/caterpillar/build -DCATERPILLAR_TEST=OFF -DCATERPILLAR_EXAMPLES=ON -DCATERPILLAR_EXPERIMENTS=OFF && cmake --build tmp/caterpillar/build --parallel 8",
+        "optional test probe: cmake -S tmp/caterpillar -B tmp/caterpillar/build-test -DCATERPILLAR_TEST=ON -DCATERPILLAR_EXAMPLES=OFF -DCATERPILLAR_EXPERIMENTS=OFF && cmake --build tmp/caterpillar/build-test --parallel 8"
+      ],
+      "available": true,
+      "hits": [
+        [
+          "source",
+          "/Users/zhouzixiang/Desktop/tzb/src/tmp/caterpillar",
+          "local source checkout exists"
+        ],
+        [
+          "file",
+          "/Users/zhouzixiang/Desktop/tzb/src/tmp/caterpillar/build/CMakeCache.txt",
+          "local file exists"
+        ],
+        [
+          "file",
+          "/Users/zhouzixiang/Desktop/tzb/src/tmp/caterpillar/build-test/lib/abcsat/liblibabcsat.a",
+          "local file exists"
+        ]
+      ],
+      "remote_heads": [
+        {
+          "branch": "master",
+          "status": "reachable",
+          "commit": "4c6f766cd0ffc62d37ab45edfe80c9f1eae44764"
+        }
+      ]
     }
   ]
 }

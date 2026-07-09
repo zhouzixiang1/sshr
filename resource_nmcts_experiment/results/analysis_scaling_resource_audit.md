@@ -9,4 +9,4 @@ The representative resources are method-specific and should not be read as avera
 | Stage-gated frontier | n=24,28,32,40 | 96 | 96/96 | score 1089.7; T/CNOT/depth 985/1593/1593; anc. 5.3; time 10.57s | Controller audit; still term-set symbolic verification. |
 | Action-width probe | n=20,28,40 | 216 | 1512/1512 | score 1130.4; T/CNOT/depth 1023/1648/1648; anc. 5.2; time 1.27s | Sensitivity check; wider root screens are not claimed as better. |
 | Ultra-scale term-set stress | n=48,56,64 | 48 | 480/480 | score 1182.6; T/CNOT/depth 1070/1728/1728; anc. 5.4; time 17.11s | Ultra-scale symbolic stress; no truth-table enumeration. |
-| Complete truth-table bridge | n=21--25 | 40 | 400/400 | score 1126.2; T/CNOT/depth 1019/1647/1647; anc. 5.3; time 4.16s; truth check 0.08s | Complete checking on generated bridge slices only. |
+| Complete truth-table bridge | n=21--26 | 46 | 460/460 | score 1107.1; T/CNOT/depth 1001/1619/1619; anc. 5.3; time 4.11s; truth check 0.14s | Complete checking on generated bridge slices only. |

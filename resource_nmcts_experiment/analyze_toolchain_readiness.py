@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -138,6 +139,26 @@ TOOLS = [
             "/opt/anaconda3/envs/mcts-qoracle/bin/python resource_nmcts_experiment/run_revkit_cli_probe.py --workers 8 --timeout 20 --flow tbs=tbs --flow dbs=dbs --flow rms=rms",
         ],
     },
+    {
+        "name": "caterpillar",
+        "kind": "cxx_source_library",
+        "paths": [
+            ROOT / "tmp" / "caterpillar",
+            ROOT / "tmp" / "caterpillar" / "build" / "CMakeCache.txt",
+            ROOT / "tmp" / "caterpillar" / "build-test" / "lib" / "abcsat" / "liblibabcsat.a",
+        ],
+        "commands": [],
+        "modules": [],
+        "role": "open-source LSI quantum Boolean synthesis library with XAG synthesis and SAT-based pebbling components; source/build probe only, not standalone ROS CLI",
+        "source_url": "https://github.com/gmeuli/caterpillar",
+        "remote": "https://github.com/gmeuli/caterpillar.git",
+        "branches": ["master"],
+        "install": [
+            "git clone --depth 1 https://github.com/gmeuli/caterpillar.git tmp/caterpillar",
+            "cmake -S tmp/caterpillar -B tmp/caterpillar/build -DCATERPILLAR_TEST=OFF -DCATERPILLAR_EXAMPLES=ON -DCATERPILLAR_EXPERIMENTS=OFF && cmake --build tmp/caterpillar/build --parallel 8",
+            "optional test probe: cmake -S tmp/caterpillar -B tmp/caterpillar/build-test -DCATERPILLAR_TEST=ON -DCATERPILLAR_EXAMPLES=OFF -DCATERPILLAR_EXPERIMENTS=OFF && cmake --build tmp/caterpillar/build-test --parallel 8",
+        ],
+    },
 ]
 
 
@@ -225,7 +246,11 @@ def find_tool(tool: dict) -> dict:
     for path in tool.get("paths", []):
         path = Path(path)
         if path.exists() and path.is_file():
-            hits.append(("file", str(path), binary_version(path)))
+            if os.access(path, os.X_OK):
+                probe = binary_version(path)
+            else:
+                probe = "local file exists"
+            hits.append(("file", str(path), probe))
         elif path.exists() and path.is_dir():
             hits.append(("source", str(path), "local source checkout exists"))
     for command in tool.get("commands", []):
@@ -382,6 +407,17 @@ def write_markdown(prereqs: list[dict], results: list[dict], out: Path) -> None:
             lines.append("- RevKit/CirKit legacy CLI is locally available for command-line reversible-synthesis probes.")
     else:
         lines.append("- RevKit/CirKit legacy CLI is not yet available, so legacy command-line reversible-synthesis reproduction remains pending.")
+    if availability.get("caterpillar"):
+        lines.append(
+            "- caterpillar source is locally available as the open-source LSI quantum Boolean synthesis library cited by the XAG compilation line. It exposes XAG synthesis and SAT-based pebbling/memory-management components, but no standalone ROS executable was detected in this checkout."
+        )
+        lines.append(
+            "- The local caterpillar minimal CMake probe configured successfully; the optional all-test build is environment-sensitive on this macOS/AppleClang toolchain because the bundled Catch2 trap uses an x86 `int $3` inline-assembly mnemonic."
+        )
+    else:
+        lines.append(
+            "- caterpillar is reachable upstream but not locally available; this prevents using it as a source-family probe for ROS/XAG memory-management components on this workstation."
+        )
     lines.extend(
         [
             "- This audit is intentionally environment-specific; rerun it after installing external tools before claiming reproduced external reversible-toolchain results.",
@@ -391,6 +427,7 @@ def write_markdown(prereqs: list[dict], results: list[dict], out: Path) -> None:
             "- mockturtle: <https://github.com/lsils/mockturtle>",
             "- RevKit: <https://github.com/msoeken/revkit>",
             "- RevKit/CirKit legacy CLI: <https://msoeken.github.io/revkit.html>",
+            "- caterpillar: <https://github.com/gmeuli/caterpillar>",
             "- Back-end-aware fault-tolerant oracle synthesis: <https://dl.acm.org/doi/10.1145/3658617.3697776>",
         ]
     )

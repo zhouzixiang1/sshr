@@ -516,7 +516,7 @@ def specs() -> list[EvidenceFamily]:
         ),
         EvidenceFamily(
             family="Complete truth-table bridge slices",
-            claim_use="Connects high-dimensional symbolic plans to complete truth-table simulation on n=21-25 bridge rows.",
+            claim_use="Connects high-dimensional symbolic plans to complete truth-table simulation on n=21-26 bridge rows.",
             rerun_tier="bridge raw rerun",
             scripts=("run_truth_bridge_terms.py",),
             raw_patterns=("raw_truth_bridge*.csv", "raw_schedule_truth_bridge*.csv"),

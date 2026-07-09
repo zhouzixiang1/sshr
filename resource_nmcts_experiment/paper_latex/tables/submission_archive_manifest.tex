@@ -2,15 +2,15 @@
 \toprule
 Payload group & Files & Missing & Digest & Boundary \\
 \midrule
-Manuscript source & 5 & 0 & \texttt{c5b8781e4ad2} & Compiled PDF is checked by readiness audit to avoid self-referential hashes. \\
-Paper tables & 182 & 0 & \texttt{48368b2a8c0a} & Terminal submission audit tables are excluded from the stable payload digest. \\
-Submission figures & 28 & 0 & \texttt{969172669302} & Includes generated figure assets and plotted source data, not raw benchmark reruns. \\
-Raw measurements & 153 & 0 & \texttt{efc9edba2fff} & Raw CSVs are regenerated only by the heavier run scripts, not by the lightweight rebuild. \\
-Derived summaries & 402 & 0 & \texttt{3013cf740b70} & Terminal submission/package outputs are excluded so this manifest remains stable. \\
-Run manifests & 113 & 0 & \texttt{40fdf97270e6} & Submission-level terminal manifests are excluded from this digest group. \\
-Scripts and docs & 143 & 0 & \texttt{b2dbb997616c} & Includes reproducible entry points and top-level core implementation modules; raw sweeps still require their individual drivers. \\
+Manuscript source & 5 & 0 & \texttt{120183635591} & Compiled PDF is checked by readiness audit to avoid self-referential hashes. \\
+Paper tables & 183 & 0 & \texttt{9ea1417d7d1c} & Terminal submission audit tables are excluded from the stable payload digest. \\
+Submission figures & 28 & 0 & \texttt{fe6acc594c09} & Includes generated figure assets and plotted source data, not raw benchmark reruns. \\
+Raw measurements & 154 & 0 & \texttt{599f0822fe1d} & Raw CSVs are regenerated only by the heavier run scripts, not by the lightweight rebuild. \\
+Derived summaries & 404 & 0 & \texttt{9351c19e6cff} & Terminal submission/package outputs are excluded so this manifest remains stable. \\
+Run manifests & 113 & 0 & \texttt{0fd65dbbcf72} & Submission-level terminal manifests are excluded from this digest group. \\
+Scripts and docs & 143 & 0 & \texttt{f49caf8eb14b} & Includes reproducible entry points and top-level core implementation modules; raw sweeps still require their individual drivers. \\
 Models & 20 & 0 & \texttt{4c5c2a1bfc19} & Includes trained local policy artifacts when present; model retraining is not part of the lightweight rebuild. \\
 External adapters & 1 & 0 & \texttt{de5aa3b78998} & Includes local adapter source files used for external toolchain probes, not vendored tool repositories. \\
-Submission support & 13 & 0 & \texttt{fb055468dc4b} & Includes public package README, author-input packet, artifact guide, cover-letter, declaration, checklist, reviewer-brief, editor-screening, venue-selection, and structured metadata templates; ignored generated private submission text is excluded. \\
+Submission support & 13 & 0 & \texttt{c9d087ff6b99} & Includes public package README, author-input packet, artifact guide, cover-letter, declaration, checklist, reviewer-brief, editor-screening, venue-selection, and structured metadata templates; ignored generated private submission text is excluded. \\
 \bottomrule
 \end{tabularx}

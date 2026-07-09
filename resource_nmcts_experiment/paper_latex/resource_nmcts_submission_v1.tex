@@ -62,8 +62,8 @@ instances, a sparse depth-2/4 frontier matches the measured depth-2/3/4
 frontier while reducing evaluation time by 24.94--28.88\%, and a learned
 depth-4 gate preserves sparse-frontier score on a 144-pair multi-seed
 $n=24,28,32,40$ audit while saving 13.43\%.  Correctness is supported by
-15,774 symbolic, phase-search, and policy-pruning rows, plus 400/400 complete
-\ttable{}-bridge rows for $n=21$--$25$.  The contribution is a verified
+15,774 symbolic, phase-search, and policy-pruning rows, plus 460/460 complete
+\ttable{}-bridge rows for $n=21$--$26$.  The contribution is a verified
 logical-layer search method with strong T-count and weighted-score advantages,
 not a hardware-mapped, depth-only, or universal-dominance claim.
 \end{abstract}
@@ -1348,8 +1348,8 @@ sign test.  Negative $\Delta$ mean favors the learned shortlist.}
 Figure~\ref{fig:validation} summarizes the current verification envelope.
 The manuscript-level evidence includes 6120/6120 item-level symbolic runs for
 $n=20$--$64$, 1512/1512 width-probe symbolic runs, 531/531 exact phase-search
-rows, 7611/7611 phase-policy pruning rows, and 400/400 complete \ttable{}
-bridge method rows.  The complete bridge spans $n=21$--$25$ and checks the
+rows, 7611/7611 phase-policy pruning rows, and 460/460 complete \ttable{}
+bridge method rows.  The complete bridge spans $n=21$--$26$ and checks the
 oracle relation, the expanded \anf{} plan, and the emitted-circuit symbolic
 semantics.  The additional $n=48,56,64$ stress slice keeps the same symbolic
 plan and emitted-circuit checks, but is not a complete truth-table benchmark.
@@ -1362,7 +1362,7 @@ representative resource means only for the paper-facing method in each slice.
 \includegraphics[width=0.94\linewidth]{fig5_validation.pdf}
 \caption{\textbf{Verification coverage.}  Large term-set experiments are
 validated symbolically; phase-search and phase-policy rows are checked up to
-global phase; $n=21$--$25$ bridge slices add complete \ttable{} checking on
+global phase; $n=21$--$26$ bridge slices add complete \ttable{} checking on
 selected generated functions.}
 \label{fig:validation}
 \end{figure}
@@ -1420,7 +1420,7 @@ Check & Current coverage & Boundary \\
 \midrule
  $n=20$--$64$ item-level symbolic runs & 6120/6120 & Not full truth-table enumeration. \\
 Width-probe symbolic runs & 1512/1512 & Supports the default action width, but remains term-set validation. \\
-$n=21$--$25$ complete bridge & 400/400 & Small generated slices; not exhaustive coverage of all high-dimensional functions. \\
+$n=21$--$26$ complete bridge & 460/460 & Small generated slices; not exhaustive coverage of all high-dimensional functions. \\
 Exact phase-search rows & 531/531 & Verified up to global phase; no rotation-sequence output. \\
 Phase-policy pruning rows & 7611/7611 & Learned shortlist rows verified up to global phase; still no rotation-sequence output. \\
 Rotation-sequence smoke angles & 20/20 & Source-derived single-qubit Clifford+T strings at coarse tolerance; not high-precision gridsynth. \\
@@ -1507,7 +1507,7 @@ ESOP, SSHR-H, and ESOP-MILP baselines.  On external probes based on
 ROS-style LUT mapping, mockturtle, CirKit, and legacy RevKit CLI reversible
 synthesis, the method retains a strong weighted-score advantage while exposing
 clear depth and ancilla tradeoffs.  Large symbolic experiments and
-$n=21$--$25$ complete truth-table bridges support the semantic correctness of
+$n=21$--$26$ complete truth-table bridges support the semantic correctness of
 the logical-layer circuits.  The sparse depth-frontier analysis further reduces
 high-dimensional planning cost by skipping depth 3 in the audited frontier, and
 the learned sparse depth-4 gate preserves sparse-frontier score across both

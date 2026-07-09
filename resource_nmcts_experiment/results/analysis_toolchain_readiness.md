@@ -28,6 +28,9 @@ RevKit 3.x is a Python package backed by C++ code.
 | CirKit 3 shell | binary_or_source | available (additional) | official CirKit shell for AIG/LUT optimization probes; not legacy RevKit reversible synthesis | `source: /Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit` | local source checkout exists |
 | RevKit CLI / CirKit legacy | binary_or_source | available | legacy command-line reversible synthesis flow for exact oracle-permutation baselines | `file: /Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit_legacy/build/programs/revkit` | Usage: /Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit_legacy/build/programs/revkit [OPTIONS] |
 | RevKit CLI / CirKit legacy | binary_or_source | available (additional) | legacy command-line reversible synthesis flow for exact oracle-permutation baselines | `source: /Users/zhouzixiang/Desktop/tzb/src/tmp/cirkit_legacy` | local source checkout exists |
+| caterpillar | cxx_source_library | available | open-source LSI quantum Boolean synthesis library with XAG synthesis and SAT-based pebbling components; source/build probe only, not standalone ROS CLI | `source: /Users/zhouzixiang/Desktop/tzb/src/tmp/caterpillar` | local source checkout exists |
+| caterpillar | cxx_source_library | available (additional) | open-source LSI quantum Boolean synthesis library with XAG synthesis and SAT-based pebbling components; source/build probe only, not standalone ROS CLI | `file: /Users/zhouzixiang/Desktop/tzb/src/tmp/caterpillar/build/CMakeCache.txt` | local file exists |
+| caterpillar | cxx_source_library | available (additional) | open-source LSI quantum Boolean synthesis library with XAG synthesis and SAT-based pebbling components; source/build probe only, not standalone ROS CLI | `file: /Users/zhouzixiang/Desktop/tzb/src/tmp/caterpillar/build-test/lib/abcsat/liblibabcsat.a` | local file exists |
 
 ## Upstream Source Reachability
 
@@ -41,6 +44,7 @@ RevKit 3.x is a Python package backed by C++ code.
 | CirKit 3 shell | <https://github.com/msoeken/cirkit> | master | reachable | `8a098dae1f09f9e8af6e132b1fa76f05948689ed` |
 | RevKit CLI / CirKit legacy | <https://github.com/msoeken/cirkit> | master | reachable | `8a098dae1f09f9e8af6e132b1fa76f05948689ed` |
 | RevKit CLI / CirKit legacy | <https://github.com/msoeken/cirkit> | develop | reachable | `104eb35f1933b080aa228ad419756f04682d4a2e` |
+| caterpillar | <https://github.com/gmeuli/caterpillar> | master | reachable | `4c6f766cd0ffc62d37ab45edfe80c9f1eae44764` |
 
 ## Reproduction Commands to Try Next
 
@@ -70,6 +74,12 @@ RevKit 3.x is a Python package backed by C++ code.
 - `cd tmp/cirkit_legacy && mkdir -p build && cd build && cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -Denable_cirkit-addon-reversible=ON .. && cmake --build . --target revkit --parallel 8`
 - `/opt/anaconda3/envs/mcts-qoracle/bin/python resource_nmcts_experiment/run_revkit_cli_probe.py --workers 8 --timeout 20 --flow tbs=tbs --flow dbs=dbs --flow rms=rms`
 
+### caterpillar
+
+- `git clone --depth 1 https://github.com/gmeuli/caterpillar.git tmp/caterpillar`
+- `cmake -S tmp/caterpillar -B tmp/caterpillar/build -DCATERPILLAR_TEST=OFF -DCATERPILLAR_EXAMPLES=ON -DCATERPILLAR_EXPERIMENTS=OFF && cmake --build tmp/caterpillar/build --parallel 8`
+- `optional test probe: cmake -S tmp/caterpillar -B tmp/caterpillar/build-test -DCATERPILLAR_TEST=ON -DCATERPILLAR_EXAMPLES=OFF -DCATERPILLAR_EXPERIMENTS=OFF && cmake --build tmp/caterpillar/build-test --parallel 8`
+
 ## Interpretation
 
 - ABC is already usable through the bundled `tmp/abc/abc` binary and is the basis of the current AIG/XAG/LUT/ESOP export baselines.
@@ -78,6 +88,8 @@ RevKit 3.x is a Python package backed by C++ code.
 - RevKit Python API is locally available and can support an API-level `oracle_synth` baseline; this is distinct from the legacy RevKit/CirKit CLI flow.
 - CirKit 3 shell is locally available and `run_cirkit_aig_probe.py` has produced a reproducible AIG/multiplicative-complexity probe. This is not legacy RevKit reversible synthesis or full ROS.
 - RevKit/CirKit legacy CLI is locally available and `run_revkit_cli_probe.py` has produced a reproducible reversible-synthesis CLI portfolio probe on exact oracle permutations.
+- caterpillar source is locally available as the open-source LSI quantum Boolean synthesis library cited by the XAG compilation line. It exposes XAG synthesis and SAT-based pebbling/memory-management components, but no standalone ROS executable was detected in this checkout.
+- The local caterpillar minimal CMake probe configured successfully; the optional all-test build is environment-sensitive on this macOS/AppleClang toolchain because the bundled Catch2 trap uses an x86 `int $3` inline-assembly mnemonic.
 - This audit is intentionally environment-specific; rerun it after installing external tools before claiming reproduced external reversible-toolchain results.
 
 ## Primary References / Tool Sources
@@ -85,4 +97,5 @@ RevKit 3.x is a Python package backed by C++ code.
 - mockturtle: <https://github.com/lsils/mockturtle>
 - RevKit: <https://github.com/msoeken/revkit>
 - RevKit/CirKit legacy CLI: <https://msoeken.github.io/revkit.html>
+- caterpillar: <https://github.com/gmeuli/caterpillar>
 - Back-end-aware fault-tolerant oracle synthesis: <https://dl.acm.org/doi/10.1145/3658617.3697776>

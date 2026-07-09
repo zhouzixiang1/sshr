@@ -8,5 +8,5 @@ This terminal audit extracts searchable text from the author and anonymous PDFs 
 
 | manuscript | status | pages | characters | words | missing anchors | forbidden hits | identity anchors | failures |
 |---|---|---:|---:|---:|---|---|---|---|
-| author | pass | 45 | 212267 | 18948 | none | none | author=True; anonymous=False | none |
-| anonymous | pass | 45 | 210965 | 18777 | none | none | author=False; anonymous=True | none |
+| author | pass | 45 | 213038 | 18958 | none | none | author=True; anonymous=False | none |
+| anonymous | pass | 45 | 211736 | 18787 | none | none | author=False; anonymous=True | none |

@@ -23,9 +23,9 @@
 
 - PDF pages=45/45
 - readiness=70 pass + 1 needs author input
-- payload_files=1071
-- artifact_registry=27 families / 153 raw CSV / 77642 raw rows
-- source_privacy=0 strict leaks / 55 provenance files / 1028 payload text files
+- payload_files=1075
+- artifact_registry=27 families / 154 raw CSV / 77702 raw rows
+- source_privacy=0 strict leaks / 55 provenance files / 1032 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open

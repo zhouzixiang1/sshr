@@ -14,7 +14,7 @@ This table consolidates already-generated experiment evidence into the reviewer-
 | RevKit phase/Rz branch | n=3-6 | 531/531 | Affine phase vs RevKit oracle_synth 177/0/0, -65.50% | Logical phase/Rz proxy verified up to global phase; sequence evidence is a coarse smoke check, not optimal Clifford+T synthesis. |
 | Learned phase pruning | n=3-6 | 7611/7611 | Held-out n=6 rank-diverse top512 vs wide128 0/7/31, +0.00% | Policy-pruned affine candidate ranking; evidence is held-out exact scoring, not a standalone compiler backend. |
 | High-dimensional frontier search | n=20,24,28,32,40,48,56,64 | 2088/2088 | Stage-gated vs all-depth scale 0/4/92, +0.04% score; -25.43% time; ultra n=48,56,64 stress 480/480 plan+circuit verified | Term-set symbolic verification with emitted-circuit ANF checks; depth frontier is a planning guard, not a hardware scheduler. |
-| Complete truth-table bridges | n=21-25 | 400/400 | Bridge rows verify plan, emitted symbolic circuit, and complete truth table for n=21-25. | Bridge set is intentionally narrow because complete truth tables grow exponentially. |
+| Complete truth-table bridges | n=21-26 | 460/460 | Bridge rows verify plan, emitted symbolic circuit, and complete truth table for n=21-26. | Bridge set is intentionally narrow because complete truth tables grow exponentially. |
 
 ## Source files
 
@@ -28,4 +28,4 @@ This table consolidates already-generated experiment evidence into the reviewer-
 - RevKit phase/Rz branch: `results/raw_phase_parity_affine.csv`
 - Learned phase pruning: `results/raw_phase_affine_policy_rank_diverse.csv`
 - High-dimensional frontier search: `results/raw_screen_scale_depth_frontier_policy_large_generalization_terms.csv; results/raw_screen_scale_depth_frontier_terms.csv; results/raw_screen_scale_ultra_scale64_terms.csv`
-- Complete truth-table bridges: `results/raw_truth_bridge_terms.csv; results/raw_truth_bridge_n23_terms.csv; results/raw_truth_bridge_n23_large_frontier_terms.csv; results/raw_truth_bridge_n23_cost_time003_frontier_terms.csv; results/raw_truth_bridge_n24_terms.csv; results/raw_truth_bridge_n25_terms.csv`
+- Complete truth-table bridges: `results/raw_truth_bridge_terms.csv; results/raw_truth_bridge_n23_terms.csv; results/raw_truth_bridge_n23_large_frontier_terms.csv; results/raw_truth_bridge_n23_cost_time003_frontier_terms.csv; results/raw_truth_bridge_n24_terms.csv; results/raw_truth_bridge_n25_terms.csv; results/raw_truth_bridge_n26_terms.csv`

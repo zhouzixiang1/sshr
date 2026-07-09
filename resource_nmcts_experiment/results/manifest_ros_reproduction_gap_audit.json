@@ -2,7 +2,7 @@
   "coverage_counts": {
     "covered": 5,
     "not reproduced": 2,
-    "partial": 6
+    "partial": 7
   },
   "full_ros_boundary_is_explicit": true,
   "needs_revision_count": 0,
@@ -14,7 +14,7 @@
     "table": "paper_latex/tables/ros_reproduction_gap_audit.tex"
   },
   "python": "3.11.15",
-  "rows": 13,
+  "rows": 14,
   "rows_detail": [
     {
       "audit_status": "pass",
@@ -37,6 +37,17 @@
       "next_reproduction_step": "If an official ROS source tree or binary is obtained, place it under a tracked provenance path or an ignored tmp path and add a dedicated driver before promoting any full-ROS claim.",
       "official_requirement": "A full official ROS reproduction requires an executable ROS implementation or enough published implementation artifacts to recreate the LUT mapper plus SAT garbage-management flow.",
       "supported_claim": "The package documents a concrete source-availability boundary before using ROS-style proxy rows."
+    },
+    {
+      "audit_status": "pass",
+      "coverage_status": "partial",
+      "current_coverage": "The workstation has a local caterpillar checkout and source/build probe for XAG synthesis and SAT-based pebbling components; no standalone ROS executable is detected in that checkout.",
+      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none",
+      "excluded_claim": "caterpillar availability is not a full ROS SAT garbage-management reproduction and is not used as a new standalone performance baseline.",
+      "item": "caterpillar/XAG source-family probe",
+      "next_reproduction_step": "If a stable caterpillar CLI or project adapter is added, run it on the exported truth-table benchmarks and keep the results separate from the ROS-style proxy rows.",
+      "official_requirement": "Related open-source synthesis libraries should be separated from the standalone ROS flow unless they expose the same LUT plus SAT garbage-management compiler path.",
+      "supported_claim": "The package now records a closer open-source implementation-family probe for XAG synthesis and quantum memory-management components."
     },
     {
       "audit_status": "pass",
@@ -162,6 +173,6 @@
   ],
   "script": "analyze_ros_reproduction_gap_audit.py",
   "status_counts": {
-    "pass": 13
+    "pass": 14
   }
 }
