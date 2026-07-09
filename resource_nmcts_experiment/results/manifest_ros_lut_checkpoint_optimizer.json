@@ -1,0 +1,41 @@
+{
+  "budgets": [
+    "keep100",
+    "line75",
+    "line50",
+    "line25",
+    "minline"
+  ],
+  "exact_over_checkpoint_candidates": true,
+  "frontier_rows": 5,
+  "max_checkpoint_candidates": 12,
+  "needs_revision_count": 0,
+  "official_ros_fully_reproduced": false,
+  "outputs": {
+    "analysis": "results/analysis_ros_lut_checkpoint_optimizer.md",
+    "manifest": "results/manifest_ros_lut_checkpoint_optimizer.json",
+    "raw": "results/raw_ros_lut_checkpoint_optimizer.csv",
+    "summary": "results/summary_ros_lut_checkpoint_optimizer.csv",
+    "table": "paper_latex/tables/ros_lut_checkpoint_optimizer.tex"
+  },
+  "python": "3.11.15",
+  "raw_rows": 474,
+  "script": "analyze_ros_lut_checkpoint_optimizer.py",
+  "skipped_functions": 0,
+  "solved_functions": 192,
+  "solved_traditional_n_le_6": 177,
+  "sources": [
+    "results/raw_ros_lut_proxy_best.csv",
+    "results/raw_ros_lut_garbage_proxy.csv",
+    "results/raw_traditional_resource.csv",
+    "results/raw_highdim_resource.csv",
+    "results/raw_highdim_scale_resource.csv",
+    "results/raw_ultra_highdim_resource.csv",
+    "results/raw_mega_highdim_resource.csv"
+  ],
+  "status_counts": {
+    "pass": 35
+  },
+  "summary_rows": 35,
+  "table_anchor_present": true
+}

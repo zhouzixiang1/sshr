@@ -482,6 +482,27 @@ logical-layer comparison meaningful.}
 \input{tables/comparison_answer_scorecard}
 \end{table}
 
+Table~\ref{tab:sshr-reproduction-scope} gives the corresponding SSHR
+reproduction-scope audit.  This table is included because SSHR is both the
+closest geometric small-function baseline and the easiest comparison to
+over-read.  The audit separates source-anchored paper-reference checks,
+same-function SSHR-H rows, time-limited SSHR-I rows, and the exact $n\leq4$
+pilot from the stronger claim that the lightweight rebuild fully reruns every
+published SSHR random experiment.  The results section therefore uses SSHR as
+a CNOT-oriented counterpoint, not as the definition of the proposed method.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{SSHR reproduction-scope audit.  The table records which SSHR-facing
+elements are reproduced or source-anchored in the current package, and which
+stronger SSHR claims remain outside the logical-layer submission.}
+\label{tab:sshr-reproduction-scope}
+\input{tables/sshr_reproduction_scope_audit}
+\end{table}
+
 Table~\ref{tab:comparability-audit} makes the fairness boundary explicit.  It
 separates comparisons that share the same bit-flip oracle target from
 logic-network proxies, exact reversible-oracle probes, phase/\rz{} proxies, and
@@ -687,6 +708,29 @@ The frontier selects among executable proxy schedules under relative
 peak-ancilla budgets; it is not the official ROS SAT garbage-management flow.}
 \label{tab:ros-garbage-budget-frontier}
 \input{tables/ros_lut_garbage_budget_frontier}
+\end{table}
+
+To check that the three-policy frontier is not hiding a better checkpoint
+choice on tractable instances, we further solve an exact checkpoint-subset
+subproblem on the same verified LUT DAGs whenever the number of multi-fanout
+checkpoint candidates is at most 12.  This covers 192 DAGs, including all 177
+traditional $n\leq6$ functions.  The optimizer exhaustively enumerates every
+checkpoint subset and then selects the lowest-score feasible schedule under
+the same peak-ancilla budgets.  Pareto-\method{} keeps 192/0/0 score wins
+against both the keep100 and minline optimized baselines, while the minline
+peak-ancilla comparison is 186/0/6.  The remaining fanout-heavy DAGs are left
+outside the exact subproblem, so this is still a ROS-style reproducible
+subproblem rather than a full ROS SAT reproduction.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Exact checkpoint-subset optimizer for tractable ROS-style LUT DAGs.
+The optimizer exhaustively enumerates checkpoint subsets for DAGs with at most
+12 multi-fanout candidates.  It covers all traditional $n\leq6$ functions but
+does not reproduce the full ROS SAT garbage-management flow.}
+\label{tab:ros-checkpoint-optimizer}
+\input{tables/ros_lut_checkpoint_optimizer}
 \end{table}
 
 The public STG benchmark suite is a different, deliberately stronger

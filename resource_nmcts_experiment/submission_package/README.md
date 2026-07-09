@@ -100,6 +100,9 @@ noise modeling, or magic-state-factory accounting.
 - `../results/analysis_comparison_protocol_audit.md`: machine-readable audit
   that checks each baseline layer has a role, evidence, comparability boundary,
   counterpoint coverage where relevant, and manuscript anchors.
+- `../results/analysis_sshr_reproduction_scope_audit.md`: audit that separates
+  source-anchored SSHR paper references, same-function SSHR-H rows, timed
+  SSHR-I rows, exact n<=4 pilot checks, and excluded full-paper SSHR reruns.
 - `../results/analysis_citation_support_audit.md`: audit that checks
   related-work families, cited BibTeX keys, bibliography resolution, and
   DOI/URL/eprint locator coverage.
@@ -209,6 +212,7 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_claim_scope_lint.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_comparison_protocol_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_comparison_target_validity_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_sshr_reproduction_scope_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_ros_reproduction_gap_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_editorial_screening_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_support_packet_audit.py

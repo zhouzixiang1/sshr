@@ -1,0 +1,17 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.16\linewidth}rrrr>{\raggedright\arraybackslash}X}
+\toprule
+Budget & Funcs. & Peak & log$_{10}$ score & Subsets & Selected policies \\
+\midrule
+keep100 & 192 & 7.2 & 2.18 & 1.6 & keep\_all\_bennett:192 \\
+line75 & 56 & 7.6 & 2.93 & 5.6 & fanout\_checkpoint:13; keep\_all\_bennett:7; zero\_checkpoint:36 \\
+line50 & 25 & 8.4 & 2.94 & 12.2 & checkpoint\_subset:2; fanout\_checkpoint:7; keep\_all\_bennett:7; zero\_checkpoint:9 \\
+line25 & 9 & 4.2 & 1.76 & 28.9 & fanout\_checkpoint:1; keep\_all\_bennett:7; zero\_checkpoint:1 \\
+minline & 192 & 4.7 & 2.38 & 1.6 & checkpoint\_subset:4; fanout\_checkpoint:2; keep\_all\_bennett:123; zero\_checkpoint:63 \\
+\midrule
+Comparison & Items & W/L/T & Mean $\Delta$ & & Boundary \\
+Pareto vs keep100 & 192 & 192/0/0 & -75.47\% & & exact subproblem, not full ROS \\
+Pareto vs line50 & 25 & 25/0/0 & -92.34\% & & exact subproblem, not full ROS \\
+Pareto vs minline & 192 & 192/0/0 & -80.57\% & & exact subproblem, not full ROS \\
+Pareto vs minline lines & 192 & 186/0/6 & -54.18\% & & exact subproblem, not full ROS \\
+\bottomrule
+\end{tabularx}

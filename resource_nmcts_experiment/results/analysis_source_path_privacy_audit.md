@@ -8,9 +8,9 @@ This terminal audit separates strict source/privacy gates from allowed local-pat
 
 | item | status | scope | files scanned | hits | evidence |
 |---|---|---|---:|---:|---|
-| Manuscript source local-path hygiene | pass | author/anonymous TeX, bibliography, and generated table inputs | 186 | 0 | local_path_files=none; old_workspace_files=none. |
+| Manuscript source local-path hygiene | pass | author/anonymous TeX, bibliography, and generated table inputs | 188 | 0 | local_path_files=none; old_workspace_files=none. |
 | Submission support local-path hygiene | pass | public submission_package Markdown/JSON support files | 12 | 0 | local_path_files=none; old_workspace_files=none. |
 | Anonymous source identity boundary | pass | anonymous and ACM/TQC review sources | 2 | 0 | missing_anonymous=none; identity_hits=none. |
-| Payload private-file membership | pass | results/manifest_submission_payload_archive.json | 1059 | 0 | private_members=none; unsafe_members=none. |
-| Payload local-path provenance classification | pass | all text files listed in the upload payload manifest | 1016 | 217 | local_path_files=55; strict_local_path_files=none; provenance_local_path_files=55. |
-| Old claude workspace path cleanup | pass | all text files listed in the upload payload manifest | 1016 | 0 | old_workspace_path_files=none. |
+| Payload private-file membership | pass | results/manifest_submission_payload_archive.json | 1070 | 0 | private_members=none; unsafe_members=none. |
+| Payload local-path provenance classification | pass | all text files listed in the upload payload manifest | 1027 | 217 | local_path_files=55; strict_local_path_files=none; provenance_local_path_files=55. |
+| Old claude workspace path cleanup | pass | all text files listed in the upload payload manifest | 1027 | 0 | old_workspace_path_files=none. |

@@ -1,3 +1,3 @@
 manuscript,status,pdf,pages,encrypted,javascript,form,page_size,title,author,creator,producer,forbidden_metadata_hits,identity_metadata_hits,pdfinfo_returncode,stderr,failures,next_action
-author,pass,paper_latex/resource_nmcts_submission_v1.pdf,43,no,no,none,595.276 x 841.89 pts (A4),,,LaTeX with hyperref,pdfTeX-1.40.28,none,none,0,none,none,No action needed.
-anonymous,pass,paper_latex/resource_nmcts_submission_anonymous.pdf,43,no,no,none,595.276 x 841.89 pts (A4),,,LaTeX with hyperref,pdfTeX-1.40.28,none,none,0,none,none,No action needed.
+author,pass,paper_latex/resource_nmcts_submission_v1.pdf,45,no,no,none,595.276 x 841.89 pts (A4),,,LaTeX with hyperref,pdfTeX-1.40.28,none,none,0,none,none,No action needed.
+anonymous,pass,paper_latex/resource_nmcts_submission_anonymous.pdf,45,no,no,none,595.276 x 841.89 pts (A4),,,LaTeX with hyperref,pdfTeX-1.40.28,none,none,0,none,none,No action needed.

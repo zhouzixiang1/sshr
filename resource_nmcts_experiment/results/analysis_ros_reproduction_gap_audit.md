@@ -4,13 +4,13 @@ This audit separates verified ROS-style proxy evidence from full official ROS re
 
 ## Status counts
 
-- pass: 12
+- pass: 13
 
 ## Coverage counts
 
 - covered: 5
 - not reproduced: 2
-- partial: 5
+- partial: 6
 
 ## Boundary matrix
 
@@ -22,6 +22,7 @@ This audit separates verified ROS-style proxy evidence from full official ROS re
 | Line and garbage-pressure sensitivity | pass | partial | The line-sensitivity audit reselects the verified LUT sweep under min-ancilla and line-weighted objectives. | The score advantage is robust to line-aware LUT proxy selectors. | This is not SAT garbage management and cannot be called a full ROS reproduction. |
 | Executable LUT garbage-management proxy | pass | partial | The project re-runs and truth-table verifies the same best-K LUT DAGs and compares keep-all, fanout-checkpoint, and zero-checkpoint recomputation schedules. | The paper can report an executable garbage-pressure proxy showing the line-operation trade-off over verified LUT DAGs. | This is still not the official ROS SAT garbage-management algorithm or a reproduced full ROS compiler flow. |
 | Executable LUT garbage budget frontier | pass | partial | The budget-frontier audit selects the lowest-score feasible schedule among keep-all, fanout-checkpoint, and zero-checkpoint policies under keep100, line75, line50, line25, and minline peak-ancilla budgets. | The paper can report a budgeted LUT garbage-pressure frontier over verified DAGs. | This frontier is not an official ROS SAT optimization, reversible-emission, routing, or hardware-mapped result. |
+| Exact LUT checkpoint-subset optimizer | pass | partial | The checkpoint optimizer exhaustively enumerates every checkpoint subset for verified LUT DAGs with at most 12 multi-fanout candidates, covering all 177 traditional n<=6 functions and 192 DAGs total. | The paper can report an exact ROS-style checkpoint-subset subproblem on the tractable traditional slice. | This exact subproblem is not the full ROS SAT garbage-management algorithm and does not solve the large fanout-heavy DAGs exactly. |
 | Published STG optimum-library counterpoint | pass | covered | The project synthesizes the same 54 public truth-table representatives and reports both the negative STG-optimum boundary and the same-slice direct-baseline gains. | The paper includes a published small-function optimum-library counterpoint and does not hide that STG wins on tiny precomputed representatives. | This is not a reproduced ROS SAT garbage-management flow and does not replace scalable logical-layer comparisons. |
 | Official ROS SAT garbage management | pass | not reproduced | The manuscript, README, and line-sensitivity audit explicitly mark SAT garbage management as not reproduced. | The package is transparent about the missing official ROS component. | No result may be described as beating or reproducing full ROS with SAT garbage management. |
 | Reversible emission and exact-oracle counterpoint | pass | partial | Legacy RevKit CLI probes synthesize exact oracle permutations and serve as a separate reversible-synthesis counterpoint. | The paper has a genuine exact reversible-oracle toolchain probe in addition to LUT/XAG/AIG proxies. | The RevKit CLI probe is not the ROS hierarchical LUT plus SAT garbage-management flow. |

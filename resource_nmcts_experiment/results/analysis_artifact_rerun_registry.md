@@ -4,9 +4,9 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 
 ## Status counts
 
-- complete: 26
-- unique raw files covered by registry: 152
-- unique raw CSV rows covered by registry: 77154
+- complete: 27
+- unique raw files covered by registry: 153
+- unique raw CSV rows covered by registry: 77628
 
 | evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |
 |---|---|---:|---:|---:|---|---|
@@ -19,11 +19,12 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | Method workflow, algorithm, and budget contracts | quick method audit | 0 | 0 | 2 | complete | Quick derived audit; checks implementation anchors and manuscript method exposition, not raw benchmark outcomes. |
 | Comparison protocol and claim boundaries | quick comparison audit | 0 | 0 | 3 | complete | Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps. |
 | Novelty and comparison scorecard | quick comparison audit | 0 | 0 | 1 | complete | Quick derived audit; it strengthens reviewer-facing positioning without rerunning raw experiments. |
+| SSHR reproduction-scope audit | quick comparison audit | 3 | 3402 | 4 | complete | Quick scope audit over existing SSHR-facing rows and references; it does not rerun heavy SSHR-I/Gurobi or every published random table. |
 | Resource-weight sensitivity and robustness | quick derived audit | 12 | 19568 | 2 | complete | Post-hoc logical-resource rescoring only; it does not rerun synthesis and is not a hardware cost model. |
 | Traditional logical baselines | raw Python rerun | 5 | 4341 | 4 | complete | Python rerun; ILP-based subbaselines need Gurobi where enabled. |
 | External logical baseline extension | raw Python plus optional solvers | 3 | 2049 | 3 | complete | Python with optional Gurobi/logic-tool components; rows with skips/errors remain explicit. |
-| ROS-style LUT proxy | raw proxy rerun | 5 | 4458 | 4 | complete | Proxy-level LUT and garbage-pressure analysis only; not a full ROS SAT garbage-management rerun. |
-| ROS reproduction boundary audit | quick audit | 5 | 4458 | 5 | complete | Checks scope and evidence boundaries; it deliberately records that full official ROS is not reproduced. |
+| ROS-style LUT proxy | raw proxy rerun | 6 | 4932 | 5 | complete | Proxy-level LUT and garbage-pressure analysis only; not a full ROS SAT garbage-management rerun. |
+| ROS reproduction boundary audit | quick audit | 6 | 4932 | 6 | complete | Checks scope and evidence boundaries; it deliberately records that full official ROS is not reproduced. |
 | Published STG optimum-library counterpoint | raw Python rerun | 1 | 270 | 1 | complete | Published small-function optimum-library counterpoint; not full ROS SAT garbage management and not hardware mapping. |
 | mockturtle KLUT-to-XAG probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded mockturtle checkout/header path; still a logical proxy, not reversible mapping. |
 | CirKit AIG/MC probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded CirKit executable/commit; results are logical estimates, not hardware mapping. |
@@ -75,6 +76,10 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - claim use: Checks that reviewer-facing novelty/comparison questions are tied to manuscript evidence, support-brief anchors, and explicit limitations.
   - scripts: `analyze_novelty_comparison_scorecard.py`
   - representative raw: not applicable for this tier
+- **SSHR reproduction-scope audit**
+  - claim use: Separates source-anchored SSHR paper references, same-function SSHR-H rows, timed SSHR-I rows, exact n<=4 pilot checks, and excluded full-paper SSHR reruns.
+  - scripts: `analyze_sshr_reproduction_scope_audit.py`
+  - representative raw: `results/raw_external_traditional_resource_n4.csv; results/raw_external_traditional_resource_n6.csv; results/raw_traditional_resource.csv`
 - **Resource-weight sensitivity and robustness**
   - claim use: Recomputes verified internal and external resource rows under alternative logical-resource weights so weighted-score conclusions are not tied only to the paper coefficients.
   - scripts: `analyze_weight_robustness.py; analyze_resource_weight_sensitivity_audit.py`
@@ -89,12 +94,12 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - representative raw: `results/raw_external_traditional_resource_n4.csv; results/raw_external_traditional_resource_n5.csv; results/raw_external_traditional_resource_n6.csv`
 - **ROS-style LUT proxy**
   - claim use: Tests whether the score advantage survives LUT-style oracle-synthesis proxies, line-aware reselection, and executable garbage-pressure schedules.
-  - scripts: `run_ros_lut_proxy.py; analyze_ros_lut_line_sensitivity.py; analyze_ros_lut_garbage_proxy.py; analyze_ros_lut_garbage_budget_frontier.py`
-  - representative raw: `results/raw_ros_lut_garbage_budget_frontier.csv; results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; +1 more`
+  - scripts: `run_ros_lut_proxy.py; analyze_ros_lut_line_sensitivity.py; analyze_ros_lut_garbage_proxy.py; analyze_ros_lut_garbage_budget_frontier.py; analyze_ros_lut_checkpoint_optimizer.py`
+  - representative raw: `results/raw_ros_lut_checkpoint_optimizer.csv; results/raw_ros_lut_garbage_budget_frontier.csv; results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; +2 more`
 - **ROS reproduction boundary audit**
   - claim use: Makes the distinction between ROS-style proxy evidence and unreproduced full ROS/SAT garbage management machine-checkable.
   - scripts: `analyze_ros_reproduction_gap_audit.py`
-  - representative raw: `results/raw_ros_lut_garbage_budget_frontier.csv; results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; results/raw_ros_lut_proxy_best.csv; +1 more`
+  - representative raw: `results/raw_ros_lut_checkpoint_optimizer.csv; results/raw_ros_lut_garbage_budget_frontier.csv; results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; +2 more`
 - **Published STG optimum-library counterpoint**
   - claim use: Compares the current logical methods on the public n=4/5 STG spectral-representative truth-table table and exposes the small-function optimum boundary.
   - scripts: `analyze_stg_published_benchmark.py`

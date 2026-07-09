@@ -1,0 +1,36 @@
+baseline,items,losses,mean_checkpoint_candidates,mean_evaluated_subsets,mean_log10_score,mean_peak_ancilla,mean_relative,metric,mode_counts,policy_counts,status,target,ties,wins
+checkpoint-subset optimizer,192,,0.171875,1.6458333333333333,2.179413101815364,7.15625,,frontier,exact_exhaustive:15;trivial_no_fanout:177,keep_all_bennett:192,pass,external_ros_lut_checkpoint_opt_keep100,,
+checkpoint-subset optimizer,56,,0.5535714285714286,5.571428571428571,2.930815057493812,7.607142857142857,,frontier,exact_exhaustive:13;trivial_no_fanout:43,fanout_checkpoint:13;keep_all_bennett:7;zero_checkpoint:36,pass,external_ros_lut_checkpoint_opt_line75,,
+checkpoint-subset optimizer,25,,1.12,12.24,2.9376537752416785,8.4,,frontier,exact_exhaustive:11;trivial_no_fanout:14,checkpoint_subset:2;fanout_checkpoint:7;keep_all_bennett:7;zero_checkpoint:9,pass,external_ros_lut_checkpoint_opt_line50,,
+checkpoint-subset optimizer,9,,1.1111111111111112,28.88888888888889,1.760754069629496,4.222222222222222,,frontier,exact_exhaustive:2;trivial_no_fanout:7,fanout_checkpoint:1;keep_all_bennett:7;zero_checkpoint:1,pass,external_ros_lut_checkpoint_opt_line25,,
+checkpoint-subset optimizer,192,,0.171875,1.6458333333333333,2.377164491289702,4.671875,,frontier,exact_exhaustive:15;trivial_no_fanout:177,checkpoint_subset:4;fanout_checkpoint:2;keep_all_bennett:123;zero_checkpoint:63,pass,external_ros_lut_checkpoint_opt_minline,,
+external_ros_lut_checkpoint_opt_keep100,192,0,,,,,-0.7466464073978007,score,,,pass,and_resource_nmcts,0,192
+external_ros_lut_checkpoint_opt_keep100,192,0,,,,,-0.7453166983490092,T,,,pass,and_resource_nmcts,3,189
+external_ros_lut_checkpoint_opt_keep100,192,0,,,,,-0.6021736947663,peak_ancilla,,,pass,and_resource_nmcts,1,191
+external_ros_lut_checkpoint_opt_keep100,192,0,,,,,-0.754714623511194,score,,,pass,and_pareto_resource_nmcts,0,192
+external_ros_lut_checkpoint_opt_keep100,192,0,,,,,-0.7544682833792579,T,,,pass,and_pareto_resource_nmcts,3,189
+external_ros_lut_checkpoint_opt_keep100,192,0,,,,,-0.5856272298300855,peak_ancilla,,,pass,and_pareto_resource_nmcts,6,186
+external_ros_lut_checkpoint_opt_line75,56,0,,,,,-0.9112590553385072,score,,,pass,and_resource_nmcts,0,56
+external_ros_lut_checkpoint_opt_line75,56,0,,,,,-0.8660433862159161,T,,,pass,and_resource_nmcts,3,53
+external_ros_lut_checkpoint_opt_line75,56,0,,,,,-0.7142643566750709,peak_ancilla,,,pass,and_resource_nmcts,0,56
+external_ros_lut_checkpoint_opt_line75,56,0,,,,,-0.9143824546208782,score,,,pass,and_pareto_resource_nmcts,0,56
+external_ros_lut_checkpoint_opt_line75,56,0,,,,,-0.8692329401694215,T,,,pass,and_pareto_resource_nmcts,3,53
+external_ros_lut_checkpoint_opt_line75,56,0,,,,,-0.6974952626738341,peak_ancilla,,,pass,and_pareto_resource_nmcts,0,56
+external_ros_lut_checkpoint_opt_line50,25,0,,,,,-0.9213877111350903,score,,,pass,and_resource_nmcts,0,25
+external_ros_lut_checkpoint_opt_line50,25,0,,,,,-0.809974001534497,T,,,pass,and_resource_nmcts,3,22
+external_ros_lut_checkpoint_opt_line50,25,0,,,,,-0.8473710733710734,peak_ancilla,,,pass,and_resource_nmcts,0,25
+external_ros_lut_checkpoint_opt_line50,25,0,,,,,-0.9233762816231798,score,,,pass,and_pareto_resource_nmcts,0,25
+external_ros_lut_checkpoint_opt_line50,25,0,,,,,-0.8120576138824771,T,,,pass,and_pareto_resource_nmcts,3,22
+external_ros_lut_checkpoint_opt_line50,25,0,,,,,-0.8328256188256188,peak_ancilla,,,pass,and_pareto_resource_nmcts,0,25
+external_ros_lut_checkpoint_opt_line25,9,0,,,,,-0.8298626212459561,score,,,pass,and_resource_nmcts,0,9
+external_ros_lut_checkpoint_opt_line25,9,0,,,,,-0.5180808131314176,T,,,pass,and_resource_nmcts,3,6
+external_ros_lut_checkpoint_opt_line25,9,0,,,,,-0.9835978835978836,peak_ancilla,,,pass,and_resource_nmcts,0,9
+external_ros_lut_checkpoint_opt_line25,9,0,,,,,-0.8298642370097881,score,,,pass,and_pareto_resource_nmcts,0,9
+external_ros_lut_checkpoint_opt_line25,9,0,,,,,-0.5180808131314176,T,,,pass,and_pareto_resource_nmcts,3,6
+external_ros_lut_checkpoint_opt_line25,9,0,,,,,-0.9835978835978836,peak_ancilla,,,pass,and_pareto_resource_nmcts,0,9
+external_ros_lut_checkpoint_opt_minline,192,0,,,,,-0.8021358158261265,score,,,pass,and_resource_nmcts,0,192
+external_ros_lut_checkpoint_opt_minline,192,0,,,,,-0.8019409245930668,T,,,pass,and_resource_nmcts,3,189
+external_ros_lut_checkpoint_opt_minline,192,0,,,,,-0.5611904784009564,peak_ancilla,,,pass,and_resource_nmcts,1,191
+external_ros_lut_checkpoint_opt_minline,192,0,,,,,-0.805716872290234,score,,,pass,and_pareto_resource_nmcts,0,192
+external_ros_lut_checkpoint_opt_minline,192,0,,,,,-0.8060604448119757,T,,,pass,and_pareto_resource_nmcts,3,189
+external_ros_lut_checkpoint_opt_minline,192,0,,,,,-0.5417516706808986,peak_ancilla,,,pass,and_pareto_resource_nmcts,6,186

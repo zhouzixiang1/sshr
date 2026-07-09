@@ -34,6 +34,7 @@ run_py analyze_counterpoint_claim_boundary.py
 run_py analyze_comparison_protocol_audit.py
 run_py analyze_comparison_target_validity_audit.py
 run_py analyze_comparison_answer_scorecard.py
+run_py analyze_sshr_reproduction_scope_audit.py
 run_py analyze_claim_scope_lint.py
 run_py analyze_stg_published_benchmark.py
 echo "==> ${PYTHON_BIN} analyze_ros_lut_line_sensitivity.py"
@@ -46,6 +47,7 @@ echo "==> ${PYTHON_BIN} analyze_ros_lut_line_sensitivity.py"
 	  --ancilla-weights 10,25
 run_py analyze_ros_lut_garbage_proxy.py
 run_py analyze_ros_lut_garbage_budget_frontier.py
+run_py analyze_ros_lut_checkpoint_optimizer.py
 run_py analyze_ros_reproduction_gap_audit.py
 run_py analyze_paired_statistical_evidence.py
 run_py analyze_paired_effect_uncertainty.py

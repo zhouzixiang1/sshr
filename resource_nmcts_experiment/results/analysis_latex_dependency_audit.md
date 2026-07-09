@@ -4,14 +4,14 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 
 ## Status counts
 
-- pass: 183
+- pass: 189
 
 ## Dependency types
 
 - bibliography: 3
 - figure: 21
 - main_source: 3
-- tex_input: 156
+- tex_input: 162
 
 ## Missing dependencies
 
@@ -33,6 +33,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/comparison_protocol_audit` | `paper_latex/tables/comparison_protocol_audit.tex` | True | True | pass |
 | author | tex_input | `tables/comparison_target_validity_audit` | `paper_latex/tables/comparison_target_validity_audit.tex` | True | True | pass |
 | author | tex_input | `tables/comparison_answer_scorecard` | `paper_latex/tables/comparison_answer_scorecard.tex` | True | True | pass |
+| author | tex_input | `tables/sshr_reproduction_scope_audit` | `paper_latex/tables/sshr_reproduction_scope_audit.tex` | True | True | pass |
 | author | tex_input | `tables/baseline_comparability_audit` | `paper_latex/tables/baseline_comparability_audit.tex` | True | True | pass |
 | author | tex_input | `tables/counterpoint_claim_boundary` | `paper_latex/tables/counterpoint_claim_boundary.tex` | True | True | pass |
 | author | tex_input | `tables/reproducibility_audit` | `paper_latex/tables/reproducibility_audit.tex` | True | True | pass |
@@ -41,6 +42,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/ros_lut_line_sensitivity` | `paper_latex/tables/ros_lut_line_sensitivity.tex` | True | True | pass |
 | author | tex_input | `tables/ros_lut_garbage_proxy` | `paper_latex/tables/ros_lut_garbage_proxy.tex` | True | True | pass |
 | author | tex_input | `tables/ros_lut_garbage_budget_frontier` | `paper_latex/tables/ros_lut_garbage_budget_frontier.tex` | True | True | pass |
+| author | tex_input | `tables/ros_lut_checkpoint_optimizer` | `paper_latex/tables/ros_lut_checkpoint_optimizer.tex` | True | True | pass |
 | author | tex_input | `tables/stg_published_benchmark` | `paper_latex/tables/stg_published_benchmark.tex` | True | True | pass |
 | author | tex_input | `tables/cirkit_aig_probe` | `paper_latex/tables/cirkit_aig_probe.tex` | True | True | pass |
 | author | tex_input | `tables/cirkit_aig_highdim_probe` | `paper_latex/tables/cirkit_aig_highdim_probe.tex` | True | True | pass |
@@ -94,6 +96,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/comparison_protocol_audit` | `paper_latex/tables/comparison_protocol_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/comparison_target_validity_audit` | `paper_latex/tables/comparison_target_validity_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/comparison_answer_scorecard` | `paper_latex/tables/comparison_answer_scorecard.tex` | True | True | pass |
+| anonymous | tex_input | `tables/sshr_reproduction_scope_audit` | `paper_latex/tables/sshr_reproduction_scope_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/baseline_comparability_audit` | `paper_latex/tables/baseline_comparability_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/counterpoint_claim_boundary` | `paper_latex/tables/counterpoint_claim_boundary.tex` | True | True | pass |
 | anonymous | tex_input | `tables/reproducibility_audit` | `paper_latex/tables/reproducibility_audit.tex` | True | True | pass |
@@ -102,6 +105,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/ros_lut_line_sensitivity` | `paper_latex/tables/ros_lut_line_sensitivity.tex` | True | True | pass |
 | anonymous | tex_input | `tables/ros_lut_garbage_proxy` | `paper_latex/tables/ros_lut_garbage_proxy.tex` | True | True | pass |
 | anonymous | tex_input | `tables/ros_lut_garbage_budget_frontier` | `paper_latex/tables/ros_lut_garbage_budget_frontier.tex` | True | True | pass |
+| anonymous | tex_input | `tables/ros_lut_checkpoint_optimizer` | `paper_latex/tables/ros_lut_checkpoint_optimizer.tex` | True | True | pass |
 | anonymous | tex_input | `tables/stg_published_benchmark` | `paper_latex/tables/stg_published_benchmark.tex` | True | True | pass |
 | anonymous | tex_input | `tables/cirkit_aig_probe` | `paper_latex/tables/cirkit_aig_probe.tex` | True | True | pass |
 | anonymous | tex_input | `tables/cirkit_aig_highdim_probe` | `paper_latex/tables/cirkit_aig_highdim_probe.tex` | True | True | pass |
@@ -155,6 +159,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/comparison_protocol_audit` | `paper_latex/tables/comparison_protocol_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/comparison_target_validity_audit` | `paper_latex/tables/comparison_target_validity_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/comparison_answer_scorecard` | `paper_latex/tables/comparison_answer_scorecard.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/sshr_reproduction_scope_audit` | `paper_latex/tables/sshr_reproduction_scope_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/baseline_comparability_audit` | `paper_latex/tables/baseline_comparability_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/counterpoint_claim_boundary` | `paper_latex/tables/counterpoint_claim_boundary.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/reproducibility_audit` | `paper_latex/tables/reproducibility_audit.tex` | True | True | pass |
@@ -163,6 +168,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/ros_lut_line_sensitivity` | `paper_latex/tables/ros_lut_line_sensitivity.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/ros_lut_garbage_proxy` | `paper_latex/tables/ros_lut_garbage_proxy.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/ros_lut_garbage_budget_frontier` | `paper_latex/tables/ros_lut_garbage_budget_frontier.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/ros_lut_checkpoint_optimizer` | `paper_latex/tables/ros_lut_checkpoint_optimizer.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/stg_published_benchmark` | `paper_latex/tables/stg_published_benchmark.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/cirkit_aig_probe` | `paper_latex/tables/cirkit_aig_probe.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/cirkit_aig_highdim_probe` | `paper_latex/tables/cirkit_aig_highdim_probe.tex` | True | True | pass |

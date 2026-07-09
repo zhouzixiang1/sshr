@@ -4,21 +4,23 @@ This terminal audit extracts the reviewer/upload payload into a temporary direct
 
 ## Status counts
 
-- pass: 41
+- pass: 43
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Payload extraction | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1059; error=none. | Regenerate the payload archive if it cannot be safely extracted. |
+| Payload extraction | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1070; error=none. | Regenerate the payload archive if it cannot be safely extracted. |
 | Comparison protocol audit | pass | returncode=0; manifest=results/manifest_comparison_protocol_audit.json; needs_revision_count=0; layers=7; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Comparison target validity audit | pass | returncode=0; manifest=results/manifest_comparison_target_validity_audit.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Comparison answer scorecard | pass | returncode=0; manifest=results/manifest_comparison_answer_scorecard.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Score-weight robustness audit | pass | returncode=0; manifest=results/manifest_weight_robustness.json; needs_revision_count=0; compact_checks=28; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Resource-weight sensitivity audit | pass | returncode=0; manifest=results/manifest_resource_weight_sensitivity_audit.json; needs_revision_count=0; raw_rows=12732; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
+| SSHR reproduction-scope audit | pass | returncode=0; manifest=results/manifest_sshr_reproduction_scope_audit.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Novelty/comparison scorecard | pass | returncode=0; manifest=results/manifest_novelty_comparison_scorecard.json; needs_revision_count=0; rows=6; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Threats-to-validity audit | pass | returncode=0; manifest=results/manifest_threats_to_validity_audit.json; needs_revision_count=0; rows=7; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
-| ROS reproduction gap audit | pass | returncode=0; manifest=results/manifest_ros_reproduction_gap_audit.json; needs_revision_count=0; rows=12; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
+| ROS reproduction gap audit | pass | returncode=0; manifest=results/manifest_ros_reproduction_gap_audit.json; needs_revision_count=0; rows=13; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | ROS-style LUT garbage proxy | pass | returncode=0; manifest=results/manifest_ros_lut_garbage_proxy.json; needs_revision_count=0; raw_rows=927; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | ROS-style LUT garbage budget frontier | pass | returncode=0; manifest=results/manifest_ros_lut_garbage_budget_frontier.json; needs_revision_count=0; raw_rows=1059; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
+| ROS-style LUT checkpoint optimizer | pass | returncode=0; manifest=results/manifest_ros_lut_checkpoint_optimizer.json; needs_revision_count=0; raw_rows=474; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Published STG counterpoint | pass | returncode=0; manifest=results/manifest_stg_published_benchmark.json; needs_revision_count=0; raw_rows=270; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Schedule-proxy tradeoff audit | pass | returncode=0; manifest=results/manifest_schedule_proxy_audit.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Ultra-scale n=48--64 stress audit | pass | returncode=0; manifest=results/manifest_screen_scale_ultra_scale64_stress.json; needs_revision_count=0; raw_rows=480; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
@@ -48,4 +50,4 @@ This terminal audit extracts the reviewer/upload payload into a temporary direct
 | Submission metadata closure path | pass | returncode=0; manifest=results/manifest_submission_metadata_closure_path.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Claim-scope lint | pass | returncode=0; manifest=results/manifest_claim_scope_lint.json; unresolved_count=0; required_boundary_count=5; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Payload Git policy audit | pass | returncode=0; manifest=results/manifest_payload_git_policy_audit.json; needs_revision_count=0; rows=2; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
-| Artifact rerun registry | pass | returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=26; rows=26; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
+| Artifact rerun registry | pass | returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=27; rows=27; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |

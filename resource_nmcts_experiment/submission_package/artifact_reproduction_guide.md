@@ -69,6 +69,8 @@ After the quick rebuild, the current package should report:
   `results/analysis_comparison_target_validity_audit.md`
 - comparison answer scorecard state in
   `results/analysis_comparison_answer_scorecard.md`
+- SSHR reproduction-scope state in
+  `results/analysis_sshr_reproduction_scope_audit.md`
 - threats-to-validity audit state in
   `results/analysis_threats_to_validity_audit.md`
 - neural/MCTS claim-calibration state in
@@ -209,6 +211,7 @@ manifest coverage, rerun tier, and dependency boundary.
 
 - Core traditional resource experiments: `run_experiments.py`
 - External baseline aggregation: `run_external_baselines.py`
+- SSHR reproduction-scope audit: `analyze_sshr_reproduction_scope_audit.py`
 - ROS-style LUT proxy: `run_ros_lut_proxy.py`
 - ROS reproduction-boundary audit: `analyze_ros_reproduction_gap_audit.py`
 - mockturtle KLUT-to-XAG probe: `run_mockturtle_xag_probe.py`

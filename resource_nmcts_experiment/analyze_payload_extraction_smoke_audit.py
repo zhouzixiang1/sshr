@@ -85,6 +85,15 @@ SMOKE_SPECS = (
         minimum_rows=12000,
     ),
     SmokeSpec(
+        name="SSHR reproduction-scope audit",
+        script="analyze_sshr_reproduction_scope_audit.py",
+        manifest="results/manifest_sshr_reproduction_scope_audit.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=8,
+    ),
+    SmokeSpec(
         name="Novelty/comparison scorecard",
         script="analyze_novelty_comparison_scorecard.py",
         manifest="results/manifest_novelty_comparison_scorecard.json",
@@ -128,6 +137,15 @@ SMOKE_SPECS = (
         expected_value=0,
         minimum_rows_key="raw_rows",
         minimum_rows=1059,
+    ),
+    SmokeSpec(
+        name="ROS-style LUT checkpoint optimizer",
+        script="analyze_ros_lut_checkpoint_optimizer.py",
+        manifest="results/manifest_ros_lut_checkpoint_optimizer.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="raw_rows",
+        minimum_rows=474,
     ),
     SmokeSpec(
         name="Published STG counterpoint",

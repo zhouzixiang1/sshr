@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1059; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1070; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -45,6 +45,12 @@
       "status": "pass"
     },
     {
+      "evidence": "returncode=0; manifest=results/manifest_sshr_reproduction_scope_audit.json; needs_revision_count=0; rows=8; stderr=none",
+      "item": "SSHR reproduction-scope audit",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
       "evidence": "returncode=0; manifest=results/manifest_novelty_comparison_scorecard.json; needs_revision_count=0; rows=6; stderr=none",
       "item": "Novelty/comparison scorecard",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
@@ -57,7 +63,7 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_ros_reproduction_gap_audit.json; needs_revision_count=0; rows=12; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_ros_reproduction_gap_audit.json; needs_revision_count=0; rows=13; stderr=none",
       "item": "ROS reproduction gap audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -71,6 +77,12 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_ros_lut_garbage_budget_frontier.json; needs_revision_count=0; raw_rows=1059; stderr=none",
       "item": "ROS-style LUT garbage budget frontier",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_ros_lut_checkpoint_optimizer.json; needs_revision_count=0; raw_rows=474; stderr=none",
+      "item": "ROS-style LUT checkpoint optimizer",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -249,7 +261,7 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=26; rows=26; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_artifact_rerun_registry.json; complete_rows=27; rows=27; stderr=none",
       "item": "Artifact rerun registry",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -294,6 +306,13 @@
     },
     {
       "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_sshr_reproduction_scope_audit.json",
+      "minimum_rows_key": "rows",
+      "name": "SSHR reproduction-scope audit",
+      "script": "analyze_sshr_reproduction_scope_audit.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
       "manifest": "results/manifest_novelty_comparison_scorecard.json",
       "minimum_rows_key": "rows",
       "name": "Novelty/comparison scorecard",
@@ -326,6 +345,13 @@
       "minimum_rows_key": "raw_rows",
       "name": "ROS-style LUT garbage budget frontier",
       "script": "analyze_ros_lut_garbage_budget_frontier.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_ros_lut_checkpoint_optimizer.json",
+      "minimum_rows_key": "raw_rows",
+      "name": "ROS-style LUT checkpoint optimizer",
+      "script": "analyze_ros_lut_checkpoint_optimizer.py"
     },
     {
       "expected_key": "needs_revision_count",
@@ -539,6 +565,6 @@
     }
   ],
   "status_counts": {
-    "pass": 41
+    "pass": 43
   }
 }

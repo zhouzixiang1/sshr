@@ -9,6 +9,6 @@ This audit checks that the deterministic upload tarball is available locally aft
 | item | status | evidence | next action |
 |---|---|---|---|
 | Generated payload presence | pass | archive_exists=True; sha256_exists=True; archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz. | Run make_submission_payload_archive.py or rebuild_submission_package.sh to regenerate the upload tarball and sidecar. |
-| Generated payload SHA sidecar | pass | actual=ac38d5f552614dc0eaa5a2f83b7b7f6442adff63646fcba99eaf4cae2bce6cd6; sidecar=ac38d5f552614dc0eaa5a2f83b7b7f6442adff63646fcba99eaf4cae2bce6cd6; bytes=41521400. | Regenerate the tarball and sidecar if their digests differ. |
+| Generated payload SHA sidecar | pass | actual=5cf06a74d24fcd4aacfafec7f1e5a7ee5c35a706d84301cd76056e005ea25dae; sidecar=5cf06a74d24fcd4aacfafec7f1e5a7ee5c35a706d84301cd76056e005ea25dae; bytes=41574029. | Regenerate the tarball and sidecar if their digests differ. |
 | Generated payload Git policy | pass | tracked=none; ignored=['resource_nmcts_experiment/submission_package/dist/resource_nmcts_submission_payload.tar.gz', 'resource_nmcts_experiment/submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256']; git_root=/Users/zhouzixiang/Desktop/tzb/src. | Keep submission_package/dist/*.tar.gz and the SHA sidecar ignored and out of the Git index. |
 | Generated payload regeneration path | pass | rebuild_script=True; verify_script=True. | Restore rebuild_submission_package.sh and verify_submission_package.sh if either entrypoint is missing. |

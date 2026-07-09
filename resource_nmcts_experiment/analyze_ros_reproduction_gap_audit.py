@@ -43,6 +43,11 @@ ROS_GARBAGE_BUDGET_SUMMARY = RESULTS / "summary_ros_lut_garbage_budget_frontier.
 ROS_GARBAGE_BUDGET_MANIFEST = RESULTS / "manifest_ros_lut_garbage_budget_frontier.json"
 ROS_GARBAGE_BUDGET_RAW = RESULTS / "raw_ros_lut_garbage_budget_frontier.csv"
 ROS_GARBAGE_BUDGET_TABLE = TABLES / "ros_lut_garbage_budget_frontier.tex"
+ROS_CHECKPOINT_ANALYSIS = RESULTS / "analysis_ros_lut_checkpoint_optimizer.md"
+ROS_CHECKPOINT_SUMMARY = RESULTS / "summary_ros_lut_checkpoint_optimizer.csv"
+ROS_CHECKPOINT_MANIFEST = RESULTS / "manifest_ros_lut_checkpoint_optimizer.json"
+ROS_CHECKPOINT_RAW = RESULTS / "raw_ros_lut_checkpoint_optimizer.csv"
+ROS_CHECKPOINT_TABLE = TABLES / "ros_lut_checkpoint_optimizer.tex"
 STG_ANALYSIS = RESULTS / "analysis_stg_published_benchmark.md"
 STG_SUMMARY = RESULTS / "summary_stg_published_benchmark.csv"
 STG_MANIFEST = RESULTS / "manifest_stg_published_benchmark.json"
@@ -260,6 +265,26 @@ def specs() -> list[RosSpec]:
             supported_claim="The paper can report a budgeted LUT garbage-pressure frontier over verified DAGs.",
             excluded_claim="This frontier is not an official ROS SAT optimization, reversible-emission, routing, or hardware-mapped result.",
             next_reproduction_step="Replace the schedule portfolio with the official SAT garbage-management optimizer if executable ROS artifacts or a faithful reimplementation become available.",
+        ),
+        RosSpec(
+            item="Exact LUT checkpoint-subset optimizer",
+            coverage_status="partial",
+            official_requirement="A stronger ROS-facing garbage-management proxy should optimize checkpoint choices rather than only compare a few hand-written schedules.",
+            current_coverage="The checkpoint optimizer exhaustively enumerates every checkpoint subset for verified LUT DAGs with at most 12 multi-fanout candidates, covering all 177 traditional n<=6 functions and 192 DAGs total.",
+            files=(ROS_CHECKPOINT_ANALYSIS, ROS_CHECKPOINT_SUMMARY, ROS_CHECKPOINT_MANIFEST, ROS_CHECKPOINT_RAW, ROS_CHECKPOINT_TABLE, PAPER),
+            tokens=("exact checkpoint-subset subproblem", "solved functions: 192", "solved traditional n<=6 functions: 177", "tab:ros-checkpoint-optimizer", "not the official ROS SAT"),
+            csv_expectations=(CsvExpectation(ROS_CHECKPOINT_RAW, 474),),
+            json_expectations=(
+                JsonExpectation(ROS_CHECKPOINT_MANIFEST, "raw_rows", 474),
+                JsonExpectation(ROS_CHECKPOINT_MANIFEST, "frontier_rows", 5),
+                JsonExpectation(ROS_CHECKPOINT_MANIFEST, "solved_functions", 192),
+                JsonExpectation(ROS_CHECKPOINT_MANIFEST, "solved_traditional_n_le_6", 177),
+                JsonExpectation(ROS_CHECKPOINT_MANIFEST, "exact_over_checkpoint_candidates", True),
+                JsonExpectation(ROS_CHECKPOINT_MANIFEST, "official_ros_fully_reproduced", False),
+            ),
+            supported_claim="The paper can report an exact ROS-style checkpoint-subset subproblem on the tractable traditional slice.",
+            excluded_claim="This exact subproblem is not the full ROS SAT garbage-management algorithm and does not solve the large fanout-heavy DAGs exactly.",
+            next_reproduction_step="Extend the checkpoint optimizer with a scalable SAT/ILP formulation or obtain official ROS artifacts before promoting a full-ROS claim.",
         ),
         RosSpec(
             item="Published STG optimum-library counterpoint",

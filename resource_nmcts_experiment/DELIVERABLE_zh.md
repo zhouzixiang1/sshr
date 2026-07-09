@@ -20,11 +20,11 @@
 
 以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，用于防止交付说明和机器审计结果漂移：
 
-- PDF pages=43/43
-- readiness=68 pass + 1 needs author input
-- payload_files=1059
-- artifact_registry=26 families / 152 raw CSV / 77154 raw rows
-- source_privacy=0 strict leaks / 55 provenance files / 1016 payload text files
+- PDF pages=45/45
+- readiness=70 pass + 1 needs author input
+- payload_files=1070
+- artifact_registry=27 families / 153 raw CSV / 77628 raw rows
+- source_privacy=0 strict leaks / 55 provenance files / 1027 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open
@@ -180,6 +180,17 @@
 - `paper_latex/tables/ros_lut_garbage_budget_frontier.tex`
 
 该审计在同一批 truth-table verified best-K LUT DAG 上，对 keep100、line75、line50、line25 和 minline 五种 peak-ancilla 预算逐函数选择 keep-all Bennett、fanout-checkpoint、zero-checkpoint 中 score 最低的可行 schedule。当前生成 1059 行预算前沿、覆盖 309 个函数；keep100 和 minline 均覆盖 309/309，minline 平均 peak ancilla 降低 45.41%，但 mean log10(score+1) 相对 keep-all 增加 +2.61。Pareto-Resource-NMCTS 相对 keep100 和 minline 均为 309/0/0 score 胜出，相对 minline peak ancilla 为 303/0/6。它已接入 author/anonymous/ACM 三套英文稿、rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke、traceability、artifact rerun registry 和 ROS reproduction gap audit；边界仍是 ROS-style proxy，不是官方 ROS SAT garbage-management optimizer。
+
+本轮进一步新增 ROS-style exact checkpoint-subset optimizer，把三种手写 garbage schedule 推进到可穷举的小规模 checkpoint 优化子问题：
+
+- `analyze_ros_lut_checkpoint_optimizer.py`
+- `results/raw_ros_lut_checkpoint_optimizer.csv`
+- `results/summary_ros_lut_checkpoint_optimizer.csv`
+- `results/analysis_ros_lut_checkpoint_optimizer.md`
+- `results/manifest_ros_lut_checkpoint_optimizer.json`
+- `paper_latex/tables/ros_lut_checkpoint_optimizer.tex`
+
+该审计仍不声称复现官方 ROS，但它比三点 proxy 更接近 ROS 的 SAT garbage-management 问题：对同一批已验证 ABC LUT DAG，若 multi-fanout checkpoint candidates 不超过 12，则穷举所有 checkpoint 子集，并在 keep100、line75、line50、line25、minline 五种 peak-ancilla 预算下选择最低 score 可行 schedule。当前覆盖 192 个 DAG，其中包括全部 177 个 traditional `n<=6` 函数；生成 474 行 raw、35 行 summary，117 个 fanout-heavy 高维 DAG 被明确标为 out-of-exact-scope。关键结果是 Pareto-Resource-NMCTS 相对 exact checkpoint keep100 和 minline optimized baseline 的 score 均为 192/0/0；相对 minline 的 peak-ancilla 为 186/0/6。这显著降低“ROS 只是简单 greedy proxy”的审稿风险，但仍不能写成 full ROS SAT optimizer 或 hardware mapping。
 
 本轮进一步补充了 paired statistical evidence 层，避免论文只依赖均值叙述：
 
@@ -2182,6 +2193,7 @@ Git 状态：
 | ROS-style LUT proxy | 309 个 n=3..6/14/15/16/18 函数 | 927/927 K-sweep truth-table 检查通过；best-K vs fixed K=4 为 219/0/90、-18.12%；Resource vs proxy 为 309/0/0、-83.77% | 新增更强 LUT proxy，但不是官方 ROS 复现 |
 | ROS-style LUT line-sensitivity | 同上 309 个函数 | min-ancilla selector vs best-score proxy：peak ancilla -32.47% 但 score +40.67%；Pareto vs min-ancilla/line-weighted/K4-line-cap selectors score 均为 309/0/0，-84.45% 到 -85.83% | 新增辅助线压力稳健性证据，仍不是官方 ROS |
 | ROS-style LUT garbage budget frontier | 同上 309 个函数，1059 行预算前沿 | keep100/minline 均覆盖 309/309；minline peak ancilla -45.41%，mean log10(score+1) shift +2.61；Pareto vs keep100/minline score 均为 309/0/0，vs minline peak ancilla 为 303/0/6 | 新增 executable garbage schedule 预算前沿，仍不是官方 ROS SAT garbage-management optimizer |
+| ROS-style exact checkpoint optimizer | 192 个 tractable LUT DAG，其中包含全部 177 个 traditional n<=6 函数 | 穷举 <=12 个 multi-fanout checkpoint candidates；474 行 raw、35 行 summary；Pareto vs exact checkpoint keep100/minline score 均为 192/0/0，vs minline peak ancilla 为 186/0/6 | 新增 exact checkpoint-subset 子问题，仍不是 full ROS SAT garbage-management optimizer |
 | CirKit 3 shell AIG/MC probe | n<=6 traditional 177 个函数 + n=14 highdim 64 个函数 | 传统 177/177、n=14 64/64 Verilog readback truth-table 验证通过；Pareto vs CirKit score 分别为 177/0/0、-62.34% 和 64/0/0、-94.46%；depth 多数输给 CirKit | 新增官方 CirKit shell probe，但不是 legacy RevKit/ROS |
 | RevKit CLI exact-oracle portfolio | n<=6 traditional 177 个函数 | TBS/DBS/RMS 三流 531/531 usable；best-score portfolio 下 Pareto vs RevKit score 为 173/0/4、-67.28%，T 为 173/0/4、-72.59%，peak ancilla 为 0/169/8、+153.11% | 新增 legacy reversible-synthesis CLI probe，但不是 ROS 或硬件 mapping |
 | Affine-FPRM phase search | n<=6 traditional, 177 个函数 | 531/531 selected rows up-to-global-phase 验证通过；`T/Rz=30` vs fixed-polarity FPRM 为 81/0/96、-2.51%；vs phase-parity ANF 为 85/0/92、-2.98%；vs RevKit 为 177/0/0、-65.50% | 当前最强 phase/Rz 搜索证据，仍非旋转序列级综合 |

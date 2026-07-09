@@ -170,39 +170,45 @@
     "submission_package/target_venue_brief.md"
   ],
   "ros_gap_paths": [
+    "analyze_ros_lut_checkpoint_optimizer.py",
     "analyze_ros_lut_garbage_budget_frontier.py",
     "analyze_ros_lut_garbage_proxy.py",
     "analyze_ros_reproduction_gap_audit.py",
+    "paper_latex/tables/ros_lut_checkpoint_optimizer.tex",
     "paper_latex/tables/ros_lut_garbage_budget_frontier.tex",
     "paper_latex/tables/ros_lut_garbage_proxy.tex",
     "paper_latex/tables/ros_reproduction_gap_audit.tex",
+    "results/analysis_ros_lut_checkpoint_optimizer.md",
     "results/analysis_ros_lut_garbage_budget_frontier.md",
     "results/analysis_ros_lut_garbage_proxy.md",
     "results/analysis_ros_reproduction_gap_audit.md",
+    "results/manifest_ros_lut_checkpoint_optimizer.json",
     "results/manifest_ros_lut_garbage_budget_frontier.json",
     "results/manifest_ros_lut_garbage_proxy.json",
     "results/manifest_ros_reproduction_gap_audit.json",
+    "results/raw_ros_lut_checkpoint_optimizer.csv",
     "results/raw_ros_lut_garbage_budget_frontier.csv",
     "results/raw_ros_lut_garbage_proxy.csv",
+    "results/summary_ros_lut_checkpoint_optimizer.csv",
     "results/summary_ros_lut_garbage_budget_frontier.csv",
     "results/summary_ros_lut_garbage_proxy.csv",
     "results/summary_ros_reproduction_gap_audit.csv"
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1059; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1070; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=1059; archive_files=1059; missing=none; extra=none.",
+      "evidence": "manifest_files=1070; archive_files=1070; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=1059; mismatches=none.",
+      "evidence": "checked=1070; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -256,6 +262,12 @@
       "status": "pass"
     },
     {
+      "evidence": "sshr_reproduction_scope_files=21; missing=none.",
+      "item": "Payload SSHR reproduction-scope evidence",
+      "next_action": "Ensure the uploadable archive includes the SSHR reproduction-scope audit script, required raw rows, generated evidence, manifest, and manuscript table.",
+      "status": "pass"
+    },
+    {
       "evidence": "novelty_scorecard_files=5; missing=none.",
       "item": "Payload novelty/comparison scorecard",
       "next_action": "Ensure the uploadable archive includes the novelty/comparison scorecard script, generated evidence, and manuscript table.",
@@ -268,7 +280,7 @@
       "status": "pass"
     },
     {
-      "evidence": "ros_gap_files=17; missing=none.",
+      "evidence": "ros_gap_files=23; missing=none.",
       "item": "Payload ROS reproduction-boundary evidence",
       "next_action": "Ensure the uploadable archive includes the ROS reproduction gap audit script, generated evidence, and support table.",
       "status": "pass"
@@ -400,7 +412,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=1059; metadata_issues=none.",
+      "evidence": "members_checked=1070; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -424,8 +436,31 @@
     "results/manifest_search_budget_contract.json",
     "results/summary_search_budget_contract.csv"
   ],
+  "sshr_reproduction_scope_paths": [
+    "analyze_sshr_reproduction_scope_audit.py",
+    "paper_latex/tables/sshr_reproduction_scope_audit.tex",
+    "results/analysis_comparison_answer_scorecard.md",
+    "results/analysis_comparison_target_validity_audit.md",
+    "results/analysis_exact_fprm_dp.md",
+    "results/analysis_multimetric_pareto_tradeoff.md",
+    "results/analysis_resource_weight_sensitivity_audit.md",
+    "results/analysis_sshr_reproduction_scope_audit.md",
+    "results/analysis_threats_to_validity_audit.md",
+    "results/manifest_claim_scope_lint.json",
+    "results/manifest_external_traditional_resource_n4.json",
+    "results/manifest_external_traditional_resource_n6.json",
+    "results/manifest_resource_weight_sensitivity_audit.json",
+    "results/manifest_sshr_reproduction_scope_audit.json",
+    "results/manifest_traditional_resource.json",
+    "results/raw_external_traditional_resource_n4.csv",
+    "results/raw_external_traditional_resource_n6.csv",
+    "results/raw_traditional_resource.csv",
+    "results/summary_exact_fprm_dp.csv",
+    "results/summary_exact_xag_mc.csv",
+    "results/summary_sshr_reproduction_scope_audit.csv"
+  ],
   "status_counts": {
-    "pass": 36
+    "pass": 37
   },
   "stg_benchmark_paths": [
     "analyze_stg_published_benchmark.py",

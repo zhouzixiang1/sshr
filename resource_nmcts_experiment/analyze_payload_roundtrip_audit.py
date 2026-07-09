@@ -93,6 +93,29 @@ RESOURCE_WEIGHT_SENSITIVITY_PATHS = {
     "results/manifest_resource_weight_sensitivity_audit.json",
     "paper_latex/tables/resource_weight_sensitivity_audit.tex",
 }
+SSHR_REPRODUCTION_SCOPE_PATHS = {
+    "analyze_sshr_reproduction_scope_audit.py",
+    "results/raw_traditional_resource.csv",
+    "results/manifest_traditional_resource.json",
+    "results/raw_external_traditional_resource_n4.csv",
+    "results/raw_external_traditional_resource_n6.csv",
+    "results/manifest_external_traditional_resource_n4.json",
+    "results/manifest_external_traditional_resource_n6.json",
+    "results/summary_exact_fprm_dp.csv",
+    "results/analysis_exact_fprm_dp.md",
+    "results/summary_exact_xag_mc.csv",
+    "results/analysis_resource_weight_sensitivity_audit.md",
+    "results/manifest_resource_weight_sensitivity_audit.json",
+    "results/analysis_multimetric_pareto_tradeoff.md",
+    "results/analysis_comparison_answer_scorecard.md",
+    "results/analysis_comparison_target_validity_audit.md",
+    "results/analysis_threats_to_validity_audit.md",
+    "results/manifest_claim_scope_lint.json",
+    "results/analysis_sshr_reproduction_scope_audit.md",
+    "results/summary_sshr_reproduction_scope_audit.csv",
+    "results/manifest_sshr_reproduction_scope_audit.json",
+    "paper_latex/tables/sshr_reproduction_scope_audit.tex",
+}
 NOVELTY_SCORECARD_PATHS = {
     "analyze_novelty_comparison_scorecard.py",
     "results/analysis_novelty_comparison_scorecard.md",
@@ -110,20 +133,26 @@ THREATS_VALIDITY_PATHS = {
 ROS_GAP_PATHS = {
     "analyze_ros_lut_garbage_proxy.py",
     "analyze_ros_lut_garbage_budget_frontier.py",
+    "analyze_ros_lut_checkpoint_optimizer.py",
     "analyze_ros_reproduction_gap_audit.py",
     "results/raw_ros_lut_garbage_proxy.csv",
     "results/raw_ros_lut_garbage_budget_frontier.csv",
+    "results/raw_ros_lut_checkpoint_optimizer.csv",
     "results/analysis_ros_lut_garbage_proxy.md",
     "results/analysis_ros_lut_garbage_budget_frontier.md",
+    "results/analysis_ros_lut_checkpoint_optimizer.md",
     "results/summary_ros_lut_garbage_proxy.csv",
     "results/summary_ros_lut_garbage_budget_frontier.csv",
+    "results/summary_ros_lut_checkpoint_optimizer.csv",
     "results/manifest_ros_lut_garbage_proxy.json",
     "results/manifest_ros_lut_garbage_budget_frontier.json",
+    "results/manifest_ros_lut_checkpoint_optimizer.json",
     "results/analysis_ros_reproduction_gap_audit.md",
     "results/summary_ros_reproduction_gap_audit.csv",
     "results/manifest_ros_reproduction_gap_audit.json",
     "paper_latex/tables/ros_lut_garbage_proxy.tex",
     "paper_latex/tables/ros_lut_garbage_budget_frontier.tex",
+    "paper_latex/tables/ros_lut_checkpoint_optimizer.tex",
     "paper_latex/tables/ros_reproduction_gap_audit.tex",
 }
 STG_BENCHMARK_PATHS = {
@@ -484,6 +513,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    sshr_reproduction_missing = sorted(SSHR_REPRODUCTION_SCOPE_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload SSHR reproduction-scope evidence",
+            "pass" if not sshr_reproduction_missing else "needs revision",
+            f"sshr_reproduction_scope_files={len(SSHR_REPRODUCTION_SCOPE_PATHS)}; missing={sshr_reproduction_missing or 'none'}.",
+            "Ensure the uploadable archive includes the SSHR reproduction-scope audit script, required raw rows, generated evidence, manifest, and manuscript table.",
+        )
+    )
+
     novelty_missing = sorted(NOVELTY_SCORECARD_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -800,6 +839,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "comparison_answer_scorecard_paths": sorted(COMPARISON_ANSWER_SCORECARD_PATHS),
         "weight_robustness_paths": sorted(WEIGHT_ROBUSTNESS_PATHS),
         "resource_weight_sensitivity_paths": sorted(RESOURCE_WEIGHT_SENSITIVITY_PATHS),
+        "sshr_reproduction_scope_paths": sorted(SSHR_REPRODUCTION_SCOPE_PATHS),
         "threats_validity_paths": sorted(THREATS_VALIDITY_PATHS),
         "ros_gap_paths": sorted(ROS_GAP_PATHS),
         "stg_benchmark_paths": sorted(STG_BENCHMARK_PATHS),

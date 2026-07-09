@@ -7,6 +7,7 @@ compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, comparison-protocol coverage,
 comparison-target validity,
 score-weight robustness,
+SSHR reproduction-scope support,
 threats-to-validity coverage,
 novelty/comparison scorecard coverage,
 public handoff freshness,
@@ -75,6 +76,8 @@ WEIGHT_ROBUSTNESS_MANIFEST = RESULTS / "manifest_weight_robustness.json"
 WEIGHT_ROBUSTNESS_TABLE = THIS_DIR / "paper_latex" / "tables" / "weight_robustness_compact.tex"
 RESOURCE_WEIGHT_SENSITIVITY_MANIFEST = RESULTS / "manifest_resource_weight_sensitivity_audit.json"
 RESOURCE_WEIGHT_SENSITIVITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "resource_weight_sensitivity_audit.tex"
+SSHR_REPRODUCTION_MANIFEST = RESULTS / "manifest_sshr_reproduction_scope_audit.json"
+SSHR_REPRODUCTION_TABLE = THIS_DIR / "paper_latex" / "tables" / "sshr_reproduction_scope_audit.tex"
 THREATS_VALIDITY_MANIFEST = RESULTS / "manifest_threats_to_validity_audit.json"
 THREATS_VALIDITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "threats_to_validity_audit.tex"
 NOVELTY_SCORECARD_MANIFEST = RESULTS / "manifest_novelty_comparison_scorecard.json"
@@ -85,6 +88,8 @@ ROS_GARBAGE_MANIFEST = RESULTS / "manifest_ros_lut_garbage_proxy.json"
 ROS_GARBAGE_TABLE = THIS_DIR / "paper_latex" / "tables" / "ros_lut_garbage_proxy.tex"
 ROS_GARBAGE_BUDGET_MANIFEST = RESULTS / "manifest_ros_lut_garbage_budget_frontier.json"
 ROS_GARBAGE_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "ros_lut_garbage_budget_frontier.tex"
+ROS_CHECKPOINT_MANIFEST = RESULTS / "manifest_ros_lut_checkpoint_optimizer.json"
+ROS_CHECKPOINT_TABLE = THIS_DIR / "paper_latex" / "tables" / "ros_lut_checkpoint_optimizer.tex"
 STG_BENCHMARK_MANIFEST = RESULTS / "manifest_stg_published_benchmark.json"
 STG_BENCHMARK_TABLE = THIS_DIR / "paper_latex" / "tables" / "stg_published_benchmark.tex"
 SEARCH_BUDGET_MANIFEST = RESULTS / "manifest_search_budget_contract.json"
@@ -427,6 +432,36 @@ def verify_resource_weight_sensitivity() -> dict[str, str]:
     )
 
 
+def verify_sshr_reproduction_scope() -> dict[str, str]:
+    manifest = read_json(SSHR_REPRODUCTION_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    coverage = manifest.get("coverage_counts", {}) if manifest else {}
+    rows = int(manifest.get("rows", -1)) if manifest else -1
+    source_tree = manifest.get("source_tree_available", "missing") if manifest else "missing"
+    table_exists = SSHR_REPRODUCTION_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    anonymous_anchor = bool(manifest.get("anonymous_table_anchor_present", False)) if manifest else False
+    acm_anchor = bool(manifest.get("acm_table_anchor_present", False)) if manifest else False
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and rows >= 8
+        and table_exists
+        and anchor
+        and anonymous_anchor
+        and acm_anchor
+        else "needs revision"
+    )
+    return row(
+        "SSHR reproduction-scope audit",
+        status,
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; coverage_counts={coverage}; source_tree_available={source_tree}; table_exists={table_exists}; table_anchor_present={anchor}; anonymous_anchor={anonymous_anchor}; acm_anchor={acm_anchor}.",
+        "Run analyze_sshr_reproduction_scope_audit.py and restore SSHR reproduction-scope rows, generated table, or manuscript anchors.",
+    )
+
+
 def verify_threats_to_validity() -> dict[str, str]:
     manifest = read_json(THREATS_VALIDITY_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -552,6 +587,42 @@ def verify_ros_garbage_budget_frontier() -> dict[str, str]:
         status,
         f"raw_rows={raw_rows}; summary_rows={summary_rows}; frontier_rows={frontier_rows}; functions={functions}; budgets={budgets}; needs_revision_count={revisions}; status_counts={counts}; official_ros_fully_reproduced={full_ros}; table_exists={table_exists}; table_anchor_present={anchor}.",
         "Run analyze_ros_lut_garbage_budget_frontier.py after changing ROS-style LUT garbage schedules, budget-frontier wording, or table anchors.",
+    )
+
+
+def verify_ros_checkpoint_optimizer() -> dict[str, str]:
+    manifest = read_json(ROS_CHECKPOINT_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    raw_rows = manifest.get("raw_rows", "missing") if manifest else "missing"
+    summary_rows = manifest.get("summary_rows", "missing") if manifest else "missing"
+    frontier_rows = manifest.get("frontier_rows", "missing") if manifest else "missing"
+    solved = manifest.get("solved_functions", "missing") if manifest else "missing"
+    solved_traditional = manifest.get("solved_traditional_n_le_6", "missing") if manifest else "missing"
+    exact = bool(manifest.get("exact_over_checkpoint_candidates", False)) if manifest else False
+    full_ros = manifest.get("official_ros_fully_reproduced", "missing") if manifest else "missing"
+    table_exists = ROS_CHECKPOINT_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and raw_rows == 474
+        and summary_rows == 35
+        and frontier_rows == 5
+        and solved == 192
+        and solved_traditional == 177
+        and exact
+        and full_ros is False
+        and table_exists
+        and anchor
+        else "needs revision"
+    )
+    return row(
+        "ROS-style exact checkpoint-subset optimizer",
+        status,
+        f"raw_rows={raw_rows}; summary_rows={summary_rows}; frontier_rows={frontier_rows}; solved_functions={solved}; solved_traditional_n_le_6={solved_traditional}; exact_over_checkpoint_candidates={exact}; needs_revision_count={revisions}; status_counts={counts}; official_ros_fully_reproduced={full_ros}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_ros_lut_checkpoint_optimizer.py after changing ROS-style LUT checkpoint optimization, exact-scope wording, or table anchors.",
     )
 
 
@@ -1425,11 +1496,13 @@ def build_rows() -> list[dict[str, str]]:
             verify_comparison_answer_scorecard(),
             verify_weight_robustness(),
             verify_resource_weight_sensitivity(),
+            verify_sshr_reproduction_scope(),
             verify_threats_to_validity(),
             verify_novelty_scorecard(),
             verify_public_handoff_freshness(),
             verify_ros_garbage_proxy(),
             verify_ros_garbage_budget_frontier(),
+            verify_ros_checkpoint_optimizer(),
             verify_ros_gap(),
             verify_stg_benchmark(),
             verify_search_budget_contract(),

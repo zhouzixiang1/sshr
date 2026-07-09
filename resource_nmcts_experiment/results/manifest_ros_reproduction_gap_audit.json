@@ -2,7 +2,7 @@
   "coverage_counts": {
     "covered": 5,
     "not reproduced": 2,
-    "partial": 5
+    "partial": 6
   },
   "full_ros_boundary_is_explicit": true,
   "needs_revision_count": 0,
@@ -14,7 +14,7 @@
     "table": "paper_latex/tables/ros_reproduction_gap_audit.tex"
   },
   "python": "3.11.15",
-  "rows": 12,
+  "rows": 13,
   "rows_detail": [
     {
       "audit_status": "pass",
@@ -81,6 +81,17 @@
       "next_reproduction_step": "Replace the schedule portfolio with the official SAT garbage-management optimizer if executable ROS artifacts or a faithful reimplementation become available.",
       "official_requirement": "A ROS-facing garbage-management comparison should expose line/operation trade-offs across feasible auxiliary-line budgets, not just isolated schedules.",
       "supported_claim": "The paper can report a budgeted LUT garbage-pressure frontier over verified DAGs."
+    },
+    {
+      "audit_status": "pass",
+      "coverage_status": "partial",
+      "current_coverage": "The checkpoint optimizer exhaustively enumerates every checkpoint subset for verified LUT DAGs with at most 12 multi-fanout candidates, covering all 177 traditional n<=6 functions and 192 DAGs total.",
+      "evidence": "files_missing=none; tokens=5/5; missing_tokens=none; csv=results/raw_ros_lut_checkpoint_optimizer.csv rows=474/474; json=results/manifest_ros_lut_checkpoint_optimizer.json::raw_rows=474; results/manifest_ros_lut_checkpoint_optimizer.json::frontier_rows=5; results/manifest_ros_lut_checkpoint_optimizer.json::solved_functions=192; results/manifest_ros_lut_checkpoint_optimizer.json::solved_traditional_n_le_6=177; results/manifest_ros_lut_checkpoint_optimizer.json::exact_over_checkpoint_candidates=True; results/manifest_ros_lut_checkpoint_optimizer.json::official_ros_fully_reproduced=False",
+      "excluded_claim": "This exact subproblem is not the full ROS SAT garbage-management algorithm and does not solve the large fanout-heavy DAGs exactly.",
+      "item": "Exact LUT checkpoint-subset optimizer",
+      "next_reproduction_step": "Extend the checkpoint optimizer with a scalable SAT/ILP formulation or obtain official ROS artifacts before promoting a full-ROS claim.",
+      "official_requirement": "A stronger ROS-facing garbage-management proxy should optimize checkpoint choices rather than only compare a few hand-written schedules.",
+      "supported_claim": "The paper can report an exact ROS-style checkpoint-subset subproblem on the tractable traditional slice."
     },
     {
       "audit_status": "pass",
@@ -151,6 +162,6 @@
   ],
   "script": "analyze_ros_reproduction_gap_audit.py",
   "status_counts": {
-    "pass": 12
+    "pass": 13
   }
 }
