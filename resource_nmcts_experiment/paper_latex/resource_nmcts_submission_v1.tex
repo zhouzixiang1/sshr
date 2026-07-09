@@ -284,6 +284,26 @@ guarantees.}
 \input{tables/algorithm_contract}
 \end{table}
 
+Table~\ref{tab:search-budget-contract} records the corresponding search-budget
+contract.  The table is intentionally operational: it states the configured
+candidate fan-out, auxiliary-line, MCTS, polarity-search, portfolio, Pareto,
+frontier-controller, and verification caps that make the method rerunnable.
+These caps are part of the claim boundary.  They explain why the method scales
+as a bounded logical-layer search workflow while also making clear that the
+reported candidates are not certificates of global optimality.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Search-budget contract for \method{}.  Each row states the explicit
+cap used to make the search rerunnable, the scalability role of that cap, and
+the limitation it leaves in place.}
+\label{tab:search-budget-contract}
+\input{tables/search_budget_contract}
+\end{table}
+
 \subsection{Boolean-ring linear factors}
 
 A key extension is allowing the linear factor and the quotient to share
@@ -751,12 +771,14 @@ favor the first method in each comparison.}
 Table~\ref{tab:search-control-baseline-audit} restates the search-control
 comparisons in the form used for claim interpretation.  The bit-flip branch is
 compared against heuristic-only, beam-only, strengthened no-\mcts{} portfolio,
-\mcts{}, Pareto archive, and learned-prior/no-prior controls.  The only random
-control in the current package is the same-budget phase/\rz{} shortlist audit;
-it is therefore not used as a bit-flip random baseline.  This keeps the
-learning claim narrow: search control adds measured quality or budget-control
-evidence, but the largest gains also depend on the algebraic action space and
-baseline-preserving guards.
+\mcts{}, Pareto archive, and learned-prior/no-prior controls.  Table
+\ref{tab:bitflip-random-prior} adds a same-budget random-prior control for the
+bit-flip neural scorer.  The learned prior changes only action ranking, keeps
+the same candidate legality and semantic checks, and is compared with eight
+deterministic random-prior repeats per function.  The effect is intentionally
+reported as small: learned scores are non-degrading and beat the random-prior
+mean, but the largest resource gains still depend on the algebraic action space
+and baseline-preserving guards.
 
 \begin{table}[H]
 \centering
@@ -768,6 +790,18 @@ baseline is being tested and which stronger claim remains outside the evidence
 for that comparison.}
 \label{tab:search-control-baseline-audit}
 \input{tables/search_control_baseline_audit}
+\end{table}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.08}
+\caption{Same-budget bit-flip random-prior control.  W/L/T compares the learned
+prior with the per-function mean over eight deterministic random-prior repeats;
+negative score changes favor the learned prior.}
+\label{tab:bitflip-random-prior}
+\input{tables/bitflip_random_prior_control}
 \end{table}
 
 \begin{table}[H]

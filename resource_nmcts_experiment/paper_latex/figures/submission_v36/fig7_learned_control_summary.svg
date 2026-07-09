@@ -534,10 +534,15 @@ z
 " style="stroke: #1e2329; stroke-width: 0.4"/>
     </defs>
     <g clip-path="url(#p920092bc43)">
-     <use xlink:href="#m7246512e9c" x="442.750176" y="167.914196" style="fill: #b56b45; stroke: #1e2329; stroke-width: 0.4"/>
+     <use xlink:href="#m7246512e9c" x="435.739594" y="141.409197" style="fill: #b56b45; stroke: #1e2329; stroke-width: 0.4"/>
     </g>
    </g>
    <g id="PathCollection_2">
+    <g clip-path="url(#p920092bc43)">
+     <use xlink:href="#m7246512e9c" x="442.750176" y="167.914196" style="fill: #b56b45; stroke: #1e2329; stroke-width: 0.4"/>
+    </g>
+   </g>
+   <g id="PathCollection_3">
     <g clip-path="url(#p920092bc43)">
      <use xlink:href="#m7246512e9c" x="477.803088" y="58.0189" style="fill: #b56b45; stroke: #1e2329; stroke-width: 0.4"/>
     </g>
@@ -563,19 +568,22 @@ L 512.856 179.62
 " style="fill: none; stroke: #000000; stroke-width: 0.7; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_35">
-    <text style="font-size: 6.2px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="447.423898" y="169.480665" transform="rotate(-0 447.423898 169.480665)">neural guard</text>
+    <text style="font-size: 6.2px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="440.413316" y="143.049775" transform="rotate(-0 440.413316 143.049775)">Bit-flip learned prior</text>
    </g>
    <g id="text_36">
-    <text style="font-size: 6.2px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="482.47681" y="59.621697" transform="rotate(-0 482.47681 59.621697)">root ranker</text>
+    <text style="font-size: 6.2px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="447.423898" y="169.480665" transform="rotate(-0 447.423898 169.480665)">neural guard</text>
    </g>
    <g id="text_37">
+    <text style="font-size: 6.2px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="482.47681" y="59.621697" transform="rotate(-0 482.47681 59.621697)">root ranker</text>
+   </g>
+   <g id="text_38">
     <text style="font-weight: 700; font-size: 8.4px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="412.370986" y="42.350625" transform="rotate(-0 412.370986 42.350625)">Diagnostics expose limits.</text>
    </g>
   </g>
-  <g id="text_38">
+  <g id="text_39">
    <text style="font-weight: 700; font-size: 10px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="7.2" y="21.06" transform="rotate(-0 7.2 21.06)">d</text>
   </g>
-  <g id="text_39">
+  <g id="text_40">
    <text style="font-weight: 700; font-size: 8.5px; font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="276.768" y="13.387734" transform="rotate(-0 276.768 13.387734)">Learned controllers are promoted only where quality and search-effort evidence align.</text>
   </g>
  </g>

@@ -66,6 +66,15 @@ SMOKE_SPECS = (
         minimum_rows=8,
     ),
     SmokeSpec(
+        name="Search-budget contract audit",
+        script="analyze_search_budget_contract.py",
+        manifest="results/manifest_search_budget_contract.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=8,
+    ),
+    SmokeSpec(
         name="Search-control baseline audit",
         script="analyze_search_control_baseline_audit.py",
         manifest="results/manifest_search_control_baseline_audit.json",
@@ -73,6 +82,15 @@ SMOKE_SPECS = (
         expected_value=0,
         minimum_rows_key="rows",
         minimum_rows=8,
+    ),
+    SmokeSpec(
+        name="Bit-flip random-prior control",
+        script="analyze_bitflip_random_prior_control.py",
+        manifest="results/manifest_bitflip_random_prior_control.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="rows",
+        minimum_rows=18,
     ),
     SmokeSpec(
         name="Editorial screening audit",

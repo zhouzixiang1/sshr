@@ -66,20 +66,20 @@
       "summary_files": "1"
     },
     {
-      "analysis_files": "2",
-      "claim_use": "Verifies that the method description is connected to executable stages, source anchors, and semantic/resource guarantees.",
+      "analysis_files": "3",
+      "claim_use": "Verifies that the method description is connected to executable stages, source anchors, semantic/resource guarantees, and explicit search budgets.",
       "dependency_boundary": "Quick derived audit; checks implementation anchors and manuscript method exposition, not raw benchmark outcomes.",
-      "driver_scripts": "analyze_method_workflow_table.py; analyze_algorithm_contract_table.py",
-      "evidence_family": "Method workflow and algorithm contract",
-      "manifest_files": "1",
+      "driver_scripts": "analyze_method_workflow_table.py; analyze_algorithm_contract_table.py; analyze_search_budget_contract.py",
+      "evidence_family": "Method workflow, algorithm, and budget contracts",
+      "manifest_files": "2",
       "raw_files": "0",
       "raw_rows": "0",
       "representative_raw": "",
       "rerun_tier": "quick method audit",
       "scripts_missing": "",
-      "scripts_present": "2",
+      "scripts_present": "3",
       "status": "complete",
-      "summary_files": "2"
+      "summary_files": "3"
     },
     {
       "analysis_files": "5",
@@ -226,20 +226,20 @@
       "summary_files": "9"
     },
     {
-      "analysis_files": "12",
+      "analysis_files": "13",
       "claim_use": "Separates neural/search-control effects from deterministic algebraic construction and guarded portfolio selection.",
       "dependency_boundary": "Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only.",
-      "driver_scripts": "train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py",
+      "driver_scripts": "train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; run_bitflip_random_prior_control.py; analyze_bitflip_random_prior_control.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py",
       "evidence_family": "Learned-control and ablations",
-      "manifest_files": "9",
-      "raw_files": "13",
-      "raw_rows": "3959",
-      "representative_raw": "results/raw_highdim_neural_prior_boolean_guard.csv; results/raw_highdim_neural_prior_learned_prior.csv; results/raw_highdim_neural_prior_no_prior.csv; results/raw_highdim_neural_prior_pairwise.csv; +9 more",
+      "manifest_files": "11",
+      "raw_files": "14",
+      "raw_rows": "8207",
+      "representative_raw": "results/raw_bitflip_random_prior_control.csv; results/raw_highdim_neural_prior_boolean_guard.csv; results/raw_highdim_neural_prior_learned_prior.csv; results/raw_highdim_neural_prior_no_prior.csv; +10 more",
       "rerun_tier": "training plus ablation rerun",
       "scripts_missing": "",
-      "scripts_present": "6",
+      "scripts_present": "8",
       "status": "complete",
-      "summary_files": "19"
+      "summary_files": "21"
     },
     {
       "analysis_files": "2",
@@ -346,6 +346,7 @@
   "python": "3.11.15",
   "raw_file_names": [
     "results/raw_ablation_affine.csv",
+    "results/raw_bitflip_random_prior_control.csv",
     "results/raw_boolean_neural_guard_vs_deterministic.csv",
     "results/raw_boolean_neural_highdim.csv",
     "results/raw_boolean_screen_depth_frontier_policy.csv",
@@ -492,6 +493,6 @@
   ],
   "rows": 21,
   "script": "analyze_artifact_rerun_registry.py",
-  "unique_raw_files": 144,
-  "unique_raw_rows": 55308
+  "unique_raw_files": 145,
+  "unique_raw_rows": 59556
 }

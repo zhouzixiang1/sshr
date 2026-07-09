@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import hashlib
 from typing import Iterable, List, Sequence
 
 import torch
@@ -62,6 +63,25 @@ class NeuralScorer:
         x = torch.tensor(rows, dtype=torch.float32, device=self.device)
         x = (x - self.mean) / self.std.clamp_min(1e-6)
         return self.model(x).detach().cpu().tolist()
+
+
+class RandomPriorScorer:
+    """Deterministic same-budget random scorer for prior-control experiments."""
+
+    def __init__(self, seed: int = 0) -> None:
+        self.seed = int(seed)
+
+    def _score(self, features: Sequence[float]) -> float:
+        payload = f"{self.seed}|" + ",".join(f"{float(value):.8g}" for value in features)
+        digest = hashlib.blake2b(payload.encode("utf-8"), digest_size=8).digest()
+        unit = int.from_bytes(digest, "big") / float(1 << 64)
+        return 2.0 * unit - 1.0
+
+    def score_one(self, features: Sequence[float]) -> float:
+        return self._score(features)
+
+    def score_many(self, features: Iterable[Sequence[float]]) -> List[float]:
+        return [self._score(row) for row in features]
 
 
 def save_model(path: str | Path, model: ActionNet, mean: torch.Tensor, std: torch.Tensor) -> None:

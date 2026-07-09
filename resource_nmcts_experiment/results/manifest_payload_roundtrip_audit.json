@@ -6,6 +6,17 @@
     "results/manifest_author_input_closure_audit.json",
     "results/summary_author_input_closure_audit.csv"
   ],
+  "bitflip_random_prior_paths": [
+    "analyze_bitflip_random_prior_control.py",
+    "paper_latex/tables/bitflip_random_prior_control.tex",
+    "results/analysis_bitflip_random_prior_control.md",
+    "results/manifest_bitflip_random_prior_control.json",
+    "results/manifest_bitflip_random_prior_control_run.json",
+    "results/raw_bitflip_random_prior_control.csv",
+    "results/summary_bitflip_random_prior_control.csv",
+    "results/summary_bitflip_random_prior_control_run.csv",
+    "run_bitflip_random_prior_control.py"
+  ],
   "citation_support_paths": [
     "analyze_citation_support_audit.py",
     "results/analysis_citation_support_audit.md",
@@ -90,19 +101,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=915; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=942; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=915; archive_files=915; missing=none; extra=none.",
+      "evidence": "manifest_files=942; archive_files=942; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=915; mismatches=none.",
+      "evidence": "checked=942; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -141,6 +152,18 @@
       "evidence": "schedule_proxy_files=8; missing=none.",
       "item": "Payload schedule-proxy evidence",
       "next_action": "Ensure the uploadable archive includes the schedule metrics scripts, compact audit outputs, and manuscript schedule-proxy table.",
+      "status": "pass"
+    },
+    {
+      "evidence": "search_budget_files=5; missing=none.",
+      "item": "Payload search-budget contract evidence",
+      "next_action": "Ensure the uploadable archive includes the search-budget contract script, generated evidence, and manuscript table.",
+      "status": "pass"
+    },
+    {
+      "evidence": "bitflip_random_prior_files=9; missing=none.",
+      "item": "Payload bit-flip random-prior evidence",
+      "next_action": "Ensure the uploadable archive includes the bit-flip random-prior run script, analysis outputs, raw CSV, and manuscript table.",
       "status": "pass"
     },
     {
@@ -198,7 +221,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=915; metadata_issues=none.",
+      "evidence": "members_checked=942; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -215,8 +238,15 @@
     "results/summary_schedule_proxy_audit.csv"
   ],
   "script": "analyze_payload_roundtrip_audit.py",
+  "search_budget_paths": [
+    "analyze_search_budget_contract.py",
+    "paper_latex/tables/search_budget_contract.tex",
+    "results/analysis_search_budget_contract.md",
+    "results/manifest_search_budget_contract.json",
+    "results/summary_search_budget_contract.csv"
+  ],
   "status_counts": {
-    "pass": 19
+    "pass": 21
   },
   "support_packet_paths": [
     "analyze_submission_support_packet_audit.py",

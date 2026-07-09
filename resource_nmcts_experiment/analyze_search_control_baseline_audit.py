@@ -35,6 +35,10 @@ def pct(value: str | float, digits: int = 2) -> str:
     return f"{float(value):+.{digits}f}%"
 
 
+def pct_ratio(value: str | float, digits: int = 2) -> str:
+    return f"{100.0 * float(value):+.{digits}f}%"
+
+
 def pass_status(row: dict[str, str]) -> str:
     wlt = row["score_wlt"].split("/")
     wins, losses = int(wlt[0]), int(wlt[1])
@@ -87,6 +91,7 @@ def paired_variant_stats(
 def build_rows() -> list[dict[str, str]]:
     search = read_csv(RESULTS / "summary_search_contribution.csv")
     prior_raw = read_csv(RESULTS / "raw_neural_prior_ablation.csv")
+    bitflip_random = read_csv(RESULTS / "summary_bitflip_random_prior_control.csv")
     phase_random = read_csv(RESULTS / "summary_phase_policy_random_control.csv")
 
     def search_row(
@@ -126,6 +131,8 @@ def build_rows() -> list[dict[str, str]]:
         baseline_variant="no_prior",
         metric="time_s",
     )
+    bitflip_random_score = require_row(bitflip_random, method="and_resource_nmcts", metric="score")
+    bitflip_random_time = require_row(bitflip_random, method="and_resource_nmcts", metric="time_s")
     phase = require_row(phase_random, policy="diverse", topk="512")
 
     rows = [
@@ -176,6 +183,23 @@ def build_rows() -> list[dict[str, str]]:
             "supported_conclusion": "The learned scorer is a quality signal under the same functions and methods.",
             "boundary": "It is not a runtime claim and should not be promoted as the main source of improvement.",
             "status": "pass" if prior_score["losses"] == "0" and float(prior_score["mean_relative"]) < 0 else "needs revision",
+        },
+        {
+            "layer": "bit-flip random control",
+            "evidence_source": "bit-flip same-budget random-prior audit",
+            "comparison": "Learned bit-flip prior vs same-budget random-prior mean",
+            "scope": "177 n<=6 functions; eight random-prior repeats",
+            "pairs": bitflip_random_score["pairs"],
+            "score_wlt": f"{bitflip_random_score['learned_wins']}/{bitflip_random_score['learned_losses']}/{bitflip_random_score['ties']}",
+            "mean_score_change": pct_ratio(bitflip_random_score["mean_relative"]),
+            "cost_or_runtime": f"time {pct_ratio(bitflip_random_time['mean_relative'])}",
+            "supported_conclusion": "The learned scorer beats deterministic random action priors as a bounded quality signal.",
+            "boundary": "The margin is small and runtime-negative; this is not a claim that neural ranking explains the full gain.",
+            "status": "pass"
+            if int(bitflip_random_score["pairs"]) == 177
+            and int(bitflip_random_score["random_repeats"]) >= 8
+            and float(bitflip_random_score["mean_relative"]) < 0.0
+            else "needs revision",
         },
         search_row(
             comparison="Highdim no-MCTS portfolio over root beam",
@@ -263,8 +287,8 @@ def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
             "",
             "## Interpretation",
             "",
-            "- The bit-flip branch compares against heuristic-only, beam-only, no-MCTS, MCTS, Pareto, and learned-prior/no-prior controls.",
-            "- The random-control row belongs to the phase/Rz shortlist branch, where same-budget random shortlists are well defined.",
+            "- The bit-flip branch compares against heuristic-only, beam-only, no-MCTS, MCTS, Pareto, learned-prior/no-prior, and same-budget random-prior controls.",
+            "- Random controls now cover both the bit-flip action-prior scorer and the phase/Rz shortlist branch; they support bounded ranking/pruning claims, not runtime or full-causality claims.",
             "- The evidence supports resource-aware search control, not a claim that reinforcement learning alone causes the full improvement.",
         ]
     )
@@ -319,6 +343,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "sources": [
             "results/summary_search_contribution.csv",
             "results/raw_neural_prior_ablation.csv",
+            "results/summary_bitflip_random_prior_control.csv",
             "results/summary_phase_policy_random_control.csv",
         ],
         "outputs": {

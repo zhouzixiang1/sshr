@@ -56,9 +56,13 @@ CLAIM_SCOPE_MANIFEST = RESULTS / "manifest_claim_scope_lint.json"
 COMPARISON_PROTOCOL_MANIFEST = RESULTS / "manifest_comparison_protocol_audit.json"
 COMPARISON_PROTOCOL_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_protocol_audit.tex"
 ROS_GAP_MANIFEST = RESULTS / "manifest_ros_reproduction_gap_audit.json"
+SEARCH_BUDGET_MANIFEST = RESULTS / "manifest_search_budget_contract.json"
+SEARCH_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "search_budget_contract.tex"
 SCHEDULE_PROXY_MANIFEST = RESULTS / "manifest_schedule_proxy_audit.json"
 SCHEDULE_PROXY_TABLE = THIS_DIR / "paper_latex" / "tables" / "schedule_proxy_audit.tex"
 SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
+BITFLIP_RANDOM_PRIOR_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control.json"
+BITFLIP_RANDOM_PRIOR_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_random_prior_control.tex"
 EDITORIAL_SCREENING_MANIFEST = RESULTS / "manifest_editorial_screening_audit.json"
 SUPPORT_PACKET_MANIFEST = RESULTS / "manifest_submission_support_packet_audit.json"
 CITATION_SUPPORT_MANIFEST = RESULTS / "manifest_citation_support_audit.json"
@@ -303,6 +307,21 @@ def verify_schedule_proxy() -> dict[str, str]:
     )
 
 
+def verify_search_budget_contract() -> dict[str, str]:
+    manifest = read_json(SEARCH_BUDGET_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    table_exists = SEARCH_BUDGET_TABLE.exists()
+    status = "pass" if manifest and revisions == 0 and table_exists else "needs revision"
+    return row(
+        "Search-budget contract audit",
+        status,
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
+        "Run analyze_search_budget_contract.py and restore method search-budget table anchors.",
+    )
+
+
 def verify_search_control() -> dict[str, str]:
     manifest = read_json(SEARCH_CONTROL_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -313,7 +332,22 @@ def verify_search_control() -> dict[str, str]:
         "Search-control baseline audit",
         status,
         f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}.",
-        "Run analyze_search_control_baseline_audit.py and restore heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, and phase random-control evidence rows.",
+        "Run analyze_search_control_baseline_audit.py and restore heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, bit-flip random-prior, and phase random-control evidence rows.",
+    )
+
+
+def verify_bitflip_random_prior() -> dict[str, str]:
+    manifest = read_json(BITFLIP_RANDOM_PRIOR_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = manifest.get("rows", "missing") if manifest else "missing"
+    table_exists = BITFLIP_RANDOM_PRIOR_TABLE.exists()
+    status = "pass" if manifest and revisions == 0 and table_exists else "needs revision"
+    return row(
+        "Bit-flip random-prior control",
+        status,
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}.",
+        "Run analyze_bitflip_random_prior_control.py and restore the bit-flip random-prior manuscript table.",
     )
 
 
@@ -771,8 +805,10 @@ def build_rows() -> list[dict[str, str]]:
             verify_claim_scope(),
             verify_comparison_protocol(),
             verify_ros_gap(),
+            verify_search_budget_contract(),
             verify_schedule_proxy(),
             verify_search_control(),
+            verify_bitflip_random_prior(),
             verify_editorial_screening(),
             verify_support_packet(),
             verify_citation_support(),

@@ -79,6 +79,24 @@ SCHEDULE_PROXY_PATHS = {
     "results/manifest_schedule_proxy_audit.json",
     "paper_latex/tables/schedule_proxy_audit.tex",
 }
+SEARCH_BUDGET_PATHS = {
+    "analyze_search_budget_contract.py",
+    "results/analysis_search_budget_contract.md",
+    "results/summary_search_budget_contract.csv",
+    "results/manifest_search_budget_contract.json",
+    "paper_latex/tables/search_budget_contract.tex",
+}
+BITFLIP_RANDOM_PRIOR_PATHS = {
+    "run_bitflip_random_prior_control.py",
+    "analyze_bitflip_random_prior_control.py",
+    "results/raw_bitflip_random_prior_control.csv",
+    "results/summary_bitflip_random_prior_control_run.csv",
+    "results/manifest_bitflip_random_prior_control_run.json",
+    "results/summary_bitflip_random_prior_control.csv",
+    "results/analysis_bitflip_random_prior_control.md",
+    "results/manifest_bitflip_random_prior_control.json",
+    "paper_latex/tables/bitflip_random_prior_control.tex",
+}
 HEADLINE_NUMERIC_PATHS = {
     "analyze_headline_numeric_consistency.py",
     "results/analysis_headline_numeric_consistency.md",
@@ -290,6 +308,26 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    search_budget_missing = sorted(SEARCH_BUDGET_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload search-budget contract evidence",
+            "pass" if not search_budget_missing else "needs revision",
+            f"search_budget_files={len(SEARCH_BUDGET_PATHS)}; missing={search_budget_missing or 'none'}.",
+            "Ensure the uploadable archive includes the search-budget contract script, generated evidence, and manuscript table.",
+        )
+    )
+
+    bitflip_random_missing = sorted(BITFLIP_RANDOM_PRIOR_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload bit-flip random-prior evidence",
+            "pass" if not bitflip_random_missing else "needs revision",
+            f"bitflip_random_prior_files={len(BITFLIP_RANDOM_PRIOR_PATHS)}; missing={bitflip_random_missing or 'none'}.",
+            "Ensure the uploadable archive includes the bit-flip random-prior run script, analysis outputs, raw CSV, and manuscript table.",
+        )
+    )
+
     headline_missing = sorted(HEADLINE_NUMERIC_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -454,6 +492,8 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "comparison_protocol_paths": sorted(COMPARISON_PROTOCOL_PATHS),
         "ros_gap_paths": sorted(ROS_GAP_PATHS),
         "schedule_proxy_paths": sorted(SCHEDULE_PROXY_PATHS),
+        "search_budget_paths": sorted(SEARCH_BUDGET_PATHS),
+        "bitflip_random_prior_paths": sorted(BITFLIP_RANDOM_PRIOR_PATHS),
         "headline_numeric_paths": sorted(HEADLINE_NUMERIC_PATHS),
         "citation_support_paths": sorted(CITATION_SUPPORT_PATHS),
         "editorial_screening_paths": sorted(EDITORIAL_SCREENING_PATHS),

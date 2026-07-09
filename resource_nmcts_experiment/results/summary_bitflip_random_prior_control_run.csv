@@ -1,0 +1,4 @@
+functions,mean_score,mean_time_s,method,random_repeats,rows
+177,55.433213276836184,0.23558456699053446,and_affine_nmcts,8,1416
+177,53.28714689265549,0.34787705187070167,and_resource_nmcts,8,1416
+177,49.57258121468946,3.434573242219828,and_pareto_resource_nmcts,8,1416

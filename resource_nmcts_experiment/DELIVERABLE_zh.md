@@ -54,6 +54,28 @@
 
 该表已接入 author/anonymous 两套英文投稿稿 Method 部分，并被 rebuild、readiness 和 artifact rerun registry 覆盖。它逐行检查 canonical ANF state、verifiable action generation、prior-guided tree search、baseline guard、Pareto archive、large-scale controllers、emission/verification 七个步骤的源码锚点，明确 neural scorer 和 learned gate 只是排序/预算/跳过控制，不能替代 GF(2) 展开、guarded selection 和 semantic verifier。这比普通伪代码更适合当前项目：既给审稿人算法级入口，也防止方法文字和实现漂移。
 
+本轮继续新增 search-budget contract 表，把“为什么能扩到大规模、哪些地方只是有界搜索”写成可审计方法合约：
+
+- `analyze_search_budget_contract.py`
+- `results/summary_search_budget_contract.csv`
+- `results/analysis_search_budget_contract.md`
+- `results/manifest_search_budget_contract.json`
+- `paper_latex/tables/search_budget_contract.tex`
+
+该表已接入 author/anonymous 两套英文投稿稿 Method 部分，并被 rebuild、readiness、terminal package verifier、payload round-trip、payload extraction smoke、traceability 和 artifact rerun registry 覆盖。它从源码读取/检查 `SearchConfig` 与相关实现锚点，列出 action fan-out、factor ancilla、PUCT/MCTS simulations、polarity/affine search、resource portfolio、Pareto archive、high-dimensional frontier controllers 和 verification route 的显式预算或边界。它的作用是把可扩展性主张限定为“有界、可复跑的逻辑层搜索”，而不是全局最优综合证明。
+
+本轮新增 bit-flip same-budget random-prior 控制实验，用于补强“神经先验不是随机排序运气”的审稿证据：
+
+- `run_bitflip_random_prior_control.py`
+- `analyze_bitflip_random_prior_control.py`
+- `results/raw_bitflip_random_prior_control.csv`
+- `results/summary_bitflip_random_prior_control.csv`
+- `results/analysis_bitflip_random_prior_control.md`
+- `results/manifest_bitflip_random_prior_control.json`
+- `paper_latex/tables/bitflip_random_prior_control.tex`
+
+该实验复用 traditional learned-prior manifest 的同一 `SearchConfig`，对 `and_affine_nmcts`、`and_resource_nmcts` 和 `and_pareto_resource_nmcts` 三个 bit-flip 方法各跑 8 个 deterministic random-prior seed，形成 177 个函数 × 3 个方法 × 8 个 seed = 4248/4248 usable rows。分析表已接入 author/anonymous 两套英文投稿稿 search contribution 段落，并被 rebuild、readiness、terminal package verifier、payload round-trip、payload extraction smoke、traceability、goal-completion 和 artifact rerun registry 覆盖。结果显示 learned prior 相对 random-prior mean 的 score 改善幅度较小（Affine -0.12%、Resource -0.15%、Pareto -0.03%），但三组均不退化，并且 Resource-NMCTS 击败 8/8 个 random seed means。论文中应把它写成“same-budget 稳健性控制”，不能写成主要收益来源。
+
 本轮进一步把 related work 定位固化为可复现矩阵：
 
 - `analyze_related_work_positioning.py`
@@ -151,7 +173,7 @@
 - `results/manifest_search_control_baseline_audit.json`
 - `paper_latex/tables/search_control_baseline_audit.tex`
 
-该审计把“我的方法到底和什么搜索策略比”压缩成审稿人可读表：bit-flip 主线明确对比 heuristic-only、beam-only、no-MCTS portfolio、Resource-NMCTS、Pareto-Resource-NMCTS 和 learned-prior/no-prior；phase/Rz 分支单独保留 same-budget random shortlist control。关键结论是：Resource-NMCTS 相对强化 no-MCTS portfolio 为 54/0/123、score -1.44%，Pareto-Resource-NMCTS 相对 no-MCTS 为 106/0/71、score -4.69%，learned prior 相对 no-prior 为 39/0/138、score -1.10% 但 runtime 增加，因此不能写成速度主张；phase diverse top-512 相对 8 组 random mean 为 17/0/21、score -0.012%。这张表已接入英文投稿稿，用来直接回答“AI/MCTS 有什么增量、哪些只是确定性结构搜索、random control 在哪个分支有效”。
+该审计把“我的方法到底和什么搜索策略比”压缩成审稿人可读表：bit-flip 主线明确对比 heuristic-only、beam-only、no-MCTS portfolio、Resource-NMCTS、Pareto-Resource-NMCTS、learned-prior/no-prior 和 same-budget random-prior；phase/Rz 分支保留 same-budget random shortlist control。关键结论是：Resource-NMCTS 相对强化 no-MCTS portfolio 为 54/0/123、score -1.44%，Pareto-Resource-NMCTS 相对 no-MCTS 为 106/0/71、score -4.69%，learned prior 相对 no-prior 为 39/0/138、score -1.10% 但 runtime 增加；新增 bit-flip random-prior control 显示 Resource-NMCTS learned prior 相对 8 组 deterministic random-prior mean 为 17/8/152、score -0.15%，并击败 8/8 个 random seed mean，但 runtime +48.05%，因此只能写成质量排序信号，不能写成速度主张或 AI 单独贡献；phase diverse top-512 相对 8 组 random mean 为 17/0/21、score -0.012%。这张表已接入英文投稿稿，用来直接回答“AI/MCTS 有什么增量、哪些只是确定性结构搜索、random control 在哪个分支有效”。
 
 - `analyze_learned_control_audit.py`
 - `results/summary_learned_control_audit.csv`
@@ -160,7 +182,7 @@
 - `paper_latex/figures/submission_v36/fig7_learned_control_summary.pdf`
 - `paper_latex/figures/submission_v36/source_data/fig7_learned_control_summary.csv`
 
-该表把 AI/学习控制组件分成两类：可作为论文证据的 depth-frontier policy、stage-gated frontier、sparse depth-4 gate、rank-diverse phase shortlist；以及只能作为限制或未来工作的 boolean neural guard、root-action neural ranker。关键数值：frontier policy 在 held-out `n=28,40` 上相对 oracle frontier 为 0/3/45、+0.04% score，但减少 51.30% all-depth frontier evaluation time；stage-gated frontier 在独立 `n=24,28,32,40` 上相对 all-depth 为 0/4/92、+0.04% score，减少 25.43% staged planning time；sparse depth-4 gate 在三组独立 seed 的 `n=24,28,32,40` 共 144 个 pair 上相对 deterministic sparse frontier 为 0/0/144、0 false skip，并减少 13.43% sparse-frontier evaluation time，阈值扫描显示 zero-false-skip plateau 可到 -14.92% time，允许 1 个 false skip 时为 -15.49% time 且 score gap 仅 +0.01%；rank-diverse phase shortlist 在 held-out `n=6` 上用 512/8192 exact forms/function 贴近 wide-128。另一方面，boolean neural guard 只有 -0.12% score 但 +94.49% runtime，root-action neural ranker质量未超过 beam4，因此不能作为主贡献夸大。
+该表把 AI/学习控制组件分成两类：可作为论文证据的 depth-frontier policy、stage-gated frontier、sparse depth-4 gate、rank-diverse phase shortlist；以及只能作为有限证据或未来工作的 bit-flip learned prior、boolean neural guard、root-action neural ranker。关键数值：frontier policy 在 held-out `n=28,40` 上相对 oracle frontier 为 0/3/45、+0.04% score，但减少 51.30% all-depth frontier evaluation time；stage-gated frontier 在独立 `n=24,28,32,40` 上相对 all-depth 为 0/4/92、+0.04% score，减少 25.43% staged planning time；sparse depth-4 gate 在三组独立 seed 的 `n=24,28,32,40` 共 144 个 pair 上相对 deterministic sparse frontier 为 0/0/144、0 false skip，并减少 13.43% sparse-frontier evaluation time，阈值扫描显示 zero-false-skip plateau 可到 -14.92% time，允许 1 个 false skip 时为 -15.49% time 且 score gap 仅 +0.01%；rank-diverse phase shortlist 在 held-out `n=6` 上用 512/8192 exact forms/function 贴近 wide-128。另一方面，bit-flip learned prior 只有 -0.15% score 且 runtime +48.05%，boolean neural guard 只有 -0.12% score 但 +94.49% runtime，root-action neural ranker质量未超过 beam4，因此这些不能作为主贡献夸大。
 
 新增 summary figure 将上述边界可视化：promoted controls 同时满足 score 不显著变差/有改善与搜索开销下降，limited diagnostics 则落在“质量弱或运行时间反向”的区域，用于防止把所有 AI 组件都写成主贡献。
 

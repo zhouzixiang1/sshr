@@ -8,6 +8,7 @@ deterministic search controls & No-MCTS portfolio over beam-only & 177 & 106/1/7
 MCTS over deterministic portfolio & Resource-NMCTS over no-MCTS portfolio & 177 & 54/0/123 & -1.44\% & The magnitude is incremental, not the whole resource drop. \\
 Pareto search control & Pareto Resource-NMCTS over no-MCTS portfolio & 177 & 106/0/71 & -4.69\% & Ancilla tradeoffs still need separate reporting. \\
 learned prior & Learned prior for Resource-NMCTS & 177 & 39/0/138 & -1.10\% & It is not a runtime claim and should not be promoted as the main source of improvement. \\
+bit-flip random control & Learned bit-flip prior vs same-budget random-prior mean & 177 & 17/8/152 & -0.15\% & The margin is small and runtime-negative; this is not a claim that neural ranking explains the full gain. \\
 high-dimensional deterministic control & Highdim no-MCTS portfolio over root beam & 16 & 14/0/2 & -6.25\% & This is symbolic/high-dimensional evidence, not exhaustive truth-table optimality. \\
 phase random control & Diverse phase shortlist top-512 vs same-budget random mean & 38 & 17/0/21 & -0.012\% & This is a phase/Rz proxy control, not a bit-flip random baseline or rotation synthesis. \\
 \bottomrule

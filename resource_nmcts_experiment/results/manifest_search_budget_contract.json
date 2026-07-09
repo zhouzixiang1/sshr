@@ -1,0 +1,25 @@
+{
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_search_budget_contract.md",
+    "manifest": "results/manifest_search_budget_contract.json",
+    "summary": "results/summary_search_budget_contract.csv",
+    "table": "paper_latex/tables/search_budget_contract.tex"
+  },
+  "python": "3.11.15",
+  "rows": 8,
+  "script": "analyze_search_budget_contract.py",
+  "search_config": {
+    "candidate_top_k": "24",
+    "greedy_eval_limit": "1",
+    "max_factor_ancilla": "4",
+    "max_factor_size": "5",
+    "max_polarities": "384",
+    "mcts_simulations": "96",
+    "min_factor_count": "2",
+    "neural_mcts_simulations": "128"
+  },
+  "status_counts": {
+    "pass": 8
+  }
+}

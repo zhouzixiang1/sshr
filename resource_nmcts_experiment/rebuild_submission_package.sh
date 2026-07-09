@@ -23,6 +23,7 @@ echo "==> Using Python: ${PYTHON_BIN}"
 run_py analyze_contribution_evidence_map.py
 run_py analyze_method_workflow_table.py
 run_py analyze_algorithm_contract_table.py
+run_py analyze_search_budget_contract.py
 run_py analyze_related_work_positioning.py
 run_py analyze_citation_support_audit.py
 run_py analyze_baseline_claim_matrix.py
@@ -44,6 +45,7 @@ run_py analyze_paired_statistical_evidence.py
 run_py analyze_paired_effect_uncertainty.py
 run_py analyze_multimetric_pareto_tradeoff.py
 run_py analyze_search_contribution.py
+run_py analyze_bitflip_random_prior_control.py
 run_py analyze_search_control_baseline_audit.py
 run_py analyze_boolean_ring_structural_evidence.py
 run_py analyze_sparse_depth_frontier.py

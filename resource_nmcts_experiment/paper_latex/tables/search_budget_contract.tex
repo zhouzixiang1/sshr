@@ -1,0 +1,14 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}X}
+\toprule
+Budget family & Explicit cap & Scalability role & Boundary \\
+\midrule
+Action fan-out & candidate\_top\_k=24; max\_factor\_size=5; min\_factor\_count=2 & Bounds the number of algebraic actions expanded at each \anf{} state. & The cap controls search cost; it is not a proof that the globally best factor action is always included. \\
+Ancilla and recursion & max\_factor\_ancilla=4; depth guard=64 in \mcts{} recursion & Prevents recursive factoring from allocating unbounded temporary factor lines. & This is a resource guard, not an ancilla-optimality theorem. \\
+PUCT/\mcts{} simulations & mcts\_simulations=96; neural\_mcts\_simulations=128; c\_puct=1.35 & Makes tree-search compute an explicit, rerunnable budget rather than an open-ended optimizer. & The \mcts{} budget supports a bounded search-control claim, not exact optimal synthesis. \\
+Polarity and affine search & max\_polarities=384; high-dimensional direct screening narrows expensive planning trials & Keeps fixed-polarity and affine preconditioning searches tractable on larger sparse term sets. & Screening is a controlled heuristic; missed polarities remain part of the search-boundary limitation. \\
+Resource portfolio & fast\_config caps candidate\_top\_k$\leq$18, \mcts{}$\leq$32/40, max\_polarities$\leq$16/24 before portfolio selection & Separates cheap deterministic candidates from more expensive \mcts{} or affine branches. & Portfolio selection gives a best verified candidate among attempted children, not a certificate over all possible children. \\
+Pareto archive & Deduplicate by (T,CNOT,depth,gates,peak ancilla), remove dominated candidates, then rank the non-dominated front by active score & Keeps multi-objective diversity without carrying every generated candidate into the final comparison. & The archive is Pareto over generated candidates only; it is not a global Pareto frontier. \\
+High-dimensional frontier controllers & Staged, sparse, and learned gates decide whether depth-3/depth-4 Boolean-ring screens are evaluated & Moves large-term-set runs from all-frontier evaluation toward validated budget control. & The controller is empirical on the audited slices and is not a proof that depth-4 can always be skipped. \\
+Verification route & Symbolic \anf{}/circuit checks for large rows; complete truth-table bridge slices where enumeration is feasible & Allows high-dimensional evidence without pretending that every large instance was exhaustively enumerated. & Symbolic verification is exact for emitted GF(2) semantics but does not replace hardware mapping or exhaustive enumeration for all n. \\
+\bottomrule
+\end{tabularx}

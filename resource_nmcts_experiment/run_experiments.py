@@ -538,7 +538,7 @@ def main(argv: Iterable[str] | None = None) -> int:
 
     cfg = PRESETS[args.preset]
     suite = make_suite(args.preset, args.seed)
-    model_path = args.model if Path(args.model).exists() else ""
+    model_path = args.model if args.model.startswith("random-prior:") or Path(args.model).exists() else ""
     weights = ResourceWeights(t=1.0, cnot=0.04, depth=0.015, gates=0.01, ancilla=2.0)
     config_dict = {
         "weights": weights.__dict__,

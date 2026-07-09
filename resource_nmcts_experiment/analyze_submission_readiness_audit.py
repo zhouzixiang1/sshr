@@ -83,6 +83,10 @@ ALGORITHM_CONTRACT_ANALYSIS = RESULTS / "analysis_algorithm_contract.md"
 ALGORITHM_CONTRACT_SUMMARY = RESULTS / "summary_algorithm_contract.csv"
 ALGORITHM_CONTRACT_MANIFEST = RESULTS / "manifest_algorithm_contract.json"
 ALGORITHM_CONTRACT_TABLE = THIS_DIR / "paper_latex" / "tables" / "algorithm_contract.tex"
+SEARCH_BUDGET_ANALYSIS = RESULTS / "analysis_search_budget_contract.md"
+SEARCH_BUDGET_SUMMARY = RESULTS / "summary_search_budget_contract.csv"
+SEARCH_BUDGET_MANIFEST = RESULTS / "manifest_search_budget_contract.json"
+SEARCH_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "search_budget_contract.tex"
 ROS_GAP_ANALYSIS = RESULTS / "analysis_ros_reproduction_gap_audit.md"
 ROS_GAP_SUMMARY = RESULTS / "summary_ros_reproduction_gap_audit.csv"
 ROS_GAP_MANIFEST = RESULTS / "manifest_ros_reproduction_gap_audit.json"
@@ -127,6 +131,10 @@ SEARCH_CONTROL_ANALYSIS = RESULTS / "analysis_search_control_baseline_audit.md"
 SEARCH_CONTROL_SUMMARY = RESULTS / "summary_search_control_baseline_audit.csv"
 SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
 SEARCH_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "search_control_baseline_audit.tex"
+BITFLIP_RANDOM_PRIOR_ANALYSIS = RESULTS / "analysis_bitflip_random_prior_control.md"
+BITFLIP_RANDOM_PRIOR_SUMMARY = RESULTS / "summary_bitflip_random_prior_control.csv"
+BITFLIP_RANDOM_PRIOR_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control.json"
+BITFLIP_RANDOM_PRIOR_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_random_prior_control.tex"
 EDITORIAL_SCREENING_ANALYSIS = RESULTS / "analysis_editorial_screening_audit.md"
 EDITORIAL_SCREENING_SUMMARY = RESULTS / "summary_editorial_screening_audit.csv"
 EDITORIAL_SCREENING_MANIFEST = RESULTS / "manifest_editorial_screening_audit.json"
@@ -210,6 +218,10 @@ def build_rows() -> list[dict[str, str]]:
     )
     algorithm_contract_counts = algorithm_contract_manifest.get("status_counts", {}) if algorithm_contract_manifest else {}
     algorithm_contract_rows = algorithm_contract_manifest.get("rows", "missing") if algorithm_contract_manifest else "missing"
+    search_budget_manifest = read_json(SEARCH_BUDGET_MANIFEST)
+    search_budget_revisions = int(search_budget_manifest.get("needs_revision_count", -1)) if search_budget_manifest else -1
+    search_budget_counts = search_budget_manifest.get("status_counts", {}) if search_budget_manifest else {}
+    search_budget_rows = search_budget_manifest.get("rows", "missing") if search_budget_manifest else "missing"
     ros_gap_manifest = read_json(ROS_GAP_MANIFEST)
     ros_gap_counts = ros_gap_manifest.get("status_counts", {}) if ros_gap_manifest else {}
     ros_gap_coverage = ros_gap_manifest.get("coverage_counts", {}) if ros_gap_manifest else {}
@@ -234,6 +246,12 @@ def build_rows() -> list[dict[str, str]]:
     )
     search_control_counts = search_control_manifest.get("status_counts", {}) if search_control_manifest else {}
     search_control_rows = search_control_manifest.get("rows", "missing") if search_control_manifest else "missing"
+    bitflip_random_manifest = read_json(BITFLIP_RANDOM_PRIOR_MANIFEST)
+    bitflip_random_revisions = (
+        int(bitflip_random_manifest.get("needs_revision_count", -1)) if bitflip_random_manifest else -1
+    )
+    bitflip_random_counts = bitflip_random_manifest.get("status_counts", {}) if bitflip_random_manifest else {}
+    bitflip_random_rows = bitflip_random_manifest.get("rows", "missing") if bitflip_random_manifest else "missing"
     figure_asset_manifest = read_json(FIGURE_ASSET_MANIFEST)
     figure_asset_revisions = int(figure_asset_manifest.get("needs_revision_count", -1)) if figure_asset_manifest else -1
     figure_asset_counts = figure_asset_manifest.get("status_counts", {}) if figure_asset_manifest else {}
@@ -410,6 +428,19 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_algorithm_contract_table.py after changing core search implementation, method text, or source anchors.",
         },
         {
+            "item": "Search-budget contract table",
+            "status": "pass"
+            if "tab:search-budget-contract" in text
+            and SEARCH_BUDGET_ANALYSIS.exists()
+            and SEARCH_BUDGET_SUMMARY.exists()
+            and SEARCH_BUDGET_MANIFEST.exists()
+            and SEARCH_BUDGET_TABLE.exists()
+            and search_budget_revisions == 0
+            else "needs revision",
+            "evidence": f"Method includes an explicit search-budget and scalability contract; rows={search_budget_rows}; status_counts={search_budget_counts}; needs_revision_count={search_budget_revisions}.",
+            "next_action": "Rerun analyze_search_budget_contract.py after changing SearchConfig defaults, MCTS budgets, portfolio caps, frontier controllers, or verification routes.",
+        },
+        {
             "item": "Baseline fairness and scope",
             "status": "pass"
             if contains_all(text, ["tab:baseline-claim-matrix", "tab:evidence-matrix", "tab:comparability-audit"])
@@ -466,8 +497,21 @@ def build_rows() -> list[dict[str, str]]:
             and SEARCH_CONTROL_TABLE.exists()
             and search_control_revisions == 0
             else "needs revision",
-            "evidence": f"Search-control audit separates heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, high-dimensional guard, and phase random-control evidence; rows={search_control_rows}; status_counts={search_control_counts}; needs_revision_count={search_control_revisions}.",
-            "next_action": "Rerun analyze_search_control_baseline_audit.py after changing search ablations, learned-prior rows, phase random controls, or search-control manuscript claims.",
+            "evidence": f"Search-control audit separates heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, high-dimensional guard, bit-flip random-prior, and phase random-control evidence; rows={search_control_rows}; status_counts={search_control_counts}; needs_revision_count={search_control_revisions}.",
+            "next_action": "Rerun analyze_search_control_baseline_audit.py after changing search ablations, learned-prior rows, bit-flip/phase random controls, or search-control manuscript claims.",
+        },
+        {
+            "item": "Bit-flip random-prior control",
+            "status": "pass"
+            if "tab:bitflip-random-prior" in text
+            and BITFLIP_RANDOM_PRIOR_ANALYSIS.exists()
+            and BITFLIP_RANDOM_PRIOR_SUMMARY.exists()
+            and BITFLIP_RANDOM_PRIOR_MANIFEST.exists()
+            and BITFLIP_RANDOM_PRIOR_TABLE.exists()
+            and bitflip_random_revisions == 0
+            else "needs revision",
+            "evidence": f"Same-budget bit-flip random-prior control is manuscript-visible; rows={bitflip_random_rows}; status_counts={bitflip_random_counts}; needs_revision_count={bitflip_random_revisions}.",
+            "next_action": "Rerun run_bitflip_random_prior_control.py and analyze_bitflip_random_prior_control.py after changing the neural prior, action features, or bit-flip learned-prior claims.",
         },
         {
             "item": "Citation support audit",

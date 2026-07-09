@@ -25,7 +25,7 @@ from anf_utils import anf_monomials, shifted_function
 from cube_search import cube_beam_plan, cube_greedy_plan, emit_cube_plan
 from esop_milp import synthesize_esop_milp_circuit
 from factor_plan import SearchConfig, affine_linear_pair_beam_plan, direct_plan, emit_plan_to_circuit, greedy_plan, linear_pair_beam_plan, linear_pair_screen_plan, root_beam_plan, root_child_beam_plan, verify_oracle
-from neural_policy import NeuralScorer
+from neural_policy import NeuralScorer, RandomPriorScorer
 from nmcts_solver import NeuralMCTSSolver
 from resource_model import ResourceCost, ResourceWeights
 
@@ -91,6 +91,9 @@ def _wrap_cost(polarity: int) -> ResourceCost:
 
 @lru_cache(maxsize=4)
 def _cached_scorer(model_path: str):
+    if model_path.startswith("random-prior:"):
+        _, seed = model_path.split(":", 1)
+        return RandomPriorScorer(int(seed))
     return NeuralScorer(model_path) if model_path else None
 
 

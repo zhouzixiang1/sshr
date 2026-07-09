@@ -5,8 +5,8 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 ## Status counts
 
 - complete: 21
-- unique raw files covered by registry: 144
-- unique raw CSV rows covered by registry: 55308
+- unique raw files covered by registry: 145
+- unique raw CSV rows covered by registry: 59556
 
 | evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |
 |---|---|---:|---:|---:|---|---|
@@ -14,7 +14,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | Submission metadata closure path | quick metadata audit | 0 | 0 | 1 | complete | Does not require private author metadata; filled metadata remains ignored and untracked until author approval. |
 | Editorial screening and reviewer-risk support | quick submission-support audit | 0 | 0 | 1 | complete | Does not change scientific results; checks public submission-support consistency against existing audit outputs. |
 | Cover-letter and venue support packet | quick submission-support audit | 0 | 0 | 1 | complete | Does not choose a venue or fill private metadata; checks public upload-support consistency against existing audits. |
-| Method workflow and algorithm contract | quick method audit | 0 | 0 | 1 | complete | Quick derived audit; checks implementation anchors and manuscript method exposition, not raw benchmark outcomes. |
+| Method workflow, algorithm, and budget contracts | quick method audit | 0 | 0 | 2 | complete | Quick derived audit; checks implementation anchors and manuscript method exposition, not raw benchmark outcomes. |
 | Comparison protocol and claim boundaries | quick comparison audit | 0 | 0 | 1 | complete | Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps. |
 | Traditional logical baselines | raw Python rerun | 4 | 4071 | 4 | complete | Python rerun; ILP-based subbaselines need Gurobi where enabled. |
 | External logical baseline extension | raw Python plus optional solvers | 3 | 2049 | 3 | complete | Python with optional Gurobi/logic-tool components; rows with skips/errors remain explicit. |
@@ -24,7 +24,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | CirKit AIG/MC probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded CirKit executable/commit; results are logical estimates, not hardware mapping. |
 | RevKit exact and Rz probes | external toolchain rerun | 5 | 3194 | 5 | complete | Requires RevKit CLI/API availability; Rz rows are phase/sensitivity probes, not final Clifford+T decomposition. |
 | Phase and affine FPRM branch | raw phase rerun and training | 7 | 11859 | 7 | complete | Logical phase verification up to global phase; not approximate rotation synthesis. |
-| Learned-control and ablations | training plus ablation rerun | 13 | 3959 | 9 | complete | Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only. |
+| Learned-control and ablations | training plus ablation rerun | 14 | 8207 | 11 | complete | Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only. |
 | Schedule proxy and lifetime tradeoffs | quick derived audit | 3 | 1140 | 1 | complete | Emitted-circuit logical schedule proxies only; not hardware routing, native-gate scheduling, or device execution. |
 | High-dimensional symbolic screen-scale runs | large raw rerun | 76 | 11480 | 24 | complete | Symbolic or generated-instance verification; not exhaustive truth-table enumeration for all large n. |
 | External high-dimensional resource extensions | large raw rerun | 4 | 528 | 4 | complete | Generated large-instance comparisons; external availability and timeout behavior are recorded in manifests. |
@@ -50,9 +50,9 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - claim use: Verifies that cover letter, declarations, venue brief, upload checklist, and handoff docs preserve claim boundaries and author-gated metadata.
   - scripts: `analyze_submission_support_packet_audit.py`
   - representative raw: not applicable for this tier
-- **Method workflow and algorithm contract**
-  - claim use: Verifies that the method description is connected to executable stages, source anchors, and semantic/resource guarantees.
-  - scripts: `analyze_method_workflow_table.py; analyze_algorithm_contract_table.py`
+- **Method workflow, algorithm, and budget contracts**
+  - claim use: Verifies that the method description is connected to executable stages, source anchors, semantic/resource guarantees, and explicit search budgets.
+  - scripts: `analyze_method_workflow_table.py; analyze_algorithm_contract_table.py; analyze_search_budget_contract.py`
   - representative raw: not applicable for this tier
 - **Comparison protocol and claim boundaries**
   - claim use: Verifies the reviewer-facing baseline roles, evidence layers, comparability limits, counterpoints, and manuscript table.
@@ -92,8 +92,8 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - representative raw: `results/raw_phase_affine_policy.csv; results/raw_phase_affine_policy_rank_diverse.csv; results/raw_phase_parity_affine.csv; results/raw_phase_parity_affine_wide128.csv; +3 more`
 - **Learned-control and ablations**
   - claim use: Separates neural/search-control effects from deterministic algebraic construction and guarded portfolio selection.
-  - scripts: `train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py`
-  - representative raw: `results/raw_highdim_neural_prior_boolean_guard.csv; results/raw_highdim_neural_prior_learned_prior.csv; results/raw_highdim_neural_prior_no_prior.csv; results/raw_highdim_neural_prior_pairwise.csv; +9 more`
+  - scripts: `train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; run_bitflip_random_prior_control.py; analyze_bitflip_random_prior_control.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py`
+  - representative raw: `results/raw_bitflip_random_prior_control.csv; results/raw_highdim_neural_prior_boolean_guard.csv; results/raw_highdim_neural_prior_learned_prior.csv; results/raw_highdim_neural_prior_no_prior.csv; +10 more`
 - **Schedule proxy and lifetime tradeoffs**
   - claim use: Checks logic-level T-depth proxy and explicit auxiliary-lifetime tradeoffs for the high-dimensional frontier controllers.
   - scripts: `analyze_schedule_metrics.py; analyze_schedule_proxy_audit.py`

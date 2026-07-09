@@ -1,0 +1,31 @@
+{
+  "functions": 177,
+  "methods": [
+    "and_affine_nmcts",
+    "and_resource_nmcts",
+    "and_pareto_resource_nmcts"
+  ],
+  "outputs": {
+    "manifest": "results/manifest_bitflip_random_prior_control_run.json",
+    "raw": "results/raw_bitflip_random_prior_control.csv",
+    "summary": "results/summary_bitflip_random_prior_control_run.csv"
+  },
+  "preset": "traditional_resource",
+  "random_seeds": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1005,
+    1006,
+    1007,
+    1008
+  ],
+  "raw_rows": 4248,
+  "script": "run_bitflip_random_prior_control.py",
+  "seconds_current_run": 295.1577363014221,
+  "seed": 42,
+  "source_manifest": "results/manifest_traditional_resource_learned_prior.json",
+  "usable_rows": 4248,
+  "workers": 10
+}

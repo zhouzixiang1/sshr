@@ -4,14 +4,14 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 
 ## Status counts
 
-- pass: 88
+- pass: 92
 
 ## Dependency types
 
 - bibliography: 2
 - figure: 14
 - main_source: 2
-- tex_input: 70
+- tex_input: 74
 
 ## Missing dependencies
 
@@ -26,6 +26,7 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 | author | tex_input | `tables/related_work_positioning` | `paper_latex/tables/related_work_positioning.tex` | True | True | pass |
 | author | tex_input | `tables/method_workflow` | `paper_latex/tables/method_workflow.tex` | True | True | pass |
 | author | tex_input | `tables/algorithm_contract` | `paper_latex/tables/algorithm_contract.tex` | True | True | pass |
+| author | tex_input | `tables/search_budget_contract` | `paper_latex/tables/search_budget_contract.tex` | True | True | pass |
 | author | tex_input | `tables/baseline_claim_matrix` | `paper_latex/tables/baseline_claim_matrix.tex` | True | True | pass |
 | author | tex_input | `tables/comparison_evidence_matrix` | `paper_latex/tables/comparison_evidence_matrix.tex` | True | True | pass |
 | author | tex_input | `tables/comparison_protocol_audit` | `paper_latex/tables/comparison_protocol_audit.tex` | True | True | pass |
@@ -44,6 +45,7 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 | author | tex_input | `tables/multimetric_nondominated` | `paper_latex/tables/multimetric_nondominated.tex` | True | True | pass |
 | author | tex_input | `tables/search_contribution_decomposition` | `paper_latex/tables/search_contribution_decomposition.tex` | True | True | pass |
 | author | tex_input | `tables/search_control_baseline_audit` | `paper_latex/tables/search_control_baseline_audit.tex` | True | True | pass |
+| author | tex_input | `tables/bitflip_random_prior_control` | `paper_latex/tables/bitflip_random_prior_control.tex` | True | True | pass |
 | author | tex_input | `tables/boolean_ring_structural_evidence` | `paper_latex/tables/boolean_ring_structural_evidence.tex` | True | True | pass |
 | author | tex_input | `tables/sparse_depth_frontier` | `paper_latex/tables/sparse_depth_frontier.tex` | True | True | pass |
 | author | tex_input | `tables/sparse_depth4_gate` | `paper_latex/tables/sparse_depth4_gate.tex` | True | True | pass |
@@ -70,6 +72,7 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 | anonymous | tex_input | `tables/related_work_positioning` | `paper_latex/tables/related_work_positioning.tex` | True | True | pass |
 | anonymous | tex_input | `tables/method_workflow` | `paper_latex/tables/method_workflow.tex` | True | True | pass |
 | anonymous | tex_input | `tables/algorithm_contract` | `paper_latex/tables/algorithm_contract.tex` | True | True | pass |
+| anonymous | tex_input | `tables/search_budget_contract` | `paper_latex/tables/search_budget_contract.tex` | True | True | pass |
 | anonymous | tex_input | `tables/baseline_claim_matrix` | `paper_latex/tables/baseline_claim_matrix.tex` | True | True | pass |
 | anonymous | tex_input | `tables/comparison_evidence_matrix` | `paper_latex/tables/comparison_evidence_matrix.tex` | True | True | pass |
 | anonymous | tex_input | `tables/comparison_protocol_audit` | `paper_latex/tables/comparison_protocol_audit.tex` | True | True | pass |
@@ -88,6 +91,7 @@ This terminal audit parses the author and anonymous LaTeX sources and checks tha
 | anonymous | tex_input | `tables/multimetric_nondominated` | `paper_latex/tables/multimetric_nondominated.tex` | True | True | pass |
 | anonymous | tex_input | `tables/search_contribution_decomposition` | `paper_latex/tables/search_contribution_decomposition.tex` | True | True | pass |
 | anonymous | tex_input | `tables/search_control_baseline_audit` | `paper_latex/tables/search_control_baseline_audit.tex` | True | True | pass |
+| anonymous | tex_input | `tables/bitflip_random_prior_control` | `paper_latex/tables/bitflip_random_prior_control.tex` | True | True | pass |
 | anonymous | tex_input | `tables/boolean_ring_structural_evidence` | `paper_latex/tables/boolean_ring_structural_evidence.tex` | True | True | pass |
 | anonymous | tex_input | `tables/sparse_depth_frontier` | `paper_latex/tables/sparse_depth_frontier.tex` | True | True | pass |
 | anonymous | tex_input | `tables/sparse_depth4_gate` | `paper_latex/tables/sparse_depth4_gate.tex` | True | True | pass |

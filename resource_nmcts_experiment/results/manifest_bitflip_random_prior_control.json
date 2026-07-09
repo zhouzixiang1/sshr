@@ -1,0 +1,20 @@
+{
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_bitflip_random_prior_control.md",
+    "manifest": "results/manifest_bitflip_random_prior_control.json",
+    "summary": "results/summary_bitflip_random_prior_control.csv",
+    "table": "paper_latex/tables/bitflip_random_prior_control.tex"
+  },
+  "python": "3.11.15",
+  "rows": 18,
+  "script": "analyze_bitflip_random_prior_control.py",
+  "source_files": {
+    "learned": "results/raw_traditional_resource_learned_prior.csv",
+    "no_prior": "results/raw_traditional_resource_no_prior.csv",
+    "random_prior": "results/raw_bitflip_random_prior_control.csv"
+  },
+  "status_counts": {
+    "pass": 18
+  }
+}

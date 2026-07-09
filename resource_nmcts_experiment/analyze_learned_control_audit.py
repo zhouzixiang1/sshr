@@ -31,6 +31,10 @@ def pct_plain(value: str | float) -> str:
     return f"{float(value):+.2f}%"
 
 
+def pct_ratio(value: str | float) -> str:
+    return f"{100.0 * float(value):+.2f}%"
+
+
 def wlt(row: dict[str, str], *, prefix: str = "") -> str:
     if prefix:
         return f"{row[prefix + 'wins']}/{row[prefix + 'losses']}/{row[prefix + 'ties']}"
@@ -75,6 +79,10 @@ def build_rows() -> list[dict[str, str]]:
     boolean_score = require_row(boolean_guard, metric="score")
     boolean_time = require_row(boolean_guard, metric="time_s")
 
+    bitflip_random = read_csv(RESULTS / "summary_bitflip_random_prior_control.csv")
+    bitflip_score = require_row(bitflip_random, method="and_resource_nmcts", metric="score")
+    bitflip_time = require_row(bitflip_random, method="and_resource_nmcts", metric="time_s")
+
     root_means = read_csv(RESULTS / "summary_highdim_root_action_oracle.csv")
     root_neural = require_row(root_means, method="root_neural_top4")
     root_beam = require_row(root_means, method="root_beam4_oracle_eval")
@@ -117,6 +125,17 @@ def build_rows() -> list[dict[str, str]]:
             "quality": f"vs budget-32 {wlt(phase_budget)}, {pct(phase_budget['mean_relative'])}; vs wide-128 {wlt(phase_wide)}, {pct(phase_wide['mean_relative'])}",
             "cost": "512/8192 exact forms per function",
             "role": "promoted phase-search pruning",
+        },
+        {
+            "component": "Bit-flip learned prior",
+            "scope": "177 n<=6 functions; 8 random-prior repeats",
+            "quality": (
+                f"vs random mean {bitflip_score['learned_wins']}/{bitflip_score['learned_losses']}/{bitflip_score['ties']}, "
+                f"{pct_ratio(bitflip_score['mean_relative'])}; "
+                f"seed means beaten {bitflip_score['seed_means_beaten']}/{bitflip_score['random_repeats']}"
+            ),
+            "cost": f"{pct_ratio(bitflip_time['mean_relative'])} runtime vs random-prior mean",
+            "role": "limited quality signal, not runtime claim",
         },
         {
             "component": "Boolean neural guard",
