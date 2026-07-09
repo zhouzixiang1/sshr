@@ -25,6 +25,12 @@
       "status": "pass"
     },
     {
+      "evidence": "status_counts={'pass': 5}; required_paths=50; starter_only=['code_availability.commit_hash', 'code_availability.environment_notes', 'code_availability.repository_url']; missing=[]; unknown_answer_paths=[]; needs_revision_count=0.",
+      "item": "Public answer-template coverage",
+      "next_action": "Keep the public short-answer template aligned with REQUIRED_METADATA_PATHS and the safe public starter fields.",
+      "status": "pass"
+    },
+    {
       "evidence": "public_prefill_fields=2; unavailable=none; author_gated_examples=6.",
       "item": "Private metadata starter dry-run",
       "next_action": "The starter should prefill only safe public repository fields and leave author/venue declarations human-gated.",
@@ -61,7 +67,7 @@
       "status": "pass"
     },
     {
-      "evidence": "git_worktree=True; metadata_counts={'needs author input': 12}; author_input_closure_counts={'pass': 7}; goal_overall=not complete.",
+      "evidence": "git_worktree=True; metadata_counts={'needs author input': 12}; author_input_closure_counts={'pass': 8}; goal_overall=not complete.",
       "item": "Goal-closure gate consistency",
       "next_action": "Do not mark the overall goal complete until author/venue metadata are filled and the readiness audit has no unresolved author-input rows.",
       "status": "pass"
@@ -69,6 +75,6 @@
   ],
   "script": "analyze_submission_metadata_closure_path.py",
   "status_counts": {
-    "pass": 8
+    "pass": 9
   }
 }

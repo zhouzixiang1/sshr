@@ -49,6 +49,7 @@ SELFTEST_MANIFEST = RESULTS / "manifest_submission_metadata_pipeline_selftest.js
 ANONYMOUS_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 AUTHOR_INPUT_CLOSURE_MANIFEST = RESULTS / "manifest_author_input_closure_audit.json"
 GOAL_MANIFEST = RESULTS / "manifest_goal_completion_audit.json"
+ANSWER_TEMPLATE_COVERAGE_MANIFEST = RESULTS / "manifest_metadata_answer_template_coverage.json"
 
 PRIVATE_PATHS = (METADATA_ANSWERS_FILE, METADATA_FILE, *PRIVATE_OUTPUTS)
 
@@ -158,6 +159,21 @@ def check_required_inventory() -> dict[str, str]:
         "pass" if METADATA_TEMPLATE.exists() and not uncovered and len(REQUIRED_METADATA_PATHS) >= 45 else "needs revision",
         f"required_paths={len(REQUIRED_METADATA_PATHS)}; template_placeholders={len(template_placeholders)}; uncovered_placeholders={uncovered[:5] or 'none'}.",
         "Keep REQUIRED_METADATA_PATHS aligned with every AUTHOR INPUT REQUIRED field in submission_metadata_template.json.",
+    )
+
+
+def check_answer_template_coverage() -> dict[str, str]:
+    manifest = read_manifest(ANSWER_TEMPLATE_COVERAGE_MANIFEST)
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    revisions = manifest_int(ANSWER_TEMPLATE_COVERAGE_MANIFEST, "needs_revision_count")
+    missing = manifest.get("missing_required_paths", "missing") if manifest else "missing"
+    unknown = manifest.get("unknown_answer_paths", "missing") if manifest else "missing"
+    starter_only = manifest.get("starter_only_required_paths", "missing") if manifest else "missing"
+    return row(
+        "Public answer-template coverage",
+        "pass" if manifest and revisions == 0 and not missing and not unknown else "needs revision",
+        f"status_counts={counts}; required_paths={len(REQUIRED_METADATA_PATHS)}; starter_only={starter_only}; missing={missing}; unknown_answer_paths={unknown}; needs_revision_count={revisions}.",
+        "Keep the public short-answer template aligned with REQUIRED_METADATA_PATHS and the safe public starter fields.",
     )
 
 
@@ -330,6 +346,7 @@ def check_closure_audit_consistency() -> dict[str, str]:
 def build_rows() -> list[dict[str, str]]:
     return [
         check_required_inventory(),
+        check_answer_template_coverage(),
         check_starter_prefill(),
         check_private_git_protection(),
         check_validator_and_preview_gates(),

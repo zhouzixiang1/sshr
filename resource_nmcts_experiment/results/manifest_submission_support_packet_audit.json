@@ -7,7 +7,7 @@
     "table": "paper_latex/tables/submission_support_packet_audit.tex"
   },
   "python": "3.11.15",
-  "rows": 15,
+  "rows": 16,
   "rows_detail": [
     {
       "boundary": "The cover letter still needs author, editor, reviewer, and prior-dissemination fields before upload.",
@@ -91,6 +91,15 @@
       "upload_risk": "The final author/venue gate could remain too abstract for the author to fill in one pass."
     },
     {
+      "boundary": "The template contains placeholders only; real author and venue values remain private and human-provided.",
+      "evidence": "files_missing=none; tokens=10/10; missing_tokens=none; manifest=results/manifest_metadata_answer_template_coverage.json::needs_revision_count=0",
+      "item": "Short answer template covers metadata fields",
+      "next_action": "No action needed.",
+      "status": "pass",
+      "supported_use": "The tracked short-answer JSON template is machine-checked against every required private metadata path before authors fill the ignored answer file.",
+      "upload_risk": "The public JSON answer template could omit a required private field even if the longer questionnaire mentions it."
+    },
+    {
       "boundary": "The audit does not choose the journal; it only checks that the choice is explicit and policy-gated.",
       "evidence": "files_missing=none; tokens=13/13; missing_tokens=none; manifest=results/manifest_target_venue_decision_audit.json::needs_revision_count=0",
       "item": "Venue policy gate is visible before upload",
@@ -147,6 +156,6 @@
   ],
   "script": "analyze_submission_support_packet_audit.py",
   "status_counts": {
-    "pass": 15
+    "pass": 16
   }
 }

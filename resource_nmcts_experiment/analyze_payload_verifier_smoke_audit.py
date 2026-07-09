@@ -16,6 +16,7 @@ from __future__ import annotations
 import csv
 import json
 import os
+import re
 import subprocess
 import sys
 import tarfile
@@ -27,6 +28,7 @@ from make_submission_payload_archive import ARCHIVE, PAYLOAD_ROOT, THIS_DIR
 
 
 RESULTS = THIS_DIR / "results"
+SOURCE_VERIFIER_MANIFEST = RESULTS / "manifest_submission_package_verifier.json"
 
 
 def rel(path: Path) -> str:
@@ -97,6 +99,13 @@ def read_json(path: Path) -> dict[str, object]:
         return {}
 
 
+def int_or_none(value: object) -> int | None:
+    try:
+        return int(value)
+    except Exception:
+        return None
+
+
 def run_verifier(payload_dir: Path) -> dict[str, str]:
     script = payload_dir / "verify_submission_package.sh"
     if not script.exists():
@@ -134,19 +143,40 @@ def run_verifier(payload_dir: Path) -> dict[str, str]:
             "Fix verify_submission_package.sh so it runs from an extracted payload tree.",
         )
     manifest = read_json(payload_dir / "results" / "manifest_submission_package_verifier.json")
+    source_manifest = read_json(SOURCE_VERIFIER_MANIFEST)
     status_counts = manifest.get("status_counts", {}) if manifest else {}
     needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
     rows = int(manifest.get("rows", -1)) if manifest else -1
     extracted_mode = bool(manifest.get("extracted_payload_mode", False)) if manifest else False
+    source_rows = int_or_none(source_manifest.get("rows")) if source_manifest else None
+    source_needs_revision = int_or_none(source_manifest.get("needs_revision_count")) if source_manifest else None
+    extracted_archive_absent = not (payload_dir / "submission_package" / "dist" / "resource_nmcts_submission_payload.tar.gz").exists()
+    expected_delta: int | str = 1 if extracted_archive_absent else 0
+    row_delta: int | str = "missing"
+    row_delta_ok = True
+    if source_rows is not None and rows >= 0:
+        row_delta = source_rows - rows
+        row_delta_ok = row_delta == expected_delta
     stderr_lines = proc.stderr.strip().splitlines()
     status = (
         "pass"
-        if proc.returncode == 0 and manifest and needs_revision == 0 and rows >= 24 and extracted_mode
+        if (
+            proc.returncode == 0
+            and manifest
+            and needs_revision == 0
+            and rows >= 24
+            and extracted_mode
+            and row_delta_ok
+        )
         else "needs revision"
     )
     evidence = (
         f"verifier_returncode={proc.returncode}; verifier_rows={rows}; "
+        f"source_verifier_rows={source_rows if source_rows is not None else 'missing'}; "
+        f"row_delta={row_delta}; expected_row_delta={expected_delta}; "
+        f"row_delta_reason={'archive_absent_by_design' if extracted_archive_absent else 'none'}; "
         f"verifier_needs_revision_count={needs_revision}; extracted_payload_mode={extracted_mode}; "
+        f"source_needs_revision_count={source_needs_revision if source_needs_revision is not None else 'missing'}; "
         f"status_counts={status_counts}; stdout_lines={len(proc.stdout.splitlines())}; "
         f"stderr={stderr_lines[:2] or 'none'}."
     )
@@ -159,6 +189,11 @@ def run_verifier(payload_dir: Path) -> dict[str, str]:
         evidence,
         "Inspect the verifier outputs generated inside the extracted payload directory.",
     )
+
+
+def evidence_value(evidence: str, key: str) -> str:
+    match = re.search(rf"(?:^|; )({re.escape(key)})=([^;]+)", evidence)
+    return match.group(2) if match else "missing"
 
 
 def build_rows() -> list[dict[str, str]]:
@@ -221,6 +256,7 @@ def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
 def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
     counts = Counter(item["status"] for item in rows)
     verifier_row = next((item for item in rows if item["item"] == "Extracted payload verifier command"), {})
+    verifier_evidence = verifier_row.get("evidence", "")
     data = {
         "script": Path(__file__).name,
         "python": sys.version.split()[0],
@@ -229,6 +265,11 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "status_counts": dict(sorted(counts.items())),
         "needs_revision_count": counts.get("needs revision", 0),
         "verifier_returncode": verifier_row.get("returncode", "missing"),
+        "verifier_rows": evidence_value(verifier_evidence, "verifier_rows"),
+        "source_verifier_rows": evidence_value(verifier_evidence, "source_verifier_rows"),
+        "row_delta": evidence_value(verifier_evidence, "row_delta"),
+        "expected_row_delta": evidence_value(verifier_evidence, "expected_row_delta"),
+        "row_delta_reason": evidence_value(verifier_evidence, "row_delta_reason"),
         "rows_detail": rows,
         "outputs": {
             "summary": rel(RESULTS / "summary_payload_verifier_smoke_audit.csv"),

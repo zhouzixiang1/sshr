@@ -6,11 +6,12 @@ It does not require private author metadata to be present; it checks that the ma
 
 ## Status counts
 
-- pass: 7
+- pass: 8
 
 | item | status | evidence | next action |
 |---|---|---|---|
 | Metadata template placeholder coverage | pass | placeholders=53; required_paths=50; uncovered=none. | Add every template AUTHOR INPUT REQUIRED path to REQUIRED_METADATA_PATHS, or cover it with an explicit parent field. |
+| Answer-template required-field coverage | pass | required_paths=50; starter_only=['code_availability.commit_hash', 'code_availability.environment_notes', 'code_availability.repository_url']; missing=[]; unknown_answer_paths=[]; status_counts={'pass': 5}; needs_revision_count=0. | Rerun analyze_metadata_answer_template_coverage.py after changing required metadata paths, starter prefill fields, or submission_metadata_answers_template.json. |
 | Author packet required-field coverage | pass | packet_exists=True; required_paths=50; missing=none; needs_author_input=12. | Rerun make_author_input_packet.py after changing metadata requirements. |
 | Support document author-gate visibility | pass | missing_docs=none; missing_tokens=none. | Keep README, checklist, handoff, declaration template, cover-letter template, questionnaire, minimal response form, target-venue policy checklist, and answer template aligned with the private metadata workflow. |
 | Private author metadata git protection | pass | ignored=6/6; tracked=none; existing_private=none. | Keep submission_metadata_answers.json, submission_metadata.json, and generated private previews ignored and untracked. |

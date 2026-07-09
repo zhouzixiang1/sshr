@@ -1,0 +1,35 @@
+{
+  "answer_template": "submission_package/submission_metadata_answers_template.json",
+  "answer_template_required_paths": 47,
+  "expected_starter_only_required_paths": [
+    "code_availability.commit_hash",
+    "code_availability.environment_notes",
+    "code_availability.repository_url"
+  ],
+  "extracted_payload_mode": false,
+  "missing_required_paths": [],
+  "needs_revision_count": 0,
+  "non_placeholder_answer_paths": [],
+  "outputs": {
+    "analysis": "results/analysis_metadata_answer_template_coverage.md",
+    "manifest": "results/manifest_metadata_answer_template_coverage.json",
+    "summary": "results/summary_metadata_answer_template_coverage.csv"
+  },
+  "private_like_value_paths": [],
+  "public_unavailable_paths": [],
+  "python": "3.11.15",
+  "remaining_author_paths_after_template_dry_run": 53,
+  "required_metadata_paths": 50,
+  "rows": 5,
+  "script": "analyze_metadata_answer_template_coverage.py",
+  "starter_only_required_paths": [
+    "code_availability.commit_hash",
+    "code_availability.environment_notes",
+    "code_availability.repository_url"
+  ],
+  "status_counts": {
+    "pass": 5
+  },
+  "unexpected_omitted_paths": [],
+  "unknown_answer_paths": []
+}

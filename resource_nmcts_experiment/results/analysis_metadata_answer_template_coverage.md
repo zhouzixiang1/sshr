@@ -1,0 +1,17 @@
+# Metadata Answer Template Coverage
+
+This audit checks the tracked short-answer template used to collect final private author and venue metadata.
+
+It verifies that every required metadata path is either present in the answer template or intentionally delegated to the safe public metadata starter.
+
+## Status counts
+
+- pass: 5
+
+| item | status | evidence | next action |
+|---|---|---|---|
+| Answer template JSON | pass | submission_package/submission_metadata_answers_template.json exists and parses as a JSON object. | Keep the public short-answer template tracked and free of private values. |
+| Required-path coverage | pass | required_paths=50; answer_template_paths=47; starter_only_paths=['code_availability.commit_hash', 'code_availability.environment_notes', 'code_availability.repository_url']; missing=none. | Add missing author-fillable paths to submission_metadata_answers_template.json, or explicitly whitelist public starter-only paths. |
+| Starter-only public-field policy | pass | expected_starter_only=['code_availability.commit_hash', 'code_availability.environment_notes', 'code_availability.repository_url']; observed_starter_only=['code_availability.commit_hash', 'code_availability.environment_notes', 'code_availability.repository_url']; starter_filled=['code_availability.commit_hash', 'code_availability.repository_url']; starter_unavailable=none; extracted_payload_mode=False. | Keep only repository URL, commit hash, and environment notes delegated to the public starter. |
+| Answer-template converter dry-run | pass | filled_paths=2; public_unavailable=none; unknown_answer_paths=none; remaining_author_paths=53. | The public template should dry-run without unknown paths and should still require author/venue input before writing private metadata. |
+| Public answer-template privacy hygiene | pass | non_instruction_non_placeholder_values=none; private_like_value_paths=none. | Keep tracked answer-template values as placeholders only; put real author metadata only in ignored private files. |

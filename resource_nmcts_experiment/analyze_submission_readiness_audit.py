@@ -57,6 +57,9 @@ AUTHOR_INPUT_CLOSURE_MANIFEST = RESULTS / "manifest_author_input_closure_audit.j
 AUTHOR_QUESTIONNAIRE_COVERAGE_ANALYSIS = RESULTS / "analysis_author_questionnaire_coverage.md"
 AUTHOR_QUESTIONNAIRE_COVERAGE_SUMMARY = RESULTS / "summary_author_questionnaire_coverage.csv"
 AUTHOR_QUESTIONNAIRE_COVERAGE_MANIFEST = RESULTS / "manifest_author_questionnaire_coverage.json"
+METADATA_ANSWER_TEMPLATE_ANALYSIS = RESULTS / "analysis_metadata_answer_template_coverage.md"
+METADATA_ANSWER_TEMPLATE_SUMMARY = RESULTS / "summary_metadata_answer_template_coverage.csv"
+METADATA_ANSWER_TEMPLATE_MANIFEST = RESULTS / "manifest_metadata_answer_template_coverage.json"
 METADATA_CLOSURE_ANALYSIS = RESULTS / "analysis_submission_metadata_closure_path.md"
 METADATA_CLOSURE_SUMMARY = RESULTS / "summary_submission_metadata_closure_path.csv"
 METADATA_CLOSURE_MANIFEST = RESULTS / "manifest_submission_metadata_closure_path.json"
@@ -705,6 +708,34 @@ def build_rows() -> list[dict[str, str]]:
     author_questionnaire_missing = (
         author_questionnaire_manifest.get("missing_required_paths", "missing") if author_questionnaire_manifest else "missing"
     )
+    metadata_answer_manifest = read_json(METADATA_ANSWER_TEMPLATE_MANIFEST)
+    metadata_answer_counts = metadata_answer_manifest.get("status_counts", {}) if metadata_answer_manifest else {}
+    metadata_answer_revisions = (
+        int(metadata_answer_manifest.get("needs_revision_count", -1)) if metadata_answer_manifest else -1
+    )
+    metadata_answer_required = (
+        metadata_answer_manifest.get("required_metadata_paths", "missing") if metadata_answer_manifest else "missing"
+    )
+    metadata_answer_template_paths = (
+        metadata_answer_manifest.get("answer_template_required_paths", "missing") if metadata_answer_manifest else "missing"
+    )
+    metadata_answer_starter_only = (
+        metadata_answer_manifest.get("starter_only_required_paths", "missing") if metadata_answer_manifest else "missing"
+    )
+    metadata_answer_missing = (
+        metadata_answer_manifest.get("missing_required_paths", "missing") if metadata_answer_manifest else "missing"
+    )
+    metadata_answer_unknown = (
+        metadata_answer_manifest.get("unknown_answer_paths", "missing") if metadata_answer_manifest else "missing"
+    )
+    metadata_answer_private_like = (
+        metadata_answer_manifest.get("private_like_value_paths", "missing") if metadata_answer_manifest else "missing"
+    )
+    metadata_answer_remaining = (
+        metadata_answer_manifest.get("remaining_author_paths_after_template_dry_run", "missing")
+        if metadata_answer_manifest
+        else "missing"
+    )
     metadata_closure_manifest = read_json(METADATA_CLOSURE_MANIFEST)
     metadata_closure_counts = metadata_closure_manifest.get("status_counts", {}) if metadata_closure_manifest else {}
     metadata_closure_revisions = (
@@ -789,6 +820,19 @@ def build_rows() -> list[dict[str, str]]:
     )
     payload_verifier_returncode = (
         payload_verifier_manifest.get("verifier_returncode", "missing") if payload_verifier_manifest else "missing"
+    )
+    payload_verifier_rows = payload_verifier_manifest.get("verifier_rows", "missing") if payload_verifier_manifest else "missing"
+    payload_verifier_source_rows = (
+        payload_verifier_manifest.get("source_verifier_rows", "missing") if payload_verifier_manifest else "missing"
+    )
+    payload_verifier_row_delta = (
+        payload_verifier_manifest.get("row_delta", "missing") if payload_verifier_manifest else "missing"
+    )
+    payload_verifier_expected_delta = (
+        payload_verifier_manifest.get("expected_row_delta", "missing") if payload_verifier_manifest else "missing"
+    )
+    payload_verifier_delta_reason = (
+        payload_verifier_manifest.get("row_delta_reason", "missing") if payload_verifier_manifest else "missing"
     )
     lower = text.lower()
     todo_hits = re.findall(r"\b(?:todo|tbd|placeholder)\b", lower)
@@ -1569,6 +1613,20 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_author_questionnaire_coverage.py after changing submission_metadata_template.json or AUTHOR_METADATA_QUESTIONNAIRE_zh.md.",
         },
         {
+            "item": "Metadata answer-template coverage audit",
+            "status": "pass"
+            if METADATA_ANSWER_TEMPLATE_ANALYSIS.exists()
+            and METADATA_ANSWER_TEMPLATE_SUMMARY.exists()
+            and METADATA_ANSWER_TEMPLATE_MANIFEST.exists()
+            and metadata_answer_revisions == 0
+            and not metadata_answer_missing
+            and not metadata_answer_unknown
+            and not metadata_answer_private_like
+            else "needs revision",
+            "evidence": f"Answer-template coverage audit checks the tracked short-answer JSON template against required private metadata paths; required_metadata_paths={metadata_answer_required}; answer_template_required_paths={metadata_answer_template_paths}; starter_only_required_paths={metadata_answer_starter_only}; missing_required_paths={metadata_answer_missing}; unknown_answer_paths={metadata_answer_unknown}; remaining_author_paths={metadata_answer_remaining}; private_like_value_paths={metadata_answer_private_like}; status_counts={metadata_answer_counts}; needs_revision_count={metadata_answer_revisions}.",
+            "next_action": "Rerun analyze_metadata_answer_template_coverage.py after changing submission_metadata_answers_template.json, REQUIRED_METADATA_PATHS, or metadata starter behavior.",
+        },
+        {
             "item": "Submission metadata closure path",
             "status": "pass"
             if METADATA_CLOSURE_ANALYSIS.exists()
@@ -1658,7 +1716,7 @@ def build_rows() -> list[dict[str, str]]:
             and PAYLOAD_VERIFIER_SMOKE_MANIFEST.exists()
             and payload_verifier_revisions == 0
             else "needs revision",
-            "evidence": f"Payload verifier smoke audit extracts the upload tarball and runs verify_submission_package.sh inside the extracted payload tree; verifier_returncode={payload_verifier_returncode}; status_counts={payload_verifier_counts}; needs_revision_count={payload_verifier_revisions}.",
+            "evidence": f"Payload verifier smoke audit extracts the upload tarball and runs verify_submission_package.sh inside the extracted payload tree; verifier_returncode={payload_verifier_returncode}; verifier_rows={payload_verifier_rows}; source_verifier_rows={payload_verifier_source_rows}; row_delta={payload_verifier_row_delta}; expected_row_delta={payload_verifier_expected_delta}; row_delta_reason={payload_verifier_delta_reason}; status_counts={payload_verifier_counts}; needs_revision_count={payload_verifier_revisions}.",
             "next_action": "Rerun analyze_payload_verifier_smoke_audit.py after payload creation and fix extracted one-command verifier failures.",
         },
         {

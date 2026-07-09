@@ -102,6 +102,7 @@ run_py analyze_submission_metadata_audit.py
 run_py validate_submission_metadata.py
 run_py make_author_input_packet.py
 run_py analyze_author_questionnaire_coverage.py
+run_py analyze_metadata_answer_template_coverage.py
 run_py make_submission_text_preview.py
 run_py selftest_submission_metadata_pipeline.py
 run_py make_anonymous_review_draft.py

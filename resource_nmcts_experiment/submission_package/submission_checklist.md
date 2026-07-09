@@ -66,6 +66,7 @@ Use this checklist immediately before uploading the manuscript.
 - Source/path privacy audit: `results/analysis_source_path_privacy_audit.md`
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
 - Metadata validator: `results/analysis_submission_metadata_validator.md`
+- Metadata answer-template coverage audit: `results/analysis_metadata_answer_template_coverage.md`
 - Author-input closure audit: `results/analysis_author_input_closure_audit.md`
 - Metadata closure-path audit: `results/analysis_submission_metadata_closure_path.md`
 - Metadata pipeline self-test: `results/analysis_submission_metadata_pipeline_selftest.md`
@@ -148,9 +149,9 @@ rg -n "Overfull|Underfull|undefined|Undefined|Warning|Error|LaTeX Warning|Rerun"
 Expected current state:
 
 - Machine snapshot tokens checked by `analyze_public_handoff_freshness_audit.py`:
-  PDF pages=49/49; readiness=75 pass + 1 needs author input;
-  payload_files=1151; artifact_registry=30 families / 161 raw CSV / 80312 raw rows;
-  source_privacy=0 strict leaks / 57 provenance files / 1108 payload text files;
+  PDF pages=49/49; readiness=76 pass + 1 needs author input;
+  payload_files=1155; artifact_registry=30 families / 161 raw CSV / 80312 raw rows;
+  source_privacy=0 strict leaks / 57 provenance files / 1112 payload text files;
   comparison_validity=8/8 pass; novelty_scorecard=6/6 pass;
   goal_gate=author/venue metadata remains open.
 - Archive manifest: all payload groups complete.

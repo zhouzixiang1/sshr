@@ -43,6 +43,7 @@ AUTHOR_PACKET_MANIFEST = RESULTS / "manifest_author_input_packet.json"
 VALIDATOR_MANIFEST = RESULTS / "manifest_submission_metadata_validator.json"
 TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
 ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
+ANSWER_TEMPLATE_COVERAGE_MANIFEST = RESULTS / "manifest_metadata_answer_template_coverage.json"
 
 PRIVATE_OUTPUTS = (
     METADATA_ANSWERS_FILE,
@@ -160,6 +161,22 @@ def check_author_packet_coverage() -> dict[str, str]:
     )
 
 
+def check_answer_template_coverage() -> dict[str, str]:
+    manifest = read_json(ANSWER_TEMPLATE_COVERAGE_MANIFEST)
+    counts = manifest.get("status_counts", {}) if isinstance(manifest, dict) else {}
+    revisions = int(manifest.get("needs_revision_count", -1)) if isinstance(manifest, dict) else -1
+    missing = manifest.get("missing_required_paths", "missing") if isinstance(manifest, dict) else "missing"
+    unknown = manifest.get("unknown_answer_paths", "missing") if isinstance(manifest, dict) else "missing"
+    starter_only = manifest.get("starter_only_required_paths", "missing") if isinstance(manifest, dict) else "missing"
+    status = "pass" if manifest and revisions == 0 and not missing and not unknown else "needs revision"
+    return row(
+        "Answer-template required-field coverage",
+        status,
+        f"required_paths={len(REQUIRED_METADATA_PATHS)}; starter_only={starter_only}; missing={missing}; unknown_answer_paths={unknown}; status_counts={counts}; needs_revision_count={revisions}.",
+        "Rerun analyze_metadata_answer_template_coverage.py after changing required metadata paths, starter prefill fields, or submission_metadata_answers_template.json.",
+    )
+
+
 def check_support_document_visibility() -> dict[str, str]:
     required_docs = (
         FINAL_HANDOFF,
@@ -269,6 +286,7 @@ def check_metadata_audit_consistency() -> dict[str, str]:
 def build_rows() -> list[dict[str, str]]:
     return [
         check_template_placeholder_coverage(),
+        check_answer_template_coverage(),
         check_author_packet_coverage(),
         check_support_document_visibility(),
         check_private_git_protection(),

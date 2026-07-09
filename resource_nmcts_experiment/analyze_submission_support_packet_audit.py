@@ -47,6 +47,7 @@ COMPARISON_REFERENCE_INTEGRITY = RESULTS / "manifest_comparison_support_referenc
 NOVELTY_SCORECARD = RESULTS / "manifest_novelty_comparison_scorecard.json"
 EDITORIAL_SCREENING = RESULTS / "manifest_editorial_screening_audit.json"
 METADATA_CLOSURE = RESULTS / "manifest_submission_metadata_closure_path.json"
+METADATA_ANSWER_TEMPLATE_COVERAGE = RESULTS / "manifest_metadata_answer_template_coverage.json"
 TEXT_PREVIEW = RESULTS / "manifest_submission_text_preview.json"
 ANONYMOUS_REVIEW = RESULTS / "manifest_anonymous_review_readiness.json"
 TARGET_VENUE_DECISION = RESULTS / "manifest_target_venue_decision_audit.json"
@@ -283,6 +284,28 @@ def specs() -> list[PacketSpec]:
             expected=0,
             supported_use="The author can answer a Chinese field-by-field questionnaire and transfer the answers to the ignored private metadata JSON.",
             boundary="The questionnaire is an intake guide only; it does not contain, infer, or commit private author values.",
+        ),
+        PacketSpec(
+            item="Short answer template covers metadata fields",
+            upload_risk="The public JSON answer template could omit a required private field even if the longer questionnaire mentions it.",
+            files=(METADATA_ANSWERS_TEMPLATE, AUTHOR_PACKET, README, CHECKLIST),
+            tokens=(
+                "AUTHOR INPUT REQUIRED",
+                "target_venue.name",
+                "authors",
+                "corresponding_author",
+                "funding",
+                "competing_interests",
+                "data_availability",
+                "code_availability",
+                "ai_assistance",
+                "cover_letter",
+            ),
+            manifest_path=METADATA_ANSWER_TEMPLATE_COVERAGE,
+            manifest_key="needs_revision_count",
+            expected=0,
+            supported_use="The tracked short-answer JSON template is machine-checked against every required private metadata path before authors fill the ignored answer file.",
+            boundary="The template contains placeholders only; real author and venue values remain private and human-provided.",
         ),
         PacketSpec(
             item="Venue policy gate is visible before upload",

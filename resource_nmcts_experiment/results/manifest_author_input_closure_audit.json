@@ -17,12 +17,18 @@
   ],
   "python": "3.11.15",
   "required_metadata_paths": 50,
-  "rows": 7,
+  "rows": 8,
   "rows_detail": [
     {
       "evidence": "placeholders=53; required_paths=50; uncovered=none.",
       "item": "Metadata template placeholder coverage",
       "next_action": "Add every template AUTHOR INPUT REQUIRED path to REQUIRED_METADATA_PATHS, or cover it with an explicit parent field.",
+      "status": "pass"
+    },
+    {
+      "evidence": "required_paths=50; starter_only=['code_availability.commit_hash', 'code_availability.environment_notes', 'code_availability.repository_url']; missing=[]; unknown_answer_paths=[]; status_counts={'pass': 5}; needs_revision_count=0.",
+      "item": "Answer-template required-field coverage",
+      "next_action": "Rerun analyze_metadata_answer_template_coverage.py after changing required metadata paths, starter prefill fields, or submission_metadata_answers_template.json.",
       "status": "pass"
     },
     {
@@ -64,6 +70,6 @@
   ],
   "script": "analyze_author_input_closure_audit.py",
   "status_counts": {
-    "pass": 7
+    "pass": 8
   }
 }

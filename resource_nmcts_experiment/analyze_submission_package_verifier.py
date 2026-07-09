@@ -170,6 +170,7 @@ METADATA_PIPELINE_SELFTEST_MANIFEST = RESULTS / "manifest_submission_metadata_pi
 ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 AUTHOR_INPUT_CLOSURE_MANIFEST = RESULTS / "manifest_author_input_closure_audit.json"
 AUTHOR_QUESTIONNAIRE_COVERAGE_MANIFEST = RESULTS / "manifest_author_questionnaire_coverage.json"
+METADATA_ANSWER_TEMPLATE_MANIFEST = RESULTS / "manifest_metadata_answer_template_coverage.json"
 METADATA_CLOSURE_MANIFEST = RESULTS / "manifest_submission_metadata_closure_path.json"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
 PAYLOAD_GIT_POLICY_MANIFEST = RESULTS / "manifest_payload_git_policy_audit.json"
@@ -1690,6 +1691,30 @@ def verify_author_questionnaire_coverage() -> dict[str, str]:
     )
 
 
+def verify_metadata_answer_template_coverage() -> dict[str, str]:
+    manifest = read_json(METADATA_ANSWER_TEMPLATE_MANIFEST)
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    required_paths = manifest.get("required_metadata_paths", "missing") if manifest else "missing"
+    answer_paths = manifest.get("answer_template_required_paths", "missing") if manifest else "missing"
+    starter_only = manifest.get("starter_only_required_paths", "missing") if manifest else "missing"
+    missing_required = manifest.get("missing_required_paths", "missing") if manifest else "missing"
+    unknown_paths = manifest.get("unknown_answer_paths", "missing") if manifest else "missing"
+    private_like = manifest.get("private_like_value_paths", "missing") if manifest else "missing"
+    remaining = manifest.get("remaining_author_paths_after_template_dry_run", "missing") if manifest else "missing"
+    status = (
+        "pass"
+        if manifest and needs_revision == 0 and not missing_required and not unknown_paths and not private_like
+        else "needs revision"
+    )
+    return row(
+        "Metadata answer-template coverage audit",
+        status,
+        f"required_metadata_paths={required_paths}; answer_template_required_paths={answer_paths}; starter_only_required_paths={starter_only}; missing_required_paths={missing_required}; unknown_answer_paths={unknown_paths}; remaining_author_paths={remaining}; private_like_value_paths={private_like}; status_counts={counts}.",
+        "Run analyze_metadata_answer_template_coverage.py and align the public answer template with required private metadata paths.",
+    )
+
+
 def verify_metadata_closure_path() -> dict[str, str]:
     manifest = read_json(METADATA_CLOSURE_MANIFEST)
     counts = manifest.get("status_counts", {}) if manifest else {}
@@ -1811,11 +1836,16 @@ def verify_payload_verifier_smoke() -> dict[str, str]:
     needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
     verifier_returncode = manifest.get("verifier_returncode", "missing") if manifest else "missing"
     rows = manifest.get("rows", "missing") if manifest else "missing"
+    verifier_rows = manifest.get("verifier_rows", "missing") if manifest else "missing"
+    source_verifier_rows = manifest.get("source_verifier_rows", "missing") if manifest else "missing"
+    row_delta = manifest.get("row_delta", "missing") if manifest else "missing"
+    expected_row_delta = manifest.get("expected_row_delta", "missing") if manifest else "missing"
+    row_delta_reason = manifest.get("row_delta_reason", "missing") if manifest else "missing"
     status = "pass" if manifest and needs_revision == 0 else "needs revision"
     return row(
         "Payload verifier smoke audit",
         status,
-        f"needs_revision_count={needs_revision}; verifier_returncode={verifier_returncode}; rows={rows}; status_counts={counts}.",
+        f"needs_revision_count={needs_revision}; verifier_returncode={verifier_returncode}; rows={rows}; verifier_rows={verifier_rows}; source_verifier_rows={source_verifier_rows}; row_delta={row_delta}; expected_row_delta={expected_row_delta}; row_delta_reason={row_delta_reason}; status_counts={counts}.",
         "Run analyze_payload_verifier_smoke_audit.py after payload creation and fix extracted one-command verifier failures.",
     )
 
@@ -1943,6 +1973,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_anonymous_review_audit(),
             verify_author_input_closure(),
             verify_author_questionnaire_coverage(),
+            verify_metadata_answer_template_coverage(),
             verify_metadata_closure_path(),
             verify_text_preview(),
             verify_private_payload_exclusion(),
