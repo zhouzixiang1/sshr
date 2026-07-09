@@ -79,6 +79,8 @@ After the quick rebuild, the current package should report:
   `results/analysis_ros_reproduction_gap_audit.md`
 - Caterpillar source-family probe state in
   `results/analysis_caterpillar_ros_family_probe.md`
+- Caterpillar XAG API performance-probe state in
+  `results/analysis_caterpillar_xag_api_probe.md`
 - editorial screening state in
   `results/analysis_editorial_screening_audit.md`
 - support packet state in
@@ -125,6 +127,7 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_verifier_smoke_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_latex_compile_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_caterpillar_ros_family_probe.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_caterpillar_xag_api_probe.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_ros_reproduction_gap_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_editorial_screening_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_support_packet_audit.py
@@ -202,6 +205,8 @@ layout warnings.
   `results/analysis_payload_verifier_smoke_audit.md`
 - Terminal package verifier:
   `results/analysis_submission_package_verifier.md`
+- Caterpillar XAG API performance probe:
+  `results/analysis_caterpillar_xag_api_probe.md`
 
 ## Raw Rerun Entry Points
 
@@ -217,6 +222,7 @@ manifest coverage, rerun tier, and dependency boundary.
 - SSHR reproduction-scope audit: `analyze_sshr_reproduction_scope_audit.py`
 - ROS-style LUT proxy: `run_ros_lut_proxy.py`
 - Caterpillar source-family probe: `analyze_caterpillar_ros_family_probe.py`
+- Caterpillar XAG API performance probe: `run_caterpillar_xag_api_probe.py`
 - ROS reproduction-boundary audit: `analyze_ros_reproduction_gap_audit.py`
 - mockturtle KLUT-to-XAG probe: `run_mockturtle_xag_probe.py`
 - CirKit AIG/MC probe: `run_cirkit_aig_probe.py`

@@ -380,7 +380,8 @@ rotations.
 Experiments answer four questions.  First, does \method{} reduce T-count and
 weighted score on small functions where full \ttable{} checking is practical?
 Second, do the conclusions survive comparisons with ESOP, SSHR, ABC/BDD,
-ROS-style LUT, mockturtle, CirKit, RevKit CLI, and RevKit phase/Rz baselines?
+ROS-style LUT, mockturtle, Caterpillar API, CirKit, RevKit CLI, and RevKit
+phase/Rz baselines?
 Third, which components--affine search, \mcts{}, neural priors, guards,
 frontier policies, and Pareto archives--account for the gains?  Fourth, how far
 can correctness evidence be pushed beyond small truth tables?
@@ -411,9 +412,9 @@ outside the scope of the logical-layer experiments.}
 
 \begin{table}[H]
 \centering
-\scriptsize
-\setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.08}
+\tiny
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{0.94}
 \caption{Reviewer-facing evidence matrix.  The table consolidates the
 baseline family, coverage, verification count, headline paired result, and
 scope boundary used by the manuscript claims.}
@@ -430,7 +431,7 @@ stronger conclusion that the evidence does not support.
 \centering
 \scriptsize
 \setlength{\tabcolsep}{2pt}
-\renewcommand{\arraystretch}{1.05}
+\renewcommand{\arraystretch}{0.98}
 \caption{Comparison protocol audit.  Each comparison layer is tied to the
 reviewer question it answers, the conclusion supported by the current evidence,
 and the stronger claim excluded by the logical-layer experiment design.}
@@ -451,7 +452,7 @@ AI ablations are not treated as competing oracle synthesizers.
 \centering
 \scriptsize
 \setlength{\tabcolsep}{2pt}
-\renewcommand{\arraystretch}{1.05}
+\renewcommand{\arraystretch}{0.98}
 \caption{Comparison target validity audit.  Each target family is assigned the
 role it plays in the manuscript, the reason the comparison is meaningful, and
 the stronger conclusion that the row does not support.  The corresponding CSV
@@ -472,9 +473,9 @@ controls.
 
 \begin{table}[H]
 \centering
-\scriptsize
+\tiny
 \setlength{\tabcolsep}{2pt}
-\renewcommand{\arraystretch}{1.05}
+\renewcommand{\arraystretch}{0.94}
 \caption{Comparison answer scorecard.  The table gives the short answer to
 ``compared with what?'' by linking each comparison target to verified evidence,
 headline quantitative outcomes, and the excluded claim that keeps the
@@ -753,10 +754,33 @@ SAT garbage management.
 \setlength{\tabcolsep}{3pt}
 \caption{Caterpillar ROS-family source probe.  This is a local source/API/build
 and toy compile smoke audit for a related open-source synthesis library; it is
-not a full ROS SAT garbage-management reproduction or a standalone performance
-baseline.}
+not a full ROS SAT garbage-management reproduction, and this source-only audit
+is not itself a standalone performance baseline.}
 \label{tab:caterpillar-ros-family}
 \input{tables/caterpillar_ros_family_probe}
+\end{table}
+
+Having established that source-family boundary, we also run a bounded
+Caterpillar API performance probe on the same traditional $n\leq6$ function
+names.  Each truth table is converted to an ANF-XAG input, synthesized through
+Caterpillar's \texttt{logic\_network\_synthesis} API with three XAG strategies,
+and verified by converting the emitted circuit back to a logic network.  All
+531 strategy rows verify.  The best Caterpillar row per function is a useful
+counterpoint rather than a win: it has lower CNOT/depth proxies on most rows,
+but much larger auxiliary-line usage, and Pareto-\method{} obtains 177/0/0
+matched score wins against it.  This strengthens the external comparison while
+keeping the conclusion bounded to logical-layer resources and not to full ROS
+or hardware mapping.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\caption{Caterpillar XAG API performance probe on the traditional $n\leq6$
+slice.  The probe uses ANF-XAG inputs and Caterpillar's logic-network API; it is
+a verified implementation-family counterpoint, not the official ROS flow.}
+\label{tab:caterpillar-xag-api}
+\input{tables/caterpillar_xag_api_probe}
 \end{table}
 
 The public STG benchmark suite is a different, deliberately stronger
@@ -1426,7 +1450,7 @@ representative resource means only for the paper-facing method in each slice.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.94\linewidth]{fig5_validation.pdf}
+\includegraphics[width=0.94\linewidth]{fig5_validation.png}
 \caption{\textbf{Verification coverage.}  Large term-set experiments are
 validated symbolically; phase-search and phase-policy rows are checked up to
 global phase; $n=21$--$26$ bridge slices add complete \ttable{} checking on
@@ -1557,10 +1581,12 @@ Several limitations are deliberate.  All results are logical-layer estimates;
 the paper does not model routing, hardware connectivity, native gate sets,
 noise, or magic-state factories.  The ROS-style LUT result is a proxy rather
 than a full ROS reproduction with SAT garbage management; the line-aware LUT
-reselection only tests parameter sensitivity within the same proxy.  The RevKit
-CLI baseline is a real exact-oracle reversible-synthesis probe, but CNOT/depth
-are derived from RevKit's Toffoli-control distribution and the experiment is
-still not a hardware mapping.  High-dimensional symbolic checks validate
+reselection only tests parameter sensitivity within the same proxy.  The
+Caterpillar source-family audit and XAG API probe add a verified
+implementation-family counterpoint, but they are still not the official ROS
+flow.  The RevKit CLI baseline is a real exact-oracle reversible-synthesis
+probe, but CNOT/depth are derived from RevKit's Toffoli-control distribution
+and the experiment is still not a hardware mapping.  High-dimensional symbolic checks validate
 emitted circuit semantics but do not replace full truth-table enumeration
 beyond the bridge slices.
 
@@ -1571,9 +1597,9 @@ resource-constrained quantum Boolean oracle synthesis over verifiable
 \anf{}/\fprm{} actions.  On matched small-function benchmarks, the method
 substantially lowers T-count and weighted score relative to direct \anf{},
 ESOP, SSHR-H, and ESOP-MILP baselines.  On external probes based on
-ROS-style LUT mapping, mockturtle, CirKit, and legacy RevKit CLI reversible
-synthesis, the method retains a strong weighted-score advantage while exposing
-clear depth and ancilla tradeoffs.  Large symbolic experiments and
+ROS-style LUT mapping, mockturtle, Caterpillar API, CirKit, and legacy RevKit
+CLI reversible synthesis, the method retains a strong weighted-score advantage
+while exposing clear CNOT, depth, and ancilla tradeoffs.  Large symbolic experiments and
 $n=21$--$30$ complete truth-table bridges support the semantic correctness of
 the logical-layer circuits.  The sparse depth-frontier analysis further reduces
 high-dimensional planning cost by skipping depth 3 in the audited frontier, and

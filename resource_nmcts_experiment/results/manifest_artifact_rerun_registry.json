@@ -226,20 +226,20 @@
       "summary_files": "5"
     },
     {
-      "analysis_files": "2",
-      "claim_use": "Makes the distinction between ROS-style proxy evidence, Caterpillar source-family probing, and unreproduced full ROS/SAT garbage management machine-checkable.",
-      "dependency_boundary": "Checks scope and evidence boundaries; Caterpillar is source/API/build smoke evidence only, and full official ROS is not reproduced.",
-      "driver_scripts": "analyze_caterpillar_ros_family_probe.py; analyze_ros_reproduction_gap_audit.py",
+      "analysis_files": "3",
+      "claim_use": "Makes the distinction between ROS-style proxy evidence, Caterpillar source/API/performance probing, and unreproduced full ROS/SAT garbage management machine-checkable.",
+      "dependency_boundary": "Checks scope and evidence boundaries; Caterpillar API rows are bounded ANF-XAG implementation-family probes, and full official ROS is not reproduced.",
+      "driver_scripts": "analyze_caterpillar_ros_family_probe.py; run_caterpillar_xag_api_probe.py; analyze_ros_reproduction_gap_audit.py",
       "evidence_family": "ROS reproduction boundary audit",
-      "manifest_files": "7",
-      "raw_files": "6",
-      "raw_rows": "4932",
-      "representative_raw": "results/raw_ros_lut_checkpoint_optimizer.csv; results/raw_ros_lut_garbage_budget_frontier.csv; results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; +2 more",
+      "manifest_files": "8",
+      "raw_files": "8",
+      "raw_rows": "5640",
+      "representative_raw": "results/raw_caterpillar_xag_api_best.csv; results/raw_caterpillar_xag_api_probe.csv; results/raw_ros_lut_checkpoint_optimizer.csv; results/raw_ros_lut_garbage_budget_frontier.csv; +4 more",
       "rerun_tier": "quick audit",
       "scripts_missing": "",
-      "scripts_present": "2",
+      "scripts_present": "3",
       "status": "complete",
-      "summary_files": "2"
+      "summary_files": "3"
     },
     {
       "analysis_files": "1",
@@ -451,6 +451,8 @@
     "results/raw_boolean_screen_depth_frontier_policy_large.csv",
     "results/raw_boolean_screen_depth_guard.csv",
     "results/raw_boolean_screen_depth_policy.csv",
+    "results/raw_caterpillar_xag_api_best.csv",
+    "results/raw_caterpillar_xag_api_probe.csv",
     "results/raw_cirkit_aig_highdim_probe.csv",
     "results/raw_cirkit_aig_probe.csv",
     "results/raw_evidence.csv",
@@ -602,6 +604,6 @@
   ],
   "rows": 27,
   "script": "analyze_artifact_rerun_registry.py",
-  "unique_raw_files": 158,
-  "unique_raw_rows": 78365
+  "unique_raw_files": 160,
+  "unique_raw_rows": 79073
 }

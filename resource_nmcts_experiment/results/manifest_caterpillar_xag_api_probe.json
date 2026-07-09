@@ -1,0 +1,42 @@
+{
+  "best_functions": 177,
+  "best_raw_rows": 177,
+  "caterpillar_api_input": "ANF-XAG",
+  "caterpillar_commit": "4c6f766",
+  "caterpillar_is_performance_baseline": true,
+  "caterpillar_path": "tmp/caterpillar",
+  "correct_rows": 531,
+  "input": "results/raw_traditional_resource.csv",
+  "needs_revision_count": 0,
+  "official_ros_fully_reproduced": false,
+  "outputs": {
+    "analysis": "results/analysis_caterpillar_xag_api_probe.md",
+    "best_raw": "results/raw_caterpillar_xag_api_best.csv",
+    "manifest": "results/manifest_caterpillar_xag_api_probe.json",
+    "raw": "results/raw_caterpillar_xag_api_probe.csv",
+    "summary": "results/summary_caterpillar_xag_api_probe.csv",
+    "table": "paper_latex/tables/caterpillar_xag_api_probe.tex"
+  },
+  "pareto_cnot_mean_relative_vs_caterpillar_pct": 195.17942484402428,
+  "pareto_cnot_wlt_vs_caterpillar": "4/173/0",
+  "pareto_score_mean_relative_vs_caterpillar_pct": -47.94082323313712,
+  "pareto_score_wlt_vs_caterpillar": "177/0/0",
+  "raw_rows": 531,
+  "score_mean_relative_vs_pareto_pct": 102.8035714683593,
+  "score_wlt_vs_pareto": "0/177/0",
+  "script": "run_caterpillar_xag_api_probe.py",
+  "strategies": [
+    "xag_lowt",
+    "xag_fast_lowt",
+    "xag_lowd"
+  ],
+  "summary_rows": 4,
+  "tasks": 177,
+  "weights": {
+    "ancilla": 2.0,
+    "cnot": 0.04,
+    "depth": 0.015,
+    "gates": 0.01,
+    "t": 1.0
+  }
+}

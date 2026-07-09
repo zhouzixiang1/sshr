@@ -22,9 +22,9 @@
   "rows": 5,
   "script": "analyze_target_venue_decision_audit.py",
   "sources": [
-    "https://acm-stoc.org/stoc2020/acm-journals/tqc-new-announcement-06-2020.pdf",
+    "https://www.acm.org/publications/authors/submissions",
     "https://quantum-journal.org/instructions/authors/",
-    "https://tqe.ieee.org/",
+    "https://tqe.ieee.org/submission-process/",
     "https://ieee-ceda.org/publications/tcad/tcad-paper-submissions",
     "https://publishingsupport.iopscience.iop.org/journals/quantum-science-technology/"
   ],

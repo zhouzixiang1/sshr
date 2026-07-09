@@ -26,6 +26,7 @@ SEARCH_CONTROL = RESULTS / "summary_search_control_baseline_audit.csv"
 DOMINANCE = RESULTS / "summary_multimetric_pairwise_dominance.csv"
 NONDOMINATED = RESULTS / "summary_multimetric_nondominated.csv"
 RESOURCE_WEIGHT_SENSITIVITY = RESULTS / "manifest_resource_weight_sensitivity_audit.json"
+CATERPILLAR_API = RESULTS / "manifest_caterpillar_xag_api_probe.json"
 
 SUMMARY = RESULTS / "summary_comparison_answer_scorecard.csv"
 ANALYSIS = RESULTS / "analysis_comparison_answer_scorecard.md"
@@ -96,6 +97,32 @@ def resource_weight_evidence() -> str:
     )
 
 
+def caterpillar_api_evidence() -> str:
+    if not CATERPILLAR_API.exists():
+        return "Caterpillar XAG API probe: missing"
+    manifest = json.loads(CATERPILLAR_API.read_text(encoding="utf-8"))
+    return (
+        "Caterpillar ANF-XAG API probe: "
+        f"{manifest.get('correct_rows', 'missing')}/{manifest.get('raw_rows', 'missing')} strategy rows; "
+        f"{manifest.get('best_raw_rows', 'missing')} best rows; "
+        f"Caterpillar score vs Pareto {manifest.get('score_wlt_vs_pareto', 'missing')}, "
+        f"{float(manifest.get('score_mean_relative_vs_pareto_pct', 0.0)):+.2f}%; "
+        f"Pareto CNOT vs Caterpillar {manifest.get('pareto_cnot_wlt_vs_caterpillar', 'missing')}"
+    )
+
+
+def caterpillar_api_headline() -> str:
+    if not CATERPILLAR_API.exists():
+        return "Caterpillar best API: missing"
+    manifest = json.loads(CATERPILLAR_API.read_text(encoding="utf-8"))
+    return (
+        "Pareto vs Caterpillar API score "
+        f"{manifest.get('pareto_score_wlt_vs_caterpillar', 'missing')}, "
+        f"{float(manifest.get('pareto_score_mean_relative_vs_caterpillar_pct', 0.0)):+.2f}%; "
+        f"CNOT {manifest.get('pareto_cnot_wlt_vs_caterpillar', 'missing')}"
+    )
+
+
 def dominance_text(baseline: str) -> str:
     row = dominance_row(baseline)
     if not row:
@@ -160,11 +187,12 @@ def build_rows() -> list[dict[str, str]]:
         },
         {
             "reviewer_question": "Does the advantage survive external logic synthesis?",
-            "comparison_target": "ROS-style LUT/garbage-budget, mockturtle XAG, CirKit AIG/MC",
+            "comparison_target": "ROS-style LUT/garbage-budget, mockturtle XAG, Caterpillar API, CirKit AIG/MC",
             "role": "external logical-toolchain stress test",
             "verified_evidence": verified(
                 "ROS-style LUT proxy",
                 "mockturtle KLUT-to-XAG probe",
+                "Caterpillar XAG API probe",
                 "CirKit AIG/MC probe",
             ),
             "headline_answer": (
@@ -172,12 +200,14 @@ def build_rows() -> list[dict[str, str]]:
                 + paired("ROS-style LUT best-K")
                 + "; mockturtle n<=6 "
                 + paired("mockturtle XAG n<=6")
+                + "; "
+                + caterpillar_api_headline()
                 + "; CirKit n<=6 "
                 + paired("CirKit AIG/MC n<=6")
             ),
             "usable_claim": "The score/T-count advantage is not an artifact of comparing only against local hand-written baselines.",
             "excluded_claim": "Not a full ROS SAT garbage-management optimizer, reversible-emission, routing, or hardware-mapped comparison.",
-            "sources": "summary_comparison_evidence_matrix.csv; summary_paired_statistical_evidence.csv",
+            "sources": "summary_comparison_evidence_matrix.csv; summary_paired_statistical_evidence.csv; manifest_caterpillar_xag_api_probe.json",
         },
         {
             "reviewer_question": "Does it beat published tiny-function optima?",

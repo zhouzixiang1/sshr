@@ -51,7 +51,8 @@ def configure() -> None:
         {
             "font.family": "sans-serif",
             "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans", "sans-serif"],
-            "pdf.fonttype": 3,
+            "pdf.fonttype": 42,
+            "ps.fonttype": 42,
             "svg.fonttype": "none",
             "font.size": 7,
             "axes.spines.right": False,

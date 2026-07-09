@@ -63,6 +63,12 @@ CATERPILLAR_ANALYSIS = RESULTS / "analysis_caterpillar_ros_family_probe.md"
 CATERPILLAR_SUMMARY = RESULTS / "summary_caterpillar_ros_family_probe.csv"
 CATERPILLAR_MANIFEST = RESULTS / "manifest_caterpillar_ros_family_probe.json"
 CATERPILLAR_TABLE = TABLES / "caterpillar_ros_family_probe.tex"
+CATERPILLAR_API_ANALYSIS = RESULTS / "analysis_caterpillar_xag_api_probe.md"
+CATERPILLAR_API_SUMMARY = RESULTS / "summary_caterpillar_xag_api_probe.csv"
+CATERPILLAR_API_MANIFEST = RESULTS / "manifest_caterpillar_xag_api_probe.json"
+CATERPILLAR_API_RAW = RESULTS / "raw_caterpillar_xag_api_probe.csv"
+CATERPILLAR_API_BEST = RESULTS / "raw_caterpillar_xag_api_best.csv"
+CATERPILLAR_API_TABLE = TABLES / "caterpillar_xag_api_probe.tex"
 
 
 @dataclass(frozen=True)
@@ -226,8 +232,38 @@ def specs() -> list[RosSpec]:
                 JsonExpectation(CATERPILLAR_MANIFEST, "official_ros_fully_reproduced", False),
             ),
             supported_claim="The package now records a closer open-source implementation-family probe for XAG synthesis and quantum memory-management components.",
-            excluded_claim="caterpillar availability and a toy API smoke are not a full ROS SAT garbage-management reproduction and are not used as a new standalone performance baseline.",
-            next_reproduction_step="If a stable caterpillar CLI or project adapter is added, run it on the exported truth-table benchmarks and keep the results separate from the ROS-style proxy rows.",
+            excluded_claim="caterpillar availability and the source-only toy smoke are not a full ROS SAT garbage-management reproduction; performance rows are handled only by the separate Caterpillar XAG API probe.",
+            next_reproduction_step="If a stable caterpillar CLI or project adapter is added, keep it separate from both the source-family audit and the ROS-style proxy rows.",
+        ),
+        RosSpec(
+            item="Caterpillar XAG API performance probe",
+            coverage_status="partial",
+            official_requirement="A related implementation-family baseline should be row-level verified and kept separate from full ROS unless it implements the ROS LUT plus SAT garbage-management flow.",
+            current_coverage="The package compiles a local Caterpillar API adapter, converts the 177 traditional n<=6 truth tables to ANF-XAG inputs, runs three XAG strategies, and verifies 531 emitted rows through Caterpillar's circuit-to-logic-network path.",
+            files=(CATERPILLAR_API_ANALYSIS, CATERPILLAR_API_SUMMARY, CATERPILLAR_API_MANIFEST, CATERPILLAR_API_RAW, CATERPILLAR_API_BEST, CATERPILLAR_API_TABLE, PAPER),
+            tokens=(
+                "raw probe rows: 531",
+                "unique functions covered by best-of-Caterpillar: 177",
+                "best API",
+                "tab:caterpillar-xag-api",
+                "not the official ROS",
+            ),
+            csv_expectations=(
+                CsvExpectation(CATERPILLAR_API_RAW, 531, True),
+                CsvExpectation(CATERPILLAR_API_BEST, 177, True),
+                CsvExpectation(CATERPILLAR_API_SUMMARY, 4),
+            ),
+            json_expectations=(
+                JsonExpectation(CATERPILLAR_API_MANIFEST, "raw_rows", 531),
+                JsonExpectation(CATERPILLAR_API_MANIFEST, "best_raw_rows", 177),
+                JsonExpectation(CATERPILLAR_API_MANIFEST, "correct_rows", 531),
+                JsonExpectation(CATERPILLAR_API_MANIFEST, "needs_revision_count", 0),
+                JsonExpectation(CATERPILLAR_API_MANIFEST, "official_ros_fully_reproduced", False),
+                JsonExpectation(CATERPILLAR_API_MANIFEST, "caterpillar_is_performance_baseline", True),
+            ),
+            supported_claim="The paper can report a bounded, verified Caterpillar API performance counterpoint on the traditional slice.",
+            excluded_claim="The API rows are ANF-XAG Caterpillar runs, not the official ROS LUT mapper, SAT garbage-management optimizer, reversible-emission flow, or hardware-mapped result.",
+            next_reproduction_step="If an official ROS implementation becomes available, add a separate full-ROS driver rather than relabeling Caterpillar API rows.",
         ),
         RosSpec(
             item="Verified LUT K-sweep proxy",

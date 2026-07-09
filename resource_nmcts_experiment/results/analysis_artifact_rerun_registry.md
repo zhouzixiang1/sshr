@@ -5,8 +5,8 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 ## Status counts
 
 - complete: 27
-- unique raw files covered by registry: 158
-- unique raw CSV rows covered by registry: 78365
+- unique raw files covered by registry: 160
+- unique raw CSV rows covered by registry: 79073
 
 | evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |
 |---|---|---:|---:|---:|---|---|
@@ -24,7 +24,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | Traditional logical baselines | raw Python rerun | 5 | 4341 | 4 | complete | Python rerun; ILP-based subbaselines need Gurobi where enabled. |
 | External logical baseline extension | raw Python plus optional solvers | 3 | 2049 | 3 | complete | Python with optional Gurobi/logic-tool components; rows with skips/errors remain explicit. |
 | ROS-style LUT proxy | raw proxy rerun | 6 | 4932 | 5 | complete | Proxy-level LUT and garbage-pressure analysis only; not a full ROS SAT garbage-management rerun. |
-| ROS reproduction boundary audit | quick audit | 6 | 4932 | 7 | complete | Checks scope and evidence boundaries; Caterpillar is source/API/build smoke evidence only, and full official ROS is not reproduced. |
+| ROS reproduction boundary audit | quick audit | 8 | 5640 | 8 | complete | Checks scope and evidence boundaries; Caterpillar API rows are bounded ANF-XAG implementation-family probes, and full official ROS is not reproduced. |
 | Published STG optimum-library counterpoint | raw Python rerun | 1 | 270 | 1 | complete | Published small-function optimum-library counterpoint; not full ROS SAT garbage management and not hardware mapping. |
 | mockturtle KLUT-to-XAG probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded mockturtle checkout/header path; still a logical proxy, not reversible mapping. |
 | CirKit AIG/MC probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded CirKit executable/commit; results are logical estimates, not hardware mapping. |
@@ -97,9 +97,9 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - scripts: `run_ros_lut_proxy.py; analyze_ros_lut_line_sensitivity.py; analyze_ros_lut_garbage_proxy.py; analyze_ros_lut_garbage_budget_frontier.py; analyze_ros_lut_checkpoint_optimizer.py`
   - representative raw: `results/raw_ros_lut_checkpoint_optimizer.csv; results/raw_ros_lut_garbage_budget_frontier.csv; results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; +2 more`
 - **ROS reproduction boundary audit**
-  - claim use: Makes the distinction between ROS-style proxy evidence, Caterpillar source-family probing, and unreproduced full ROS/SAT garbage management machine-checkable.
-  - scripts: `analyze_caterpillar_ros_family_probe.py; analyze_ros_reproduction_gap_audit.py`
-  - representative raw: `results/raw_ros_lut_checkpoint_optimizer.csv; results/raw_ros_lut_garbage_budget_frontier.csv; results/raw_ros_lut_garbage_proxy.csv; results/raw_ros_lut_line_sensitivity.csv; +2 more`
+  - claim use: Makes the distinction between ROS-style proxy evidence, Caterpillar source/API/performance probing, and unreproduced full ROS/SAT garbage management machine-checkable.
+  - scripts: `analyze_caterpillar_ros_family_probe.py; run_caterpillar_xag_api_probe.py; analyze_ros_reproduction_gap_audit.py`
+  - representative raw: `results/raw_caterpillar_xag_api_best.csv; results/raw_caterpillar_xag_api_probe.csv; results/raw_ros_lut_checkpoint_optimizer.csv; results/raw_ros_lut_garbage_budget_frontier.csv; +4 more`
 - **Published STG optimum-library counterpoint**
   - claim use: Compares the current logical methods on the public n=4/5 STG spectral-representative truth-table table and exposes the small-function optimum boundary.
   - scripts: `analyze_stg_published_benchmark.py`

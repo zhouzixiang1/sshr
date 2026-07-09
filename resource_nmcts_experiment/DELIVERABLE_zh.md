@@ -11,7 +11,7 @@
 - 用资源加权目标函数评价候选线路：
   `score = T + 0.04*CNOT + 0.015*depth + 0.01*gates + 2*ancilla`。
 - 用神经先验、MCTS、FPRM 极性搜索、线性因子分解和 Pareto archive 生成候选。
-- 用 direct ANF、AND-direct ANF、ESOP、ABC、BDD、SSHR-H/SSHR-I、mockturtle、CirKit、RevKit API 和 legacy RevKit CLI 等作为外部或内部 baseline。
+- 用 direct ANF、AND-direct ANF、ESOP、ABC、BDD、SSHR-H/SSHR-I、mockturtle、Caterpillar API、CirKit、RevKit API 和 legacy RevKit CLI 等作为外部或内部 baseline。
 - 所有结果均是逻辑层资源估计，不包含硬件映射和连通性约束。
 
 论文主张应限定为：资源约束、低 T-count、低加权 score 的量子布尔函数 oracle 综合方法。不能写成 CNOT-only 最优，也不能写成硬件映射优势。
@@ -20,11 +20,11 @@
 
 以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，用于防止交付说明和机器审计结果漂移：
 
-- PDF pages=47/47
+- PDF pages=48/47
 - readiness=72 pass + 1 needs author input
-- payload_files=1110
-- artifact_registry=27 families / 158 raw CSV / 78365 raw rows
-- source_privacy=0 strict leaks / 57 provenance files / 1067 payload text files
+- payload_files=1117
+- artifact_registry=27 families / 160 raw CSV / 79073 raw rows
+- source_privacy=0 strict leaks / 57 provenance files / 1074 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open
@@ -34,7 +34,7 @@
 当前方法的对比对象分三层，而不是只和 SSHR 比：
 
 1. 传统 oracle 综合和布尔表示 baseline：direct ANF、AND-direct ANF、ESOP/ESOP-MILP、BDD、ABC-AIG/XAG/LUT/ESOP、XAG、ROS-style LUT。这一层证明方法不是只优化某个 SSHR 实现，而是在布尔函数表示和 oracle 资源层面降低 T-count、CNOT、深度、gate 和辅助比特等逻辑资源。
-2. 可复现外部工具链 baseline：mockturtle official-header KLUT-to-XAG、CirKit 3 AIG/multiplicative-complexity probe、RevKit API 和 legacy RevKit CLI exact-oracle reversible-synthesis probe。这一层用于回应审稿人对“是否只和自写 baseline 比”的质疑，但必须保留边界：它们是逻辑层 probe 或复现，不能写成 full ROS/hardware mapping。
+2. 可复现外部工具链 baseline：mockturtle official-header KLUT-to-XAG、Caterpillar ANF-XAG API、CirKit 3 AIG/multiplicative-complexity probe、RevKit API 和 legacy RevKit CLI exact-oracle reversible-synthesis probe。这一层用于回应审稿人对“是否只和自写 baseline 比”的质疑，但必须保留边界：它们是逻辑层 probe 或复现，不能写成 full ROS/hardware mapping。
 3. 搜索策略 baseline：greedy、direct、beam、fixed-coordinate MCTS、neural-prior ablation、Pareto archive、depth-frontier/stage-gated frontier、rank-diverse pruning 等。这一层证明创新点来自资源感知搜索和学习引导，而不是单纯换了一个 cost function。
 
 因此论文意义应写成“面向资源约束量子布尔函数 oracle 综合的逻辑层 AI 搜索框架”，SSHR-H/SSHR-I 是小规模、CNOT-oriented 的重要结构化 baseline，但不是本文方法的定义边界。
@@ -200,7 +200,19 @@
 - `results/manifest_caterpillar_ros_family_probe.json`
 - `paper_latex/tables/caterpillar_ros_family_probe.tex`
 
-该审计检查本地 `tmp/caterpillar` Git provenance、README 中 Boolean-function quantum synthesis 与 quantum memory management 定位、`logic_network_synthesis`/`stg_gate`/`pebbling_mapping_strategy`/`circuit_to_logic_network` API、BSAT/Z3 pebbling solver surface、CMake build-test 对象与 `liblibabcsat.a`，并运行一个 toy AIG compile/run smoke。当前结论应写成“Caterpillar source-family probe”：本机源码、API 与 toy smoke 可用，但没有 standalone Caterpillar/ROS executable baseline；英文边界是 not a full ROS SAT garbage-management reproduction，也不新增性能 leaderboard 行。
+该审计检查本地 `tmp/caterpillar` Git provenance、README 中 Boolean-function quantum synthesis 与 quantum memory management 定位、`logic_network_synthesis`/`stg_gate`/`pebbling_mapping_strategy`/`circuit_to_logic_network` API、BSAT/Z3 pebbling solver surface、CMake build-test 对象与 `liblibabcsat.a`，并运行一个 toy AIG compile/run smoke。当前结论应写成“Caterpillar source-family probe”：本机源码、API 与 toy smoke 可用，但没有 standalone Caterpillar/ROS executable baseline；英文边界是 not a full ROS SAT garbage-management reproduction。该 source-only 审计本身不作为性能 leaderboard 行，性能行由单独的 Caterpillar XAG API probe 承担。
+
+本轮进一步新增 `Caterpillar XAG API performance probe`，把 Caterpillar 从 source/API smoke 推进到同函数集的有界性能对比：
+
+- `run_caterpillar_xag_api_probe.py`
+- `results/raw_caterpillar_xag_api_probe.csv`
+- `results/raw_caterpillar_xag_api_best.csv`
+- `results/summary_caterpillar_xag_api_probe.csv`
+- `results/analysis_caterpillar_xag_api_probe.md`
+- `results/manifest_caterpillar_xag_api_probe.json`
+- `paper_latex/tables/caterpillar_xag_api_probe.tex`
+
+该 probe 将 traditional `n<=6` 的 177 个真值表转成 ANF-XAG 输入，调用本地 Caterpillar `logic_network_synthesis` API 的 `xag_lowt`、`xag_fast_lowt`、`xag_lowd` 三种策略，并用 `circuit_to_logic_network` 回读验证。当前 531/531 strategy rows 正确，best-of-Caterpillar 覆盖 177/177 个函数。结果是非常适合投稿的边界证据：Pareto-Resource-NMCTS 相对 Caterpillar API best score 为 177/0/0、-47.94%，但 CNOT 为 4/173/0、+195.18%，说明 Caterpillar 在 CNOT/depth proxy 上强，本文主要赢 T-count/score/ancilla，而不是全指标支配。它仍不是官方 ROS LUT mapper、SAT garbage-management、reversible emission 或 hardware mapping。
 
 本轮进一步补充了 paired statistical evidence 层，避免论文只依赖均值叙述：
 

@@ -390,9 +390,9 @@ def build_rows() -> tuple[list[dict[str, str]], dict[str, Any]]:
             "pass",
             "not available",
             f"candidate_executables={len(cli_files)}; examples_cpp={count_files(CATERPILLAR / 'examples', '*.cpp')}; experiments_cpp={count_files(CATERPILLAR / 'experiments', '*.cpp')}",
-            "The audit records why Caterpillar is currently source-family evidence rather than a new performance row.",
-            "No standalone Caterpillar/ROS executable baseline is claimed or used in the result tables.",
-            "Create a dedicated adapter and manifest before adding Caterpillar to the quantitative leaderboard.",
+            "The audit records why Caterpillar source availability is currently source-family evidence rather than a standalone CLI benchmark row.",
+            "No standalone Caterpillar/ROS executable baseline is claimed or used in the result tables; API-adapter performance rows must remain in their separate manifest.",
+            "Keep any API adapter or future CLI baseline in a dedicated manifest before adding it to the quantitative leaderboard.",
         ),
         row(
             "Manuscript and ROS-gap boundary",

@@ -3,7 +3,9 @@
 #
 # This script regenerates paper-facing analysis tables, figures, audit files,
 # and the English submission PDF.  It intentionally does not rerun the raw
-# benchmark sweeps, external-toolchain probes, or neural training jobs.
+# benchmark sweeps, most external-toolchain probes, or neural training jobs.
+# It does rerun the bounded Caterpillar API probe because it is a fast local
+# compile/run check that protects the ROS-facing comparison boundary.
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -29,6 +31,7 @@ run_py analyze_search_budget_contract.py
 run_py analyze_related_work_positioning.py
 run_py analyze_citation_support_audit.py
 run_py analyze_baseline_claim_matrix.py
+run_py run_caterpillar_xag_api_probe.py
 run_py analyze_comparison_evidence_matrix.py
 run_py analyze_baseline_comparability_audit.py
 run_py analyze_counterpoint_claim_boundary.py

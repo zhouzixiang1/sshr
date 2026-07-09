@@ -79,6 +79,10 @@ noise modeling, or magic-state-factory accounting.
 - `../results/analysis_caterpillar_ros_family_probe.md`: local source/API/build
   and toy compile smoke audit for the Caterpillar implementation family; this
   is not a standalone ROS performance baseline.
+- `../results/analysis_caterpillar_xag_api_probe.md`: bounded Caterpillar
+  `logic_network_synthesis` API performance probe over the same traditional
+  `n<=6` functions; it verifies 531/531 ANF-XAG strategy rows and 177/177
+  best-of-Caterpillar rows, but is still not the full ROS LUT/SAT flow.
 - `../results/analysis_submission_metadata_pipeline_selftest.md`: synthetic,
   non-private self-test for the metadata validator and private-preview
   renderers.
@@ -203,7 +207,10 @@ Not supported:
 - Hardware-mapped performance.
 - Universal CNOT, depth, ancilla, or line-count dominance.
 - A full ROS SAT garbage-management reproduction.
-- Official ROS source-discovery note: no official ROS implementation repository or local ROS executable is included; the accessible public artifacts are the ROS paper and the STG benchmark table.
+- Official ROS source-discovery note: no official ROS implementation repository
+  or local ROS executable is included; the accessible public artifacts are the
+  ROS paper and the STG benchmark table.  The Caterpillar API probe is an
+  implementation-family performance counterpoint, not an official ROS run.
 - A final Clifford+T decomposition claim for RevKit `oracle_synth` Rz outputs.
 - Exhaustive truth-table benchmarking for all large-dimensional functions.
 
@@ -221,6 +228,7 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_comparison_target_validity_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_sshr_reproduction_scope_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_caterpillar_ros_family_probe.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python run_caterpillar_xag_api_probe.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_ros_reproduction_gap_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_editorial_screening_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_support_packet_audit.py

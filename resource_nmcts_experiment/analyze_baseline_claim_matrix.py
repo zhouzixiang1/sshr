@@ -26,9 +26,9 @@ ROWS = [
     },
     {
         "comparison_role": "External logic-network probes",
-        "methods": "ABC AIG/XAG/LUT, ROS-style LUT and garbage-budget proxy, mockturtle KLUT-to-XAG, CirKit AIG/MC",
+        "methods": "ABC AIG/XAG/LUT, ROS-style LUT and garbage-budget proxy, mockturtle KLUT-to-XAG, Caterpillar ANF-XAG API, CirKit AIG/MC",
         "why_it_matters": "They test whether mature Boolean-network optimization already removes the apparent advantage over direct algebraic baselines.",
-        "supported_claim": "The score advantage persists against stronger exported-network and official-header tool probes.",
+        "supported_claim": "The score advantage persists against stronger exported-network, official-header, and local implementation-family API probes.",
         "excluded_claim": "Does not reproduce full ROS SAT garbage management or reversible/hardware mapping.",
     },
     {

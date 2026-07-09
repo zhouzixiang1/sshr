@@ -183,6 +183,8 @@ def build_matrix() -> list[dict[str, str]]:
     stg_published = [RESULTS / "raw_stg_published_benchmark.csv"]
     stg_summary = RESULTS / "summary_stg_published_benchmark.csv"
     mockturtle = [RESULTS / "raw_mockturtle_xag_probe.csv", RESULTS / "raw_mockturtle_xag_highdim_probe.csv"]
+    caterpillar_api = [RESULTS / "raw_caterpillar_xag_api_probe.csv"]
+    caterpillar_best = [RESULTS / "raw_caterpillar_xag_api_best.csv"]
     cirkit = [RESULTS / "raw_cirkit_aig_probe.csv", RESULTS / "raw_cirkit_aig_highdim_probe.csv"]
     revkit_cli = [RESULTS / "raw_revkit_cli_multiflow_traditional.csv"]
     phase = [RESULTS / "raw_phase_parity_affine.csv"]
@@ -299,6 +301,22 @@ def build_matrix() -> list[dict[str, str]]:
             ),
             "boundary": "Official-header XAG resynthesis probe; still a logical proxy, not full ROS or reversible garbage management.",
             "sources": csv_join(mockturtle),
+        }
+    )
+
+    total_raw, usable_raw, _ = raw_count(caterpillar_api)
+    total_best, usable_best, scope = raw_count(caterpillar_best)
+    rows.append(
+        {
+            "evidence_block": "Caterpillar XAG API probe",
+            "scope": scope,
+            "verified_rows": f"{usable_best}/{total_best} best rows; {usable_raw}/{total_raw} strategy rows",
+            "main_result": "Pareto vs best API score "
+            + result_from_raw(traditional + caterpillar_best, "and_pareto_resource_nmcts", "external_caterpillar_xag_api_best")
+            + "; CNOT "
+            + result_from_raw(traditional + caterpillar_best, "and_pareto_resource_nmcts", "external_caterpillar_xag_api_best", "CNOT"),
+            "boundary": "Local Caterpillar logic-network API over ANF-XAG inputs; verified implementation-family performance probe, not full ROS SAT garbage management.",
+            "sources": csv_join(caterpillar_api + caterpillar_best),
         }
     )
 

@@ -4,14 +4,14 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 
 ## Status counts
 
-- pass: 198
+- pass: 201
 
 ## Dependency types
 
 - bibliography: 3
 - figure: 21
 - main_source: 3
-- tex_input: 171
+- tex_input: 174
 
 ## Missing dependencies
 
@@ -44,6 +44,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/ros_lut_garbage_budget_frontier` | `paper_latex/tables/ros_lut_garbage_budget_frontier.tex` | True | True | pass |
 | author | tex_input | `tables/ros_lut_checkpoint_optimizer` | `paper_latex/tables/ros_lut_checkpoint_optimizer.tex` | True | True | pass |
 | author | tex_input | `tables/caterpillar_ros_family_probe` | `paper_latex/tables/caterpillar_ros_family_probe.tex` | True | True | pass |
+| author | tex_input | `tables/caterpillar_xag_api_probe` | `paper_latex/tables/caterpillar_xag_api_probe.tex` | True | True | pass |
 | author | tex_input | `tables/stg_published_benchmark` | `paper_latex/tables/stg_published_benchmark.tex` | True | True | pass |
 | author | tex_input | `tables/cirkit_aig_probe` | `paper_latex/tables/cirkit_aig_probe.tex` | True | True | pass |
 | author | tex_input | `tables/cirkit_aig_highdim_probe` | `paper_latex/tables/cirkit_aig_highdim_probe.tex` | True | True | pass |
@@ -85,7 +86,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | figure | `fig6_sparse_gate_sensitivity.pdf` | `paper_latex/figures/submission_v36/fig6_sparse_gate_sensitivity.pdf` | True | True | pass |
 | author | figure | `fig7_learned_control_summary.pdf` | `paper_latex/figures/submission_v36/fig7_learned_control_summary.pdf` | True | True | pass |
 | author | figure | `fig4_phase_affine.pdf` | `paper_latex/figures/submission_v36/fig4_phase_affine.pdf` | True | True | pass |
-| author | figure | `fig5_validation.pdf` | `paper_latex/figures/submission_v36/fig5_validation.pdf` | True | True | pass |
+| author | figure | `fig5_validation.png` | `paper_latex/figures/submission_v36/fig5_validation.png` | True | True | pass |
 | author | bibliography | `references` | `paper_latex/references.bib` | True | True | pass |
 | anonymous | main_source | `paper_latex/resource_nmcts_submission_anonymous.tex` | `paper_latex/resource_nmcts_submission_anonymous.tex` | True | True | pass |
 | anonymous | tex_input | `tables/contribution_evidence_map` | `paper_latex/tables/contribution_evidence_map.tex` | True | True | pass |
@@ -110,6 +111,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/ros_lut_garbage_budget_frontier` | `paper_latex/tables/ros_lut_garbage_budget_frontier.tex` | True | True | pass |
 | anonymous | tex_input | `tables/ros_lut_checkpoint_optimizer` | `paper_latex/tables/ros_lut_checkpoint_optimizer.tex` | True | True | pass |
 | anonymous | tex_input | `tables/caterpillar_ros_family_probe` | `paper_latex/tables/caterpillar_ros_family_probe.tex` | True | True | pass |
+| anonymous | tex_input | `tables/caterpillar_xag_api_probe` | `paper_latex/tables/caterpillar_xag_api_probe.tex` | True | True | pass |
 | anonymous | tex_input | `tables/stg_published_benchmark` | `paper_latex/tables/stg_published_benchmark.tex` | True | True | pass |
 | anonymous | tex_input | `tables/cirkit_aig_probe` | `paper_latex/tables/cirkit_aig_probe.tex` | True | True | pass |
 | anonymous | tex_input | `tables/cirkit_aig_highdim_probe` | `paper_latex/tables/cirkit_aig_highdim_probe.tex` | True | True | pass |
@@ -151,7 +153,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | figure | `fig6_sparse_gate_sensitivity.pdf` | `paper_latex/figures/submission_v36/fig6_sparse_gate_sensitivity.pdf` | True | True | pass |
 | anonymous | figure | `fig7_learned_control_summary.pdf` | `paper_latex/figures/submission_v36/fig7_learned_control_summary.pdf` | True | True | pass |
 | anonymous | figure | `fig4_phase_affine.pdf` | `paper_latex/figures/submission_v36/fig4_phase_affine.pdf` | True | True | pass |
-| anonymous | figure | `fig5_validation.pdf` | `paper_latex/figures/submission_v36/fig5_validation.pdf` | True | True | pass |
+| anonymous | figure | `fig5_validation.png` | `paper_latex/figures/submission_v36/fig5_validation.png` | True | True | pass |
 | anonymous | bibliography | `references` | `paper_latex/references.bib` | True | True | pass |
 | acm_tqc | main_source | `paper_latex/resource_nmcts_submission_acm_tqc.tex` | `paper_latex/resource_nmcts_submission_acm_tqc.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/contribution_evidence_map` | `paper_latex/tables/contribution_evidence_map.tex` | True | True | pass |
@@ -176,6 +178,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/ros_lut_garbage_budget_frontier` | `paper_latex/tables/ros_lut_garbage_budget_frontier.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/ros_lut_checkpoint_optimizer` | `paper_latex/tables/ros_lut_checkpoint_optimizer.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/caterpillar_ros_family_probe` | `paper_latex/tables/caterpillar_ros_family_probe.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/caterpillar_xag_api_probe` | `paper_latex/tables/caterpillar_xag_api_probe.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/stg_published_benchmark` | `paper_latex/tables/stg_published_benchmark.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/cirkit_aig_probe` | `paper_latex/tables/cirkit_aig_probe.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/cirkit_aig_highdim_probe` | `paper_latex/tables/cirkit_aig_highdim_probe.tex` | True | True | pass |
@@ -217,5 +220,5 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | figure | `fig6_sparse_gate_sensitivity.pdf` | `paper_latex/figures/submission_v36/fig6_sparse_gate_sensitivity.pdf` | True | True | pass |
 | acm_tqc | figure | `fig7_learned_control_summary.pdf` | `paper_latex/figures/submission_v36/fig7_learned_control_summary.pdf` | True | True | pass |
 | acm_tqc | figure | `fig4_phase_affine.pdf` | `paper_latex/figures/submission_v36/fig4_phase_affine.pdf` | True | True | pass |
-| acm_tqc | figure | `fig5_validation.pdf` | `paper_latex/figures/submission_v36/fig5_validation.pdf` | True | True | pass |
+| acm_tqc | figure | `fig5_validation.png` | `paper_latex/figures/submission_v36/fig5_validation.png` | True | True | pass |
 | acm_tqc | bibliography | `references` | `paper_latex/references.bib` | True | True | pass |

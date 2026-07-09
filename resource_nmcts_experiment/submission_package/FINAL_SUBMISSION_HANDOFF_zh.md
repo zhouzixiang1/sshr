@@ -21,11 +21,11 @@
 
 以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，代表当前公开交接状态：
 
-- PDF pages=47/47
+- PDF pages=48/47
 - readiness=72 pass + 1 needs author input
-- payload_files=1110
-- artifact_registry=27 families / 158 raw CSV / 78365 raw rows
-- source_privacy=0 strict leaks / 57 provenance files / 1067 payload text files
+- payload_files=1117
+- artifact_registry=27 families / 160 raw CSV / 79073 raw rows
+- source_privacy=0 strict leaks / 57 provenance files / 1074 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open

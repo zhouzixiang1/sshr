@@ -40,11 +40,11 @@ ROWS = [
         "usable_claim": "Mature classical logic optimization does not by itself remove the T/score advantage.",
     },
     {
-        "baseline_family": "ROS-style LUT, mockturtle, and CirKit probes",
-        "task_alignment": "Same benchmark functions are passed through LUT/XAG/AIG toolchain probes and verified after export/readback when available.",
-        "fairness_control": "The LUT proxy includes best-K, line-aware reselection, and an executable garbage-budget frontier; mockturtle and CirKit use official toolchain paths and row-level correctness checks.",
+        "baseline_family": "ROS-style LUT and XAG/AIG/API probes",
+        "task_alignment": "Same benchmark functions pass through LUT, XAG, AIG, and Caterpillar API probes with export/readback checks where available.",
+        "fairness_control": "The LUT proxy includes best-K, line-aware reselection, and an executable garbage-budget frontier; mockturtle, CirKit, and Caterpillar use official source/toolchain/API paths and row-level correctness checks.",
         "residual_risk": "These are not full ROS SAT garbage-management optimizers or hardware-mapped reversible flows.",
-        "usable_claim": "The advantage persists beyond self-written baselines, with CirKit exposing a real depth tradeoff.",
+        "usable_claim": "The advantage persists beyond self-written baselines, with CirKit and Caterpillar exposing real CNOT/depth tradeoffs.",
     },
     {
         "baseline_family": "Legacy RevKit CLI exact-oracle portfolio",
@@ -81,6 +81,7 @@ def latex_escape(text: str) -> str:
 
 def latex_cell(text: str) -> str:
     escaped = latex_escape(text)
+    escaped = escaped.replace("/", r"/\allowbreak{}")
     replacements = [
         ("Resource-NMCTS", r"\method{}"),
         ("ANF", r"\anf{}"),

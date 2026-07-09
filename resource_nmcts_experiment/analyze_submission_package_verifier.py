@@ -57,6 +57,9 @@ THIS_DIR = Path(__file__).resolve().parent
 RESULTS = THIS_DIR / "results"
 PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.pdf"
 LOG = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.log"
+AUTHOR_TEX = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.tex"
+ANON_TEX = THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.tex"
+ACM_TEX = THIS_DIR / "paper_latex" / "resource_nmcts_submission_acm_tqc.tex"
 ANONYMOUS_PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.pdf"
 ANONYMOUS_LOG = THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.log"
 PAYLOAD = THIS_DIR / "submission_package" / "dist" / "resource_nmcts_submission_payload.tar.gz"
@@ -89,6 +92,10 @@ PUBLIC_HANDOFF_MANIFEST = RESULTS / "manifest_public_handoff_freshness_audit.jso
 ROS_GAP_MANIFEST = RESULTS / "manifest_ros_reproduction_gap_audit.json"
 CATERPILLAR_PROBE_MANIFEST = RESULTS / "manifest_caterpillar_ros_family_probe.json"
 CATERPILLAR_PROBE_TABLE = THIS_DIR / "paper_latex" / "tables" / "caterpillar_ros_family_probe.tex"
+CATERPILLAR_API_MANIFEST = RESULTS / "manifest_caterpillar_xag_api_probe.json"
+CATERPILLAR_API_RAW = RESULTS / "raw_caterpillar_xag_api_probe.csv"
+CATERPILLAR_API_BEST = RESULTS / "raw_caterpillar_xag_api_best.csv"
+CATERPILLAR_API_TABLE = THIS_DIR / "paper_latex" / "tables" / "caterpillar_xag_api_probe.tex"
 ROS_GARBAGE_MANIFEST = RESULTS / "manifest_ros_lut_garbage_proxy.json"
 ROS_GARBAGE_TABLE = THIS_DIR / "paper_latex" / "tables" / "ros_lut_garbage_proxy.tex"
 ROS_GARBAGE_BUDGET_MANIFEST = RESULTS / "manifest_ros_lut_garbage_budget_frontier.json"
@@ -192,6 +199,12 @@ def read_json(path: Path) -> dict[str, object]:
         return json.loads(path.read_text(encoding="utf-8"))
     except Exception:
         return {}
+
+
+def read_text(path: Path) -> str:
+    if not path.exists():
+        return ""
+    return path.read_text(encoding="utf-8", errors="replace")
 
 
 def pdf_pages(path: Path) -> str:
@@ -599,6 +612,46 @@ def verify_caterpillar_probe() -> dict[str, str]:
         status,
         f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; coverage_counts={coverage}; source_tree_available={source_tree}; compile_smoke_passed={compile_smoke}; standalone_cli_detected={standalone_cli}; official_ros_fully_reproduced={full_ros}; caterpillar_is_performance_baseline={performance_baseline}; table_exists={table_exists}.",
         "Run analyze_caterpillar_ros_family_probe.py from the source worktree and keep Caterpillar framed as source/API/build smoke evidence, not a full ROS or standalone performance baseline.",
+    )
+
+
+def verify_caterpillar_api_probe() -> dict[str, str]:
+    manifest = read_json(CATERPILLAR_API_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    raw_rows = manifest.get("raw_rows", "missing") if manifest else "missing"
+    best_rows = manifest.get("best_raw_rows", "missing") if manifest else "missing"
+    correct_rows = manifest.get("correct_rows", "missing") if manifest else "missing"
+    summary_rows = manifest.get("summary_rows", "missing") if manifest else "missing"
+    full_ros = manifest.get("official_ros_fully_reproduced", "missing") if manifest else "missing"
+    performance = bool(manifest.get("caterpillar_is_performance_baseline", False)) if manifest else False
+    score_wlt = manifest.get("score_wlt_vs_pareto", "missing") if manifest else "missing"
+    cnot_wlt = manifest.get("pareto_cnot_wlt_vs_caterpillar", "missing") if manifest else "missing"
+    raw_exists = CATERPILLAR_API_RAW.exists()
+    best_exists = CATERPILLAR_API_BEST.exists()
+    table_exists = CATERPILLAR_API_TABLE.exists()
+    paper_text = read_text(AUTHOR_TEX) + "\n" + read_text(ANON_TEX) + "\n" + read_text(ACM_TEX)
+    anchor = "tab:caterpillar-xag-api" in paper_text
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and raw_rows == 531
+        and best_rows == 177
+        and correct_rows == 531
+        and summary_rows == 4
+        and full_ros is False
+        and performance
+        and raw_exists
+        and best_exists
+        and table_exists
+        and anchor
+        else "needs revision"
+    )
+    return row(
+        "Caterpillar XAG API performance probe",
+        status,
+        f"raw_rows={raw_rows}; best_raw_rows={best_rows}; correct_rows={correct_rows}; summary_rows={summary_rows}; needs_revision_count={revisions}; official_ros_fully_reproduced={full_ros}; caterpillar_is_performance_baseline={performance}; score_wlt_vs_pareto={score_wlt}; pareto_cnot_wlt_vs_caterpillar={cnot_wlt}; raw_exists={raw_exists}; best_exists={best_exists}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run run_caterpillar_xag_api_probe.py in the source worktree and keep the table framed as a bounded ANF-XAG API counterpoint, not full ROS.",
     )
 
 
@@ -1624,6 +1677,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_ros_garbage_budget_frontier(),
             verify_ros_checkpoint_optimizer(),
             verify_caterpillar_probe(),
+            verify_caterpillar_api_probe(),
             verify_ros_gap(),
             verify_stg_benchmark(),
             verify_search_budget_contract(),

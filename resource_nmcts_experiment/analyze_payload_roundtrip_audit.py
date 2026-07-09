@@ -142,6 +142,7 @@ THREATS_VALIDITY_PATHS = {
 }
 ROS_GAP_PATHS = {
     "analyze_caterpillar_ros_family_probe.py",
+    "run_caterpillar_xag_api_probe.py",
     "analyze_ros_lut_garbage_proxy.py",
     "analyze_ros_lut_garbage_budget_frontier.py",
     "analyze_ros_lut_checkpoint_optimizer.py",
@@ -149,6 +150,11 @@ ROS_GAP_PATHS = {
     "results/analysis_caterpillar_ros_family_probe.md",
     "results/summary_caterpillar_ros_family_probe.csv",
     "results/manifest_caterpillar_ros_family_probe.json",
+    "results/raw_caterpillar_xag_api_probe.csv",
+    "results/raw_caterpillar_xag_api_best.csv",
+    "results/analysis_caterpillar_xag_api_probe.md",
+    "results/summary_caterpillar_xag_api_probe.csv",
+    "results/manifest_caterpillar_xag_api_probe.json",
     "results/raw_ros_lut_garbage_proxy.csv",
     "results/raw_ros_lut_garbage_budget_frontier.csv",
     "results/raw_ros_lut_checkpoint_optimizer.csv",
@@ -165,6 +171,7 @@ ROS_GAP_PATHS = {
     "results/summary_ros_reproduction_gap_audit.csv",
     "results/manifest_ros_reproduction_gap_audit.json",
     "paper_latex/tables/caterpillar_ros_family_probe.tex",
+    "paper_latex/tables/caterpillar_xag_api_probe.tex",
     "paper_latex/tables/ros_lut_garbage_proxy.tex",
     "paper_latex/tables/ros_lut_garbage_budget_frontier.tex",
     "paper_latex/tables/ros_lut_checkpoint_optimizer.tex",

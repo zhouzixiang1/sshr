@@ -23,6 +23,7 @@
   "rows": 8,
   "script": "analyze_comparison_answer_scorecard.py",
   "source_files": [
+    "manifest_caterpillar_xag_api_probe.json",
     "manifest_resource_weight_sensitivity_audit.json",
     "summary_comparison_evidence_matrix.csv",
     "summary_multimetric_nondominated.csv",

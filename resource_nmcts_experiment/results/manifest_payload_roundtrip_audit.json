@@ -198,44 +198,51 @@
     "analyze_ros_lut_garbage_proxy.py",
     "analyze_ros_reproduction_gap_audit.py",
     "paper_latex/tables/caterpillar_ros_family_probe.tex",
+    "paper_latex/tables/caterpillar_xag_api_probe.tex",
     "paper_latex/tables/ros_lut_checkpoint_optimizer.tex",
     "paper_latex/tables/ros_lut_garbage_budget_frontier.tex",
     "paper_latex/tables/ros_lut_garbage_proxy.tex",
     "paper_latex/tables/ros_reproduction_gap_audit.tex",
     "results/analysis_caterpillar_ros_family_probe.md",
+    "results/analysis_caterpillar_xag_api_probe.md",
     "results/analysis_ros_lut_checkpoint_optimizer.md",
     "results/analysis_ros_lut_garbage_budget_frontier.md",
     "results/analysis_ros_lut_garbage_proxy.md",
     "results/analysis_ros_reproduction_gap_audit.md",
     "results/manifest_caterpillar_ros_family_probe.json",
+    "results/manifest_caterpillar_xag_api_probe.json",
     "results/manifest_ros_lut_checkpoint_optimizer.json",
     "results/manifest_ros_lut_garbage_budget_frontier.json",
     "results/manifest_ros_lut_garbage_proxy.json",
     "results/manifest_ros_reproduction_gap_audit.json",
+    "results/raw_caterpillar_xag_api_best.csv",
+    "results/raw_caterpillar_xag_api_probe.csv",
     "results/raw_ros_lut_checkpoint_optimizer.csv",
     "results/raw_ros_lut_garbage_budget_frontier.csv",
     "results/raw_ros_lut_garbage_proxy.csv",
     "results/summary_caterpillar_ros_family_probe.csv",
+    "results/summary_caterpillar_xag_api_probe.csv",
     "results/summary_ros_lut_checkpoint_optimizer.csv",
     "results/summary_ros_lut_garbage_budget_frontier.csv",
     "results/summary_ros_lut_garbage_proxy.csv",
-    "results/summary_ros_reproduction_gap_audit.csv"
+    "results/summary_ros_reproduction_gap_audit.csv",
+    "run_caterpillar_xag_api_probe.py"
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1110; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1117; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=1110; archive_files=1110; missing=none; extra=none.",
+      "evidence": "manifest_files=1117; archive_files=1117; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=1110; mismatches=none.",
+      "evidence": "checked=1117; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -313,7 +320,7 @@
       "status": "pass"
     },
     {
-      "evidence": "ros_gap_files=28; missing=none.",
+      "evidence": "ros_gap_files=35; missing=none.",
       "item": "Payload ROS reproduction-boundary evidence",
       "next_action": "Ensure the uploadable archive includes the ROS reproduction gap audit script, generated evidence, and support table.",
       "status": "pass"
@@ -451,7 +458,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=1110; metadata_issues=none.",
+      "evidence": "members_checked=1117; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"

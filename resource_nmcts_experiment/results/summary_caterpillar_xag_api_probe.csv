@@ -1,0 +1,5 @@
+item,status,rows,correct_rows,mean_T,mean_CNOT,mean_depth,mean_peak_ancilla,mean_score,mean_time_s
+xag_fast_lowt,pass,177,177,62.9153,27.9661,31.8249,15.7288,96.5677,0.000092
+xag_lowd,pass,177,177,62.9153,64.0791,33.8475,22.7740,112.4941,0.000110
+xag_lowt,pass,177,177,62.9153,27.9661,34.1469,15.7288,96.6025,0.000078
+best_of_caterpillar_xag_api,pass,177,177,62.9153,27.9661,31.5311,15.7288,96.5633,0.000087
