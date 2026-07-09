@@ -33,7 +33,7 @@
       "status": "pass"
     },
     {
-      "bytes": "741592",
+      "bytes": "741596",
       "compile_seconds": "not_recorded",
       "evidence": "stdout_lines=1397; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "anonymous payload LaTeX compile",
@@ -44,7 +44,7 @@
       "status": "pass"
     },
     {
-      "bytes": "912571",
+      "bytes": "912570",
       "compile_seconds": "not_recorded",
       "evidence": "stdout_lines=1922; stderr=none; allowed_bibliography_bootstrap_lines=5; unexpected_log_lines=none.",
       "item": "acm_tqc payload LaTeX compile",
