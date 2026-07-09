@@ -60,6 +60,9 @@ PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
 PAYLOAD_EXTRACTION_SMOKE_ANALYSIS = RESULTS / "analysis_payload_extraction_smoke_audit.md"
 PAYLOAD_EXTRACTION_SMOKE_SUMMARY = RESULTS / "summary_payload_extraction_smoke_audit.csv"
 PAYLOAD_EXTRACTION_SMOKE_MANIFEST = RESULTS / "manifest_payload_extraction_smoke_audit.json"
+PAYLOAD_LATEX_COMPILE_ANALYSIS = RESULTS / "analysis_payload_latex_compile_audit.md"
+PAYLOAD_LATEX_COMPILE_SUMMARY = RESULTS / "summary_payload_latex_compile_audit.csv"
+PAYLOAD_LATEX_COMPILE_MANIFEST = RESULTS / "manifest_payload_latex_compile_audit.json"
 GOAL_ANALYSIS = RESULTS / "analysis_goal_completion_audit.md"
 GOAL_SUMMARY = RESULTS / "summary_goal_completion_audit.csv"
 GOAL_MANIFEST = RESULTS / "manifest_goal_completion_audit.json"
@@ -224,6 +227,10 @@ def build_rows() -> list[dict[str, str]]:
     payload_smoke_manifest = read_json(PAYLOAD_EXTRACTION_SMOKE_MANIFEST)
     payload_smoke_counts = payload_smoke_manifest.get("status_counts", {}) if payload_smoke_manifest else {}
     payload_smoke_revisions = int(payload_smoke_manifest.get("needs_revision_count", -1)) if payload_smoke_manifest else -1
+    payload_latex_manifest = read_json(PAYLOAD_LATEX_COMPILE_MANIFEST)
+    payload_latex_counts = payload_latex_manifest.get("status_counts", {}) if payload_latex_manifest else {}
+    payload_latex_revisions = int(payload_latex_manifest.get("needs_revision_count", -1)) if payload_latex_manifest else -1
+    payload_latex_compiled = payload_latex_manifest.get("compiled_manuscripts", "missing") if payload_latex_manifest else "missing"
     lower = text.lower()
     todo_hits = re.findall(r"\b(?:todo|tbd|placeholder)\b", lower)
     abstract_words = abstract_word_count(text)
@@ -524,6 +531,17 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_payload_extraction_smoke_audit.py after payload creation and fix extraction or in-payload script execution failures.",
         },
         {
+            "item": "Payload LaTeX compile audit",
+            "status": "pass"
+            if PAYLOAD_LATEX_COMPILE_ANALYSIS.exists()
+            and PAYLOAD_LATEX_COMPILE_SUMMARY.exists()
+            and PAYLOAD_LATEX_COMPILE_MANIFEST.exists()
+            and payload_latex_revisions == 0
+            else "needs revision",
+            "evidence": f"Payload LaTeX compile audit extracts the upload tarball and rebuilds author/anonymous PDFs from the extracted TeX sources; compiled_manuscripts={payload_latex_compiled}; status_counts={payload_latex_counts}; needs_revision_count={payload_latex_revisions}.",
+            "next_action": "Rerun analyze_payload_latex_compile_audit.py after payload creation and restore missing extracted-payload LaTeX dependencies.",
+        },
+        {
             "item": "Terminal package verifier",
             "status": "pass"
             if VERIFY_SCRIPT.exists()
@@ -531,7 +549,7 @@ def build_rows() -> list[dict[str, str]]:
             and VERIFIER_SUMMARY.exists()
             and VERIFIER_MANIFEST.exists()
             else "needs revision",
-            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, PDF visual rendering, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, citation support, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, author-input closure, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, and LaTeX log boundaries.",
+            "evidence": "Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, PDF visual rendering, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, citation support, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, author-input closure, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, extracted-payload LaTeX compilation, and LaTeX log boundaries.",
             "next_action": "Run verify_submission_package.sh after rebuilding the payload archive.",
         },
         {

@@ -14,7 +14,8 @@ private-metadata starter dry-run, private-metadata validation,
 synthetic metadata-pipeline self-testing, anonymous-review decision support,
 author-input closure,
 private-preview protection, private payload exclusion, payload round-trip
-integrity, extracted-payload smoke checks, and LaTeX log cleanliness.  It
+integrity, extracted-payload smoke checks, extracted-payload LaTeX compilation,
+and LaTeX log cleanliness.  It
 writes a small audit report but does not rerun experiments or alter manuscript
 sources.
 """
@@ -56,6 +57,7 @@ ANONYMOUS_REVIEW_MANIFEST = RESULTS / "manifest_anonymous_review_readiness.json"
 AUTHOR_INPUT_CLOSURE_MANIFEST = RESULTS / "manifest_author_input_closure_audit.json"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
 PAYLOAD_EXTRACTION_SMOKE_MANIFEST = RESULTS / "manifest_payload_extraction_smoke_audit.json"
+PAYLOAD_LATEX_COMPILE_MANIFEST = RESULTS / "manifest_payload_latex_compile_audit.json"
 METADATA_STARTER = THIS_DIR / "make_submission_metadata_starter.py"
 METADATA_FILE = THIS_DIR / "submission_package" / "submission_metadata.json"
 
@@ -477,6 +479,24 @@ def verify_payload_extraction_smoke() -> dict[str, str]:
     )
 
 
+def verify_payload_latex_compile() -> dict[str, str]:
+    manifest = read_json(PAYLOAD_LATEX_COMPILE_MANIFEST)
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    needs_revision = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    compiled = manifest.get("compiled_manuscripts", "missing") if manifest else "missing"
+    try:
+        compiled_count = int(compiled)
+    except Exception:
+        compiled_count = -1
+    status = "pass" if manifest and needs_revision == 0 and compiled_count >= 2 else "needs revision"
+    return row(
+        "Payload LaTeX compile audit",
+        status,
+        f"needs_revision_count={needs_revision}; compiled_manuscripts={compiled}; status_counts={counts}.",
+        "Run analyze_payload_latex_compile_audit.py and restore missing extracted-payload TeX, table, figure, or bibliography dependencies.",
+    )
+
+
 def verify_latex_log(path: Path, label: str) -> dict[str, str]:
     if not path.exists():
         return row(label, "needs revision", "LaTeX log is missing.", "Rebuild the PDF with latexmk.")
@@ -526,6 +546,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_private_payload_exclusion(),
             verify_payload_roundtrip(),
             verify_payload_extraction_smoke(),
+            verify_payload_latex_compile(),
             verify_latex_log(LOG, "Author LaTeX log boundary"),
             verify_latex_log(ANONYMOUS_LOG, "Anonymous LaTeX log boundary"),
         ]

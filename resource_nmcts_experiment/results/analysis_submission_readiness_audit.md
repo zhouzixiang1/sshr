@@ -5,7 +5,7 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 ## Status counts
 
 - needs author input: 1
-- pass: 36
+- pass: 37
 
 ## Checklist
 
@@ -41,7 +41,8 @@ This audit checks paper-level readiness markers in `paper_latex/resource_nmcts_s
 | Uploadable payload archive | pass | Deterministic submission payload tarball, SHA256 sidecar, CSV, Markdown, and JSON manifest are present. | Rerun make_submission_payload_archive.py after adding or removing upload payload files. |
 | Payload round-trip integrity | pass | Payload round-trip audit exists; status_counts={'pass': 11}; needs_revision_count=0. | Rerun analyze_payload_roundtrip_audit.py after payload creation and fix any archive/manifest/path/hash issues. |
 | Payload extraction smoke test | pass | Payload extraction smoke audit runs lightweight checks from an extracted payload tree; status_counts={'pass': 8}; needs_revision_count=0. | Rerun analyze_payload_extraction_smoke_audit.py after payload creation and fix extraction or in-payload script execution failures. |
-| Terminal package verifier | pass | Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, PDF visual rendering, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, citation support, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, author-input closure, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, and LaTeX log boundaries. | Run verify_submission_package.sh after rebuilding the payload archive. |
+| Payload LaTeX compile audit | pass | Payload LaTeX compile audit extracts the upload tarball and rebuilds author/anonymous PDFs from the extracted TeX sources; compiled_manuscripts=2; status_counts={'pass': 3}; needs_revision_count=0. | Rerun analyze_payload_latex_compile_audit.py after payload creation and restore missing extracted-payload LaTeX dependencies. |
+| Terminal package verifier | pass | Fast pre-upload verifier script and read-only verifier outputs check author/anonymous PDF availability, PDF visual rendering, payload SHA consistency, readiness state, raw registry coverage, claim-scope lint, comparison-protocol coverage, citation support, headline numeric consistency, figure assets, LaTeX dependency closure, private metadata validation, metadata-pipeline self-test, anonymous-review readiness, author-input closure, private-preview protection, private payload exclusion, payload round-trip integrity, extraction smoke checks, extracted-payload LaTeX compilation, and LaTeX log boundaries. | Run verify_submission_package.sh after rebuilding the payload archive. |
 | Derived package rebuild command | pass | A lightweight rebuild script is present and cited in Data and Code Availability. | Keep the rebuild script aligned with paper-facing analysis, figure, audit, and PDF outputs. |
 | Limitations and failure modes | pass | Discussion names logical-layer, ROS-proxy, RevKit-derived, and high-dimensional bridge boundaries. | Add any new negative result to Discussion rather than hiding it in tables. |
 | Data and code availability | pass | Manuscript has an availability section pointing to scripts, CSVs, manifests, tables, and figures. | Replace repository-relative wording with an archival DOI or anonymous link at submission time if required. |

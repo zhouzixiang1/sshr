@@ -8,9 +8,9 @@ This terminal audit opens the reviewer/upload tarball and checks manifest agreem
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Payload archive readable | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=873; error=none. | Regenerate the payload archive if it cannot be opened by Python tarfile. |
-| Payload manifest round-trip | pass | manifest_files=873; archive_files=873; missing=none; extra=none. | Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge. |
-| Payload per-file SHA256 | pass | checked=873; mismatches=none. | Regenerate the payload archive and manifest if any archived file digest differs from the manifest. |
+| Payload archive readable | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=874; error=none. | Regenerate the payload archive if it cannot be opened by Python tarfile. |
+| Payload manifest round-trip | pass | manifest_files=874; archive_files=874; missing=none; extra=none. | Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge. |
+| Payload per-file SHA256 | pass | checked=874; mismatches=none. | Regenerate the payload archive and manifest if any archived file digest differs from the manifest. |
 | Payload path hygiene | pass | unsafe_paths=none; private_hits=none. | Remove unsafe, platform-generated, or private files from the payload inputs. |
 | Payload required artifacts | pass | required=12; missing=none. | Ensure the uploadable archive includes manuscript, bibliography, rebuild/verify scripts, handoff docs, and submission audits. |
 | Payload reviewer entrypoints | pass | reviewer_entries=7; missing=none. | Ensure the uploadable archive includes reviewer-facing guide, editor/reviewer briefs, venue brief, registry, and reproducibility audit. |
@@ -18,4 +18,4 @@ This terminal audit opens the reviewer/upload tarball and checks manifest agreem
 | Payload headline numeric evidence | pass | headline_numeric_files=4; missing=none. | Ensure the uploadable archive includes the headline numeric audit script and generated CSV/Markdown/JSON evidence. |
 | Payload citation support evidence | pass | citation_support_files=4; missing=none. | Ensure the uploadable archive includes the citation support audit script and generated CSV/Markdown/JSON evidence. |
 | Payload author-input closure evidence | pass | author_input_closure_files=4; missing=none. | Ensure the uploadable archive includes the author-input closure audit script and generated CSV/Markdown/JSON evidence. |
-| Payload deterministic tar metadata | pass | members_checked=873; metadata_issues=none. | Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads. |
+| Payload deterministic tar metadata | pass | members_checked=874; metadata_issues=none. | Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads. |

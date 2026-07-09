@@ -78,6 +78,8 @@ After the quick rebuild, the current package should report:
   `results/analysis_submission_payload_archive.md`
 - payload extraction smoke status in
   `results/analysis_payload_extraction_smoke_audit.md`
+- extracted-payload LaTeX compile status in
+  `results/analysis_payload_latex_compile_audit.md`
 - submission support-file count in
   `results/analysis_submission_archive_manifest.md`
 - raw rerun registry in `results/analysis_artifact_rerun_registry.md`
@@ -94,6 +96,7 @@ git diff --check
 ./verify_submission_package.sh
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_extraction_smoke_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_latex_compile_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_citation_support_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_author_input_closure_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_headline_numeric_consistency.py
@@ -150,6 +153,8 @@ layout warnings.
   `results/analysis_submission_traceability_audit.md`
 - Payload manifest:
   `results/analysis_submission_payload_archive.md`
+- Payload LaTeX compile audit:
+  `results/analysis_payload_latex_compile_audit.md`
 - Terminal package verifier:
   `results/analysis_submission_package_verifier.md`
 

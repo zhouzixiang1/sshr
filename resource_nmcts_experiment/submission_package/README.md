@@ -66,6 +66,9 @@ noise modeling, or magic-state-factory accounting.
 - `../results/analysis_payload_extraction_smoke_audit.md`: terminal check that
   extracts the upload tarball into a temporary directory and runs lightweight
   reviewer-facing audits from inside the extracted payload.
+- `../results/analysis_payload_latex_compile_audit.md`: terminal check that
+  extracts the upload tarball and rebuilds the author and anonymous PDFs from
+  the extracted LaTeX source tree.
 - `submission_checklist.md`: final upload checklist and verification commands.
 - `../results/analysis_claim_scope_lint.md`: automated claim-boundary lint for
   the manuscript and handoff files.
@@ -178,6 +181,7 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_text_preview.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_roundtrip_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_extraction_smoke_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_latex_compile_audit.py
 pdfinfo paper_latex/resource_nmcts_submission_v1.pdf | sed -n '1,20p'
 rg -n "Warning|Overfull|Underfull|LaTeX Error|Undefined|Rerun" \
   paper_latex/resource_nmcts_submission_v1.log
@@ -198,6 +202,7 @@ rg -n "needs author input|pass:|file count|archive sha256|Submission support|unr
   results/analysis_submission_text_preview.md \
   results/analysis_payload_roundtrip_audit.md \
   results/analysis_payload_extraction_smoke_audit.md \
+  results/analysis_payload_latex_compile_audit.md \
   results/analysis_submission_payload_archive.md \
   results/analysis_submission_archive_manifest.md
 ```
