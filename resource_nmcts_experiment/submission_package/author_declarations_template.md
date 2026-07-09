@@ -11,7 +11,8 @@ committed accidentally.
 
 When the JSON file is complete, the rebuild writes ignored private previews:
 `generated_author_declarations.md`, `generated_availability_statements.md`,
-`generated_cover_letter.md`, and `generated_submission_text.md`.  Review these
+`generated_cover_letter.md`, `generated_submission_text.md`, and
+`generated_upload_plan.md`.  Review these
 against the target venue submission system before upload.
 The rebuild also runs `validate_submission_metadata.py` to check common format
 and consistency issues without exposing private values in tracked files.

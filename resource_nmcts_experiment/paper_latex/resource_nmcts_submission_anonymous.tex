@@ -1120,6 +1120,14 @@ losses in all aggregate slices, and the largest score/T-count reductions occur
 in the middle tercile.  This pattern is useful for interpretation: learned
 ranking is most helpful when deterministic search has enough ambiguity for
 candidate ordering to matter, while trivial and very hard rows more often tie.
+Because no-prior score terciles are explanatory rather than deployable,
+Table~\ref{tab:bitflip-prior-feature-gate} tests a static pre-search gate using
+only the input ANF term count.  Enabling the learned prior only for ANF terms in
+the interval 6--23 retains all always-learned score wins in the audited rows,
+keeps zero score losses, and reduces measured learned-prior overhead relative
+to always-learned deployment.  The interval is selected from existing evidence,
+so the result is reported as a bounded deployment audit rather than a held-out
+policy claim.
 
 \begin{table}[H]
 \centering
@@ -1167,6 +1175,18 @@ Each row aggregates the three bit-flip \method{} variants after splitting
 functions into no-prior score terciles within each budget and method.}
 \label{tab:bitflip-prior-difficulty}
 \input{tables/bitflip_prior_difficulty_slices}
+\end{table}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.06}
+\caption{Static ANF-term feature gate for bit-flip learned-prior deployment.
+The gate enables the learned prior only when the input ANF contains 6--23
+terms, using a pre-search feature rather than the no-prior score.}
+\label{tab:bitflip-prior-feature-gate}
+\input{tables/bitflip_prior_feature_gate}
 \end{table}
 
 Table~\ref{tab:frontier-random-depth} applies the same random-control idea to
@@ -1306,9 +1326,9 @@ routing, or native-gate scheduling results.}
 
 Table~\ref{tab:learned-control-audit} separates promoted learned-control
 components from bounded controls and limited diagnostics.  The frontier policies, sparse depth-4
-gate, phase shortlist, and low-budget bit-flip prior provide the strongest
-paper-facing learned-control evidence.  The root-action neural component is
-reported only as a bounded candidate-extension signal: it preserves the
+gate, phase shortlist, low-budget bit-flip prior, and ANF-term prior gate
+provide the strongest paper-facing learned-control evidence.  The root-action
+neural component is reported only as a bounded candidate-extension signal: it preserves the
 deterministic heuristic top-4 root window and adds learned top-12 actions,
 giving a combined 8/0/25 score W/L/T diagnostic over the heuristic root window
 on the audited $n=14$ and $n=16$ slices.  The Boolean-neural guard and the

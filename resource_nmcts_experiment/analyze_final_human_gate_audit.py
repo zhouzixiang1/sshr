@@ -24,6 +24,8 @@ GOAL_MANIFEST = RESULTS / "manifest_goal_completion_audit.json"
 METADATA_SUMMARY = RESULTS / "summary_submission_metadata_audit.csv"
 METADATA_VALIDATOR_SUMMARY = RESULTS / "summary_submission_metadata_validator.csv"
 TEXT_PREVIEW_SUMMARY = RESULTS / "summary_submission_text_preview.csv"
+FINAL_UPLOAD_PLAN_SUMMARY = RESULTS / "summary_final_upload_plan.csv"
+FINAL_UPLOAD_PLAN_TOOL_SUMMARY = RESULTS / "summary_final_upload_plan_tool_audit.csv"
 ANONYMOUS_REVIEW_SUMMARY = RESULTS / "summary_anonymous_review_readiness.csv"
 AUTHOR_INPUT_CLOSURE_SUMMARY = RESULTS / "summary_author_input_closure_audit.csv"
 METADATA_CLOSURE_SUMMARY = RESULTS / "summary_submission_metadata_closure_path.csv"
@@ -121,11 +123,16 @@ def build_rows() -> list[dict[str, str]]:
 
     validator_rows = read_csv(METADATA_VALIDATOR_SUMMARY)
     preview_rows = read_csv(TEXT_PREVIEW_SUMMARY)
+    final_upload_plan_rows = read_csv(FINAL_UPLOAD_PLAN_SUMMARY)
+    final_upload_plan_tool_rows = read_csv(FINAL_UPLOAD_PLAN_TOOL_SUMMARY)
     validator_preview_ok = (
         only_author_input_or_pass(validator_rows)
         and only_author_input_or_pass(preview_rows)
+        and only_author_input_or_pass(final_upload_plan_rows)
+        and all_pass(final_upload_plan_tool_rows)
         and status_counts(validator_rows).get("needs revision", 0) == 0
         and status_counts(preview_rows).get("needs revision", 0) == 0
+        and status_counts(final_upload_plan_rows).get("needs revision", 0) == 0
     )
 
     author_closure_rows = read_csv(AUTHOR_INPUT_CLOSURE_SUMMARY)
@@ -161,8 +168,8 @@ def build_rows() -> list[dict[str, str]]:
         row(
             "Validator and private-preview boundary",
             "pass" if validator_preview_ok else "needs revision",
-            f"validator_counts={status_counts(validator_rows)}; preview_counts={status_counts(preview_rows)}.",
-            "Run validate_submission_metadata.py and make_submission_text_preview.py; needs-revision rows must be fixed, while missing private metadata remains author input.",
+            f"validator_counts={status_counts(validator_rows)}; preview_counts={status_counts(preview_rows)}; upload_plan_counts={status_counts(final_upload_plan_rows)}; upload_plan_tool_counts={status_counts(final_upload_plan_tool_rows)}.",
+            "Run validate_submission_metadata.py, make_submission_text_preview.py, make_final_upload_plan.py, and analyze_final_upload_plan_tool_audit.py; needs-revision rows must be fixed, while missing private metadata remains author input.",
         ),
         row(
             "Author-input closure path",

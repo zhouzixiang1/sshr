@@ -29,6 +29,7 @@ $EDITOR submission_package/submission_metadata_answers.json
 ```bash
 /opt/anaconda3/envs/mcts-qoracle/bin/python validate_submission_metadata.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_text_preview.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python make_final_upload_plan.py
 ./rebuild_submission_package.sh
 ./verify_submission_package.sh
 ```
@@ -39,15 +40,18 @@ $EDITOR submission_package/submission_metadata_answers.json
 - `submission_package/generated_availability_statements.md`
 - `submission_package/generated_cover_letter.md`
 - `submission_package/generated_submission_text.md`
+- `submission_package/generated_upload_plan.md`
 
-7. 上传前看一次 `results/analysis_upload_bundle_matrix_audit.md`，按目标 venue
-   选择作者版、匿名版、ACM/TQC review 版和 payload/source-data bundle。
+7. 上传前看一次 `submission_package/generated_upload_plan.md` 和
+   `results/analysis_upload_bundle_matrix_audit.md`，按目标 venue 选择作者版、
+   匿名版、ACM/TQC review 版和 payload/source-data bundle。
 
 ## 填完后的通过标准
 
 - `./verify_submission_package.sh` 通过。
 - `results/analysis_submission_package_verifier.md` 显示 terminal package verifier 全部 pass。
 - `results/analysis_upload_bundle_matrix_audit.md` 中所有 upload bundle 均为 pass。
+- `results/analysis_final_upload_plan_tool_audit.md` 中三条 synthetic route 均为 pass。
 - `results/analysis_submission_readiness_audit.md` 中没有 `needs revision`。
 - 最终上传副本不再保留未处理的 `AUTHOR INPUT REQUIRED`。
 - 如果双盲，匿名稿和匿名 artifact 链接中没有作者姓名、个人仓库、个人邮箱或可追溯致谢。

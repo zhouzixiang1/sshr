@@ -284,6 +284,18 @@ BITFLIP_NEURAL_BUDGET_PATHS = {
     "results/manifest_bitflip_neural_budget_sweep.json",
     "paper_latex/tables/bitflip_neural_budget_sweep.tex",
 }
+BITFLIP_PRIOR_FEATURE_GATE_PATHS = {
+    "analyze_bitflip_prior_difficulty_slices.py",
+    "analyze_bitflip_prior_feature_gate.py",
+    "results/summary_bitflip_prior_difficulty_slices.csv",
+    "results/analysis_bitflip_prior_difficulty_slices.md",
+    "results/manifest_bitflip_prior_difficulty_slices.json",
+    "results/summary_bitflip_prior_feature_gate.csv",
+    "results/analysis_bitflip_prior_feature_gate.md",
+    "results/manifest_bitflip_prior_feature_gate.json",
+    "paper_latex/tables/bitflip_prior_difficulty_slices.tex",
+    "paper_latex/tables/bitflip_prior_feature_gate.tex",
+}
 FRONTIER_RANDOM_DEPTH_PATHS = {
     "analyze_frontier_random_depth_control.py",
     "results/summary_frontier_random_depth_control.csv",
@@ -694,6 +706,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    bitflip_gate_missing = sorted(BITFLIP_PRIOR_FEATURE_GATE_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload bit-flip learned-prior localization and gate evidence",
+            "pass" if not bitflip_gate_missing else "needs revision",
+            f"bitflip_prior_gate_files={len(BITFLIP_PRIOR_FEATURE_GATE_PATHS)}; missing={bitflip_gate_missing or 'none'}.",
+            "Ensure the uploadable archive includes the learned-prior difficulty-slice and ANF-term feature-gate evidence.",
+        )
+    )
+
     frontier_random_missing = sorted(FRONTIER_RANDOM_DEPTH_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -941,6 +963,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "neural_mcts_claim_calibration_paths": sorted(NEURAL_MCTS_CLAIM_CALIBRATION_PATHS),
         "bitflip_random_prior_paths": sorted(BITFLIP_RANDOM_PRIOR_PATHS),
         "bitflip_neural_budget_paths": sorted(BITFLIP_NEURAL_BUDGET_PATHS),
+        "bitflip_prior_feature_gate_paths": sorted(BITFLIP_PRIOR_FEATURE_GATE_PATHS),
         "frontier_random_depth_paths": sorted(FRONTIER_RANDOM_DEPTH_PATHS),
         "stochastic_control_stability_paths": sorted(STOCHASTIC_CONTROL_STABILITY_PATHS),
         "headline_numeric_paths": sorted(HEADLINE_NUMERIC_PATHS),

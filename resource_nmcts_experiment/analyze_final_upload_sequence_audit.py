@@ -42,6 +42,8 @@ AUTHOR_MINIMAL_FORM_MANIFEST = RESULTS / "manifest_author_minimal_form_coverage.
 METADATA_ANSWER_TEMPLATE_MANIFEST = RESULTS / "manifest_metadata_answer_template_coverage.json"
 METADATA_CLOSURE_MANIFEST = RESULTS / "manifest_submission_metadata_closure_path.json"
 TEXT_PREVIEW_MANIFEST = RESULTS / "manifest_submission_text_preview.json"
+FINAL_UPLOAD_PLAN_MANIFEST = RESULTS / "manifest_final_upload_plan.json"
+FINAL_UPLOAD_PLAN_TOOL_MANIFEST = RESULTS / "manifest_final_upload_plan_tool_audit.json"
 FINAL_HUMAN_GATE_MANIFEST = RESULTS / "manifest_final_human_gate_audit.json"
 
 SUMMARY = RESULTS / "summary_final_upload_sequence_audit.csv"
@@ -221,19 +223,45 @@ def build_rows() -> list[dict[str, str]]:
         "generated_availability_statements.md",
         "generated_cover_letter.md",
         "generated_submission_text.md",
+        "generated_upload_plan.md",
     )
     preview_ok, preview_missing = contains_all(all_docs, preview_tokens)
     preview_counts = status_counts(preview_manifest)
     previews_ignored = bool(preview_manifest.get("private_outputs_are_git_ignored", False)) if preview_manifest else False
+    upload_plan_manifest = read_json(FINAL_UPLOAD_PLAN_MANIFEST)
+    upload_plan_tool_manifest = read_json(FINAL_UPLOAD_PLAN_TOOL_MANIFEST)
+    upload_plan_counts = status_counts(upload_plan_manifest)
+    upload_plan_revisions = needs_revision(upload_plan_manifest)
+    upload_plan_ignored = (
+        bool(upload_plan_manifest.get("private_output_is_git_ignored", False)) if upload_plan_manifest else False
+    )
+    upload_plan_tool_counts = status_counts(upload_plan_tool_manifest)
+    upload_plan_tool_revisions = needs_revision(upload_plan_tool_manifest)
+    upload_plan_tool_private = (
+        bool(upload_plan_tool_manifest.get("uses_private_metadata", True)) if upload_plan_tool_manifest else True
+    )
     rows.append(
         row(
             "Private preview review path",
-            "pass" if preview_ok and previews_ignored and preview_counts.get("needs revision", 0) == 0 else "needs revision",
+            "pass"
+            if preview_ok
+            and previews_ignored
+            and preview_counts.get("needs revision", 0) == 0
+            and upload_plan_revisions == 0
+            and upload_plan_ignored
+            and upload_plan_tool_revisions == 0
+            and not upload_plan_tool_private
+            else "needs revision",
             (
                 f"missing_doc_tokens={preview_missing or 'none'}; "
-                f"preview_counts={preview_counts}; private_outputs_are_git_ignored={previews_ignored}."
+                f"preview_counts={preview_counts}; private_outputs_are_git_ignored={previews_ignored}; "
+                f"upload_plan_counts={upload_plan_counts}; upload_plan_revisions={upload_plan_revisions}; "
+                f"upload_plan_private_output_ignored={upload_plan_ignored}; "
+                f"upload_plan_tool_counts={upload_plan_tool_counts}; "
+                f"upload_plan_tool_revisions={upload_plan_tool_revisions}; "
+                f"upload_plan_tool_uses_private_metadata={upload_plan_tool_private}."
             ),
-            "Review generated private declarations, availability text, cover letter, and submission-system text before upload.",
+            "Review generated private declarations, availability text, cover letter, submission-system text, and route-specific upload plan before upload.",
         )
     )
 

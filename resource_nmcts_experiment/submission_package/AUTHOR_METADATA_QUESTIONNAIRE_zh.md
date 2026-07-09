@@ -10,7 +10,7 @@ $EDITOR submission_package/submission_metadata_answers.json
 ./verify_submission_package.sh
 ```
 
-私有短答案文件 `submission_package/submission_metadata_answers.json` 和生成后的 `submission_package/submission_metadata.json` 都被 Git 忽略。生成后的元数据会由 `validate_submission_metadata.py` 校验，并生成同样被 Git 忽略的 `generated_author_declarations.md`、`generated_availability_statements.md`、`generated_cover_letter.md` 和 `generated_submission_text.md` 供投稿系统复制粘贴。
+私有短答案文件 `submission_package/submission_metadata_answers.json` 和生成后的 `submission_package/submission_metadata.json` 都被 Git 忽略。生成后的元数据会由 `validate_submission_metadata.py` 校验，并生成同样被 Git 忽略的 `generated_author_declarations.md`、`generated_availability_statements.md`、`generated_cover_letter.md`、`generated_submission_text.md` 和 `generated_upload_plan.md` 供投稿系统复制粘贴与最终上传路由核对。
 
 ## 0. 不要改动的论文边界
 

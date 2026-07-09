@@ -75,6 +75,12 @@ FINAL_UPLOAD_SEQUENCE_MANIFEST = RESULTS / "manifest_final_upload_sequence_audit
 UPLOAD_BUNDLE_MATRIX_ANALYSIS = RESULTS / "analysis_upload_bundle_matrix_audit.md"
 UPLOAD_BUNDLE_MATRIX_SUMMARY = RESULTS / "summary_upload_bundle_matrix_audit.csv"
 UPLOAD_BUNDLE_MATRIX_MANIFEST = RESULTS / "manifest_upload_bundle_matrix_audit.json"
+FINAL_UPLOAD_PLAN_ANALYSIS = RESULTS / "analysis_final_upload_plan.md"
+FINAL_UPLOAD_PLAN_SUMMARY = RESULTS / "summary_final_upload_plan.csv"
+FINAL_UPLOAD_PLAN_MANIFEST = RESULTS / "manifest_final_upload_plan.json"
+FINAL_UPLOAD_PLAN_TOOL_ANALYSIS = RESULTS / "analysis_final_upload_plan_tool_audit.md"
+FINAL_UPLOAD_PLAN_TOOL_SUMMARY = RESULTS / "summary_final_upload_plan_tool_audit.csv"
+FINAL_UPLOAD_PLAN_TOOL_MANIFEST = RESULTS / "manifest_final_upload_plan_tool_audit.json"
 PAYLOAD_ROUNDTRIP_ANALYSIS = RESULTS / "analysis_payload_roundtrip_audit.md"
 PAYLOAD_ROUNDTRIP_SUMMARY = RESULTS / "summary_payload_roundtrip_audit.csv"
 PAYLOAD_ROUNDTRIP_MANIFEST = RESULTS / "manifest_payload_roundtrip_audit.json"
@@ -857,6 +863,42 @@ def build_rows() -> list[dict[str, str]]:
     upload_bundle_rows = upload_bundle_manifest.get("rows", "missing") if upload_bundle_manifest else "missing"
     upload_bundle_ready = (
         bool(upload_bundle_manifest.get("bundle_matrix_ready", False)) if upload_bundle_manifest else False
+    )
+    final_upload_plan_manifest = read_json(FINAL_UPLOAD_PLAN_MANIFEST)
+    final_upload_plan_counts = final_upload_plan_manifest.get("status_counts", {}) if final_upload_plan_manifest else {}
+    final_upload_plan_revisions = (
+        int(final_upload_plan_manifest.get("needs_revision_count", -1)) if final_upload_plan_manifest else -1
+    )
+    final_upload_plan_author_input = (
+        int(final_upload_plan_manifest.get("needs_author_input_count", -1)) if final_upload_plan_manifest else -1
+    )
+    final_upload_plan_route = (
+        final_upload_plan_manifest.get("route", "missing") if final_upload_plan_manifest else "missing"
+    )
+    final_upload_plan_ignored = (
+        bool(final_upload_plan_manifest.get("private_output_is_git_ignored", False))
+        if final_upload_plan_manifest
+        else False
+    )
+    final_upload_plan_tool_manifest = read_json(FINAL_UPLOAD_PLAN_TOOL_MANIFEST)
+    final_upload_plan_tool_counts = (
+        final_upload_plan_tool_manifest.get("status_counts", {}) if final_upload_plan_tool_manifest else {}
+    )
+    final_upload_plan_tool_revisions = (
+        int(final_upload_plan_tool_manifest.get("needs_revision_count", -1))
+        if final_upload_plan_tool_manifest
+        else -1
+    )
+    final_upload_plan_tool_rows = (
+        final_upload_plan_tool_manifest.get("rows", "missing") if final_upload_plan_tool_manifest else "missing"
+    )
+    final_upload_plan_tool_routes = (
+        final_upload_plan_tool_manifest.get("synthetic_routes", []) if final_upload_plan_tool_manifest else []
+    )
+    final_upload_plan_tool_private = (
+        bool(final_upload_plan_tool_manifest.get("uses_private_metadata", True))
+        if final_upload_plan_tool_manifest
+        else True
     )
     editorial_screening_manifest = read_json(EDITORIAL_SCREENING_MANIFEST)
     editorial_screening_counts = (
@@ -1855,6 +1897,23 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Upload bundle matrix audit maps author, anonymous, ACM/TQC, payload, support, private-local, and venue-decision bundles to checked files and privacy/claim boundaries; rows={upload_bundle_rows}; status_counts={upload_bundle_counts}; needs_revision_count={upload_bundle_revisions}; bundle_matrix_ready={upload_bundle_ready}.",
             "next_action": "Rerun analyze_upload_bundle_matrix_audit.py after changing PDF/source outputs, payload packaging, support docs, private-file boundaries, target format, or final upload route docs.",
+        },
+        {
+            "item": "Final upload-plan generator",
+            "status": "pass"
+            if FINAL_UPLOAD_PLAN_ANALYSIS.exists()
+            and FINAL_UPLOAD_PLAN_SUMMARY.exists()
+            and FINAL_UPLOAD_PLAN_MANIFEST.exists()
+            and FINAL_UPLOAD_PLAN_TOOL_ANALYSIS.exists()
+            and FINAL_UPLOAD_PLAN_TOOL_SUMMARY.exists()
+            and FINAL_UPLOAD_PLAN_TOOL_MANIFEST.exists()
+            and final_upload_plan_revisions == 0
+            and final_upload_plan_ignored
+            and final_upload_plan_tool_revisions == 0
+            and not final_upload_plan_tool_private
+            else "needs revision",
+            "evidence": f"Final upload-plan generator converts filled private metadata into an ignored route-specific upload checklist; current_route={final_upload_plan_route}; current_status_counts={final_upload_plan_counts}; needs_author_input_count={final_upload_plan_author_input}; current_needs_revision_count={final_upload_plan_revisions}; private_output_is_git_ignored={final_upload_plan_ignored}; synthetic_rows={final_upload_plan_tool_rows}; synthetic_routes={final_upload_plan_tool_routes}; synthetic_status_counts={final_upload_plan_tool_counts}; synthetic_needs_revision_count={final_upload_plan_tool_revisions}; uses_private_metadata={final_upload_plan_tool_private}.",
+            "next_action": "Rerun make_final_upload_plan.py and analyze_final_upload_plan_tool_audit.py after changing upload-route logic, private metadata workflow, or upload bundle files.",
         },
         {
             "item": "Compiled anonymous review draft",

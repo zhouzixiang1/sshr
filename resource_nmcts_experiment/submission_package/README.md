@@ -90,6 +90,13 @@ noise modeling, or magic-state-factory accounting.
   maps the author, anonymous, ACM/TQC, source/data payload, support-template,
   private-local, and venue-decision bundles to checked files and upload
   boundaries.
+- `../results/analysis_final_upload_plan.md`: public redacted audit for the
+  ignored route-specific upload plan generated after private metadata is
+  filled.
+- `../results/analysis_final_upload_plan_tool_audit.md`: synthetic route audit
+  for the final upload-plan generator, covering author-labeled, generic
+  anonymous, and ACM/TQC anonymous upload paths without reading private
+  metadata.
 - `../results/analysis_editorial_screening_audit.md`: audit that checks the
   editor-facing path for scope, novelty, comparison fairness, counterpoints,
   AI-claim boundaries, large-scale verification boundaries, reproducibility,
@@ -213,6 +220,7 @@ generated private previews:
 - `generated_availability_statements.md`
 - `generated_cover_letter.md`
 - `generated_submission_text.md`
+- `generated_upload_plan.md`
 
 These generated files are for local copy/paste into a target venue submission
 system and are excluded from the public payload archive.
@@ -287,6 +295,8 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python selftest_submission_metadata_pipeline.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_anonymous_review_readiness.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python make_submission_text_preview.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python make_final_upload_plan.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_final_upload_plan_tool_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_roundtrip_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_extraction_smoke_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_payload_verifier_smoke_audit.py
@@ -316,6 +326,8 @@ rg -n "needs author input|pass:|file count|archive sha256|Submission support|unr
   results/analysis_submission_metadata_pipeline_selftest.md \
   results/analysis_anonymous_review_readiness.md \
   results/analysis_submission_text_preview.md \
+  results/analysis_final_upload_plan.md \
+  results/analysis_final_upload_plan_tool_audit.md \
   results/analysis_payload_roundtrip_audit.md \
   results/analysis_payload_extraction_smoke_audit.md \
   results/analysis_payload_verifier_smoke_audit.md \

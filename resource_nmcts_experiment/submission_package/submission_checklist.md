@@ -77,6 +77,8 @@ Use this checklist immediately before uploading the manuscript.
 - Metadata closure-path audit: `results/analysis_submission_metadata_closure_path.md`
 - Final upload sequence audit: `results/analysis_final_upload_sequence_audit.md`
 - Upload bundle matrix audit: `results/analysis_upload_bundle_matrix_audit.md`
+- Final upload-plan audit: `results/analysis_final_upload_plan.md`
+- Final upload-plan tool audit: `results/analysis_final_upload_plan_tool_audit.md`
 - Metadata pipeline self-test: `results/analysis_submission_metadata_pipeline_selftest.md`
 - Anonymous-review readiness audit: `results/analysis_anonymous_review_readiness.md`
 - Private submission text preview audit: `results/analysis_submission_text_preview.md`
@@ -141,6 +143,8 @@ Run these from `resource_nmcts_experiment/`:
   validate_submission_metadata.py \
   make_submission_metadata_from_answers.py \
   make_submission_metadata_starter.py \
+  make_final_upload_plan.py \
+  analyze_final_upload_plan_tool_audit.py \
   selftest_submission_metadata_pipeline.py \
   analyze_payload_roundtrip_audit.py \
   analyze_payload_extraction_smoke_audit.py \
@@ -160,9 +164,9 @@ rg -n "Overfull|Underfull|undefined|Undefined|Warning|Error|LaTeX Warning|Rerun"
 Expected current state:
 
 - Machine snapshot tokens checked by `analyze_public_handoff_freshness_audit.py`:
-  PDF pages=51/51; readiness=83 pass + 1 needs author input;
-  payload_files=1191; artifact_registry=31 families / 161 raw CSV / 80312 raw rows;
-  source_privacy=0 strict leaks / 57 provenance files / 1148 payload text files;
+  PDF pages=51/51; readiness=84 pass + 1 needs author input;
+  payload_files=1196; artifact_registry=31 families / 161 raw CSV / 80312 raw rows;
+  source_privacy=0 strict leaks / 57 provenance files / 1153 payload text files;
   comparison_validity=8/8 pass; novelty_scorecard=6/6 pass;
   goal_gate=author/venue metadata remains open.
 - Archive manifest: all payload groups complete.
@@ -174,6 +178,9 @@ Expected current state:
 - Upload bundle matrix audit: author, anonymous, ACM/TQC, source/data payload,
   support-template, private-local, and venue-decision bundles all pass their
   file, privacy, and claim-boundary checks.
+- Final upload-plan generator: current missing private metadata is an
+  author-input state, while the synthetic author-labeled, generic anonymous,
+  and ACM/TQC anonymous route audit passes without using private values.
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
 - Comparison protocol audit: all baseline layers have role, evidence, comparability, counterpoint, artifact, and manuscript-anchor coverage.
 - Comparison target validity audit: comparison families are explicitly labeled as primary benchmark, external stress test, exact reversible counterpoint, phase proxy, causal control, scalability verification, or non-dominance boundary.
@@ -201,7 +208,7 @@ Expected current state:
 - Metadata closure-path audit: final author/venue metadata intake is explicit, private, ignored by Git, rehearsed with synthetic metadata, and tied to the goal-closure gate.
 - Metadata pipeline self-test: synthetic non-private metadata exercises validator and preview renderers with no `needs revision` rows.
 - Anonymous-review readiness: no `needs revision` rows; an anonymous review draft is compiled, and final anonymous artifact links remain explicit author-input actions if double-blind review is required.
-- Private submission text preview: public audit exists; generated private Markdown previews remain ignored by Git and excluded from the payload archive.
+- Private submission text preview: public audit exists; generated private Markdown previews, including `generated_upload_plan.md`, remain ignored by Git and excluded from the payload archive.
 - Goal-completion audit: all research/package requirements pass and only author/venue gates remain open.
 - Traceability audit: all claim families complete.
 - Readiness audit: all paper/package checks pass except author-specific declarations.
@@ -222,6 +229,6 @@ Expected current state:
 2. Upload `submission_package/dist/resource_nmcts_submission_payload.tar.gz` or a venue-specific source archive assembled from it.
 3. Upload generated figure files and source data separately if the venue requires them outside the payload archive.
 4. Paste author declarations into the submission system.
-5. Paste generated private preview text from `submission_package/generated_*.md` after reviewing venue wording, or paste the manually edited declarations if the venue requires a different format.
+5. Paste generated private preview text from `submission_package/generated_*.md`, including the route-specific `generated_upload_plan.md`, after reviewing venue wording, or paste the manually edited declarations if the venue requires a different format.
 6. Paste the cover letter and reviewer suggestions if requested.
 7. Review the generated proof for table placement and figure readability before final approval.

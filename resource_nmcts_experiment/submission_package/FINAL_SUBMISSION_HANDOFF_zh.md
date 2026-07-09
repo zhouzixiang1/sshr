@@ -23,10 +23,10 @@
 以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，代表当前公开交接状态：
 
 - PDF pages=51/51
-- readiness=83 pass + 1 needs author input
-- payload_files=1191
+- readiness=84 pass + 1 needs author input
+- payload_files=1196
 - artifact_registry=31 families / 161 raw CSV / 80312 raw rows
-- source_privacy=0 strict leaks / 57 provenance files / 1148 payload text files
+- source_privacy=0 strict leaks / 57 provenance files / 1153 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open
@@ -62,6 +62,7 @@ $EDITOR submission_package/submission_metadata_answers.json
 ```bash
 ./rebuild_submission_package.sh
 ./verify_submission_package.sh
+/opt/anaconda3/envs/mcts-qoracle/bin/python make_final_upload_plan.py
 ```
 
 6. 检查生成的私有预览文件：
@@ -70,6 +71,7 @@ $EDITOR submission_package/submission_metadata_answers.json
 - `submission_package/generated_availability_statements.md`
 - `submission_package/generated_cover_letter.md`
 - `submission_package/generated_submission_text.md`
+- `submission_package/generated_upload_plan.md`
 
 7. 如果目标期刊要求双盲审稿，使用匿名 PDF 和匿名源码作为投稿稿件，并把数据/代码
    链接替换成匿名审稿链接。不要把作者姓名、个人仓库、个人邮箱或可追溯致谢放进

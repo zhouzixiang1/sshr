@@ -19,6 +19,7 @@ traditional structure-mechanism support,
 search-control baseline coverage,
 learned-control audit coverage,
 learned-prior difficulty-slice localization,
+learned-prior feature-gate localization,
 neural/MCTS claim-calibration coverage,
 runtime-envelope feasibility coverage,
 frontier random-depth control coverage,
@@ -156,6 +157,8 @@ BITFLIP_NEURAL_BUDGET_MANIFEST = RESULTS / "manifest_bitflip_neural_budget_sweep
 BITFLIP_NEURAL_BUDGET_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_neural_budget_sweep.tex"
 BITFLIP_PRIOR_DIFFICULTY_MANIFEST = RESULTS / "manifest_bitflip_prior_difficulty_slices.json"
 BITFLIP_PRIOR_DIFFICULTY_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_prior_difficulty_slices.tex"
+BITFLIP_PRIOR_FEATURE_GATE_MANIFEST = RESULTS / "manifest_bitflip_prior_feature_gate.json"
+BITFLIP_PRIOR_FEATURE_GATE_TABLE = THIS_DIR / "paper_latex" / "tables" / "bitflip_prior_feature_gate.tex"
 FRONTIER_RANDOM_DEPTH_MANIFEST = RESULTS / "manifest_frontier_random_depth_control.json"
 FRONTIER_RANDOM_DEPTH_TABLE = THIS_DIR / "paper_latex" / "tables" / "frontier_random_depth_control.tex"
 STOCHASTIC_CONTROL_STABILITY_MANIFEST = RESULTS / "manifest_stochastic_control_stability.json"
@@ -1333,6 +1336,40 @@ def verify_bitflip_prior_difficulty() -> dict[str, str]:
     )
 
 
+def verify_bitflip_prior_feature_gate() -> dict[str, str]:
+    manifest = read_json(BITFLIP_PRIOR_FEATURE_GATE_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    pairs = int(manifest.get("aggregate_pairs", -1)) if manifest else -1
+    enabled = int(manifest.get("aggregate_gate_enabled", -1)) if manifest else -1
+    wins = int(manifest.get("aggregate_score_wins", -1)) if manifest else -1
+    losses = int(manifest.get("aggregate_score_losses", -1)) if manifest else -1
+    learned_wins = int(manifest.get("aggregate_learned_score_wins", -1)) if manifest else -1
+    retained = bool(manifest.get("aggregate_retained_learned_wins", False)) if manifest else False
+    overhead_cut = float(manifest.get("aggregate_learned_overhead_reduction", -1.0)) if manifest else -1.0
+    table_exists = BITFLIP_PRIOR_FEATURE_GATE_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and pairs >= 1500
+        and enabled >= 1000
+        and wins == learned_wins
+        and losses == 0
+        and retained
+        and overhead_cut > 0.1
+        and table_exists
+        and anchor
+        else "needs revision"
+    )
+    return row(
+        "Bit-flip learned-prior feature gate",
+        status,
+        f"pairs={pairs}; gate_enabled={enabled}; score_wins={wins}; learned_score_wins={learned_wins}; score_losses={losses}; retained_learned_wins={retained}; learned_overhead_reduction={overhead_cut:.4f}; needs_revision_count={revisions}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_bitflip_prior_feature_gate.py and restore the feature-gated learned-prior table and manuscript anchor.",
+    )
+
+
 def verify_frontier_random_depth() -> dict[str, str]:
     manifest = read_json(FRONTIER_RANDOM_DEPTH_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -2211,6 +2248,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_search_control(),
             verify_bitflip_neural_budget(),
             verify_bitflip_prior_difficulty(),
+            verify_bitflip_prior_feature_gate(),
             verify_root_action_ranker(),
             verify_phase_rotation_precision(),
             verify_phase_rotation_sequence_smoke(),

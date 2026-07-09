@@ -113,6 +113,12 @@ def build_rows() -> list[dict[str, str]]:
     low_budget_ties = sum(int(row["ties"]) for row in low_budget_score_rows)
     low_budget_mean_rel = sum(float(row["mean_relative"]) for row in low_budget_score_rows) / max(len(low_budget_score_rows), 1)
     low_budget_mean_time = sum(float(row["mean_relative"]) for row in low_budget_time_rows) / max(len(low_budget_time_rows), 1)
+    bitflip_gate = require_row(
+        read_csv(RESULTS / "summary_bitflip_prior_feature_gate.csv"),
+        row_type="all_aggregate",
+        budget="all",
+        method="all_methods",
+    )
 
     root_ranker = read_csv(RESULTS / "summary_root_action_ranker_audit.csv")
     root_union = require_row(root_ranker, component="Combined heuristic top-4 plus neural top-12 extension")
@@ -225,6 +231,31 @@ def build_rows() -> list[dict[str, str]]:
                 and low_budget_losses == 0
                 and low_budget_wins > 0
                 and low_budget_mean_rel < 0.0
+            ),
+        },
+        {
+            "component": "Bit-flip ANF-term prior gate",
+            "claim_class": "bounded",
+            "scope": (
+                f"{bitflip_gate['pairs']} paired rows; "
+                "static 6--23 ANF-term deployment gate"
+            ),
+            "quality": (
+                f"retains {bitflip_gate['score_wins']}/{bitflip_gate['learned_score_wins']} "
+                f"always-learned score wins; {bitflip_gate['score_losses']} score losses; "
+                f"{pct_ratio(bitflip_gate['mean_score_relative'])}"
+            ),
+            "cost": (
+                f"{pct_ratio(bitflip_gate['mean_time_relative'])} runtime vs no-prior; "
+                f"{pct_ratio(bitflip_gate['learned_overhead_reduction'])} overhead cut vs always-learned"
+            ),
+            "role": "bounded deployment rule from input ANF terms; not held-out policy claim",
+            "status": status_from(
+                int(bitflip_gate["pairs"]) >= 1500
+                and bitflip_gate["retained_learned_wins"] == "True"
+                and int(bitflip_gate["score_losses"]) == 0
+                and float(bitflip_gate["mean_score_relative"]) < 0.0
+                and float(bitflip_gate["learned_overhead_reduction"]) > 0.1
             ),
         },
         {
@@ -377,6 +408,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
             "results/summary_boolean_neural_guard_vs_deterministic.csv",
             "results/summary_bitflip_random_prior_control.csv",
             "results/summary_bitflip_neural_budget_sweep.csv",
+            "results/summary_bitflip_prior_feature_gate.csv",
             "results/summary_root_action_ranker_audit.csv",
         ],
         "outputs": {

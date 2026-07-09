@@ -1,0 +1,34 @@
+{
+  "aggregate_always_learned_time_relative": 0.34489318027871524,
+  "aggregate_gate_enabled": 1179,
+  "aggregate_learned_overhead_reduction": 0.14609791969554917,
+  "aggregate_learned_score_wins": 328,
+  "aggregate_mean_score_relative": -0.010652914059532335,
+  "aggregate_mean_time_relative": 0.29450500412281294,
+  "aggregate_pairs": 1593,
+  "aggregate_retained_learned_wins": true,
+  "aggregate_score_losses": 0,
+  "aggregate_score_wins": 328,
+  "gate": {
+    "feature": "anf_terms",
+    "max": 23,
+    "min": 6
+  },
+  "input_rows": 3186,
+  "inputs": [
+    "results/raw_bitflip_neural_budget_sweep.csv",
+    "results/raw_traditional_resource_learned_prior.csv",
+    "results/raw_traditional_resource_no_prior.csv"
+  ],
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_bitflip_prior_feature_gate.md",
+    "manifest": "results/manifest_bitflip_prior_feature_gate.json",
+    "summary": "results/summary_bitflip_prior_feature_gate.csv",
+    "table": "paper_latex/tables/bitflip_prior_feature_gate.tex"
+  },
+  "rows": 13,
+  "script": "analyze_bitflip_prior_feature_gate.py",
+  "table": "paper_latex/tables/bitflip_prior_feature_gate.tex",
+  "table_anchor_present": true
+}

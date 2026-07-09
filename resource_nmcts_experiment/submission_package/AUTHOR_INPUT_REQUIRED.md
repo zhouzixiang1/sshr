@@ -22,7 +22,8 @@ instead if you prefer a completely blank template.  `submission_metadata.json`
 is ignored by Git so private author metadata is not committed accidentally.
 When the metadata file is complete, the rebuild also creates ignored private previews:
 `generated_author_declarations.md`, `generated_availability_statements.md`,
-`generated_cover_letter.md`, and `generated_submission_text.md`.
+`generated_cover_letter.md`, `generated_submission_text.md`, and
+`generated_upload_plan.md`.
 Before generating final upload text, `validate_submission_metadata.py` checks common
 format issues without writing private values to tracked files.
 
@@ -138,7 +139,7 @@ Quantum, and archive/license gates to the private metadata fields.
 - `submission_package/COMPARISON_SIGNIFICANCE_MATRIX_zh.md` as the Chinese comparison-role matrix before editing cover-letter, response, or venue-system claim text.
 - `submission_package/submission_metadata_answers.json` for the short ignored private answer file generated from `submission_metadata_answers_template.json`.
 - `submission_package/submission_metadata.json` for the private structured intake.
-- `submission_package/generated_*.md` private previews, generated automatically from the structured intake and intentionally ignored by Git.
+- `submission_package/generated_*.md` private previews and the route-specific upload plan, generated automatically from the structured intake and intentionally ignored by Git.
 - `submission_package/author_declarations_template.md` if the venue wants declarations in prose form.
 - `submission_package/cover_letter_template.md` after the target venue and routing details are known.
 - `submission_package/submission_checklist.md` after venue formatting, reference style, word limit, supplementary-material policy, and AI-disclosure policy are confirmed.
