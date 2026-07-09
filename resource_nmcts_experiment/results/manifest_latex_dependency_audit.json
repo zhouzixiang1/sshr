@@ -1,0 +1,25 @@
+{
+  "dependency_count": 80,
+  "dependency_type_counts": {
+    "bibliography": 2,
+    "figure": 14,
+    "main_source": 2,
+    "tex_input": 62
+  },
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_latex_dependency_audit.md",
+    "manifest": "results/manifest_latex_dependency_audit.json",
+    "summary": "results/summary_latex_dependency_audit.csv"
+  },
+  "payload_manifest": "results/manifest_submission_payload_archive.json",
+  "python": "3.11.15",
+  "script": "analyze_latex_dependency_audit.py",
+  "source_files": {
+    "anonymous_tex": "paper_latex/resource_nmcts_submission_anonymous.tex",
+    "author_tex": "paper_latex/resource_nmcts_submission_v1.tex"
+  },
+  "status_counts": {
+    "pass": 80
+  }
+}

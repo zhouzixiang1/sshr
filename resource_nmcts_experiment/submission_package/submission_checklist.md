@@ -40,7 +40,9 @@ Use this checklist immediately before uploading the manuscript.
 - Terminal package verifier: `results/analysis_submission_package_verifier.md`
 - Claim-scope lint: `results/analysis_claim_scope_lint.md`
 - Comparison protocol audit: `results/analysis_comparison_protocol_audit.md`
+- Headline numeric consistency audit: `results/analysis_headline_numeric_consistency.md`
 - Figure asset audit: `results/analysis_figure_asset_audit.md`
+- LaTeX dependency audit: `results/analysis_latex_dependency_audit.md`
 - Metadata audit: `results/analysis_submission_metadata_audit.md`
 - Metadata validator: `results/analysis_submission_metadata_validator.md`
 - Metadata pipeline self-test: `results/analysis_submission_metadata_pipeline_selftest.md`
@@ -74,7 +76,9 @@ Run these from `resource_nmcts_experiment/`:
   analyze_submission_archive_manifest.py \
   analyze_claim_scope_lint.py \
   analyze_comparison_protocol_audit.py \
+  analyze_headline_numeric_consistency.py \
   analyze_figure_asset_audit.py \
+  analyze_latex_dependency_audit.py \
   analyze_submission_metadata_audit.py \
   analyze_anonymous_review_readiness.py \
   analyze_submission_readiness_audit.py \
@@ -102,7 +106,9 @@ Expected current state:
 - Payload extraction smoke audit: the upload tarball extracts safely and runs comparison protocol, claim-scope lint, and artifact-rerun registry checks from the extracted tree.
 - Claim-scope lint: all required boundaries pass and no unguarded overclaim remains.
 - Comparison protocol audit: all baseline layers have role, evidence, comparability, counterpoint, artifact, and manuscript-anchor coverage.
+- Headline numeric consistency audit: all abstract-level numbers match generated CSV evidence and both author/anonymous TeX sources.
 - Figure asset audit: every manuscript figure has generated PDF/PNG/SVG assets and non-empty source-data CSV.
+- LaTeX dependency audit: every author/anonymous TeX input, figure reference, and bibliography file exists locally and is included in the upload payload.
 - Metadata audit: all author- and venue-specific fields are enumerated before upload, and any filled `submission_metadata.json` is checked.
 - Metadata validator: no `needs revision` rows; missing private metadata remains an author-input gate until filled.
 - Metadata pipeline self-test: synthetic non-private metadata exercises validator and preview renderers with no `needs revision` rows.

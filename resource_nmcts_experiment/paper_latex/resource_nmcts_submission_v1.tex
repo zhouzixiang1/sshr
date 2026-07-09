@@ -48,7 +48,7 @@ frontier controllers, Pareto archives, and baseline-preserving guards.  Unlike
 SSHR, the method does not search
 parallelotope candidates; SSHR is used only as a CNOT-oriented small-function
 baseline.  On 177 traditional functions with $n\leq6$, Pareto-\method{}
-reduces mean T-count by 72.25\% and mean weighted score by 67.80\% relative to
+reduces mean T-count by 73.92\% and mean weighted score by 67.80\% relative to
 direct \anf{} synthesis, and its score win/loss/tie counts against ESOP beam,
 weighted ESOP-MILP, and SSHR-H are 174/0/3, 167/3/7, and 173/4/0.  External
 probes show corresponding score wins against ROS-style LUT (309/0/0),
@@ -62,7 +62,7 @@ instances, a sparse depth-2/4 frontier matches the measured depth-2/3/4
 frontier while reducing evaluation time by 24.94--28.88\%, and a learned
 depth-4 gate preserves sparse-frontier score on a 144-pair multi-seed
 $n=24,28,32,40$ audit while saving 13.43\%.  Correctness is supported by
-15,294 symbolic, phase-search, and policy-pruning rows, plus 400/400 complete
+15,762 symbolic, phase-search, and policy-pruning rows, plus 400/400 complete
 \ttable{}-bridge rows for $n=21$--$25$.  The contribution is a verified
 logical-layer search method with strong T-count and weighted-score advantages,
 not a hardware-mapped, depth-only, or universal-dominance claim.
@@ -469,7 +469,7 @@ scope boundary for that group.}
 Figure~\ref{fig:traditional} and Table~\ref{tab:traditional} summarize the
 traditional $n\leq6$ slice.  Pareto-\method{} has the lowest mean T-count and
 weighted score among the shown internal baselines, reducing T-count by
-72.25\% and score by 67.80\% relative to direct \anf{} synthesis.  SSHR-H
+73.92\% and score by 67.80\% relative to direct \anf{} synthesis.  SSHR-H
 retains the lowest mean CNOT count, so the result is not a CNOT-only dominance
 claim.
 

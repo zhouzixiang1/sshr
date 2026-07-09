@@ -67,8 +67,14 @@ noise modeling, or magic-state-factory accounting.
 - `../results/analysis_comparison_protocol_audit.md`: machine-readable audit
   that checks each baseline layer has a role, evidence, comparability boundary,
   counterpoint coverage where relevant, and manuscript anchors.
+- `../results/analysis_headline_numeric_consistency.md`: audit that
+  recomputes abstract-level numerical claims from CSV evidence and checks the
+  author and anonymous TeX sources contain the matching headline tokens.
 - `../results/analysis_figure_asset_audit.md`: figure-asset audit that checks
   manuscript figure references, PDF/PNG/SVG outputs, and source-data CSVs.
+- `../results/analysis_latex_dependency_audit.md`: terminal audit that checks
+  author/anonymous TeX inputs, figure references, and bibliography files exist
+  locally and are included in the upload payload.
 
 ## Required Author Actions Before Upload
 
@@ -149,7 +155,9 @@ git diff --check
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_submission_package_verifier.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_claim_scope_lint.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_comparison_protocol_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_headline_numeric_consistency.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_figure_asset_audit.py
+/opt/anaconda3/envs/mcts-qoracle/bin/python analyze_latex_dependency_audit.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python validate_submission_metadata.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python selftest_submission_metadata_pipeline.py
 /opt/anaconda3/envs/mcts-qoracle/bin/python analyze_anonymous_review_readiness.py
@@ -163,7 +171,9 @@ rg -n "needs author input|pass:|file count|archive sha256|Submission support|unr
   results/analysis_submission_readiness_audit.md \
   results/analysis_claim_scope_lint.md \
   results/analysis_comparison_protocol_audit.md \
+  results/analysis_headline_numeric_consistency.md \
   results/analysis_figure_asset_audit.md \
+  results/analysis_latex_dependency_audit.md \
   results/manifest_claim_scope_lint.json \
   results/analysis_submission_metadata_validator.md \
   results/analysis_submission_metadata_pipeline_selftest.md \

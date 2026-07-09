@@ -48,6 +48,7 @@ run_py make_submission_text_preview.py
 run_py selftest_submission_metadata_pipeline.py
 run_py make_anonymous_review_draft.py
 run_py analyze_anonymous_review_readiness.py
+run_py analyze_headline_numeric_consistency.py
 run_py make_submission_figures.py
 run_py analyze_figure_asset_audit.py
 run_py analyze_submission_archive_manifest.py
@@ -62,6 +63,7 @@ echo "==> Building English submission PDF"
 
 run_py analyze_goal_completion_audit.py
 run_py make_submission_payload_archive.py
+run_py analyze_latex_dependency_audit.py
 run_py analyze_payload_roundtrip_audit.py
 run_py analyze_payload_extraction_smoke_audit.py
 run_py analyze_submission_readiness_audit.py

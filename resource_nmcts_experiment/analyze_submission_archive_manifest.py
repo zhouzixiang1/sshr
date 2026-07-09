@@ -55,6 +55,9 @@ TERMINAL_PACKAGE_OUTPUTS = {
     RESULTS / "summary_payload_extraction_smoke_audit.csv",
     RESULTS / "analysis_payload_extraction_smoke_audit.md",
     RESULTS / "manifest_payload_extraction_smoke_audit.json",
+    RESULTS / "summary_latex_dependency_audit.csv",
+    RESULTS / "analysis_latex_dependency_audit.md",
+    RESULTS / "manifest_latex_dependency_audit.json",
     TABLES / "submission_traceability_audit.tex",
 }
 

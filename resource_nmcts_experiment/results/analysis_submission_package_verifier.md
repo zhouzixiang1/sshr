@@ -4,19 +4,21 @@ This read-only verifier checks the terminal package invariants after the payload
 
 ## Status counts
 
-- pass: 19
+- pass: 21
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Compiled author PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=27, bytes=601125. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
-| Compiled anonymous PDF | pass | paper_latex/resource_nmcts_submission_anonymous.pdf pages=27, bytes=597770. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
-| Payload SHA sidecar | pass | actual=99cda22bbf39afbc4fe70662aae364b17d18119b28dfeb9fdb9388a9ba9572d6; sidecar=99cda22bbf39afbc4fe70662aae364b17d18119b28dfeb9fdb9388a9ba9572d6. | Regenerate the payload archive if the digests differ. |
-| Payload manifest consistency | pass | summary=99cda22bbf39afbc4fe70662aae364b17d18119b28dfeb9fdb9388a9ba9572d6; manifest=99cda22bbf39afbc4fe70662aae364b17d18119b28dfeb9fdb9388a9ba9572d6; file_count=859. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
-| Readiness audit terminal state | pass | status_counts={'pass': 30, 'needs author input': 1}. | Resolve any needs-revision rows; author-specific declarations remain manual. |
+| Compiled author PDF | pass | paper_latex/resource_nmcts_submission_v1.pdf pages=27, bytes=601127. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
+| Compiled anonymous PDF | pass | paper_latex/resource_nmcts_submission_anonymous.pdf pages=27, bytes=597773. | Rebuild the submission package and inspect latexmk output if the PDF is missing. |
+| Payload SHA sidecar | pass | actual=3a3d6579bfcf58c4310353d46fdcbf06e700215838b7899440de4e2bbb03b0d6; sidecar=3a3d6579bfcf58c4310353d46fdcbf06e700215838b7899440de4e2bbb03b0d6. | Regenerate the payload archive if the digests differ. |
+| Payload manifest consistency | pass | summary=3a3d6579bfcf58c4310353d46fdcbf06e700215838b7899440de4e2bbb03b0d6; manifest=3a3d6579bfcf58c4310353d46fdcbf06e700215838b7899440de4e2bbb03b0d6; file_count=864. | Regenerate make_submission_payload_archive.py outputs if summary and manifest disagree. |
+| Readiness audit terminal state | pass | status_counts={'pass': 32, 'needs author input': 1}. | Resolve any needs-revision rows; author-specific declarations remain manual. |
 | Artifact rerun registry coverage | pass | families=14; registry_raw=144; actual_raw=144. | Rerun analyze_artifact_rerun_registry.py after adding raw CSVs or driver scripts. |
 | Claim-scope lint | pass | unresolved_count=0; status_counts={'guarded': 59, 'pass': 5}. | Run analyze_claim_scope_lint.py and revise unguarded hardware-mapping, universal-dominance, optimality, or full-tool-reproduction claims. |
 | Comparison protocol audit | pass | layers=7; needs_revision_count=0; status_counts={'pass': 7}. | Run analyze_comparison_protocol_audit.py and restore missing baseline-role, evidence, comparability, counterpoint, or manuscript anchors. |
+| Headline numeric consistency | pass | claims=15; needs_revision_count=0; status_counts={'pass': 15}. | Run analyze_headline_numeric_consistency.py and align abstract tokens with CSV-derived evidence. |
 | Figure asset audit | pass | figures=7; needs_revision_count=0; status_counts={'pass': 7}. | Run make_submission_figures.py and analyze_figure_asset_audit.py to restore referenced PDF/PNG/SVG assets and source-data CSVs. |
+| LaTeX dependency audit | pass | dependencies=80; type_counts={'bibliography': 2, 'figure': 14, 'main_source': 2, 'tex_input': 62}; needs_revision_count=0; status_counts={'pass': 80}. | Run analyze_latex_dependency_audit.py after payload creation and restore missing TeX, table, figure, bibliography, or payload entries. |
 | Metadata starter dry-run | pass | returncode=0; missing_tokens=none; private_preexisting=False; private_created=False; private_modified=False. | Run make_submission_metadata_starter.py without --write-private and keep it read-only until author input is explicit. |
 | Private metadata validator | pass | needs_revision_count=0; status_counts={'needs author input': 1}. | Run validate_submission_metadata.py and fix metadata format or consistency rows before upload. |
 | Metadata pipeline self-test | pass | needs_revision_count=0; status_counts={'pass': 14}; synthetic_only=True; writes_private_metadata=False; writes_private_preview_files=False. | Run selftest_submission_metadata_pipeline.py and keep the fixture synthetic and non-private. |

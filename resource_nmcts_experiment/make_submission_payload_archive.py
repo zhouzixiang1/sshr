@@ -169,6 +169,9 @@ def write_manifest(path: Path, files: list[Path], missing: list[Path], archive_d
             rel(RESULTS / "summary_payload_extraction_smoke_audit.csv"),
             rel(RESULTS / "analysis_payload_extraction_smoke_audit.md"),
             rel(RESULTS / "manifest_payload_extraction_smoke_audit.json"),
+            rel(RESULTS / "summary_latex_dependency_audit.csv"),
+            rel(RESULTS / "analysis_latex_dependency_audit.md"),
+            rel(RESULTS / "manifest_latex_dependency_audit.json"),
         ],
         "files": [
             {

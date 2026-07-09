@@ -73,6 +73,12 @@ RERUN_REGISTRY_TABLE = THIS_DIR / "paper_latex" / "tables" / "artifact_rerun_reg
 FIGURE_ASSET_ANALYSIS = RESULTS / "analysis_figure_asset_audit.md"
 FIGURE_ASSET_SUMMARY = RESULTS / "summary_figure_asset_audit.csv"
 FIGURE_ASSET_MANIFEST = RESULTS / "manifest_figure_asset_audit.json"
+HEADLINE_NUMERIC_ANALYSIS = RESULTS / "analysis_headline_numeric_consistency.md"
+HEADLINE_NUMERIC_SUMMARY = RESULTS / "summary_headline_numeric_consistency.csv"
+HEADLINE_NUMERIC_MANIFEST = RESULTS / "manifest_headline_numeric_consistency.json"
+LATEX_DEPENDENCY_ANALYSIS = RESULTS / "analysis_latex_dependency_audit.md"
+LATEX_DEPENDENCY_SUMMARY = RESULTS / "summary_latex_dependency_audit.csv"
+LATEX_DEPENDENCY_MANIFEST = RESULTS / "manifest_latex_dependency_audit.json"
 PAIRED_EFFECT_ANALYSIS = RESULTS / "analysis_paired_effect_uncertainty.md"
 PAIRED_EFFECT_SUMMARY = RESULTS / "summary_paired_effect_uncertainty.csv"
 PAIRED_EFFECT_MANIFEST = RESULTS / "manifest_paired_effect_uncertainty.json"
@@ -150,6 +156,21 @@ def build_rows() -> list[dict[str, str]]:
     figure_asset_revisions = int(figure_asset_manifest.get("needs_revision_count", -1)) if figure_asset_manifest else -1
     figure_asset_counts = figure_asset_manifest.get("status_counts", {}) if figure_asset_manifest else {}
     figure_count = figure_asset_manifest.get("figures", "missing") if figure_asset_manifest else "missing"
+    headline_numeric_manifest = read_json(HEADLINE_NUMERIC_MANIFEST)
+    headline_numeric_revisions = (
+        int(headline_numeric_manifest.get("needs_revision_count", -1)) if headline_numeric_manifest else -1
+    )
+    headline_numeric_counts = headline_numeric_manifest.get("status_counts", {}) if headline_numeric_manifest else {}
+    headline_numeric_claims = headline_numeric_manifest.get("claims", "missing") if headline_numeric_manifest else "missing"
+    latex_dependency_manifest = read_json(LATEX_DEPENDENCY_MANIFEST)
+    latex_dependency_revisions = (
+        int(latex_dependency_manifest.get("needs_revision_count", -1)) if latex_dependency_manifest else -1
+    )
+    latex_dependency_counts = latex_dependency_manifest.get("status_counts", {}) if latex_dependency_manifest else {}
+    latex_dependency_count = latex_dependency_manifest.get("dependency_count", "missing") if latex_dependency_manifest else "missing"
+    latex_dependency_types = (
+        latex_dependency_manifest.get("dependency_type_counts", {}) if latex_dependency_manifest else {}
+    )
     text_preview_manifest = read_json(TEXT_PREVIEW_MANIFEST)
     text_preview_counts = text_preview_manifest.get("status_counts", {}) if text_preview_manifest else {}
     private_outputs_ignored = bool(text_preview_manifest.get("private_outputs_are_git_ignored", False))
@@ -254,6 +275,17 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_paired_effect_uncertainty.py after changing paired comparisons or score fields.",
         },
         {
+            "item": "Headline numeric consistency",
+            "status": "pass"
+            if HEADLINE_NUMERIC_ANALYSIS.exists()
+            and HEADLINE_NUMERIC_SUMMARY.exists()
+            and HEADLINE_NUMERIC_MANIFEST.exists()
+            and headline_numeric_revisions == 0
+            else "needs revision",
+            "evidence": f"Headline numeric audit recomputes abstract-level numbers from CSV evidence and checks author/anonymous TeX tokens; claims={headline_numeric_claims}; status_counts={headline_numeric_counts}; needs_revision_count={headline_numeric_revisions}.",
+            "next_action": "Rerun analyze_headline_numeric_consistency.py after changing headline numbers, comparison summaries, phase policy controls, or validation-row counts.",
+        },
+        {
             "item": "Claim-scope lint",
             "status": "pass"
             if CLAIM_SCOPE_ANALYSIS.exists()
@@ -280,6 +312,17 @@ def build_rows() -> list[dict[str, str]]:
             else "needs revision",
             "evidence": f"Figure asset audit checks manuscript figure references, generated PDF/PNG/SVG assets, and source-data CSVs; figures={figure_count}; status_counts={figure_asset_counts}; needs_revision_count={figure_asset_revisions}.",
             "next_action": "Rerun make_submission_figures.py and analyze_figure_asset_audit.py after changing figure code, source data, or TeX figure references.",
+        },
+        {
+            "item": "LaTeX dependency audit",
+            "status": "pass"
+            if LATEX_DEPENDENCY_ANALYSIS.exists()
+            and LATEX_DEPENDENCY_SUMMARY.exists()
+            and LATEX_DEPENDENCY_MANIFEST.exists()
+            and latex_dependency_revisions == 0
+            else "needs revision",
+            "evidence": f"LaTeX dependency audit checks author/anonymous source, table inputs, figure references, and bibliography files against local files and the upload payload; dependencies={latex_dependency_count}; type_counts={latex_dependency_types}; status_counts={latex_dependency_counts}; needs_revision_count={latex_dependency_revisions}.",
+            "next_action": "Rerun make_submission_payload_archive.py and analyze_latex_dependency_audit.py after editing TeX inputs, figures, bibliography, or payload packaging.",
         },
         {
             "item": "Raw rerun registry",
