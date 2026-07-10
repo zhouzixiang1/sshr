@@ -13,8 +13,8 @@ import sys
 from pathlib import Path
 
 
-THIS_DIR = Path(__file__).resolve().parent
-PAPER_DIR = THIS_DIR / "paper_latex"
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PAPER_DIR = PROJECT_ROOT / "paper_latex"
 ANONYMOUS_SOURCE = PAPER_DIR / "resource_nmcts_submission_anonymous.tex"
 ACM_SOURCE = PAPER_DIR / "resource_nmcts_submission_acm_tqc.tex"
 
@@ -121,7 +121,7 @@ def main() -> int:
             print(f"error: {issue}", file=sys.stderr)
         return 1
     ACM_SOURCE.write_text(output, encoding="utf-8")
-    print(f"wrote {ACM_SOURCE.relative_to(THIS_DIR)}")
+    print(f"wrote {ACM_SOURCE.relative_to(PROJECT_ROOT)}")
     return 0
 
 

@@ -1,0 +1,17 @@
+kind,variant,index,gate_type,controls,target,stage,T,CNOT,depth,gates,score
+gate,direct,1,MCT,x0;x1;x2,y,monomial x0*x1*x2,,,,,
+gate,direct,2,MCT,x0;x1;x3,y,monomial x0*x1*x3,,,,,
+gate,direct,3,MCT,x1;x2;x3,y,monomial x1*x2*x3,,,,,
+gate,direct,4,MCT,x0;x1;x4,y,monomial x0*x1*x4,,,,,
+gate,direct,5,MCT,x2;x3;x4,y,monomial x2*x3*x4,,,,,
+gate,resource_nmcts,1,MCT,x0;x1,a0,compute x0*x1,,,,,
+gate,resource_nmcts,2,MCT,a0;x2,y,reuse with x2,,,,,
+gate,resource_nmcts,3,MCT,a0;x3,y,reuse with x3,,,,,
+gate,resource_nmcts,4,MCT,a0;x4,y,reuse with x4,,,,,
+gate,resource_nmcts,5,MCT,x0;x1,a0,uncompute x0*x1,,,,,
+gate,resource_nmcts,6,MCT,x2;x3,a0,compute x2*x3,,,,,
+gate,resource_nmcts,7,MCT,a0;x1,y,reuse with x1,,,,,
+gate,resource_nmcts,8,MCT,a0;x4,y,reuse with x4,,,,,
+gate,resource_nmcts,9,MCT,x2;x3,a0,uncompute x2*x3,,,,,
+resource,direct,,,,,,40,65,65,25,45.825
+resource,resource_nmcts,,,,,,28,55,55,23,33.254999999999995

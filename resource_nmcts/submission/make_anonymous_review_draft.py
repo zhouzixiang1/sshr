@@ -7,8 +7,8 @@ import sys
 from pathlib import Path
 
 
-THIS_DIR = Path(__file__).resolve().parent
-PAPER_DIR = THIS_DIR / "paper_latex"
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PAPER_DIR = PROJECT_ROOT / "paper_latex"
 SOURCE = PAPER_DIR / "resource_nmcts_submission_v1.tex"
 ANONYMOUS_SOURCE = PAPER_DIR / "resource_nmcts_submission_anonymous.tex"
 
@@ -73,7 +73,7 @@ def main() -> int:
             print(f"error: {issue}", file=sys.stderr)
         return 1
     ANONYMOUS_SOURCE.write_text(anonymous, encoding="utf-8")
-    print(f"wrote {ANONYMOUS_SOURCE.relative_to(THIS_DIR)}")
+    print(f"wrote {ANONYMOUS_SOURCE.relative_to(PROJECT_ROOT)}")
     return 0
 
 

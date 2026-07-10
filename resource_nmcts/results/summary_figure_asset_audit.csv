@@ -6,3 +6,4 @@ fig4_phase_affine,pass,True,True,True,True,1,41717,102608,18341,7,none,Regenerat
 fig5_validation,pass,True,True,True,True,1,35604,69390,12222,5,none,Regenerate figures with make_submission_figures.py and keep TeX references aligned with source_data CSVs.
 fig6_sparse_gate_sensitivity,pass,True,True,True,True,1,45480,163341,79801,201,none,Regenerate figures with make_submission_figures.py and keep TeX references aligned with source_data CSVs.
 fig7_learned_control_summary,pass,True,True,True,True,1,44541,138925,31539,13,none,Regenerate figures with make_submission_figures.py and keep TeX references aligned with source_data CSVs.
+fig8_worked_example,pass,True,True,True,True,1,58008,162988,72085,16,none,Regenerate figures with make_submission_figures.py and keep TeX references aligned with source_data CSVs.

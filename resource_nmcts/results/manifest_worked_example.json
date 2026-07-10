@@ -1,0 +1,71 @@
+{
+  "function": {
+    "anf_masks": [
+      7,
+      11,
+      14,
+      19,
+      28
+    ],
+    "n": 5,
+    "onset": [
+      7,
+      11,
+      14,
+      15,
+      19,
+      28,
+      29,
+      31
+    ],
+    "truth_table_hex": "0xB008C880"
+  },
+  "gate_mode": "logical_and",
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_worked_example.md",
+    "gates": "results/raw_worked_example_gates.csv",
+    "manifest": "results/manifest_worked_example.json",
+    "resource_table": "paper_latex/tables/worked_example_resources.tex",
+    "resources": "results/summary_worked_example.csv",
+    "search": "results/raw_worked_example_search.csv",
+    "search_table": "paper_latex/tables/worked_example_search.tex",
+    "truth_table": "results/raw_worked_example_truth_table.csv"
+  },
+  "python": "3.11.15",
+  "resource_weights": {
+    "ancilla": 2.0,
+    "cnot": 0.04,
+    "depth": 0.015,
+    "gates": 0.01,
+    "t": 1.0
+  },
+  "script": "run_worked_example.py",
+  "search": {
+    "combined_prior_formula": "heuristic_prior + neural_prior_weight * neural_score",
+    "model": "models/action_scorer.pt",
+    "model_sha256": "14805602dda40b01de04d7727901f320d926a541b3a1bba8f86b750655fe9334",
+    "neural_prior_weight": 2.5,
+    "root_actions": 4,
+    "seed": 7,
+    "selected_factor": "x0*x1",
+    "simulations": 128
+  },
+  "status_counts": {
+    "pass": 6
+  },
+  "verification": {
+    "ancilla_mismatches": 0,
+    "circuit_gates": 9,
+    "circuit_verified": true,
+    "input_mismatches": 0,
+    "output_mismatch": 0,
+    "plan_mismatches": 0,
+    "plan_nodes": 5,
+    "plan_verified": true,
+    "portfolio_matches_neural_mcts_plan": true,
+    "truth_rows_total": 32,
+    "truth_rows_verified": 32,
+    "truth_verified": true
+  }
+}

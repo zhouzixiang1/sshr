@@ -369,6 +369,108 @@ the limitation it leaves in place.}
 \input{tables/search_budget_contract}
 \end{table}
 
+\subsection{Worked example: from Boolean function to circuit}
+\label{sec:worked-example}
+
+We make the search state, selected actions, and emitted circuit concrete with a
+five-variable example.  Let
+\begin{equation}
+\begin{split}
+f(x)={}&x_0x_1x_2\xor x_0x_1x_3\xor x_1x_2x_3\\
+      &{}\xor x_0x_1x_4\xor x_2x_3x_4 .
+\end{split}
+\label{eq:worked-example-anf}
+\end{equation}
+Assignments are indexed by
+$j=\sum_{i=0}^{4}2^i x_i$.  The corresponding 32-bit truth table is
+\texttt{0xB008C880}, with $f=1$ at assignments 7, 11, 14, 15, 19, 28, 29,
+and 31; every other assignment evaluates to zero.
+The useful algebraic rewrite is
+\begin{equation}
+f=x_0x_1(x_2\xor x_3\xor x_4)
+  \xor x_2x_3(x_1\xor x_4).
+\label{eq:worked-example-factor}
+\end{equation}
+
+Table~\ref{tab:worked-example-search} records the actual root state produced
+with the paper's logical-AND resource model, the trained action scorer,
+seed~7, and 128 MCTS simulations.  The reported prior is the combined
+deterministic heuristic and neural score: specifically,
+$p=h+2.5s_{\mathrm{NN}}$, where $h$ is the resource heuristic and
+$s_{\mathrm{NN}}$ is the trained network output.  The estimated score is
+either the visited MCTS value or the deterministic rollout value.  For
+$x_0x_1$, the network raises the prior from $h=0.381$ using
+$s_{\mathrm{NN}}=0.927$ to $p=2.700$.  The search assigns
+96 visits to $x_0x_1$ and 32 to $x_2x_3$.  The two orders reach the same final
+score after the second factor is selected in the rest subproblem, so the
+deterministic tie order emits $x_0x_1$ first.  The overlapping alternatives
+$x_1x_2$ and $x_1x_3$ have higher rollout scores and receive no further visit.
+
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.06}
+\caption{Root search trace for Eq.~\eqref{eq:worked-example-anf}.  Bold marks
+the first emitted factor.  Combined is $h+2.5s_{\mathrm{NN}}$; lower estimated
+score is better.}
+\label{tab:worked-example-search}
+\input{tables/worked_example_search}
+\end{table}
+
+The full \method{} portfolio and an independently run neural-MCTS ANF branch
+converge to the same two-factor plan.  Figure~\ref{fig:worked-example} compares
+its emitted circuit with the AND-direct ANF construction.  Direct synthesis
+applies five independent three-control output actions.  The selected plan
+computes $a_0=x_0x_1$, reuses it for $x_2,x_3,x_4$, uncomputes it, and then
+recycles the same line for $a_0=x_2x_3$ and the residual controls $x_1,x_4$.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig8_worked_example.pdf}
+\caption{\textbf{A complete Resource-NMCTS circuit example.} (a) AND-direct
+ANF emits one three-control action for each term in
+Eq.~\eqref{eq:worked-example-anf}.  (b) \method{} emits the factored
+compute/reuse/uncompute sequence in Eq.~\eqref{eq:worked-example-factor} and
+returns the recycled factor line to zero.  The drawing shows the verified
+X/CNOT/\mct{} skeleton; resource labels use the paper's logical-AND accounting,
+including four-T conjunction computation and Clifford/measurement-assisted
+uncomputation.  Source data: \texttt{fig8\_worked\_example.csv}.}
+\Description{Two quantum-circuit diagrams for the same five-variable Boolean
+function.  The direct circuit has five independent three-control output
+actions.  The Resource-NMCTS circuit computes and uncomputes the shared
+factors x0 x1 and x2 x3 on one recycled ancilla, using each factor to control
+several output actions.}
+\label{fig:worked-example}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\caption{Logical resources for the worked example.  Factor anc. counts
+explicit reusable factor lines; peak ancilla also includes decomposition
+helpers.  Verified denotes complete truth-table assignments passed.}
+\label{tab:worked-example-resources}
+\resizebox{\linewidth}{!}{\input{tables/worked_example_resources}}
+\end{table}
+
+The factor plan lowers T-count from 40 to 28 (30.00\%), CNOT count and depth
+from 65 to 55 (15.38\%), gate count from 25 to 23 (8.00\%), and score from
+45.825 to 33.255 (27.43\%).  It introduces one explicit factor line, but peak
+ancilla remains one because the direct three-control actions already require
+one decomposition helper under the same logical-AND model.  Correctness is
+checked at all three layers used in the larger experiments: plan expansion
+has five nodes and zero mismatches; emitted-circuit GF(2) simulation has zero
+input, output, or ancilla mismatch across nine logical gates; and the complete
+truth-table verifier passes all 32 assignments.
+
+This example explains the core factor-search mechanism rather than serving as
+an ablation.  The neural and deterministic branches agree on this small
+instance, and the example does not exercise nonidentity FPRM/affine actions,
+the Pareto budget controller, the phase/Rz branch, or high-dimensional
+frontier policies.
+
 \subsection{Boolean-ring linear factors}
 
 A key extension is allowing the linear factor and the quotient to share

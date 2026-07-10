@@ -38,6 +38,7 @@ from scripts.run_external_baselines import (
     verify_blif,
     verify_esop,
 )
+from scripts.run_worked_example import build_example
 from src.synthesizers import synthesize
 
 
@@ -154,10 +155,30 @@ def check_plan_anf_verifier() -> None:
         assert circuit_verification.ancilla_mismatches == 0
 
 
+def check_worked_example() -> None:
+    example = build_example()
+    direct, selected = example.resource_rows
+    assert example.boolean_function.truth_table == 0xB008C880
+    assert example.boolean_function.onset == [7, 11, 14, 15, 19, 28, 29, 31]
+    assert len(example.search_rows) == 4
+    assert example.search_rows[0]["factor"] == "x0*x1"
+    assert example.search_rows[0]["visits"] == 96
+    assert abs(float(example.search_rows[0]["heuristic_prior"]) - 0.38132678668848874) < 1e-12
+    assert abs(float(example.search_rows[0]["neural_score"]) - 0.9272814393043518) < 1e-12
+    assert abs(float(example.search_rows[0]["combined_prior"]) - 2.699530384949368) < 1e-12
+    assert abs(float(direct["score"]) - 45.825) < 1e-9
+    assert abs(float(selected["score"]) - 33.255) < 1e-9
+    assert example.verification["plan_verified"]
+    assert example.verification["circuit_verified"]
+    assert example.verification["truth_rows_verified"] == 32
+    assert example.verification["portfolio_matches_neural_mcts_plan"]
+
+
 def main() -> int:
     check_roundtrip()
     check_external_truth_verifiers()
     check_plan_anf_verifier()
+    check_worked_example()
     with TemporaryDirectory() as tmp:
         out_dir = Path(tmp)
         summary = export_suite("smoke", 42, out_dir, selected_formats("pla,blif,truth"), limit=2)

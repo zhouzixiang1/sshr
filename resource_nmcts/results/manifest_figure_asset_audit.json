@@ -1,5 +1,5 @@
 {
-  "figures": 7,
+  "figures": 8,
   "formats_required": [
     "pdf",
     "png",
@@ -18,10 +18,10 @@
     "anonymous_tex": "paper_latex/resource_nmcts_submission_anonymous.tex",
     "author_tex": "paper_latex/resource_nmcts_submission_v1.tex",
     "figure_dir": "paper_latex/figures/submission_v36",
-    "figure_script": "make_submission_figures.py",
+    "figure_script": "submission/make_submission_figures.py",
     "source_data_dir": "paper_latex/figures/submission_v36/source_data"
   },
   "status_counts": {
-    "pass": 7
+    "pass": 8
   }
 }

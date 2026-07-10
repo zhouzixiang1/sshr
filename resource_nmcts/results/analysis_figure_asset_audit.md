@@ -4,7 +4,7 @@ This audit checks manuscript figure references, generated PDF/PNG/SVG assets, an
 
 ## Status counts
 
-- pass: 7
+- pass: 8
 
 | figure | status | refs | generated | bytes pdf/png/svg | source rows | missing |
 |---|---|---|---|---:|---:|---|
@@ -15,3 +15,4 @@ This audit checks manuscript figure references, generated PDF/PNG/SVG assets, an
 | fig5_validation | pass | author=True; anon=True | save=True; source=True; pages=1 | 35604/69390/12222 | 5 | none |
 | fig6_sparse_gate_sensitivity | pass | author=True; anon=True | save=True; source=True; pages=1 | 45480/163341/79801 | 201 | none |
 | fig7_learned_control_summary | pass | author=True; anon=True | save=True; source=True; pages=1 | 44541/138925/31539 | 13 | none |
+| fig8_worked_example | pass | author=True; anon=True | save=True; source=True; pages=1 | 58008/162988/72085 | 16 | none |

@@ -124,6 +124,88 @@ SSHR 利用 Boolean hypercube 中 parallelotope 结构生成 MCT block，并以 
 
 神经动作先验用于对候选排序，\mcts{} 在有限预算内探索候选组合，rollout 使用确定性资源估计和已有 baseline 候选。最终 portfolio 在多个候选线路中按式~\eqref{eq:score} 选择最优者。这里 AI 的职责是搜索控制，而不是语义生成；任何候选线路都必须通过 \anf{} 或 circuit-level 验证。
 
+\subsection{从具体布尔函数到量子线路的完整实例}
+\label{sec:worked-example-zh}
+
+考虑五变量函数
+\begin{equation}
+\begin{split}
+f(x)={}&x_0x_1x_2\xor x_0x_1x_3\xor x_1x_2x_3\\
+      &{}\xor x_0x_1x_4\xor x_2x_3x_4 .
+\end{split}
+\label{eq:worked-example-anf-zh}
+\end{equation}
+令输入编号为 $j=\sum_{i=0}^{4}2^i x_i$，则其 32 位真值表为
+\texttt{0xB008C880}，on-set 为
+$\{7,11,14,15,19,28,29,31\}$，其余 24 个输入均输出 0。该函数可改写为
+\begin{equation}
+f=x_0x_1(x_2\xor x_3\xor x_4)
+  \xor x_2x_3(x_1\xor x_4).
+\label{eq:worked-example-factor-zh}
+\end{equation}
+
+表~\ref{tab:worked-example-search-zh} 给出使用本文 logical-AND 资源模型、
+训练动作评分器、seed~7 和 128 次 MCTS simulation 得到的真实根节点轨迹。
+合并 prior 为 $p=h+2.5s_{\mathrm{NN}}$，其中 $h$ 是资源启发式分数，
+$s_{\mathrm{NN}}$ 是训练网络的输出。对 $x_0x_1$，神经网络以
+$s_{\mathrm{NN}}=0.927$ 把 $h=0.381$ 提升为 $p=2.700$。estimated score
+来自已访问动作的 MCTS Q 值或确定性 rollout。$x_0x_1$ 获得 96 次访问，$x_2x_3$ 获得
+32 次访问；两种先后顺序在 rest 子问题中选择另一个因子后得到相同最终
+score，因此确定性 tie order 首先输出 $x_0x_1$。重叠候选 $x_1x_2$ 和
+$x_1x_3$ 的 rollout score 更高，没有获得后续访问。
+
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.06}
+\caption{式~\eqref{eq:worked-example-anf-zh} 的根节点搜索轨迹。粗体为首先
+输出的因子；Combined 为 $h+2.5s_{\mathrm{NN}}$，estimated score 越低越好。}
+\label{tab:worked-example-search-zh}
+\input{../paper_latex/tables/worked_example_search}
+\end{table}
+
+完整 \method{} portfolio 与独立运行的 neural-MCTS ANF 分支收敛到相同
+双因子 plan。图~\ref{fig:worked-example-zh} 对比 AND-direct ANF 和最终
+factored circuit。Direct 线路对五个三阶单项式分别施加一次三控输出操作；
+搜索线路先计算 $a_0=x_0x_1$，依次复用于 $x_2,x_3,x_4$，反计算后再用
+同一条辅助线计算 $a_0=x_2x_3$，并复用于 $x_1,x_4$。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig8_worked_example.pdf}
+\caption{\textbf{\method{} 的完整线路实例。} (a) AND-direct ANF 对
+式~\eqref{eq:worked-example-anf-zh} 中每个单项式施加独立三控操作；
+(b) \method{} 按式~\eqref{eq:worked-example-factor-zh} 执行
+compute/reuse/uncompute，并把复用辅助线恢复为 0。图中是通过验证的
+X/CNOT/\mct{} 逻辑骨架；资源数字采用本文 logical-AND 口径，其中合取
+计算使用 4T，反计算使用 Clifford/measurement-assisted accounting。
+Source data: \texttt{fig8\_worked\_example.csv}.}
+\label{fig:worked-example-zh}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\caption{具体实例的逻辑资源。Factor anc. 为显式复用因子线；peak ancilla
+还包含分解 helper。Verified 为通过完整真值表检查的输入数。}
+\label{tab:worked-example-resources-zh}
+\resizebox{\linewidth}{!}{\input{../paper_latex/tables/worked_example_resources}}
+\end{table}
+
+该计划把 T-count 从 40 降到 28（30.00\%），CNOT 和 depth 从 65 降到
+55（15.38\%），gate count 从 25 降到 23（8.00\%），加权 score 从
+45.825 降到 33.255（27.43\%）。虽然增加了一条显式 factor line，但 direct
+三控操作在同一 logical-AND 分解模型下已经需要一个 helper，因此两条线路
+的 peak ancilla 都为 1。正确性同时通过三层检查：factor plan 展开含 5 个
+节点且 0 mismatch；9 个 emitted logical gate 的 GF(2) 模拟中输入、输出和
+辅助线 mismatch 均为 0；完整真值表 32/32 通过。
+
+这个实例用于解释核心因子搜索，而不是证明 learned prior 在该简单函数上
+不可替代。它没有覆盖非 identity FPRM/affine 动作、Pareto 预算控制器、
+phase/Rz 分支或高维 frontier policy。
+
 \subsection{布尔环线性因子}
 
 传统线性因子筛选往往要求线性因子变量和 quotient 变量不相交。本文的 Boolean-ring screen 允许二者共享变量，并在展开时使用 $x_i^2=x_i$ 与 GF(2) 偶数项消去。例如

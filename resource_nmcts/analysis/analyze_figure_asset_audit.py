@@ -16,17 +16,17 @@ import sys
 from pathlib import Path
 
 
-THIS_DIR = Path(__file__).resolve().parent
-RESULTS = THIS_DIR / "results"
-FIGURES = THIS_DIR / "paper_latex" / "figures" / "submission_v36"
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+RESULTS = PROJECT_ROOT / "results"
+FIGURES = PROJECT_ROOT / "paper_latex" / "figures" / "submission_v36"
 SOURCE_DATA = FIGURES / "source_data"
-AUTHOR_TEX = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.tex"
-ANON_TEX = THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.tex"
-FIGURE_SCRIPT = THIS_DIR / "make_submission_figures.py"
+AUTHOR_TEX = PROJECT_ROOT / "paper_latex" / "resource_nmcts_submission_v1.tex"
+ANON_TEX = PROJECT_ROOT / "paper_latex" / "resource_nmcts_submission_anonymous.tex"
+FIGURE_SCRIPT = PROJECT_ROOT / "submission" / "make_submission_figures.py"
 
 
 def rel(path: Path) -> str:
-    return str(path.relative_to(THIS_DIR))
+    return str(path.relative_to(PROJECT_ROOT))
 
 
 def read_text(path: Path) -> str:

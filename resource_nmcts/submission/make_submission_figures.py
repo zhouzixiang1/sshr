@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import csv
 from datetime import datetime, timezone
+import json
 import re
 import subprocess
 from collections import defaultdict
@@ -16,12 +17,12 @@ from typing import Iterable
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
+from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch
 
 
-ROOT = Path(__file__).resolve().parent
-RESULTS = ROOT / "results"
-OUT = ROOT / "paper_latex" / "figures" / "submission_v36"
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+RESULTS = PROJECT_ROOT / "results"
+OUT = PROJECT_ROOT / "paper_latex" / "figures" / "submission_v36"
 SOURCE = OUT / "source_data"
 
 METHOD_LABELS = {
@@ -888,6 +889,197 @@ def fig_sparse_gate_sensitivity() -> None:
     save(fig, "fig6_sparse_gate_sensitivity")
 
 
+def _wire_math(label: str) -> str:
+    if label.startswith("x") and label[1:].isdigit():
+        return rf"$x_{label[1:]}$"
+    if label.startswith("a") and label[1:].isdigit():
+        return rf"$a_{label[1:]}=0$"
+    return "$" + label + "$"
+
+
+def _term_math(term: str) -> str:
+    variables = [part for part in term.split("*") if part]
+    return "$" + "".join(rf"x_{part[1:]}" for part in variables) + "$"
+
+
+def _draw_worked_circuit(
+    ax: plt.Axes,
+    gates: list[dict[str, str]],
+    resources: dict[str, str],
+    *,
+    panel: str,
+    title: str,
+    include_ancilla: bool,
+) -> None:
+    wires = [f"x{i}" for i in range(5)] + ["y"]
+    if include_ancilla:
+        wires.append("a0")
+    y_positions = {wire: len(wires) - 1 - index for index, wire in enumerate(wires)}
+    x_max = len(gates) + 0.9
+
+    ax.set_xlim(-0.85, x_max)
+    ax.set_ylim(-0.65, len(wires) + 0.90)
+    ax.set_axis_off()
+    for wire in wires:
+        y = y_positions[wire]
+        color = PALETTE["gain"] if wire == "a0" else "#4A5058"
+        ax.plot([0.05, x_max - 0.15], [y, y], color=color, linewidth=0.75, zorder=1)
+        ax.text(-0.12, y, _wire_math(wire), ha="right", va="center", fontsize=7.4, color="#20242A")
+
+    ax.text(-0.80, len(wires) + 0.68, panel, fontsize=9.5, fontweight="bold", va="center")
+    ax.text(-0.50, len(wires) + 0.68, title, fontsize=7.7, fontweight="bold", va="center")
+    ax.text(
+        x_max - 0.05,
+        len(wires) + 0.30,
+        (
+            f"T={int(float(resources['T']))}, CNOT={int(float(resources['CNOT']))}, "
+            f"depth={int(float(resources['depth']))}, score={float(resources['score']):.3f}"
+        ),
+        ha="right",
+        va="center",
+        fontsize=6.4,
+        color=PALETTE["resource"] if include_ancilla else PALETTE["neutral"],
+    )
+
+    for gate_index, row in enumerate(gates, start=1):
+        x = float(gate_index)
+        controls = [value for value in row["controls"].split(";") if value]
+        target = row["target"]
+        involved = controls + [target]
+        y_values = [y_positions[value] for value in involved]
+        stage = row["stage"]
+        if stage.startswith("compute"):
+            color = PALETTE["resource"]
+        elif stage.startswith("uncompute"):
+            color = PALETTE["warn"]
+        elif stage.startswith("reuse"):
+            color = PALETTE["gain"]
+        else:
+            color = PALETTE["direct"]
+        ax.plot([x, x], [min(y_values), max(y_values)], color=color, linewidth=1.0, zorder=2)
+        for control in controls:
+            ax.add_patch(Circle((x, y_positions[control]), 0.09, facecolor=color, edgecolor=color, zorder=3))
+        target_y = y_positions[target]
+        ax.add_patch(Circle((x, target_y), 0.15, facecolor="white", edgecolor=color, linewidth=1.0, zorder=3))
+        ax.plot([x - 0.09, x + 0.09], [target_y, target_y], color=color, linewidth=0.9, zorder=4)
+        ax.plot([x, x], [target_y - 0.09, target_y + 0.09], color=color, linewidth=0.9, zorder=4)
+
+        if stage.startswith("monomial "):
+            gate_label = _term_math(stage.removeprefix("monomial "))
+        elif stage.startswith("reuse with "):
+            gate_label = _term_math(stage.removeprefix("reuse with "))
+        elif stage.startswith("compute "):
+            gate_label = "compute\n" + _term_math(stage.removeprefix("compute "))
+        elif stage.startswith("uncompute "):
+            gate_label = "uncompute\n" + _term_math(stage.removeprefix("uncompute "))
+        else:
+            gate_label = stage
+        ax.text(x, len(wires) - 0.38, gate_label, ha="center", va="bottom", fontsize=5.6, color=color)
+
+    if include_ancilla:
+        ax.text(
+            x_max - 0.15,
+            y_positions["a0"] - 0.34,
+            r"$a_0$ is recycled and returns to $0$",
+            ha="right",
+            va="top",
+            fontsize=6.1,
+            color=PALETTE["gain"],
+        )
+
+
+def fig_worked_example() -> None:
+    gates = read_csv(RESULTS / "raw_worked_example_gates.csv")
+    resources = read_csv(RESULTS / "summary_worked_example.csv")
+    manifest = json.loads((RESULTS / "manifest_worked_example.json").read_text(encoding="utf-8"))
+    direct_gates = [row for row in gates if row["variant"] == "direct"]
+    selected_gates = [row for row in gates if row["variant"] == "resource_nmcts"]
+    direct_resources = next(row for row in resources if row["method"] == "AND-direct ANF")
+    selected_resources = next(row for row in resources if row["method"] == "Resource-NMCTS")
+
+    source_rows: list[dict[str, object]] = []
+    for row in gates:
+        source_rows.append(
+            {
+                "kind": "gate",
+                "variant": row["variant"],
+                "index": row["gate_index"],
+                "gate_type": row["gate_type"],
+                "controls": row["controls"],
+                "target": row["target"],
+                "stage": row["stage"],
+                "T": "",
+                "CNOT": "",
+                "depth": "",
+                "gates": "",
+                "score": "",
+            }
+        )
+    for row in resources:
+        source_rows.append(
+            {
+                "kind": "resource",
+                "variant": "direct" if row["method"] == "AND-direct ANF" else "resource_nmcts",
+                "index": "",
+                "gate_type": "",
+                "controls": "",
+                "target": "",
+                "stage": "",
+                "T": row["T"],
+                "CNOT": row["CNOT"],
+                "depth": row["depth"],
+                "gates": row["gates"],
+                "score": row["score"],
+            }
+        )
+    write_source(
+        "fig8_worked_example",
+        source_rows,
+        ["kind", "variant", "index", "gate_type", "controls", "target", "stage", "T", "CNOT", "depth", "gates", "score"],
+    )
+
+    fig, axes = plt.subplots(2, 1, figsize=(7.2, 5.35), gridspec_kw={"height_ratios": [0.92, 1.08]})
+    _draw_worked_circuit(
+        axes[0],
+        direct_gates,
+        direct_resources,
+        panel="a",
+        title="AND-direct ANF: five independent output actions",
+        include_ancilla=False,
+    )
+    _draw_worked_circuit(
+        axes[1],
+        selected_gates,
+        selected_resources,
+        panel="b",
+        title="Resource-NMCTS: two factors share one recycled line",
+        include_ancilla=True,
+    )
+    truth_hex = manifest["function"]["truth_table_hex"]
+    fig.suptitle(
+        (
+            r"$f=x_0x_1(x_2\oplus x_3\oplus x_4)"
+            r"\oplus x_2x_3(x_1\oplus x_4)$"
+            f"   |   truth table {truth_hex}"
+        ),
+        x=0.51,
+        y=0.995,
+        fontsize=8.6,
+        fontweight="bold",
+    )
+    fig.text(
+        0.5,
+        0.012,
+        "The selected circuit passes plan expansion, emitted-circuit GF(2) simulation, and all 32 truth-table assignments.",
+        ha="center",
+        va="bottom",
+        fontsize=6.3,
+        color="#30343B",
+    )
+    fig.tight_layout(rect=(0.0, 0.035, 1.0, 0.955), h_pad=1.0)
+    save(fig, "fig8_worked_example")
+
+
 def main() -> None:
     configure()
     OUT.mkdir(parents=True, exist_ok=True)
@@ -899,6 +1091,7 @@ def main() -> None:
     fig_phase_affine()
     fig_validation()
     fig_sparse_gate_sensitivity()
+    fig_worked_example()
     print(f"wrote figures to {OUT}")
     print(f"wrote source data to {SOURCE}")
 

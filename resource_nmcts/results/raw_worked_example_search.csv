@@ -1,0 +1,5 @@
+rank,factor_mask,factor,grouped_terms,group_size,residual_terms,rest_terms,immediate_gain,heuristic_prior,neural_score,combined_prior,visits,estimated_score,value_source,selected_first
+1,0x3,x0*x1,x0*x1*x2 xor x0*x1*x3 xor x0*x1*x4,3,x2 xor x3 xor x4,x1*x2*x3 xor x2*x3*x4,4.4599999999999955,0.38132678668848874,0.9272814393043518,2.699530384949368,96,33.254999999999995,MCTS Q,True
+2,0x6,x1*x2,x0*x1*x2 xor x1*x2*x3,2,x0 xor x3,x0*x1*x3 xor x0*x1*x4 xor x2*x3*x4,0.10999999999999943,0.23840043644298964,0.27394649386405945,0.9232666711031383,0,37.605000000000004,greedy rollout,False
+3,0xa,x1*x3,x0*x1*x3 xor x1*x2*x3,2,x0 xor x2,x0*x1*x2 xor x0*x1*x4 xor x2*x3*x4,0.10999999999999943,0.23840043644298964,0.27394649386405945,0.9232666711031383,0,37.605000000000004,greedy rollout,False
+4,0xc,x2*x3,x1*x2*x3 xor x2*x3*x4,2,x1 xor x4,x0*x1*x2 xor x0*x1*x3 xor x0*x1*x4,0.10999999999999943,0.23840043644298964,0.27394649386405945,0.9232666711031383,32,33.255,MCTS Q,False
