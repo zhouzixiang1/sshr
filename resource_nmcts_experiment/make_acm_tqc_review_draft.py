@@ -61,7 +61,7 @@ ACM_PREAMBLE_TEMPLATE = r"""\documentclass[manuscript,screen,review,anonymous]{a
 \ccsdesc[500]{Theory of computation~Quantum computation theory}
 \ccsdesc[300]{Hardware~Reversible logic}
 \ccsdesc[300]{Computing methodologies~Search methodologies}
-\keywords{quantum Boolean oracle synthesis, Monte Carlo tree search, resource-aware synthesis, reversible logic, algebraic normal form}
+\keywords{quantum Boolean oracle synthesis, Monte Carlo tree search, reinforcement learning, contextual bandit, resource-aware synthesis, reversible logic, algebraic normal form}
 
 \begin{document}
 """

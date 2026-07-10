@@ -7,6 +7,7 @@ deterministic search controls & No-MCTS portfolio over heuristic-only & 177 & 54
 deterministic search controls & No-MCTS portfolio over beam-only & 177 & 106/1/70 & -8.36\% & Beam is a child/search baseline, not the full method. \\
 MCTS over deterministic portfolio & Resource-NMCTS over no-MCTS portfolio & 177 & 54/0/123 & -1.44\% & The magnitude is incremental, not the whole resource drop. \\
 Pareto search control & Pareto Resource-NMCTS over no-MCTS portfolio & 177 & 106/0/71 & -4.69\% & Ancilla tradeoffs still need separate reporting. \\
+reinforcement-learned Pareto budget control & Fitted-Q budget policy vs Resource-NMCTS and always-Pareto & 160 & 56/0/104 vs Resource & -3.48\% & The policy has nonzero regret against always-Pareto and does not dominate its circuit resources on every function. \\
 learned prior & Learned prior for Resource-NMCTS & 177 & 39/0/138 & -1.10\% & It is not a runtime claim and should not be promoted as the main source of improvement. \\
 bit-flip random control & Learned bit-flip prior vs same-budget random-prior mean & 177 & 17/8/152 & -0.15\% & The margin is small and runtime-negative; this is not a claim that neural ranking explains the full gain. \\
 bit-flip low-budget control & Learned prior vs no-prior under compressed candidate/MCTS budgets & 1062 & 218/0/844 & -1.04\% & The same rows still show runtime overhead, so this is budget-allocation quality evidence rather than a speedup claim. \\

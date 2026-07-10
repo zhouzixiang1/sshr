@@ -5,8 +5,8 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 ## Status counts
 
 - complete: 31
-- unique raw files covered by registry: 162
-- unique raw CSV rows covered by registry: 80318
+- unique raw files covered by registry: 166
+- unique raw CSV rows covered by registry: 82071
 
 | evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |
 |---|---|---:|---:|---:|---|---|
@@ -16,7 +16,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | Editorial screening and reviewer-risk support | quick submission-support audit | 0 | 0 | 2 | complete | Does not change scientific results; checks public submission-support consistency against existing audit outputs. |
 | Cover-letter and venue support packet | quick submission-support audit | 0 | 0 | 5 | complete | Does not choose a venue or fill private metadata; checks public upload-support consistency, comparison evidence-entrypoint integrity, and ACM/TQC template smoke compilation against existing audits. |
 | Public handoff freshness | quick submission-support audit | 0 | 0 | 1 | complete | Does not change scientific results; checks that public handoff counters are refreshed after rebuilds. |
-| Runtime envelope and execution cost | quick derived audit | 20 | 7582 | 1 | complete | Derived from existing raw timing columns; it records workstation feasibility and does not claim portable runtime speedups. |
+| Runtime envelope and execution cost | quick derived audit | 21 | 7742 | 1 | complete | Derived from existing raw timing columns; it records workstation feasibility and does not claim portable runtime speedups. |
 | Method workflow, algorithm, and budget contracts | quick method audit | 0 | 0 | 2 | complete | Quick derived audit; checks implementation anchors and manuscript method exposition, not raw benchmark outcomes. |
 | Comparison protocol and claim boundaries | quick comparison audit | 0 | 0 | 6 | complete | Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps. |
 | Benchmark suite composition and representativeness | quick benchmark audit | 51 | 34954 | 3 | complete | Descriptive derived audit over existing raw CSVs; it records coverage and verification routes but does not rerun synthesis, training, or external toolchains. |
@@ -33,9 +33,9 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | CirKit AIG/MC probe | external toolchain rerun | 2 | 241 | 2 | complete | Requires the recorded CirKit executable/commit; results are logical estimates, not hardware mapping. |
 | RevKit exact and Rz probes | external toolchain rerun | 5 | 3194 | 5 | complete | Requires RevKit CLI/API availability; Rz rows are phase/sensitivity probes, not final Clifford+T decomposition. |
 | Phase and affine FPRM branch | raw phase rerun and training | 8 | 11879 | 10 | complete | Logical phase verification up to global phase; sequence smoke is coarse; backend audit records that no high-precision gridsynth-style backend is present. |
-| Learned-control and ablations | training plus ablation rerun | 20 | 10883 | 24 | complete | Training can use MPS/GPU when available; learned controls rank, gate, or allocate search only. |
+| Learned-control and ablations | training plus ablation rerun | 24 | 12636 | 29 | complete | Training can use MPS/GPU when available; learned controls rank, gate, or allocate optional search effort only. The fitted-Q policy has disjoint train/validation/test truth functions. |
 | Schedule proxy and lifetime tradeoffs | quick derived audit | 3 | 1140 | 1 | complete | Emitted-circuit logical schedule proxies only; not hardware routing, native-gate scheduling, or device execution. |
-| Runtime envelope and rerun feasibility | quick runtime audit | 20 | 7582 | 1 | complete | Descriptive workstation timing envelope over existing raw artifacts; supports rerun feasibility, not portable runtime-speedup claims. |
+| Runtime envelope and rerun feasibility | quick runtime audit | 21 | 7742 | 1 | complete | Descriptive workstation timing envelope over existing raw artifacts; supports rerun feasibility, not portable runtime-speedup claims. |
 | High-dimensional symbolic screen-scale runs | large raw rerun | 77 | 11960 | 26 | complete | Symbolic or generated-instance verification; not exhaustive truth-table enumeration for all large n. |
 | External high-dimensional resource extensions | large raw rerun | 4 | 528 | 4 | complete | Generated large-instance comparisons; external availability and timeout behavior are recorded in manifests. |
 | Boolean screen, frontier, and gate auxiliaries | training plus ablation rerun | 11 | 2170 | 3 | complete | Auxiliary policy-selection evidence; not all rows are promoted as final-quality gains. |
@@ -71,7 +71,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 - **Runtime envelope and execution cost**
   - claim use: Consolidates workstation wall-clock evidence for small benchmarks, external probes, high-dimensional symbolic rows, truth-bridge rows, and learned-control rows.
   - scripts: `analyze_runtime_envelope_audit.py`
-  - representative raw: `results/raw_bitflip_neural_budget_sweep.csv; results/raw_caterpillar_xag_api_best.csv; results/raw_cirkit_aig_probe.csv; results/raw_mockturtle_xag_probe.csv; +16 more`
+  - representative raw: `results/raw_bitflip_neural_budget_sweep.csv; results/raw_caterpillar_xag_api_best.csv; results/raw_cirkit_aig_probe.csv; results/raw_mcts_budget_policy_decisions.csv; +17 more`
 - **Method workflow, algorithm, and budget contracts**
   - claim use: Verifies that the method description is connected to executable stages, source anchors, semantic/resource guarantees, and explicit search budgets.
   - scripts: `analyze_method_workflow_table.py; analyze_algorithm_contract_table.py; analyze_search_budget_contract.py`
@@ -137,9 +137,9 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - scripts: `run_phase_parity_baseline.py; run_phase_parity_affine_search.py; run_phase_parity_fprm_search.py; train_phase_affine_policy.py; analyze_phase_rotation_precision_audit.py; analyze_phase_rotation_sequence_smoke_audit.py; analyze_rotation_synthesis_backend_audit.py; analyze_phase_policy_budget_frontier.py`
   - representative raw: `results/raw_phase_affine_policy.csv; results/raw_phase_affine_policy_rank_diverse.csv; results/raw_phase_parity_affine.csv; results/raw_phase_parity_affine_wide128.csv; +4 more`
 - **Learned-control and ablations**
-  - claim use: Separates neural/search-control effects from deterministic algebraic construction and guarded portfolio selection.
-  - scripts: `train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; run_bitflip_random_prior_control.py; analyze_bitflip_random_prior_control.py; run_bitflip_neural_budget_sweep.py; analyze_bitflip_neural_budget_sweep.py; analyze_bitflip_prior_difficulty_slices.py; analyze_bitflip_prior_feature_gate.py; analyze_bitflip_prior_feature_gate_cv.py; analyze_bitflip_prior_feature_gate_cv_random_control.py; analyze_frontier_random_depth_control.py; analyze_phase_rotation_precision_audit.py; analyze_phase_rotation_sequence_smoke_audit.py; analyze_rotation_synthesis_backend_audit.py; analyze_phase_policy_budget_frontier.py; analyze_phase_policy_random_control.py; analyze_root_action_ranker_audit.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py; analyze_limited_learned_control_boundary.py; analyze_learned_control_effect_uncertainty.py; analyze_stochastic_control_stability.py; analyze_neural_mcts_claim_calibration.py`
-  - representative raw: `results/raw_bitflip_neural_budget_sweep.csv; results/raw_bitflip_random_prior_control.csv; results/raw_highdim_neural_prior_boolean_guard.csv; results/raw_highdim_neural_prior_learned_prior.csv; +16 more`
+  - claim use: Separates neural/search-control effects from deterministic algebraic construction, guarded portfolio selection, and reinforcement-learned Pareto budget allocation.
+  - scripts: `train_neural_policy.py; train_screen_depth_policy.py; train_screen_depth_frontier_policy.py; train_sparse_depth4_gate.py; train_mcts_budget_policy.py; evaluate_mcts_budget_policy.py; run_bitflip_random_prior_control.py; analyze_bitflip_random_prior_control.py; run_bitflip_neural_budget_sweep.py; analyze_bitflip_neural_budget_sweep.py; analyze_bitflip_prior_difficulty_slices.py; analyze_bitflip_prior_feature_gate.py; analyze_bitflip_prior_feature_gate_cv.py; analyze_bitflip_prior_feature_gate_cv_random_control.py; analyze_frontier_random_depth_control.py; analyze_phase_rotation_precision_audit.py; analyze_phase_rotation_sequence_smoke_audit.py; analyze_rotation_synthesis_backend_audit.py; analyze_phase_policy_budget_frontier.py; analyze_phase_policy_random_control.py; analyze_root_action_ranker_audit.py; analyze_search_control_baseline_audit.py; analyze_learned_control_audit.py; analyze_limited_learned_control_boundary.py; analyze_learned_control_effect_uncertainty.py; analyze_stochastic_control_stability.py; analyze_neural_mcts_claim_calibration.py`
+  - representative raw: `results/raw_bitflip_neural_budget_sweep.csv; results/raw_bitflip_random_prior_control.csv; results/raw_highdim_neural_prior_boolean_guard.csv; results/raw_highdim_neural_prior_learned_prior.csv; +20 more`
 - **Schedule proxy and lifetime tradeoffs**
   - claim use: Checks logic-level T-depth proxy and explicit auxiliary-lifetime tradeoffs for the high-dimensional frontier controllers.
   - scripts: `analyze_schedule_metrics.py; analyze_schedule_proxy_audit.py`
@@ -147,7 +147,7 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 - **Runtime envelope and rerun feasibility**
   - claim use: Summarizes workstation wall-clock envelopes across small, external, high-dimensional, truth-bridge, and learned-control slices.
   - scripts: `analyze_runtime_envelope_audit.py`
-  - representative raw: `results/raw_bitflip_neural_budget_sweep.csv; results/raw_caterpillar_xag_api_best.csv; results/raw_cirkit_aig_probe.csv; results/raw_mockturtle_xag_probe.csv; +16 more`
+  - representative raw: `results/raw_bitflip_neural_budget_sweep.csv; results/raw_caterpillar_xag_api_best.csv; results/raw_cirkit_aig_probe.csv; results/raw_mcts_budget_policy_decisions.csv; +17 more`
 - **High-dimensional symbolic screen-scale runs**
   - claim use: Tests scaling behavior on n=20-64 generated term-set instances with symbolic emitted-circuit checks.
   - scripts: `run_screen_scale_terms.py; analyze_ultra_scale64_stress.py; analyze_ultra_scale64_resource_profile.py`

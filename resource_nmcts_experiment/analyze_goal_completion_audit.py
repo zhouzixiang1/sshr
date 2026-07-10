@@ -48,6 +48,15 @@ def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8") if path.exists() else ""
 
 
+def read_json(path: Path) -> dict[str, object]:
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
 def file_count(root: Path, pattern: str) -> int:
     return sum(1 for _ in root.glob(pattern)) if root.exists() else 0
 
@@ -91,6 +100,25 @@ def build_items() -> list[GoalItem]:
     table_count = file_count(TABLES, "*.tex")
     pages = pdf_pages(PDF)
     metadata_needs, _ = metadata_counts()
+    budget_manifest = read_json(RESULTS / "manifest_mcts_budget_policy.json")
+    budget_training = read_json(RESULTS / "manifest_mcts_budget_policy_training.json")
+    budget_selected = budget_manifest.get("selected_operating_point", {}) if budget_manifest else {}
+    budget_policy_ok = (
+        bool(budget_manifest)
+        and bool(budget_training)
+        and int(budget_manifest.get("needs_revision_count", -1)) == 0
+        and int(budget_manifest.get("pairs", -1)) == 160
+        and int(budget_manifest.get("exact_fingerprint_overlap", -1)) == 0
+        and budget_training.get("status") == "complete"
+        and int(budget_training.get("train_samples", -1)) == 320
+        and int(budget_training.get("validation_samples", -1)) == 160
+        and int(budget_selected.get("vs_resource_losses", -1)) == 0
+        and float(budget_selected.get("mean_relative_vs_resource_score", 0.0)) <= -0.03
+        and float(budget_selected.get("time_change_ci_high", 1.0)) < 0.0
+        and float(budget_selected.get("quality_retained_ci_low", 0.0)) >= 0.90
+        and 0 < int(budget_selected.get("vs_pareto_losses", 0)) < 160
+        and float(budget_selected.get("score_regret_ci_high", 1.0)) <= 0.01
+    )
 
     return [
         GoalItem(
@@ -171,10 +199,17 @@ def build_items() -> list[GoalItem]:
                     TABLES / "limited_learned_control_boundary.tex",
                     RESULTS / "analysis_learned_control_effect_uncertainty.md",
                     TABLES / "learned_control_effect_uncertainty.tex",
+                    RESULTS / "analysis_mcts_budget_policy.md",
+                    RESULTS / "manifest_mcts_budget_policy_training.json",
+                    RESULTS / "manifest_mcts_budget_policy.json",
+                    RESULTS / "raw_mcts_budget_policy_decisions.csv",
+                    THIS_DIR / "models" / "mcts_budget_policy.pt",
+                    TABLES / "mcts_budget_policy.tex",
                     FIGURES / "fig7_learned_control_summary.pdf",
-                )
+                ),
+                budget_policy_ok,
             ),
-            evidence="Search-control, bit-flip random-prior, frontier random-depth, stochastic-control stability, learned-control, limited-boundary, and learned-control effect-uncertainty audits separate heuristic/beam/no-MCTS/MCTS/Pareto/prior comparisons, same-budget random-prior controls, same-candidate frontier budget controls, independent-seed checks, promoted frontier/gating/phase-pruning controls, runtime-negative limited diagnostics, and paired bootstrap effect intervals.",
+            evidence="Search-control and random-control audits separate heuristic/beam/no-MCTS/MCTS/Pareto effects. The fitted-Q controller passes a 320/160/160 disjoint train/validation/test gate; on 160 test functions it improves score by 3.48% over base Resource-NMCTS with 56/0/104 W/L/T, retains 94.90% of the Pareto gain, and reduces conservative measured time by 13.13% with paired bootstrap support.",
             evidence_files=(
                 RESULTS / "analysis_search_control_baseline_audit.md",
                 TABLES / "search_control_baseline_audit.tex",
@@ -190,10 +225,16 @@ def build_items() -> list[GoalItem]:
                 TABLES / "limited_learned_control_boundary.tex",
                 RESULTS / "analysis_learned_control_effect_uncertainty.md",
                 TABLES / "learned_control_effect_uncertainty.tex",
+                RESULTS / "analysis_mcts_budget_policy.md",
+                RESULTS / "manifest_mcts_budget_policy_training.json",
+                RESULTS / "manifest_mcts_budget_policy.json",
+                RESULTS / "raw_mcts_budget_policy_decisions.csv",
+                THIS_DIR / "models" / "mcts_budget_policy.pt",
+                TABLES / "mcts_budget_policy.tex",
                 FIGURES / "fig7_learned_control_summary.pdf",
             ),
-            boundary="The evidence supports bounded neural/search-control contributions, not a claim that deep RL alone explains all gains.",
-            next_action="Do not promote runtime-negative or quality-weak neural diagnostics as main contributions.",
+            boundary="Reinforcement learning controls optional Pareto effort after a verified base result; it is not end-to-end deep RL and has explicit score regret against always-on Pareto.",
+            next_action="Preserve the disjoint split, paired uncertainty gates, and quality-effort boundary when changing the policy or manuscript claim.",
         ),
         GoalItem(
             requirement="Baseline reproduction and comparison breadth",
@@ -237,20 +278,27 @@ def build_items() -> list[GoalItem]:
                     RESULTS / "analysis_paired_effect_uncertainty.md",
                     TABLES / "paired_statistical_evidence.tex",
                     TABLES / "paired_effect_uncertainty.tex",
+                    RESULTS / "analysis_mcts_budget_policy.md",
+                    RESULTS / "manifest_mcts_budget_policy.json",
+                    TABLES / "mcts_budget_policy.tex",
                     FIGURES / "fig2_traditional_resources.pdf",
                     FIGURES / "fig3_baseline_comparisons.pdf",
-                )
+                ),
+                budget_policy_ok,
             ),
-            evidence="Paired statistics and bootstrap effect intervals show score/T improvements over direct ANF, ESOP, SSHR variants, ABC-XAG, ROS-style LUT, mockturtle, Caterpillar API, CirKit, RevKit CLI, and high-dimensional root/fast baselines.",
+            evidence="Paired statistics show large score/T improvements over direct ANF, ESOP, SSHR, and external logical probes. Independently, the fitted-Q policy adds a statistically supported 3.48% score improvement over base Resource-NMCTS while reducing conservative search time by 13.13% relative to always-on Pareto.",
             evidence_files=(
                 RESULTS / "analysis_paired_statistical_evidence.md",
                 RESULTS / "analysis_paired_effect_uncertainty.md",
                 TABLES / "paired_statistical_evidence.tex",
                 TABLES / "paired_effect_uncertainty.tex",
+                RESULTS / "analysis_mcts_budget_policy.md",
+                RESULTS / "manifest_mcts_budget_policy.json",
+                TABLES / "mcts_budget_policy.tex",
                 FIGURES / "fig2_traditional_resources.pdf",
                 FIGURES / "fig3_baseline_comparisons.pdf",
             ),
-            boundary="The strongest claim is T-count and weighted-score improvement; raw CNOT/depth/ancilla tradeoffs remain explicit.",
+            boundary="The strongest circuit claim is T-count and weighted-score improvement; the RL result is a quality-effort tradeoff and raw CNOT/depth/ancilla tradeoffs remain explicit.",
             next_action="Keep effect-size claims paired and matched by function name.",
         ),
         GoalItem(

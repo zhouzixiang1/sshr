@@ -5,13 +5,13 @@ It is intentionally conservative: small or runtime-negative AI components are la
 
 ## Status counts
 
-- pass: 12
+- pass: 13
 
 ## Claim-class counts
 
 - bounded: 6
 - limited: 2
-- promoted: 4
+- promoted: 5
 
 | component | claim class | scope | quality evidence | cost/evaluation evidence | paper role | status |
 |---|---|---|---|---|---|---|
@@ -20,6 +20,7 @@ It is intentionally conservative: small or runtime-negative AI components are la
 | Stage-gated frontier | promoted | independent n=24,28,32,40; 96 rows | vs all-depth 0/4/92, +0.04% | -25.43% staged planning time | promoted validation-calibrated guard | pass |
 | Sparse depth-4 gate | promoted | multi-seed n=24,28,32,40; 144 pairs | vs sparse frontier 0/0/144, +0.00%; false skips 0 | -13.43% time vs sparse frontier | promoted budget gate after depth-2 | pass |
 | Rank-diverse phase shortlist | promoted | held-out n=6 phase search; 38 rows | vs budget-32 17/0/21, -2.48%; vs wide-128 0/7/31, +0.00% | 512/8192 exact forms; 93.75% fewer vs wide-128 | promoted phase-search pruning | pass |
+| Contextual-bandit Pareto budget policy | promoted | disjoint seed-45 random-truth test; 160 functions | vs Resource 56/0/104, -3.48%; retains 94.90% Pareto gain | -13.13% conservative time; Pareto invoked 71/160 | promoted reinforcement-learned search-budget controller | pass |
 | Bit-flip learned prior | limited | 177 n<=6 functions; 8 random-prior repeats | vs random mean 17/8/152, -0.15%; seed means beaten 8/8 | +48.05% runtime vs random-prior mean | limited quality signal, not runtime claim | pass |
 | Bit-flip low-budget prior | bounded | top-8/top-12 budgets; 6 score rows; 1062 pairs | learned vs no-prior 218/0/844, -1.04% | +24.22% runtime vs no-prior | bounded low-budget quality evidence, not speed claim | pass |
 | Bit-flip ANF-term prior gate | bounded | 1593 paired rows; static 6--23 ANF-term deployment gate | retains 328/328 always-learned score wins; 0 score losses; -1.07% | +29.45% runtime vs no-prior; +14.61% overhead cut vs always-learned | bounded deployment rule from input ANF terms; not held-out policy claim | pass |

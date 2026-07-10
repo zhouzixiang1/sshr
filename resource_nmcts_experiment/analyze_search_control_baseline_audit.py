@@ -96,6 +96,13 @@ def build_rows() -> list[dict[str, str]]:
     frontier_random = read_csv(RESULTS / "summary_frontier_random_depth_control.csv")
     phase_budget = read_csv(RESULTS / "summary_phase_policy_budget_frontier.csv")
     phase_random = read_csv(RESULTS / "summary_phase_policy_random_control.csv")
+    mcts_budget_policy = require_row(
+        read_csv(RESULTS / "summary_mcts_budget_policy.csv"),
+        threshold="0.6",
+    )
+    mcts_budget_manifest = json.loads(
+        (RESULTS / "manifest_mcts_budget_policy.json").read_text(encoding="utf-8")
+    )
 
     def search_row(
         *,
@@ -193,6 +200,33 @@ def build_rows() -> list[dict[str, str]]:
             conclusion="The Pareto archive makes the search-control gain clearer than base Resource-NMCTS alone.",
             boundary="Ancilla tradeoffs still need separate reporting.",
         ),
+        {
+            "layer": "reinforcement-learned Pareto budget control",
+            "evidence_source": "disjoint seed-45 contextual-bandit test",
+            "comparison": "Fitted-Q budget policy vs Resource-NMCTS and always-Pareto",
+            "scope": "160 random truth-table functions; train/validation/test fingerprints disjoint",
+            "pairs": mcts_budget_policy["pairs"],
+            "score_wlt": (
+                f"{mcts_budget_policy['vs_resource_wins']}/"
+                f"{mcts_budget_policy['vs_resource_losses']}/"
+                f"{mcts_budget_policy['vs_resource_ties']} vs Resource"
+            ),
+            "mean_score_change": pct_ratio(
+                mcts_budget_policy["mean_relative_vs_resource_score"]
+            ),
+            "cost_or_runtime": (
+                f"time {pct_ratio(mcts_budget_policy['time_change_vs_pareto'])}; "
+                f"Pareto calls {mcts_budget_policy['run_pareto']}/{mcts_budget_policy['pairs']}"
+            ),
+            "supported_conclusion": "A fitted-Q contextual bandit preserves most Pareto quality gain while reducing expensive search effort over base Resource-NMCTS.",
+            "boundary": "The policy has nonzero regret against always-Pareto and does not dominate its circuit resources on every function.",
+            "status": "pass"
+            if int(mcts_budget_manifest.get("needs_revision_count", -1)) == 0
+            and int(mcts_budget_policy["vs_resource_losses"]) == 0
+            and float(mcts_budget_policy["time_change_ci_high"]) < 0.0
+            and float(mcts_budget_policy["quality_retained_ci_low"]) >= 0.90
+            else "needs revision",
+        },
         {
             "layer": "learned prior",
             "evidence_source": "traditional_resource no-prior rerun",

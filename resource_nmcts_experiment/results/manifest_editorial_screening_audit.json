@@ -46,13 +46,13 @@
       "supported_decision": "Unfavorable metric evidence is visible before review rather than hidden in raw tables."
     },
     {
-      "boundary": "The largest gains remain tied to algebraic action space and guarded/Pareto selection.",
-      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; manifest=results/manifest_search_control_baseline_audit.json::needs_revision_count=0",
+      "boundary": "The largest circuit-resource gains remain tied to algebraic actions and guarded/Pareto selection; RL controls optional search effort.",
+      "evidence": "files_missing=none; tokens=6/6; missing_tokens=none; manifest=results/manifest_search_control_baseline_audit.json::needs_revision_count=0",
       "item": "AI and MCTS contribution bounded",
       "next_action": "No action needed.",
       "risk": "Reviewer may reject an overclaim that deep learning alone explains the gains.",
       "status": "pass",
-      "supported_decision": "The manuscript can claim neural/MCTS search-control support without overclaiming deep RL."
+      "supported_decision": "The manuscript can claim neural/MCTS search control and a held-out fitted-Q budget result without overclaiming deep RL."
     },
     {
       "boundary": "Do not claim exhaustive high-dimensional truth-table benchmarking.",

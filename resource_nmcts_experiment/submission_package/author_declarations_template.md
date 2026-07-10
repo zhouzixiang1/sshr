@@ -31,7 +31,7 @@ filling author contributions, AI assistance, and policy fields.
 
 ## Manuscript
 
-- Title: Resource-Constrained Neural Monte Carlo Tree Search for Quantum Boolean Oracle Synthesis
+- Title: Resource-Constrained Neural Monte Carlo Tree Search with Reinforcement-Learned Budget Control for Quantum Boolean Oracle Synthesis
 - Current manuscript source: `paper_latex/resource_nmcts_submission_v1.tex`
 - Current manuscript PDF: `paper_latex/resource_nmcts_submission_v1.pdf`
 - Scope boundary: logical-layer quantum Boolean oracle synthesis only; no hardware mapping, routing, native-gate scheduling, noise model, or magic-state-factory resource estimate.

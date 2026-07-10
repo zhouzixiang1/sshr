@@ -4,7 +4,7 @@ This audit answers the reviewer-facing question: which search/control baselines 
 
 ## Status counts
 
-- pass: 12
+- pass: 13
 
 | layer | comparison | scope | score W/L/T | mean score change | supported conclusion | boundary | status |
 |---|---|---|---:|---:|---|---|---|
@@ -13,6 +13,7 @@ This audit answers the reviewer-facing question: which search/control baselines 
 | deterministic search controls | No-MCTS portfolio over beam-only | 177 n<=6 functions | 106/1/70 | -8.36% | The no-MCTS portfolio is stronger than the beam-only child in the same slice. | Beam is a child/search baseline, not the full method. | pass |
 | MCTS over deterministic portfolio | Resource-NMCTS over no-MCTS portfolio | 177 n<=6 functions | 54/0/123 | -1.44% | MCTS adds a small but non-degrading score gain over the strengthened no-MCTS portfolio. | The magnitude is incremental, not the whole resource drop. | pass |
 | Pareto search control | Pareto Resource-NMCTS over no-MCTS portfolio | 177 n<=6 functions | 106/0/71 | -4.69% | The Pareto archive makes the search-control gain clearer than base Resource-NMCTS alone. | Ancilla tradeoffs still need separate reporting. | pass |
+| reinforcement-learned Pareto budget control | Fitted-Q budget policy vs Resource-NMCTS and always-Pareto | 160 random truth-table functions; train/validation/test fingerprints disjoint | 56/0/104 vs Resource | -3.48% | A fitted-Q contextual bandit preserves most Pareto quality gain while reducing expensive search effort over base Resource-NMCTS. | The policy has nonzero regret against always-Pareto and does not dominate its circuit resources on every function. | pass |
 | learned prior | Learned prior for Resource-NMCTS | 177 n<=6 functions | 39/0/138 | -1.10% | The learned scorer is a quality signal under the same functions and methods. | It is not a runtime claim and should not be promoted as the main source of improvement. | pass |
 | bit-flip random control | Learned bit-flip prior vs same-budget random-prior mean | 177 n<=6 functions; eight random-prior repeats | 17/8/152 | -0.15% | The learned scorer beats deterministic random action priors as a bounded quality signal. | The margin is small and runtime-negative; this is not a claim that neural ranking explains the full gain. | pass |
 | bit-flip low-budget control | Learned prior vs no-prior under compressed candidate/MCTS budgets | 2 budgets x 3 methods x 177 n<=6 functions | 218/0/844 | -1.04% | The learned prior remains a positive quality signal when candidate and MCTS budgets are tightened. | The same rows still show runtime overhead, so this is budget-allocation quality evidence rather than a speedup claim. | pass |

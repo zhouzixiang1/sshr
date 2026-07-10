@@ -32,7 +32,7 @@
 \newcommand{\ttable}{truth table}
 \providecommand{\Description}[1]{}
 
-\title{Resource-Constrained Neural Monte Carlo Tree Search for Quantum Boolean Oracle Synthesis}
+\title{Resource-Constrained Neural Monte Carlo Tree Search with Reinforcement-Learned Budget Control for Quantum Boolean Oracle Synthesis}
 \author{Anonymous Authors}
 \date{\today}
 
@@ -41,35 +41,33 @@
 
 \begin{abstract}
 Boolean oracle synthesis embeds classical predicates into quantum algorithms,
-but direct algebraic-normal-form constructions can be costly in non-Clifford
-gates, CNOTs, logical depth, and temporary workspace.  We formulate bit-flip
-Boolean oracle synthesis as a resource-constrained search problem over
-\anf{}/\fprm{} term sets and introduce \method{}, a logical-layer workflow that
-combines neural action priors, Monte Carlo tree search, Boolean-ring actions,
-frontier controllers, Pareto archives, and baseline-preserving guards.  Unlike
-SSHR, the method does not search
-parallelotope candidates; SSHR is used only as a CNOT-oriented small-function
-baseline.  On 177 traditional functions with $n\leq6$, Pareto-\method{}
-reduces mean T-count by 72.25\% and mean weighted score by 67.80\% relative to
-direct \anf{} synthesis, and its score win/loss/tie counts against ESOP beam,
-10-s time-limited weighted ESOP-MILP, and SSHR-H are 174/0/3, 167/3/7, and
-173/4/0.  Matched controls bound base/Pareto \mcts{} gains beyond no-\mcts{}
-to 1.44\%/4.69\%.  External
-probes show corresponding score wins against ROS-style LUT (309/0/0),
-mockturtle (166/11/0 and 64/0/0), CirKit (177/0/0 and 64/0/0), and legacy
-RevKit CLI exact-oracle synthesis (173/0/4).  These comparisons also expose
-the expected tradeoffs: CirKit is often shallower, and RevKit uses fewer
-auxiliary lines on most small functions.  In the phase branch, a rank-trained shortlist
-scores 512 of 8192 affine forms per held-out $n=6$ function and matches the
-wide-search mean within 0.01\% under the $T/R_z=30$ proxy.  For larger term-set
-instances, a sparse depth-2/4 frontier matches the measured depth-2/3/4
-frontier while reducing evaluation time by 24.94--30.28\%, and a learned
-depth-4 gate preserves sparse-frontier score on a 144-pair multi-seed
-$n=24,28,32,40$ audit while saving 13.43\%.  Correctness is supported by
-15,774 symbolic, phase-search, and policy-pruning rows, plus 700/700 complete
-\ttable{}-bridge rows for $n=21$--$30$.  The contribution is a verified
-logical-layer search method with strong T-count and weighted-score advantages,
-not a hardware-mapped, depth-only, or universal-dominance claim.
+but direct algebraic-normal-form constructions can be expensive in
+non-Clifford gates, CNOTs, depth, and workspace.  We formulate bit-flip oracle
+synthesis as resource-constrained search over \anf{}/\fprm{} term sets and
+introduce \method{}, a logical-layer workflow combining neural action priors,
+Monte Carlo tree search, Boolean-ring actions, Pareto archives,
+baseline-preserving guards, and a reinforcement-learned contextual-bandit
+fitted-Q policy that decides whether extra Pareto search justifies its measured
+cost.  The method is independent of SSHR; SSHR is used only as a CNOT-oriented
+external baseline.  On 177 traditional functions with $n\leq6$,
+Pareto-\method{} reduces mean T-count by 72.25\% and mean weighted score by
+67.80\% relative to direct \anf{} synthesis.  Its score win/loss/tie counts
+against ESOP beam, 10-s time-limited weighted ESOP-MILP, and SSHR-H are
+174/0/3, 167/3/7, and 173/4/0; matched controls bound base/Pareto \mcts{} gains
+beyond no-\mcts{} to 1.44\%/4.69\%.  On a disjoint 160-function test set, the
+fitted-Q policy invokes Pareto search 71 times, retains 94.90\% of its score
+gain, and reduces conservative measured search time by 13.13\% (95\%
+bootstrap CI, 6.80--20.46\%).  It improves score by 3.48\% over base
+\method{} with 0.51\% regret against always-Pareto.  External executable
+probes confirm weighted-score wins over ROS-style LUT, mockturtle, CirKit, and
+legacy RevKit; CirKit is often shallower, and RevKit uses fewer ancillas.  In the phase branch, a rank-trained shortlist scores 512 of
+8192 affine forms and matches the wide-search mean within 0.01\%.  For larger
+term-set instances, a sparse frontier reduces evaluation time by
+24.94--30.28\%, and a learned depth-4 gate preserves its score on 144 paired
+cases while saving 13.43\%.  Correctness is supported by
+15,774 symbolic, phase-search, and policy-pruning rows plus 700/700 complete
+\ttable{}-bridge rows for $n=21$--$30$.  The result is a verified logical-layer
+search method, not a hardware-mapped, depth-only, or universal-dominance claim.
 \end{abstract}
 
 \section{Introduction}
@@ -101,7 +99,8 @@ together.
 We address this gap by treating Boolean oracle synthesis as an explicit search
 problem.  The state is an \anf{}/\fprm{} term set; actions are algebraic
 rewrites that can be expanded back to GF(2) semantics; neural policies and
-\mcts{} allocate the search budget; and guard rules ensure that learned
+\mcts{} allocate the search budget; a fitted-Q contextual-bandit policy
+decides whether to invoke the expensive Pareto stage; and guard rules ensure that learned
 candidates do not replace a stronger deterministic baseline.  The resulting
 circuit is checked at the plan level, at the emitted X/CNOT/\mct{} symbolic
 level, and, for bridge instances, by full \ttable{} oracle simulation.
@@ -110,11 +109,13 @@ The paper makes four contributions.  First, it defines \method{} as a
 resource-constrained \anf{}/\fprm{} search pipeline rather than as an SSHR
 extension.  Second, it combines Boolean-ring linear-factor screening, neural
 action priors, \mcts{}, depth-frontier policies, Pareto archives, and
-baseline-preserving guards into one logical-layer synthesis workflow.  Third,
+baseline-preserving guards into one logical-layer synthesis workflow, then
+adds reinforcement-learned budget control over the optional Pareto stage.  Third,
 it evaluates the method against ESOP, SSHR, ABC/BDD, ROS-style LUT,
 mockturtle, Caterpillar API, CirKit, RevKit CLI, and RevKit phase/Rz baselines on matched
 functions.  Fourth, it separates algorithmic gains from engineering guards
-through ablations and high-dimensional verification bridges.
+through ablations, a disjoint train/validation/test budget-policy protocol,
+and high-dimensional verification bridges.
 
 The comparison design is deliberately layered.  Direct \anf{}, ESOP,
 ABC/BDD, and matched SSHR rows answer the same-task resource question;
@@ -410,6 +411,35 @@ remaining archive using the active score.  The archive is used only after each
 candidate has passed the same plan and emitted-circuit checks as the base
 method.
 
+\subsection{Contextual-bandit Pareto budget policy}
+
+The Pareto archive improves circuit resources but is substantially more
+expensive than base \method{}.  We therefore formulate its invocation as a
+two-action contextual bandit after a verified base-\method{} result is
+available~\cite{li2010contextual}.  The state contains input ANF statistics and the base result's
+score, T-count, CNOT count, depth, gate count, and peak ancilla.  The actions
+are to stop or to run Pareto-\method{} and retain the better verified result.
+For a function with base score $s_R$, Pareto score $s_P$, Pareto time $t_P$,
+and median training time $\widetilde{t}_P$, the logged return for running the
+Pareto action is
+\begin{equation}
+ r_{\mathrm{run}} = \frac{s_R-s_P}{\max(s_R,1)}
+ - 0.004\log_2\!\left(1+\frac{t_P}{\widetilde{t}_P}\right),
+ \qquad r_{\mathrm{stop}}=0.
+ \label{eq:budget-policy-reward}
+\end{equation}
+Because both actions are available in the logged benchmark, a small fitted-Q
+network learns the run-action return directly, following the batch
+value-learning lineage of Q-learning and fitted Q iteration
+~\cite{watkins1992qlearning,ernst2005fittedq}, and uses a validation-selected
+probability threshold of 0.6.  The policy is trained on 320 random truth-table
+functions from seeds 42--43, selected on 160 disjoint seed-44 functions, and
+frozen before a 160-function seed-45 test.  Exact truth-table fingerprints are
+disjoint across these sets.  This is reinforcement-learned search-budget
+control, not a claim that a learned model supplies circuit correctness: both
+the stop and run actions return circuits already checked by the same semantic
+verifiers.
+
 \subsection{Phase/Rz branch}
 
 RevKit \texttt{oracle\_synth} returns phase/Rz netlists rather than direct
@@ -424,14 +454,16 @@ rotations.
 
 \section{Experimental Design}
 
-Experiments answer four questions.  First, does \method{} reduce T-count and
+Experiments answer five questions.  First, does \method{} reduce T-count and
 weighted score on small functions where full \ttable{} checking is practical?
 Second, do the conclusions survive comparisons with ESOP, SSHR, ABC/BDD,
 ROS-style LUT, mockturtle, Caterpillar API, CirKit, RevKit CLI, and RevKit
 phase/Rz baselines?
 Third, which components--affine search, \mcts{}, neural priors, guards,
 frontier policies, and Pareto archives--account for the gains?  Fourth, how far
-can correctness evidence be pushed beyond small truth tables?
+can correctness evidence be pushed beyond small truth tables?  Fifth, can a
+reinforcement-learned budget policy reduce Pareto-search effort on disjoint
+functions while preserving most of its circuit-resource gain?
 
 The traditional slice contains 177 functions with $n\leq 6$.  High-dimensional
 logic-network probes include exported $n=14$, $n=15$, $n=16$, and $n=18$
@@ -444,6 +476,12 @@ On the traditional slice, weighted ESOP-MILP uses a 10-s per-function solver
 limit and reports the returned feasible ESOP incumbent.  It is a time-limited
 baseline within the weighted ESOP formulation, not a certificate of globally
 optimal quantum-circuit synthesis.
+The budget-policy study uses only random truth-table functions and keeps its
+320/160/160 train/validation/test split separate from the 177-function
+headline table.  The operating threshold is fixed on seed 44 before the seed-45
+test.  Policy time conservatively adds the already incurred base-\method{} time
+to Pareto-\method{} time whenever the run action is selected, even though the
+current Pareto implementation repeats some base candidates internally.
 Table~\ref{tab:benchmark-suite-audit} summarizes this benchmark-suite
 composition before any leaderboard-style result is reported.  It separates
 enumerable small Boolean oracles, published tiny-function optima, external
@@ -1301,6 +1339,33 @@ verification route; only the action-prior scorer and search budget differ.}
 \input{tables/bitflip_neural_budget_sweep}
 \end{table}
 
+Table~\ref{tab:mcts-budget-policy} reports the independent seed-45 test of the
+contextual-bandit fitted-Q budget policy.  It invokes Pareto-\method{} on
+71/160 functions and stops after base \method{} on 89/160, reducing expensive
+Pareto invocations by 55.6\%.  Relative to always running Pareto-\method{}, the
+conservative measured time decreases by 13.13\% (95\% CI, 6.80--20.46\%) while
+94.90\% (90.43--98.19\%) of the mean Pareto score gain is retained.  Relative
+to base \method{}, the policy records 56/0/104 score wins/losses/ties and a
+3.48\% mean score reduction; T-count, CNOT count, and depth decrease by 3.99\%,
+3.84\%, and 3.34\%, respectively.  The policy is not identical to always-Pareto:
+13 functions lose some Pareto gain, producing a 0.506\% mean score regret and
+a 0.831\% T-count regret.  Peak ancilla is 4.48\% above base \method{} but
+1.35\% below always-Pareto.  These rows support a quality--search-effort
+improvement over base \method{}, not all-metric dominance over Pareto search.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{Independent contextual-bandit fitted-Q budget-policy test.  The
+policy decides whether to run Pareto-\method{} after a verified base result.
+Time adds both stages conservatively; score regret is relative to always
+running Pareto search.}
+\label{tab:mcts-budget-policy}
+\input{tables/mcts_budget_policy}
+\end{table}
+
 \begin{table}[H]
 \centering
 \scriptsize
@@ -1913,6 +1978,11 @@ The ablations also calibrate the role of AI.  The neural prior is useful, but
 the largest gain comes from the searchable algebraic action space and from
 guarded portfolio selection.  This is a better fit for the evidence than
 claiming that deep reinforcement learning alone drives the result.  The
+contextual-bandit fitted-Q controller provides the paper's explicit
+reinforcement-learning component, but only at the search-budget level.  Its
+independent test reduces expensive Pareto invocations and measured search time
+while retaining most of the Pareto resource gain; the nonzero score regret and
+ancilla tradeoff rule out a claim of dominance over always-Pareto search.  The
 Boolean-ring structural audit further separates resource quality from planning
 cost: at $n=14$ and $n=16$ the guard improves score by 0.34--0.82\% over the
 pairwise-wide baseline; at $n=20$ a deeper screen gives a 7.47\% score
@@ -1972,7 +2042,8 @@ beyond the bridge slices.
 
 \section{Conclusion}
 
-We presented \method{}, a neural Monte Carlo tree search framework for
+We presented \method{}, a neural Monte Carlo tree search framework with
+reinforcement-learned budget control for
 resource-constrained quantum Boolean oracle synthesis over verifiable
 \anf{}/\fprm{} actions.  On matched small-function benchmarks, the method
 substantially lowers T-count and weighted score relative to direct \anf{},
@@ -1986,7 +2057,11 @@ high-dimensional planning cost by skipping depth 3 in the audited frontier, and
 the learned sparse depth-4 gate preserves sparse-frontier score across both
 held-out and independent-seed audits while removing additional depth-4
 evaluations.  The staged frontier analysis remains a validation-calibrated
-controller when depth-4 evaluation itself should be conditional.  The next step is not to
+controller when depth-4 evaluation itself should be conditional.  On a
+disjoint random-truth test, a fitted-Q contextual-bandit controller further
+retains 94.90\% of the Pareto score gain while reducing conservative measured
+search time by 13.13\%, with the remaining score and ancilla tradeoffs reported
+explicitly.  The next step is not to
 claim hardware-level
 optimality, but to strengthen the phase/Rz policy and complete fuller
 toolchain reproductions while keeping the claim at the logical synthesis

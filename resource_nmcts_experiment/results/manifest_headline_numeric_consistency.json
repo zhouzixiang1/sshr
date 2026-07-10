@@ -1,5 +1,5 @@
 {
-  "claims": 15,
+  "claims": 16,
   "manuscripts": {
     "anonymous": "paper_latex/resource_nmcts_submission_anonymous.tex",
     "author": "paper_latex/resource_nmcts_submission_v1.tex"
@@ -14,6 +14,7 @@
   "script": "analyze_headline_numeric_consistency.py",
   "source_files": [
     "paper_latex/figures/submission_v36/source_data/fig5_validation.csv",
+    "results/summary_mcts_budget_policy.csv",
     "results/summary_paired_statistical_evidence.csv",
     "results/summary_phase_policy_random_control.csv",
     "results/summary_sparse_depth4_gate_threshold_operating_points.csv",
@@ -21,6 +22,6 @@
     "results/summary_weight_robustness.csv"
   ],
   "status_counts": {
-    "pass": 15
+    "pass": 16
   }
 }

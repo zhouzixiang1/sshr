@@ -1,0 +1,123 @@
+{
+  "bootstrap_samples": 4000,
+  "bootstrap_seed": 20260745,
+  "csv_sha256": {
+    "results/raw_mcts_budget_policy_test_seed45.csv": "93f0f547db8b27447fcd4d9ed03bdf6b44ca750df4b82e4b701c7afb4cc7e110"
+  },
+  "csvs": [
+    "results/raw_mcts_budget_policy_test_seed45.csv"
+  ],
+  "exact_fingerprint_overlap": 0,
+  "gates": [
+    {
+      "evidence": "train=320; validation=160; test=160; exact_fingerprint_overlap=0",
+      "gate": "disjoint train/validation/test functions",
+      "status": "pass"
+    },
+    {
+      "evidence": "time_change=-0.131287; ci=[-0.204561,-0.067988]; run=71/160",
+      "gate": "statistically supported search-time reduction",
+      "status": "pass"
+    },
+    {
+      "evidence": "retained=0.948972; ci=[0.904259,0.981942]",
+      "gate": "Pareto quality-gain retention",
+      "status": "pass"
+    },
+    {
+      "evidence": "W/L/T=56/0/104; mean_relative=-0.034825",
+      "gate": "non-degrading score advantage over base Resource-NMCTS",
+      "status": "pass"
+    },
+    {
+      "evidence": "W/L/T=0/13/147; regret_ci_high=0.008805",
+      "gate": "Pareto tradeoff remains explicit",
+      "status": "pass"
+    },
+    {
+      "evidence": "metrics=['score', 'T', 'CNOT', 'depth', 'gates', 'peak_ancilla']",
+      "gate": "multi-resource reporting",
+      "status": "pass"
+    },
+    {
+      "evidence": "decision_rows=160; expected=160",
+      "gate": "per-instance policy decisions",
+      "status": "pass"
+    }
+  ],
+  "model": "models/mcts_budget_policy.pt",
+  "model_sha256": "5f06129944ee1c71ffd664e98fe80a79e71c869aedc4762de2b4c44d6ffbcd8a",
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_mcts_budget_policy.md",
+    "decisions": "results/raw_mcts_budget_policy_decisions.csv",
+    "latex": "paper_latex/tables/mcts_budget_policy.tex",
+    "manifest": "results/manifest_mcts_budget_policy.json",
+    "summary": "results/summary_mcts_budget_policy.csv"
+  },
+  "pairs": 160,
+  "script": "evaluate_mcts_budget_policy.py",
+  "selected_operating_point": {
+    "max_score_regret_vs_pareto": 0.15763954588457899,
+    "mean_pareto_CNOT": 85.175,
+    "mean_pareto_T": 41.325,
+    "mean_pareto_depth": 90.34375,
+    "mean_pareto_gates": 44.18125,
+    "mean_pareto_peak_ancilla": 2.125,
+    "mean_pareto_score": 50.77896875,
+    "mean_policy_CNOT": 85.78125,
+    "mean_policy_T": 41.575,
+    "mean_policy_depth": 90.8375,
+    "mean_policy_gates": 44.2375,
+    "mean_policy_peak_ancilla": 2.0875,
+    "mean_policy_score": 50.9861875,
+    "mean_relative_vs_pareto_CNOT": 0.00841931724137796,
+    "mean_relative_vs_pareto_T": 0.008306051587301588,
+    "mean_relative_vs_pareto_depth": 0.0068064899624160485,
+    "mean_relative_vs_pareto_gates": 0.0014874202552549883,
+    "mean_relative_vs_pareto_peak_ancilla": -0.013541666666666665,
+    "mean_relative_vs_pareto_score": 0.0050604983646378365,
+    "mean_relative_vs_resource_CNOT": -0.0384163040710581,
+    "mean_relative_vs_resource_T": -0.039916763852288616,
+    "mean_relative_vs_resource_depth": -0.033371263305180664,
+    "mean_relative_vs_resource_gates": -0.020391388977624974,
+    "mean_relative_vs_resource_peak_ancilla": 0.04479166666666667,
+    "mean_relative_vs_resource_score": -0.034824715989041424,
+    "mean_resource_CNOT": 92.44375,
+    "mean_resource_T": 45.25,
+    "mean_resource_depth": 97.05,
+    "mean_resource_gates": 46.1375,
+    "mean_resource_peak_ancilla": 1.9875,
+    "mean_resource_score": 54.839875,
+    "mean_score_regret_vs_pareto": 0.0050604983646378365,
+    "pairs": 160,
+    "pareto_total_time_s": 441.2320864200592,
+    "policy_total_time_s": 383.3041265010834,
+    "quality_gain_retained": 0.9489722891288115,
+    "quality_retained_ci_high": 0.9819423294568314,
+    "quality_retained_ci_low": 0.9042594649544388,
+    "run_fraction": 0.44375,
+    "run_pareto": 71,
+    "score_regret_ci_high": 0.00880502888244766,
+    "score_regret_ci_low": 0.0019234916814729924,
+    "stop": 89,
+    "threshold": 0.6,
+    "time_change_ci_high": -0.06798808112973304,
+    "time_change_ci_low": -0.20456052910686184,
+    "time_change_vs_pareto": -0.13128682546406567,
+    "vs_pareto_losses": 13,
+    "vs_pareto_ties": 147,
+    "vs_pareto_wins": 0,
+    "vs_resource_losses": 0,
+    "vs_resource_ties": 104,
+    "vs_resource_wins": 56
+  },
+  "status": "complete",
+  "status_counts": {
+    "pass": 7
+  },
+  "thresholds": [
+    0.6
+  ],
+  "training_manifest": "results/manifest_mcts_budget_policy_training.json"
+}

@@ -11,7 +11,7 @@
   ],
   "needs_revision_count": 0,
   "python": "3.11.15",
-  "raw_rows": 39689,
+  "raw_rows": 39849,
   "rows": 7,
   "script": "analyze_benchmark_suite_audit.py",
   "source_files": [
@@ -23,6 +23,7 @@
     "results/raw_external_traditional_resource_n4.csv",
     "results/raw_external_traditional_resource_n5.csv",
     "results/raw_external_traditional_resource_n6.csv",
+    "results/raw_mcts_budget_policy_decisions.csv",
     "results/raw_mockturtle_xag_highdim_probe.csv",
     "results/raw_mockturtle_xag_probe.csv",
     "results/raw_phase_affine_policy.csv",

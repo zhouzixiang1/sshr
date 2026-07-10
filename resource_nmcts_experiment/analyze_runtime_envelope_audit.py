@@ -173,12 +173,20 @@ def build_rows() -> list[dict[str, str]]:
 
     budget = read_csv(RESULTS / "raw_bitflip_neural_budget_sweep.csv")
     budget_pareto = [row for row in budget if row.get("method") == "and_pareto_resource_nmcts"]
+    mcts_budget_decisions = read_csv(RESULTS / "raw_mcts_budget_policy_decisions.csv")
 
     learned_summary = read_csv(RESULTS / "summary_learned_control_audit.csv")
     learned_costs = [
         row["cost"]
         for row in learned_summary
-        if row.get("cost") and row.get("component") in {"Depth-frontier policy", "Sparse depth-4 gate", "Bit-flip low-budget prior"}
+        if row.get("cost")
+        and row.get("component")
+        in {
+            "Depth-frontier policy",
+            "Sparse depth-4 gate",
+            "Bit-flip low-budget prior",
+            "Contextual-bandit Pareto budget policy",
+        }
     ]
 
     return [
@@ -223,6 +231,10 @@ def build_rows() -> list[dict[str, str]]:
             "Low-budget Pareto learned-prior rows are correct; selected learned-control cost rows: "
             + "; ".join(learned_costs),
             "Learned controls are quality/budget evidence with explicit overhead or savings, not a blanket speedup claim.",
+            extra_times={
+                "fitted-Q policy": time_values(mcts_budget_decisions, "policy_time_s"),
+                "always-Pareto": time_values(mcts_budget_decisions, "pareto_time_s"),
+            },
         ),
     ]
 

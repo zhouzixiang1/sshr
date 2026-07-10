@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Calibrate the title-level Neural/MCTS claim against generated evidence.
+"""Calibrate the title-level neural/MCTS/RL claim against generated evidence.
 
 The manuscript title and abstract use a strong method identity: neural
 Monte Carlo tree search for resource-constrained Boolean-oracle synthesis.
@@ -34,6 +34,7 @@ LIMITED_LEARNED_BOUNDARY_MANIFEST = RESULTS / "manifest_limited_learned_control_
 LIMITED_LEARNED_BOUNDARY_SUMMARY = RESULTS / "summary_limited_learned_control_boundary.csv"
 LEARNED_EFFECT_UNCERTAINTY_MANIFEST = RESULTS / "manifest_learned_control_effect_uncertainty.json"
 LEARNED_EFFECT_UNCERTAINTY_SUMMARY = RESULTS / "summary_learned_control_effect_uncertainty.csv"
+MCTS_BUDGET_POLICY_MANIFEST = RESULTS / "manifest_mcts_budget_policy.json"
 BITFLIP_RANDOM_MANIFEST = RESULTS / "manifest_bitflip_random_prior_control.json"
 BITFLIP_BUDGET_MANIFEST = RESULTS / "manifest_bitflip_neural_budget_sweep.json"
 FRONTIER_RANDOM_MANIFEST = RESULTS / "manifest_frontier_random_depth_control.json"
@@ -74,7 +75,7 @@ def manifest_rows(path: Path) -> int:
     manifest = read_json(path)
     if not manifest:
         return -1
-    for key in ("rows", "profile_rows", "raw_rows", "required_boundary_count"):
+    for key in ("rows", "pairs", "profile_rows", "raw_rows", "required_boundary_count"):
         if key in manifest:
             return int(manifest.get(key, -1))
     return -1
@@ -153,6 +154,35 @@ def build_rows() -> list[dict[str, str]]:
                 LEARNED_EFFECT_UNCERTAINTY_MANIFEST,
                 LEARNED_EFFECT_UNCERTAINTY_SUMMARY,
                 REVIEWER_BRIEF,
+            ),
+        },
+        {
+            "claim_anchor": "Reinforcement-learned budget control in the title",
+            "evidence_gate": (
+                f"budget-policy pairs={manifest_rows(MCTS_BUDGET_POLICY_MANIFEST)}, "
+                f"needs_revision={manifest_revision_count(MCTS_BUDGET_POLICY_MANIFEST)}"
+            ),
+            "condition": (
+                manifest_revision_count(MCTS_BUDGET_POLICY_MANIFEST) == 0
+                and manifest_rows(MCTS_BUDGET_POLICY_MANIFEST) == 160
+                and not missing_tokens(
+                    paper,
+                    (
+                        "Reinforcement-Learned Budget Control",
+                        "contextual-bandit fitted-Q",
+                        "94.90\\%",
+                        "13.13\\%",
+                        "not a claim that a learned model supplies circuit correctness",
+                    ),
+                )
+            ),
+            "allowed_claim": "A fitted-Q contextual bandit learns whether to spend the optional Pareto-MCTS budget and achieves a measured quality-effort tradeoff on disjoint test functions.",
+            "excluded_claim": "Do not describe the full synthesizer as end-to-end deep reinforcement learning or claim dominance over always-Pareto search.",
+            "evidence_files": (
+                MCTS_BUDGET_POLICY_MANIFEST,
+                RESULTS / "analysis_mcts_budget_policy.md",
+                RESULTS / "manifest_mcts_budget_policy_training.json",
+                PAPER,
             ),
         },
         {
@@ -313,7 +343,7 @@ def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
     lines = [
         "# Neural/MCTS Claim Calibration",
         "",
-        "This audit checks whether the title-level neural MCTS framing is supported by the current evidence and bounded by explicit exclusions.",
+        "This audit checks whether the title-level neural MCTS and reinforcement-learned budget-control framing is supported by the current evidence and bounded by explicit exclusions.",
         "",
         "## Status counts",
         "",

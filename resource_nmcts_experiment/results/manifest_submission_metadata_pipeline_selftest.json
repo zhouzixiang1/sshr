@@ -68,7 +68,7 @@
       "status": "pass"
     },
     {
-      "evidence": "chars=1923; has_header=True; placeholder_present=False.",
+      "evidence": "chars=1965; has_header=True; placeholder_present=False.",
       "item": "preview renderer: author declarations",
       "next_action": "Fix renderer output before relying on generated private preview files.",
       "status": "pass"
@@ -80,13 +80,13 @@
       "status": "pass"
     },
     {
-      "evidence": "chars=1391; has_header=True; placeholder_present=False.",
+      "evidence": "chars=1433; has_header=True; placeholder_present=False.",
       "item": "preview renderer: cover letter",
       "next_action": "Fix renderer output before relying on generated private preview files.",
       "status": "pass"
     },
     {
-      "evidence": "chars=4308; has_header=True; placeholder_present=False.",
+      "evidence": "chars=4392; has_header=True; placeholder_present=False.",
       "item": "preview renderer: submission text packet",
       "next_action": "Fix renderer output before relying on generated private preview files.",
       "status": "pass"

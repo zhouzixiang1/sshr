@@ -28,6 +28,7 @@ run_py() {
 
 echo "==> Using Python: ${PYTHON_BIN}"
 
+run_py evaluate_mcts_budget_policy.py
 run_py analyze_contribution_evidence_map.py
 run_py analyze_novelty_comparison_scorecard.py
 run_py analyze_method_workflow_table.py

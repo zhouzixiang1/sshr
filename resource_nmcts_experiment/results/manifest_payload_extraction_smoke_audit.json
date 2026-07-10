@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1246; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1264; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -129,13 +129,13 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_search_budget_contract.json; needs_revision_count=0; rows=8; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_search_budget_contract.json; needs_revision_count=0; rows=9; stderr=none",
       "item": "Search-budget contract audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_search_control_baseline_audit.json; needs_revision_count=0; rows=12; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_search_control_baseline_audit.json; needs_revision_count=0; rows=13; stderr=none",
       "item": "Search-control baseline audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -195,7 +195,7 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_learned_control_audit.json; needs_revision_count=0; rows=12; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_learned_control_audit.json; needs_revision_count=0; rows=13; stderr=none",
       "item": "Learned-control audit",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -207,13 +207,13 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_learned_control_effect_uncertainty.json; needs_revision_count=0; rows=8; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_learned_control_effect_uncertainty.json; needs_revision_count=0; rows=9; stderr=none",
       "item": "Learned-control effect uncertainty",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_neural_mcts_claim_calibration.json; needs_revision_count=0; rows=7; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_neural_mcts_claim_calibration.json; needs_revision_count=0; rows=8; stderr=none",
       "item": "Neural/MCTS claim calibration",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
@@ -261,7 +261,7 @@
       "status": "pass"
     },
     {
-      "evidence": "returncode=0; manifest=results/manifest_headline_numeric_consistency.json; needs_revision_count=0; claims=15; stderr=none",
+      "evidence": "returncode=0; manifest=results/manifest_headline_numeric_consistency.json; needs_revision_count=0; claims=16; stderr=none",
       "item": "Headline numeric consistency",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"

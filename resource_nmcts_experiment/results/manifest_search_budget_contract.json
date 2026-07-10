@@ -7,7 +7,7 @@
     "table": "paper_latex/tables/search_budget_contract.tex"
   },
   "python": "3.11.15",
-  "rows": 8,
+  "rows": 9,
   "script": "analyze_search_budget_contract.py",
   "search_config": {
     "candidate_top_k": "24",
@@ -20,6 +20,6 @@
     "neural_mcts_simulations": "128"
   },
   "status_counts": {
-    "pass": 8
+    "pass": 9
   }
 }

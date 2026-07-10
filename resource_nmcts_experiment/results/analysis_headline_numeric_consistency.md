@@ -4,7 +4,7 @@ This audit recomputes central abstract numbers from generated evidence files and
 
 ## Status counts
 
-- pass: 15
+- pass: 16
 
 ## Claims
 
@@ -24,4 +24,5 @@ This audit recomputes central abstract numbers from generated evidence files and
 | phase diverse top-512 shortlist tracks wide search | pass | held_out_items=38; exact_scored=512/8192; mean_delta=-0.01% | held_out_items=38; exact_scored=512/8192; |mean_delta|<=0.0125% | `results/summary_phase_policy_random_control.csv` | 512 of 8192; 0.01%; T/R_z=30 |
 | sparse depth-2/4 frontier bridge time reduction | pass | bridge_rows=8; time_range=24.94%--30.28%; score_tied=True | bridge_rows=8; time_range=24.94%--30.28%; score_tied=True | `results/summary_sparse_depth_frontier.csv` | 24.94--30.28% |
 | learned sparse depth-4 gate selected operating point | pass | pairs=144; score_wlt_vs_sparse=0/0/144; time_saving=13.43% | pairs=144; score_wlt_vs_sparse=0/0/144; time_saving=13.43% | `results/summary_sparse_depth4_gate_threshold_operating_points.csv` | 144-pair; 13.43% |
+| reinforcement-learned MCTS budget policy | pass | pairs=160; run=71; vs_resource=56/0/104; score_gain=3.48%; Pareto_regret=0.51%; retained=94.90%; time_saving=13.13% | pairs=160; run=71; vs_resource=56/0/104; score_gain=3.48%; Pareto_regret=0.51%; retained=94.90%; time_saving=13.13% | `results/summary_mcts_budget_policy.csv` | 160-function; 3.48%; 0.51%; 94.90%; 13.13% |
 | headline verification row count | pass | verified_total=15,774; bridge_700_700=True; all_exact=True | verified_total=15,774; bridge_700_700=True; all_exact=True | `paper_latex/figures/submission_v36/source_data/fig5_validation.csv` | 15,774; 700/700 |

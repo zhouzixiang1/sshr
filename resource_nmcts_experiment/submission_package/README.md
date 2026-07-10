@@ -1,8 +1,8 @@
 # Submission Package README
 
 This directory contains the human-facing upload and handoff files for the
-manuscript "Resource-Constrained Neural Monte Carlo Tree Search for Quantum
-Boolean Oracle Synthesis".
+manuscript "Resource-Constrained Neural Monte Carlo Tree Search with
+Reinforcement-Learned Budget Control for Quantum Boolean Oracle Synthesis".
 
 The package is prepared for a logical-layer quantum Boolean oracle synthesis
 paper.  It does not include hardware mapping, routing, native-gate scheduling,

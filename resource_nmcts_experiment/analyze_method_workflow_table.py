@@ -26,7 +26,7 @@ ROWS = [
     },
     {
         "stage": "Search control",
-        "mechanism": "Use neural action priors, MCTS/beam expansion, staged frontiers, and sparse learned gates to allocate the search budget.",
+        "mechanism": "Use neural action priors, MCTS/beam expansion, staged frontiers, sparse learned gates, and fitted-Q Pareto invocation to allocate the search budget.",
         "invariant": "Learned decisions rank or skip evaluations; they do not define semantic correctness.",
         "artifact": "Scored candidate pool and search-time diagnostics.",
     },

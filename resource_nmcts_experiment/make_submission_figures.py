@@ -537,6 +537,7 @@ def learned_control_rows() -> list[dict[str, object]]:
             "Stage-gated frontier": "stage gate",
             "Sparse depth-4 gate": "sparse gate",
             "Rank-diverse phase shortlist": "phase shortlist",
+            "Contextual-bandit Pareto budget policy": "RL budget",
             "Bit-flip learned prior": "learned prior",
             "Bit-flip low-budget prior": "low-budget prior",
             "Bit-flip ANF-term prior gate": "ANF gate",
@@ -591,7 +592,13 @@ def fig_learned_control_summary() -> None:
         figsize=(7.2, 2.75),
         gridspec_kw={"width_ratios": [1.15, 1.15, 1.0]},
     )
-    colors = [PALETTE["resource"], PALETTE["baseline"], PALETTE["gain"], PALETTE["phase"]]
+    colors = [
+        PALETTE["resource"],
+        PALETTE["baseline"],
+        PALETTE["gain"],
+        PALETTE["phase"],
+        PALETTE["resource"],
+    ]
 
     ax = axes[0]
     y = list(range(len(promoted)))
@@ -603,7 +610,7 @@ def fig_learned_control_summary() -> None:
     ax.invert_yaxis()
     ax.set_xlabel("Score change (%)")
     ax.set_title("Promoted controls keep quality.", loc="left", weight="bold")
-    ax.set_xlim(-2.8, 0.35)
+    ax.set_xlim(-4.2, 0.35)
     for i, value in enumerate(quality):
         if value < -0.25:
             ax.text(value + 0.10, i, f"{value:+.2f}%", va="center", ha="left", fontsize=6.3, color="white")

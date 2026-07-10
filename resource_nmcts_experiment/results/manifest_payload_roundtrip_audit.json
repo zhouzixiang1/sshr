@@ -161,9 +161,12 @@
     "analyze_phase_rotation_sequence_smoke_audit.py",
     "analyze_root_action_ranker_audit.py",
     "analyze_rotation_synthesis_backend_audit.py",
+    "evaluate_mcts_budget_policy.py",
+    "models/mcts_budget_policy.pt",
     "paper_latex/tables/learned_control_audit.tex",
     "paper_latex/tables/learned_control_effect_uncertainty.tex",
     "paper_latex/tables/limited_learned_control_boundary.tex",
+    "paper_latex/tables/mcts_budget_policy.tex",
     "paper_latex/tables/phase_policy_budget_frontier.tex",
     "paper_latex/tables/phase_rotation_precision_audit.tex",
     "paper_latex/tables/phase_rotation_sequence_smoke_audit.tex",
@@ -172,6 +175,7 @@
     "results/analysis_learned_control_audit.md",
     "results/analysis_learned_control_effect_uncertainty.md",
     "results/analysis_limited_learned_control_boundary.md",
+    "results/analysis_mcts_budget_policy.md",
     "results/analysis_phase_policy_budget_frontier.md",
     "results/analysis_phase_rotation_precision_audit.md",
     "results/analysis_phase_rotation_sequence_smoke_audit.md",
@@ -180,20 +184,34 @@
     "results/manifest_learned_control_audit.json",
     "results/manifest_learned_control_effect_uncertainty.json",
     "results/manifest_limited_learned_control_boundary.json",
+    "results/manifest_mcts_budget_policy.json",
+    "results/manifest_mcts_budget_policy_test_seed45_run.json",
+    "results/manifest_mcts_budget_policy_train_seed43_run.json",
+    "results/manifest_mcts_budget_policy_training.json",
+    "results/manifest_mcts_budget_policy_validation_seed44_run.json",
     "results/manifest_phase_policy_budget_frontier.json",
     "results/manifest_phase_rotation_precision_audit.json",
     "results/manifest_phase_rotation_sequence_smoke_audit.json",
     "results/manifest_root_action_ranker_audit.json",
     "results/manifest_rotation_synthesis_backend_audit.json",
+    "results/raw_mcts_budget_policy_decisions.csv",
+    "results/raw_mcts_budget_policy_test_seed45.csv",
+    "results/raw_mcts_budget_policy_train_seed43.csv",
+    "results/raw_mcts_budget_policy_validation_seed44.csv",
     "results/raw_phase_rotation_sequence_smoke_audit.csv",
     "results/summary_learned_control_audit.csv",
     "results/summary_learned_control_effect_uncertainty.csv",
     "results/summary_limited_learned_control_boundary.csv",
+    "results/summary_mcts_budget_policy.csv",
+    "results/summary_mcts_budget_policy_test_seed45_run.csv",
+    "results/summary_mcts_budget_policy_train_seed43_run.csv",
+    "results/summary_mcts_budget_policy_validation_seed44_run.csv",
     "results/summary_phase_policy_budget_frontier.csv",
     "results/summary_phase_rotation_precision_audit.csv",
     "results/summary_phase_rotation_sequence_smoke_audit.csv",
     "results/summary_root_action_ranker_audit.csv",
-    "results/summary_rotation_synthesis_backend_audit.csv"
+    "results/summary_rotation_synthesis_backend_audit.csv",
+    "train_mcts_budget_policy.py"
   ],
   "needs_revision_count": 0,
   "neural_mcts_claim_calibration_paths": [
@@ -304,19 +322,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1246; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1264; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=1246; archive_files=1246; missing=none; extra=none.",
+      "evidence": "manifest_files=1264; archive_files=1264; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=1246; mismatches=none.",
+      "evidence": "checked=1264; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -442,7 +460,7 @@
       "status": "pass"
     },
     {
-      "evidence": "learned_control_files=41; missing=none.",
+      "evidence": "learned_control_files=59; missing=none.",
       "item": "Payload learned-control evidence",
       "next_action": "Ensure the uploadable archive includes the learned-control audit script, generated evidence, manifest, and manuscript table.",
       "status": "pass"
@@ -574,7 +592,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=1246; metadata_issues=none.",
+      "evidence": "members_checked=1264; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"

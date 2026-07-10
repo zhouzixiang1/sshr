@@ -1,0 +1,67 @@
+{
+  "actions": [
+    "stop_after_resource_nmcts",
+    "run_pareto_resource_nmcts"
+  ],
+  "best_validation": {
+    "mean_normalized_time": 0.9460904843190626,
+    "mean_score_regret": 0.0013119068800782673,
+    "pairs": 160,
+    "run_pareto": 75,
+    "stop": 85
+  },
+  "best_validation_utility": 0.0050962688173545176,
+  "config": {
+    "entropy_bonus": 0.0002,
+    "hidden": 64,
+    "learning_rate": 0.001,
+    "median_pareto_time_s": 4.762985467910767,
+    "objective": "fitted_q",
+    "random_truth_only": true,
+    "reward_scale": 0.03464892879128456,
+    "seed": 20260742,
+    "sign_loss_weight": 0.35,
+    "threshold": 0.6,
+    "time_penalty": 0.004,
+    "weight_decay": 0.0001
+  },
+  "epochs_completed": 581,
+  "epochs_requested": 3000,
+  "feature_names": [
+    "n",
+    "anf_terms",
+    "onset_density",
+    "mean_anf_degree",
+    "max_anf_degree",
+    "nonlinear_terms",
+    "degree3plus_terms",
+    "resource_score",
+    "resource_T",
+    "resource_CNOT",
+    "resource_depth",
+    "resource_gates",
+    "resource_peak_ancilla",
+    "resource_terms"
+  ],
+  "final_policy_loss": 0.2633717358112335,
+  "outputs": {
+    "manifest": "results/manifest_mcts_budget_policy_training.json",
+    "model": "models/mcts_budget_policy.pt"
+  },
+  "python": "3.11.15",
+  "reward": "relative score gain minus normalized Pareto runtime penalty",
+  "script": "train_mcts_budget_policy.py",
+  "status": "complete",
+  "torch": "2.12.0",
+  "train_csvs": [
+    "results/raw_search_ablation_traditional.csv",
+    "results/raw_mcts_budget_policy_train_seed43.csv"
+  ],
+  "train_pareto_improvements": 132,
+  "train_samples": 320,
+  "training_kind": "contextual_bandit_fitted_q_iteration",
+  "validation_csvs": [
+    "results/raw_mcts_budget_policy_validation_seed44.csv"
+  ],
+  "validation_samples": 160
+}

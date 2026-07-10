@@ -101,21 +101,24 @@ TIERS = (
     ClaimTier(
         tier="Search-control attribution",
         role="Causal and ablation evidence for AI/search components",
-        comparison_families="No-MCTS, beam-only, learned/no-prior, random-prior, random-depth, sparse/guard controls",
+        comparison_families="No-MCTS, beam-only, learned/no-prior, random-prior, random-depth, sparse/guard, fitted-Q Pareto-budget controls",
         required_files=(
             "results/analysis_search_control_baseline_audit.md",
             "results/analysis_bitflip_random_prior_control.md",
             "results/analysis_frontier_random_depth_control.md",
             "results/analysis_learned_control_audit.md",
             "results/analysis_limited_learned_control_boundary.md",
+            "results/analysis_mcts_budget_policy.md",
+            "results/manifest_mcts_budget_policy.json",
         ),
         anchor_tokens=(
             "random-prior",
             "random-depth",
             "deep reinforcement learning alone",
+            "contextual-bandit fitted-Q",
         ),
-        supported_claim="Neural/MCTS controls provide bounded quality, pruning, or budget-allocation gains over strengthened deterministic controls.",
-        excluded_claim="The paper does not claim that deep reinforcement learning alone causes the full resource reduction.",
+        supported_claim="Neural/MCTS controls provide bounded quality, pruning, or budget-allocation gains; fitted-Q control reduces optional Pareto effort at explicit score regret.",
+        excluded_claim="The paper does not claim that deep reinforcement learning alone causes the full resource reduction or that fitted-Q dominates always-on Pareto score.",
     ),
     ClaimTier(
         tier="Scaling verification",

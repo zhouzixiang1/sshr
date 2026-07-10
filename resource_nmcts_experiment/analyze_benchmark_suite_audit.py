@@ -197,13 +197,14 @@ def suite_specs() -> list[SuiteSpec]:
             patterns=(
                 "raw_bitflip_random_prior_control.csv",
                 "raw_bitflip_neural_budget_sweep.csv",
+                "raw_mcts_budget_policy_decisions.csv",
                 "raw_sparse_depth4_gate_generalization.csv",
                 "raw_phase_affine_policy.csv",
                 "raw_phase_affine_policy_rank_diverse.csv",
             ),
-            verification_route="same-budget random controls, held-out splits, independent seeds, and semantic checks",
-            usable_claim="Neural ranking, frontier policies, and guards are separated from the algebraic representation effect.",
-            boundary="These rows support bounded control gains; they do not imply that deep learning alone causes the main resource reduction.",
+            verification_route="same-budget random controls, disjoint training, validation, and test splits, independent seeds, and semantic checks",
+            usable_claim="Neural ranking, contextual-bandit budget allocation, frontier policies, and guards are separated from the algebraic representation effect.",
+            boundary="These rows support bounded control gains; they do not imply that deep learning or reinforcement learning alone causes the main resource reduction.",
         ),
     ]
 

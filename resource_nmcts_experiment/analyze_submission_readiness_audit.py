@@ -257,6 +257,13 @@ LEARNED_CONTROL_ANALYSIS = RESULTS / "analysis_learned_control_audit.md"
 LEARNED_CONTROL_SUMMARY = RESULTS / "summary_learned_control_audit.csv"
 LEARNED_CONTROL_MANIFEST = RESULTS / "manifest_learned_control_audit.json"
 LEARNED_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "learned_control_audit.tex"
+MCTS_BUDGET_POLICY_ANALYSIS = RESULTS / "analysis_mcts_budget_policy.md"
+MCTS_BUDGET_POLICY_SUMMARY = RESULTS / "summary_mcts_budget_policy.csv"
+MCTS_BUDGET_POLICY_MANIFEST = RESULTS / "manifest_mcts_budget_policy.json"
+MCTS_BUDGET_POLICY_TRAINING_MANIFEST = RESULTS / "manifest_mcts_budget_policy_training.json"
+MCTS_BUDGET_POLICY_DECISIONS = RESULTS / "raw_mcts_budget_policy_decisions.csv"
+MCTS_BUDGET_POLICY_MODEL = THIS_DIR / "models" / "mcts_budget_policy.pt"
+MCTS_BUDGET_POLICY_TABLE = THIS_DIR / "paper_latex" / "tables" / "mcts_budget_policy.tex"
 LIMITED_LEARNED_BOUNDARY_ANALYSIS = RESULTS / "analysis_limited_learned_control_boundary.md"
 LIMITED_LEARNED_BOUNDARY_SUMMARY = RESULTS / "summary_limited_learned_control_boundary.csv"
 LIMITED_LEARNED_BOUNDARY_MANIFEST = RESULTS / "manifest_limited_learned_control_boundary.json"
@@ -783,6 +790,33 @@ def build_rows() -> list[dict[str, str]]:
     learned_control_limited = (
         learned_control_manifest.get("limited_count", "missing") if learned_control_manifest else "missing"
     )
+    mcts_budget_policy_manifest = read_json(MCTS_BUDGET_POLICY_MANIFEST)
+    mcts_budget_training_manifest = read_json(MCTS_BUDGET_POLICY_TRAINING_MANIFEST)
+    mcts_budget_revisions = (
+        int(mcts_budget_policy_manifest.get("needs_revision_count", -1))
+        if mcts_budget_policy_manifest
+        else -1
+    )
+    mcts_budget_counts = (
+        mcts_budget_policy_manifest.get("status_counts", {})
+        if mcts_budget_policy_manifest
+        else {}
+    )
+    mcts_budget_pairs = (
+        mcts_budget_policy_manifest.get("pairs", "missing")
+        if mcts_budget_policy_manifest
+        else "missing"
+    )
+    mcts_budget_overlap = (
+        mcts_budget_policy_manifest.get("exact_fingerprint_overlap", "missing")
+        if mcts_budget_policy_manifest
+        else "missing"
+    )
+    mcts_budget_selected = (
+        mcts_budget_policy_manifest.get("selected_operating_point", {})
+        if mcts_budget_policy_manifest
+        else {}
+    )
     limited_learned_boundary_manifest = read_json(LIMITED_LEARNED_BOUNDARY_MANIFEST)
     limited_learned_boundary_revisions = (
         int(limited_learned_boundary_manifest.get("needs_revision_count", -1))
@@ -1204,6 +1238,7 @@ def build_rows() -> list[dict[str, str]]:
             and ALGORITHM_CONTRACT_MANIFEST.exists()
             and ALGORITHM_CONTRACT_TABLE.exists()
             and algorithm_contract_revisions == 0
+            and algorithm_contract_rows == 8
             else "needs revision",
             "evidence": f"Method includes a source-anchored algorithm contract; rows={algorithm_contract_rows}; status_counts={algorithm_contract_counts}; needs_revision_count={algorithm_contract_revisions}.",
             "next_action": "Rerun analyze_algorithm_contract_table.py after changing core search implementation, method text, or source anchors.",
@@ -1217,6 +1252,7 @@ def build_rows() -> list[dict[str, str]]:
             and SEARCH_BUDGET_MANIFEST.exists()
             and SEARCH_BUDGET_TABLE.exists()
             and search_budget_revisions == 0
+            and search_budget_rows == 9
             else "needs revision",
             "evidence": f"Method includes an explicit search-budget and scalability contract; rows={search_budget_rows}; status_counts={search_budget_counts}; needs_revision_count={search_budget_revisions}.",
             "next_action": "Rerun analyze_search_budget_contract.py after changing SearchConfig defaults, MCTS budgets, portfolio caps, frontier controllers, or verification routes.",
@@ -1645,6 +1681,32 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_ultra_scale64_resource_profile.py after changing ultra-scale raw rows, resource columns, or manuscript anchors.",
         },
         {
+            "item": "Reinforcement-learned MCTS budget policy",
+            "status": "pass"
+            if "tab:mcts-budget-policy" in text
+            and MCTS_BUDGET_POLICY_ANALYSIS.exists()
+            and MCTS_BUDGET_POLICY_SUMMARY.exists()
+            and MCTS_BUDGET_POLICY_MANIFEST.exists()
+            and MCTS_BUDGET_POLICY_TRAINING_MANIFEST.exists()
+            and MCTS_BUDGET_POLICY_DECISIONS.exists()
+            and MCTS_BUDGET_POLICY_MODEL.exists()
+            and MCTS_BUDGET_POLICY_TABLE.exists()
+            and mcts_budget_revisions == 0
+            and mcts_budget_pairs == 160
+            and mcts_budget_overlap == 0
+            and mcts_budget_training_manifest.get("status") == "complete"
+            and mcts_budget_training_manifest.get("train_samples") == 320
+            and mcts_budget_training_manifest.get("validation_samples") == 160
+            and float(mcts_budget_selected.get("time_change_ci_high", 1.0)) < 0.0
+            and float(mcts_budget_selected.get("quality_retained_ci_low", 0.0)) >= 0.90
+            and int(mcts_budget_selected.get("vs_resource_losses", -1)) == 0
+            and float(mcts_budget_selected.get("mean_relative_vs_resource_score", 0.0)) <= -0.03
+            and int(mcts_budget_selected.get("vs_pareto_losses", 0)) > 0
+            else "needs revision",
+            "evidence": f"Held-out fitted-Q budget policy uses 320/160/160 train/validation/test functions with exact overlap={mcts_budget_overlap}; pairs={mcts_budget_pairs}; selected={mcts_budget_selected}; status_counts={mcts_budget_counts}; needs_revision_count={mcts_budget_revisions}.",
+            "next_action": "Rerun evaluate_mcts_budget_policy.py after changing the model, split, reward, threshold, raw Resource/Pareto rows, or reinforcement-learning claim wording.",
+        },
+        {
             "item": "Search-control baseline audit",
             "status": "pass"
             if "tab:search-control-baseline-audit" in text
@@ -1653,6 +1715,7 @@ def build_rows() -> list[dict[str, str]]:
             and SEARCH_CONTROL_MANIFEST.exists()
             and SEARCH_CONTROL_TABLE.exists()
             and search_control_revisions == 0
+            and search_control_rows == 13
             else "needs revision",
             "evidence": f"Search-control audit separates heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, high-dimensional guard, bit-flip random-prior, frontier random-depth, and phase random-control evidence; rows={search_control_rows}; status_counts={search_control_counts}; needs_revision_count={search_control_revisions}.",
             "next_action": "Rerun analyze_search_control_baseline_audit.py after changing search ablations, learned-prior rows, bit-flip/frontier/phase random controls, or search-control manuscript claims.",
@@ -1667,9 +1730,9 @@ def build_rows() -> list[dict[str, str]]:
             and LEARNED_CONTROL_TABLE.exists()
             and learned_control_revisions == 0
             and isinstance(learned_control_rows, int)
-            and learned_control_rows >= 9
+            and learned_control_rows == 13
             and isinstance(learned_control_promoted, int)
-            and learned_control_promoted >= 4
+            and learned_control_promoted >= 5
             and isinstance(learned_control_bounded, int)
             and learned_control_bounded >= 2
             and isinstance(learned_control_limited, int)
@@ -1704,8 +1767,8 @@ def build_rows() -> list[dict[str, str]]:
             and LEARNED_EFFECT_UNCERTAINTY_TABLE.exists()
             and learned_effect_revisions == 0
             and isinstance(learned_effect_rows, int)
-            and learned_effect_rows >= 8
-            and learned_effect_class_counts.get("promoted", 0) >= 4
+            and learned_effect_rows == 9
+            and learned_effect_class_counts.get("promoted", 0) >= 5
             and learned_effect_class_counts.get("bounded", 0) >= 2
             and learned_effect_class_counts.get("limited", 0) >= 2
             else "needs revision",
@@ -1738,7 +1801,7 @@ def build_rows() -> list[dict[str, str]]:
             and NEURAL_MCTS_CLAIM_MANIFEST.exists()
             and NEURAL_MCTS_CLAIM_TABLE.exists()
             and neural_mcts_claim_revisions == 0
-            and neural_mcts_claim_rows == 7
+            and neural_mcts_claim_rows == 8
             and neural_mcts_claim_anchor_present
             else "needs revision",
             "evidence": f"Neural/MCTS claim-calibration audit ties title-level neural, MCTS, resource-constrained, large-scale, and logical-layer terms to evidence gates and excluded claims; rows={neural_mcts_claim_rows}; claim_anchors={neural_mcts_claim_anchors}; status_counts={neural_mcts_claim_counts}; needs_revision_count={neural_mcts_claim_revisions}; table_anchor_present={neural_mcts_claim_anchor_present}.",

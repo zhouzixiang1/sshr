@@ -8,7 +8,7 @@ This audit ranks the experiment package by verification strength and claim use. 
 
 ## Aggregate ladder coverage
 
-- experiment raw rows represented: 39689
+- experiment raw rows represented: 39849
 - experiment verified rows represented: 39368
 
 | level | role | n scope | instances | raw rows | verified rows | verification strength | claim use | boundary | status |
@@ -19,7 +19,7 @@ This audit ranks the experiment package by verification strength and claim use. 
 | 4. Reversible and phase boundary | Exact reversible and phase/Rz transfer counterpoint | n=3--6 | 181 | 10286 | 10109 | permutation checks, phase checks up to global phase, smoke sequence checks | Separates reversible/phase transfer evidence from the main bit-flip result. | Not a final approximate Clifford+T rotation-synthesis comparison. | pass |
 | 5. Complete high-n semantic bridge | Large-n semantic bridge | n=21--30 | 60 | 880 | 880 | complete truth-table construction and emitted-circuit checks | Connects symbolic large-instance plans to exact semantic checks up to n=30 generated functions. | Deliberately narrow because full truth tables grow exponentially. | pass |
 | 6. Ultra-scale symbolic stress | Scalability and resource-profile stress test | n=20--64 | 384 | 7392 | 7392 | symbolic ANF and emitted-circuit ANF checks | Shows the bounded search and emitter still run on generated n=20--64 logical instances. | Symbolic verification is not exhaustive high-dimensional truth-table enumeration. | pass |
-| 7. AI/search-control attribution | Neural/MCTS causal and stability evidence | n=3--40 | 225 | 16074 | 15930 | same-budget controls, held-out splits, independent seeds, semantic checks | Separates learned ranking, frontier policies, guards, and MCTS controls from representation effects. | Does not claim deep learning alone causes the full resource reduction. | pass |
+| 7. AI/search-control attribution | Neural/MCTS causal and stability evidence | n=3--40 | 385 | 16234 | 15930 | same-budget controls, held-out splits, independent seeds, semantic checks | Separates learned ranking, frontier policies, guards, and MCTS controls from representation effects. | Does not claim deep learning alone causes the full resource reduction. | pass |
 | 8. Manuscript integration | Experimental-strength ladder is visible in all submission variants | not applicable | 0 | 0 | 0 | source anchor check | Places benchmark scale, semantic strength, and boundaries before result tables. | Integration evidence is not a new experiment. | pass |
 
 ## Source suites

@@ -89,6 +89,14 @@ def build_rows() -> list[dict[str, str]]:
         topk="512",
     )
 
+    mcts_budget_policy = require_row(
+        read_csv(RESULTS / "summary_mcts_budget_policy.csv"),
+        threshold="0.6",
+    )
+    mcts_budget_manifest = json.loads(
+        (RESULTS / "manifest_mcts_budget_policy.json").read_text(encoding="utf-8")
+    )
+
     boolean_guard = read_csv(RESULTS / "summary_boolean_neural_guard_vs_deterministic.csv")
     boolean_score = require_row(boolean_guard, metric="score")
     boolean_time = require_row(boolean_guard, metric="time_s")
@@ -216,6 +224,31 @@ def build_rows() -> list[dict[str, str]]:
                 and int(phase_budget["losses"]) == 0
                 and abs(float(phase_wide["mean_relative"])) <= 0.001
                 and float(phase_frontier["eval_reduction_vs_wide128_pct"]) >= 90.0
+            ),
+        },
+        {
+            "component": "Contextual-bandit Pareto budget policy",
+            "claim_class": "promoted",
+            "scope": "disjoint seed-45 random-truth test; 160 functions",
+            "quality": (
+                f"vs Resource {mcts_budget_policy['vs_resource_wins']}/"
+                f"{mcts_budget_policy['vs_resource_losses']}/"
+                f"{mcts_budget_policy['vs_resource_ties']}, "
+                f"{pct_ratio(mcts_budget_policy['mean_relative_vs_resource_score'])}; "
+                f"retains {100.0 * float(mcts_budget_policy['quality_gain_retained']):.2f}% Pareto gain"
+            ),
+            "cost": (
+                f"{pct_ratio(mcts_budget_policy['time_change_vs_pareto'])} conservative time; "
+                f"Pareto invoked {mcts_budget_policy['run_pareto']}/{mcts_budget_policy['pairs']}"
+            ),
+            "role": "promoted reinforcement-learned search-budget controller",
+            "status": status_from(
+                int(mcts_budget_manifest.get("needs_revision_count", -1)) == 0
+                and int(mcts_budget_policy["pairs"]) == 160
+                and int(mcts_budget_policy["vs_resource_losses"]) == 0
+                and float(mcts_budget_policy["mean_relative_vs_resource_score"]) < 0.0
+                and float(mcts_budget_policy["time_change_ci_high"]) < 0.0
+                and float(mcts_budget_policy["quality_retained_ci_low"]) >= 0.90
             ),
         },
         {

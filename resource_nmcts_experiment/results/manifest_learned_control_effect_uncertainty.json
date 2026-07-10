@@ -4,7 +4,7 @@
   "claim_class_counts": {
     "bounded": 2,
     "limited": 2,
-    "promoted": 4
+    "promoted": 5
   },
   "needs_revision_count": 0,
   "outputs": {
@@ -13,8 +13,8 @@
     "summary": "results/summary_learned_control_effect_uncertainty.csv",
     "table": "paper_latex/tables/learned_control_effect_uncertainty.tex"
   },
-  "rows": 8,
-  "score_ci_excludes_zero_count": 6,
+  "rows": 9,
+  "score_ci_excludes_zero_count": 7,
   "script": "analyze_learned_control_effect_uncertainty.py",
   "sources": [
     "results/raw_bitflip_neural_budget_sweep.csv",
@@ -22,6 +22,8 @@
     "results/raw_boolean_neural_guard_vs_deterministic.csv",
     "results/raw_boolean_screen_depth_frontier_policy_large.csv",
     "results/raw_highdim_root_action_pairwise_widths.csv",
+    "results/raw_mcts_budget_policy_decisions.csv",
+    "results/raw_mcts_budget_policy_test_seed45.csv",
     "results/raw_phase_affine_policy_rank_diverse.csv",
     "results/raw_screen_scale_depth_frontier_policy_large_generalization_terms.csv",
     "results/raw_sparse_depth4_gate_generalization.csv",
@@ -30,6 +32,6 @@
     "results/raw_ultra_root_action_pairwise_widths.csv"
   ],
   "status_counts": {
-    "pass": 8
+    "pass": 9
   }
 }

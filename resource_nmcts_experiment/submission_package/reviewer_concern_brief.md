@@ -63,12 +63,15 @@ The limited learned-control boundary audit adds a direct gate for this point: th
 
 The learned-control effect-uncertainty audit adds paired bootstrap intervals to the same promoted, bounded, and limited controls, so the AI contribution is reported with effect-uncertainty evidence rather than only mean deltas or W/L/T counts.
 
+The explicit reinforcement-learning component is a one-step contextual-bandit fitted-Q controller that decides whether to invoke the expensive Pareto search after a verified Resource-NMCTS result.  On 160 disjoint seed-45 test functions it invokes Pareto for 71 cases, improves mean score by 3.48% over base Resource-NMCTS with 56/0/104 wins/losses/ties, retains 94.90% of the Pareto score gain, and reduces conservative measured search time by 13.13% (95% CI, 6.80%--20.46%).  It remains 0.51% worse in mean score than always-on Pareto, so the claim is a learned quality-effort tradeoff rather than Pareto dominance or end-to-end deep RL.
+
 Manuscript anchors:
 - Search contribution decomposition
 - Search-control baseline audit
 - Learned-control audit
 - Limited learned-control boundary audit
 - Learned-control effect-uncertainty audit
+- MCTS budget-policy test
 - Neural/MCTS claim-calibration audit
 - Counterpoint and claim-boundary audit
 - Sparse depth-frontier analysis
@@ -80,7 +83,9 @@ Yes, but only in the calibrated sense used by the manuscript.  The neural/MCTS
 claim-calibration audit ties the title-level terms to evidence gates: MCTS and
 Pareto search are measured against no-MCTS portfolios; learned policies and
 gates rank, prune, or allocate bounded search budgets; random-prior and
-random-depth controls isolate the learned ranking/budget-allocation signal; and
+random-depth controls isolate the learned ranking/budget-allocation signal; the
+held-out fitted-Q policy supplies a statistically gated reinforcement-learned
+Pareto-invocation result; and
 claim-scope/threats audits keep the result at the logical layer.  The audit
 marks these as excluded and not supported claims: a deep-learning-only
 explanation, neural semantic certification, hardware mapping, or global

@@ -157,6 +157,16 @@ ULTRA_SCALE64_PROFILE_TABLE = THIS_DIR / "paper_latex" / "tables" / "screen_scal
 SEARCH_CONTROL_MANIFEST = RESULTS / "manifest_search_control_baseline_audit.json"
 LEARNED_CONTROL_MANIFEST = RESULTS / "manifest_learned_control_audit.json"
 LEARNED_CONTROL_TABLE = THIS_DIR / "paper_latex" / "tables" / "learned_control_audit.tex"
+MCTS_BUDGET_POLICY_ANALYSIS = RESULTS / "analysis_mcts_budget_policy.md"
+MCTS_BUDGET_POLICY_SUMMARY = RESULTS / "summary_mcts_budget_policy.csv"
+MCTS_BUDGET_POLICY_MANIFEST = RESULTS / "manifest_mcts_budget_policy.json"
+MCTS_BUDGET_POLICY_TRAINING_MANIFEST = RESULTS / "manifest_mcts_budget_policy_training.json"
+MCTS_BUDGET_POLICY_DECISIONS = RESULTS / "raw_mcts_budget_policy_decisions.csv"
+MCTS_BUDGET_POLICY_TRAIN_RAW = RESULTS / "raw_mcts_budget_policy_train_seed43.csv"
+MCTS_BUDGET_POLICY_VALIDATION_RAW = RESULTS / "raw_mcts_budget_policy_validation_seed44.csv"
+MCTS_BUDGET_POLICY_TEST_RAW = RESULTS / "raw_mcts_budget_policy_test_seed45.csv"
+MCTS_BUDGET_POLICY_MODEL = THIS_DIR / "models" / "mcts_budget_policy.pt"
+MCTS_BUDGET_POLICY_TABLE = THIS_DIR / "paper_latex" / "tables" / "mcts_budget_policy.tex"
 LIMITED_LEARNED_BOUNDARY_MANIFEST = RESULTS / "manifest_limited_learned_control_boundary.json"
 LIMITED_LEARNED_BOUNDARY_TABLE = THIS_DIR / "paper_latex" / "tables" / "limited_learned_control_boundary.tex"
 LEARNED_EFFECT_UNCERTAINTY_MANIFEST = RESULTS / "manifest_learned_control_effect_uncertainty.json"
@@ -1175,7 +1185,7 @@ def verify_search_budget_contract() -> dict[str, str]:
     counts = manifest.get("status_counts", {}) if manifest else {}
     rows = manifest.get("rows", "missing") if manifest else "missing"
     table_exists = SEARCH_BUDGET_TABLE.exists()
-    status = "pass" if manifest and revisions == 0 and table_exists else "needs revision"
+    status = "pass" if manifest and revisions == 0 and rows == 9 and table_exists else "needs revision"
     return row(
         "Search-budget contract audit",
         status,
@@ -1189,12 +1199,68 @@ def verify_search_control() -> dict[str, str]:
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
     counts = manifest.get("status_counts", {}) if manifest else {}
     rows = manifest.get("rows", "missing") if manifest else "missing"
-    status = "pass" if manifest and revisions == 0 else "needs revision"
+    status = "pass" if manifest and revisions == 0 and rows == 13 else "needs revision"
     return row(
         "Search-control baseline audit",
         status,
         f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}.",
         "Run analyze_search_control_baseline_audit.py and restore heuristic, beam, no-MCTS, MCTS, Pareto, learned-prior, bit-flip random-prior, frontier random-depth, and phase random-control evidence rows.",
+    )
+
+
+def verify_mcts_budget_policy() -> dict[str, str]:
+    manifest = read_json(MCTS_BUDGET_POLICY_MANIFEST)
+    training = read_json(MCTS_BUDGET_POLICY_TRAINING_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    pairs = int(manifest.get("pairs", -1)) if manifest else -1
+    overlap = int(manifest.get("exact_fingerprint_overlap", -1)) if manifest else -1
+    selected = manifest.get("selected_operating_point", {}) if manifest else {}
+    decisions = read_csv(MCTS_BUDGET_POLICY_DECISIONS)
+    paper_text = read_text(AUTHOR_TEX) + "\n" + read_text(ANON_TEX) + "\n" + read_text(ACM_TEX)
+    required_files = (
+        MCTS_BUDGET_POLICY_ANALYSIS,
+        MCTS_BUDGET_POLICY_SUMMARY,
+        MCTS_BUDGET_POLICY_MANIFEST,
+        MCTS_BUDGET_POLICY_TRAINING_MANIFEST,
+        MCTS_BUDGET_POLICY_DECISIONS,
+        MCTS_BUDGET_POLICY_TRAIN_RAW,
+        MCTS_BUDGET_POLICY_VALIDATION_RAW,
+        MCTS_BUDGET_POLICY_TEST_RAW,
+        MCTS_BUDGET_POLICY_MODEL,
+        MCTS_BUDGET_POLICY_TABLE,
+    )
+    metrics = ("score", "T", "CNOT", "depth", "gates", "peak_ancilla")
+    status = (
+        "pass"
+        if manifest
+        and training
+        and all(path.exists() for path in required_files)
+        and revisions == 0
+        and counts.get("pass") == 7
+        and pairs == 160
+        and overlap == 0
+        and training.get("status") == "complete"
+        and training.get("train_samples") == 320
+        and training.get("validation_samples") == 160
+        and len(decisions) == 160
+        and all(row_.get("verified") == "True" for row_ in decisions)
+        and int(selected.get("run_pareto", pairs)) < pairs
+        and float(selected.get("time_change_ci_high", 1.0)) < 0.0
+        and float(selected.get("quality_retained_ci_low", 0.0)) >= 0.90
+        and int(selected.get("vs_resource_losses", -1)) == 0
+        and float(selected.get("mean_relative_vs_resource_score", 0.0)) <= -0.03
+        and int(selected.get("vs_pareto_losses", 0)) > 0
+        and float(selected.get("score_regret_ci_high", 1.0)) <= 0.01
+        and all(f"mean_policy_{metric}" in selected for metric in metrics)
+        and "tab:mcts-budget-policy" in paper_text
+        else "needs revision"
+    )
+    return row(
+        "Reinforcement-learned MCTS budget policy",
+        status,
+        f"pairs={pairs}; train/validation={training.get('train_samples', 'missing')}/{training.get('validation_samples', 'missing')}; exact_overlap={overlap}; decision_rows={len(decisions)}; selected={selected}; needs_revision_count={revisions}; status_counts={counts}.",
+        "Run train_mcts_budget_policy.py only when retraining is intended, then run evaluate_mcts_budget_policy.py and restore the disjoint split, paired uncertainty gates, resource metrics, model, and manuscript table.",
     )
 
 
@@ -1210,7 +1276,7 @@ def verify_learned_control() -> dict[str, str]:
     table_exists = LEARNED_CONTROL_TABLE.exists()
     status = (
         "pass"
-        if manifest and revisions == 0 and isinstance(rows, int) and rows >= 9 and promoted >= 4 and bounded >= 2 and limited >= 2 and table_exists
+        if manifest and revisions == 0 and rows == 13 and promoted >= 5 and bounded >= 2 and limited >= 2 and table_exists
         else "needs revision"
     )
     return row(
@@ -1259,8 +1325,8 @@ def verify_learned_effect_uncertainty() -> dict[str, str]:
         "pass"
         if manifest
         and revisions == 0
-        and rows >= 8
-        and class_counts.get("promoted", 0) >= 4
+        and rows == 9
+        and class_counts.get("promoted", 0) >= 5
         and class_counts.get("bounded", 0) >= 2
         and class_counts.get("limited", 0) >= 2
         and table_exists
@@ -1424,7 +1490,7 @@ def verify_neural_mcts_claim_calibration() -> dict[str, str]:
     anchors = manifest.get("claim_anchors", []) if manifest else []
     table_exists = NEURAL_MCTS_CLAIM_TABLE.exists()
     anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
-    status = "pass" if manifest and revisions == 0 and rows == 7 and table_exists and anchor else "needs revision"
+    status = "pass" if manifest and revisions == 0 and rows == 8 and table_exists and anchor else "needs revision"
     return row(
         "Neural/MCTS claim calibration",
         status,
@@ -2534,6 +2600,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_schedule_proxy(),
             verify_ultra_scale64(),
             verify_ultra_scale64_resource_profile(),
+            verify_mcts_budget_policy(),
             verify_search_control(),
             verify_bitflip_neural_budget(),
             verify_bitflip_prior_difficulty(),

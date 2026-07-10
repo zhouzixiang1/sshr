@@ -4,6 +4,13 @@
 
 > 面向资源约束量子布尔函数综合的神经蒙特卡洛树搜索方法
 
+## 当前权威版本
+
+- 当前中文同步精简稿：`resource_nmcts_zh_manuscript_v40.tex` / `resource_nmcts_zh_manuscript_v40.pdf`。
+- 当前英文投稿权威稿：`../paper_latex/resource_nmcts_submission_v1.tex` / `../paper_latex/resource_nmcts_submission_v1.pdf`。
+- v40 以当前英文投稿证据为权威源，补齐比较层级、baseline fairness、SSHR crosswalk、强化学习 Pareto 预算控制、最新 phase/scale 验证与声称边界；它是中文精简同步稿，不是英文 61 页审计型全文的逐段翻译。
+- v39 及以前版本仅保留研究演进记录，不应再作为最新中文稿分发。
+
 文件：
 
 - `main_zh.tex` / `main_zh.pdf`：现有中文主稿。
@@ -50,6 +57,7 @@
 - `resource_nmcts_zh_manuscript_v37.tex` / `resource_nmcts_zh_manuscript_v37.pdf`：中文论文稿 v37，wide Affine-FPRM phase search 增量稿；新增 transform-budget 128 相对 budget 32 的配对分析，`T/Rz=30` 目标为 43/0/134、平均 synth-score 再降 0.60%，并保持 531/531 phase selected rows 验证通过。
 - `resource_nmcts_zh_manuscript_v38.tex` / `resource_nmcts_zh_manuscript_v38.pdf`：中文论文稿 v38，learned phase candidate pruning 增量稿；新增 `train_phase_affine_policy.py`，在 `n<=5` 训练、held-out `n=6` 测试，policy top-512 相对 budget-32 为 17/0/21、`T/Rz=30` synth-score -2.47%，相对 wide-128 仅 +0.01%；但 same-budget random shortlist 也接近，因此写作上只作为可学习剪枝和候选空间密集性证据。
 - `resource_nmcts_zh_manuscript_v39.tex` / `resource_nmcts_zh_manuscript_v39.pdf`：中文论文稿 v39，CirKit/RevKit CLI 外部 probe 增量稿；新增 legacy RevKit CLI exact-oracle reversible-synthesis portfolio，把每个函数嵌入为 `(x,y)->(x,y xor f(x))` 的 SPEC permutation，并运行 TBS/DBS/RMS 三个 flow。三流 531/531 行 usable，best-score portfolio 下 Pareto-Resource-NMCTS 相对 RevKit CLI 为 173/0/4、平均 score -67.28%，T-count -72.59%；但 peak ancilla 为 0/169/8、平均 +153.11%，因此写作上必须保留辅助线 trade-off。
+- `resource_nmcts_zh_manuscript_v40.tex` / `resource_nmcts_zh_manuscript_v40.pdf`：当前中文同步精简稿。基于最新英文作者稿与 2026-07-10 证据更新，加入 9/9 baseline fairness、5/5 SSHR Table IV--VIII crosswalk、实验论据阶梯、反例型比较边界、`n=20--64` 符号验证、`n=21--30` 的 700/700 完整真值表 bridge，以及独立 320/160/160 train/validation/test 的 contextual-bandit fitted-Q Pareto 预算策略。该策略在 160 个测试函数上只运行 71 次 Pareto，保留 94.90% Pareto score gain，并降低 13.13% 保守搜索时间；相对 always-Pareto 的 +0.506% score regret 与相对 base 的 +4.48% peak-ancilla 代价同时保留。
 - `resource_nmcts_zh_research_position.tex` / `resource_nmcts_zh_research_position.pdf`：中文研究定位稿，重新梳理“不从 SSHR 入手”的论文主线、AI 在搜索问题中的角色、当前证据边界和下一步明显提升目标。
 - 最新 v4 稿已补充 `train_screen_depth_policy.py` 的结构级 depth policy 结果：n=14/16/18 训练、held-out n=20 测试，说明 AI 已能学习 screen 深度选择，但尚未超过固定 depth-2 的 score。
 - 最新 v8 稿补充 `train_structure_gate.py` 的 screen-gated Resource-NMCTS 边界验证：原 n=20 切片资源持平且平均运行时间降低 75.58%，held-out n=19/20 合计 16/16 score 持平并平均节省 36.83%，但仍只作为运行时门控证据。
@@ -102,6 +110,7 @@ latexmk -xelatex -g resource_nmcts_zh_manuscript_v36.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v37.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v38.tex
 latexmk -xelatex -g resource_nmcts_zh_manuscript_v39.tex
+latexmk -xelatex -g resource_nmcts_zh_manuscript_v40.tex
 latexmk -xelatex -g resource_nmcts_zh_research_position.tex
 ```
 

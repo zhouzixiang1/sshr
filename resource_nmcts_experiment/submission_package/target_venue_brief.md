@@ -1,10 +1,10 @@
 # Target Venue Brief
 
-Snapshot date: 2026-07-09
+Snapshot date: 2026-07-10
 
 This brief narrows the venue choice for the current manuscript:
-Resource-Constrained Neural Monte Carlo Tree Search for Quantum Boolean Oracle
-Synthesis. It is a planning aid only. The final target venue, manuscript type,
+Resource-Constrained Neural Monte Carlo Tree Search with Reinforcement-Learned
+Budget Control for Quantum Boolean Oracle Synthesis. It is a planning aid only. The final target venue, manuscript type,
 anonymous-review status, APC constraints, and required policy checks must still
 be copied into `submission_metadata.json` before upload.
 

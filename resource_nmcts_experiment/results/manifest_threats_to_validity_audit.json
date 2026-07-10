@@ -11,6 +11,7 @@
     "results/analysis_frontier_random_depth_control.md",
     "results/analysis_headline_numeric_consistency.md",
     "results/analysis_learned_control_audit.md",
+    "results/analysis_mcts_budget_policy.md",
     "results/analysis_multimetric_pareto_tradeoff.md",
     "results/analysis_paired_effect_uncertainty.md",
     "results/analysis_paired_statistical_evidence.md",
@@ -25,6 +26,8 @@
     "results/analysis_submission_archive_manifest.md",
     "results/analysis_truth_bridge_terms.md",
     "results/analysis_weight_robustness.md",
+    "results/manifest_mcts_budget_policy.json",
+    "results/manifest_mcts_budget_policy_training.json",
     "submission_package/README.md"
   ],
   "needs_revision_count": 0,
@@ -39,7 +42,7 @@
     "Logical-layer abstraction",
     "Weighted-score aggregation",
     "Baseline comparability",
-    "AI/MCTS attribution",
+    "AI/MCTS/RL attribution",
     "High-dimensional verification envelope",
     "Statistical and benchmark representativeness",
     "Reproducibility and package drift"

@@ -6,15 +6,16 @@ for external review.
 
 ## Manuscript Positioning
 
-Title: "Resource-Constrained Neural Monte Carlo Tree Search for Quantum Boolean
-Oracle Synthesis"
+Title: "Resource-Constrained Neural Monte Carlo Tree Search with
+Reinforcement-Learned Budget Control for Quantum Boolean Oracle Synthesis"
 
 The manuscript studies logical-layer synthesis of quantum Boolean bit-flip
 oracles.  It does not propose a hardware-mapped quantum compiler.  The method
 formulates synthesis as a resource-constrained search over ANF/FPRM term sets
 and uses neural action priors, Monte Carlo tree search, Boolean-ring actions,
 Pareto archives, frontier controllers, and baseline-preserving guards to choose
-verified logical oracle circuits.
+verified logical oracle circuits.  A contextual-bandit fitted-Q controller then
+chooses whether the quality gain justifies invoking additional Pareto search.
 
 ## Why the Comparison Is Meaningful
 
@@ -34,7 +35,9 @@ leaderboard.
 3. Internal search ablations: no-MCTS, learned-prior-off, guard-off,
    Pareto-archive-off, depth-frontier, sparse-frontier, and rank-diverse
    pruning runs separate the contribution of the search controller from the
-   algebraic candidate space and the resource score.
+   algebraic candidate space and the resource score.  A disjoint
+   train/validation/test budget-policy experiment separately evaluates the
+   reinforcement-learned Pareto-invocation decision.
 
 The manuscript then reports a separate counterpoint and claim-boundary audit:
 SSHR is treated as the CNOT counterpoint, Caterpillar API as an
@@ -66,6 +69,9 @@ deep-learning-only explanation.
   relative score changes, and exact sign-test evidence.
 - Multi-resource tradeoff audit: reports raw T/CNOT/depth/ancilla Pareto
   dominance separately from the weighted score.
+- MCTS budget-policy test: reports the fitted-Q controller's disjoint split,
+  per-function decisions, paired bootstrap intervals, quality retention,
+  Pareto-call reduction, and all six logical resource metrics.
 - Ultra-scale resource-profile audit: separates the $n=48,56,64$ stress slice
   into score, T-count, CNOT count, depth, ancilla, T-depth proxy, auxiliary
   lifetime, and planning-time means.
@@ -89,6 +95,10 @@ deep-learning-only explanation.
   of emitted logical circuits within the stated scope.
 - Bounded learned-control benefits and planning-time savings from frontier and
   guard policies.
+- A reinforcement-learned quality-effort controller that, on 160 independent
+  test functions, improves mean score by 3.48% over base Resource-NMCTS while
+  reducing conservative measured search time by 13.13% relative to always-on
+  Pareto and retaining 94.90% of its score gain.
 
 ## Claims That Are Not Made
 
@@ -102,6 +112,9 @@ deep-learning-only explanation.
 - No claim that high-dimensional exhaustive truth-table benchmarking is
   feasible beyond the bridge slices reported in the manuscript; the
   $n=48,56,64$ rows are symbolic stress evidence.
+- No claim that the fitted-Q controller is end-to-end deep RL or that it
+  dominates always-on Pareto search in score; its measured role is optional
+  search-budget allocation.
 
 ## Recommended Editorial Reading Path
 

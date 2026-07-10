@@ -3,7 +3,7 @@
   "claim_class_counts": {
     "bounded": 6,
     "limited": 2,
-    "promoted": 4
+    "promoted": 5
   },
   "limited_count": 2,
   "needs_revision_count": 0,
@@ -14,8 +14,8 @@
     "summary": "results/summary_learned_control_audit.csv",
     "table": "paper_latex/tables/learned_control_audit.tex"
   },
-  "promoted_count": 4,
-  "rows": 12,
+  "promoted_count": 5,
+  "rows": 13,
   "script": "analyze_learned_control_audit.py",
   "sources": [
     "results/summary_boolean_screen_depth_frontier_policy_large.csv",
@@ -33,6 +33,6 @@
     "results/summary_root_action_ranker_audit.csv"
   ],
   "status_counts": {
-    "pass": 12
+    "pass": 13
   }
 }

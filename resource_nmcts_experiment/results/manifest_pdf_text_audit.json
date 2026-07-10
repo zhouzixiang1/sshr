@@ -6,7 +6,7 @@
     "summary": "results/summary_pdf_text_audit.csv"
   },
   "python": "3.11.15",
-  "required_anchor_count": 18,
+  "required_anchor_count": 20,
   "rows": 2,
   "script": "analyze_pdf_text_audit.py",
   "source_files": {

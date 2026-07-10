@@ -61,6 +61,14 @@ ROWS = [
         "guarantee": "Weighted-score wins are kept separate from multi-resource dominance, which is why tradeoff tables remain part of the Results section.",
     },
     {
+        "stage": "Reinforcement-learned budget control",
+        "operational_rule": "After a verified base Resource-NMCTS result, a fitted-Q contextual-bandit policy chooses whether to stop or invoke Pareto-Resource-NMCTS under a validation-fixed threshold.",
+        "source_anchors": "train_mcts_budget_policy.py: run_reward, fitted_q; evaluate_mcts_budget_policy.py: policy decisions and held-out gates",
+        "required_files": ("train_mcts_budget_policy.py", "evaluate_mcts_budget_policy.py"),
+        "required_tokens": ("def run_reward", "contextual_bandit_fitted_q_iteration", "run_pareto", "exact_fingerprint_overlap"),
+        "guarantee": "The policy changes search effort only; both actions return semantically verified circuits, and nonzero regret against always-Pareto remains visible.",
+    },
+    {
         "stage": "Large-scale controllers",
         "operational_rule": "Use depth-frontier policies and sparse gates to decide which high-dimensional Boolean-ring screens to evaluate, with deterministic sparse/full frontiers kept as references.",
         "source_anchors": "run_truth_bridge_terms.py: load_depth2_guard, load_frontier_policy, depth_frontier_policy, screen_depth4",

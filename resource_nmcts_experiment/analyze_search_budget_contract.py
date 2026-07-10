@@ -97,6 +97,15 @@ def row_specs(values: dict[str, str]) -> list[dict[str, object]]:
             "boundary": "The archive is Pareto over generated candidates only; it is not a global Pareto frontier.",
         },
         {
+            "budget_family": "Reinforcement-learned Pareto invocation",
+            "budget_or_cap": "Two actions (stop/run Pareto), fitted-Q time penalty=0.004, validation threshold=0.6, 320/160/160 train/validation/test functions",
+            "source_anchors": "train_mcts_budget_policy.py: run_reward, fitted_q; evaluate_mcts_budget_policy.py: disjoint fingerprint and quality/time gates",
+            "required_files": ("train_mcts_budget_policy.py", "evaluate_mcts_budget_policy.py"),
+            "required_tokens": ("def run_reward", "contextual_bandit_fitted_q_iteration", "exact_fingerprint_overlap", "quality_retained_ci_low"),
+            "scalability_role": "Learns when the optional Pareto stage is worth its additional search cost after a verified base result.",
+            "boundary": "The policy reduces measured effort but retains nonzero regret against always-Pareto search; it is not end-to-end deep reinforcement learning.",
+        },
+        {
             "budget_family": "High-dimensional frontier controllers",
             "budget_or_cap": "Staged, sparse, and learned gates decide whether depth-3/depth-4 Boolean-ring screens are evaluated",
             "source_anchors": "train_sparse_depth4_gate.py: threshold; run_truth_bridge_terms.py: load_depth2_guard, depth_frontier_policy, screen_depth4",

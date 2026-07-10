@@ -254,6 +254,8 @@ SEARCH_BUDGET_PATHS = {
     "paper_latex/tables/search_budget_contract.tex",
 }
 LEARNED_CONTROL_PATHS = {
+    "train_mcts_budget_policy.py",
+    "evaluate_mcts_budget_policy.py",
     "analyze_learned_control_audit.py",
     "analyze_limited_learned_control_boundary.py",
     "analyze_learned_control_effect_uncertainty.py",
@@ -270,6 +272,21 @@ LEARNED_CONTROL_PATHS = {
     "results/analysis_phase_rotation_sequence_smoke_audit.md",
     "results/analysis_rotation_synthesis_backend_audit.md",
     "results/analysis_phase_policy_budget_frontier.md",
+    "models/mcts_budget_policy.pt",
+    "results/raw_mcts_budget_policy_train_seed43.csv",
+    "results/raw_mcts_budget_policy_validation_seed44.csv",
+    "results/raw_mcts_budget_policy_test_seed45.csv",
+    "results/raw_mcts_budget_policy_decisions.csv",
+    "results/summary_mcts_budget_policy_train_seed43_run.csv",
+    "results/summary_mcts_budget_policy_validation_seed44_run.csv",
+    "results/summary_mcts_budget_policy_test_seed45_run.csv",
+    "results/summary_mcts_budget_policy.csv",
+    "results/analysis_mcts_budget_policy.md",
+    "results/manifest_mcts_budget_policy_train_seed43_run.json",
+    "results/manifest_mcts_budget_policy_validation_seed44_run.json",
+    "results/manifest_mcts_budget_policy_test_seed45_run.json",
+    "results/manifest_mcts_budget_policy_training.json",
+    "results/manifest_mcts_budget_policy.json",
     "results/raw_phase_rotation_sequence_smoke_audit.csv",
     "results/summary_learned_control_audit.csv",
     "results/summary_limited_learned_control_boundary.csv",
@@ -295,6 +312,7 @@ LEARNED_CONTROL_PATHS = {
     "paper_latex/tables/phase_rotation_sequence_smoke_audit.tex",
     "paper_latex/tables/rotation_synthesis_backend_audit.tex",
     "paper_latex/tables/phase_policy_budget_frontier.tex",
+    "paper_latex/tables/mcts_budget_policy.tex",
 }
 NEURAL_MCTS_CLAIM_CALIBRATION_PATHS = {
     "analyze_neural_mcts_claim_calibration.py",

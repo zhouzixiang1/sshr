@@ -30,6 +30,7 @@ WEIGHT_ROBUSTNESS = RESULTS / "summary_weight_robustness.csv"
 SPARSE_FRONTIER = RESULTS / "summary_sparse_depth_frontier.csv"
 DEPTH4_GATE = RESULTS / "summary_sparse_depth4_gate_threshold_operating_points.csv"
 PHASE_RANDOM_CONTROL = RESULTS / "summary_phase_policy_random_control.csv"
+MCTS_BUDGET_POLICY = RESULTS / "summary_mcts_budget_policy.csv"
 EVIDENCE_MATRIX = RESULTS / "summary_comparison_evidence_matrix.csv"
 VALIDATION_SOURCE = PAPER_DIR / "figures" / "submission_v36" / "source_data" / "fig5_validation.csv"
 
@@ -213,6 +214,44 @@ def depth4_gate_claim() -> Claim:
     )
 
 
+def mcts_budget_policy_claim() -> Claim:
+    rows = read_csv(MCTS_BUDGET_POLICY)
+    row = rows[0] if rows else {}
+    pairs = int(row.get("pairs", "-1")) if row else -1
+    run = int(row.get("run_pareto", "-1")) if row else -1
+    resource_wlt = (
+        f"{row.get('vs_resource_wins', 'missing')}/"
+        f"{row.get('vs_resource_losses', 'missing')}/"
+        f"{row.get('vs_resource_ties', 'missing')}"
+    )
+    score_gain = -100.0 * float(row.get("mean_relative_vs_resource_score", "nan"))
+    regret = 100.0 * float(row.get("mean_score_regret_vs_pareto", "nan"))
+    retained = 100.0 * float(row.get("quality_gain_retained", "nan"))
+    time_saving = -100.0 * float(row.get("time_change_vs_pareto", "nan"))
+    numeric_ok = (
+        pairs == 160
+        and run == 71
+        and resource_wlt == "56/0/104"
+        and float_close(score_gain, 3.48)
+        and float_close(regret, 0.51)
+        and float_close(retained, 94.90)
+        and float_close(time_saving, 13.13)
+    )
+    return Claim(
+        claim="reinforcement-learned MCTS budget policy",
+        computed=(
+            f"pairs={pairs}; run={run}; vs_resource={resource_wlt}; "
+            f"score_gain={pct(score_gain)}; Pareto_regret={pct(regret)}; "
+            f"retained={pct(retained)}; time_saving={pct(time_saving)}"
+        ),
+        expected="pairs=160; run=71; vs_resource=56/0/104; score_gain=3.48%; Pareto_regret=0.51%; retained=94.90%; time_saving=13.13%",
+        source="results/summary_mcts_budget_policy.csv",
+        tokens=("160-function", "3.48%", "0.51%", "94.90%", "13.13%"),
+        numeric_ok=numeric_ok,
+        evidence_note="Independent seed-45 test selected at a validation-fixed threshold.",
+    )
+
+
 def phase_shortlist_claim() -> Claim:
     rows = read_csv(PHASE_RANDOM_CONTROL)
     row = find_row(rows, policy="diverse", topk="512")
@@ -265,6 +304,7 @@ def build_claims() -> list[Claim]:
         phase_shortlist_claim(),
         sparse_frontier_claim(),
         depth4_gate_claim(),
+        mcts_budget_policy_claim(),
         validation_scale_claim(),
     ]
 

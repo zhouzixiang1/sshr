@@ -190,6 +190,23 @@ def phase_shortlist_effect() -> tuple[list[float], list[float]]:
     return score_rels, effort_rels
 
 
+def mcts_budget_policy_effect() -> tuple[list[float], list[float]]:
+    rows = [
+        row
+        for row in read_csv(RESULTS / "raw_mcts_budget_policy_decisions.csv")
+        if usable(row) and row.get("threshold") == "0.6"
+    ]
+    score_rels = [
+        relative_pct(float(row["policy_score"]), float(row["resource_score"]))
+        for row in rows
+    ]
+    time_rels = [
+        relative_pct(float(row["policy_time_s"]), float(row["pareto_time_s"]))
+        for row in rows
+    ]
+    return score_rels, time_rels
+
+
 def bitflip_random_prior_effect() -> tuple[list[float], list[float]]:
     learned = {
         row["name"]: row
@@ -316,6 +333,20 @@ def build_rows() -> list[dict[str, str]]:
             "Policy shortlist improves the small-budget score while using far fewer exact evaluations than wide128.",
             (RESULTS / "raw_phase_affine_policy_rank_diverse.csv",),
             38,
+        ),
+        (
+            "Contextual-bandit Pareto budget policy",
+            "promoted",
+            "fitted-Q policy vs Resource score; conservative time vs always-Pareto",
+            "disjoint seed-45 random-truth test",
+            mcts_budget_policy_effect,
+            "conservative search time",
+            "Fitted-Q budget control retains most Pareto quality gain while reducing measured search time on a disjoint test.",
+            (
+                RESULTS / "raw_mcts_budget_policy_decisions.csv",
+                RESULTS / "raw_mcts_budget_policy_test_seed45.csv",
+            ),
+            160,
         ),
         (
             "Bit-flip learned prior",

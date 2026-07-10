@@ -7,9 +7,9 @@
     "table": "paper_latex/tables/algorithm_contract.tex"
   },
   "python": "3.11.15",
-  "rows": 7,
+  "rows": 8,
   "script": "analyze_algorithm_contract_table.py",
   "status_counts": {
-    "pass": 7
+    "pass": 8
   }
 }

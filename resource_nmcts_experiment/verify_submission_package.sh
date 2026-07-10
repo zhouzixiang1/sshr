@@ -63,6 +63,7 @@ fi
 "$PYTHON_BIN" analyze_sshr_reproduction_scope_audit.py
 "$PYTHON_BIN" analyze_weight_robustness.py
 "$PYTHON_BIN" analyze_stg_published_benchmark.py
+"$PYTHON_BIN" evaluate_mcts_budget_policy.py
 "$PYTHON_BIN" analyze_bitflip_neural_budget_sweep.py
 "$PYTHON_BIN" analyze_bitflip_prior_difficulty_slices.py
 "$PYTHON_BIN" analyze_bitflip_prior_feature_gate.py
@@ -123,6 +124,7 @@ if command -v rg >/dev/null 2>&1; then
     results/analysis_weight_robustness.md
     results/analysis_cnot_constraint_profile_audit.md
     results/analysis_stg_published_benchmark.md
+    results/analysis_mcts_budget_policy.md
     results/analysis_bitflip_neural_budget_sweep.md
     results/analysis_bitflip_prior_difficulty_slices.md
     results/analysis_bitflip_prior_feature_gate.md

@@ -29,6 +29,7 @@ REGISTRY_MANIFEST = RESULTS / "manifest_artifact_rerun_registry.json"
 SOURCE_PRIVACY = RESULTS / "summary_source_path_privacy_audit.csv"
 COMPARISON_VALIDITY = RESULTS / "manifest_comparison_target_validity_audit.json"
 NOVELTY_SCORECARD = RESULTS / "manifest_novelty_comparison_scorecard.json"
+MCTS_BUDGET_POLICY = RESULTS / "summary_mcts_budget_policy.csv"
 
 SUMMARY = RESULTS / "summary_public_handoff_freshness_audit.csv"
 ANALYSIS = RESULTS / "analysis_public_handoff_freshness_audit.md"
@@ -42,6 +43,7 @@ TOKEN_PREFIXES = (
     "source_privacy=",
     "comparison_validity=",
     "novelty_scorecard=",
+    "rl_budget_policy=",
     "goal_gate=",
 )
 
@@ -141,6 +143,8 @@ def current_snapshot() -> dict[str, object]:
     novelty = read_json(NOVELTY_SCORECARD)
     comparison_counts = comparison.get("status_counts", {}) if comparison else {}
     novelty_counts = novelty.get("status_counts", {}) if novelty else {}
+    budget_rows = read_csv(MCTS_BUDGET_POLICY)
+    budget = budget_rows[0] if budget_rows else {}
 
     return {
         "author_pages": page_by_kind.get("author", -1),
@@ -160,6 +164,10 @@ def current_snapshot() -> dict[str, object]:
         "novelty_pass": int(novelty_counts.get("pass", -1)) if novelty_counts else -1,
         "novelty_rows": int(novelty.get("rows", -1)) if novelty else -1,
         "novelty_needs_revision": int(novelty.get("needs_revision_count", -1)) if novelty else -1,
+        "budget_pairs": int(budget.get("pairs", -1)) if budget else -1,
+        "budget_run_pareto": int(budget.get("run_pareto", -1)) if budget else -1,
+        "budget_score_vs_resource_pct": 100.0 * float(budget.get("mean_relative_vs_resource_score", "nan")),
+        "budget_time_vs_pareto_pct": 100.0 * float(budget.get("time_change_vs_pareto", "nan")),
     }
 
 
@@ -183,6 +191,13 @@ def snapshot_tokens(snapshot: dict[str, object]) -> tuple[str, ...]:
         ),
         f"comparison_validity={snapshot['comparison_pass']}/{snapshot['comparison_rows']} pass",
         f"novelty_scorecard={snapshot['novelty_pass']}/{snapshot['novelty_rows']} pass",
+        (
+            "rl_budget_policy="
+            f"{snapshot['budget_pairs']} test functions / "
+            f"{snapshot['budget_run_pareto']} Pareto calls / "
+            f"{snapshot['budget_score_vs_resource_pct']:+.2f}% score vs Resource / "
+            f"{snapshot['budget_time_vs_pareto_pct']:+.2f}% time vs always-Pareto"
+        ),
         "goal_gate=author/venue metadata remains open",
     )
 
@@ -230,6 +245,7 @@ def build_rows(snapshot: dict[str, object]) -> list[dict[str, str]]:
         SOURCE_PRIVACY,
         COMPARISON_VALIDITY,
         NOVELTY_SCORECARD,
+        MCTS_BUDGET_POLICY,
     )
     missing_files = [rel(path) for path in required_files if not path.exists()]
     tokens = snapshot_tokens(snapshot)
@@ -244,6 +260,10 @@ def build_rows(snapshot: dict[str, object]) -> list[dict[str, str]]:
         and snapshot["strict_local_path_leaks"] == 0
         and snapshot["comparison_needs_revision"] == 0
         and snapshot["novelty_needs_revision"] == 0
+        and snapshot["budget_pairs"] == 160
+        and snapshot["budget_run_pareto"] < snapshot["budget_pairs"]
+        and snapshot["budget_score_vs_resource_pct"] <= -3.0
+        and snapshot["budget_time_vs_pareto_pct"] < 0.0
     )
     return [
         row(

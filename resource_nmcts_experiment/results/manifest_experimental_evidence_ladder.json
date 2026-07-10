@@ -14,7 +14,7 @@
   ],
   "needs_revision_count": 0,
   "python": "3.11.15",
-  "raw_rows": 39689,
+  "raw_rows": 39849,
   "rows": 8,
   "script": "analyze_experimental_evidence_ladder.py",
   "semantic_bridge_present": true,

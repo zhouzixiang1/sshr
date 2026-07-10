@@ -20,11 +20,11 @@ ROWS = [
         "boundary": "Logical-layer oracle synthesis only; no routing, native-gate mapping, or noise model.",
     },
     {
-        "contribution": "Neural/MCTS resource-search workflow",
-        "implementation": "Neural action priors, MCTS/beam/portfolio search, Pareto archive, frontier policies, staged and sparse learned gates.",
-        "evidence_latex": r"Tables~\ref{tab:contribution}, \ref{tab:search-control-baseline-audit}, \ref{tab:learned-control-audit}; Fig.~\ref{fig:learned-control-summary}",
-        "evidence_plain": "contribution decomposition, search-control baseline audit, learned-control audit, learned-control figure",
-        "boundary": "The largest gains come from searchable algebraic actions plus guarded selection; the paper does not claim deep RL alone explains all gains.",
+        "contribution": "Neural/MCTS search with reinforcement-learned budget control",
+        "implementation": "Neural action priors, MCTS/beam/portfolio search, Pareto archive, frontier policies, and a contextual-bandit fitted-Q controller for optional Pareto invocation.",
+        "evidence_latex": r"Tables~\ref{tab:contribution}, \ref{tab:search-control-baseline-audit}, \ref{tab:learned-control-audit}, \ref{tab:mcts-budget-policy}; Fig.~\ref{fig:learned-control-summary}",
+        "evidence_plain": "contribution decomposition, search-control and learned-control audits, held-out MCTS budget-policy test, learned-control figure",
+        "boundary": "Reinforcement learning controls optional search effort after a verified base result; it is neither end-to-end deep RL nor a claim of dominance over always-on Pareto search.",
     },
     {
         "contribution": "Broad baseline and toolchain comparison",

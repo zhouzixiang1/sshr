@@ -20,13 +20,14 @@
 
 以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，用于防止交付说明和机器审计结果漂移：
 
-- PDF pages=59/59
-- readiness=90 pass + 1 needs author input
-- payload_files=1246
-- artifact_registry=31 families / 162 raw CSV / 80318 raw rows
-- source_privacy=0 strict leaks / 57 provenance files / 1203 payload text files
+- PDF pages=61/60
+- readiness=91 pass + 1 needs author input
+- payload_files=1264
+- artifact_registry=31 families / 166 raw CSV / 82071 raw rows
+- source_privacy=0 strict leaks / 57 provenance files / 1220 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
+- rl_budget_policy=160 test functions / 71 Pareto calls / -3.48% score vs Resource / -13.13% time vs always-Pareto
 - goal_gate=author/venue metadata remains open
 
 ### 1.1 对比对象与论文意义
@@ -300,9 +301,26 @@
 - `paper_latex/figures/submission_v36/fig7_learned_control_summary.pdf`
 - `paper_latex/figures/submission_v36/source_data/fig7_learned_control_summary.csv`
 
-该表把 AI/学习控制组件分成三类：可作为质量/时间主证据的 depth-frontier policy、stage-gated frontier、sparse depth-4 gate、rank-diverse phase shortlist；可作为 bounded 质量证据但不能写成速度收益的 frontier random-depth control、low-budget bit-flip prior 和 root-action candidate extension；以及只能作为有限证据的 generic bit-flip learned prior 与 boolean neural guard。关键数值：frontier policy 在 held-out `n=28,40` 上相对 oracle frontier 为 0/3/45、+0.04% score，但减少 51.30% all-depth frontier evaluation time；frontier random-depth control 在独立 `n=24,28,32,40` scale 上相对 same-candidate random depth 为 55/3/38、score -1.12%、T-depth proxy -1.10%，并击败 8/8 个 random seed means，但 planning time +58.78%；stage-gated frontier 在独立 `n=24,28,32,40` 上相对 all-depth 为 0/4/92、+0.04% score，减少 25.43% staged planning time；sparse depth-4 gate 在三组独立 seed 的 `n=24,28,32,40` 共 144 个 pair 上相对 deterministic sparse frontier 为 0/0/144、0 false skip，并减少 13.43% sparse-frontier evaluation time，阈值扫描显示 zero-false-skip plateau 可到 -14.92% time，允许 1 个 false skip 时为 -15.49% time 且 score gap 仅 +0.01%；rank-diverse phase shortlist 在 held-out `n=6` 上用 512/8192 exact forms/function 贴近 wide-128，相对 budget-32 为 17/0/21、score -2.477%，相对 wide-128 均值只差 +0.003%，并减少 93.75% wide-128 exact scoring；low-budget bit-flip prior 在 top-8/top-12 预算下 6/6 个 score row 为正向、合计 218/0/844、平均 score -1.04%；root-action candidate extension 保留 heuristic top-4 并加入 neural top-12，在 `n=14/n=16` 合并诊断上相对 heuristic root window 为 8/0/25、score -0.08%。另一方面，generic bit-flip learned prior 只有 -0.15% score 且 runtime +48.05%，boolean neural guard 只有 -0.12% score 但 +94.49% runtime，因此这些不能作为主贡献夸大。
+该表把 AI/学习控制组件分成三类：可作为质量/时间主证据的 depth-frontier policy、stage-gated frontier、sparse depth-4 gate、rank-diverse phase shortlist 和 contextual-bandit Pareto budget policy；可作为 bounded 质量证据但不能写成速度收益的 frontier random-depth control、low-budget bit-flip prior 和 root-action candidate extension；以及只能作为有限证据的 generic bit-flip learned prior 与 boolean neural guard。关键数值：frontier policy 在 held-out `n=28,40` 上相对 oracle frontier 为 0/3/45、+0.04% score，但减少 51.30% all-depth frontier evaluation time；frontier random-depth control 在独立 `n=24,28,32,40` scale 上相对 same-candidate random depth 为 55/3/38、score -1.12%、T-depth proxy -1.10%，并击败 8/8 个 random seed means，但 planning time +58.78%；stage-gated frontier 在独立 `n=24,28,32,40` 上相对 all-depth 为 0/4/92、+0.04% score，减少 25.43% staged planning time；sparse depth-4 gate 在三组独立 seed 的 `n=24,28,32,40` 共 144 个 pair 上相对 deterministic sparse frontier 为 0/0/144、0 false skip，并减少 13.43% sparse-frontier evaluation time，阈值扫描显示 zero-false-skip plateau 可到 -14.92% time，允许 1 个 false skip 时为 -15.49% time 且 score gap 仅 +0.01%；rank-diverse phase shortlist 在 held-out `n=6` 上用 512/8192 exact forms/function 贴近 wide-128，相对 budget-32 为 17/0/21、score -2.477%，相对 wide-128 均值只差 +0.003%，并减少 93.75% wide-128 exact scoring；low-budget bit-flip prior 在 top-8/top-12 预算下 6/6 个 score row 为正向、合计 218/0/844、平均 score -1.04%；root-action candidate extension 保留 heuristic top-4 并加入 neural top-12，在 `n=14/n=16` 合并诊断上相对 heuristic root window 为 8/0/25、score -0.08%。另一方面，generic bit-flip learned prior 只有 -0.15% score 且 runtime +48.05%，boolean neural guard 只有 -0.12% score 但 +94.49% runtime，因此这些不能作为主贡献夸大。
 
 新增 summary figure 将上述边界可视化：promoted controls 同时满足 score 不显著变差/有改善与搜索开销下降，limited diagnostics 则落在“质量弱或运行时间反向”的区域，用于防止把所有 AI 组件都写成主贡献。
+
+本轮新增真正以回报为目标的 Pareto 搜索预算控制器，把强化学习贡献落实为一个可独立检验的一步决策问题：
+
+- `train_mcts_budget_policy.py`
+- `evaluate_mcts_budget_policy.py`
+- `models/mcts_budget_policy.pt`
+- `results/raw_mcts_budget_policy_train_seed43.csv`
+- `results/raw_mcts_budget_policy_validation_seed44.csv`
+- `results/raw_mcts_budget_policy_test_seed45.csv`
+- `results/raw_mcts_budget_policy_decisions.csv`
+- `results/summary_mcts_budget_policy.csv`
+- `results/analysis_mcts_budget_policy.md`
+- `results/manifest_mcts_budget_policy_training.json`
+- `results/manifest_mcts_budget_policy.json`
+- `paper_latex/tables/mcts_budget_policy.tex`
+
+该控制器在已经得到语义验证通过的 base Resource-NMCTS 结果后，根据输入 ANF 结构特征和 base 线路的 score、T、CNOT、depth、gates、peak ancilla，选择“停止”或“追加 Pareto-Resource-NMCTS”。训练回报为相对 score 改善减去归一化 Pareto 时间惩罚；使用 320 个 seed-42/43 随机真值函数训练、160 个 seed-44 函数选定阈值，并冻结后在 160 个 seed-45 函数上测试，三者精确 `(n, truth_table)` 重叠为 0。独立测试中控制器只对 71/160 个函数运行 Pareto，使昂贵 Pareto 调用减少 55.6%；相对 base Resource-NMCTS 为 56/0/104、平均 score -3.48%，T -3.99%、CNOT -3.84%、depth -3.34%、gates -2.04%；相对总是运行 Pareto，保留 94.90% 的平均 score 增益（95% CI 90.43%--98.19%），保守实测搜索时间降低 13.13%（95% CI 6.80%--20.46%）。代价也明确报告：相对总是运行 Pareto 的平均 score regret 为 +0.51%（95% CI +0.19%--+0.88%），相对 base 的 peak ancilla 为 +4.48%。因此该结果支持“reinforcement-learned quality-effort budget control”，不支持端到端 deep RL、语义正确性由网络保证或 score 支配 always-on Pareto。
 
 本轮进一步新增 stochastic-control stability audit，把随机 prior、随机 depth、phase shortlist 和 sparse-gate 独立 seed 的重复实验合并成稳定性证据：
 
@@ -2286,6 +2304,7 @@ Git 状态：
 24. learned phase candidate pruning 已把 phase/Rz 分支从“宽预算穷举”推进到“可学习剪枝”诊断，并进一步加入 rank-label 训练、diversity rerank、budget-frontier 审计、precision-sensitive rotation-cost 审计与 8 组 same-budget random repeat 控制：`train_phase_affine_policy.py` 在 `n<=5` 训练、held-out `n=6` 的 38 个函数测试；diverse policy top-512 只 exact-score 512/8192 个候选，相对 budget-32 的 2048 个候选为 17/0/21、`T/Rz=30` synth-score -2.477%，相对 wide-128 均值 gap 为 +0.003%，并减少 93.75% wide-128 exact scoring；diverse top-256 已经在 256/8192 exact forms 下达到相对 wide-128 +0.012% 的均值 gap，且 7611/7611 selected rows up-to-global-phase 验证通过。新增 `analyze_phase_rotation_precision_audit.py` 冻结同一批 phase/Rz 候选，把每个 non-Clifford `Rz` 按 `ceil(3 log2(1/epsilon))` 估算 T/depth/gate 代价；在 `epsilon=1e-6` 下，Affine-128 相对 RevKit `oracle_synth` 为 177/0/0、mean score -66.118%，diverse top-512 相对 budget-32 为 17/0/21、-2.381%，相对 wide-128 只差 +0.002%。新增 `analyze_phase_policy_random_control.py` 将随机重复按函数求均值后做 paired sign test：diverse top-512 相对 per-function random-repeat mean 为 17/0/21、p=1.53e-05，且均值低于全部 8 个 random seed mean。本轮进一步把 `analyze_phase_rotation_sequence_smoke_audit.py` 从 6 个代表角扩展到 verified phase-search 输出中最高频的 20 个 non-Clifford/non-T-like 角；20/20 通过 `epsilon=0.125` 的 coarse Clifford+T sequence smoke，5/20 通过 `epsilon=0.05`。随机对照的绝对幅度仍只有约 0.01%--0.03%，sequence smoke 也只是内部 bounded matrix beam，因此这些证据可写成 learned pruned-search feasibility、预算前沿改善、精度敏感成本稳健性和 coarse sequence-level sanity check，不能写成 phase/Rz 全局最优或高精度 rotation synthesis。
 25. CirKit 3 shell AIG/MC probe 把外部工具链对比从 mockturtle/ABC 继续补强：传统 177 行与高维 `n=14` 64 行均逐行 Verilog readback truth-table 验证通过。Pareto-Resource-NMCTS 相对 CirKit AIG/MC 在传统集为 177/0/0、平均 score -62.34%，在 `n=14` 为 64/0/0、平均 score -94.46%；但 depth 分别为 16/156/5 和 14/50/0，说明本文不能宣称 depth-only 支配 CirKit。
 26. Legacy RevKit CLI exact-oracle reversible-synthesis probe 进一步补齐可逆工具链对比：TBS/DBS/RMS 三流合计 531/531 行 usable，best-score portfolio 覆盖传统 177 个函数。Pareto-Resource-NMCTS 相对 RevKit CLI best-score portfolio 在 score 上为 173/0/4、平均 -67.28%，T-count 为 173/0/4、平均 -72.59%；但 peak ancilla 为 0/169/8、平均 +153.11%，说明本文方法用更多辅助线换取低 T 和低 weighted score。
+27. Contextual-bandit fitted-Q 预算控制器提供了当前最直接的强化学习证据：在与训练/验证零重叠的 160 个 seed-45 测试函数上，只运行 71 次 Pareto；相对 base Resource-NMCTS 为 56/0/104、平均 score -3.48%，相对 always-on Pareto 保留 94.90% 的 score 增益并节省 13.13% 保守实测搜索时间，两项 bootstrap 置信区间均通过预设门槛。其相对 Pareto 的 +0.51% score regret 和相对 base 的 +4.48% peak-ancilla 代价同时保留在正文中。
 
 不应写的主张：
 
@@ -2297,6 +2316,7 @@ Git 状态：
 6. 不应把 Exact XAG 乘法复杂度写成 CNOT/depth/ancilla 最优；它只给出 logical-AND T-count 的全局下界。
 7. 不应把 n=20 giga stress 写成深层神经/FPRM 搜索的新突破；当前正向增益来自 ANF-only recursive Boolean-ring screen，root-beam/fast linear-pair 仍在 300 s 预算下失效。
 8. 不应把 Boolean-linear screen 泛化成所有高维上的高质量方法；recursive screen 在 n=20 是有效的可扩展修复，在 n=18 也优于单层 screen，但 n=18 结果仍显示 deep Resource 分支明显更强，因此 screen 应写成超高维边界候选。
+9. 不应把 fitted-Q 预算控制器写成端到端 deep RL 或声称 score 支配 always-on Pareto；它解决的是经过验证的 base 结果之后是否追加 Pareto 搜索的一步质量-开销决策。
 
 ## 7. 下一步建议
 
@@ -2332,6 +2352,7 @@ Git 状态：
 | cost-aware frontier policy | 48 个 held-out + 96 个独立泛化项集 + 6 个 n=23 bridge 函数 | scale vs depth-2 为 56/0/40、score -1.39%、time +170.03%；n=23 vs large 为 score +0.92%、time -56.29%、lifetime -12.62% | 新增快速质量折中模式 |
 | stage-gated frontier | 72 个 validation 项集 + 96 个独立泛化项集 + 6 个 n=23 bridge 函数 | validation 选阈值 1.25%；scale vs all-depth 为 +0.04% score、staged time -25.43%；n=23 vs all-depth 为 +0.00% score、staged time -11.51% | 新增接近 all-depth 的 teacher/guard |
 | learned sparse depth-4 gate | train `n=16,20,24`；三组独立 seed 审计 `n=24,28,32,40`，144 个 pair | vs sparse frontier 为 0/0/144、score +0.00%、false skip 0；只运行 106/144 个 depth-4，time -13.43%；阈值扫描 zero-false-skip 最优为 -14.92% time | 新增 sparse frontier 内部学习预算控制 |
+| contextual-bandit Pareto budget policy | train/validation/test 320/160/160 个随机真值函数，精确重叠 0 | 测试只运行 71/160 次 Pareto；vs Resource 56/0/104、score -3.48%；保留 94.90% Pareto 增益；保守 time -13.13%（95% CI -20.46% 到 -6.80%） | 新增明确的 reinforcement-learned 质量-开销控制，不是 end-to-end deep RL |
 | n=21/22/23 truth-table bridge | 16 个基础生成式 ANF 函数 + 12 个 n=23 rerun 函数 | 按当前 v36 主图源数据口径，280/280 完整 truth-table oracle 验证通过，280/280 plan 与 emitted-circuit 符号验证通过，0 mismatch；large/cost 两种 n=23 rerun 均完整验证 | 新增 n>20 完整验证桥接 |
 | n=24/25/26/27/28/29/30 truth-table bridge | 42 个生成式 ANF 函数 | 新增 420/420 完整 truth-table oracle 验证通过，420/420 plan 与 emitted-circuit 符号验证通过，0 mismatch；累计 bridge 为 700/700 | 新增 n=24、n=25、n=26、n=27、n=28、n=29 与 n=30 完整验证边界 |
 | action-width probe | n=20/28/40，每个宽度 72 个项集 | width 6/12/24 各 504/504 plan 与 emitted-circuit 符号验证通过；单纯加宽不改善默认 score 结论，时间显著上升 | 新增负向消融，支持默认 width 6 |
@@ -2357,6 +2378,6 @@ Git 状态：
 
 “基于资源感知搜索、神经先验和 MCTS/Pareto 候选选择的量子布尔函数 oracle 综合方法，在同 benchmark 的 ESOP、ABC、BDD 和 direct ANF baseline 上展示显著低 T-count 与低加权资源优势。”
 
-但是投稿前还需要继续补强“AI 搜索本身带来的贡献”这一点。learned sparse depth-4 gate 已经把 frontier 内部预算控制补上了一块，但文章仍需要避免被评价为一组 FPRM/ESOP 工程启发的组合，而不是强化学习与 MCTS 方法论文。
+“AI 搜索本身带来的贡献”已经从原先不足 1% 且 runtime 反向的 learned-prior 诊断，推进为可独立审计的强化学习质量-开销结果：fitted-Q 控制器在零重叠独立测试上相对 base Resource-NMCTS 稳定改善 score，并相对 always-on Pareto 显著减少搜索时间。仍需保持边界：主要线路资源优势来自可搜索的 Boolean-ring/ANF/FPRM 动作与 MCTS/Pareto 组合，强化学习负责可解释的 Pareto 预算决策，而不是单独生成或验证线路。
 
-本轮新增贡献分解、`search_ablation_traditional`、`search_ablation_highdim`、`highdim_neural_prior`、`highdim_root_action_oracle`、`exact_fprm_dp`、`exact_xag_mc`、pairwise-wide n=16 full synthesis、Boolean-ring linear factor、schedule proxy、n=23/24/25/26/27/28/29/30 完整 truth-table bridge、ROS-style LUT proxy、CirKit 3 shell AIG/MC probe、legacy RevKit CLI exact-oracle portfolio、large frontier policy、cost-aware frontier policy、learned sparse depth-4 gate、Affine-FPRM phase search、wide Affine-FPRM budget 扩展、learned phase candidate pruning 和 20-angle phase rotation-sequence smoke 后，这个风险已经下降：现在能证明 neural refine、learned prior、final guard、no-MCTS portfolio、Resource-NMCTS、Pareto archive、高维 guard/no-MCTS 组合、小规模 exact bounded FPRM 对照、全局 XAG T 下界对照、高维 pairwise-wide root-action ranker、Boolean-ring factor 扩展、emitted-circuit 层 T-depth/辅助生命周期 trade-off、n=21/22/23/24/25/26/27/28/29/30 共 700/700 方法行的完整 oracle 验证、large frontier policy 相对旧 policy 的质量提升、cost-aware frontier policy 的快速质量折中、sparse depth-4 gate 在 144 个独立 seed 审计 pair 上 0 false skip 且省 13.43% sparse-frontier 时间，并且阈值扫描显示 zero-false-skip 省时可到 14.92%、相对更强 LUT proxy 的 309/0/0 score 优势、相对 CirKit AIG/MC 的传统 177/0/0 与 n=14 64/0/0 score 优势、相对 RevKit CLI best-score portfolio 的 173/0/4 score 优势、Affine-FPRM 相对 fixed-polarity FPRM 的 81/0/96 phase-search 增益、wide128 相对 budget32 的 43/0/134 `T/Rz=30` 增益、policy top-512 相对 budget32 的 17/0/21 剪枝增益和相对 random-repeat mean 的 17/0/21、p=1.53e-05 稳健性，以及最高频 20 个 phase/Rz 角的 20/20 coarse sequence smoke pass。不过官方 ROS 完整复现、从 phase/Rz 候选剪枝升级到真正的 high-precision learned rotation/phase policy、以及作者/期刊元数据仍需继续推进，所以目标还不能判定完成。
+本轮新增贡献分解、搜索消融、精确小规模对照、高维 Boolean-ring 扩展、完整 truth-table bridge、外部工具链 probe、learned frontier/gate、phase 分支，以及 contextual-bandit fitted-Q Pareto 预算控制后，已经形成“方法不依赖 SSHR、资源提升由结构搜索和 MCTS/Pareto 支撑、强化学习有独立质量-开销贡献、正确性由语义验证器保证”的完整证据链。当前剩余工作主要是作者/期刊元数据和最终投稿决策；官方 ROS 完整复现与高精度 phase rotation synthesis 属于后续增强项，不应重新定义本文完成条件。

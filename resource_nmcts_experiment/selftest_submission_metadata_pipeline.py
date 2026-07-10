@@ -47,7 +47,7 @@ def synthetic_metadata() -> dict[str, object]:
             "scope": "Submission metadata self-test only.",
         },
         "manuscript": {
-            "title": "Resource-Constrained Neural Monte Carlo Tree Search for Quantum Boolean Oracle Synthesis",
+            "title": "Resource-Constrained Neural Monte Carlo Tree Search with Reinforcement-Learned Budget Control for Quantum Boolean Oracle Synthesis",
             "scope_boundary": "Logical-layer quantum Boolean oracle synthesis only; no hardware mapping, routing, native-gate scheduling, noise model, or magic-state-factory resource estimate.",
         },
         "target_venue": {

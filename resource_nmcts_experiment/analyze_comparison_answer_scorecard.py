@@ -246,7 +246,7 @@ def build_rows() -> list[dict[str, str]]:
         },
         {
             "reviewer_question": "What part is actually AI/MCTS?",
-            "comparison_target": "No-MCTS portfolio, Pareto archive, learned/random controls",
+            "comparison_target": "No-MCTS portfolio, Pareto archive, learned/random controls, fitted-Q Pareto budget control",
             "role": "causal search-control ablation",
             "verified_evidence": search_control_evidence(),
             "headline_answer": (
@@ -256,10 +256,12 @@ def build_rows() -> list[dict[str, str]]:
                 + control("Pareto Resource-NMCTS over no-MCTS portfolio")
                 + "; learned vs random prior "
                 + control("Learned bit-flip prior vs same-budget random-prior mean")
+                + "; fitted-Q budget "
+                + control("Fitted-Q budget policy vs Resource-NMCTS and always-Pareto")
             ),
-            "usable_claim": "MCTS, Pareto selection, and learned ranking add bounded quality gains beyond deterministic construction.",
-            "excluded_claim": "Do not state that deep reinforcement learning alone explains the full resource reduction.",
-            "sources": "summary_search_control_baseline_audit.csv",
+            "usable_claim": "MCTS and Pareto selection add bounded quality gains; fitted-Q reinforcement learning allocates optional Pareto effort with a measured quality-time tradeoff.",
+            "excluded_claim": "Do not state that deep reinforcement learning alone explains the full resource reduction or that the budget policy dominates always-on Pareto score.",
+            "sources": "summary_search_control_baseline_audit.csv; summary_mcts_budget_policy.csv",
         },
         {
             "reviewer_question": "Is the evidence only small-scale?",
