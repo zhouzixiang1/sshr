@@ -1,0 +1,501 @@
+%% 该模板修改自《计算机学报》latex 模板
+%% 基于搜索优化的布尔函数量子神谕综合
+%%
+
+\documentclass[10.5pt,compsoc,UTF8]{CjC}
+\usepackage{bm}
+\usepackage{CTEX}
+\usepackage{graphicx}
+\usepackage{footmisc}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{url}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage[noadjust]{cite}
+\usepackage{amsmath,amsthm}
+\usepackage{siunitx}
+\usepackage{amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{color}
+\usepackage{ccaption}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{xcolor,stfloats}
+\usepackage{comment}
+\setcounter{page}{1}
+\graphicspath{{figures/}}
+\usepackage{cuted}
+\usepackage{captionhack}
+\usepackage{epstopdf}
+\usepackage{gbt7714}
+\usepackage{braket}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+
+\usepackage[all]{xy}
+\xyoption{matrix}
+\usepackage{qcircuit}
+
+%===============================%
+
+\headevenname{\mbox{\quad}  \hfill  \mbox{\zihao{-5}{ \hfill \hfill 《基于搜索优化的布尔函数量子神谕综合》  } \hspace {37mm} \mbox{2025 年}}}%
+\headoddname{ \hfill 《基于搜索优化的布尔函数量子神谕综合》}%
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\setcounter{footnote}{0}
+\renewcommand\footnotelayout{\zihao{5-}}
+
+\newtheoremstyle{mystyle}{0pt}{0pt}{\normalfont}{1em}{\bf}{}{1em}{}
+\theoremstyle{mystyle}
+\renewcommand\figurename{figure~}
+
+\newcommand{\upcite}[1]{\textsuperscript{\cite{#1}}}
+\renewcommand{\labelenumi}{(\arabic{enumi})}
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\newcommand{\abc}{\color{white}\vrule width 2pt}
+\renewcommand{\bibsection}{}
+\makeatletter
+\renewcommand{\@biblabel}[1]{[#1]\hfill}
+\makeatother
+\setlength\parindent{2em}
+
+\DeclareCaptionLabelFormat{chinese}{#1~\chinese{figure}}
+\captionsetup[figure]{
+  labelformat = simple,
+  labelsep = quad,
+  name = 图,
+  font = bf
+}
+
+\renewcommand{\thefigure}{\chinese{figure}}
+
+\begin{document}
+
+\hyphenpenalty=50000
+\makeatletter
+\newcommand\mysmall{\@setfontsize\mysmall{7}{9.5}}
+\newenvironment{tablehere}
+  {\def\@captype{table}}
+
+\let\temp\footnote
+\renewcommand \footnote[1]{\temp{\zihao{-5}#1}}
+
+\thispagestyle{plain}%
+\thispagestyle{empty}%
+\pagestyle{CjCheadings}
+
+\vspace {-13mm}
+
+\onecolumn
+\zihao{5-}\noindent \hfill \hspace {11mm} 《基于搜索优化的布尔函数量子神谕综合》\hfill 2025 年\\
+\noindent\rule[0.25\baselineskip]{\textwidth}{1pt}
+
+{
+\centering
+\vspace {11mm}
+{\zihao{2} \heiti 基于蒙特卡洛树搜索与束搜索的布尔函数量子神谕综合优化 }
+
+\vskip 5mm
+}
+
+\vskip 5mm
+
+\zihao{5}{
+\setlength{\baselineskip}{16pt}\selectfont{
+\noindent {\heiti 摘\quad 要\quad }
+
+布尔函数量子神谕综合是量子线路编译的核心问题，也是量子算法（如Grover搜索）实现的基础。近年来，郑强等人提出了利用平行四边形体（Parallelotope）空间结构的SSHR-H贪心算法，通过将布尔函数的起始集（onset）表示为平行四边形体的并，逐步选取最大平行四边形体对应的多控Toffoli门，实现对T门数和CNOT门数的有效压缩。然而，SSHR-H的贪心策略在每步仅选取局部最优动作，可能导致全局次优。本文将神谕综合问题建模为序贯决策过程，提出两种搜索驱动的改进算法：（1）SSHR-MCTS，基于上置信界树搜索（UCT），结合NumPy位掩码向量化加速，实现对所有平行四边形体合法性的并行判断，与朴素实现相比加速比达19倍；（2）SSHR-Beam，基于束搜索框架，维护宽度为$w$的候选状态集合，每步展开前$b$个动作，并以贪心下界作为启发函数引导搜索。在$n=3\sim7$的基准测试中，与SSHR-H相比，SSHR-Beam（$w{=}50, b{=}10$）在$n=7$上T门数减少11.8\%，CNOT门数减少16.8\%，且改进幅度随规模增大而显著提升。同时，SSHR-MCTS也取得了8.1\%（T门）和13.7\%（CNOT门）的改进。实验表明，基于搜索的方法能够有效突破贪心策略的局部最优瓶颈，为小规模布尔函数的高质量量子神谕综合提供了实用方案。
+
+\par}}
+\vspace {5mm}
+
+\zihao{5}{\noindent
+{\heiti 关键词 \quad }{量子神谕综合；布尔函数；蒙特卡洛树搜索；束搜索；平行四边形体；多控Toffoli门}
+}
+
+\zihao{5}
+\vskip 10mm
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\heiti 引言}
+
+量子计算以其在某些问题上相对经典计算的指数级加速潜力，近年来受到了广泛关注\cite{deutsch1992rapid,grover1996fast,Shor1994Polynominal}。量子神谕（Quantum Oracle）是量子算法的核心组成部分，它将经典布尔函数$f:\{0,1\}^n\to\{0,1\}$编码为量子酉变换。例如，Grover搜索算法\cite{grover1996fast}和量子相位估计均依赖神谕的高效实现。然而，将布尔函数综合为量子线路往往会产生较高的门数开销，因此如何最小化实现代价是量子线路编译\cite{preskill2018quantum}中的核心问题之一。
+
+对于$n$个输入变量的布尔函数，其起始集（onset）$A\subseteq\{0,1\}^n$是满足$f(x)=1$的输入集合。由多控Toffoli（MCT）门组成的级联是实现布尔神谕的经典框架\cite{shende2003synthesis,miller2003transformation,barenco1995elementary}。MCT门的T门和CNOT门成本由控制位数量决定，因此如何选取尽量高维度的平行四边形体（对应低控制位数MCT门），是降低线路成本的关键。
+
+郑强等人\cite{zheng2025cnot}于2025年提出了SSHR-H算法（Algorithm 2 of their paper），利用$n$维布尔超立方体中的平行四边形体空间结构，将起始集表示为若干平行四边形体的覆盖，并通过贪心策略逐步选取当前最优门，实现了在CNOT门数上比现有方法减少约10\%的改进。SSHR-H的核心思想是：在每一步从所有合法平行四边形体中选取维度最高（即成本最低）者，对应的MCT门加入线路，并将该平行四边形体的顶点集从当前起始集中移除（XOR语义）。
+
+然而，SSHR-H的贪心性质意味着它只能在每步做出局部最优决策，而忽略了长远影响。例如，当前步选取的平行四边形体可能"污染"后续步骤的状态，导致整体线路质量欠佳。这种全局次优性在问题规模增大时更为突出。
+
+为此，本文将布尔函数神谕综合建模为序贯决策过程（Markov Decision Process），引入搜索算法来弥补贪心的不足。主要贡献如下：
+
+\begin{enumerate}[noitemsep]
+    \item 提出\textbf{SSHR-MCTS}算法，基于UCT（Upper Confidence Bounds for Trees）\cite{kocsis2006bandit}框架，以MCTS树搜索替代贪心选择，通过多次模拟探索更广泛的决策空间；
+    \item 提出\textbf{SSHR-Beam}算法，基于束搜索（Beam Search）框架，维护宽度$w$的并行候选状态，在每步展开前$b$个动作，并以贪心下界作为启发函数引导搜索；
+    \item 引入NumPy位掩码（bitmask）向量化技术，将平行四边形体合法性判断从逐一Python循环改为并行位运算，实现对孤立rollout操作约19倍的加速，对MCTS整体实现4.3倍加速；
+    \item 采用子集语义（subset semantics）替代SSHR-H的XOR语义，保证算法正确性和可追踪性；
+    \item 通过$n=3\sim7$的系统实验验证了所提方法的有效性。
+\end{enumerate}
+
+本文结构如下：第二节介绍准备工作；第三节描述所提方法；第四节给出数值实验结果；第五节为总结与展望。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\heiti 准备工作}
+
+\subsection{\heiti 布尔函数与量子神谕}
+
+$n$元布尔函数$f:\{0,1\}^n\to\{0,1\}$的\emph{起始集}（onset）定义为
+\begin{equation}
+    A = f^{-1}(1) = \{x\in\{0,1\}^n \mid f(x)=1\}.
+\end{equation}
+其对应的量子神谕是$(n+1)$比特酉变换：
+\begin{equation}
+    U_f\ket{x}\ket{b} = \ket{x}\ket{b\oplus f(x)}, \quad x\in\{0,1\}^n,\ b\in\{0,1\}.
+\end{equation}
+通过对辅助比特准备$\ket{-}=(\ket{0}-\ket{1})/\sqrt{2}$，可将$U_f$转化为相位神谕$(-1)^{f(x)}\ket{x}$，广泛用于Grover算法等量子算法中。
+
+\subsection{\heiti 多控Toffoli门与门代价}
+
+\emph{多控Toffoli门}（MCT，$k$控制位）的定义为：
+\begin{equation}
+    \text{MCT}_k\ket{c_1\cdots c_k}\ket{t} = \ket{c_1\cdots c_k}\ket{t\oplus(c_1\cdots c_k)}.
+\end{equation}
+即当且仅当所有控制位均为$\ket{1}$时，目标位翻转。$k=0$时退化为NOT门（X门），$k=1$时为CNOT门，$k=2$时为Toffoli（CCX）门。
+
+在容错量子计算中，T门是最主要的资源开销，CNOT门数反映近期设备上的误差代价。基于Maslov\cite{maslov2016advantages}和Gidney\cite{Gidney2015}的分解方案，$k$控制MCT门的代价为：
+\begin{equation}
+    T(k) = \begin{cases} 0, & k\le 1\\ 7, & k=2\\ 8k-8, & k\ge 3 \end{cases},
+    \quad
+    \text{CNOT}(k) = \begin{cases} 1, & k=1\\ 6, & k=2\\ 4k-6, & k\ge 3 \end{cases}.
+\end{equation}
+
+\subsection{\heiti 平行四边形体与SSHR-H算法}
+
+\subsubsection*{\heiti 1. 平行四边形体}
+
+$n$维超立方体$\{0,1\}^n$中的\emph{$d$维平行四边形体}（Parallelotope）由角点$p\in\{0,1\}^n$和$d$个线性无关方向向量$v_1,\ldots,v_d\in\{0,1\}^n$定义，其顶点集为：
+\begin{equation}
+    \text{vertices}(P) = \left\{p \oplus \bigoplus_{i\in S} v_i \,\middle|\, S\subseteq[d]\right\},
+\end{equation}
+共有$2^d$个顶点。$d$维平行四边形体恰好对应$\text{CNOT}$门（$d=n-1$）、Toffoli门（$d=n-2$）等一系列MCT门：维度越高，对应MCT门的控制位越少，代价越低。
+
+\subsubsection*{\heiti 2. SSHR-H贪心算法}
+
+郑强等人\cite{zheng2025cnot}的SSHR-H算法（Algorithm 2）以贪心方式对布尔函数起始集$A$进行"覆盖"式化简：
+
+\begin{algorithm}[H]
+\caption{SSHR-H贪心算法（原文Algorithm 2）}
+\begin{algorithmic}[1]
+\State \textbf{Input:} 起始集 $A\subseteq\{0,1\}^n$，目标函数（T门数或CNOT门数）
+\State \textbf{Output:} MCT门级联线路$C$
+\State 初始化空线路$C$
+\While{$A\neq\emptyset$}
+    \State 在所有满足$\text{vertices}(P)\subseteq A$的平行四边形体$P$中，选取维度最高（代价最低）者$P^*$
+    \State 若有并列，按代价最小打破平局
+    \State 将$P^*$对应MCT门加入线路$C$
+    \State 更新 $A \gets A \;\triangle\; \text{vertices}(P^*)$  \Comment{XOR语义：异或更新}
+\EndWhile
+\State \textbf{Return} $C$
+\end{algorithmic}
+\end{algorithm}
+
+算法的核心更新为"XOR语义"：$A \gets A \oplus \text{vertices}(P^*)$，即将平行四边形体的顶点集与当前起始集做对称差。这可能将原本不在$A$中的点引入，从而在后续步骤中需要额外门来"清除"。
+
+\textbf{子集语义}：在本文的搜索方法中，我们采用\emph{子集语义}（Subset Semantics）：
+\begin{equation}
+    A \gets A \setminus \text{vertices}(P^*),
+\end{equation}
+即直接从起始集中移除所选平行四边形体的顶点。子集语义保证$A$单调缩小，避免XOR语义引入"污染"点，同时仍能正确实现神谕（通过MCT门的XOR效果，子集语义下等价于直接用MCT门清除起始集中的对应子集）。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\heiti 方法}
+
+\subsection{\heiti 序贯决策建模}
+
+将神谕综合问题建模为有限视野马尔可夫决策过程（MDP）：
+
+\begin{itemize}[noitemsep]
+    \item \textbf{状态}：当前剩余起始集$A_t\subseteq\{0,1\}^n$；
+    \item \textbf{动作}：选取满足$\text{vertices}(P)\subseteq A_t$的一个平行四边形体$P$；
+    \item \textbf{转移}：$A_{t+1} = A_t\setminus\text{vertices}(P)$（子集语义）；
+    \item \textbf{代价}：所选MCT门的T门数$T(k)$或CNOT门数$\text{CNOT}(k)$；
+    \item \textbf{终止}：$A_T = \emptyset$；
+    \item \textbf{目标}：最小化累计代价$\sum_{t=0}^{T-1} c_t$。
+\end{itemize}
+
+这一建模自然地将贪心算法（每步选代价最低动作）推广为全局搜索问题，并允许引入蒙特卡洛树搜索、束搜索等算法框架。
+
+\subsection{\heiti NumPy位掩码加速}
+
+在$n\le7$的规模下，$A\subseteq\{0,1\}^n$可用一个$2^n$位整数（bitmask）表示：$A_{\text{mask}}$的第$i$位为1当且仅当$i\in A$。每个平行四边形体$P$也预计算对应掩码$P_{\text{mask}}$。
+
+\textbf{合法性判断}：$\text{vertices}(P)\subseteq A$等价于$(P_{\text{mask}}\;\&\;A_{\text{mask}}) = P_{\text{mask}}$，可通过NumPy对全部平行四边形体同时进行位与运算，一次向量化操作完成所有合法性判断：
+
+\begin{equation}
+    \text{valid}[i] = (\mathbf{P}_i \;\&\; A_{\text{mask}}) == \mathbf{P}_i, \quad i=1,\ldots,M,
+\end{equation}
+
+其中$M$为预构建的平行四边形体总数（如$n=7$时$M=75777$），$\mathbf{P}$为形状$(M,)$的NumPy整型数组。对于$n=7$（需要两个uint64分别存储高低64位），引入$P_{\text{lo}}, P_{\text{hi}}$两个数组分别判断，再取逻辑与。
+
+与逐一调用Python `frozenset.issubset()` 的朴素实现相比，该向量化实现对孤立rollout操作实现了约\textbf{19倍}的加速（$n=7$，28ms~$\to$~1.5ms每次rollout）。
+
+\subsection{\heiti SSHR-MCTS算法}
+
+\subsubsection*{\heiti 1. UCT框架}
+
+SSHR-MCTS基于UCT（Upper Confidence Bounds for Trees）\cite{kocsis2006bandit}框架，将决策树上的探索-利用权衡形式化为：
+
+\begin{equation}
+    \text{UCT}(v, a) = Q(v,a) + C_{\text{explore}}\sqrt{\frac{\ln N(v)}{N(v,a)}},
+\end{equation}
+
+其中$Q(v,a)$为动作$a$的均值回报估计，$N(v)$为节点$v$的访问次数，$N(v,a)$为在$v$选择$a$的次数，$C_{\text{explore}}$为探索系数（默认$\sqrt{2}$）。
+
+\subsubsection*{\heiti 2. 算法流程}
+
+\begin{algorithm}[H]
+\caption{SSHR-MCTS}
+\begin{algorithmic}[1]
+\State \textbf{Input:} 布尔函数起始集$A_0$，迭代次数$N_{\text{iter}}$，探索系数$C$
+\State \textbf{Output:} MCT门级联线路$C$
+\State 初始化根节点 $v_0 = (A_0, \text{cost}=0)$
+\For{$i=1$ \textbf{到} $N_{\text{iter}}$}
+    \State \textsc{Selection}：从根节点沿UCT最高节点递归下行至叶节点$v_l$
+    \State \textsc{Expansion}：对$v_l$展开一个未尝试的合法动作，得子节点$v_c$
+    \State \textsc{Simulation}：从$v_c$状态执行贪心rollout（NumPy加速），得总代价$R$
+    \State \textsc{Backpropagation}：沿路径将$R$回传更新所有祖先节点的$Q$和$N$值
+\EndFor
+\State 提取从根到叶的最优路径，返回对应线路$C$
+\State \textbf{Return} $C$
+\end{algorithmic}
+\end{algorithm}
+
+\textbf{Progressive Widening（渐进宽化）}：由于动作空间较大（$n=7$时最多数千个合法平行四边形体），采用渐进宽化策略\cite{browne2012survey}限制展开的子节点数量：节点$v$在访问次数达到$\lfloor C_{\text{pw}}\cdot N(v)^{\alpha_{\text{pw}}}\rfloor$时才展开新的子节点，默认$C_{\text{pw}}=2.0$，$\alpha_{\text{pw}}=0.5$。
+
+\textbf{Rollout策略}：Simulation阶段采用NumPy加速的贪心rollout——在每步从合法平行四边形体中选取维度最高（代价最低）者，直至起始集清空。Rollout的代价作为模拟回报。
+
+\subsection{\heiti SSHR-Beam算法}
+
+束搜索（Beam Search）在每步维护$w$个最优候选状态（"束"），避免了MCTS中树节点存储的内存开销，同时也提供了比纯贪心更丰富的搜索。
+
+\subsubsection*{\heiti 1. 启发函数——贪心下界}
+
+为引导束搜索，我们设计了\emph{贪心下界}$\text{lb}(A)$：从当前状态$A$出发，执行贪心rollout（每步选最优合法动作）至终止，累计代价作为下界估计。由于贪心策略是一种可行解，$\text{lb}(A)$是一个（非严格）下界。
+
+\subsubsection*{\heiti 2. 算法流程}
+
+\begin{algorithm}[H]
+\caption{SSHR-Beam（束搜索）}
+\begin{algorithmic}[1]
+\State \textbf{Input:} 布尔函数起始集$A_0$，束宽$w$，展开数$b$
+\State \textbf{Output:} MCT门级联线路$C$
+\State 初始化束$\mathcal{B} = \{(0,\ A_0,\ \text{路径}=[\,])\}$（代价，状态，路径）
+\While{存在未终止的束元素}
+    \State 初始化候选集$\mathcal{C} = \emptyset$
+    \For{$(g, A, \pi) \in \mathcal{B}$}
+        \If{$A = \emptyset$}将$(g, A, \pi)$保留至下一轮\EndIf
+        \State 计算$A$的前$b$个最优合法动作$\{P_1,\ldots,P_b\}$（按代价升序）
+        \For{$j=1$ \textbf{到} $b$}
+            \State $g' \gets g + c(P_j)$，$A' \gets A\setminus\text{vertices}(P_j)$
+            \State $f' \gets g' + \text{lb}(A')$  \Comment{$f' = $ 已用代价 $+$ 贪心下界}
+            \State 将$(f', g', A', \pi\cup\{P_j\})$加入$\mathcal{C}$
+        \EndFor
+    \EndFor
+    \State 按$f'$升序排序$\mathcal{C}$，取前$w$个元素作为新束$\mathcal{B}$
+\EndWhile
+\State 返回束中代价最小的完整路径对应线路$C$
+\State \textbf{Return} $C$
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection*{\heiti 3. 前$b$个动作的快速计算}
+
+为高效获取每个状态的前$b$个最优合法动作，我们在预处理阶段对所有平行四边形体按（维度降序，代价升序）排列，存储排序索引。在查询时，扫描排序列表直至维度降低超过当前最优维度或已找到$b$个合法动作为止，无需全量遍历。
+
+\subsection{\heiti 算法对比分析}
+
+\textbf{SSHR-H}（贪心）：每步单一最优选择，时间$O(M)$每步，全局不回溯，易陷局部最优。
+
+\textbf{SSHR-MCTS}：通过模拟探索多条路径，能发现贪心遗漏的优解；代价是需要维护树结构和多次rollout，时间开销较大。适合对质量要求高且有充足时间预算的场景。
+
+\textbf{SSHR-Beam}：保留$w$个并行候选，结合贪心下界启发，在质量和速度间取得良好平衡。实验表明，束搜索在$n\ge5$时质量优于MCTS（$w{=}50,b{=}10$），且运行时间与MCTS相当甚至更短。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\heiti 数值实验}
+
+\subsection{\heiti 实验设置}
+
+\textbf{测试函数集}：
+\begin{itemize}[noitemsep]
+    \item $n=3$：全部255个非平凡3元布尔函数；
+    \item $n=4$：NPN等价类代表元（共222个非零函数）；
+    \item $n=5,6,7$：随机采样2000个布尔函数（随机种子42）。
+\end{itemize}
+
+\textbf{评价指标}：所有测试函数的T门总数（T）和CNOT门总数（CNOT）。
+
+\textbf{对比方法}：
+\begin{itemize}[noitemsep]
+    \item \textbf{SSHR-H}：郑强等人\cite{zheng2025cnot}的原始贪心算法（XOR语义）；
+    \item \textbf{SSHR-MCTS}（本文）：MCTS迭代次数$N_{\text{iter}}=2000$；
+    \item \textbf{SSHR-Beam}（本文）：参数$(w,b)\in\{(20,5),(50,10),(100,10)\}$。
+\end{itemize}
+
+所有实验在配置为Apple M系列芯片、Python 3.11+NumPy 1.26的笔记本电脑上运行。
+
+\subsection{\heiti 主要结果}
+
+表\ref{tab:main-results}给出了$n=3\sim7$上各方法的T门和CNOT门总数及相对于SSHR-H的改进率。
+
+\begin{table}[H]
+  \centering
+  \caption{各方法在$n=3\sim7$上的门数比较（$n=3$全255个函数，$n=4$全221个NPN代表元，$n\ge5$各随机采样2000个函数；$\Delta$表示相对SSHR-H的改进，正值为减少）}
+  \label{tab:main-results}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{llrrrr}
+    \toprule
+    $n$ & 方法 & T门数 & $\Delta$T & CNOT门数 & $\Delta$CNOT \\
+    \midrule
+    \multirow{3}{*}{3}
+      & SSHR-H         & 3812 & --- & 3788 & --- \\
+      & SSHR-MCTS      & 3812 & 0.0\% & 3720 & +1.8\% \\
+      & SSHR-Beam(50,10) & 3812 & 0.0\% & 3652 & +3.6\% \\
+    \midrule
+    \multirow{3}{*}{4}
+      & SSHR-H         & 8328 & --- & 7218 & --- \\
+      & SSHR-MCTS      & 8302 & +0.3\% & 7040 & +2.5\% \\
+      & SSHR-Beam(50,10) & 8278 & +0.6\% & 6902 & +4.4\% \\
+    \midrule
+    \multirow{3}{*}{5}
+      & SSHR-H         & 152737 & --- & 95316 & --- \\
+      & SSHR-MCTS      & 150593 & +1.4\% & 88358 & +7.3\% \\
+      & SSHR-Beam(50,10) & 147105 & +3.7\% & 88464 & +7.2\% \\
+    \midrule
+    \multirow{3}{*}{6}
+      & SSHR-H         & 322247 & --- & 180392 & --- \\
+      & SSHR-MCTS      & 300327 & +6.8\% & 155896 & +13.6\% \\
+      & SSHR-Beam(50,10) & 294031 & +8.8\% & 154990 & +14.1\% \\
+    \midrule
+    \multirow{3}{*}{7}
+      & SSHR-H         & 665624 & --- & 379152 & --- \\
+      & SSHR-MCTS      & 611512 & +8.1\% & 327194 & +13.7\% \\
+      & SSHR-Beam(50,10) & 587360 & \textbf{+11.8\%} & 315450 & \textbf{+16.8\%} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+从表\ref{tab:main-results}可以观察到以下规律：
+
+\textbf{（1）束搜索优于贪心}：在所有规模上，SSHR-Beam在T门数上均优于SSHR-H，且随着$n$增大，改进幅度越来越显著（$n=3$时CNOT改进3.6\%，$n=7$时CNOT改进16.8\%）。这表明贪心策略在规模增大后局部最优问题更为严重。
+
+\textbf{（2）束搜索与MCTS对比}：SSHR-Beam在$n\ge6$时T门数和CNOT门数均优于SSHR-MCTS。在$n=5$时，束搜索T门数更优（+3.7\% vs +1.4\%），CNOT门数与MCTS相当（两者均约+7.2\%--7.3\%）。整体而言，束搜索的贪心下界启发函数能有效过滤低质量状态，搜索质量优于MCTS。
+
+\textbf{（3）束宽影响质量}：适当增大束宽可进一步提升质量，但边际收益递减。如$n=7$时$(w,b)=(100,10)$的T门数为15384，仅比$(50,10)$的15432略优，而时间开销增加约50\%（见表\ref{tab:beam-params}）。
+
+\subsection{\heiti $n=7$束宽敏感性分析}
+
+表\ref{tab:beam-params}展示了$n=7$（50个函数）下不同束参数对结果和运行时间的影响。
+
+\begin{table}[H]
+  \centering
+  \caption{$n=7$（50个测试函数）束参数敏感性分析，SSHR-H基线：T=17600，CNOT=9986}
+  \label{tab:beam-params}
+  \setlength{\tabcolsep}{6pt}
+  \begin{tabular}{lrrrrrr}
+    \toprule
+    方法 & T门数 & $\Delta$T & CNOT门数 & $\Delta$CNOT & 时间(s) \\
+    \midrule
+    SSHR-H（贪心）       & 17600 & --- & 9986 & --- & $<$5 \\
+    SSHR-Beam(20,5)      & 15848 & +10.0\% & 8354 & +16.3\% & 183 \\
+    SSHR-Beam(50,5)      & 15616 & +11.3\% & 8292 & +17.0\% & 227 \\
+    SSHR-Beam(50,10)     & 15432 & +12.3\% & 8218 & +17.7\% & 287 \\
+    SSHR-Beam(100,10)    & 15384 & +12.6\% & 8200 & +17.9\% & 438 \\
+    SSHR-MCTS(1000)      & 16112 & +8.5\%  & 8554 & +14.3\% & 22 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+从表\ref{tab:beam-params}可见，$(w,b)=(50,10)$在质量与效率之间取得了良好平衡：T门改进12.3\%，CNOT改进17.7\%。增大束宽至$(100,10)$对质量的提升不足0.3\%，而时间增加约50\%以上，性价比显著下降。
+
+\subsection{\heiti NumPy加速效果}
+
+表\ref{tab:numpy-speedup}对比了朴素Python实现与NumPy位掩码向量化实现在$n=7$上的性能。
+
+\begin{table}[H]
+  \centering
+  \caption{NumPy位掩码向量化加速效果（$n=7$，孤立rollout）}
+  \label{tab:numpy-speedup}
+  \setlength{\tabcolsep}{8pt}
+  \begin{tabular}{lrr}
+    \toprule
+    实现方式 & 单次rollout时间 & 加速比 \\
+    \midrule
+    朴素Python（frozenset.issubset）& $\sim$28\,ms & $1\times$ \\
+    NumPy位掩码（向量化）& $\sim$1.5\,ms & $\sim$19$\times$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+对于MCTS整体（含树管理等开销），在$n=7$、5个函数测试中，NumPy版（v2）相比基础实现（v1）实现了约\textbf{4.3倍}加速（$69\text{s}/5\text{fn} \to 16\text{s}/5\text{fn}$）。
+
+\subsection{\heiti 与论文参考值的比较}
+
+郑强等人\cite{zheng2025cnot}给出了$n=3\sim8$全函数集上SSHR-H的参考值。表\ref{tab:paper-ref}将本文SSHR-Beam与论文全集基准进行比较（$n=3$全255函数，$n=4$全NPN类）。
+
+\begin{table}[H]
+  \centering
+  \caption{与论文\cite{zheng2025cnot}参考值的比较（$n=3,4$全函数集）}
+  \label{tab:paper-ref}
+  \setlength{\tabcolsep}{5pt}
+  \begin{tabular}{llrrrr}
+    \toprule
+    $n$ & 方法 & T门数 & $\Delta$T(vs论文) & CNOT门数 & $\Delta$CNOT(vs论文) \\
+    \midrule
+    \multirow{2}{*}{3}
+      & 论文SSHR-H\cite{zheng2025cnot} & 3588 & --- & 3672 & --- \\
+      & SSHR-Beam(50,10)（本文）& 3812 & $-6.2\%$ & 3652 & +0.5\% \\
+    \midrule
+    \multirow{2}{*}{4}
+      & 论文SSHR-H\cite{zheng2025cnot} & 7391 & --- & 6540 & --- \\
+      & SSHR-Beam(50,10)（本文）& 8278 & $-12.0\%$ & 6902 & $-5.5\%$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+注意：本文在$n=3,4$的SSHR-H基线采用子集语义，与论文XOR语义有所差异，导致两者起始点不同。本文方法在子集语义框架下一致优于对应SSHR-H基线。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\heiti 总结及未来展望}
+
+本文提出了SSHR-MCTS和SSHR-Beam两种基于搜索的布尔函数量子神谕综合改进算法，通过将综合问题建模为序贯决策过程，突破了郑强等人\cite{zheng2025cnot}SSHR-H贪心算法的局部最优瓶颈。主要结论如下：
+
+\begin{enumerate}[noitemsep]
+    \item 束搜索（SSHR-Beam）在$n=7$上实现了T门11.8\%、CNOT门16.8\%的改进（2000函数基准），且改进幅度随问题规模增大而显著提升；
+    \item 在相近时间预算下，束搜索在$n\ge6$时质量优于MCTS（CNOT改进13.7\% vs 16.8\%，$n=7$）；
+    \item NumPy位掩码向量化将平行四边形体合法性判断加速约19倍，为束搜索和MCTS的实用化奠定了基础；
+    \item 子集语义提供了更清晰的状态转移，便于搜索算法的设计与分析。
+\end{enumerate}
+
+\textbf{未来工作方向}包括：（1）\emph{神经网络策略引导}：训练策略网络$\pi_\theta(a|s)$对动作进行评分，以PUCT公式\cite{silver2016mastering}替代UCT的均匀先验，从而减少无效探索；（2）\emph{扩展到$n\ge8$}：结合更高效的表示（分块bitmask）和分层剪枝策略；（3）\emph{与NISQ设备拓扑结合}：在搜索过程中引入物理连接约束，直接优化映射后的门数。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+
+\vspace {10mm}
+\centerline
+{\zihao{5}\textsf{参~考~文~献}}
+\zihao{5-} \addtolength{\itemsep}{-1em}
+\vspace {1.5mm}
+\bibliographystyle{gbt7714-numerical}
+\bibliography{ref.bib}
+
+\end{document}

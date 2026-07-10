@@ -1,0 +1,9 @@
+.model parity_n3
+.inputs x0 x1 x2
+.outputs f
+.names x0 x1 x2 f
+100 1
+010 1
+001 1
+111 1
+.end

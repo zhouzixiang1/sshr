@@ -1,0 +1,17 @@
+{
+  "preset": "mega_highdim_resource",
+  "seed": 42,
+  "functions": 12,
+  "formats": [
+    "blif",
+    "truth"
+  ],
+  "source_methods": [
+    "direct_anf",
+    "and_direct_anf",
+    "and_fprm_root_beam",
+    "and_resource_nmcts",
+    "and_profile_resource_nmcts"
+  ],
+  "manifest": "manifest.csv"
+}

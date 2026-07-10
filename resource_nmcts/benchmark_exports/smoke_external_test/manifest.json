@@ -1,0 +1,24 @@
+{
+  "preset": "smoke",
+  "seed": 42,
+  "functions": 4,
+  "formats": [
+    "truth"
+  ],
+  "source_methods": [
+    "direct_anf",
+    "and_direct_anf",
+    "and_rc_nmcts",
+    "and_affine_nmcts",
+    "greedy_factor",
+    "mcts_factor",
+    "fprm_mcts",
+    "and_fprm_mcts",
+    "and_fprm_neural_mcts",
+    "cube_greedy",
+    "cube_beam",
+    "neural_mcts",
+    "sshr_h"
+  ],
+  "manifest": "manifest.csv"
+}

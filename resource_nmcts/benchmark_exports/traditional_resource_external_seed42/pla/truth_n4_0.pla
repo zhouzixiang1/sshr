@@ -1,0 +1,16 @@
+# name truth_n4_0
+# truth_table_hex A3B1
+.i 4
+.o 1
+.ilb x0 x1 x2 x3
+.ob f
+.type fr
+0000 1
+0010 1
+1010 1
+1110 1
+0001 1
+1001 1
+1011 1
+1111 1
+.e

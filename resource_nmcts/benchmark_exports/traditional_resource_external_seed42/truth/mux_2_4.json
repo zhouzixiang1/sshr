@@ -1,0 +1,7 @@
+{
+  "name": "mux_2_4",
+  "n": 6,
+  "truth_table_hex": "FEDCBA9876543210",
+  "bit_order": "LSB-first over integer assignments x0 + 2*x1 + ...",
+  "truth_bits_lsb_first": "0000100001001100001010100110111000011001010111010011101101111111"
+}

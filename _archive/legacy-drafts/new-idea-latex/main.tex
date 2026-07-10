@@ -1,0 +1,234 @@
+\documentclass[11pt,letterpaper]{ctexart}
+
+\usepackage[margin=1.35in,top=1.15in,bottom=1.0in,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=false,
+  pdfauthor={你的名字},
+  pdftitle={基于强化学习与蒙特卡洛树搜索的量子布尔函数综合方法}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\nouppercase{\leftmark}}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\fancypagestyle{plain}{
+  \fancyhf{}
+  \fancyfoot[C]{\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+\SetKwInput{KwInput}{Input}
+\SetKwInput{KwOutput}{Output}
+\SetKwComment{tcp}{// }{}
+\DontPrintSemicolon
+\SetAlgoNlRelativeSize{0}
+\SetAlgoInsideSkip{smallskip}
+
+\begin{document}
+
+\thispagestyle{plain}
+\begin{center}
+\vspace*{1.35in}
+{\LARGE 基于强化学习与蒙特卡洛树搜索的量子布尔\\[0.35em]函数综合方法\par}
+\vspace{0.42in}
+{\large 你的名字\par}
+\vspace{0.22in}
+{\large 2026 年 7 月 1 日\par}
+\end{center}
+\vspace{0.42in}
+
+\section{方法}
+
+本文提出的方法将量子布尔函数综合建模为一个 ** 序列决策问题 **，
+并采用强化学习（RL）与蒙特卡洛树搜索（MCTS）相结合的智能框架进行
+求解。
+
+\subsection{问题形式化}
+
+给定一个 $n$ 变量布尔函数的真值表 $T \in \{0,1\}^{2^n}$，目标为找到一个等价
+的量子电路，即一个门序列 $G=(g_1,g_2,\ldots,g_L)$，使得对应的酉矩阵 $U(G)$
+满足 $U(G)|0\rangle^{\otimes n}=|T\rangle$（其中 $|T\rangle$ 为真值表对应的计算基态叠加）。
+
+我们将该问题建模为 ** 马尔可夫决策过程（MDP）**，定义如下：
+
+\begin{itemize}
+  \item \textbf{状态 $s_t$：} 当前部分构建的电路状态，包括目标真值表 $T$ 和当前电路的
+  酉矩阵 $U_t$。
+
+  \item \textbf{动作 $a_t$：} 从预定义动作空间 $\mathcal{A}$ 中选择一个量子门（含门类型和作用比
+  特），即 $a_t=(gate,qubits)$。
+
+  \item \textbf{状态转移 $s_{t+1}=s_t\circ a_t$：} 即在当前电路后添加该门。
+
+  \item \textbf{奖励 $R(s_t,a_t)$：} 当电路构建完成（达到终止状态）时，根据最终电路的
+  保真度 $\mathcal{F}$ 给予稀疏奖励：
+  \[
+    R_{\mathrm{final}}=
+    \begin{cases}
+      +1, & \mathcal{F}=1 \quad \text{(电路完全正确)},\\
+      -1, & \mathcal{F}<1 \quad \text{(电路错误)},
+    \end{cases}
+  \]
+  并可附加过程惩罚 $r_{\mathrm{step}}=-\lambda$ 以鼓励简洁电路。
+
+  \item \textbf{终止条件：} 电路深度达到预设最大值，或电路已满足目标函数。
+\end{itemize}
+
+\subsection{双网络智能体架构}
+
+智能体由策略网络和价值网络构成，二者共享一个主干编码器，但输出
+头不同。
+
+\subsubsection{状态表示}
+
+输入状态由两部分拼接而成：
+
+\begin{enumerate}
+  \item 目标真值表 $T$ 的向量化表示（长度 $2^n$）；
+
+  \item 当前酉矩阵 $U_t$ 的实部与虚部展平（维度 $2 \times 2^n \times 2^n$）。
+\end{enumerate}
+
+为避免维度过大，可在实际实现中对酉矩阵进行降维（如 PCA 或自编码
+器），本文采用直接展平方式以保持信息完整。
+
+\subsubsection{策略网络 $\pi_\theta(a|s)$}
+
+策略网络输出一个概率分布，对每个动作 $a \in \mathcal{A}$ 打分：
+\[
+  \pi_\theta(a|s)=\operatorname{Softmax}(f_{\mathrm{policy}}(h_s)),
+\]
+其中 $h_s$ 为共享主干提取的特征向量，$f_{\mathrm{policy}}$ 为若干全连接层。该输出作为
+MCTS 中动作的 ** 先验概率 ** $P(s,a)$。
+
+\subsubsection{价值网络 $V_\phi(s)$}
+
+价值网络输出一个标量，预测从状态 $s$ 出发的期望累计奖励：
+\[
+  V_\phi(s)=\operatorname{Tanh}(f_{\mathrm{value}}(h_s)),
+\]
+其中 $f_{\mathrm{value}}$ 为另一组全连接层，输出经 $\tanh$ 激活以限制在 $[-1,1]$。该值用
+于 MCTS 中的节点评估和提前终止判断。
+
+\newpage
+
+\subsection{蒙特卡洛树搜索（MCTS）}
+
+MCTS 在每次决策时进行多步模拟，以平衡“探索”与“利用”。其核
+心流程包含四个阶段：
+
+\begin{algorithm}[H]
+\caption{MCTS 搜索过程}
+\KwInput{当前状态 $s_0$，策略网络 $\pi_\theta$，价值网络 $V_\phi$，模拟次数 $N_{\mathrm{sim}}$}
+\KwOutput{改进后的动作概率分布 $\pi$（基于访问次数）}
+初始化搜索树，根节点为 $s_0$\;
+\For{$i=1$ \KwTo $N_{\mathrm{sim}}$}{
+  $node \leftarrow$ 根节点\;
+  \While{$node$ 非叶节点}{
+    \[
+      a \leftarrow \arg\max_{a'}
+      \left(
+      Q(node,a')+
+      c \cdot P(node,a') \cdot
+      \frac{\sqrt{\sum_b N(node,b)}}{1+N(node,a')}
+      \right)
+    \]
+    \tcp{选择阶段}
+    $node \leftarrow$ 子节点$(node,a)$\;
+  }
+  \uIf{$node$ 为终止状态}{
+    $z \leftarrow R_{\mathrm{final}}$\;
+  }
+  \Else{
+    \For{每个动作 $a'$ 在动作空间中}{
+      创建新子节点 $child$，其先验 $P(child)=\pi_\theta(a'|s_{node})$\;
+    }
+    $z \leftarrow$ 模拟$(node)$\tcp*[r]{使用默认策略快速走完}
+  }
+  \tcp{反向传播}
+  \While{$node \ne$ 根节点}{
+    更新 $N(node,a) += 1$，$Q(node,a) += z - V_\phi(s_{node})$\;
+    $node \leftarrow$ 父节点$(node)$\;
+  }
+}
+\Return{$\pi(a|s_0)=N(s_0,a)/\sum_b N(s_0,b)$}\tcp*[r]{访问次数归一化}
+\end{algorithm}
+
+其中 $c$ 为探索常数，$N$ 为访问次数，$Q$ 为平均价值，模拟阶段可采用
+随机走子或轻量级启发式策略。
+
+\newpage
+
+\subsection{训练循环}
+
+整个系统通过“搜索-存储-学习”的闭环不断进化。训练算法如算
+法~?? 所示。
+
+\begin{algorithm}[H]
+\caption{训练循环}
+\KwInput{布尔函数数据集 $\mathcal{D}$，策略网络 $\pi_\theta$，价值网络 $V_\phi$，训练轮数 $E$}
+\KwOutput{训练好的网络参数 $\theta,\phi$}
+初始化经验池 $\mathcal{B}\leftarrow\emptyset$\;
+\For{$epoch=1$ \KwTo $E$}{
+  \ForEach{函数 $f \in \mathcal{D}$}{
+    使用 MCTS（算法 1）搜索得到改进策略 $\pi$ 和最终奖励 $z$\;
+    记录每一步的 $(s_t,\pi_t,z_t)$ 存入 $\mathcal{B}$\;
+  }
+  \For{$step=1$ \KwTo $K$}{
+    从 $\mathcal{B}$ 中采样一批数据 $(s,\pi,z)$\;
+    计算损失：
+    \[
+      \mathcal{L}
+      =
+      \frac{1}{|\mathrm{batch}|}
+      \sum_i
+      \left[
+        (z_i-V_\phi(s_i))^2
+        - \pi_i^\top \log \pi_\theta(s_i)
+      \right]
+      + \lambda\|\theta\|_2^2,
+    \]
+    其中 $\lambda$ 为正则系数。使用 Adam 优化器更新 $\theta,\phi$\;
+  }
+}
+\Return{$\theta,\phi$}
+\end{algorithm}
+
+\subsection{动作空间与门库}
+
+动作空间 $\mathcal{A}$ 可根据研究目标灵活配置。本文考虑以下常用门库：
+
+\begin{itemize}
+  \item \textbf{CNT 门库：} $\{NOT,CNOT,Toffoli\}$，适合可逆逻辑综合；
+
+  \item \textbf{通用门库：} $\{H,X,Y,Z,CNOT,T,Toffoli,SWAP\}$，表达能力最强；
+
+  \item \textbf{Clifford+T 门库：} $\{H,S,CNOT,T\}$，贴合容错计算硬件约束。
+\end{itemize}
+
+\newpage
+
+每个动作同时包含门类型和作用量子比特（如 $CNOT_{0,1}$），动作空间大小为
+$|\text{门库}| \times n(n-1)/2$（对于双比特门）或 $|\text{门库}| \times n$（对于单比特门）。
+
+\subsection{复杂性分析}
+
+MCTS 每次模拟的复杂度为 $O(L\cdot|\mathcal{A}|)$，其中 $L$ 为模拟深度，$|\mathcal{A}|$ 为动
+作空间大小；训练过程的计算成本主要取决于模拟次数和数据规模。由于策
+略网络和价值网络提供了先验和评估，实际搜索效率远优于穷举。
+
+\section{小结}
+
+本章详细阐述了基于 RL 与 MCTS 的量子布尔函数综合方法，包括
+MDP 建模、双网络架构、MCTS 搜索算法及训练流程。该方法通过智能体
+的自我博弈，能够在指数级搜索空间中高效地生成高质量量子电路，为后续
+实验验证奠定了理论基础。
+
+\end{document}

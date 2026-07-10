@@ -1,0 +1,9 @@
+.model majority_n3
+.inputs x0 x1 x2
+.outputs f
+.names x0 x1 x2 f
+110 1
+101 1
+011 1
+111 1
+.end

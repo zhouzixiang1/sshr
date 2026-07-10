@@ -1,0 +1,19 @@
+# name threshold2_n4
+# truth_table_hex FEE8
+.i 4
+.o 1
+.ilb x0 x1 x2 x3
+.ob f
+.type fr
+1100 1
+1010 1
+0110 1
+1110 1
+1001 1
+0101 1
+1101 1
+0011 1
+1011 1
+0111 1
+1111 1
+.e

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="520" height="350" viewBox="0 0 520 350"
+     xmlns="http://www.w3.org/2000/svg"
+     font-family="'Times New Roman', 'STIX Two Math', serif">
+
+  <rect width="520" height="350" fill="white"/>
+
+  <!-- ── 标题 ── -->
+  <text x="260" y="26" text-anchor="middle"
+        font-family="sans-serif" font-size="14" font-weight="bold" fill="#111">
+    n = 3  ·  3-majority 函数
+  </text>
+  <text x="260" y="46" text-anchor="middle"
+        font-family="'Times New Roman',serif" font-size="12" fill="#444">
+    f(x₀,x₁,x₂) = x₀x₁ ∨ x₀x₂ ∨ x₁x₂,   tt = 0xe8,   onset = {3, 5, 6, 7}
+  </text>
+
+  <!-- ── 步骤标签 ── -->
+  <text x="165" y="68" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#999">Step 1</text>
+  <text x="255" y="68" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#999">Step 2</text>
+  <text x="345" y="68" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#999">Step 3</text>
+  <text x="435" y="68" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#999">Step 4</text>
+
+  <!-- ── 横向量子线 (q0~q3) ── -->
+  <!-- q0: y=85,  q1: y=145,  q2: y=205,  q3: y=265 -->
+  <line x1="115" y1="85"  x2="470" y2="85"  stroke="#1a1a1a" stroke-width="1.5"/>
+  <line x1="115" y1="145" x2="470" y2="145" stroke="#1a1a1a" stroke-width="1.5"/>
+  <line x1="115" y1="205" x2="470" y2="205" stroke="#1a1a1a" stroke-width="1.5"/>
+  <line x1="115" y1="265" x2="470" y2="265" stroke="#1a1a1a" stroke-width="1.5"/>
+
+  <!-- ── Ket 标签 ── -->
+  <text x="108" y="85"  text-anchor="end" dominant-baseline="middle" font-size="16" fill="#1a1a1a">|q₀⟩</text>
+  <text x="108" y="145" text-anchor="end" dominant-baseline="middle" font-size="16" fill="#1a1a1a">|q₁⟩</text>
+  <text x="108" y="205" text-anchor="end" dominant-baseline="middle" font-size="16" fill="#1a1a1a">|q₂⟩</text>
+  <text x="108" y="265" text-anchor="end" dominant-baseline="middle" font-size="16" fill="#1a1a1a">|q₃⟩</text>
+  <!-- 输出辅助比特标注 -->
+  <text x="473" y="265" dominant-baseline="middle"
+        font-family="sans-serif" font-size="10" fill="#888">out</text>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- Step 1 (x=165): CNOT  ctrl=q1  tgt=q2                  -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <line x1="165" y1="145" x2="165" y2="205" stroke="#1a1a1a" stroke-width="1.5"/>
+  <!-- 控制点 @ q1 -->
+  <circle cx="165" cy="145" r="6" fill="#1a1a1a"/>
+  <!-- ⊕ 目标 @ q2 -->
+  <circle cx="165" cy="205" r="12" fill="white" stroke="#1a1a1a" stroke-width="1.5"/>
+  <line x1="165" y1="193" x2="165" y2="217" stroke="#1a1a1a" stroke-width="1.5"/>
+  <line x1="153" y1="205" x2="177" y2="205" stroke="#1a1a1a" stroke-width="1.5"/>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- Step 2 (x=255): Toffoli  ctrl=[q0,q2]  tgt=q3           -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 控制线：q0(85) → q3(265)，途经 q1(145) -->
+  <line x1="255" y1="85" x2="255" y2="265" stroke="#1a1a1a" stroke-width="1.5"/>
+  <!-- 控制点 @ q0, q2 -->
+  <circle cx="255" cy="85"  r="6" fill="#1a1a1a"/>
+  <circle cx="255" cy="205" r="6" fill="#1a1a1a"/>
+  <!-- ⊕ 目标 @ q3 -->
+  <circle cx="255" cy="265" r="12" fill="white" stroke="#1a1a1a" stroke-width="1.5"/>
+  <line x1="255" y1="253" x2="255" y2="277" stroke="#1a1a1a" stroke-width="1.5"/>
+  <line x1="243" y1="265" x2="267" y2="265" stroke="#1a1a1a" stroke-width="1.5"/>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- Step 3 (x=345): CNOT  ctrl=q1  tgt=q2                  -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <line x1="345" y1="145" x2="345" y2="205" stroke="#1a1a1a" stroke-width="1.5"/>
+  <circle cx="345" cy="145" r="6" fill="#1a1a1a"/>
+  <circle cx="345" cy="205" r="12" fill="white" stroke="#1a1a1a" stroke-width="1.5"/>
+  <line x1="345" y1="193" x2="345" y2="217" stroke="#1a1a1a" stroke-width="1.5"/>
+  <line x1="333" y1="205" x2="357" y2="205" stroke="#1a1a1a" stroke-width="1.5"/>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- Step 4 (x=435): Toffoli  ctrl=[q1,q2]  tgt=q3          -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <line x1="435" y1="145" x2="435" y2="265" stroke="#1a1a1a" stroke-width="1.5"/>
+  <circle cx="435" cy="145" r="6" fill="#1a1a1a"/>
+  <circle cx="435" cy="205" r="6" fill="#1a1a1a"/>
+  <circle cx="435" cy="265" r="12" fill="white" stroke="#1a1a1a" stroke-width="1.5"/>
+  <line x1="435" y1="253" x2="435" y2="277" stroke="#1a1a1a" stroke-width="1.5"/>
+  <line x1="423" y1="265" x2="447" y2="265" stroke="#1a1a1a" stroke-width="1.5"/>
+
+  <!-- ── 代价与方法 ── -->
+  <text x="260" y="308" text-anchor="middle"
+        font-family="sans-serif" font-size="12" fill="#333">
+    T-count = 14，CNOT-count = 14，辅助比特 = 0
+  </text>
+  <text x="260" y="330" text-anchor="middle"
+        font-family="sans-serif" font-size="11" fill="#777">
+    合成方法：SSHR-H paper（sshr_h_paper，n=3，onset 枚举）
+  </text>
+
+</svg>

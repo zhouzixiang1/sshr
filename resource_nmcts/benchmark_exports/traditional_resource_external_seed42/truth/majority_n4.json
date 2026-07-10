@@ -1,0 +1,7 @@
+{
+  "name": "majority_n4",
+  "n": 4,
+  "truth_table_hex": "E880",
+  "bit_order": "LSB-first over integer assignments x0 + 2*x1 + ...",
+  "truth_bits_lsb_first": "0000000100010111"
+}

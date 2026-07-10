@@ -1,0 +1,12 @@
+# name threshold2_n3
+# truth_table_hex E8
+.i 3
+.o 1
+.ilb x0 x1 x2
+.ob f
+.type fr
+110 1
+101 1
+011 1
+111 1
+.e

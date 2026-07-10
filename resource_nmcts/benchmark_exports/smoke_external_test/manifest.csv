@@ -1,0 +1,5 @@
+index,name,preset_name,n,truth_table_hex,onset_size,anf_terms,pla,blif,truth
+0,parity_n3,parity_n3,3,96,4,3,,,truth/parity_n3.json
+1,majority_n3,majority_n3,3,E8,4,3,,,truth/majority_n3.json
+2,threshold2_n3,threshold2_n3,3,E8,4,3,,,truth/threshold2_n3.json
+3,parity_n4,parity_n4,4,6996,8,4,,,truth/parity_n4.json

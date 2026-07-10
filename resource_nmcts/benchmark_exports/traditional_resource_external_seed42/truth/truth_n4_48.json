@@ -1,0 +1,7 @@
+{
+  "name": "truth_n4_48",
+  "n": 4,
+  "truth_table_hex": "F50B",
+  "bit_order": "LSB-first over integer assignments x0 + 2*x1 + ...",
+  "truth_bits_lsb_first": "1101000010101111"
+}

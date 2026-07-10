@@ -1,0 +1,156 @@
+[
+  {
+    "area": "SSHR 核心算法代码考古：布尔函数→量子预言机(oracle)综合",
+    "key_files": [
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/CLAUDE.md",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/README.md",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/bool_func.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/parallelotope.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/parallelotope_enum.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/block_synth.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/sshr_h.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/sshr_h_paper.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/sshr_i.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/esop_ilp.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/baselines.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/sshr_beam.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/tests/test_correctness.py"
+    ],
+    "key_insights": [
+      "目标酉是 bit-flip oracle U_f|x>|0>=|x>|f(x)>，用经典仿真验证（test_correctness.circuit_implements）。不是相位oracle，更不是稀疏态制备U|0>=|T>。",
+      "平行体几何是核心创新：基向量两两不相交(Lemma 1)，使XOR=mod2加法。dim=m的块恰好2^m个顶点，Theorem 1保证它能用1个(n-m)-MCT实现，故高维=低成本。",
+      "候选数随n爆炸(Table VIII: n=6→10299, n=7→75905, n=8→609441)，枚举是大n瓶颈，ILP只到n≤6。",
+      "XOR vs monotone是关键分水岭：SSHR-H/SSHR-I/ESOP用XOR(paper一致但n≥7级联污染)；MCTS/Beam用monotone(规避污染但候选受限，n≥7可用)。代码注释明确禁止混用两种语义。",
+      "成本严格按MCT分解表(Table II): k=1→1 CNOT; k=2→7T/6CNOT(或RP-T 4T); k≥4→8k-8 T, 4k-6 CNOT。两阶段ILP(先min T再固定T预算min CNOT)在n=4比paper T降15.4%/CNOT降19.5%。",
+      "互补优化：SSHR-I对f和NOT(f)各跑一次取优(NPN_REPS_N4预选代表元精确复现paper n=4 CNOT=4696)；NOT(f)只需在输出加1个X门(0 CNOT/0 T)。",
+      "block_synth.synth_block的精巧之处：representative位自由变化(不进control_list)，inner bit经CNOT链变成常数c_{j,b}，配合X门做0-control，使单个MCT精确覆盖整个平行体顶点集。"
+    ],
+    "mechanism": "动作空间：选一个平行体P(候选)；ILP则是0/1变量x_i表示是否选P_i。状态：on-set A(整数位掩码，bit k=1表minterm k未完成)。求解方式分4类——(a)SSHR-H/sshr_h_paper:贪心，每步选满足|A∩P|/|P|≥R(=3/4)的最高维P，A^=vertices(P)(XOR更新)；区别在候选集来源：sshr_h.py从全超立方体枚举一次(允许off-set顶点，R起过滤作用)，sshr_h_paper.py每步从当前A重新枚举(全顶点在A内，ratio恒1.0，A严格单调缩减)。(b)SSHR-I(sshr_i.py):WP-SCP精确ILP(Gurobi)，约束on-set被覆盖奇数次、off-set偶数次(用整数变量y/z吸收parity：cover_sum-2y==1 / cover_sum==2z)，目标min Σcost_i·x_i；CNOT目标单阶段，T目标两阶段(先min T再固定T预算min CNOT)；用SSHR-H解做Cutoff上界+MIPStart热启动；并对f和NOT(f)各跑一次取优(NPN/complement选择)。(c)ESOP ILP(esop_ilp.py):同样WP-SCP框架但候选换成3^n个立方体cube{0,1,*}^n。(d)SSHR-MCTS v2/sshr_beam:搜索式，monotone语义(vertices(P)⊆A才合法，A^=P只缩减)，beam用greedy_lb下界+UCT/宽度搜索。门实现与计成本(block_synth.py + bool_func.py mct_cost)：每个m维平行体→1个(n-m)-MCT门(用CNOT链把inner bits变换成常数+X门做0-control+单MCT+逆)，剩余公共控制位n-m=控制位数k。块成本 block_cnot_cost=2·CNOT链长度 + mct_cost(n-m)[\"CNOT\"]；block_t_cost(或RP版k=2用4T)=mct_cost(n-m)[\"T\"]。MCT分解表(Table II): k=1→0T/1CNOT; k=2→7T/6CNOT(或相对相位Toffoli 4T); k=3→16T/14CNOT; k≥4→(8k-8)T/(4k-6)CNOT。整体目标度量：CNOT数(主)或T-count(次)，跨所有真值表/NPN代表元求和。",
+    "problem_solved": "给定小规模(n=3~8)布尔函数 f:{0,1}^n→{0,1}（整数真值表），综合出一个作用在 n+1 量子比特上的可逆量子 oracle 线路，使得 U_f|x⟩|0⟩ = |x⟩|f(x)⟩（bit-flip / set oracle，第 n+1 个量子比特为输出，初始|0⟩，f(x)=1 则翻转）。验证见 tests/test_correctness.py 的 circuit_implements：输入[x bits, 0]，要求输出位==f(x)。最小化目标是 CNOT 数（主）或 T-count（次）。这是\"oracle 综合\"问题，不是稀疏态制备。",
+    "relation_to_new_idea": "新思路\"RL+MCTS 门级搜索\"与 SSHR 的关系：相同点——最终目标一致(为小布尔函数综合低 CNOT/T 的量子 oracle，都可用 bit-flip oracle 验证)，且 SSHR 的几何块分解(CNOT链+X+单MCT+逆)证明\"块级\"天然比\"逐 minterm 的 n-MCT\"便宜得多，这是任何门级搜索必须超越的基线。冲突点/不在解同一个问题——(1)SSHR 的搜索对象是\"选哪些平行体块\"(结构级/块级动作空间，候选已用几何预先压缩，ILP/MCTS/beam 都在这一层)；新思路是\"门级搜索\"(动作=CNOT/T/X 单门)，状态空间是完整酉酉空间，维度爆炸且丧失平行体带来的 2^m 压缩。(2)SSHR 是确定性的覆盖问题(WP-SCP，ILP 可给出 n≤6 最优)，门级 RL 很难稳定超越 ILP 的最优解，且 reward/价值函数在门级极难定义(SSHR 用 block_cnot_cost/block_t_cost 这种廉价解析成本，门级则需模拟整条线路)。(3)SSHR 的 XOR 语义在 n≥7 级联污染——这是结构级方法的天花板，门级搜索反而天然不受此限(门序列不依赖 onset 集合演化)，是新思路唯一明确的差异化优势区。可复用点——(a)bool_func 的位掩码/真值表/mct_cost 表、QuantumCircuit.simulate 经典验证器、circuit_implements 测试框架可直接复用做 RL 环境/评估；(b)平行体候选枚举与 block_synth 块成本函数可作为 RL 的\"宏动作/分层动作空间\"或 reward shaping 的下界估计(SSHR-Beam 的 greedy_lb 已是范例)；(c)NPN_REPS_N4 基准与 paper_data 参考值是统一的评估基准；(d)若新思路做\"门级\"而非块级，建议明确对标 SSHR-I 的 n≤6 最优解，并主攻 n≥7(SSHR 失效区)才有价值增量。结论：两者在\"综合 oracle\"这一顶层目标上同向，但在\"动作粒度/状态表示/求解范式\"上根本不同；SSHR 不是门级搜索，而是块级几何覆盖求解器。"
+  },
+  {
+    "area": "SSHR 仓库搜索类算法（SSHR-MCTS v1/v2、SSHR-Beam）",
+    "key_files": [
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/sshr_mcts.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/sshr_mcts_v2.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/sshr_beam.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/block_synth.py (block_cnot_cost / block_t_cost / synth_block)",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/parallelotope_enum.py (enumerate_parallelotopes，候选集来源)",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/experiments/mcts_beam_compare.py (默认参数与对比入口)"
+    ],
+    "key_insights": [
+      "动作=平行体块（高层组合对象），不是量子门：每个动作直接对应一个可综合的电路块，门序列由 synth_block 在事后展开。这是与新思路'门级搜索'最根本的语义差异。",
+      "为什么用 monotone 而非 XOR：XOR 语义虽忠于论文奇偶覆盖，但在 n>=7 时若选错块会把 off-set 拉进 A，造成'级联污染'，剩余覆盖目标不可控、贪心 rollout 失效；强制 vertices(P)⊆A 使 A 严格单调缩小，rollout 必然终止、贪心 LB 单调可用。代价是候选集被限制为'当前 A 的子集块'，理论上不再等价于 WP-SCP（可能错失更优的奇偶覆盖解），但 CLAUDE.md 明确禁止 XOR 与 monotone 混用。",
+      "状态本质可压成单个大整数掩码：n<=6 用 1 个 uint64，n=7 拆 lo/hi 两个 uint64，n=8 退化为 Python int object 数组（这是 n>=8 慢的根因，也是 n<=7 适用边界的来源）。",
+      "v2 的核心加速=把 Python `for vs in vert_sets: vs.issubset(A)`（O(M) Python 层循环 + frozenset 开销）换成单条 numpy 向量表达式 `(P_masks & Am) == P_masks`；rollout 每步都调一次，MCTS 每迭代多次 rollout，故 15-20x→整体 4-5x。n=7 因 double 模式（两条向量化 AND+EQ 再 &）开销翻倍，且候选数 75905 更大，速度回落。",
+      "Progressive widening（C_pw=2.0, alpha_pw=0.5）是 n>=6 的必需品：候选数 n=6→10299、n=7→75905，全展开会爆内存/时间；它把每节点活跃子节点数限制在 ceil(2·N^0.5)。",
+      "Beam 的 f=cost+greedy_lb 不是 admissible 下界（贪心覆盖成本一般 >= 最优），所以 beam 是启发式 A* 而非最优保证；但它保底能找到贪心解（width=1,branch=1），且 n<=6 时固定预算内常优于随机性更强的 MCTS。",
+      "MCTS 动作先 shuffle 再 pop：根节点每次重新初始化 untried 都会重洗，给探索带来随机性，但也意味着树不是严格确定性扩展。",
+      "目标度量切换（CNOT vs T）只换 cost_fn：T 目标用 relative-phase Toffoli（k=2→T=4 而非标准 7），见 _block_t_cost_rp；其余搜索框架不变。",
+      "n=4 候选 257、n=5 候选 1539、n=6 候选 10299、n=7 候选 75905——枚举本身（enumerate_parallelotopes，lru_cache 按 n 缓存）在大 n 是仅次于 rollout 的性能瓶颈。"
+    ],
+    "mechanism": "【动作空间】\n动作 = 选择一个平行体块 P_i（不是量子门，也不是单个 minterm）。每个 P_i 由 enumerate_parallelotopes(full_universe, n) 从全超立方体预枚举得到，并补上 dim-0 单例（保证任一残留 minterm 都能被覆盖，rollout 必然终止）。选完一个块后由 block_synth.synth_block 在事后展开成 (CNOT链 + X + (n-m)-MCT + 逆) 的门序列——所以 MCTS/Beam 完全不感知门，门是块的事后投影。候选数随 n 暴涨（n=4→257, n=5→1539, n=6→10299, n=7→75905, n=8→609441），枚举本身是大 n 的瓶颈。\n\n【状态】\n状态 = 残余 on-set A，用 frozenset[int]（v1/节点层）和 Python int 位掩码（rollout 引擎层）双重表示。每个节点还带 cost_so_far（已选块的累加代价）。终止条件 A=∅。\n\n【合法性判定 / monotone 语义】\n关键约束：动作 P 仅当 vertices(P) ⊆ A 时合法。因此转移 A' = A - vertices(P)（严格缩小，永不增长）。\n- v1：Python `vs.issubset(A)` 逐个判定，O(M) frozenset 比较每步。\n- v2/Beam：把所有块的顶点位掩码装进 numpy uint64 数组，一步向量化 `(P_masks & Am) == P_masks`（n≤6 单 uint64；n=7 拆 lo/hi 两个 uint64 做 `(P_lo&Al)==P_lo & (P_hi&Ah)==P_hi`；n=8 退化成 object 数组的 Python 循环，所以 n=8 慢）。\n\n【为什么 monotone 而非 XOR】\nSSHR-H/SSHR-I 用 XOR 语义（A ^= vertices(P)），匹配论文奇偶覆盖 WP-SCP，但允许 off-set 被\"污染\"进 A——n≥7 时这种污染会级联，使后续贪心/rollout 在被污染的 A 上做出错误决策、质量急剧恶化。MCTS/Beam 强制 vertices(P)⊆A，A 只会缩小，从结构上杜绝污染，rollout 必然终止、贪心下界单调可用。代价：候选集被限制为\"A 的子集块\"，可能错过某些靠 XOR 交织才更优的奇偶覆盖解（理论最优性削弱）；但实践上换来 n=7 的可用性。CLAUDE.md 明确禁止两种语义混用。\n\n【奖励 / 目标度量】\nreward = -(cost_so_far + rollout_cost)，即\"负总代价\"。目标是最小化选块的总代价；代价函数 objective=\"cnot\" 用 block_cnot_cost，\"t\" 用 _block_t_cost_rp（relative-phase Toffoli：k=2→T=4 而非标准 7）。这是块级代价累加，不是逐门代价。\n\n【UCT 公式】\n标准 UCB1：uct = Q/N + C·sqrt(ln(N_parent)/N)，C_explore 默认 1.4（≈√2）。N=0 时返回 +∞ 强制先探索每个子节点。配合 progressive widening：每节点最多保留 max(1, ceil(C_pw · max(visits,1)^alpha_pw)) 个活跃子节点（默认 C_pw=2.0, alpha_pw=0.5），用于 n≥6 候选爆炸时限制分支。\n\n【rollout 策略】\n贪心：每步在合法块中选 size 最大（覆盖 minterm 最多）、平手取 cost 最小的块。v2 可选 epsilon-greedy（小概率随机选合法块）和 n_rollouts>1（多次 rollout 取最优），增强探索但默认关闭。\n路径补全：最终解 = MCTS 树前缀（selection+expansion 走过的块）+ 从该节点贪心 rollout 补全剩余 minterm；每轮都更新全局最优完整解。\n\n【Beam 的 lower bound 与剪枝】\nbeam 元素 = (score, uid, A_mask, cost_so_far, path)，score = cost_so_far + greedy_lb(A_mask)。\ngreedy_lb 用与 rollout 完全相同的\"每步取 max-size 合法块并累加其 cost\"过程，得到剩余 A 的代价估计（注意：这是贪心覆盖成本，并非数学上 admissible 的下界，更像 A* 的启发式 f；但因为是单调缩减，每步成本非负，可作为排序依据）。\n每步对 beam 中每个候选用 top_k_actions(A, branch) 取按 (size DESC, cost ASC) 排序的前 branch 个合法动作（利用预排序的 sorted_idx + 早停），扩展后按 score 全排序保留前 width 个。终态判定：A_mask==0 的候选中取 cost_so_far 最小者。保证 width=1,branch=1 退化成纯贪心。",
+    "problem_solved": "在小布尔函数（n=3~8 变量）上合成低 CNOT/T 代价的量子预言机线路。SSHR 把它建模成 WP-SCP（加权奇偶集覆盖）的顺序决策过程：给定 on-set A，每步选一个平行体块 P 覆盖部分 minterm，直到 A=∅，目标是所选块的累加代价最小。SSHR-H 太贪（贪心锁定首选项）、SSHR-I 需 Gurobi 且 n≥7 完全不可行；MCTS/Beam 提供中间档：比贪心好、比 ILP 快、可 anytime、可扩展到 n=7。输入 BooleanFunction，输出 QuantumCircuit（n+1 量子比特，最后一位为输出）。",
+    "relation_to_new_idea": "相同点：(1) 都用\"树搜索 + 价值估计\"骨架，新思路的 AlphaZero 式 MCTS 仍是 select/expand/rollout(sims)/backup 四步，可直接复用 v2 的节点结构、UCT select、progressive widening、numpy 位掩码引擎（_valid_numpy 是非常干净的向量化合法性判定，可直接迁移）。(2) \"负总代价\"作为奖励、负代价作为价值回归目标的范式可保留。(3) anytime + 全局最优完整解跟踪的工程框架可复用。\n\n根本差异（这是关键判断）：\n1. 动作粒度：现有 MCTS 动作=平行体块（宏观组合对象，候选 O(10^3)~10^5 且随 n 爆炸），rollout 用领域硬编码的\"max-size 贪心\"；新思路动作=量子门（微观，每步分支 ≤ O(n^2) 量级的局部门），搜索深度更深但分支更窄。粒度差一个抽象层——现有是\"块级覆盖规划\"，新思路是\"门级线路构造\"。\n2. 策略来源：现有 rollout 是手工启发式（greedy by size），无学习成分，exploration 靠 UCT + epsilon；新思路用策略网络 P(a|s) 引导 prior、价值网络 V(s) 替代 rollout 做局面评估——这正是现有方法最大的空白点（rollout 质量被 max-size 贪心封顶，无法学到\"小尺寸但更优组合\"的模式）。\n3. 语义约束：现有强制 monotone（vertices(P)⊆A）以保证 rollout 可终止，候选集天然受限；门级搜索的状态语义完全不同（线路态 / 作用于哪些 qubit / 累积酉矩阵），不再有\"A 必须缩小\"的约束，价值网络要学的目标函数（逼近目标酉 / 代价）也更复杂。\n4. 目标度量层级：现有在块级累加 cost（block_cnot_cost/RP-T）；门级搜索需逐门计数，价值网络直接回归门代价。\n\n冲突点 / 不能直接套用的地方：\n- 块级动作空间和门级动作空间不可互通；候选数语义不同（块候选随 n 指数爆炸，门候选是 O(n^2) 多项式），progressive widening 在门级几乎用不上，反而可能成为障碍。\n- monotone 语义在门级无对应物，不能照搬。\n- 现有 rollout 的 max-size 贪心假设（\"覆盖越多越好\"）在门级无意义，必须由学习到的策略/价值替代。\n\n可复用 / 建议保留：\n- v2 的 numpy 位掩码引擎思路（向量化状态-动作运算）对门级状态编码（如用位串/稳定子表示线路态）有方法论参考价值。\n- UCT + progressive widening + anytime + 最优完整解跟踪的工程脚手架。\n- 若新思路仍保留\"块级规划\"作为高层、门级作为低层（分层 AlphaZero），则现有 MCTS 可作高层搜索、新思路做低层精修——这是一个有意义的混合方向，而非完全替代。\n\n总体：现有 SSHR-MCTS 是\"无学习的领域启发式 UCT\"，新思路是\"带策略/价值网络的 AlphaZero\"——核心差异在动作粒度（块 vs 门）、评估方式（贪心 rollout vs 神经网络 V）、和状态语义（monotone 收缩 vs 一般线路态）。两者骨架可复用，但动作空间与评估器需要重新设计。"
+  },
+  {
+    "area": "AI-SSHR 原型实验 (src/ai_sshr_experiment/)：ML 排序器 + 候选剪枝 + XOR-beam + 剪枝/混合 ILP",
+    "key_files": [
+      "/Users/zhouzixiang/Desktop/tzb/src/ai_sshr_experiment/feature_extractor.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/ai_sshr_experiment/rankers.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/ai_sshr_experiment/ml_rankers.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/ai_sshr_experiment/data_collector.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/ai_sshr_experiment/train_ranker.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/ai_sshr_experiment/pruned_candidates.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/ai_sshr_experiment/ai_pruned_ilp.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/ai_sshr_experiment/hybrid_xor_ilp.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/ai_sshr_experiment/xor_beam_v2.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/ai_sshr_experiment/xor_beam_improved.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/ai_sshr_experiment/xor_beam_best.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/ai_sshr_experiment/run_ai_experiments.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/ai_sshr_experiment/benchmark_pruned_ilp.py"
+    ],
+    "key_insights": [
+      "特征是手工设计的 candidate×state 标量，且绝大多数状态依赖（overlap/cover_ratio/mono_removed/xor_next_size/off_ratio 等）。这意味着模型本质上学习的是'当前 active 集 A 下，加这块平行体的局部增益'——这正是 RL 价值网络/策略网络想要的先验。greedy_value=overlap/cost 已是该局部增益的解析近似，RuleRanker 是其加权和。",
+      "ILP teacher 产生 set-membership 标签（全集最优解的成员），是高质量'最优动作'监督；beam/xor_beam/random_xor teacher 产生 step-choice 标签（次优轨迹）。random_xor 是为引入 RuleRanker 之外的多样性而设计。标签按 (func_tt, step) 分组用于 lambdarank。",
+      "剪枝率高（n=4 时 keep_ratio=0.1 即保留约 25/257）但仍强制保留 onset 单例保证 ILP 可行；coverage_aware 版本进一步保证每 minterm 至少 min_coverage 个非单例覆盖。这是质量/规模权衡的旋钮。",
+      "iterative_pruned_ilp 用 round 1 解的候选 + 邻居（共享 minterm）+ ranker top 来扩池重解，是'围绕解的局部放大'思想；hybrid_xor_ilp 把 XOR-beam 解作为 Gurobi MIPStart，给 branch-and-bound 一个可行上界——这两个是把 ML/启发式与精确 ILP 桥接的关键模式，可移植到新思路。",
+      "性能瓶颈与 CLAUDE.md 一致：n≥7 候选数爆炸（n=7→75905, n=8→609441），enumerate_parallelotopes 是热点；XOR 语义在 n≥7 会级联污染，故 data_collector 给 beam/random_xor 设了 relaxed R_threshold（0.5/0.3）但仍有 visited 去重。",
+      "RuleRanker 权重可作网络初始化的好解析先验：dim_weight=4, cover_weight=3, removal_weight=0.5, cost_weight=0.08, off_penalty=2, singleton_penalty=1.5。LinearRanker 接口存在，可作为'冻结基线'对照。",
+      "train_ranker 按 func_tt 切分训练/验证（避免 step 泄漏），评估 Hit@1/MRR/NDCG@1,3,5,10；num_leaves=63, max_depth=6, lr=0.05, early_stop=50。"
+    ],
+    "mechanism": "ML模型: 核心 LightGBM LambdaMART 排序 (LGBMRanker, objective=lambdarank, metric=ndcg, eval_at=[1,3,5,10], num_leaves=63, max_depth=6, lr=0.05, early_stop=50)；附 LinearRanker/SklearnRanker 适配器，全部实现统一 CandidateRanker 协议 (score / score_many)，可对 RuleRanker 做插拔替换。特征工程: feature_extractor.candidate_features 输出 32 维 (原始22 + 新10) 手工标量特征，关键在于特征是'候选×当前状态'联合特征，依赖 active 集 a_mask——overlap=popcount(rec.mask&a_mask)、cover_ratio、off_ratio、monotone_valid、mono_removed=active_size-popcount(a&~mask)、xor_next_size=popcount(a^mask)、cost_per_overlap、greedy_value=overlap/cost 等。候选剪枝 (pruned_candidates.select_pruned_candidates): 用 ranker 对全量平行体候选打分，取 keep_ratio (默认0.1) 或 keep_min(100) 中较大者，再强制保留所有 onset 单例 (keep_onset_singletons) 以保证 ILP 可行性；剪枝率旋钮=keep_ratio，质量权衡靠 coverage_aware_pruned_ilp (每 minterm 保证 min_coverage 个非单例覆盖) 和 iterative_pruned_ilp (round1 小池解 ILP → round2 保留解候选+其邻居(共享 minterm)+ranker top → 重解)。XOR-beam 系列: v2=多起点贪心(R∈{0.75,0.67,0.6,0.5}, top_k∈0..4 求上界)+成本上界剪枝 beam+自适应R(depth 每增5降0.05, 下限0.5)；improved=v1 beam + 扰动搜索(drop 30% 块重解) + 局部搜索(逐位置替换块)；best=多 R beam + 扰动。剪枝 ILP (ai_pruned_ilp): 剪枝候选→喂 _solve_ilp_gurobi (cnot) 或 _solve_ilp_gurobi_t_then_cnot (T then CNOT)→add_block 合成。目标度量: CNOT 计数 / T 计数 (relative-phase Toffoli)，按 mct_cost(controls)。",
+    "problem_solved": "把 SSHR 中手工启发式 (SSHR-H 的 R 阈值贪心、beam 的打分、ILP 的候选池爆炸) 替换/辅助为学到的候选排序器 (ranker)。AI 不直接学量子门序列，而是评估'在当前 active 目标集下，某个平行体候选 (维度/重叠度/成本) 的效用'。两套引擎: (1) AI-Pruned WP-SCP——把 n=6+ 时 ILP 的候选池 (10299/75905/609441 个) 用 ML 打分剪到 top-K+安全单例，使 Gurobi 在大 n 下可行; (2) AI-Guided Beam——用 ranker 替代 beam search 的手工启发式动作选择。目标优化 logical CNOT/T-count (忽略硬件映射)。",
+    "relation_to_new_idea": "高度相关且可复用。相同点: 都是'候选平行体'上的决策问题，状态=active 目标集 a_mask (bitmask)，动作=选一个候选 idx，转移=A^mask (XOR) 或 A&~mask (monotone)，奖励/价值=CNOT/T-cost 增量；这正好是 RL+MCTS 门级搜索的状态/动作空间 (注意这里是'平行体级'而非'量子门级'——是块的组合搜索，更接近 SSHR-MCTS v2 的层次)。可复用点: (1) feature_extractor 的 32 维状态-动作特征可直接作为价值/策略网络的输入特征 (尤其 overlap/cover_ratio/mono_removed/cost_per_overlap 是现成的局部价值先验); (2) data_collector 的 ILP teacher 标签=最优解成员=set-membership，可作为策略网络的强监督预训练 (模仿学习) 信号；beam/random_xor teacher 给出次优步序，可做 DAGGER；(3) train_ranker 的 lambdarank 模型可作为 MCTS 的 rollout policy 或 prior (类比 AlphaGo 的快速 rollout 网络)；(4) ai_pruned_ilp 的剪枝思路可直接当 MCTS 的动作空间裁剪 (只展开 ranker top-K)，hybrid_xor_ilp 的 MIPStart 思路=用搜索结果 warm-start ILP。冲突/需调整点: (a) 原型是监督学习 (固定 teacher 标签)，新思路要 RL (价值网络需自举/贝尔曼)，标签要改为 return 而非 0/1；(b) 特征工程是手工标量，新思路若要门级 (gate-level) 搜索需扩展为图/电路级特征或 GNN (项目已有 gnn-sshr 方向可衔接)；(c) RuleRanker 的权重是好先验，可用来初始化策略网络的输出层或作 L2 正则锚点；(d) XOR vs monotone 语义必须明确——RL+MCTS 若要避免 n≥7 级联污染，应沿用 monotone 语义 (与 SSHR-MCTS/Beam 一致)，原型 ILP teacher 用 XOR 语义，标注数据存在语义不一致风险，迁移时需统一。"
+  },
+  {
+    "area": "GNN-SSHR (src/gnn-sshr/) — 图神经网络增强的 SSHR 候选筛选器，目标是在 n=7/8 大规模下用 GNN 替代手工特征+LightGBM ranker",
+    "key_files": [
+      "/Users/zhouzixiang/Desktop/tzb/src/gnn-sshr/README.md",
+      "/Users/zhouzixiang/Desktop/tzb/src/gnn-sshr/DESIGN.md",
+      "/Users/zhouzixiang/Desktop/tzb/src/gnn-sshr/PROGRESS.md",
+      "/Users/zhouzixiang/Desktop/tzb/src/gnn-sshr/src/models/candidate_pruner.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/gnn-sshr/src/data/graph_builder.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/gnn-sshr/src/train/train_pruner.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/gnn-sshr/src/search/pruned_search.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/gnn-sshr/src/data/feature_encoder.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/gnn-sshr/src/models/lightgbm_pruner.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/gnn-sshr/src/data/data_collector.py"
+    ],
+    "key_insights": [
+      "消息传递发生在『平行体候选图』上(二部图 parity<->cand + parity 间 Hamming-1 超立方邻接边),不是在真值表本身; parity 节点编码 onset/超立方几何, candidate 节点编码平行体结构+代价",
+      "任务是『候选筛选』(打分/排序),本质二分类(P∈最优解?)+pairwise ranking;不是回归、不是门序列生成;GNN 输出 per-candidate logit → keep top-k%",
+      "与 LightGBM 是直接竞争对手:两者消费不同特征(LGB 用 14 维 feature_encoder, GNN 用 11 维 graph_builder 含精确 cnot_cost/t_cost),同一 pruned_search 下游 + 同一 keep_ratio sweep 评测;P0.2 后 n=3 GNN 反超 LGB 3.64%, n=5 持平(GNN 在 T/Anc 略优), n=4 仍落后 2.83%(唯一未通过 ≤2% 容差)",
+      "当前瓶颈: (1) n=4 仅差 0.83pp 但迟迟未过线; (2) candidates 数随 n 爆炸(n=8→609441)是根本瓶颈, n≥7 时 ILP 不可行; (3) coverage repair 只用 brute-force singleton injection(每个 onset 单例强塞入 kept 集),minimum-set 修复因 workflow 中断未实施 → kept 集偏大; (4) n≥7 单图 batch 内存/推理延迟压力大; (5) 全量 ILP teacher 在 n=5 需 50-70h,数据生成昂贵",
+      "P0.1/P0.2 关键工程修复: GF(2) 跨度 coverage 修复(单例=单位向量)→ 所有 n 所有 ratio n_skipped=0; Anc 聚合从 max 改为 sum 对齐论文 Table V(our_sshr_h n=3 Anc 1→128); 代价模型 audit 验证 block_cnot_cost/block_t_cost 与论文 Table II 字节级一致",
+      "成本感知特征(cnot_cost/t_cost/control_count,从 block_synth 取精确值)是 GNN 反超 LGB 的主因: n=3 val_recall@10% 0.5775→0.7480, n=4 0.5680→0.7250。说明几何结构特征不足以区分贵/便宜候选,必须显式喂入代价信号",
+      "注意 teacher 语义混用风险: SSHR-I(ILP)和 SSHR-H 是 XOR 语义, SSHR-Beam 是 monotone 子集移除语义 — 当前 ILP teacher 训练 GNN/LGB, 不能与 Beam teacher 标签混用(CLAUDE.md/DESIGN 都强调)"
+    ],
+    "mechanism": "消息传递图(message-passing graph): 平行体候选图 = 异构二部图 + 超立方邻接。两种节点类型: (a) Parity nodes(2^n 个, 每个 minterm k 一个), 5 维特征(is_onset/hamming_weight/neighbor_onset_ratio/cover_count/n); (b) Candidate nodes(m 个平行体, m=49@n3...609441@n8), 11 维特征(dim/size/log2_size/on_overlap/off_overlap/on_ratio/dim_density/is_singleton + cost-aware 的 cnot_cost/t_cost/control_count, 后三者是来自 block_synth 的『精确』per-block 代价, 非 estimate)。三种边类型(三种关系), 每种用一个 SAGEConv 包在 HeteroConv 里: parity→cand 'covers'(覆盖边, minterm∈parallelotope)、cand→parity 'covered'(反向)、parity→parity 'adj'(Hamming-1 超立方邻接边, bidirectional)。模型=3 层 HeteroGraphSAGE(hidden=128/256)+ 每层 LayerNorm/ReLU/Dropout, head MLP 输入[cand_h, mean(parity_h), max(parity_h)]→1 标量 logit(全局 parity pooling)。任务形式=per-candidate 二分类(is P in optimal ILP solution?)+ pairwise ranking, 损失 L=focal_bce(alpha=0.25,gamma=2) + 0.5*pairwise_margin_loss(每函数采 256 正负对 softplus(neg-pos))。AdamW lr=3e-4 wd=1e-2, cosine+warmup5, grad-clip1.0, MPS。求解方式=不求解,只是给每个候选打分→排序→keep top-k%(默认 keep_ratio, sweep 0.05-0.50)→把 pruned 候选集喂给 SSHR-I(ILP/Gurobi WP-SCP)或 SSHR-Beam/SSHR-H。目标度量=Recall@10%, nDCG@10%, 端到端 CNOT/T/Anc 总和 vs full ILP, gnn/lgb CNOT ratio(成功阈值≤2%)。语义: GNN/LGB 训练用的是 SSHR-I(ILP, XOR 奇偶覆盖)标签 — 注意 Beam teacher 是 monotone 子集移除语义, 不可与 ILP 标签混用。coverage repair=force 每个 onset minterm 的 singleton {v} 入 kept 集(单例是 GF(2) 单位向量, 保证 WP-SCP 可行性)。",
+    "problem_solved": "解决论文 SSHR 在 n≥7 的两个瓶颈:(1) 候选空间爆炸(n=7: 75,905 候选, ~53 万覆盖边; n=8: 609,441 候选, 540 万边), 使 Gurobi ILP 不可行; (2) MCTS/Beam 每步评估数万候选过慢。GNN-SSHR 的方案: 用 HeteroGraphSAGE 给每个候选平行体打分, 只保留 top-k%(默认 10-20%) 高分候选 + safety singletons, 把 75K→5-15K, 让下游 ILP/搜索可行。输入=一个布尔函数 f(真值表 bitmask); 输出=剪枝后的候选集 → SSHR-H/Beam/MCTS/ILP 综合 → 量子 oracle 线路(CNOT/T/Ancilla 计数)。这是『候选筛选』(candidate pruning)问题, 不是门级综合。",
+    "relation_to_new_idea": "可复用点(强): (1) graph_builder.build_bipartite_graph + dict_to_hetero 是现成、纯 numpy、已验证的图编码器, 可直接作为 new-idea『策略网络/价值网络』的输入编码层 — 候选节点特征(11维含精确 cnot_cost/t_cost/control_count)已证明对 ranking 有效(n=3 recall 0.58→0.75), parity 节点(5维含 is_onset/cover_count/neighbor_onset_ratio)直接编码真值表几何。GNN 学到的 cand_h/parity_h 嵌入可作为 new-idea 的先验特征/特征编码器, 经监式复用(freeze+projection)或微调。 (2) 数据 pipeline(data_collector + ILP teacher + per-(func,cand) CSV + per-func HeteroData)直接复用。 (3) keep_ratio sweep / coverage repair / cost model 已 audit 对齐论文, 可直接接入。 相同点: new-idea 也是 RL+MCTS 在门级/候选级搜索, GNN-SSHR 的 HeteroGraphSAGE 恰好解决了『如何在变量多的电路状态上做表征』这一表征学习核心。 冲突点(重要): (a) GNN-SSHR 是『监督学习 + 离线筛选 + 一次性 ILP』, 不是 RL、不是 MCTS 内联; 它不学策略/价值, 只学候选『是否在最优解』二分类。要做 new-idea 的策略网络先验, 需把 CandidatePruner 的 head 换成策略/价值头, 或把 cand_h 当特征喂给 RL 网络。 (b) GNN-SSHR 用 ILP(XOR 奇偶覆盖)标签训练, new-idea 若在门级搜索且用 monotone 子集移除语义(MCTS/Beam), 标签/目标语义不一致, 直接迁移需重训。 (c) GNN 一次前向对单函数打分, 不在 MCTS 搜索树节点上逐步推理; 而 new-idea 需要在线 value/policy, GNN 延迟(n=7 200-500ms, n=8 2-5s)对 MCTS expand 可能偏高, 需轻量化或缓存。 (d) value_network(GIN+MLP, DESIGN §6.2)只设计了未实现 — new-idea 的 MCTS 价值头可借鉴其 [mean⊕max⊕sum pooling + action_history_emb + step_emb + lb_scalar] 结构。 结论: GNN-SSHR 的候选表示(graph_builder 特征 + HeteroGraphSAGE cand_h 嵌入)『可以直接当 new-idea 策略网络的特征编码器/先验』, 复用价值高; 但其『打分→top-k 剪枝→ILP』的离线筛选范式不能直接当策略网络, 需改造 head 并处理 XOR/monotone 语义与在线延迟问题。"
+  },
+  {
+    "area": "new-idea.pdf 方法批判性拆解：RL + MCTS (AlphaZero式) 量子布尔函数综合",
+    "key_files": [
+      "/Users/zhouzixiang/Desktop/tzb/new-idea.pdf",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/bool_func.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/sshr_mcts_v2.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/sshr_beam.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/sshr_i.py",
+      "/Users/zhouzixiang/Desktop/tzb/src/sshr/CLAUDE.md"
+    ],
+    "key_insights": [
+      "【Q1 致命歧义|T⟩】原文只说"
+    ],
+    "mechanism": "组件清单(逐条还原)：(A) MDP三元组：状态(T,U_t)、动作(gate,qubits)、转移U_{t+1}=gate·U_t、奖励R_final∈{+1,-1}+r_step=-λ。(B) 编码器：输入 concat[T向量(2^n), Re(U_t)展平(2^{2n}), Im(U_t)展平(2^{2n})] → MLP共享主干h_s。(C) 双头：π_θ=Softmax(FC_policy(h))作MCTS先验P；V_ϕ=Tanh(FC_value(h))∈[-1,1]。(D) MCTS：PUCT选择 a*=argmax[Q+c·P·√ΣN/(1+N)]；首次到达节点对全动作空间|A|创建子节点并用π_θ赋先验；第15行\"模拟(node)\"默认策略缺失；回传N+=1,Q+=z-V_ϕ(s)；输出π=N/ΣN。(E) 训练loss L=(z-V)²-π^T logπ_θ+λ‖θ‖²。(F) 门库三选 + 动作空间|库|×C(n,2)或×n。(G) 复杂度O(L·|A|)/simulation。\\n\\nPUCT对照AlphaZero原文：原文公式 a*=argmax_a(Q(U,a)+U(a)), U(a)=c_puct·P(s,a)·√Σ_b N(s,b)/(1+N(s,a))。论文Algorithm1写成 c·P(node,a)·√Σ_b N(node,b)/(1+N(node,a))，结构正确；但用node代s在记号上略乱。Q定义偏离：AlphaZero的Q是平均价值Q(s,a)=mean(z)，更新增量是 (z-Q_old)/N_new，即直接累加z；论文Algorithm1写 Q(node,a)+=z-V_ϕ(s_node) 是把\"残差z-V\"累加进Q——这等价于把value baseline从rollout回报中扣除(类似actor-critic优势)，与AlphaZero原版不等价，是合理变体但需明确Q是否还做1/N归一(论文未说，疑似bug：Q会单调膨胀)。loss对照：AlphaZero的loss=(z-v)²-π^T log p + c‖θ‖² (论文式)，论文加1/|batch|求和，正确；但缺Entropy bonus(AlphaZero没有，但ReLU/Tanh主干下不强化探索易塌缩)；正则项论文写λ‖θ‖²_2，原文是c‖θ‖²，量纲一致。动作空间大小：双比特门|库|×n(n-1)/2、单比特|库|×n——忽略Toffoli/CCNOT的三比特动作(n(n-1)(n-2)/6)和SWAP的双比特；CNT库含Toffoli却按双比特算C(n,2)，漏算了CCNOT动作，三比特项缺失。复杂度O(L·|A|)只计选择阶段；实际含网络前向O(|A|·网络)与扩展O(|A|)，且n=8时|A|~10^7，单次simulation绝非\"O(L|A|)\"轻量。",
+    "problem_solved": "论文要解决\"给定真值表T找等价量子电路\"的合成问题。但这是AlphaZero范式直接套用到量子合成的尝试，多处定义模糊导致方法在当前写法下不可直接实现/不可复现，且与本项目已有的SSHR系列(纯经典位掩码+XOR/单调语义、ILP精确解、Beam/MCTS在结构化候选集上搜索)在问题建模上根本不同。核心待澄清：目标态|T⟩的编码方式(决定保真度F的定义)、酉矩阵表示的维度灾难、浮点终止判定、训练集D的构造、rollout策略、PUCT/loss公式偏差。",
+    "relation_to_new_idea": "相同点：都是\"搜索+学习\"框架；都用MCTS(但本项目MCTS v2是UCT+greedy rollout在结构化候选集上、单调缩减语义，new-idea是AlphaZero式PUCT在原始门空间上)；都目标最小化电路。冲突点(根本性)：(1)问题建模不同——本项目把布尔函数合成建模为\"on-set的奇偶覆盖/集合缩减\"在平行体候选集上搜索(门只是候选的副作用，候选集才是动作)，new-idea直接把\"门\"当动作、把电路当酉矩阵积，丢失了SSH/平行体的几何结构这一核心归纳偏置，搜索空间从~10^4结构化候选膨胀到~10^7原始门组合。(2)语义不同——本项目明确区分XOR(SSHR-H/I/paper，可off-set污染)与monotone(MCTS/Beam集合缩减，无污染)；new-idea的\"F=1完全正确\"在浮点门下无精确判定，相当于退化到酉矩阵等价的连续问题，无法享受XOR的离散优势。(3)|T⟩编码未定义导致F歧义——若选振幅编码则必须归一化且与本项目\"真值表整数→on-set\"的位掩码约定冲突。\\n\\n可复用点(向new-idea收敛)：(a)双网络αZero的PUCT+自博弈训练循环，可作为本项目MCTS v2中UCT替换为学习先验P的升级方向(本项目MCTS v2目前用UCT无先验、用greedy rollout无价值网络，new-idea提供了先验+价值的双网络蓝图)；(b)价值网络V做提前终止/剪枝，可加速Beam/MCTS的lower-bound剪枝(本项目Beam已有greedy lower-bound，V可作learned lower-bound的更紧上界)；(c)训练集D若用NPN代表元(n=4已有npn_reps_n4.py)，能大幅压缩new-idea的训练样本数(本项目核心资产可直接喂给new-idea)。\\n\\n关键建议：不要把new-idea的\"原始门+酉矩阵\"路线与本项目\"结构化候选+位掩码\"路线强行合并——应让new-idea的网络作用在【候选平行体】而非【原始门】上(动作=选哪个平行体块)，状态用【当前on-set位掩码int】而非【2×2^n×2^n酉矩阵】，这样既复用αZero的PUCT/双网络/自博弈，又继承本项目的离散XOR/monotone语义与维度可控(n=8时on-set掩码仅2^8=256 bit vs 酉矩阵2×2^16)，这才是与本项目协同的正确接口。否则n≥6时new-idea的2^n×2^n酉矩阵表示直接维度爆炸，不可实现。"
+  },
+  {
+    "area": "RL/MCTS/学习型(量子)线路综合 — 文献/ 与 文献2/ 的 prior-art 综述，以及 new-idea (AlphaZero式RL+MCTS 做量子布尔函数综合) 的定位",
+    "key_files": [
+      "/Users/zhouzixiang/Desktop/tzb/文献/SHORTCIRCUIT- ALPHA ZERO-DRIVEN GENERATIVE CIRCUIT DESIGN.pdf",
+      "/Users/zhouzixiang/Desktop/tzb/文献/CIRCUIT TRANSFORMER- A TRANSFORMER THAT PRESERVES LOGICAL EQUIVALENCE.pdf",
+      "/Users/zhouzixiang/Desktop/tzb/文献/INVICTUS- Optimizing Boolean Logic Circuit Synthesis via Synergistic Learning and Search.pdf",
+      "/Users/zhouzixiang/Desktop/tzb/文献/BDD2Seq- Enabling Scalable Reversible-Circuit Synthesis via Graph-to-Sequence Learning.pdf",
+      "/Users/zhouzixiang/Desktop/tzb/Quantum Circuit Design using a Progressive Widening Enhanced Monte Carlo Tree Search.pdf",
+      "/Users/zhouzixiang/Desktop/tzb/文献2/A Monte Carlo Tree Search approach to QAOAfinding a needle in the haystack.pdf",
+      "/Users/zhouzixiang/Desktop/tzb/文献/Xor-And-Inverter Graphs for Quantum Compilation.pdf",
+      "/Users/zhouzixiang/Desktop/tzb/文献/XOR-AND-XOR_Logic_Forms_for_Autosymmetric_Functions_and_Applications_to_Quantum_Computing.pdf",
+      "/Users/zhouzixiang/Desktop/tzb/new-idea.pdf",
+      "/Users/zhouzixiang/Desktop/tzb/CLAUDE.md"
+    ],
+    "key_insights": [
+      "ShortCircuit 已经把'AlphaZero 做布尔函数综合'这条路占住: truth table -> 图、双指数状态空间、AIG-aware transformer 策略先验、SL+RL 两阶段、UCB/PUCT。new-idea 的方法描述本质上是同一范式, 仅目标库(AIG vs CNOT/T)与状态(酉矩阵 vs 真值表节点)不同——纯方法层面已被覆盖, 创新必须落到'量子目标度量(T-count/T-depth/CNOT)+ 本仓库 SSHR 的 parallelotope 几何候选空间'而非'又做一个 AlphaZero'。",
+      "new-idea 的致命弱点: 状态用'当前酉矩阵 Ut 实部/虚部展平' (2*2^n*2^n) 作为 RL 输入, n=7 时即 32K 维、n=8 时 130K 维, 与本仓库 SSHR 处理 n≤8 的目标冲突; 且门级无结构先验, 易陷入 ShortCircuit 所批评的'门级生成不收敛/泛化差'问题。本仓库 CLAUDE.md 已有 SSHR-MCTS v2 (numpy 加速 UCT) 与 SSHR-Beam, 是现成可对接的搜索骨架。",
+      "Circuit Transformer 的'cutoff/action masking 严格保等价性、消除死胡同'是直接可借鉴到量子域的设计——对'精确量子 oracle (U(G)|0>=|T>)'这种不能有错的任务, RL 探索必须配等价性/合法性掩码, 否则 reward 稀疏(整条电路错就 -1)会导致 ShortCircuit 所述的 reward sparsity 灾难。new-idea 当前只有 +1/-1 稀疏终态奖励, 未解决该问题。",
+      "PWMCTS 与 QAOA-MCTS 的共同教训: 纯 MCTS 在量子问题上有'leaf 节点 fractal / 好解稀疏分布'的失败模式, 必须做 search-space restriction (SSR) 或 progressive widening + 价值网络剪枝。new-idea 用 V_phi 是对的, 但还需类似 SSR 的结构化扩展, 否则会被 PWMCTS 论文明确批评的 vanilla-MCTS 失败重现。",
+      "与布尔函数综合最相关的是 XAIG/XORAX/XAG 这条 XOR-逻辑路线(与 SSHR 的 XOR 语义一脉相承)——它们给出可学习的'目标表达形式'(XAG 节点数 ≈ T-count), 可作为 new-idea 的输出表示, 而非裸门序列。这恰是本仓库 CLAUDE.md 中 SSHR-I/ESOP ILP (XOR 语义) 的学习化延伸方向。"
+    ],
+    "mechanism": "逐篇机制拆解:\n\n1) SHORTCIRCUIT (NeurIPS/Under review 2024, Huawei Noah's Ark): 输入=truth table (2^n 向量), 每步动作='选两个已有节点 + 是否取反, 生成一个新的 2-输入 AND 节点', 输出=AIG。架构=AIG-aware transformer, 每节点用其 truth-table 向量嵌入。训练=两阶段: 先监督学习(用 ABC 跑出的最优 AIG 作 teacher)再 RL。搜索=AlphaZero 变体(策略网络给出 MCTS 的先验 P(s,a), 价值网络估值, UCB 选择), 应对'双重指数状态空间'与'奖励稀疏'。结果: 8 输入真值表 98% 可生成, 比 ABC 小 18.62%。\n\n2) CIRCUIT TRANSFORMER (ICLR 2025, UCL+Huawei): encoder-decoder transformer, 关键=解码时插入 masking 层, 候选 token 一旦破坏逻辑等价性就被'截断(cutoff)', 保证 100% 等价、无 dead-end、无需回溯。优化目标(门数)建模为 MDP, 88M 参数, 有监督训练。语义=XOR-free 的 AND/NAND 经典逻辑。\n\n3) INVICTUS (arXiv 2305.13164, NYU): 不生成图, 只选'synthesis recipe'(从 ABC 的 7 种启发式算子 {rw,rwz,...,b} 里选长度 L=10 的序列)。三件套: (a) 离线 RL agent (在历史设计上预训练), (b) RL 引导的 MCTS 在 recipe 空间搜索, (c) OOD 检测器决定新设计走'学习策略'还是'纯搜索'。目标=面积-延迟积, MCNC/EPFL benchmark 比 SOTA 降 10–30%。\n\n4) BDD2Seq (arXiv 2511.08315, HKUST 2025): 不直接合成可逆电路, 而是预测'最优 BDD 变量序'(NP-hard)。GNN 编码电路图 + Pointer-Network 自回归解码出排列 + Diverse Beam Search (保留互不相似的多个候选)。Quantum Cost 降 ~1.4x, 合成快 ~3.7x。语义=经典可逆合成。\n\n5) PWMCTS (Lipardi et al., Maastricht, arXiv 2502.03962v2 2025): 纯 MCTS (无 RL 网络) 做 QAS——为变分量子算法搜 ansatz。动作空间=对参数化量子门(类型+比特)的采样方案, 用 progressive widening 探索无限离散空间, 仅在最终 PQC 上做梯度微调。强调 CNOT 数减少 3x、电路评估次数减少 10–100x。\n\n6) MCTS-QAOA (Agirre/van Nieuwenburg/Wauter, arXiv 2408.12648v3 2025): 把 QAOA 参数 (gamma,beta) 序列当决策树, MCTS 搜参数而非线路结构。关键创新=SSR (Search-Space Restricted) + 迭代式构建, 因 vanilla MCTS 在 QAOA 的分形 leaf 结构上惨败。无 RL 策略/价值网络, 纯 UCT。\n\n7) XAIG (Meuli/Soeken/De Micheli, npj QI 2022): 无 ML。把布尔函数表为 Xor-And-Inverter Graph, 给出 3 种 XAG→Clifford+T 编译算法, 最小化 T-count/T-depth/qubits; 关键洞察'XAG 内部 XOR 节点共享 → 显著降 T-count'。\n\n8) XORAX (Bernasconi et al., TCAD 2023): 无 ML。对 k-autosymmetric 函数(可投影到 n-k 变量子函数, 基于仿射空间)提出三层 XOR-AND-XOR 形式, 用 CNOT 实现投影、不加辅助线, 降可逆/量子电路规模。与本仓库 SSHR 的 parallelotope(仿射空间/几何块)思想同源。\n\n目标度量: ShortCircuit/Transformer/Invictus→经典门数/AIG size/ADP; PWMCTS/QAOA→VQA 能量/保真度/CNOT 数; XAIG/XORAX→T-count/T-depth/CNOT; new-idea→保真度 F=1 + 门数(未指明 T-count/CNOT 优先级)。",
+    "problem_solved": "所有这些工作都在解决\"如何把一个布尔函数(或量子目标态/目标酉)自动编译/综合成低代价的逻辑或量子线路\", 区别在于: (a) 目标表示是真值表 vs BDD vs AIG vs 量子酉矩阵/态; (b) 输出是经典 AIG vs 可逆电路 vs 变分 ansatz (PQC) vs 量子 oracle (Clifford+T/CNOT+T); (c) 用 RL / MCTS / Transformer / GNN / 纯启发式中的哪一种作为搜索驱动; (d) 优化目标度量 (门数/AIG size/T-count/QAOA 能量/保真度)。new-idea.pdf 明确目标: 给定 n 变量布尔函数真值表 T, 用 AlphaZero 式 RL(policy+value 双网络)+MCTS 找量子门序列 G 使 U(G)|0>=|T>, 奖励=F(保真度)=1 时 +1、可加深度惩罚 -λ。",
+    "relation_to_new_idea": "一句话: new-idea 在'算法范式'上已被 ShortCircuit 基本覆盖(AlphaZero policy+value + MCTS + truth-table 输入 + SL/RL), 其真正的增量空间在'问题设定'而非'方法'——必须把目标从'经典 AIG 大小'换成'量子 oracle 的 T-count/T-depth/CNOT', 并把动作空间从'裸量子门序列'换成 SSHR 的 parallelotope 几何候选块(否则会被 ShortCircuit 自己指出的双重指数+奖励稀疏+泛化差三连击中)。\n\n详细对照:\n- 相同点(范式重叠): 双网络(policy+value)+MCTS+UCB+自我博弈训练闭环 = ShortCircuit 的 AlphaZero 变体; MDP 建模 + truth-table 输入 = ShortCircuit/Circuit Transformer; 稀疏终态奖励 +1/-1 = 与 ShortCircuit 同样面临 reward sparsity。\n- 已被覆盖: '用 RL+MCTS 从真值表生成布尔电路'这条主张 ShortCircuit 已 claim 并实测(98% 8-input 可生成、超 ABC 18.62%)。new-idea 若只换门库为 CNOT/T、状态为酉矩阵, 贡献不足以构成新论文。\n- 冲突点: new-idea 用酉矩阵展平(2*2^n*2^n 维)做状态, n≥7 维度爆炸; 而 ShortCircuit 用 truth-table 节点向量(每节点 2^n)更紧凑且与 AIG 结构对齐。new-idea 的 +1/-1 奖励比 ShortCircuit 的两阶段 SL 预训练更稀疏, 训练稳定性存疑。\n- 可复用/差异化(唯一可信增量): (1) 目标度量量子化——直接最小化 T-count/CNOT 而非 AIG size, 对标 XAIG/XORAX 与本仓库 SSHR; (2) 动作空间几何化——用 SSHR 的 parallelotope 候选块作为 MCTS 的'宏动作', 而非逐门生成, 借鉴 BDD2Seq 的'先选结构(变量序)再合成'思路, 避开 ShortCircuit 自己警告的双重指数灾难; (3) 引入 Circuit Transformer 的等价性 masking 保证 F=1 零违规; (4) 与本仓库已有 SSHR-MCTS v2/sshr_beam.py 对接, 把 RL 策略网络作为 UCT 的学习先验 P(s,a), 这是 ShortCircuit 没有的'几何结构先验'。"
+  }
+]

@@ -55,3 +55,8 @@ tex/figure/S=N/S=N*系数*.png
 *.swp
 *.swo
 *~
+_archive/external-tools/
+_archive/misc/
+__pycache__/
+*.pyc
+.DS_Store

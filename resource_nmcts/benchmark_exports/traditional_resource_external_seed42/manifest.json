@@ -1,0 +1,21 @@
+{
+  "preset": "traditional_resource",
+  "seed": 42,
+  "functions": 177,
+  "formats": [
+    "blif",
+    "pla",
+    "truth"
+  ],
+  "source_methods": [
+    "direct_anf",
+    "and_direct_anf",
+    "and_mcts_factor",
+    "and_affine_nmcts",
+    "and_resource_nmcts",
+    "and_cube_beam",
+    "and_esop_milp",
+    "sshr_h"
+  ],
+  "manifest": "manifest.csv"
+}

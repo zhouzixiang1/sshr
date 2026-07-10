@@ -1,0 +1,7 @@
+{
+  "name": "parity_n5",
+  "n": 5,
+  "truth_table_hex": "96696996",
+  "bit_order": "LSB-first over integer assignments x0 + 2*x1 + ...",
+  "truth_bits_lsb_first": "01101001100101101001011001101001"
+}

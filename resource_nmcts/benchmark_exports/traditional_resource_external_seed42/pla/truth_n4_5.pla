@@ -1,0 +1,17 @@
+# name truth_n4_5
+# truth_table_hex 3EB1
+.i 4
+.o 1
+.ilb x0 x1 x2 x3
+.ob f
+.type fr
+0000 1
+0010 1
+1010 1
+1110 1
+1001 1
+0101 1
+1101 1
+0011 1
+1011 1
+.e

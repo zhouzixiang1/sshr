@@ -1,0 +1,7 @@
+{
+  "name": "mul_w2_bit1",
+  "n": 4,
+  "truth_table_hex": "6AC0",
+  "bit_order": "LSB-first over integer assignments x0 + 2*x1 + ...",
+  "truth_bits_lsb_first": "0000001101010110"
+}

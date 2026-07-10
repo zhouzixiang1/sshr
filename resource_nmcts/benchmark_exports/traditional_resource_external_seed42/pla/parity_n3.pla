@@ -1,0 +1,12 @@
+# name parity_n3
+# truth_table_hex 96
+.i 3
+.o 1
+.ilb x0 x1 x2
+.ob f
+.type fr
+100 1
+010 1
+001 1
+111 1
+.e

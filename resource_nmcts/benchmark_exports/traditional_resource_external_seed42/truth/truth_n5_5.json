@@ -1,0 +1,7 @@
+{
+  "name": "truth_n5_5",
+  "n": 5,
+  "truth_table_hex": "142C3FE8",
+  "bit_order": "LSB-first over integer assignments x0 + 2*x1 + ...",
+  "truth_bits_lsb_first": "00010111111111000011010000101000"
+}
