@@ -1,62 +1,23 @@
-.DS_Store
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.egg-info/
 .pytest_cache/
 
-# Runtime logs
-gurobi.log
-abc.history
+# macOS
+.DS_Store
 
-# LaTeX build artifacts
-tex/build/
-rl_mcts_experiment/paper/build/*
-!rl_mcts_experiment/paper/build/main.pdf
+# LaTeX build outputs
 *.aux
-*.bbl
-*.blg
 *.log
 *.out
-*.synctex*
 *.fls
 *.fdb_latexmk
-resource_nmcts_experiment/paper_latex/*.pdf
-resource_nmcts_experiment/benchmark_exports/
-resource_nmcts_experiment/submission_package/submission_metadata_answers.json
-resource_nmcts_experiment/submission_package/submission_metadata.json
-resource_nmcts_experiment/submission_package/generated_author_declarations.md
-resource_nmcts_experiment/submission_package/generated_availability_statements.md
-resource_nmcts_experiment/submission_package/generated_cover_letter.md
-resource_nmcts_experiment/submission_package/generated_submission_text.md
-resource_nmcts_experiment/submission_package/generated_upload_plan.md
-resource_nmcts_experiment/submission_package/dist/resource_nmcts_submission_payload.tar.gz
-resource_nmcts_experiment/submission_package/dist/resource_nmcts_submission_payload.tar.gz.sha256
-tmp/abc/
-tmp/bin/
-tmp/cirkit/
-tmp/cirkit_legacy/
-tmp/cirkit_probe/
-tmp/caterpillar/
-tmp/mockturtle/
-resource_nmcts_experiment.zip
+*.synctex.gz
 
-# Generated visualizations
-sshr/viz/*.png
-sshr/viz/*.pdf
-
-# Unreferenced LaTeX figure variants / archives
-tex/figure/固定N/
-tex/figure/固定S/
-tex/figure/S=N/S=N*系数*.png
-
-# IDE / Editor
-.vscode/
-.idea/
-.claude/
-*.swp
-*.swo
-*~
+# Archived external tools (1.8GB, not tracked)
 _archive/external-tools/
 _archive/misc/
-__pycache__/
-*.pyc
-.DS_Store
+
+# Model checkpoints are tracked, but large experiment re-runs are not
+*.tmp

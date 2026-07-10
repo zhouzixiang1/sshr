@@ -14,6 +14,14 @@ be connected to concrete Clifford+T sequences under a coarse smoke tolerance.
 """
 from __future__ import annotations
 
+# --- project root bootstrap (so this script runs standalone) ---
+import sys as _sys
+from pathlib import Path as _Path
+_PROJ_ROOT = _Path(__file__).resolve().parent.parent
+if str(_PROJ_ROOT) not in _sys.path:
+    _sys.path.insert(0, str(_PROJ_ROOT))
+
+
 import csv
 import json
 import math

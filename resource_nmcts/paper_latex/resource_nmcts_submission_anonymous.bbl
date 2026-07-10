@@ -1,0 +1,204 @@
+\begin{thebibliography}{10}
+
+\bibitem{assaad2026esop}
+Majd Assaad, Abhoy Kole, and Rolf Drechsler.
+\newblock Performance gains in quantum {SAT} solvers using {ESOP} encoding,
+  2026.
+
+\bibitem{brayton2010abc}
+Robert~K. Brayton and Alan Mishchenko.
+\newblock {ABC}: An academic industrial-strength verification tool.
+\newblock In {\em Computer Aided Verification}, volume 6174 of {\em Lecture
+  Notes in Computer Science}, pages 24--40. Springer, 2010.
+
+\bibitem{dubal2025paulinetwork}
+Ayushi Dubal, David Kremer, Simon Martiel, Victor Villar, Derek Wang, and Juan
+  Cruz-Benito.
+\newblock Pauli network circuit synthesis with reinforcement learning, 2025.
+\newblock arXiv:2503.14448.
+
+\bibitem{dutta2025tdepth}
+Suman Dutta, Anik~Basu Bhaumik, Anupam Chattopadhyay, and Subhamoy Maitra.
+\newblock Optimal {T} depth quantum circuits for implementing arbitrary boolean
+  functions, 2025.
+
+\bibitem{ernst2005fittedq}
+Damien Ernst, Pierre Geurts, and Louis Wehenkel.
+\newblock Tree-based batch mode reinforcement learning.
+\newblock {\em Journal of Machine Learning Research}, 6:503--556, 2005.
+
+\bibitem{furrutter2024diffusion}
+Florian F{\"u}rrutter, Gorka Mu{\~n}oz-Gil, and Hans~J. Briegel.
+\newblock Quantum circuit synthesis with diffusion models.
+\newblock {\em Nature Machine Intelligence}, 6:515--524, 2024.
+
+\bibitem{kremer2025nonclifford}
+David Kremer, Ali Javadi-Abhari, and Priyanka Mukhopadhyay.
+\newblock Optimizing the non-{Clifford}-count in unitary synthesis using
+  reinforcement learning, 2025.
+\newblock arXiv:2509.21709.
+
+\bibitem{li2010contextual}
+Lihong Li, Wei Chu, John Langford, and Robert~E. Schapire.
+\newblock A contextual-bandit approach to personalized news article
+  recommendation.
+\newblock In {\em Proceedings of the 19th International Conference on World
+  Wide Web}, pages 661--670. ACM, 2010.
+
+\bibitem{li2026oracle}
+Zhihang Li, Bo~Zhao, Chuanbing Han, Jie Zhao, Jinchen Xu, Guoqiang Shu, Yimin
+  Gao, Woji He, and Zheng Shan.
+\newblock Modeling and resource optimization for quantum oracles, 2026.
+
+\bibitem{machiya2026monteq}
+Mulundano Machiya, Matt Menickelly, Paul Hovland, and Ji~Liu.
+\newblock {MonteQ}: A monte carlo tree search based quantum circuit synthesis
+  framework, 2026.
+\newblock arXiv:2604.19029.
+
+\bibitem{stgBenchmark}
+Giulia Meuli.
+\newblock The single-target gate benchmark suite.
+\newblock GitHub repository, 2020.
+\newblock Compilation results for 4- and 5-input Boolean-function spectral
+  representatives; accessed 2026-07-09.
+
+\bibitem{caterpillar}
+Giulia Meuli and collaborators.
+\newblock {Caterpillar}: Quantum circuit synthesis for boolean functions.
+\newblock \url{https://github.com/gmeuli/caterpillar}, 2026.
+\newblock C++17 library used as a local source/API probe for Boolean-function
+  quantum-circuit synthesis and quantum memory-management components.
+
+\bibitem{meuli2019multiplicative}
+Giulia Meuli, Mathias Soeken, Earl Campbell, Martin Roetteler, and Giovanni
+  De~Micheli.
+\newblock The role of multiplicative complexity in compiling low {$T$}-count
+  oracle circuits.
+\newblock In {\em 2019 IEEE/ACM International Conference on Computer-Aided
+  Design (ICCAD)}, pages 1--8. IEEE, 2019.
+
+\bibitem{meuli2022xag}
+Giulia Meuli, Mathias Soeken, and Giovanni De~Micheli.
+\newblock Xor-and-inverter graphs for quantum compilation.
+\newblock {\em npj Quantum Information}, 8(1):7, 2022.
+
+\bibitem{meuli2020ros}
+Giulia Meuli, Mathias Soeken, Martin Roetteler, and Giovanni De~Micheli.
+\newblock {ROS}: Resource-constrained oracle synthesis for quantum computers.
+\newblock {\em Electronic Proceedings in Theoretical Computer Science},
+  318:119--130, 2020.
+
+\bibitem{rietsch2024unitary}
+Sebastian Rietsch, Abhishek~Y. Dubey, Christian Ufrecht, Maniraman Periyasamy,
+  Axel Plinge, Christopher Mutschler, and Daniel~D. Scherer.
+\newblock Unitary synthesis of {Clifford+T} circuits with reinforcement
+  learning.
+\newblock In {\em 2024 IEEE International Conference on Quantum Computing and
+  Engineering (QCE)}, pages 824--835. IEEE, 2024.
+
+\bibitem{riu2025rlzx}
+Jordi Riu, Jan Nogu{\'e}, Gerard Vilaplana, Artur Garcia-Saez, and Marta~P.
+  Estarellas.
+\newblock Reinforcement learning based quantum circuit optimization via
+  {ZX}-calculus.
+\newblock {\em Quantum}, 9:1758, 2025.
+
+\bibitem{ross2016optimalzrotation}
+Neil~J. Ross and Peter Selinger.
+\newblock Optimal ancilla-free {Clifford+T} approximation of {Z}-rotations.
+\newblock {\em Quantum Information \& Computation}, 16(11--12):901--953, 2016.
+
+\bibitem{cirkit}
+Mathias Soeken and collaborators.
+\newblock {CirKit}: Logic synthesis and optimization framework.
+\newblock \url{https://github.com/msoeken/cirkit}, 2026.
+\newblock CirKit 3 shell and legacy RevKit/CirKit command-line source.
+
+\bibitem{mockturtle}
+Mathias Soeken and collaborators.
+\newblock {mockturtle}: Logic network optimization and synthesis.
+\newblock \url{https://mockturtle.readthedocs.io/}, 2026.
+\newblock Official-header KLUT-to-XAG probe source.
+
+\bibitem{revkit}
+Mathias Soeken and collaborators.
+\newblock {RevKit}: Reversible logic and quantum circuit compilation.
+\newblock \url{https://github.com/msoeken/revkit}, 2026.
+\newblock Accessed as a local Python API and legacy command-line
+  reversible-synthesis toolchain.
+
+\bibitem{soeken2012revkit}
+Mathias Soeken, Stefan Frehse, Robert Wille, and Rolf Drechsler.
+\newblock {RevKit}: An open source toolkit for the design of reversible
+  circuits.
+\newblock In {\em Reversible Computation}, volume 7165 of {\em Lecture Notes in
+  Computer Science}, pages 64--76. Springer, 2012.
+
+\bibitem{soeken2018epfl}
+Mathias Soeken, Heinz Riener, Winston Haaswijk, Eleonora Testa, Bruno Schmitt,
+  Giulia Meuli, Fereshte Mozafari, Siang-Yun Lee, Alessandro Tempia~Calvino,
+  Dewmini~Sudara Marakkalage, and Giovanni De~Micheli.
+\newblock The {EPFL} logic synthesis libraries, 2018.
+\newblock arXiv:1805.05121.
+
+\bibitem{theissinger2026beyondrl}
+Lukas Thei{\ss}inger, Thore Gerlach, David Berghaus, and Christian Bauckhage.
+\newblock Beyond reinforcement learning: Fast and scalable quantum circuit
+  synthesis, 2026.
+\newblock arXiv:2602.15146.
+
+\bibitem{tsaras2024shortcircuit}
+Dimitrios Tsaras, Antoine Grosnit, Lei Chen, Zhiyao Xie, Haitham Bou-Ammar, and
+  Mingxuan Yuan.
+\newblock {ShortCircuit}: {AlphaZero}-driven circuit design, 2024.
+\newblock arXiv:2408.09858.
+
+\bibitem{valcarce2025dynamic}
+Xavier Valcarce, Bastien Grivet, and Nicolas Sangouard.
+\newblock Unitary synthesis with {AlphaZero} via dynamic circuits, 2025.
+\newblock arXiv:2508.21217.
+
+\bibitem{wang2023nestedmcts}
+Pei-Yong Wang, Muhammad Usman, Udaya Parampalli, Lloyd C.~L. Hollenberg, and
+  Casey~R. Myers.
+\newblock Automated quantum circuit design with nested monte carlo tree search.
+\newblock {\em IEEE Transactions on Quantum Engineering}, 4:1--20, 2023.
+
+\bibitem{watkins1992qlearning}
+Christopher J. C.~H. Watkins and Peter Dayan.
+\newblock {Q}-learning.
+\newblock {\em Machine Learning}, 8(3--4):279--292, 1992.
+
+\bibitem{weiden2023qseed}
+Mathias Weiden, Ed~Younis, Justin Kalloor, John Kubiatowicz, and Costin Iancu.
+\newblock Improving quantum circuit synthesis with machine learning.
+\newblock In {\em 2023 IEEE International Conference on Quantum Computing and
+  Engineering (QCE)}. IEEE, 2023.
+
+\bibitem{wille2009bdd}
+Robert Wille and Rolf Drechsler.
+\newblock {BDD}-based synthesis of reversible logic for large functions.
+\newblock In {\em Proceedings of the 46th Annual Design Automation Conference},
+  DAC '09, pages 270--275. ACM, 2009.
+
+\bibitem{yu2025backend}
+Mingfei Yu, Alessandro Tempia~Calvino, Mathias Soeken, and Giovanni De~Micheli.
+\newblock Back-end-aware fault-tolerant quantum oracle synthesis.
+\newblock In {\em 2025 30th Asia and South Pacific Design Automation Conference
+  (ASP-DAC)}, pages 930--937. ACM, 2025.
+
+\bibitem{zheng2025sshr}
+Qiang Zheng, Yongzhen Xu, Jiaxi Zhang, Zhaofeng Su, and Shenggen Zheng.
+\newblock {CNOT} oriented synthesis for small-scale boolean functions using
+  spatial structures of parallelotopes.
+\newblock In {\em 2025 IEEE/ACM International Conference on Computer Aided
+  Design (ICCAD)}, pages 1--9. IEEE, 2025.
+
+\bibitem{zhou2022qctmcts}
+Xiangzhen Zhou, Yuan Feng, and Sanjiang Li.
+\newblock Quantum circuit transformation: A monte carlo tree search framework.
+\newblock {\em ACM Transactions on Design Automation of Electronic Systems},
+  27(6):1--27, 2022.
+
+\end{thebibliography}

@@ -1,0 +1,80 @@
+\begin{thebibliography}{10}
+
+\bibitem{brayton2010abc}
+Robert~K. Brayton and Alan Mishchenko.
+\newblock {ABC}: An academic industrial-strength verification tool.
+\newblock In {\em Computer Aided Verification}, volume 6174 of {\em Lecture
+  Notes in Computer Science}, pages 24--40. Springer, 2010.
+
+\bibitem{kremer2025nonclifford}
+David Kremer, Ali Javadi-Abhari, and Priyanka Mukhopadhyay.
+\newblock Optimizing the non-{Clifford}-count in unitary synthesis using
+  reinforcement learning, 2025.
+\newblock arXiv:2509.21709.
+
+\bibitem{machiya2026monteq}
+Mulundano Machiya, Matt Menickelly, Paul Hovland, and Ji~Liu.
+\newblock {MonteQ}: A monte carlo tree search based quantum circuit synthesis
+  framework, 2026.
+\newblock arXiv:2604.19029.
+
+\bibitem{meuli2019multiplicative}
+Giulia Meuli, Mathias Soeken, Earl Campbell, Martin Roetteler, and Giovanni
+  De~Micheli.
+\newblock The role of multiplicative complexity in compiling low {$T$}-count
+  oracle circuits.
+\newblock In {\em 2019 IEEE/ACM International Conference on Computer-Aided
+  Design (ICCAD)}, pages 1--8. IEEE, 2019.
+
+\bibitem{meuli2022xag}
+Giulia Meuli, Mathias Soeken, and Giovanni De~Micheli.
+\newblock Xor-and-inverter graphs for quantum compilation.
+\newblock {\em npj Quantum Information}, 8(1):7, 2022.
+
+\bibitem{meuli2020ros}
+Giulia Meuli, Mathias Soeken, Martin Roetteler, and Giovanni De~Micheli.
+\newblock {ROS}: Resource-constrained oracle synthesis for quantum computers.
+\newblock {\em Electronic Proceedings in Theoretical Computer Science},
+  318:119--130, 2020.
+
+\bibitem{rietsch2024unitary}
+Sebastian Rietsch, Abhishek~Y. Dubey, Christian Ufrecht, Maniraman Periyasamy,
+  Axel Plinge, Christopher Mutschler, and Daniel~D. Scherer.
+\newblock Unitary synthesis of {Clifford+T} circuits with reinforcement
+  learning.
+\newblock In {\em 2024 IEEE International Conference on Quantum Computing and
+  Engineering (QCE)}, pages 824--835. IEEE, 2024.
+
+\bibitem{riu2025rlzx}
+Jordi Riu, Jan Nogu{\'e}, Gerard Vilaplana, Artur Garcia-Saez, and Marta~P.
+  Estarellas.
+\newblock Reinforcement learning based quantum circuit optimization via
+  {ZX}-calculus.
+\newblock {\em Quantum}, 9:1758, 2025.
+
+\bibitem{tsaras2024shortcircuit}
+Dimitrios Tsaras, Antoine Grosnit, Lei Chen, Zhiyao Xie, Haitham Bou-Ammar, and
+  Mingxuan Yuan.
+\newblock {ShortCircuit}: {AlphaZero}-driven circuit design, 2024.
+\newblock arXiv:2408.09858.
+
+\bibitem{wille2009bdd}
+Robert Wille and Rolf Drechsler.
+\newblock {BDD}-based synthesis of reversible logic for large functions.
+\newblock In {\em Proceedings of the 46th Annual Design Automation Conference},
+  DAC '09, pages 270--275. ACM, 2009.
+
+\bibitem{yu2025backend}
+Mingfei Yu, Alessandro Tempia~Calvino, Mathias Soeken, and Giovanni De~Micheli.
+\newblock Back-end-aware fault-tolerant quantum oracle synthesis.
+\newblock In {\em 2025 30th Asia and South Pacific Design Automation Conference
+  (ASP-DAC)}, pages 930--937. ACM, 2025.
+
+\bibitem{zheng2025sshr}
+Qiang Zheng, Yongzhen Xu, Jiaxi Zhang, Zhaofeng Su, and Shenggen Zheng.
+\newblock {CNOT} oriented synthesis for small-scale boolean functions using
+  spatial structures of parallelotopes.
+\newblock In {\em 2025 IEEE/ACM International Conference on Computer Aided
+  Design (ICCAD)}, pages 1--9. IEEE, 2025.
+
+\end{thebibliography}

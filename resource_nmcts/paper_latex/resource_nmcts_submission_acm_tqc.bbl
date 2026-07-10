@@ -1,0 +1,503 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{33}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{} and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showURL}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showURL #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[Assaad et~al\mbox{.}(2026)]%
+        {assaad2026esop}
+\bibfield{author}{\bibinfo{person}{Majd Assaad}, \bibinfo{person}{Abhoy Kole},
+  {and} \bibinfo{person}{Rolf Drechsler}.} \bibinfo{year}{2026}\natexlab{}.
+\newblock \bibinfo{title}{Performance Gains in Quantum {SAT} Solvers Using
+  {ESOP} Encoding}.
+\newblock
+\showeprint[arxiv]{2605.16202}~[quant-ph]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2605.16202}
+\showURL{%
+\tempurl}
+
+
+\bibitem[Brayton and Mishchenko(2010)]%
+        {brayton2010abc}
+\bibfield{author}{\bibinfo{person}{Robert~K. Brayton} {and}
+  \bibinfo{person}{Alan Mishchenko}.} \bibinfo{year}{2010}\natexlab{}.
+\newblock \showarticletitle{{ABC}: An Academic Industrial-Strength Verification
+  Tool}. In \bibinfo{booktitle}{\emph{Computer Aided Verification}}
+  \emph{(\bibinfo{series}{Lecture Notes in Computer Science},
+  Vol.~\bibinfo{volume}{6174})}. \bibinfo{publisher}{Springer},
+  \bibinfo{pages}{24--40}.
+\newblock
+\href{https://doi.org/10.1007/978-3-642-14295-6_5}{doi:\nolinkurl{10.1007/978-3-642-14295-6_5}}
+
+
+\bibitem[Dubal et~al\mbox{.}(2025)]%
+        {dubal2025paulinetwork}
+\bibfield{author}{\bibinfo{person}{Ayushi Dubal}, \bibinfo{person}{David
+  Kremer}, \bibinfo{person}{Simon Martiel}, \bibinfo{person}{Victor Villar},
+  \bibinfo{person}{Derek Wang}, {and} \bibinfo{person}{Juan Cruz-Benito}.}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{Pauli Network Circuit Synthesis with Reinforcement
+  Learning}.
+\newblock
+\showeprint[arxiv]{2503.14448}~[quant-ph]
+\href{https://doi.org/10.48550/arXiv.2503.14448}{doi:\nolinkurl{10.48550/arXiv.2503.14448}}
+\newblock
+\shownote{arXiv:2503.14448}.
+
+
+\bibitem[Dutta et~al\mbox{.}(2025)]%
+        {dutta2025tdepth}
+\bibfield{author}{\bibinfo{person}{Suman Dutta}, \bibinfo{person}{Anik~Basu
+  Bhaumik}, \bibinfo{person}{Anupam Chattopadhyay}, {and}
+  \bibinfo{person}{Subhamoy Maitra}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{Optimal {T} depth quantum circuits for implementing
+  arbitrary Boolean functions}.
+\newblock
+\showeprint[arxiv]{2506.01542}~[quant-ph]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2506.01542}
+\showURL{%
+\tempurl}
+
+
+\bibitem[Ernst et~al\mbox{.}(2005)]%
+        {ernst2005fittedq}
+\bibfield{author}{\bibinfo{person}{Damien Ernst}, \bibinfo{person}{Pierre
+  Geurts}, {and} \bibinfo{person}{Louis Wehenkel}.}
+  \bibinfo{year}{2005}\natexlab{}.
+\newblock \showarticletitle{Tree-Based Batch Mode Reinforcement Learning}.
+\newblock \bibinfo{journal}{\emph{Journal of Machine Learning Research}}
+  \bibinfo{volume}{6} (\bibinfo{year}{2005}), \bibinfo{pages}{503--556}.
+\newblock
+\urldef\tempurl%
+\url{https://www.jmlr.org/papers/v6/ernst05a.html}
+\showURL{%
+\tempurl}
+
+
+\bibitem[F{\"u}rrutter et~al\mbox{.}(2024)]%
+        {furrutter2024diffusion}
+\bibfield{author}{\bibinfo{person}{Florian F{\"u}rrutter},
+  \bibinfo{person}{Gorka Mu{\~n}oz-Gil}, {and} \bibinfo{person}{Hans~J.
+  Briegel}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Quantum Circuit Synthesis with Diffusion Models}.
+\newblock \bibinfo{journal}{\emph{Nature Machine Intelligence}}
+  \bibinfo{volume}{6} (\bibinfo{year}{2024}), \bibinfo{pages}{515--524}.
+\newblock
+\showeprint[arxiv]{2311.02041}~[quant-ph]
+\href{https://doi.org/10.1038/s42256-024-00831-9}{doi:\nolinkurl{10.1038/s42256-024-00831-9}}
+
+
+\bibitem[Kremer et~al\mbox{.}(2025)]%
+        {kremer2025nonclifford}
+\bibfield{author}{\bibinfo{person}{David Kremer}, \bibinfo{person}{Ali
+  Javadi-Abhari}, {and} \bibinfo{person}{Priyanka Mukhopadhyay}.}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{Optimizing the non-{Clifford}-count in unitary
+  synthesis using Reinforcement Learning}.
+\newblock
+\showeprint[arxiv]{2509.21709}~[quant-ph]
+\href{https://doi.org/10.48550/arXiv.2509.21709}{doi:\nolinkurl{10.48550/arXiv.2509.21709}}
+\newblock
+\shownote{arXiv:2509.21709}.
+
+
+\bibitem[Li et~al\mbox{.}(2010)]%
+        {li2010contextual}
+\bibfield{author}{\bibinfo{person}{Lihong Li}, \bibinfo{person}{Wei Chu},
+  \bibinfo{person}{John Langford}, {and} \bibinfo{person}{Robert~E. Schapire}.}
+  \bibinfo{year}{2010}\natexlab{}.
+\newblock \showarticletitle{A Contextual-Bandit Approach to Personalized News
+  Article Recommendation}. In \bibinfo{booktitle}{\emph{Proceedings of the 19th
+  International Conference on World Wide Web}}. \bibinfo{publisher}{ACM},
+  \bibinfo{pages}{661--670}.
+\newblock
+\href{https://doi.org/10.1145/1772690.1772758}{doi:\nolinkurl{10.1145/1772690.1772758}}
+
+
+\bibitem[Li et~al\mbox{.}(2026)]%
+        {li2026oracle}
+\bibfield{author}{\bibinfo{person}{Zhihang Li}, \bibinfo{person}{Bo Zhao},
+  \bibinfo{person}{Chuanbing Han}, \bibinfo{person}{Jie Zhao},
+  \bibinfo{person}{Jinchen Xu}, \bibinfo{person}{Guoqiang Shu},
+  \bibinfo{person}{Yimin Gao}, \bibinfo{person}{Woji He}, {and}
+  \bibinfo{person}{Zheng Shan}.} \bibinfo{year}{2026}\natexlab{}.
+\newblock \bibinfo{title}{Modeling and Resource Optimization for Quantum
+  Oracles}.
+\newblock
+\showeprint[arxiv]{2605.21380}~[quant-ph]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2605.21380}
+\showURL{%
+\tempurl}
+
+
+\bibitem[Machiya et~al\mbox{.}(2026)]%
+        {machiya2026monteq}
+\bibfield{author}{\bibinfo{person}{Mulundano Machiya}, \bibinfo{person}{Matt
+  Menickelly}, \bibinfo{person}{Paul Hovland}, {and} \bibinfo{person}{Ji Liu}.}
+  \bibinfo{year}{2026}\natexlab{}.
+\newblock \bibinfo{title}{{MonteQ}: A Monte Carlo Tree Search Based Quantum
+  Circuit Synthesis Framework}.
+\newblock
+\showeprint[arxiv]{2604.19029}~[quant-ph]
+\href{https://doi.org/10.48550/arXiv.2604.19029}{doi:\nolinkurl{10.48550/arXiv.2604.19029}}
+\newblock
+\shownote{arXiv:2604.19029}.
+
+
+\bibitem[Meuli(2020)]%
+        {stgBenchmark}
+\bibfield{author}{\bibinfo{person}{Giulia Meuli}.}
+  \bibinfo{year}{2020}\natexlab{}.
+\newblock \bibinfo{title}{The Single-Target Gate Benchmark Suite}.
+\newblock \bibinfo{howpublished}{GitHub repository}.
+\newblock
+\urldef\tempurl%
+\url{https://github.com/gmeuli/stg-benchmark}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{Compilation results for 4- and 5-input Boolean-function spectral
+  representatives; accessed 2026-07-09}.
+
+
+\bibitem[Meuli and collaborators(2026)]%
+        {caterpillar}
+\bibfield{author}{\bibinfo{person}{Giulia Meuli} {and}
+  \bibinfo{person}{collaborators}.} \bibinfo{year}{2026}\natexlab{}.
+\newblock \bibinfo{title}{{Caterpillar}: Quantum Circuit Synthesis for Boolean
+  Functions}.
+\newblock \bibinfo{howpublished}{\url{https://github.com/gmeuli/caterpillar}}.
+\newblock
+\newblock
+\shownote{C++17 library used as a local source/API probe for Boolean-function
+  quantum-circuit synthesis and quantum memory-management components}.
+
+
+\bibitem[Meuli et~al\mbox{.}(2019)]%
+        {meuli2019multiplicative}
+\bibfield{author}{\bibinfo{person}{Giulia Meuli}, \bibinfo{person}{Mathias
+  Soeken}, \bibinfo{person}{Earl Campbell}, \bibinfo{person}{Martin Roetteler},
+  {and} \bibinfo{person}{Giovanni De~Micheli}.}
+  \bibinfo{year}{2019}\natexlab{}.
+\newblock \showarticletitle{The Role of Multiplicative Complexity in Compiling
+  Low {$T$}-count Oracle Circuits}. In \bibinfo{booktitle}{\emph{2019 IEEE/ACM
+  International Conference on Computer-Aided Design (ICCAD)}}.
+  \bibinfo{publisher}{IEEE}, \bibinfo{pages}{1--8}.
+\newblock
+\showeprint[arxiv]{1908.01609}~[quant-ph]
+\href{https://doi.org/10.1109/ICCAD45719.2019.8942093}{doi:\nolinkurl{10.1109/ICCAD45719.2019.8942093}}
+
+
+\bibitem[Meuli et~al\mbox{.}(2022)]%
+        {meuli2022xag}
+\bibfield{author}{\bibinfo{person}{Giulia Meuli}, \bibinfo{person}{Mathias
+  Soeken}, {and} \bibinfo{person}{Giovanni De~Micheli}.}
+  \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{Xor-And-Inverter Graphs for Quantum Compilation}.
+\newblock \bibinfo{journal}{\emph{npj Quantum Information}}
+  \bibinfo{volume}{8}, \bibinfo{number}{1} (\bibinfo{year}{2022}),
+  \bibinfo{pages}{7}.
+\newblock
+\href{https://doi.org/10.1038/s41534-021-00514-y}{doi:\nolinkurl{10.1038/s41534-021-00514-y}}
+
+
+\bibitem[Meuli et~al\mbox{.}(2020)]%
+        {meuli2020ros}
+\bibfield{author}{\bibinfo{person}{Giulia Meuli}, \bibinfo{person}{Mathias
+  Soeken}, \bibinfo{person}{Martin Roetteler}, {and} \bibinfo{person}{Giovanni
+  De~Micheli}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{{ROS}: Resource-constrained Oracle Synthesis for
+  Quantum Computers}.
+\newblock \bibinfo{journal}{\emph{Electronic Proceedings in Theoretical
+  Computer Science}}  \bibinfo{volume}{318} (\bibinfo{year}{2020}),
+  \bibinfo{pages}{119--130}.
+\newblock
+\showeprint[arxiv]{2005.00211}~[quant-ph]
+\href{https://doi.org/10.4204/EPTCS.318.8}{doi:\nolinkurl{10.4204/EPTCS.318.8}}
+
+
+\bibitem[Rietsch et~al\mbox{.}(2024)]%
+        {rietsch2024unitary}
+\bibfield{author}{\bibinfo{person}{Sebastian Rietsch},
+  \bibinfo{person}{Abhishek~Y. Dubey}, \bibinfo{person}{Christian Ufrecht},
+  \bibinfo{person}{Maniraman Periyasamy}, \bibinfo{person}{Axel Plinge},
+  \bibinfo{person}{Christopher Mutschler}, {and} \bibinfo{person}{Daniel~D.
+  Scherer}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Unitary Synthesis of {Clifford+T} Circuits with
+  Reinforcement Learning}. In \bibinfo{booktitle}{\emph{2024 IEEE International
+  Conference on Quantum Computing and Engineering (QCE)}}.
+  \bibinfo{publisher}{IEEE}, \bibinfo{pages}{824--835}.
+\newblock
+\showeprint[arxiv]{2404.14865}~[quant-ph]
+\href{https://doi.org/10.1109/QCE60285.2024.00102}{doi:\nolinkurl{10.1109/QCE60285.2024.00102}}
+
+
+\bibitem[Riu et~al\mbox{.}(2025)]%
+        {riu2025rlzx}
+\bibfield{author}{\bibinfo{person}{Jordi Riu}, \bibinfo{person}{Jan Nogu{\'e}},
+  \bibinfo{person}{Gerard Vilaplana}, \bibinfo{person}{Artur Garcia-Saez},
+  {and} \bibinfo{person}{Marta~P. Estarellas}.}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Reinforcement Learning Based Quantum Circuit
+  Optimization via {ZX}-Calculus}.
+\newblock \bibinfo{journal}{\emph{Quantum}}  \bibinfo{volume}{9}
+  (\bibinfo{year}{2025}), \bibinfo{pages}{1758}.
+\newblock
+\href{https://doi.org/10.22331/q-2025-05-28-1758}{doi:\nolinkurl{10.22331/q-2025-05-28-1758}}
+
+
+\bibitem[Ross and Selinger(2016)]%
+        {ross2016optimalzrotation}
+\bibfield{author}{\bibinfo{person}{Neil~J. Ross} {and} \bibinfo{person}{Peter
+  Selinger}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Optimal Ancilla-Free {Clifford+T} Approximation of
+  {Z}-Rotations}.
+\newblock \bibinfo{journal}{\emph{Quantum Information \& Computation}}
+  \bibinfo{volume}{16}, \bibinfo{number}{11--12} (\bibinfo{year}{2016}),
+  \bibinfo{pages}{901--953}.
+\newblock
+\showeprint[arxiv]{1403.2975}~[quant-ph]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/1403.2975}
+\showURL{%
+\tempurl}
+
+
+\bibitem[Soeken and collaborators(2026a)]%
+        {cirkit}
+\bibfield{author}{\bibinfo{person}{Mathias Soeken} {and}
+  \bibinfo{person}{collaborators}.} \bibinfo{year}{2026}\natexlab{a}.
+\newblock \bibinfo{title}{{CirKit}: Logic Synthesis and Optimization
+  Framework}.
+\newblock \bibinfo{howpublished}{\url{https://github.com/msoeken/cirkit}}.
+\newblock
+\newblock
+\shownote{CirKit 3 shell and legacy RevKit/CirKit command-line source}.
+
+
+\bibitem[Soeken and collaborators(2026b)]%
+        {mockturtle}
+\bibfield{author}{\bibinfo{person}{Mathias Soeken} {and}
+  \bibinfo{person}{collaborators}.} \bibinfo{year}{2026}\natexlab{b}.
+\newblock \bibinfo{title}{{mockturtle}: Logic Network Optimization and
+  Synthesis}.
+\newblock \bibinfo{howpublished}{\url{https://mockturtle.readthedocs.io/}}.
+\newblock
+\newblock
+\shownote{Official-header KLUT-to-XAG probe source}.
+
+
+\bibitem[Soeken and collaborators(2026c)]%
+        {revkit}
+\bibfield{author}{\bibinfo{person}{Mathias Soeken} {and}
+  \bibinfo{person}{collaborators}.} \bibinfo{year}{2026}\natexlab{c}.
+\newblock \bibinfo{title}{{RevKit}: Reversible Logic and Quantum Circuit
+  Compilation}.
+\newblock \bibinfo{howpublished}{\url{https://github.com/msoeken/revkit}}.
+\newblock
+\newblock
+\shownote{Accessed as a local Python API and legacy command-line
+  reversible-synthesis toolchain}.
+
+
+\bibitem[Soeken et~al\mbox{.}(2012)]%
+        {soeken2012revkit}
+\bibfield{author}{\bibinfo{person}{Mathias Soeken}, \bibinfo{person}{Stefan
+  Frehse}, \bibinfo{person}{Robert Wille}, {and} \bibinfo{person}{Rolf
+  Drechsler}.} \bibinfo{year}{2012}\natexlab{}.
+\newblock \showarticletitle{{RevKit}: An Open Source Toolkit for the Design of
+  Reversible Circuits}. In \bibinfo{booktitle}{\emph{Reversible Computation}}
+  \emph{(\bibinfo{series}{Lecture Notes in Computer Science},
+  Vol.~\bibinfo{volume}{7165})}. \bibinfo{publisher}{Springer},
+  \bibinfo{pages}{64--76}.
+\newblock
+\href{https://doi.org/10.1007/978-3-642-29517-1_6}{doi:\nolinkurl{10.1007/978-3-642-29517-1_6}}
+
+
+\bibitem[Soeken et~al\mbox{.}(2018)]%
+        {soeken2018epfl}
+\bibfield{author}{\bibinfo{person}{Mathias Soeken}, \bibinfo{person}{Heinz
+  Riener}, \bibinfo{person}{Winston Haaswijk}, \bibinfo{person}{Eleonora
+  Testa}, \bibinfo{person}{Bruno Schmitt}, \bibinfo{person}{Giulia Meuli},
+  \bibinfo{person}{Fereshte Mozafari}, \bibinfo{person}{Siang-Yun Lee},
+  \bibinfo{person}{Alessandro Tempia~Calvino}, \bibinfo{person}{Dewmini~Sudara
+  Marakkalage}, {and} \bibinfo{person}{Giovanni De~Micheli}.}
+  \bibinfo{year}{2018}\natexlab{}.
+\newblock \bibinfo{title}{The {EPFL} Logic Synthesis Libraries}.
+\newblock
+\showeprint[arxiv]{1805.05121}~[cs.LO]
+\href{https://doi.org/10.48550/arXiv.1805.05121}{doi:\nolinkurl{10.48550/arXiv.1805.05121}}
+\newblock
+\shownote{arXiv:1805.05121}.
+
+
+\bibitem[Thei{\ss}inger et~al\mbox{.}(2026)]%
+        {theissinger2026beyondrl}
+\bibfield{author}{\bibinfo{person}{Lukas Thei{\ss}inger},
+  \bibinfo{person}{Thore Gerlach}, \bibinfo{person}{David Berghaus}, {and}
+  \bibinfo{person}{Christian Bauckhage}.} \bibinfo{year}{2026}\natexlab{}.
+\newblock \bibinfo{title}{Beyond Reinforcement Learning: Fast and Scalable
+  Quantum Circuit Synthesis}.
+\newblock
+\showeprint[arxiv]{2602.15146}~[quant-ph]
+\href{https://doi.org/10.48550/arXiv.2602.15146}{doi:\nolinkurl{10.48550/arXiv.2602.15146}}
+\newblock
+\shownote{arXiv:2602.15146}.
+
+
+\bibitem[Tsaras et~al\mbox{.}(2024)]%
+        {tsaras2024shortcircuit}
+\bibfield{author}{\bibinfo{person}{Dimitrios Tsaras}, \bibinfo{person}{Antoine
+  Grosnit}, \bibinfo{person}{Lei Chen}, \bibinfo{person}{Zhiyao Xie},
+  \bibinfo{person}{Haitham Bou-Ammar}, {and} \bibinfo{person}{Mingxuan Yuan}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{{ShortCircuit}: {AlphaZero}-Driven Circuit Design}.
+\newblock
+\showeprint[arxiv]{2408.09858}~[cs.LG]
+\href{https://doi.org/10.48550/arXiv.2408.09858}{doi:\nolinkurl{10.48550/arXiv.2408.09858}}
+\newblock
+\shownote{arXiv:2408.09858}.
+
+
+\bibitem[Valcarce et~al\mbox{.}(2025)]%
+        {valcarce2025dynamic}
+\bibfield{author}{\bibinfo{person}{Xavier Valcarce}, \bibinfo{person}{Bastien
+  Grivet}, {and} \bibinfo{person}{Nicolas Sangouard}.}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{Unitary Synthesis with {AlphaZero} via Dynamic
+  Circuits}.
+\newblock
+\showeprint[arxiv]{2508.21217}~[quant-ph]
+\href{https://doi.org/10.48550/arXiv.2508.21217}{doi:\nolinkurl{10.48550/arXiv.2508.21217}}
+\newblock
+\shownote{arXiv:2508.21217}.
+
+
+\bibitem[Wang et~al\mbox{.}(2023)]%
+        {wang2023nestedmcts}
+\bibfield{author}{\bibinfo{person}{Pei-Yong Wang}, \bibinfo{person}{Muhammad
+  Usman}, \bibinfo{person}{Udaya Parampalli}, \bibinfo{person}{Lloyd C.~L.
+  Hollenberg}, {and} \bibinfo{person}{Casey~R. Myers}.}
+  \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Automated Quantum Circuit Design With Nested Monte
+  Carlo Tree Search}.
+\newblock \bibinfo{journal}{\emph{IEEE Transactions on Quantum Engineering}}
+  \bibinfo{volume}{4} (\bibinfo{year}{2023}), \bibinfo{pages}{1--20}.
+\newblock
+\showeprint[arxiv]{2207.00132}~[quant-ph]
+\href{https://doi.org/10.1109/TQE.2023.3265709}{doi:\nolinkurl{10.1109/TQE.2023.3265709}}
+
+
+\bibitem[Watkins and Dayan(1992)]%
+        {watkins1992qlearning}
+\bibfield{author}{\bibinfo{person}{Christopher J. C.~H. Watkins} {and}
+  \bibinfo{person}{Peter Dayan}.} \bibinfo{year}{1992}\natexlab{}.
+\newblock \showarticletitle{{Q}-learning}.
+\newblock \bibinfo{journal}{\emph{Machine Learning}} \bibinfo{volume}{8},
+  \bibinfo{number}{3--4} (\bibinfo{year}{1992}), \bibinfo{pages}{279--292}.
+\newblock
+\href{https://doi.org/10.1007/BF00992698}{doi:\nolinkurl{10.1007/BF00992698}}
+
+
+\bibitem[Weiden et~al\mbox{.}(2023)]%
+        {weiden2023qseed}
+\bibfield{author}{\bibinfo{person}{Mathias Weiden}, \bibinfo{person}{Ed
+  Younis}, \bibinfo{person}{Justin Kalloor}, \bibinfo{person}{John
+  Kubiatowicz}, {and} \bibinfo{person}{Costin Iancu}.}
+  \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Improving Quantum Circuit Synthesis with Machine
+  Learning}. In \bibinfo{booktitle}{\emph{2023 IEEE International Conference on
+  Quantum Computing and Engineering (QCE)}}. \bibinfo{publisher}{IEEE}.
+\newblock
+\showeprint[arxiv]{2306.05622}~[quant-ph]
+\href{https://doi.org/10.1109/QCE57702.2023.00093}{doi:\nolinkurl{10.1109/QCE57702.2023.00093}}
+
+
+\bibitem[Wille and Drechsler(2009)]%
+        {wille2009bdd}
+\bibfield{author}{\bibinfo{person}{Robert Wille} {and} \bibinfo{person}{Rolf
+  Drechsler}.} \bibinfo{year}{2009}\natexlab{}.
+\newblock \showarticletitle{{BDD}-based Synthesis of Reversible Logic for Large
+  Functions}. In \bibinfo{booktitle}{\emph{Proceedings of the 46th Annual
+  Design Automation Conference}} \emph{(\bibinfo{series}{DAC '09})}.
+  \bibinfo{publisher}{ACM}, \bibinfo{pages}{270--275}.
+\newblock
+\href{https://doi.org/10.1145/1629911.1629984}{doi:\nolinkurl{10.1145/1629911.1629984}}
+
+
+\bibitem[Yu et~al\mbox{.}(2025)]%
+        {yu2025backend}
+\bibfield{author}{\bibinfo{person}{Mingfei Yu}, \bibinfo{person}{Alessandro
+  Tempia~Calvino}, \bibinfo{person}{Mathias Soeken}, {and}
+  \bibinfo{person}{Giovanni De~Micheli}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Back-end-aware Fault-tolerant Quantum Oracle
+  Synthesis}. In \bibinfo{booktitle}{\emph{2025 30th Asia and South Pacific
+  Design Automation Conference (ASP-DAC)}}. \bibinfo{publisher}{ACM},
+  \bibinfo{pages}{930--937}.
+\newblock
+\href{https://doi.org/10.1145/3658617.3697776}{doi:\nolinkurl{10.1145/3658617.3697776}}
+
+
+\bibitem[Zheng et~al\mbox{.}(2025)]%
+        {zheng2025sshr}
+\bibfield{author}{\bibinfo{person}{Qiang Zheng}, \bibinfo{person}{Yongzhen Xu},
+  \bibinfo{person}{Jiaxi Zhang}, \bibinfo{person}{Zhaofeng Su}, {and}
+  \bibinfo{person}{Shenggen Zheng}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{{CNOT} Oriented Synthesis for Small-Scale Boolean
+  Functions Using Spatial Structures of Parallelotopes}. In
+  \bibinfo{booktitle}{\emph{2025 IEEE/ACM International Conference on Computer
+  Aided Design (ICCAD)}}. \bibinfo{publisher}{IEEE}, \bibinfo{pages}{1--9}.
+\newblock
+\showeprint[arxiv]{2509.01912}~[quant-ph]
+\href{https://doi.org/10.1109/ICCAD66269.2025.11240690}{doi:\nolinkurl{10.1109/ICCAD66269.2025.11240690}}
+
+
+\bibitem[Zhou et~al\mbox{.}(2022)]%
+        {zhou2022qctmcts}
+\bibfield{author}{\bibinfo{person}{Xiangzhen Zhou}, \bibinfo{person}{Yuan
+  Feng}, {and} \bibinfo{person}{Sanjiang Li}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{Quantum Circuit Transformation: A Monte Carlo Tree
+  Search Framework}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Design Automation of
+  Electronic Systems}} \bibinfo{volume}{27}, \bibinfo{number}{6}, Article
+  \bibinfo{articleno}{59} (\bibinfo{year}{2022}), \bibinfo{numpages}{27}~pages.
+\newblock
+\href{https://doi.org/10.1145/3514239}{doi:\nolinkurl{10.1145/3514239}}
+
+
+\end{thebibliography}

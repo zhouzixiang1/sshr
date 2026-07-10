@@ -1,0 +1,101 @@
+\begin{thebibliography}{13}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{#1}
+\expandafter\ifx\csname urlstyle\endcsname\relax\else
+  \urlstyle{same}\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \DeclareUrlCommand\doi{\urlstyle{rm}}
+  \def\eprint#1#2{#2}
+\else
+  \def\doi#1{\href{https://doi.org/#1}{\nolinkurl{#1}}}
+  \let\eprint\href
+\fi
+
+\bibitem[Deutsch et~al.(1992)Deutsch and Jozsa]{deutsch1992rapid}
+DEUTSCH D, JOZSA R.
+\newblock Rapid solution of problems by quantum computation\allowbreak[J].
+\newblock Proceedings of the Royal Society of London. Series A: Mathematical
+  and Physical Sciences, 1992, 439\allowbreak (1907): 553-558.
+
+\bibitem[Grover(1996)]{grover1996fast}
+GROVER L~K.
+\newblock A fast quantum mechanical algorithm for database
+  search\allowbreak[C]//\allowbreak
+Proceedings of the twenty-eighth annual ACM symposium on Theory of computing.
+\newblock 1996: 212-219.
+
+\bibitem[Shor(1994)]{Shor1994Polynominal}
+SHOR P~W.
+\newblock Polynominal time algorithms for discrete logarithms and factoring on
+  a quantum computer\allowbreak[C]//\allowbreak
+Algorithmic Number Theory, First International Symposium, ANTS-I, Ithaca, NY,
+  USA, May 6-9, 1994, Proceedings.
+\newblock 1994.
+
+\bibitem[Preskill(2018)]{preskill2018quantum}
+PRESKILL J.
+\newblock Quantum computing in the nisq era and beyond\allowbreak[J].
+\newblock Quantum, 2018, 2: 79.
+
+\bibitem[Shende et~al.(2003)Shende, Prasad, Markov, and
+  Hayes]{shende2003synthesis}
+SHENDE V~V, PRASAD A~K, MARKOV I~L, et~al.
+\newblock Synthesis of reversible logic circuits\allowbreak[J].
+\newblock IEEE Transactions on Computer-Aided Design of Integrated Circuits and
+  Systems, 2003, 22\allowbreak (6): 710-722.
+
+\bibitem[Miller et~al.(2003)Miller, Maslov, and
+  Dueck]{miller2003transformation}
+MILLER D~M, MASLOV D, DUECK G~W.
+\newblock A transformation based algorithm for reversible logic
+  synthesis\allowbreak[C]//\allowbreak
+Proceedings of the 40th annual Design Automation Conference.
+\newblock 2003: 318-323.
+
+\bibitem[Barenco et~al.(1995)Barenco, Bennett, Cleve, DiVincenzo, Margolus,
+  Shor, Sleator, Smolin, and Weinfurter]{barenco1995elementary}
+BARENCO A, BENNETT C~H, CLEVE R, et~al.
+\newblock Elementary gates for quantum computation\allowbreak[J].
+\newblock Physical review A, 1995, 52\allowbreak (5): 3457.
+
+\bibitem[Zheng et~al.(2025)]{zheng2025cnot}
+ZHENG Q, et~al.
+\newblock {CNOT} oriented synthesis for small-scale {Boolean} functions using
+  spatial structures of parallelotopes\allowbreak[A].
+\newblock 2025.
+
+\bibitem[Kocsis et~al.(2006)Kocsis and Szepesv{\'a}ri]{kocsis2006bandit}
+KOCSIS L, SZEPESV{\'A}RI C.
+\newblock Bandit based {Monte-Carlo} planning\allowbreak[C]//\allowbreak
+European Conference on Machine Learning.
+\newblock Springer, 2006: 282-293.
+
+\bibitem[Maslov(2016)]{maslov2016advantages}
+MASLOV D.
+\newblock Advantages of using relative-phase {Toffoli} gates with an
+  application to multiple control {Toffoli} optimization\allowbreak[J].
+\newblock Physical Review A, 2016, 93\allowbreak (2): 022311.
+
+\bibitem[Gidney(2015)]{Gidney2015}
+GIDNEY C.
+\newblock Constructing large controlled nots\allowbreak[EB/OL].
+\newblock 2015.
+\newblock
+  \url{https://algassert.com/circuits/2015/06/05/Constructing-Large-Controlled-Nots.html}.
+
+\bibitem[Browne et~al.(2012)Browne, Powley, Whitehouse, Lucas, Cowling,
+  Rohlfshagen, Tavener, Perez, Samothrakis, and Colton]{browne2012survey}
+BROWNE C~B, POWLEY E, WHITEHOUSE D, et~al.
+\newblock A survey of monte carlo tree search methods\allowbreak[J].
+\newblock IEEE Transactions on Computational Intelligence and AI in games,
+  2012, 4\allowbreak (1): 1-43.
+
+\bibitem[Silver et~al.(2016)Silver, Huang, Maddison, Guez, Sifre, van~den
+  Driessche, Schrittwieser, Antonoglou, Panneershelvam, Lanctot,
+  et~al.]{silver2016mastering}
+SILVER D, HUANG A, MADDISON C~J, et~al.
+\newblock Mastering the game of {Go} with deep neural networks and tree
+  search\allowbreak[J].
+\newblock Nature, 2016, 529\allowbreak (7587): 484-489.
+
+\end{thebibliography}

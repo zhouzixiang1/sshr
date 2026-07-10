@@ -2,12 +2,20 @@
 """Smoke tests for resource-constrained neural MCTS synthesis."""
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from anf_utils import anf_monomials, boolean_from_anf, majority_function, parity_function
-from export_benchmarks import export_suite, selected_formats
-from factor_plan import (
+# Allow tests/ to import from src/, scripts/, submission/ at project root.
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+for _sub in ("", "src", "scripts", "submission"):
+    _p = _PROJECT_ROOT / _sub if _sub else _PROJECT_ROOT
+    if str(_p) not in sys.path:
+        sys.path.insert(0, str(_p))
+
+from src.anf_utils import anf_monomials, boolean_from_anf, majority_function, parity_function
+from submission.export_benchmarks import export_suite, selected_formats
+from src.factor_plan import (
     SearchConfig,
     direct_plan,
     emit_plan_to_circuit,
@@ -16,8 +24,8 @@ from factor_plan import (
     verify_circuit_anf,
     verify_plan_anf,
 )
-from resource_model import ResourceWeights
-from run_external_baselines import (
+from src.resource_model import ResourceWeights
+from scripts.run_external_baselines import (
     EsopCube,
     bdd_cost,
     blif_lut_network_cost,
@@ -30,7 +38,7 @@ from run_external_baselines import (
     verify_blif,
     verify_esop,
 )
-from synthesizers import synthesize
+from src.synthesizers import synthesize
 
 
 def check_roundtrip() -> None:
@@ -40,7 +48,7 @@ def check_roundtrip() -> None:
                 break
             bf = boolean_from_anf(n, anf_monomials(boolean_from_anf(n, anf_monomials(boolean_from_anf(n, [])))))
             del bf
-            from sshr_lib.bool_func import BooleanFunction
+            from src.sshr_lib.bool_func import BooleanFunction
 
             original = BooleanFunction(n, tt)
             rebuilt = boolean_from_anf(n, anf_monomials(original))
@@ -48,7 +56,7 @@ def check_roundtrip() -> None:
 
 
 def check_external_truth_verifiers() -> None:
-    from sshr_lib.bool_func import BooleanFunction
+    from src.sshr_lib.bool_func import BooleanFunction
 
     with TemporaryDirectory() as tmp:
         out_dir = Path(tmp)

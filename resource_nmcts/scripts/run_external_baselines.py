@@ -8,6 +8,14 @@ the same exported truth table manifest.
 """
 from __future__ import annotations
 
+# --- project root bootstrap (so this script runs standalone) ---
+import sys as _sys
+from pathlib import Path as _Path
+_PROJ_ROOT = _Path(__file__).resolve().parent.parent
+if str(_PROJ_ROOT) not in _sys.path:
+    _sys.path.insert(0, str(_PROJ_ROOT))
+
+
 import argparse
 import csv
 import json
@@ -24,6 +32,7 @@ from typing import Iterable
 
 
 THIS_DIR = Path(__file__).resolve().parent
+ROOT = THIS_DIR.parent  # resource_nmcts/ project root
 
 from src.sshr_lib.bool_func import BooleanFunction, QuantumCircuit, mct_cost_rp  # noqa: E402
 from src.sshr_lib.sshr_h import sshr_h  # noqa: E402
@@ -36,7 +45,8 @@ except Exception:  # pragma: no cover - reported per row when used
 
 DEFAULT_RESULTS = THIS_DIR / "results"
 DEFAULT_WEIGHTS = {"t": 1.0, "cnot": 0.04, "depth": 0.015, "gates": 0.01, "ancilla": 2.0}
-DEFAULT_ABC_BIN = ROOT / "tmp" / "abc" / "abc"
+_EXT_TOOLS = ROOT.parent / "_archive" / "external-tools" / "tmp"
+DEFAULT_ABC_BIN = _EXT_TOOLS / "abc" / "abc"
 DEFAULT_ABC_SCRIPT = "strash; balance; rewrite; refactor; rewrite -z; balance"
 DEFAULT_ABC_ESOP_SCRIPT = "strash; &get"
 DEFAULT_ABC_XAG_SCRIPT = "&get; &st -m -L 1"
