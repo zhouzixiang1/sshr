@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -18,6 +19,11 @@ from analyze_submission_metadata_audit import METADATA_FILE, METADATA_TEMPLATE, 
 
 
 AUTHOR_PLACEHOLDER = "AUTHOR INPUT REQUIRED"
+AUTHOR_TEX = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.tex"
+ALWAYS_REFRESH_PUBLIC_PATHS = {
+    "manuscript.title",
+    "code_availability.environment_notes",
+}
 
 
 def run_git(args: list[str]) -> str:
@@ -67,12 +73,37 @@ def set_if_placeholder(data: dict[str, object], dotted_path: str, value: str) ->
     return False
 
 
+def set_public_value(data: dict[str, object], dotted_path: str, value: str) -> bool:
+    """Set a non-private checkout-derived value when the schema path exists."""
+    if not value:
+        return False
+    current: object = data
+    parts = dotted_path.split(".")
+    for part in parts[:-1]:
+        if not isinstance(current, dict) or part not in current:
+            return False
+        current = current[part]
+    if not isinstance(current, dict) or parts[-1] not in current:
+        return False
+    current[parts[-1]] = value
+    return True
+
+
+def extract_manuscript_title() -> str:
+    if not AUTHOR_TEX.exists():
+        return ""
+    text = AUTHOR_TEX.read_text(encoding="utf-8", errors="replace")
+    match = re.search(r"\\title\{(?P<title>[^{}]+)\}", text)
+    return match.group("title").strip() if match else ""
+
+
 def detect_public_values() -> dict[str, str]:
     remote = normalize_remote_url(run_git(["config", "--get", "remote.origin.url"]))
     head = run_git(["rev-parse", "HEAD"])
     branch = run_git(["branch", "--show-current"])
     status = run_git(["status", "--short"])
     return {
+        "manuscript.title": extract_manuscript_title(),
         "code_availability.repository_url": remote,
         "code_availability.commit_hash": head,
         "code_availability.environment_notes": (
@@ -90,7 +121,8 @@ def build_starter() -> tuple[dict[str, object], list[str], list[str]]:
     filled: list[str] = []
     unavailable: list[str] = []
     for path, value in public_values.items():
-        if set_if_placeholder(data, path, value):
+        setter = set_public_value if path in ALWAYS_REFRESH_PUBLIC_PATHS else set_if_placeholder
+        if setter(data, path, value):
             filled.append(path)
         elif not value:
             unavailable.append(path)

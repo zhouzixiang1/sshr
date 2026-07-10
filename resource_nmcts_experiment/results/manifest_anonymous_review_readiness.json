@@ -34,9 +34,9 @@
       "status": "pass"
     },
     {
-      "evidence": "private_files_absent=True; gitignore_covers_private_paths=True; missing_gitignore_entries=none.",
+      "evidence": "extracted_payload=False; present_private_files=['submission_package/submission_metadata_answers.json']; tracked_private_files=none; gitignore_covers_private_paths=True; missing_gitignore_entries=none.",
       "item": "Private file boundary for anonymous review",
-      "next_action": "Keep submission_metadata.json and generated private previews ignored and out of public payloads.",
+      "next_action": "Keep private metadata ignored and untracked in the worktree, and absent from extracted public payloads.",
       "status": "pass"
     },
     {

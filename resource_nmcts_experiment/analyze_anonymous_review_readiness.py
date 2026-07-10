@@ -13,6 +13,7 @@ import csv
 import json
 import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -81,6 +82,22 @@ def ignored_private_paths() -> tuple[bool, list[str]]:
     return not missing, missing
 
 
+def tracked_private_paths() -> list[str]:
+    if os.environ.get("RESOURCE_NMCTS_EXTRACTED_PAYLOAD") == "1":
+        return []
+    paths = [rel(path) for path in PRIVATE_PATHS]
+    proc = subprocess.run(
+        ["git", "ls-files", "--", *paths],
+        cwd=THIS_DIR,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        text=True,
+        timeout=10,
+    )
+    return sorted(line for line in proc.stdout.splitlines() if line.strip()) if proc.returncode == 0 else paths
+
+
 def row(item: str, status: str, evidence: str, next_action: str) -> dict[str, str]:
     return {"item": item, "status": status, "evidence": evidence, "next_action": next_action}
 
@@ -140,13 +157,17 @@ def generated_anonymous_source_row() -> dict[str, str]:
 
 
 def private_boundary_row() -> dict[str, str]:
-    absent = [not path.exists() for path in PRIVATE_PATHS]
+    extracted_payload = os.environ.get("RESOURCE_NMCTS_EXTRACTED_PAYLOAD") == "1"
+    present = [rel(path) for path in PRIVATE_PATHS if path.exists()]
     ignored, missing_ignored = ignored_private_paths()
+    tracked = tracked_private_paths()
+    safe_worktree = ignored and not tracked
+    safe_payload = not extracted_payload or not present
     return row(
         "Private file boundary for anonymous review",
-        "pass" if all(absent) and ignored else "needs revision",
-        f"private_files_absent={all(absent)}; gitignore_covers_private_paths={ignored}; missing_gitignore_entries={missing_ignored or 'none'}.",
-        "Keep submission_metadata.json and generated private previews ignored and out of public payloads.",
+        "pass" if safe_worktree and safe_payload else "needs revision",
+        f"extracted_payload={extracted_payload}; present_private_files={present or 'none'}; tracked_private_files={tracked or 'none'}; gitignore_covers_private_paths={ignored}; missing_gitignore_entries={missing_ignored or 'none'}.",
+        "Keep private metadata ignored and untracked in the worktree, and absent from extracted public payloads.",
     )
 
 

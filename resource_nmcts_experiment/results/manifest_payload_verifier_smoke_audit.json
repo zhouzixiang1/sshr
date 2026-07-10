@@ -23,7 +23,7 @@
     },
     {
       "elapsed_seconds": "not_recorded",
-      "evidence": "verifier_returncode=0; verifier_rows=94; source_verifier_rows=95; row_delta=1; expected_row_delta=0_or_1; row_delta_reason=archive_absent_by_design_or_preterminal_source_manifest; verifier_needs_revision_count=0; extracted_payload_mode=True; source_needs_revision_count=0; status_counts={'pass': 94}; stdout_lines=586; stderr=none.",
+      "evidence": "verifier_returncode=0; verifier_rows=94; source_verifier_rows=95; row_delta=1; expected_row_delta=0_or_1; row_delta_reason=archive_absent_by_design_or_preterminal_source_manifest; verifier_needs_revision_count=0; extracted_payload_mode=True; source_needs_revision_count=0; status_counts={'pass': 94}; stdout_lines=585; stderr=none.",
       "item": "Extracted payload verifier command",
       "next_action": "Inspect the verifier outputs generated inside the extracted payload directory.",
       "returncode": "0",

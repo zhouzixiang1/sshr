@@ -27,7 +27,7 @@ from analyze_submission_metadata_audit import (
     rel,
     value_at,
 )
-from make_submission_metadata_starter import build_starter
+from make_submission_metadata_starter import build_starter, extract_manuscript_title
 from make_submission_text_preview import PRIVATE_OUTPUTS
 
 
@@ -222,6 +222,8 @@ def check_starter_prefill() -> dict[str, str]:
     repo_url = value_at(starter, "code_availability.repository_url")
     commit_hash = value_at(starter, "code_availability.commit_hash")
     environment_notes = value_at(starter, "code_availability.environment_notes")
+    manuscript_title = value_at(starter, "manuscript.title")
+    expected_title = extract_manuscript_title()
     repo_url_shape = (
         isinstance(repo_url, str)
         and repo_url.startswith("https://github.com/")
@@ -233,18 +235,19 @@ def check_starter_prefill() -> dict[str, str]:
         and "mcts-qoracle" in environment_notes
         and "./rebuild_submission_package.sh" in environment_notes
     )
+    manuscript_title_matches = bool(expected_title) and manuscript_title == expected_title
     if not git_worktree:
         return row(
             "Private metadata starter dry-run",
-            "pass" if len(still_private) == 6 else "needs revision",
-            f"git_worktree=False; public_prefill_fields={len(filled)}; unavailable_public_fields={len(unavailable)}; author_gated_examples={len(still_private)}.",
+            "pass" if len(still_private) == 6 and manuscript_title_matches else "needs revision",
+            f"git_worktree=False; public_prefill_fields={len(filled)}; unavailable_public_fields={len(unavailable)}; manuscript_title_matches={manuscript_title_matches}; author_gated_examples={len(still_private)}.",
             "In extracted payloads the starter cannot infer Git remote/HEAD, but it must still leave author/venue declarations human-gated.",
         )
-    release_shape_ok = repo_url_shape and commit_hash_shape and environment_notes_present
+    release_shape_ok = repo_url_shape and commit_hash_shape and environment_notes_present and manuscript_title_matches
     return row(
         "Private metadata starter dry-run",
         "pass" if len(filled) >= 2 and not unavailable and len(still_private) == 6 and release_shape_ok else "needs revision",
-        f"public_prefill_fields={len(filled)}; unavailable={unavailable or 'none'}; repo_url_shape={repo_url_shape}; commit_hash_40hex={commit_hash_shape}; environment_notes_present={environment_notes_present}; author_gated_examples={len(still_private)}.",
+        f"public_prefill_fields={len(filled)}; unavailable={unavailable or 'none'}; repo_url_shape={repo_url_shape}; commit_hash_40hex={commit_hash_shape}; environment_notes_present={environment_notes_present}; manuscript_title_matches={manuscript_title_matches}; author_gated_examples={len(still_private)}.",
         "The starter should prefill safe public repository fields with release-shaped values and leave author/venue declarations human-gated.",
     )
 

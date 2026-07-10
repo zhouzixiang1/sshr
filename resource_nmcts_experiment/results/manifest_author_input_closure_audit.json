@@ -51,7 +51,7 @@
       "status": "pass"
     },
     {
-      "evidence": "ignored=7/7; tracked=none; existing_private=none.",
+      "evidence": "ignored=7/7; tracked=none; existing_private=['submission_package/submission_metadata_answers.json'].",
       "item": "Private author metadata git protection",
       "next_action": "Keep submission_metadata_answers.json, submission_metadata.json, and generated private previews ignored and untracked.",
       "status": "pass"
