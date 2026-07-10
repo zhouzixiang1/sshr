@@ -52,7 +52,9 @@ parallelotope candidates; SSHR is used only as a CNOT-oriented small-function
 baseline.  On 177 traditional functions with $n\leq6$, Pareto-\method{}
 reduces mean T-count by 72.25\% and mean weighted score by 67.80\% relative to
 direct \anf{} synthesis, and its score win/loss/tie counts against ESOP beam,
-weighted ESOP-MILP, and SSHR-H are 174/0/3, 167/3/7, and 173/4/0.  External
+10-s time-limited weighted ESOP-MILP, and SSHR-H are 174/0/3, 167/3/7, and
+173/4/0.  Matched controls bound base/Pareto \mcts{} gains beyond no-\mcts{}
+to 1.44\%/4.69\%.  External
 probes show corresponding score wins against ROS-style LUT (309/0/0),
 mockturtle (166/11/0 and 64/0/0), CirKit (177/0/0 and 64/0/0), and legacy
 RevKit CLI exact-oracle synthesis (173/0/4).  These comparisons also expose
@@ -438,6 +440,10 @@ and bridge experiments cover item-level $n=20,24,28,32,40$ term sets, an
 $n=48,56,64$ ultra-scale symbolic stress slice, and complete \ttable{} bridge
 functions at $n=21$--$30$.  Paired comparisons include only
 matching functions or items with successful semantic checks and no timeout.
+On the traditional slice, weighted ESOP-MILP uses a 10-s per-function solver
+limit and reports the returned feasible ESOP incumbent.  It is a time-limited
+baseline within the weighted ESOP formulation, not a certificate of globally
+optimal quantum-circuit synthesis.
 Table~\ref{tab:benchmark-suite-audit} summarizes this benchmark-suite
 composition before any leaderboard-style result is reported.  It separates
 enumerable small Boolean oracles, published tiny-function optima, external
@@ -628,13 +634,35 @@ logical-layer comparison meaningful.}
 \input{tables/comparison_answer_scorecard}
 \end{table}
 
+Table~\ref{tab:baseline-fairness-ledger} complements the scorecard by stating
+the fairness contract for each comparison family.  It records the input
+normalization, verifier route, resource abstraction, supported use, and
+boundary before the results are interpreted.  This keeps the primary
+same-task rows, SSHR rows, external logic-network probes, RevKit rows,
+phase/\rz{} rows, learned-control ablations, large-scale bridges, and
+trade-off audits in their intended roles.
+
+\begin{table}[H]
+\centering
+\tiny
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{0.94}
+\caption{Baseline fairness ledger.  Each comparison family is tied to an
+input/verifier contract, evidence coverage, allowed manuscript use, and the
+claim boundary that prevents cross-level or hardware-mapping over-reading.}
+\label{tab:baseline-fairness-ledger}
+\input{tables/baseline_fairness_ledger}
+\end{table}
+
 Table~\ref{tab:sshr-reproduction-scope} gives the corresponding SSHR
 reproduction-scope audit.  This table is included because SSHR is both the
 closest geometric small-function baseline and the easiest comparison to
 over-read.  Table~\ref{tab:sshr-table8-counts} first reruns the bounded SSHR
 Table VIII candidate-space check: the local parallelotope enumerator matches
 all six published counts for $n=3,\ldots,8$, including the $n=8$ count of
-609441 candidates.  The broader audit then separates this count reproduction,
+609441 candidates.  Table~\ref{tab:sshr-paper-table-crosswalk} then maps the
+main published SSHR tables to the evidence actually regenerated or reused in
+this package.  The broader audit separates this count reproduction,
 same-function SSHR-H rows, time-limited SSHR-I rows, and the exact $n\leq4$
 pilot from the stronger claim that the lightweight rebuild fully reruns every
 published SSHR random experiment.  The results section therefore uses SSHR as
@@ -648,6 +676,16 @@ a CNOT-oriented counterpoint, not as the definition of the proposed method.
 \caption{SSHR Table VIII candidate-space count reproduction.}
 \label{tab:sshr-table8-counts}
 \input{tables/sshr_table8_candidate_counts}
+\end{table}
+
+\begin{table}[H]
+\centering
+\tiny
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.02}
+\caption{Crosswalk from published SSHR tables to current package evidence.}
+\label{tab:sshr-paper-table-crosswalk}
+\input{tables/sshr_paper_table_crosswalk}
 \end{table}
 
 \begin{table}[H]
@@ -671,9 +709,9 @@ verification route, and resource abstraction.
 
 \begin{table}[H]
 \centering
-\scriptsize
-\setlength{\tabcolsep}{2pt}
-\renewcommand{\arraystretch}{1.05}
+\tiny
+\setlength{\tabcolsep}{1.6pt}
+\renewcommand{\arraystretch}{0.88}
 \caption{Baseline comparability audit.  The table records why each comparison
 family is fair enough for the paper's bounded claim, which controls are used,
 and what residual abstraction mismatch remains.}
@@ -756,9 +794,9 @@ manuscript anchors that carry the evidence.
 
 \begin{table}[H]
 \centering
-\scriptsize
-\setlength{\tabcolsep}{2pt}
-\renewcommand{\arraystretch}{1.02}
+\tiny
+\setlength{\tabcolsep}{1.8pt}
+\renewcommand{\arraystretch}{0.92}
 \caption{Submission traceability audit.  Each row links a paper-facing claim
 family to the manuscript location and artifact chain used to support it.}
 \label{tab:traceability-audit}
@@ -1541,7 +1579,7 @@ supports it and to the stronger claim that remains outside the paper.}
 Figure~\ref{fig:learned-control-summary} visualizes the same conservative
 separation.  Promoted controllers either preserve the reference score within a
 small tolerance or improve it, while reducing the measured planning time or
-exact-evaluation budget.  The two limited diagnostics fall outside this
+exact-evaluation budget.  The bounded and limited diagnostics fall outside this
 quality--effort pattern and are therefore kept out of the headline claim.
 
 \begin{figure}[H]
@@ -1604,8 +1642,8 @@ negative values favor \method{} or Pareto-\method{}.}
 \end{table}
 
 Post-hoc reweighting alone does not show whether the search policy itself
-responds to a changed resource constraint.  We therefore rerun the
-small-function resource sweep with a pure CNOT objective.  The CNOT-only
+responds to a changed resource constraint.  We therefore rerun a matched
+47-function small-function slice with a pure CNOT objective.  The CNOT-only
 profile lowers the selected CNOT count for \method{}, Profile-\method{}, and
 Pareto-\method{} relative to their balanced-profile runs, but it still does
 not overtake SSHR-H.  Table~\ref{tab:cnot-constraint-profile} makes this
@@ -1617,7 +1655,7 @@ SSHR-H remains the CNOT-specialized counterpoint.
 \scriptsize
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.08}
-\caption{CNOT-only resource-profile rerun on the small-function sweep.  The
+\caption{CNOT-only resource-profile rerun on 47 matched small functions.  The
 profile changes the search objective before synthesis rather than only
 recomputing scores afterward.  $\Delta$ reports the same-method mean CNOT
 change relative to the balanced-profile run; negative values mean the CNOT-only
@@ -1794,7 +1832,7 @@ representative resource means only for the paper-facing method in each slice.
 \includegraphics[width=0.94\linewidth]{fig5_validation.png}
 \caption{\textbf{Verification coverage.}  Large term-set experiments are
 validated symbolically; phase-search and phase-policy rows are checked up to
-global phase; $n=21$--$26$ bridge slices add complete \ttable{} checking on
+global phase; $n=21$--$30$ bridge slices add complete \ttable{} checking on
 selected generated functions.}
 \Description{Validation coverage plot summarizing symbolic checks, phase checks, policy pruning checks, and complete truth-table bridge verification across benchmark families.}
 \label{fig:validation}

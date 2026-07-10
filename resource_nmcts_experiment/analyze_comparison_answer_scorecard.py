@@ -67,6 +67,15 @@ def control(comparison: str) -> str:
     return f"{comparison}: missing"
 
 
+def search_control_evidence() -> str:
+    rows = read_rows(SEARCH_CONTROL)
+    if not rows:
+        return "Search-control audit: missing"
+    passed = sum(row.get("status", "").strip().lower() == "pass" for row in rows)
+    suffix = "" if passed == len(rows) else "; needs revision"
+    return f"Search-control audit: {passed}/{len(rows)} pass{suffix}"
+
+
 def evidence_block(name: str) -> dict[str, str]:
     rows = by_key(read_rows(EVIDENCE), "evidence_block")
     return rows.get(name, {})
@@ -146,7 +155,8 @@ def verified(*names: str) -> str:
 
 
 def has_missing(text: str) -> bool:
-    return "missing" in text.lower()
+    lowered = text.lower()
+    return "missing" in lowered or "needs revision" in lowered
 
 
 def build_rows() -> list[dict[str, str]]:
@@ -238,7 +248,7 @@ def build_rows() -> list[dict[str, str]]:
             "reviewer_question": "What part is actually AI/MCTS?",
             "comparison_target": "No-MCTS portfolio, Pareto archive, learned/random controls",
             "role": "causal search-control ablation",
-            "verified_evidence": "Search-control audit: 10/10 pass",
+            "verified_evidence": search_control_evidence(),
             "headline_answer": (
                 "Resource over no-MCTS "
                 + control("Resource-NMCTS over no-MCTS portfolio")

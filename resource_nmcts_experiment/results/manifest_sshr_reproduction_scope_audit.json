@@ -1,5 +1,7 @@
 {
+  "acm_paper_table_crosswalk_anchor_present": true,
   "acm_table_anchor_present": true,
+  "anonymous_paper_table_crosswalk_anchor_present": true,
   "anonymous_table_anchor_present": true,
   "coverage_counts": {
     "covered": 7,
@@ -8,10 +10,18 @@
   "needs_revision_count": 0,
   "outputs": {
     "analysis": "results/analysis_sshr_reproduction_scope_audit.md",
+    "crosswalk_analysis": "results/analysis_sshr_paper_table_crosswalk.md",
+    "crosswalk_manifest": "results/manifest_sshr_paper_table_crosswalk.json",
+    "crosswalk_summary": "results/summary_sshr_paper_table_crosswalk.csv",
+    "crosswalk_table": "paper_latex/tables/sshr_paper_table_crosswalk.tex",
     "manifest": "results/manifest_sshr_reproduction_scope_audit.json",
     "summary": "results/summary_sshr_reproduction_scope_audit.csv",
     "table": "paper_latex/tables/sshr_reproduction_scope_audit.tex"
   },
+  "paper_table_crosswalk_anchor_present": true,
+  "paper_table_crosswalk_needs_revision_count": 0,
+  "paper_table_crosswalk_rows": 5,
+  "paper_table_crosswalk_table_present": true,
   "python": "3.11.15",
   "rows": 8,
   "rows_detail": [

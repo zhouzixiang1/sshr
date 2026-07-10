@@ -1,0 +1,76 @@
+{
+  "acm_table_anchor_present": true,
+  "anonymous_table_anchor_present": true,
+  "coverage_counts": {
+    "bounded reference": 1,
+    "exact count reproduction": 1,
+    "same-task matched slice": 1,
+    "timed matched slice plus n<=4 pilot": 2
+  },
+  "needs_revision_count": 0,
+  "outputs": {
+    "analysis": "results/analysis_sshr_paper_table_crosswalk.md",
+    "manifest": "results/manifest_sshr_paper_table_crosswalk.json",
+    "summary": "results/summary_sshr_paper_table_crosswalk.csv",
+    "table": "paper_latex/tables/sshr_paper_table_crosswalk.tex"
+  },
+  "python": "3.11.15",
+  "rows": 5,
+  "rows_detail": [
+    {
+      "audit_status": "pass",
+      "current_artifact": "No headline comparison uses this raw-gate table; the current package keeps it as SSHR source context only.",
+      "current_coverage": "bounded reference",
+      "evidence": "source_or_payload_ok=True; boundary_token=True",
+      "excluded_claim": "The lightweight package does not claim a full Table IV rerun.",
+      "paper_table": "Table IV",
+      "permitted_claim": "The SSHR paper provides a CNOT-oriented raw-gate decomposition context.",
+      "published_scope": "SSHR-H raw gate-type totals for n=3--6."
+    },
+    {
+      "audit_status": "pass",
+      "current_artifact": "The paper uses 177 same-function SSHR-H rows and resource-weight audits rather than importing the published aggregate as a headline win.",
+      "current_coverage": "same-task matched slice",
+      "evidence": "raw_traditional_sshr_h_rows=177; incorrect=0; boundary_token=True",
+      "excluded_claim": "The current paper does not claim to rerun every SSHR Table V random-function aggregate.",
+      "paper_table": "Table V",
+      "permitted_claim": "SSHR-H is a matched CNOT-specialized baseline on the current Boolean-oracle suite.",
+      "published_scope": "SSHR-H, ESOP, and XAG aggregate resources for the SSHR paper's benchmark sets."
+    },
+    {
+      "audit_status": "pass",
+      "current_artifact": "The package includes 177 same-function SSHR-I CNOT rows at n<=6 and 72 n<=4 pilot rows, with correctness checks and timeout metadata.",
+      "current_coverage": "timed matched slice plus n<=4 pilot",
+      "evidence": "external_n6_cnot_rows=177; incorrect=0; external_n4_cnot_rows=72; n4_incorrect=0",
+      "excluded_claim": "These rows are not an exact certificate for the full published SSHR-I Table VI aggregate.",
+      "paper_table": "Table VI",
+      "permitted_claim": "SSHR-I CNOT is a time-limited CNOT-oriented counterpoint on the matched current suite.",
+      "published_scope": "SSHR-I CNOT-objective aggregates, including NPN/random-function settings."
+    },
+    {
+      "audit_status": "pass",
+      "current_artifact": "The package includes 177 same-function SSHR-I T-objective rows at n<=6 and 72 n<=4 pilot rows under the current logical-resource projection.",
+      "current_coverage": "timed matched slice plus n<=4 pilot",
+      "evidence": "external_n6_t_rows=177; incorrect=0; external_n4_t_rows=72; n4_incorrect=0",
+      "excluded_claim": "These rows are not a full rerun of all published Table VII random/NPN settings.",
+      "paper_table": "Table VII",
+      "permitted_claim": "SSHR-I T is a relevant T-oriented counterpoint on the matched current suite.",
+      "published_scope": "SSHR-I T-objective aggregates under the SSHR paper's relative-phase Toffoli accounting."
+    },
+    {
+      "audit_status": "pass",
+      "current_artifact": "The local parallelotope enumerator is rerun on the full n=3--8 hypercubes and matches all six published counts.",
+      "current_coverage": "exact count reproduction",
+      "evidence": "source_tree_available=True; table_viii_counts={3: 49, 4: 257, 5: 1539, 6: 10299, 7: 75905, 8: 609441}; missing_counts=none; missing_tokens=none; table8_raw_rows=6; raw_matches=6; manifest_rows=6; all_match=True; max_n=8; max_count=609441; summary_rows=1; analysis_exists=True; table_exists=True",
+      "excluded_claim": "Candidate-count reproduction is not a substitute for rerunning every SSHR-I random benchmark.",
+      "paper_table": "Table VIII",
+      "permitted_claim": "The paper can use Table VIII to explain SSHR's candidate-space role.",
+      "published_scope": "SSHR optimization-space sizes for n=3--8."
+    }
+  ],
+  "script": "analyze_sshr_reproduction_scope_audit.py",
+  "status_counts": {
+    "pass": 5
+  },
+  "table_anchor_present": true
+}

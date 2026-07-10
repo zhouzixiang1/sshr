@@ -81,6 +81,13 @@ COMPARISON_ANSWER_SCORECARD_PATHS = {
     "results/manifest_comparison_answer_scorecard.json",
     "paper_latex/tables/comparison_answer_scorecard.tex",
 }
+BASELINE_FAIRNESS_LEDGER_PATHS = {
+    "analyze_baseline_fairness_ledger.py",
+    "results/analysis_baseline_fairness_ledger.md",
+    "results/summary_baseline_fairness_ledger.csv",
+    "results/manifest_baseline_fairness_ledger.json",
+    "paper_latex/tables/baseline_fairness_ledger.tex",
+}
 COMPARISON_CLAIM_HIERARCHY_PATHS = {
     "analyze_comparison_claim_hierarchy.py",
     "results/analysis_comparison_claim_hierarchy.md",
@@ -126,6 +133,9 @@ SSHR_REPRODUCTION_SCOPE_PATHS = {
     "results/analysis_sshr_table8_candidate_counts.md",
     "results/summary_sshr_table8_candidate_counts.csv",
     "results/manifest_sshr_table8_candidate_counts.json",
+    "results/analysis_sshr_paper_table_crosswalk.md",
+    "results/summary_sshr_paper_table_crosswalk.csv",
+    "results/manifest_sshr_paper_table_crosswalk.json",
     "results/raw_traditional_resource.csv",
     "results/manifest_traditional_resource.json",
     "results/raw_external_traditional_resource_n4.csv",
@@ -146,6 +156,7 @@ SSHR_REPRODUCTION_SCOPE_PATHS = {
     "results/summary_sshr_reproduction_scope_audit.csv",
     "results/manifest_sshr_reproduction_scope_audit.json",
     "paper_latex/tables/sshr_table8_candidate_counts.tex",
+    "paper_latex/tables/sshr_paper_table_crosswalk.tex",
     "paper_latex/tables/sshr_reproduction_scope_audit.tex",
 }
 NOVELTY_SCORECARD_PATHS = {
@@ -608,6 +619,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    baseline_fairness_missing = sorted(BASELINE_FAIRNESS_LEDGER_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload baseline fairness ledger",
+            "pass" if not baseline_fairness_missing else "needs revision",
+            f"comparison_fairness_files={len(BASELINE_FAIRNESS_LEDGER_PATHS)}; missing={baseline_fairness_missing or 'none'}.",
+            "Ensure the uploadable archive includes the baseline fairness ledger script, generated evidence, and manuscript table.",
+        )
+    )
+
     comparison_claim_hierarchy_missing = sorted(COMPARISON_CLAIM_HIERARCHY_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -1032,6 +1053,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "comparison_protocol_paths": sorted(COMPARISON_PROTOCOL_PATHS),
         "comparison_target_validity_paths": sorted(COMPARISON_TARGET_VALIDITY_PATHS),
         "comparison_answer_scorecard_paths": sorted(COMPARISON_ANSWER_SCORECARD_PATHS),
+        "baseline_fairness_ledger_paths": sorted(BASELINE_FAIRNESS_LEDGER_PATHS),
         "comparison_claim_hierarchy_paths": sorted(COMPARISON_CLAIM_HIERARCHY_PATHS),
         "experimental_evidence_ladder_paths": sorted(EXPERIMENTAL_EVIDENCE_LADDER_PATHS),
         "weight_robustness_paths": sorted(WEIGHT_ROBUSTNESS_PATHS),

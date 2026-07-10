@@ -118,6 +118,10 @@ COMPARISON_ANSWER_ANALYSIS = RESULTS / "analysis_comparison_answer_scorecard.md"
 COMPARISON_ANSWER_SUMMARY = RESULTS / "summary_comparison_answer_scorecard.csv"
 COMPARISON_ANSWER_MANIFEST = RESULTS / "manifest_comparison_answer_scorecard.json"
 COMPARISON_ANSWER_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_answer_scorecard.tex"
+BASELINE_FAIRNESS_ANALYSIS = RESULTS / "analysis_baseline_fairness_ledger.md"
+BASELINE_FAIRNESS_SUMMARY = RESULTS / "summary_baseline_fairness_ledger.csv"
+BASELINE_FAIRNESS_MANIFEST = RESULTS / "manifest_baseline_fairness_ledger.json"
+BASELINE_FAIRNESS_TABLE = THIS_DIR / "paper_latex" / "tables" / "baseline_fairness_ledger.tex"
 COMPARISON_ROUTE_ANALYSIS = RESULTS / "analysis_comparison_route_decision_audit.md"
 COMPARISON_ROUTE_SUMMARY = RESULTS / "summary_comparison_route_decision_audit.csv"
 COMPARISON_ROUTE_MANIFEST = RESULTS / "manifest_comparison_route_decision_audit.json"
@@ -151,6 +155,10 @@ SSHR_REPRODUCTION_TABLE = THIS_DIR / "paper_latex" / "tables" / "sshr_reproducti
 SSHR_TABLE8_RAW = RESULTS / "raw_sshr_table8_candidate_counts.csv"
 SSHR_TABLE8_MANIFEST = RESULTS / "manifest_sshr_table8_candidate_counts.json"
 SSHR_TABLE8_TABLE = THIS_DIR / "paper_latex" / "tables" / "sshr_table8_candidate_counts.tex"
+SSHR_CROSSWALK_ANALYSIS = RESULTS / "analysis_sshr_paper_table_crosswalk.md"
+SSHR_CROSSWALK_SUMMARY = RESULTS / "summary_sshr_paper_table_crosswalk.csv"
+SSHR_CROSSWALK_MANIFEST = RESULTS / "manifest_sshr_paper_table_crosswalk.json"
+SSHR_CROSSWALK_TABLE = THIS_DIR / "paper_latex" / "tables" / "sshr_paper_table_crosswalk.tex"
 THREATS_VALIDITY_ANALYSIS = RESULTS / "analysis_threats_to_validity_audit.md"
 THREATS_VALIDITY_SUMMARY = RESULTS / "summary_threats_to_validity_audit.csv"
 THREATS_VALIDITY_MANIFEST = RESULTS / "manifest_threats_to_validity_audit.json"
@@ -424,6 +432,16 @@ def build_rows() -> list[dict[str, str]]:
     comparison_answer_anchor = (
         bool(comparison_answer_manifest.get("table_anchor_present", False)) if comparison_answer_manifest else False
     )
+    baseline_fairness_manifest = read_json(BASELINE_FAIRNESS_MANIFEST)
+    baseline_fairness_revisions = (
+        int(baseline_fairness_manifest.get("needs_revision_count", -1)) if baseline_fairness_manifest else -1
+    )
+    baseline_fairness_counts = baseline_fairness_manifest.get("status_counts", {}) if baseline_fairness_manifest else {}
+    baseline_fairness_rows = baseline_fairness_manifest.get("rows", "missing") if baseline_fairness_manifest else "missing"
+    baseline_fairness_roles = baseline_fairness_manifest.get("roles", []) if baseline_fairness_manifest else []
+    baseline_fairness_anchor = (
+        bool(baseline_fairness_manifest.get("table_anchor_present", False)) if baseline_fairness_manifest else False
+    )
     comparison_route_manifest = read_json(COMPARISON_ROUTE_MANIFEST)
     comparison_route_revisions = (
         int(comparison_route_manifest.get("needs_revision_count", -1)) if comparison_route_manifest else -1
@@ -527,6 +545,7 @@ def build_rows() -> list[dict[str, str]]:
     )
     sshr_reproduction_manifest = read_json(SSHR_REPRODUCTION_MANIFEST)
     sshr_table8_manifest = read_json(SSHR_TABLE8_MANIFEST)
+    sshr_crosswalk_manifest = read_json(SSHR_CROSSWALK_MANIFEST)
     sshr_reproduction_revisions = (
         int(sshr_reproduction_manifest.get("needs_revision_count", -1)) if sshr_reproduction_manifest else -1
     )
@@ -544,6 +563,23 @@ def build_rows() -> list[dict[str, str]]:
     sshr_table8_all_match = bool(sshr_table8_manifest.get("all_match", False)) if sshr_table8_manifest else False
     sshr_table8_max_n = int(sshr_table8_manifest.get("max_n", -1)) if sshr_table8_manifest else -1
     sshr_table8_max_count = int(sshr_table8_manifest.get("max_sshr_count", -1)) if sshr_table8_manifest else -1
+    sshr_crosswalk_rows = int(sshr_crosswalk_manifest.get("rows", -1)) if sshr_crosswalk_manifest else -1
+    sshr_crosswalk_revisions = (
+        int(sshr_crosswalk_manifest.get("needs_revision_count", -1)) if sshr_crosswalk_manifest else -1
+    )
+    sshr_crosswalk_counts = sshr_crosswalk_manifest.get("status_counts", {}) if sshr_crosswalk_manifest else {}
+    sshr_crosswalk_coverage = sshr_crosswalk_manifest.get("coverage_counts", {}) if sshr_crosswalk_manifest else {}
+    sshr_crosswalk_anchor = (
+        bool(sshr_crosswalk_manifest.get("table_anchor_present", False)) if sshr_crosswalk_manifest else False
+    )
+    sshr_crosswalk_anonymous_anchor = (
+        bool(sshr_crosswalk_manifest.get("anonymous_table_anchor_present", False))
+        if sshr_crosswalk_manifest
+        else False
+    )
+    sshr_crosswalk_acm_anchor = (
+        bool(sshr_crosswalk_manifest.get("acm_table_anchor_present", False)) if sshr_crosswalk_manifest else False
+    )
     sshr_reproduction_anchor = (
         bool(sshr_reproduction_manifest.get("table_anchor_present", False)) if sshr_reproduction_manifest else False
     )
@@ -1250,6 +1286,22 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_comparison_answer_scorecard.py after changing comparison outcomes, search-control rows, dominance rows, or comparison-scope manuscript text.",
         },
         {
+            "item": "Baseline fairness ledger",
+            "status": "pass"
+            if "tab:baseline-fairness-ledger" in text
+            and BASELINE_FAIRNESS_ANALYSIS.exists()
+            and BASELINE_FAIRNESS_SUMMARY.exists()
+            and BASELINE_FAIRNESS_MANIFEST.exists()
+            and BASELINE_FAIRNESS_TABLE.exists()
+            and baseline_fairness_revisions == 0
+            and isinstance(baseline_fairness_rows, int)
+            and baseline_fairness_rows >= 9
+            and baseline_fairness_anchor
+            else "needs revision",
+            "evidence": f"Baseline fairness ledger records input/verifier/resource/claim-scope contracts for comparison families; rows={baseline_fairness_rows}; roles={baseline_fairness_roles}; status_counts={baseline_fairness_counts}; needs_revision_count={baseline_fairness_revisions}; table_anchor_present={baseline_fairness_anchor}.",
+            "next_action": "Rerun analyze_baseline_fairness_ledger.py after changing baseline families, verifier routes, resource models, or comparison-scope manuscript text.",
+        },
+        {
             "item": "Comparison route decision audit",
             "status": "pass"
             if "tab:comparison-route-decision" in text
@@ -1387,6 +1439,10 @@ def build_rows() -> list[dict[str, str]]:
             and SSHR_TABLE8_RAW.exists()
             and SSHR_TABLE8_MANIFEST.exists()
             and SSHR_TABLE8_TABLE.exists()
+            and SSHR_CROSSWALK_ANALYSIS.exists()
+            and SSHR_CROSSWALK_SUMMARY.exists()
+            and SSHR_CROSSWALK_MANIFEST.exists()
+            and SSHR_CROSSWALK_TABLE.exists()
             and sshr_reproduction_revisions == 0
             and isinstance(sshr_reproduction_rows, int)
             and sshr_reproduction_rows >= 8
@@ -1394,11 +1450,16 @@ def build_rows() -> list[dict[str, str]]:
             and sshr_table8_all_match
             and sshr_table8_max_n == 8
             and sshr_table8_max_count == 609441
+            and sshr_crosswalk_rows == 5
+            and sshr_crosswalk_revisions == 0
+            and sshr_crosswalk_anchor
+            and sshr_crosswalk_anonymous_anchor
+            and sshr_crosswalk_acm_anchor
             and sshr_reproduction_anchor
             and sshr_reproduction_anonymous_anchor
             and sshr_reproduction_acm_anchor
             else "needs revision",
-            "evidence": f"SSHR reproduction-scope audit separates reproduced Table VIII candidate-space counts, same-function SSHR-H rows, timed SSHR-I rows, exact n<=4 pilot checks, and claim boundaries; rows={sshr_reproduction_rows}; table8_rows={sshr_table8_rows}; table8_all_match={sshr_table8_all_match}; table8_max_n={sshr_table8_max_n}; table8_max_count={sshr_table8_max_count}; status_counts={sshr_reproduction_counts}; coverage_counts={sshr_reproduction_coverage}; source_tree_available={sshr_source_tree_available}; needs_revision_count={sshr_reproduction_revisions}; table_anchor_present={sshr_reproduction_anchor}; anonymous_anchor={sshr_reproduction_anonymous_anchor}; acm_anchor={sshr_reproduction_acm_anchor}.",
+            "evidence": f"SSHR reproduction-scope audit separates reproduced Table VIII candidate-space counts, published-table crosswalk rows, same-function SSHR-H rows, timed SSHR-I rows, exact n<=4 pilot checks, and claim boundaries; rows={sshr_reproduction_rows}; table8_rows={sshr_table8_rows}; table8_all_match={sshr_table8_all_match}; table8_max_n={sshr_table8_max_n}; table8_max_count={sshr_table8_max_count}; crosswalk_rows={sshr_crosswalk_rows}; crosswalk_status_counts={sshr_crosswalk_counts}; crosswalk_coverage_counts={sshr_crosswalk_coverage}; crosswalk_needs_revision_count={sshr_crosswalk_revisions}; status_counts={sshr_reproduction_counts}; coverage_counts={sshr_reproduction_coverage}; source_tree_available={sshr_source_tree_available}; needs_revision_count={sshr_reproduction_revisions}; table_anchor_present={sshr_reproduction_anchor}; anonymous_anchor={sshr_reproduction_anonymous_anchor}; acm_anchor={sshr_reproduction_acm_anchor}; crosswalk_anchor={sshr_crosswalk_anchor}; crosswalk_anonymous_anchor={sshr_crosswalk_anonymous_anchor}; crosswalk_acm_anchor={sshr_crosswalk_acm_anchor}.",
             "next_action": "Rerun reproduce_sshr_table8_candidate_counts.py and analyze_sshr_reproduction_scope_audit.py after changing SSHR baselines, source-reference wording, or comparison-boundary manuscript text.",
         },
         {

@@ -20,11 +20,11 @@
 
 以下 token 由 `analyze_public_handoff_freshness_audit.py` 检查，用于防止交付说明和机器审计结果漂移：
 
-- PDF pages=57/57
-- readiness=89 pass + 1 needs author input
-- payload_files=1237
+- PDF pages=59/59
+- readiness=90 pass + 1 needs author input
+- payload_files=1246
 - artifact_registry=31 families / 162 raw CSV / 80318 raw rows
-- source_privacy=0 strict leaks / 57 provenance files / 1194 payload text files
+- source_privacy=0 strict leaks / 57 provenance files / 1203 payload text files
 - comparison_validity=8/8 pass
 - novelty_scorecard=6/6 pass
 - goal_gate=author/venue metadata remains open
@@ -169,6 +169,16 @@
 - `paper_latex/tables/comparison_answer_scorecard.tex`
 
 该表已接入英文投稿稿 Experimental Design，并被 rebuild、verify、readiness、package verifier、payload round-trip、payload extraction smoke 和 artifact rerun registry 覆盖。它按八个 reviewer question 汇总对比目标、验证行数、headline outcome 和 excluded claim：同任务 direct/ESOP/ABC/BDD/SSHR 对比、SSHR 是否为唯一对比目标、外部 ROS-style/mockturtle/CirKit probe、published STG 小函数最优库反例、RevKit exact/phase proxy、AI/MCTS search-control、`n=20--64` scaling/bridge、以及 weighted-score 是否隐藏 trade-off。当前 8/8 行 pass；核心答案是本文的主对比是 same-task Boolean-oracle resource baselines，SSHR 是 CNOT-oriented counterpoint，published STG optimum 是诚实的 non-win boundary，外部工具链是 logical stress test，AI/MCTS 消融是因果控制，不能把任一行写成硬件映射或全指标支配。
+
+本轮新增 baseline fairness ledger，把“对比有没有意义”进一步落到输入、验证、资源模型和 claim-scope 合约：
+
+- `analyze_baseline_fairness_ledger.py`
+- `results/summary_baseline_fairness_ledger.csv`
+- `results/analysis_baseline_fairness_ledger.md`
+- `results/manifest_baseline_fairness_ledger.json`
+- `paper_latex/tables/baseline_fairness_ledger.tex`
+
+该表已接入 author/anonymous/ACM 三套英文稿 Experimental Design，并被 rebuild、verify、readiness、package verifier、payload round-trip 和 artifact rerun registry 覆盖。它按 same-task Boolean-oracle baseline、SSHR geometric counterpoint、external logic-network probes、published STG tiny-function optima、RevKit exact-oracle probe、phase/Rz transfer branch、AI/search-control ablations、large-scale correctness envelope、trade-off/sensitivity rows 九类逐项记录 input/verifier contract、evidence coverage、supported use 和 boundary。当前 9/9 pass；其作用是让审稿人看到每类比较都被限定在同一任务、逻辑层 proxy、exact reversible probe、phase proxy、causal control 或 scalability envelope 的正确角色中，避免把 score win 误读成硬件映射、全指标支配或全局最优。
 
 本轮新增 ROS-style LUT garbage budget frontier，把已有 3 种 executable garbage schedule 从单点 proxy 扩展成辅助线预算前沿：
 

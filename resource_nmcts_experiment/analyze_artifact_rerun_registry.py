@@ -246,6 +246,7 @@ def specs() -> list[EvidenceFamily]:
                 "analyze_comparison_target_validity_audit.py",
                 "analyze_comparison_claim_hierarchy.py",
                 "analyze_comparison_answer_scorecard.py",
+                "analyze_baseline_fairness_ledger.py",
                 "analyze_comparison_route_decision_audit.py",
             ),
             raw_patterns=(),
@@ -254,6 +255,7 @@ def specs() -> list[EvidenceFamily]:
                 "manifest_comparison_target_validity_audit.json",
                 "manifest_comparison_claim_hierarchy.json",
                 "manifest_comparison_answer_scorecard.json",
+                "manifest_baseline_fairness_ledger.json",
                 "manifest_comparison_route_decision_audit.json",
             ),
             summary_patterns=(
@@ -265,6 +267,7 @@ def specs() -> list[EvidenceFamily]:
                 "summary_comparison_target_validity_audit.csv",
                 "summary_comparison_claim_hierarchy.csv",
                 "summary_comparison_answer_scorecard.csv",
+                "summary_baseline_fairness_ledger.csv",
                 "summary_comparison_route_decision_audit.csv",
             ),
             analysis_patterns=(
@@ -276,6 +279,7 @@ def specs() -> list[EvidenceFamily]:
                 "analysis_comparison_target_validity_audit.md",
                 "analysis_comparison_claim_hierarchy.md",
                 "analysis_comparison_answer_scorecard.md",
+                "analysis_baseline_fairness_ledger.md",
                 "analysis_comparison_route_decision_audit.md",
             ),
             dependency_boundary="Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps.",
@@ -365,7 +369,7 @@ def specs() -> list[EvidenceFamily]:
         ),
         EvidenceFamily(
             family="SSHR reproduction-scope audit",
-            claim_use="Separates reproduced SSHR Table VIII candidate-space counts, same-function SSHR-H rows, timed SSHR-I rows, exact n<=4 pilot checks, and excluded full-paper SSHR reruns.",
+            claim_use="Separates reproduced SSHR Table VIII candidate-space counts, published-table crosswalk coverage, same-function SSHR-H rows, timed SSHR-I rows, exact n<=4 pilot checks, and excluded full-paper SSHR reruns.",
             rerun_tier="quick comparison audit",
             scripts=("reproduce_sshr_table8_candidate_counts.py", "analyze_sshr_reproduction_scope_audit.py"),
             raw_patterns=(
@@ -376,6 +380,7 @@ def specs() -> list[EvidenceFamily]:
             ),
             manifest_patterns=(
                 "manifest_sshr_table8_candidate_counts.json",
+                "manifest_sshr_paper_table_crosswalk.json",
                 "manifest_sshr_reproduction_scope_audit.json",
                 "manifest_traditional_resource.json",
                 "manifest_external_traditional_resource_n4.json",
@@ -383,17 +388,19 @@ def specs() -> list[EvidenceFamily]:
             ),
             summary_patterns=(
                 "summary_sshr_table8_candidate_counts.csv",
+                "summary_sshr_paper_table_crosswalk.csv",
                 "summary_sshr_reproduction_scope_audit.csv",
                 "summary_exact_fprm_dp.csv",
                 "summary_exact_xag_mc.csv",
             ),
             analysis_patterns=(
                 "analysis_sshr_table8_candidate_counts.md",
+                "analysis_sshr_paper_table_crosswalk.md",
                 "analysis_sshr_reproduction_scope_audit.md",
                 "analysis_exact_fprm_dp.md",
                 "analysis_resource_weight_sensitivity_audit.md",
             ),
-            dependency_boundary="Reruns the bounded Table VIII parallelotope count check and audits existing SSHR-facing rows; it does not rerun heavy SSHR-I/Gurobi or every published random table.",
+            dependency_boundary="Reruns the bounded Table VIII parallelotope count check, audits the published SSHR table-to-artifact crosswalk, and audits existing SSHR-facing rows; it does not rerun heavy SSHR-I/Gurobi or every published random table.",
         ),
         EvidenceFamily(
             family="Resource-weight sensitivity and robustness",

@@ -20,9 +20,9 @@
     "submission_package/submission_checklist.md"
   ],
   "status_counts": {
-    "guarded": 92,
+    "guarded": 93,
     "pass": 5
   },
   "unresolved_count": 0,
-  "unsupported_claim_hit_count": 92
+  "unsupported_claim_hit_count": 93
 }

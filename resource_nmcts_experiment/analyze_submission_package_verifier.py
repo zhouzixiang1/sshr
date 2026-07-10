@@ -7,6 +7,7 @@ compiled PDF availability, payload SHA consistency, readiness status, raw rerun
 registry coverage, claim-scope hygiene, comparison-protocol coverage,
 comparison-target validity,
 comparison-claim hierarchy,
+baseline fairness ledger,
 comparison-route decision support,
 benchmark-suite composition,
 experimental evidence ladder,
@@ -98,6 +99,8 @@ COMPARISON_CLAIM_HIERARCHY_MANIFEST = RESULTS / "manifest_comparison_claim_hiera
 COMPARISON_CLAIM_HIERARCHY_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_claim_hierarchy.tex"
 COMPARISON_ANSWER_SCORECARD_MANIFEST = RESULTS / "manifest_comparison_answer_scorecard.json"
 COMPARISON_ANSWER_SCORECARD_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_answer_scorecard.tex"
+BASELINE_FAIRNESS_LEDGER_MANIFEST = RESULTS / "manifest_baseline_fairness_ledger.json"
+BASELINE_FAIRNESS_LEDGER_TABLE = THIS_DIR / "paper_latex" / "tables" / "baseline_fairness_ledger.tex"
 COMPARISON_ROUTE_DECISION_MANIFEST = RESULTS / "manifest_comparison_route_decision_audit.json"
 COMPARISON_ROUTE_DECISION_TABLE = THIS_DIR / "paper_latex" / "tables" / "comparison_route_decision_audit.tex"
 BENCHMARK_SUITE_MANIFEST = RESULTS / "manifest_benchmark_suite_audit.json"
@@ -117,6 +120,10 @@ SSHR_REPRODUCTION_TABLE = THIS_DIR / "paper_latex" / "tables" / "sshr_reproducti
 SSHR_TABLE8_RAW = RESULTS / "raw_sshr_table8_candidate_counts.csv"
 SSHR_TABLE8_MANIFEST = RESULTS / "manifest_sshr_table8_candidate_counts.json"
 SSHR_TABLE8_TABLE = THIS_DIR / "paper_latex" / "tables" / "sshr_table8_candidate_counts.tex"
+SSHR_CROSSWALK_MANIFEST = RESULTS / "manifest_sshr_paper_table_crosswalk.json"
+SSHR_CROSSWALK_SUMMARY = RESULTS / "summary_sshr_paper_table_crosswalk.csv"
+SSHR_CROSSWALK_ANALYSIS = RESULTS / "analysis_sshr_paper_table_crosswalk.md"
+SSHR_CROSSWALK_TABLE = THIS_DIR / "paper_latex" / "tables" / "sshr_paper_table_crosswalk.tex"
 THREATS_VALIDITY_MANIFEST = RESULTS / "manifest_threats_to_validity_audit.json"
 THREATS_VALIDITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "threats_to_validity_audit.tex"
 NOVELTY_SCORECARD_MANIFEST = RESULTS / "manifest_novelty_comparison_scorecard.json"
@@ -488,6 +495,23 @@ def verify_comparison_answer_scorecard() -> dict[str, str]:
     )
 
 
+def verify_baseline_fairness_ledger() -> dict[str, str]:
+    manifest = read_json(BASELINE_FAIRNESS_LEDGER_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = int(manifest.get("rows", -1)) if manifest else -1
+    roles = manifest.get("roles", []) if manifest else []
+    table_exists = BASELINE_FAIRNESS_LEDGER_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = "pass" if manifest and revisions == 0 and rows >= 9 and table_exists and anchor else "needs revision"
+    return row(
+        "Baseline fairness ledger",
+        status,
+        f"rows={rows}; roles={roles}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_baseline_fairness_ledger.py and restore baseline fairness rows, generated table, or manuscript anchor.",
+    )
+
+
 def verify_comparison_claim_hierarchy() -> dict[str, str]:
     manifest = read_json(COMPARISON_CLAIM_HIERARCHY_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -716,6 +740,7 @@ def verify_cnot_constraint_profile() -> dict[str, str]:
 def verify_sshr_reproduction_scope() -> dict[str, str]:
     manifest = read_json(SSHR_REPRODUCTION_MANIFEST)
     table8_manifest = read_json(SSHR_TABLE8_MANIFEST)
+    crosswalk_manifest = read_json(SSHR_CROSSWALK_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
     counts = manifest.get("status_counts", {}) if manifest else {}
     coverage = manifest.get("coverage_counts", {}) if manifest else {}
@@ -725,15 +750,26 @@ def verify_sshr_reproduction_scope() -> dict[str, str]:
     table8_match = bool(table8_manifest.get("all_match", False)) if table8_manifest else False
     table8_max_n = int(table8_manifest.get("max_n", -1)) if table8_manifest else -1
     table8_max_count = int(table8_manifest.get("max_sshr_count", -1)) if table8_manifest else -1
+    crosswalk_rows = int(crosswalk_manifest.get("rows", -1)) if crosswalk_manifest else -1
+    crosswalk_revisions = int(crosswalk_manifest.get("needs_revision_count", -1)) if crosswalk_manifest else -1
+    crosswalk_counts = crosswalk_manifest.get("status_counts", {}) if crosswalk_manifest else {}
+    crosswalk_coverage = crosswalk_manifest.get("coverage_counts", {}) if crosswalk_manifest else {}
     table_exists = SSHR_REPRODUCTION_TABLE.exists()
     table8_exists = SSHR_TABLE8_TABLE.exists()
+    crosswalk_table_exists = SSHR_CROSSWALK_TABLE.exists()
     anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
     anonymous_anchor = bool(manifest.get("anonymous_table_anchor_present", False)) if manifest else False
     acm_anchor = bool(manifest.get("acm_table_anchor_present", False)) if manifest else False
+    crosswalk_anchor = bool(crosswalk_manifest.get("table_anchor_present", False)) if crosswalk_manifest else False
+    crosswalk_anonymous_anchor = (
+        bool(crosswalk_manifest.get("anonymous_table_anchor_present", False)) if crosswalk_manifest else False
+    )
+    crosswalk_acm_anchor = bool(crosswalk_manifest.get("acm_table_anchor_present", False)) if crosswalk_manifest else False
     status = (
         "pass"
         if manifest
         and table8_manifest
+        and crosswalk_manifest
         and revisions == 0
         and rows >= 8
         and SSHR_TABLE8_RAW.exists()
@@ -741,17 +777,25 @@ def verify_sshr_reproduction_scope() -> dict[str, str]:
         and table8_match
         and table8_max_n == 8
         and table8_max_count == 609441
+        and SSHR_CROSSWALK_SUMMARY.exists()
+        and SSHR_CROSSWALK_ANALYSIS.exists()
+        and crosswalk_rows == 5
+        and crosswalk_revisions == 0
         and table_exists
         and table8_exists
+        and crosswalk_table_exists
         and anchor
         and anonymous_anchor
         and acm_anchor
+        and crosswalk_anchor
+        and crosswalk_anonymous_anchor
+        and crosswalk_acm_anchor
         else "needs revision"
     )
     return row(
         "SSHR reproduction-scope audit",
         status,
-        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; coverage_counts={coverage}; source_tree_available={source_tree}; table8_rows={table8_rows}; table8_all_match={table8_match}; table8_max_n={table8_max_n}; table8_max_count={table8_max_count}; table_exists={table_exists}; table8_table_exists={table8_exists}; table_anchor_present={anchor}; anonymous_anchor={anonymous_anchor}; acm_anchor={acm_anchor}.",
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; coverage_counts={coverage}; source_tree_available={source_tree}; table8_rows={table8_rows}; table8_all_match={table8_match}; table8_max_n={table8_max_n}; table8_max_count={table8_max_count}; crosswalk_rows={crosswalk_rows}; crosswalk_needs_revision_count={crosswalk_revisions}; crosswalk_status_counts={crosswalk_counts}; crosswalk_coverage_counts={crosswalk_coverage}; table_exists={table_exists}; table8_table_exists={table8_exists}; crosswalk_table_exists={crosswalk_table_exists}; table_anchor_present={anchor}; anonymous_anchor={anonymous_anchor}; acm_anchor={acm_anchor}; crosswalk_anchor={crosswalk_anchor}; crosswalk_anonymous_anchor={crosswalk_anonymous_anchor}; crosswalk_acm_anchor={crosswalk_acm_anchor}.",
         "Rerun reproduce_sshr_table8_candidate_counts.py and analyze_sshr_reproduction_scope_audit.py; restore SSHR reproduction rows, generated tables, or manuscript anchors.",
     )
 
@@ -2466,6 +2510,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_comparison_target_validity(),
             verify_comparison_claim_hierarchy(),
             verify_comparison_answer_scorecard(),
+            verify_baseline_fairness_ledger(),
             verify_comparison_route_decision(),
             verify_benchmark_suite_audit(),
             verify_benchmark_function_diversity_audit(),

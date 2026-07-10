@@ -1,0 +1,19 @@
+# Baseline Fairness Ledger
+
+This ledger records the input, verifier, resource, and claim-scope contract for each comparison family.
+
+## Status counts
+
+- pass: 9
+
+| family | role | coverage | raw integrity | supported claim | boundary | status |
+|---|---|---|---|---|---|---|
+| Same-task Boolean-oracle baselines | primary benchmark | Internal logical baselines: 1770/1770; Exported SSHR/ABC/BDD extension: 1416/1416 | source_files=2; missing=0; raw_rows=3186; usable_rows=3186; verified_flags=3186/3186 | Lower T-count and weighted score on matched logical bit-flip oracle rows. | No universal CNOT, depth, line-count, mapped-depth, or global-optimality claim. | pass |
+| SSHR geometric counterpoint | CNOT-oriented small-function baseline | Internal logical baselines: 1770/1770; Exported SSHR/ABC/BDD extension: 1416/1416 | source_files=4; missing=0; raw_rows=3186; usable_rows=3186; verified_flags=3186/3186 | The proposed search has lower T-count and weighted score while SSHR remains CNOT-competitive. | Do not claim CNOT dominance over SSHR or full reproduction of every SSHR random experiment. | pass |
+| External logic-network probes | toolchain stress test | ROS-style LUT proxy: 309/309 best rows; 927/927 K-sweep rows; 927/927 garbage-proxy rows; 1059/1059 garbage-budget rows; mockturtle KLUT-to-XAG probe: 241/241; Caterpillar XAG API probe: 177/177 best rows; 531/531 strategy rows; CirKit AIG/MC probe: 241/241 | source_files=10; missing=0; raw_rows=4412; usable_rows=4412; verified_flags=3353/3353 | The T/score advantage is not only an artifact of self-written algebraic baselines. | Not a full ROS SAT garbage-management, reversible-emission, or hardware-mapped comparison. | pass |
+| Published tiny-function optima | optimum-library boundary | Published STG optimum-library counterpoint: 270/270 | source_files=2; missing=0; raw_rows=270; usable_rows=270; verified_flags=270/270 | The method improves local direct baselines on this slice but does not beat STG optima. | No claim of beating published STG T-count, T-depth, or qubit optima. | pass |
+| RevKit exact-oracle probe | exact reversible counterpoint | Legacy RevKit CLI exact oracle: 708/708 | source_files=1; missing=0; raw_rows=708; usable_rows=708; verified_flags=708/708 | A reversible-synthesis portfolio does not remove the T-count/score advantage. | Do not claim lower auxiliary-line count, routed depth, or final mapped Clifford+T dominance. | pass |
+| Phase/Rz transfer branch | logical phase proxy | RevKit phase/Rz branch: 531/531; Learned phase pruning: 7611/7611 | source_files=2; missing=0; raw_rows=8142; usable_rows=8142; verified_flags=8142/8142 | Affine search and learned shortlist pruning help a related verified phase/Rz proxy. | Not a final approximate-rotation or Clifford+T sequence-synthesis result. | pass |
+| AI/search-control ablations | causal-control evidence | derived audit rows only | source_files=4; missing=0; raw_rows=0; usable_rows=0; verified_flags=0/0 | MCTS, Pareto selection, and learned controls add bounded quality or budget-control gains. | Do not claim deep reinforcement learning alone causes the full resource reduction. | pass |
+| Large-scale correctness envelope | scalability verification | High-dimensional frontier search: 2088/2088; Complete truth-table bridges: 700/700 | source_files=14; missing=0; raw_rows=2788; usable_rows=2788; verified_flags=2788/2788 | The emitter and verifier remain effective beyond the n<=6 truth-table benchmark slice. | Not exhaustive high-dimensional truth-table benchmarking or global optimality evidence. | pass |
+| Trade-off and sensitivity rows | non-dominance boundary | derived audit rows only | source_files=3; missing=0; raw_rows=0; usable_rows=0; verified_flags=0/0 | The method occupies a strong T/score point with explicit CNOT/depth/ancilla trade-offs. | No complete Pareto dominance or hardware-level dominance claim. | pass |

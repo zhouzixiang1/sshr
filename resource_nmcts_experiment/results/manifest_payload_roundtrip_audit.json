@@ -20,6 +20,13 @@
     "results/summary_author_questionnaire_coverage.csv",
     "submission_package/AUTHOR_METADATA_QUESTIONNAIRE_zh.md"
   ],
+  "baseline_fairness_ledger_paths": [
+    "analyze_baseline_fairness_ledger.py",
+    "paper_latex/tables/baseline_fairness_ledger.tex",
+    "results/analysis_baseline_fairness_ledger.md",
+    "results/manifest_baseline_fairness_ledger.json",
+    "results/summary_baseline_fairness_ledger.csv"
+  ],
   "bitflip_neural_budget_paths": [
     "analyze_bitflip_neural_budget_sweep.py",
     "paper_latex/tables/bitflip_neural_budget_sweep.tex",
@@ -297,19 +304,19 @@
   ],
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1237; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; members=1246; error=none.",
       "item": "Payload archive readable",
       "next_action": "Regenerate the payload archive if it cannot be opened by Python tarfile.",
       "status": "pass"
     },
     {
-      "evidence": "manifest_files=1237; archive_files=1237; missing=none; extra=none.",
+      "evidence": "manifest_files=1246; archive_files=1246; missing=none; extra=none.",
       "item": "Payload manifest round-trip",
       "next_action": "Regenerate make_submission_payload_archive.py outputs if manifest and archive contents diverge.",
       "status": "pass"
     },
     {
-      "evidence": "checked=1237; mismatches=none.",
+      "evidence": "checked=1246; mismatches=none.",
       "item": "Payload per-file SHA256",
       "next_action": "Regenerate the payload archive and manifest if any archived file digest differs from the manifest.",
       "status": "pass"
@@ -351,6 +358,12 @@
       "status": "pass"
     },
     {
+      "evidence": "comparison_fairness_files=5; missing=none.",
+      "item": "Payload baseline fairness ledger",
+      "next_action": "Ensure the uploadable archive includes the baseline fairness ledger script, generated evidence, and manuscript table.",
+      "status": "pass"
+    },
+    {
       "evidence": "comparison_claim_hierarchy_files=5; missing=none.",
       "item": "Payload comparison claim hierarchy",
       "next_action": "Ensure the uploadable archive includes the comparison claim hierarchy script, generated evidence, and manuscript table.",
@@ -381,7 +394,7 @@
       "status": "pass"
     },
     {
-      "evidence": "sshr_reproduction_scope_files=27; missing=none.",
+      "evidence": "sshr_reproduction_scope_files=31; missing=none.",
       "item": "Payload SSHR reproduction-scope evidence",
       "next_action": "Ensure the uploadable archive includes the SSHR reproduction-scope audit script, required raw rows, generated evidence, manifest, and manuscript table.",
       "status": "pass"
@@ -561,7 +574,7 @@
       "status": "pass"
     },
     {
-      "evidence": "members_checked=1237; metadata_issues=none.",
+      "evidence": "members_checked=1246; metadata_issues=none.",
       "item": "Payload deterministic tar metadata",
       "next_action": "Keep tar member mtime/uid/gid/user/group/mode normalized for deterministic payloads.",
       "status": "pass"
@@ -587,6 +600,7 @@
   ],
   "sshr_reproduction_scope_paths": [
     "analyze_sshr_reproduction_scope_audit.py",
+    "paper_latex/tables/sshr_paper_table_crosswalk.tex",
     "paper_latex/tables/sshr_reproduction_scope_audit.tex",
     "paper_latex/tables/sshr_table8_candidate_counts.tex",
     "reproduce_sshr_table8_candidate_counts.py",
@@ -595,6 +609,7 @@
     "results/analysis_exact_fprm_dp.md",
     "results/analysis_multimetric_pareto_tradeoff.md",
     "results/analysis_resource_weight_sensitivity_audit.md",
+    "results/analysis_sshr_paper_table_crosswalk.md",
     "results/analysis_sshr_reproduction_scope_audit.md",
     "results/analysis_sshr_table8_candidate_counts.md",
     "results/analysis_threats_to_validity_audit.md",
@@ -602,6 +617,7 @@
     "results/manifest_external_traditional_resource_n4.json",
     "results/manifest_external_traditional_resource_n6.json",
     "results/manifest_resource_weight_sensitivity_audit.json",
+    "results/manifest_sshr_paper_table_crosswalk.json",
     "results/manifest_sshr_reproduction_scope_audit.json",
     "results/manifest_sshr_table8_candidate_counts.json",
     "results/manifest_traditional_resource.json",
@@ -611,11 +627,12 @@
     "results/raw_traditional_resource.csv",
     "results/summary_exact_fprm_dp.csv",
     "results/summary_exact_xag_mc.csv",
+    "results/summary_sshr_paper_table_crosswalk.csv",
     "results/summary_sshr_reproduction_scope_audit.csv",
     "results/summary_sshr_table8_candidate_counts.csv"
   ],
   "status_counts": {
-    "pass": 45
+    "pass": 46
   },
   "stg_benchmark_paths": [
     "analyze_stg_published_benchmark.py",

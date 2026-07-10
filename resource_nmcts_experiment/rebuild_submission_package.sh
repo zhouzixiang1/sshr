@@ -46,6 +46,7 @@ run_py analyze_comparison_protocol_audit.py
 run_py analyze_comparison_target_validity_audit.py
 run_py analyze_comparison_claim_hierarchy.py
 run_py analyze_comparison_answer_scorecard.py
+run_py analyze_baseline_fairness_ledger.py
 run_py analyze_comparison_route_decision_audit.py
 run_py analyze_comparison_support_reference_integrity.py
 run_py reproduce_sshr_table8_candidate_counts.py

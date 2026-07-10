@@ -130,20 +130,20 @@
       "summary_files": "3"
     },
     {
-      "analysis_files": "9",
+      "analysis_files": "10",
       "claim_use": "Verifies the reviewer-facing baseline roles, evidence layers, comparability limits, counterpoints, and manuscript table.",
       "dependency_boundary": "Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps.",
-      "driver_scripts": "analyze_baseline_claim_matrix.py; analyze_comparison_evidence_matrix.py; analyze_baseline_comparability_audit.py; analyze_counterpoint_claim_boundary.py; analyze_comparison_protocol_audit.py; analyze_comparison_target_validity_audit.py; analyze_comparison_claim_hierarchy.py; analyze_comparison_answer_scorecard.py; analyze_comparison_route_decision_audit.py",
+      "driver_scripts": "analyze_baseline_claim_matrix.py; analyze_comparison_evidence_matrix.py; analyze_baseline_comparability_audit.py; analyze_counterpoint_claim_boundary.py; analyze_comparison_protocol_audit.py; analyze_comparison_target_validity_audit.py; analyze_comparison_claim_hierarchy.py; analyze_comparison_answer_scorecard.py; analyze_baseline_fairness_ledger.py; analyze_comparison_route_decision_audit.py",
       "evidence_family": "Comparison protocol and claim boundaries",
-      "manifest_files": "5",
+      "manifest_files": "6",
       "raw_files": "0",
       "raw_rows": "0",
       "representative_raw": "",
       "rerun_tier": "quick comparison audit",
       "scripts_missing": "",
-      "scripts_present": "9",
+      "scripts_present": "10",
       "status": "complete",
-      "summary_files": "9"
+      "summary_files": "10"
     },
     {
       "analysis_files": "3",
@@ -194,12 +194,12 @@
       "summary_files": "4"
     },
     {
-      "analysis_files": "4",
-      "claim_use": "Separates reproduced SSHR Table VIII candidate-space counts, same-function SSHR-H rows, timed SSHR-I rows, exact n<=4 pilot checks, and excluded full-paper SSHR reruns.",
-      "dependency_boundary": "Reruns the bounded Table VIII parallelotope count check and audits existing SSHR-facing rows; it does not rerun heavy SSHR-I/Gurobi or every published random table.",
+      "analysis_files": "5",
+      "claim_use": "Separates reproduced SSHR Table VIII candidate-space counts, published-table crosswalk coverage, same-function SSHR-H rows, timed SSHR-I rows, exact n<=4 pilot checks, and excluded full-paper SSHR reruns.",
+      "dependency_boundary": "Reruns the bounded Table VIII parallelotope count check, audits the published SSHR table-to-artifact crosswalk, and audits existing SSHR-facing rows; it does not rerun heavy SSHR-I/Gurobi or every published random table.",
       "driver_scripts": "reproduce_sshr_table8_candidate_counts.py; analyze_sshr_reproduction_scope_audit.py",
       "evidence_family": "SSHR reproduction-scope audit",
-      "manifest_files": "5",
+      "manifest_files": "6",
       "raw_files": "4",
       "raw_rows": "3408",
       "representative_raw": "results/raw_external_traditional_resource_n4.csv; results/raw_external_traditional_resource_n6.csv; results/raw_sshr_table8_candidate_counts.csv; results/raw_traditional_resource.csv",
@@ -207,7 +207,7 @@
       "scripts_missing": "",
       "scripts_present": "2",
       "status": "complete",
-      "summary_files": "4"
+      "summary_files": "5"
     },
     {
       "analysis_files": "2",

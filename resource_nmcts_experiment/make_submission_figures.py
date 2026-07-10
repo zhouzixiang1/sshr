@@ -519,6 +519,12 @@ def learned_control_rows() -> list[dict[str, object]]:
     for row in read_csv(RESULTS / "summary_learned_control_audit.csv"):
         component = row["component"]
         quality_delta = first_percent(row["quality"])
+        # This specificity control reports a retained-win percentage rather
+        # than a score delta.  Keep it in Source Data, but do not place the
+        # incomparable percentage on the score-change axis in panel 3.
+        quality_delta_for_plot: float | str = (
+            "" if component == "Bit-flip CV gate random-interval control" else quality_delta
+        )
         role = row["role"]
         cost = row["cost"]
         if "512/8192" in cost:
@@ -531,15 +537,20 @@ def learned_control_rows() -> list[dict[str, object]]:
             "Stage-gated frontier": "stage gate",
             "Sparse depth-4 gate": "sparse gate",
             "Rank-diverse phase shortlist": "phase shortlist",
+            "Bit-flip learned prior": "learned prior",
+            "Bit-flip low-budget prior": "low-budget prior",
+            "Bit-flip ANF-term prior gate": "ANF gate",
+            "Bit-flip CV ANF-term prior gate": "CV ANF gate",
             "Boolean neural guard": "neural guard",
             "Root-action neural ranker": "root ranker",
+            "Root-action neural candidate extension": "root extension",
         }.get(component, component)
         rows.append(
             {
                 "component": component,
                 "short": short,
                 "promoted": role.startswith("promoted"),
-                "quality_delta_pct": quality_delta,
+                "quality_delta_pct": quality_delta_for_plot,
                 "cost_saving_pct": cost_saving,
                 "quality": row["quality"],
                 "cost": cost,
@@ -568,7 +579,11 @@ def fig_learned_control_summary() -> None:
         ],
     )
     promoted = [row for row in data if row["promoted"]]
-    limited = [row for row in data if not row["promoted"]]
+    limited = [
+        row
+        for row in data
+        if not row["promoted"] and row["quality_delta_pct"] not in ("", None)
+    ]
 
     fig, axes = plt.subplots(
         1,
@@ -615,15 +630,39 @@ def fig_learned_control_summary() -> None:
     ax.set_axisbelow(True)
 
     ax = axes[2]
+    x_limits = (-1.35, 0.18)
+    y_limits = (-115.0, 115.0)
+    label_positions = {
+        "Frontier random-depth control": (-1.02, -67.0),
+        "Bit-flip learned prior": (-0.65, -51.0),
+        "Bit-flip low-budget prior": (-0.95, -14.0),
+        "Bit-flip ANF-term prior gate": (-0.72, -27.0),
+        "Bit-flip CV ANF-term prior gate": (-0.72, -39.0),
+        "Boolean neural guard": (-0.68, -98.0),
+        "Root-action neural candidate extension": (-0.62, 6.0),
+    }
     for row in limited:
         x = float(row["quality_delta_pct"])
         yv = float(row["cost_saving_pct"])
+        if not (x_limits[0] <= x <= x_limits[1] and y_limits[0] <= yv <= y_limits[1]):
+            continue
         ax.scatter(x, yv, s=52, color=PALETTE["warn"], edgecolors="#1E2329", linewidths=0.4)
-        ax.text(x + 0.02, yv, str(row["short"]), va="center", fontsize=6.2)
+        label_x, label_y = label_positions.get(str(row["component"]), (x + 0.04, yv))
+        ax.annotate(
+            str(row["short"]),
+            xy=(x, yv),
+            xytext=(label_x, label_y),
+            textcoords="data",
+            va="center",
+            ha="left",
+            fontsize=5.5,
+            clip_on=True,
+            arrowprops={"arrowstyle": "-", "color": PALETTE["neutral"], "linewidth": 0.45},
+        )
     ax.axvline(0, color="#30343B", linewidth=0.7)
     ax.axhline(0, color="#30343B", linewidth=0.7)
-    ax.set_xlim(-1.35, 0.18)
-    ax.set_ylim(-115, 115)
+    ax.set_xlim(*x_limits)
+    ax.set_ylim(*y_limits)
     ax.set_xlabel("Score change (%)")
     ax.set_ylabel("Time/eval saved (%)")
     ax.set_title("Diagnostics expose limits.", loc="left", weight="bold")

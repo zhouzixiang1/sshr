@@ -1,0 +1,54 @@
+{
+  "comparability_key_by_family": {
+    "AI/search-control ablations": "AI/search-control ablations",
+    "External logic-network probes": "ROS-style LUT and XAG/AIG/API probes",
+    "Large-scale correctness envelope": "High-dimensional symbolic and bridge checks",
+    "Phase/Rz transfer branch": "Phase/Rz baselines and learned shortlist",
+    "Published tiny-function optima": "Published STG optimum-library counterpoint",
+    "RevKit exact-oracle probe": "Legacy RevKit CLI exact-oracle portfolio",
+    "SSHR geometric counterpoint": "SSHR-H and SSHR-I",
+    "Same-task Boolean-oracle baselines": "Direct algebraic and ESOP baselines",
+    "Trade-off and sensitivity rows": "Trade-off and resource-sensitivity audits"
+  },
+  "families": [
+    "Same-task Boolean-oracle baselines",
+    "SSHR geometric counterpoint",
+    "External logic-network probes",
+    "Published tiny-function optima",
+    "RevKit exact-oracle probe",
+    "Phase/Rz transfer branch",
+    "AI/search-control ablations",
+    "Large-scale correctness envelope",
+    "Trade-off and sensitivity rows"
+  ],
+  "needs_revision_count": 0,
+  "raw_integrity_rows": [
+    "source_files=2; missing=0; raw_rows=3186; usable_rows=3186; verified_flags=3186/3186",
+    "source_files=4; missing=0; raw_rows=3186; usable_rows=3186; verified_flags=3186/3186",
+    "source_files=10; missing=0; raw_rows=4412; usable_rows=4412; verified_flags=3353/3353",
+    "source_files=2; missing=0; raw_rows=270; usable_rows=270; verified_flags=270/270",
+    "source_files=1; missing=0; raw_rows=708; usable_rows=708; verified_flags=708/708",
+    "source_files=2; missing=0; raw_rows=8142; usable_rows=8142; verified_flags=8142/8142",
+    "source_files=4; missing=0; raw_rows=0; usable_rows=0; verified_flags=0/0",
+    "source_files=14; missing=0; raw_rows=2788; usable_rows=2788; verified_flags=2788/2788",
+    "source_files=3; missing=0; raw_rows=0; usable_rows=0; verified_flags=0/0"
+  ],
+  "roles": [
+    "CNOT-oriented small-function baseline",
+    "causal-control evidence",
+    "exact reversible counterpoint",
+    "logical phase proxy",
+    "non-dominance boundary",
+    "optimum-library boundary",
+    "primary benchmark",
+    "scalability verification",
+    "toolchain stress test"
+  ],
+  "rows": 9,
+  "script": "analyze_baseline_fairness_ledger.py",
+  "status_counts": {
+    "pass": 9
+  },
+  "table": "paper_latex/tables/baseline_fairness_ledger.tex",
+  "table_anchor_present": true
+}

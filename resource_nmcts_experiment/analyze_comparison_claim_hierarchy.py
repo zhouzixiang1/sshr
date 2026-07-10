@@ -44,7 +44,7 @@ TIERS = (
     ClaimTier(
         tier="Headline support",
         role="Primary matched logical-oracle evidence",
-        comparison_families="Direct ANF, AND-direct, ESOP beam/MILP, ABC/BDD, SSHR-H/I",
+        comparison_families="Direct ANF, AND-direct, ESOP beam/MILP, ABC-ESOP/BDD same-task projections",
         required_files=(
             "results/analysis_comparison_answer_scorecard.md",
             "results/analysis_comparison_evidence_matrix.md",
@@ -54,7 +54,7 @@ TIERS = (
         anchor_tokens=(
             "matching functions",
             "Direct \\anf{}",
-            "SSHR is used only as a CNOT-oriented",
+            "Primary matched logical-oracle rows",
         ),
         supported_claim="Lower T-count and weighted score on matched logical bit-flip Boolean-oracle benchmarks.",
         excluded_claim="No universal CNOT, depth, ancilla, line-count, hardware-mapped, or global-optimality claim.",

@@ -58,6 +58,10 @@ TABLE8_SUMMARY = RESULTS / "summary_sshr_table8_candidate_counts.csv"
 TABLE8_ANALYSIS = RESULTS / "analysis_sshr_table8_candidate_counts.md"
 TABLE8_MANIFEST = RESULTS / "manifest_sshr_table8_candidate_counts.json"
 TABLE8_LATEX = TABLES / "sshr_table8_candidate_counts.tex"
+CROSSWALK_SUMMARY = RESULTS / "summary_sshr_paper_table_crosswalk.csv"
+CROSSWALK_ANALYSIS = RESULTS / "analysis_sshr_paper_table_crosswalk.md"
+CROSSWALK_MANIFEST = RESULTS / "manifest_sshr_paper_table_crosswalk.json"
+CROSSWALK_LATEX = TABLES / "sshr_paper_table_crosswalk.tex"
 
 TABLE_VIII_COUNTS = {3: 49, 4: 257, 5: 1539, 6: 10299, 7: 75905, 8: 609441}
 
@@ -159,6 +163,12 @@ def check_json(check: JsonCheck) -> tuple[bool, str]:
     return actual == check.expected, f"{rel(check.path)}::{check.key}={actual}"
 
 
+def method_rows(path: Path, method: str) -> tuple[int, int]:
+    rows = [row for row in read_csv(path) if row.get("method") == method]
+    incorrect = sum(1 for row in rows if str(row.get("correct", "")).lower() not in {"true", "1", "yes"})
+    return len(rows), incorrect
+
+
 def source_tree_available() -> bool:
     return all(path.exists() for path in (SSHR_README, SSHR_RUN_TABLES, SSHR_PAPER_DATA, SSHR_H_IMPL, SSHR_I_IMPL))
 
@@ -204,6 +214,76 @@ def table_viii_reproduction_check() -> tuple[bool, str]:
         f"summary_rows={len(summary_rows)}; analysis_exists={analysis_exists}; table_exists={table_exists}"
     )
     return ok, detail
+
+
+def crosswalk_rows() -> list[dict[str, str]]:
+    paper_text = "\n".join(read_text(path) for path in (PAPER, ANONYMOUS_PAPER, ACM_PAPER, COMPARISON_ANSWER, THREATS_VALIDITY))
+    paper_data_text = read_text(SSHR_PAPER_DATA)
+    h_rows, h_bad = method_rows(RAW_TRADITIONAL, "sshr_h")
+    i_cnot_rows, i_cnot_bad = method_rows(RAW_EXTERNAL_N6, "external_sshr_i_cnot")
+    i_t_rows, i_t_bad = method_rows(RAW_EXTERNAL_N6, "external_sshr_i_t")
+    n4_cnot_rows, n4_cnot_bad = method_rows(RAW_EXTERNAL_N4, "external_sshr_i_cnot")
+    n4_t_rows, n4_t_bad = method_rows(RAW_EXTERNAL_N4, "external_sshr_i_t")
+    table8_ok, table8_detail = table_viii_reproduction_check()
+    boundary_token = "published SSHR random experiment" in paper_text and "CNOT-oriented counterpoint" in paper_text
+    source_or_payload_ok = (not source_tree_available()) or all(
+        token in paper_data_text
+        for token in ("TABLE_IV_RAW", "TABLE_V_SSHR_H", "TABLE_VI_SSHR_I_CNOT", "TABLE_VII_SSHR_I_T")
+    )
+
+    rows = [
+        {
+            "paper_table": "Table IV",
+            "published_scope": "SSHR-H raw gate-type totals for n=3--6.",
+            "current_coverage": "bounded reference",
+            "current_artifact": "No headline comparison uses this raw-gate table; the current package keeps it as SSHR source context only.",
+            "evidence": f"source_or_payload_ok={source_or_payload_ok}; boundary_token={boundary_token}",
+            "permitted_claim": "The SSHR paper provides a CNOT-oriented raw-gate decomposition context.",
+            "excluded_claim": "The lightweight package does not claim a full Table IV rerun.",
+            "audit_status": "pass" if source_or_payload_ok and boundary_token else "needs revision",
+        },
+        {
+            "paper_table": "Table V",
+            "published_scope": "SSHR-H, ESOP, and XAG aggregate resources for the SSHR paper's benchmark sets.",
+            "current_coverage": "same-task matched slice",
+            "current_artifact": "The paper uses 177 same-function SSHR-H rows and resource-weight audits rather than importing the published aggregate as a headline win.",
+            "evidence": f"raw_traditional_sshr_h_rows={h_rows}; incorrect={h_bad}; boundary_token={boundary_token}",
+            "permitted_claim": "SSHR-H is a matched CNOT-specialized baseline on the current Boolean-oracle suite.",
+            "excluded_claim": "The current paper does not claim to rerun every SSHR Table V random-function aggregate.",
+            "audit_status": "pass" if h_rows == 177 and h_bad == 0 and boundary_token else "needs revision",
+        },
+        {
+            "paper_table": "Table VI",
+            "published_scope": "SSHR-I CNOT-objective aggregates, including NPN/random-function settings.",
+            "current_coverage": "timed matched slice plus n<=4 pilot",
+            "current_artifact": "The package includes 177 same-function SSHR-I CNOT rows at n<=6 and 72 n<=4 pilot rows, with correctness checks and timeout metadata.",
+            "evidence": f"external_n6_cnot_rows={i_cnot_rows}; incorrect={i_cnot_bad}; external_n4_cnot_rows={n4_cnot_rows}; n4_incorrect={n4_cnot_bad}",
+            "permitted_claim": "SSHR-I CNOT is a time-limited CNOT-oriented counterpoint on the matched current suite.",
+            "excluded_claim": "These rows are not an exact certificate for the full published SSHR-I Table VI aggregate.",
+            "audit_status": "pass" if i_cnot_rows == 177 and i_cnot_bad == 0 and n4_cnot_rows == 72 and n4_cnot_bad == 0 else "needs revision",
+        },
+        {
+            "paper_table": "Table VII",
+            "published_scope": "SSHR-I T-objective aggregates under the SSHR paper's relative-phase Toffoli accounting.",
+            "current_coverage": "timed matched slice plus n<=4 pilot",
+            "current_artifact": "The package includes 177 same-function SSHR-I T-objective rows at n<=6 and 72 n<=4 pilot rows under the current logical-resource projection.",
+            "evidence": f"external_n6_t_rows={i_t_rows}; incorrect={i_t_bad}; external_n4_t_rows={n4_t_rows}; n4_incorrect={n4_t_bad}",
+            "permitted_claim": "SSHR-I T is a relevant T-oriented counterpoint on the matched current suite.",
+            "excluded_claim": "These rows are not a full rerun of all published Table VII random/NPN settings.",
+            "audit_status": "pass" if i_t_rows == 177 and i_t_bad == 0 and n4_t_rows == 72 and n4_t_bad == 0 else "needs revision",
+        },
+        {
+            "paper_table": "Table VIII",
+            "published_scope": "SSHR optimization-space sizes for n=3--8.",
+            "current_coverage": "exact count reproduction",
+            "current_artifact": "The local parallelotope enumerator is rerun on the full n=3--8 hypercubes and matches all six published counts.",
+            "evidence": table8_detail,
+            "permitted_claim": "The paper can use Table VIII to explain SSHR's candidate-space role.",
+            "excluded_claim": "Candidate-count reproduction is not a substitute for rerunning every SSHR-I random benchmark.",
+            "audit_status": "pass" if table8_ok else "needs revision",
+        },
+    ]
+    return rows
 
 
 def specs() -> list[AuditSpec]:
@@ -406,6 +486,110 @@ def write_latex(path: Path, rows: list[dict[str, str]]) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def write_crosswalk_csv(path: Path, rows: list[dict[str, str]]) -> None:
+    fields = [
+        "paper_table",
+        "published_scope",
+        "current_coverage",
+        "current_artifact",
+        "evidence",
+        "permitted_claim",
+        "excluded_claim",
+        "audit_status",
+    ]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def write_crosswalk_latex(path: Path, rows: list[dict[str, str]]) -> None:
+    lines = [
+        r"\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.24\linewidth}}",
+        r"\toprule",
+        r"SSHR table & Current coverage & Current artifact & Excluded claim \\",
+        r"\midrule",
+    ]
+    for row in rows:
+        lines.append(
+            " & ".join(
+                [
+                    tex_escape(row["paper_table"]),
+                    tex_escape(row["current_coverage"]),
+                    tex_escape(row["current_artifact"]),
+                    tex_escape(row["excluded_claim"]),
+                ]
+            )
+            + r" \\"
+        )
+    lines.extend([r"\bottomrule", r"\end{tabularx}"])
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_crosswalk_markdown(path: Path, rows: list[dict[str, str]]) -> None:
+    status_counts = {status: sum(1 for row in rows if row["audit_status"] == status) for status in sorted({row["audit_status"] for row in rows})}
+    coverage_counts = {coverage: sum(1 for row in rows if row["current_coverage"] == coverage) for coverage in sorted({row["current_coverage"] for row in rows})}
+    lines = [
+        "# SSHR Published-Table Crosswalk",
+        "",
+        "This report maps the main published SSHR tables to the current package's reproducible evidence and explicit claim boundaries.",
+        "",
+        "## Status counts",
+        "",
+    ]
+    for status in sorted(status_counts):
+        lines.append(f"- {status}: {status_counts[status]}")
+    lines.extend(["", "## Coverage counts", ""])
+    for coverage in sorted(coverage_counts):
+        lines.append(f"- {coverage}: {coverage_counts[coverage]}")
+    lines.extend(
+        [
+            "",
+            "## Crosswalk",
+            "",
+            "| SSHR table | audit status | current coverage | current artifact | permitted claim | excluded claim |",
+            "|---|---|---|---|---|---|",
+        ]
+    )
+    for row in rows:
+        safe = {key: value.replace("|", "\\|") for key, value in row.items()}
+        lines.append(
+            "| {paper_table} | {audit_status} | {current_coverage} | {current_artifact} | {permitted_claim} | {excluded_claim} |".format(
+                **safe
+            )
+        )
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_crosswalk_manifest(path: Path, rows: list[dict[str, str]]) -> None:
+    status_counts = {status: sum(1 for row in rows if row["audit_status"] == status) for status in sorted({row["audit_status"] for row in rows})}
+    coverage_counts = {coverage: sum(1 for row in rows if row["current_coverage"] == coverage) for coverage in sorted({row["current_coverage"] for row in rows})}
+    paper_text = read_text(PAPER)
+    anonymous_text = read_text(ANONYMOUS_PAPER)
+    acm_text = read_text(ACM_PAPER)
+    data = {
+        "script": Path(__file__).name,
+        "python": sys.version.split()[0],
+        "rows": len(rows),
+        "status_counts": status_counts,
+        "coverage_counts": coverage_counts,
+        "needs_revision_count": status_counts.get("needs revision", 0),
+        "table_anchor_present": "tab:sshr-paper-table-crosswalk" in paper_text,
+        "anonymous_table_anchor_present": "tab:sshr-paper-table-crosswalk" in anonymous_text,
+        "acm_table_anchor_present": "tab:sshr-paper-table-crosswalk" in acm_text,
+        "outputs": {
+            "summary": "results/summary_sshr_paper_table_crosswalk.csv",
+            "analysis": "results/analysis_sshr_paper_table_crosswalk.md",
+            "manifest": "results/manifest_sshr_paper_table_crosswalk.json",
+            "table": "paper_latex/tables/sshr_paper_table_crosswalk.tex",
+        },
+        "rows_detail": rows,
+    }
+    path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
 def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
     status_counts = {status: sum(1 for row in rows if row["audit_status"] == status) for status in sorted({row["audit_status"] for row in rows})}
     coverage_counts = {status: sum(1 for row in rows if row["coverage"] == status) for status in sorted({row["coverage"] for row in rows})}
@@ -464,6 +648,12 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "table_viii_reproduction_max_count": table8_manifest.get("max_sshr_count", "missing") if table8_manifest else "missing",
         "table_viii_reproduction_runtime_policy": table8_manifest.get("runtime_policy", "missing") if table8_manifest else "missing",
         "table_viii_reproduction_table_present": TABLE8_LATEX.exists(),
+        "paper_table_crosswalk_rows": read_json(CROSSWALK_MANIFEST).get("rows", "missing"),
+        "paper_table_crosswalk_needs_revision_count": read_json(CROSSWALK_MANIFEST).get("needs_revision_count", "missing"),
+        "paper_table_crosswalk_table_present": CROSSWALK_LATEX.exists(),
+        "paper_table_crosswalk_anchor_present": "tab:sshr-paper-table-crosswalk" in paper_text,
+        "anonymous_paper_table_crosswalk_anchor_present": "tab:sshr-paper-table-crosswalk" in anonymous_text,
+        "acm_paper_table_crosswalk_anchor_present": "tab:sshr-paper-table-crosswalk" in acm_text,
         "table_anchor_present": "tab:sshr-reproduction-scope" in paper_text,
         "anonymous_table_anchor_present": "tab:sshr-reproduction-scope" in anonymous_text,
         "acm_table_anchor_present": "tab:sshr-reproduction-scope" in acm_text,
@@ -473,6 +663,10 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
             "analysis": "results/analysis_sshr_reproduction_scope_audit.md",
             "manifest": "results/manifest_sshr_reproduction_scope_audit.json",
             "table": "paper_latex/tables/sshr_reproduction_scope_audit.tex",
+            "crosswalk_summary": "results/summary_sshr_paper_table_crosswalk.csv",
+            "crosswalk_analysis": "results/analysis_sshr_paper_table_crosswalk.md",
+            "crosswalk_manifest": "results/manifest_sshr_paper_table_crosswalk.json",
+            "crosswalk_table": "paper_latex/tables/sshr_paper_table_crosswalk.tex",
         },
         "rows_detail": rows,
     }
@@ -480,16 +674,23 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
 
 
 def main() -> int:
+    crosswalk = crosswalk_rows()
+    write_crosswalk_csv(CROSSWALK_SUMMARY, crosswalk)
+    write_crosswalk_markdown(CROSSWALK_ANALYSIS, crosswalk)
+    write_crosswalk_latex(CROSSWALK_LATEX, crosswalk)
+    write_crosswalk_manifest(CROSSWALK_MANIFEST, crosswalk)
     rows = [evaluate(spec) for spec in specs()]
     write_csv(RESULTS / "summary_sshr_reproduction_scope_audit.csv", rows)
     write_markdown(RESULTS / "analysis_sshr_reproduction_scope_audit.md", rows)
     write_latex(TABLES / "sshr_reproduction_scope_audit.tex", rows)
     write_manifest(RESULTS / "manifest_sshr_reproduction_scope_audit.json", rows)
     failures = sum(1 for row in rows if row["audit_status"] == "needs revision")
+    crosswalk_failures = sum(1 for row in crosswalk if row["audit_status"] == "needs revision")
     print(f"wrote {len(rows)} SSHR reproduction scope audit rows")
-    if failures:
-        print(f"warning: {failures} SSHR reproduction scope row(s) need revision")
-    return 1 if failures else 0
+    print(f"wrote {len(crosswalk)} SSHR published-table crosswalk rows")
+    if failures or crosswalk_failures:
+        print(f"warning: {failures} SSHR scope row(s), {crosswalk_failures} crosswalk row(s) need revision")
+    return 1 if failures or crosswalk_failures else 0
 
 
 if __name__ == "__main__":

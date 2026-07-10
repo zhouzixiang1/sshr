@@ -47,6 +47,13 @@ ROWS = [
         "usable_claim": "The advantage persists beyond self-written baselines, with CirKit and Caterpillar exposing real CNOT/depth tradeoffs.",
     },
     {
+        "baseline_family": "Published STG optimum-library counterpoint",
+        "task_alignment": "The public n=4/5 STG representatives are matched to locally synthesized rows by truth-table hex.",
+        "fairness_control": "Published T-count, T-depth, and qubit optima remain separate objectives; local rows are verified on the same truth tables and are not presented as a rerun of the optimum-library solver.",
+        "residual_risk": "The published optima are precomputed tiny-function references with decomposition assumptions that do not define the paper's larger-n search setting.",
+        "usable_claim": "This slice is a non-win boundary showing that the paper does not hide stronger tiny-function optimum references.",
+    },
+    {
         "baseline_family": "Legacy RevKit CLI exact-oracle portfolio",
         "task_alignment": "Each function is embedded as the exact reversible permutation (x,y)->(x,y xor f(x)).",
         "fairness_control": "TBS, DBS, and RMS are all run and reduced to a per-function best-score portfolio.",
@@ -61,11 +68,25 @@ ROWS = [
         "usable_claim": "The search framing extends to verified phase/Rz proxies, but it is not a finished Clifford+T compiler.",
     },
     {
+        "baseline_family": "AI/search-control ablations",
+        "task_alignment": "Each ablation reuses matched functions and, where causal attribution is claimed, the same candidate pool or search budget.",
+        "fairness_control": "No-MCTS, beam, MCTS, Pareto, learned-prior, same-budget random-prior, random-depth, held-out, and independent-seed controls are reported with quality and runtime separated.",
+        "residual_risk": "The controls span several search branches and include small or runtime-negative learned effects, so they do not identify one universal deep-RL effect.",
+        "usable_claim": "The controls support bounded attribution to MCTS, Pareto selection, learned ranking, and budget allocation rather than to representation alone.",
+    },
+    {
         "baseline_family": "High-dimensional symbolic and bridge checks",
         "task_alignment": "Large term-set instances and n=21--30 bridge functions test the same emitted logical oracle semantics.",
         "fairness_control": "Symbolic ANF/circuit checks cover all reported high-dimensional rows; bridge slices add complete truth-table checks.",
         "residual_risk": "Complete truth-table enumeration is limited to bridge slices and generated functions.",
         "usable_claim": "The large-scale evidence supports semantic correctness and scaling of the logical search, not exhaustive high-dimensional optimality.",
+    },
+    {
+        "baseline_family": "Trade-off and resource-sensitivity audits",
+        "task_alignment": "Matched verified functions are compared through the same logical resource vectors before any weighted score is interpreted.",
+        "fairness_control": "Four-resource dominance excludes the weighted score, and coefficient sweeps recompute every matched method pair under the same declared resource profile.",
+        "residual_risk": "All resources remain logical-layer proxies before routing, native-gate mapping, noise, and fault-tolerant factory costs.",
+        "usable_claim": "The method occupies a strong T-count and weighted-score region with explicit CNOT, depth, ancilla, and coefficient-sensitivity counterpoints.",
     },
 ]
 

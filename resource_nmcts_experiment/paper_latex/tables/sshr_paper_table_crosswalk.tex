@@ -1,0 +1,11 @@
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.24\linewidth}}
+\toprule
+SSHR table & Current coverage & Current artifact & Excluded claim \\
+\midrule
+Table IV & bounded reference & No headline comparison uses this raw-gate table; the current package keeps it as SSHR source context only. & The lightweight package does not claim a full Table IV rerun. \\
+Table V & same-task matched slice & The paper uses 177 same-function SSHR-H rows and resource-weight audits rather than importing the published aggregate as a headline win. & The current paper does not claim to rerun every SSHR Table V random-function aggregate. \\
+Table VI & timed matched slice plus n<=4 pilot & The package includes 177 same-function SSHR-I CNOT rows at n<=6 and 72 n<=4 pilot rows, with correctness checks and timeout metadata. & These rows are not an exact certificate for the full published SSHR-I Table VI aggregate. \\
+Table VII & timed matched slice plus n<=4 pilot & The package includes 177 same-function SSHR-I T-objective rows at n<=6 and 72 n<=4 pilot rows under the current logical-resource projection. & These rows are not a full rerun of all published Table VII random/NPN settings. \\
+Table VIII & exact count reproduction & The local parallelotope enumerator is rerun on the full n=3--8 hypercubes and matches all six published counts. & Candidate-count reproduction is not a substitute for rerunning every SSHR-I random benchmark. \\
+\bottomrule
+\end{tabularx}
