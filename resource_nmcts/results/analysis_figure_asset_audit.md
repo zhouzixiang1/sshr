@@ -8,7 +8,7 @@ This audit checks manuscript figure references, generated PDF/PNG/SVG assets, an
 
 | figure | status | refs | generated | bytes pdf/png/svg | source rows | missing |
 |---|---|---|---|---:|---:|---|
-| fig1_pipeline | pass | author=True; anon=True | save=True; source=True; pages=1 | 41217/98785/13275 | 7 | none |
+| fig1_pipeline | pass | author=True; anon=True | save=True; source=True; pages=1 | 57016/251620/23929 | 25 | none |
 | fig2_traditional_resources | pass | author=True; anon=True | save=True; source=True; pages=1 | 37494/139484/32585 | 30 | none |
 | fig3_baseline_comparisons | pass | author=True; anon=True | save=True; source=True; pages=1 | 41636/88775/12973 | 7 | none |
 | fig4_phase_affine | pass | author=True; anon=True | save=True; source=True; pages=1 | 41717/102608/18341 | 7 | none |

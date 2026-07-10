@@ -1,8 +1,26 @@
-step,module,claim
-1,Input,Truth table or ANF terms
-2,State,ANF/FPRM term set
-3,Actions,"Boolean-ring, affine, parity factors"
-4,Search,Neural prior + MCTS + frontier policy
-5,Selection,Guarded Pareto portfolio
-6,Output,Logic-layer reversible oracle
-7,Verification,"Plan, circuit, and truth-table checks"
+record_type,id,source,target,branch,title,detail,role
+node,input,,,,Input,Boolean function or truth table,input
+node,state,,,,Canonical state,"ANF/FPRM support $(p, \mathcal{M}_p)$",state
+node,actions,,,,Legal actions,"factors, polarity, parity, affine",algebra
+node,search,,,,Bounded search,neural prior + MCTS + frontier control,learned
+node,base,,,,Verified base pool,"direct, greedy, beam, MCTS candidates",candidate
+node,decision,,,,Fitted-Q decision,run Pareto?,learned
+node,pareto,,,,Optional Pareto search,resource profiles + non-dominated archive,pareto
+node,baseline,,,,Deterministic fallback,direct ANF and strongest baseline,baseline
+node,guard,,,,Guarded selection,reject invalid/dominated; preserve stronger baseline,guard
+node,emit,,,,Circuit emission,"compute / reuse / uncompute X, CNOT and MCT",emission
+node,verify,,,,Semantic verification,plan ANF; circuit GF(2); truth table or phase,verification
+node,output,,,,Verified output,"circuit + T, CNOT, depth, gates and peak ancilla",output
+edge,input_to_state,input,state,,,,control_flow
+edge,state_to_actions,state,actions,,,,control_flow
+edge,actions_to_search,actions,search,,,,control_flow
+edge,search_to_base,search,base,,,,control_flow
+edge,base_to_decision,base,decision,features,,,control_flow
+edge,decision_to_pareto,decision,pareto,run,,,control_flow
+edge,decision_to_guard,decision,guard,stop,,,control_flow
+edge,pareto_to_guard,pareto,guard,verified candidates,,,control_flow
+edge,baseline_to_guard,baseline,guard,fallback,,,control_flow
+edge,guard_to_emit,guard,emit,selected plan,,,control_flow
+edge,emit_to_verify,emit,verify,emitted circuit,,,control_flow
+edge,verify_to_output,verify,output,pass,,,control_flow
+edge,verify_to_baseline,verify,baseline,fail: reject and fall back,,,control_flow

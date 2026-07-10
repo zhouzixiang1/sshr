@@ -39,6 +39,8 @@ ACM_PREAMBLE_TEMPLATE = r"""\documentclass[manuscript,screen,review,anonymous]{a
 \usepackage{tabularx}
 \usepackage{array}
 \usepackage{float}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \usepackage{microtype}
 \graphicspath{{figures/submission_v36/}}
 

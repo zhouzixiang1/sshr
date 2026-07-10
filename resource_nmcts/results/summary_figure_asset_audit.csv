@@ -1,5 +1,5 @@
 figure,status,author_ref,anonymous_ref,script_save,script_source,pdf_pages,pdf_bytes,png_bytes,svg_bytes,source_rows,missing,next_action
-fig1_pipeline,pass,True,True,True,True,1,41217,98785,13275,7,none,Regenerate figures with make_submission_figures.py and keep TeX references aligned with source_data CSVs.
+fig1_pipeline,pass,True,True,True,True,1,57016,251620,23929,25,none,Regenerate figures with make_submission_figures.py and keep TeX references aligned with source_data CSVs.
 fig2_traditional_resources,pass,True,True,True,True,1,37494,139484,32585,30,none,Regenerate figures with make_submission_figures.py and keep TeX references aligned with source_data CSVs.
 fig3_baseline_comparisons,pass,True,True,True,True,1,41636,88775,12973,7,none,Regenerate figures with make_submission_figures.py and keep TeX references aligned with source_data CSVs.
 fig4_phase_affine,pass,True,True,True,True,1,41717,102608,18341,7,none,Regenerate figures with make_submission_figures.py and keep TeX references aligned with source_data CSVs.

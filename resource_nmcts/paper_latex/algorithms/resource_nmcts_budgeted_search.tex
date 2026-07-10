@@ -1,0 +1,39 @@
+\begin{algorithm}[H]
+\caption{Resource-NMCTS with reinforcement-learned Pareto budget control.}
+\label{alg:resource-nmcts}
+\footnotesize
+\begin{algorithmic}[1]
+\Require Boolean function $f$, search limits $\Theta$, weights $w$, neural scorer $s_\phi$, frozen budget policy $\pi_Q$
+\Ensure Verified circuit $C^\star$ and resource vector $\mathbf{r}(C^\star)$
+\State $\mathcal{M}_0\gets\Call{ANFSupport}{f}$; $B\gets\Call{DirectPlan}{\mathcal{M}_0}$
+\State $\mathcal{P}\gets\{B\}$ \Comment{direct ANF is always retained as fallback}
+\ForAll{bounded representations $\rho$ (polarity/affine), including identity}
+  \State $\mathcal{M}_\rho\gets\Call{TransformSupport}{f,\rho}$
+  \State $\mathcal{A}_\rho\gets\Call{GenerateActions}{\mathcal{M}_\rho,\Theta}$ \Comment{every action has a GF(2) expansion}
+  \ForAll{$a\in\mathcal{A}_\rho$}
+    \State $P(a)\gets h(a)+\lambda s_\phi(a)$
+  \EndFor
+  \State $\mathcal{P}\gets\mathcal{P}\cup\Call{MCTS}{\mathcal{M}_\rho,\mathcal{A}_\rho,P,\Theta}$
+  \State $\mathcal{P}\gets\mathcal{P}\cup\Call{FrontierPlans}{\mathcal{M}_\rho,\Theta}$
+\EndFor
+\State $\mathcal{P}\gets\Call{VerifyPlans}{\mathcal{P},f}$ \Comment{discard failed ANF expansions}
+\State $L_{\mathrm{base}}\gets\Call{GuardedBest}{\mathcal{P},B,w}$
+\State $z\gets\Call{BudgetFeatures}{\mathcal{M}_0,\mathbf{r}(L_{\mathrm{base}})}$
+\If{$\pi_Q(z)=\textsc{run}$}
+  \State $\mathcal{Q}_0\gets\Call{ParetoSearch}{f,\Theta}$
+  \State $\mathcal{Q}\gets\Call{VerifyPlans}{\mathcal{Q}_0,f}$
+  \State $\mathcal{P}\gets\mathcal{P}\cup\mathcal{Q}$
+\EndIf
+\State $\mathcal{F}\gets\Call{ParetoFront}{\mathcal{P}}$
+\State $L^\star\gets\Call{GuardedBest}{\mathcal{F},L_{\mathrm{base}},w}$
+\ForAll{$L$ in score order from $L^\star$ to fallback $B$}
+  \State $C\gets\Call{EmitCircuit}{L}$ \Comment{compute/reuse/uncompute}
+  \If{$\Call{VerifyCircuit}{C,f}$ and $\Call{ApplicableFinalCheck}{C,f}$}
+    \State \Return $(C,\mathbf{r}(C))$
+\EndIf
+\EndFor
+\State $C_B\gets\Call{EmitCircuit}{B}$
+\State \textbf{assert} $\Call{VerifyCircuit}{C_B,f}$ and $\Call{ApplicableFinalCheck}{C_B,f}$
+\State \Return $(C_B,\mathbf{r}(C_B))$ \Comment{verified identity fallback}
+\end{algorithmic}
+\end{algorithm}

@@ -1,0 +1,49 @@
+\floatname{algorithm}{算法}
+\algrenewcommand\algorithmicrequire{\textbf{输入：}}
+\algrenewcommand\algorithmicensure{\textbf{输出：}}
+\algrenewcommand\algorithmicforall{\textbf{对每个}}
+\algrenewcommand\algorithmicfor{\textbf{循环}}
+\algrenewcommand\algorithmicdo{\textbf{执行}}
+\algrenewcommand\algorithmicend{\textbf{结束}}
+\algrenewcommand\algorithmicif{\textbf{如果}}
+\algrenewcommand\algorithmicthen{\textbf{则}}
+\algrenewcommand\algorithmicreturn{\textbf{返回}}
+\begin{algorithm}[H]
+\caption{带强化学习 Pareto 预算控制的 Resource-NMCTS。}
+\label{alg:resource-nmcts-zh}
+\footnotesize
+\begin{algorithmic}[1]
+\Require 目标布尔函数 $f$，搜索上限 $\Theta$，资源权重 $w$，神经评分器 $s_\phi$，冻结预算策略 $\pi_Q$
+\Ensure 已验证线路 $C^\star$ 及资源向量 $\mathbf{r}(C^\star)$
+\State $\mathcal{M}_0\gets\Call{ANFSupport}{f}$；$B\gets\Call{DirectPlan}{\mathcal{M}_0}$
+\State $\mathcal{P}\gets\{B\}$ \Comment{始终保留 direct ANF fallback}
+\ForAll{包含 identity 的有界 polarity/affine 表示 $\rho$}
+  \State $\mathcal{M}_\rho\gets\Call{TransformSupport}{f,\rho}$
+  \State $\mathcal{A}_\rho\gets\Call{GenerateActions}{\mathcal{M}_\rho,\Theta}$ \Comment{每个动作均有 GF(2) 展开}
+  \ForAll{$a\in\mathcal{A}_\rho$}
+    \State $P(a)\gets h(a)+\lambda s_\phi(a)$
+  \EndFor
+  \State $\mathcal{P}\gets\mathcal{P}\cup\Call{MCTS}{\mathcal{M}_\rho,\mathcal{A}_\rho,P,\Theta}$
+  \State $\mathcal{P}\gets\mathcal{P}\cup\Call{FrontierPlans}{\mathcal{M}_\rho,\Theta}$
+\EndFor
+\State $\mathcal{P}\gets\Call{VerifyPlans}{\mathcal{P},f}$ \Comment{丢弃 ANF 展开失败的计划}
+\State $L_{\mathrm{base}}\gets\Call{GuardedBest}{\mathcal{P},B,w}$
+\State $z\gets\Call{BudgetFeatures}{\mathcal{M}_0,\mathbf{r}(L_{\mathrm{base}})}$
+\If{$\pi_Q(z)=\textsc{run}$}
+  \State $\mathcal{Q}_0\gets\Call{ParetoSearch}{f,\Theta}$
+  \State $\mathcal{Q}\gets\Call{VerifyPlans}{\mathcal{Q}_0,f}$
+  \State $\mathcal{P}\gets\mathcal{P}\cup\mathcal{Q}$
+\EndIf
+\State $\mathcal{F}\gets\Call{ParetoFront}{\mathcal{P}}$
+\State $L^\star\gets\Call{GuardedBest}{\mathcal{F},L_{\mathrm{base}},w}$
+\ForAll{从 $L^\star$ 到 fallback $B$ 按 score 排序的候选 $L$}
+  \State $C\gets\Call{EmitCircuit}{L}$ \Comment{compute/reuse/uncompute}
+  \If{$\Call{VerifyCircuit}{C,f}$ 且 $\Call{ApplicableFinalCheck}{C,f}$}
+    \State \Return $(C,\mathbf{r}(C))$
+\EndIf
+\EndFor
+\State $C_B\gets\Call{EmitCircuit}{B}$
+\State \textbf{断言} $\Call{VerifyCircuit}{C_B,f}$ 且 $\Call{ApplicableFinalCheck}{C_B,f}$
+\State \Return $(C_B,\mathbf{r}(C_B))$ \Comment{返回已验证的 identity fallback}
+\end{algorithmic}
+\end{algorithm}

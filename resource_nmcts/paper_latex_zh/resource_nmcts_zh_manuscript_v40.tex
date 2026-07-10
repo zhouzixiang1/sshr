@@ -6,6 +6,8 @@
 \usepackage{tabularx}
 \usepackage{array}
 \usepackage{float}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{hyperref}
@@ -75,7 +77,13 @@
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{fig1_pipeline.pdf}
-\caption{\textbf{\method{} 的可验证搜索 pipeline。} 输入可以是完整 \ttable{} 或 \anf{} 项集合；动作空间包含布尔环因子、极性、线性奇偶因子和 affine phase 分支；搜索由神经先验、\mcts{} 和 frontier policy 控制；最终输出在 plan、emitted circuit 和完整 \ttable{} 层进行验证。Source data: \texttt{fig1\_pipeline.csv}.}
+\caption{\textbf{\method{} 的闭环算法流程。} 布尔函数先被规范化为
+\anf{}/\fprm{} 支撑集状态，再由神经先验与有界 \mcts{} 对可验证代数动作
+进行排序和探索。冻结的 fitted-Q 策略在 verified base pool 上选择 stop 或
+追加 Pareto 搜索；guard 保留更强的确定性 baseline。最终计划被发射为
+compute/reuse/uncompute 线路，并接受 plan、circuit、真值表或 phase 检查；
+失败候选被拒绝并回退到确定性候选池。Source data:
+\texttt{fig1\_pipeline.csv}.}
 \label{fig:pipeline}
 \end{figure}
 
@@ -104,7 +112,26 @@ SSHR 利用 Boolean hypercube 中 parallelotope 结构生成 MCT block，并以 
   f(x)=\bigoplus_{m\in\mathcal{M}}\prod_{i\in m}x_i ,
   \label{eq:anf}
 \end{equation}
-其中 $\mathcal{M}$ 是 monomial 集合。输出线路使用 X、CNOT 和多控 Toffoli（\mct{}）抽象门，并在逻辑层估计 T-count、CNOT、depth、gate count 与 peak ancilla。
+其中 $\mathcal{M}$ 是 monomial 集合。这里“项集合”是多项式系数的支撑集，
+不是使函数取 1 的输入集合。一个 item $S\subseteq\{0,\ldots,n-1\}$ 表示
+平方自由单项式 $m_S=\prod_{i\in S}x_i$，空集表示常数 1；
+$\mathcal{M}_0=\{S:c_S=1\}$ 只保存 \anf{} 中系数非零的项，重复项在 GF(2)
+的 XOR 加法下相消。
+
+\fprm{} 状态在项集合外再保存极性向量 $p\in\{0,1\}^n$。令
+$z=x\xor p$，则
+\begin{equation}
+g_p(z)=f(z\xor p)=\bigoplus_{S\in\mathcal{M}_p}\prod_{i\in S}z_i,
+\label{eq:fprm-support-zh}
+\end{equation}
+搜索状态写为 $(p,\mathcal{M}_p)$；$p=0$ 时就是普通 \anf{}。例如，
+$f=1\xor x_0\xor x_1\xor x_0x_1$ 的 \anf{} 支撑集为
+$\{\varnothing,\{0\},\{1\},\{0,1\}\}$。若取 $p=(1,1)$，则
+$z_i=x_i\xor1$，同一函数化为 $f=z_0z_1$，对应的一项 \fprm{} 支撑集为
+$\mathcal{M}_p=\{\{0,1\}\}$。因此，极性搜索是在不改变目标函数的前提下，
+寻找项数更少或更容易分解的表示。输出线路使用 X、CNOT 和多控 Toffoli
+（\mct{}）抽象门，并在逻辑层估计 T-count、CNOT、depth、gate count 与
+peak ancilla。
 
 搜索排序采用统一加权分数
 \begin{equation}
@@ -123,6 +150,13 @@ SSHR 利用 Boolean hypercube 中 parallelotope 结构生成 MCT block，并以 
 \method{} 的状态是当前尚未综合的项集合 $\mathcal{M}$。一次动作选择一个可计算、可反算的代数结构，将 $\mathcal{M}$ 分解为 quotient 子问题和 rest 子问题，再递归生成 compute/action/uncompute 线路。候选动作包括公共单项式因子、\fprm{} 极性重写后的公共项、线性奇偶因子、布尔环线性因子和 root-action 扩展。动作被接受后，框架估计即时资源收益、子问题大小、辅助比特峰值和后续可分解性。
 
 神经动作先验用于对候选排序，\mcts{} 在有限预算内探索候选组合，rollout 使用确定性资源估计和已有 baseline 候选。最终 portfolio 在多个候选线路中按式~\eqref{eq:score} 选择最优者。这里 AI 的职责是搜索控制，而不是语义生成；任何候选线路都必须通过 \anf{} 或 circuit-level 验证。
+
+图~\ref{fig:pipeline} 给出完整控制流，算法~\ref{alg:resource-nmcts-zh}
+进一步给出逐行执行过程。基础搜索始终保留 direct \anf{} 作为 fallback；
+fitted-Q 只决定是否追加 Pareto 搜索，而不能跳过代数和线路验证。因此，
+神经评分较高只能增加候选的探索机会，不能使错误候选通过。
+
+\input{algorithms/resource_nmcts_budgeted_search_zh}
 
 \subsection{从具体布尔函数到量子线路的完整实例}
 \label{sec:worked-example-zh}

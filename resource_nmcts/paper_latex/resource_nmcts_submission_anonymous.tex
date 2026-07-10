@@ -7,6 +7,8 @@
 \usepackage{tabularx}
 \usepackage{array}
 \usepackage{float}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \usepackage{graphicx}
 \usepackage{microtype}
 \usepackage{xcolor}
@@ -169,11 +171,16 @@ boundary that prevents overclaiming.}
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{fig1_pipeline.pdf}
-\caption{\textbf{Verified search pipeline.}  \method{} operates on complete
-\ttable{} inputs or \anf{} term sets, searches algebraic actions under neural
-and tree-search control, and verifies candidate circuits at plan, emitted
-symbolic-circuit, and complete-\ttable{} levels.}
-\Description{Pipeline diagram showing Boolean-function inputs, algebraic search actions, neural and tree-search control, circuit emission, and semantic verification outputs.}
+\caption{\textbf{Closed-loop Resource-NMCTS workflow.}  A Boolean function is
+normalized to an \anf{}/\fprm{} support state before verifiable algebraic
+actions are ranked by a neural prior and explored by bounded \mcts{}.  A frozen
+fitted-Q policy either stops at the verified base pool or invokes the optional
+Pareto branch.  Guarded selection preserves a stronger deterministic baseline;
+the selected plan is emitted as a compute/reuse/uncompute circuit and must pass
+the applicable plan, circuit, truth-table, or phase checks.  A failed candidate
+is rejected and falls back to the deterministic pool.  Source data:
+\texttt{fig1\_pipeline.csv}.}
+\Description{Pipeline diagram showing Boolean-function normalization into an ANF or FPRM term-set state, verifiable action generation, neural-prior MCTS, a fitted-Q stop-or-Pareto decision, guarded selection, circuit emission, semantic verification, and failure fallback.}
 \label{fig:pipeline}
 \end{figure}
 
@@ -284,6 +291,27 @@ one controlled action per monomial.  The synthesis problem is to replace this
 direct construction with reusable compute/action/uncompute subplans that
 implement Eq.~\eqref{eq:oracle} while lowering a multi-resource objective.
 
+The phrase \emph{term set} denotes coefficient support, not the set of
+satisfying assignments.  An item $S\subseteq\{0,\ldots,n-1\}$ represents the
+square-free monomial $m_S=\prod_{i\in S}x_i$; the empty item represents the
+constant 1, and
+$\mathcal{M}_0=\{S:c_S=1\}$ stores exactly the nonzero \anf{} coefficients.
+Duplicate items cancel because addition is XOR over GF(2).  A fixed-polarity
+Reed--Muller state additionally stores a polarity vector
+$p\in\{0,1\}^n$.  With $z=x\xor p$, it uses the support
+\begin{equation}
+g_p(z)=f(z\xor p)=\bigoplus_{S\in\mathcal{M}_p}\prod_{i\in S}z_i,
+\label{eq:fprm-support}
+\end{equation}
+so the search state is $(p,\mathcal{M}_p)$ and $p=0$ recovers the \anf{} state.
+For example,
+$f=1\xor x_0\xor x_1\xor x_0x_1$ has the \anf{} support
+$\{\varnothing,\{0\},\{1\},\{0,1\}\}$, whereas $p=(1,1)$ gives
+$z_i=x_i\xor1$ and the one-item \fprm{} support
+$\mathcal{M}_p=\{\{0,1\}\}$ because $f=z_0z_1$.  Searching polarity can
+therefore expose a smaller or more factorable term set without changing the
+target Boolean function.
+
 All resource numbers in this paper are logical-layer estimates over X, CNOT
 and multi-controlled Toffoli gates.  Candidate selection uses
 \begin{equation}
@@ -309,6 +337,15 @@ factors, and bounded affine changes of variables.  Each action is scored by
 its immediate resource estimate and by the size and structure of the induced
 subproblems.
 
+Figure~\ref{fig:pipeline} gives the control-flow view, while
+Algorithm~\ref{alg:resource-nmcts} states the executable path.  The base search
+always retains direct \anf{} as a fallback, verifies algebraic plans before
+selection, and lets the fitted-Q policy change only whether the optional Pareto
+stage is evaluated.  Circuit emission and semantic checks occur after this
+search decision, so a high model score cannot make an invalid plan acceptable.
+
+\input{algorithms/resource_nmcts_budgeted_search}
+
 Table~\ref{tab:method-workflow} summarizes the complete execution path.  The
 central invariant is that learning and tree search only control which
 verifiable algebraic candidates are evaluated or selected; semantic correctness
@@ -329,9 +366,9 @@ analysis.}
 \end{table}
 
 Table~\ref{tab:algorithm-contract} gives the algorithmic contract used by the
-implementation.  It is written as a source-anchored contract rather than as
-language-only pseudocode: each row identifies the implementation anchors that
-make the corresponding method statement executable and auditable.  This is
+implementation.  It complements Algorithm~\ref{alg:resource-nmcts} with a
+source-anchored audit: each row identifies the implementation anchors that make
+the corresponding pseudocode step executable and reviewable.  This is
 important for the learning components, because the neural scorer and learned
 frontier gates are only allowed to change ranking, budget allocation, or
 skipping decisions; correctness and final resource reporting remain attached

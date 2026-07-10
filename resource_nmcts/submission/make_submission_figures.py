@@ -17,7 +17,7 @@ from typing import Iterable
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch
+from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Polygon
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -182,76 +182,211 @@ def find_summary_row(path: Path, **criteria: str) -> dict[str, str]:
 
 
 def fig_pipeline() -> None:
-    """Schematic-led figure: verifiable search pipeline."""
-    rows = [
-        {"step": "1", "module": "Input", "claim": "Truth table or ANF terms"},
-        {"step": "2", "module": "State", "claim": "ANF/FPRM term set"},
-        {"step": "3", "module": "Actions", "claim": "Boolean-ring, affine, parity factors"},
-        {"step": "4", "module": "Search", "claim": "Neural prior + MCTS + frontier policy"},
-        {"step": "5", "module": "Selection", "claim": "Guarded Pareto portfolio"},
-        {"step": "6", "module": "Output", "claim": "Logic-layer reversible oracle"},
-        {"step": "7", "module": "Verification", "claim": "Plan, circuit, and truth-table checks"},
+    """Closed-loop workflow separating learned control from semantic checks."""
+    nodes = [
+        ("input", "Input", "Boolean function\nor truth table", "input"),
+        ("state", "Canonical state", "ANF/FPRM support\n$(p, \\mathcal{M}_p)$", "state"),
+        ("actions", "Legal actions", "factors, polarity,\nparity, affine", "algebra"),
+        ("search", "Bounded search", "neural prior + MCTS\n+ frontier control", "learned"),
+        ("base", "Verified base pool", "direct, greedy, beam,\nMCTS candidates", "candidate"),
+        ("decision", "Fitted-Q decision", "run Pareto?", "learned"),
+        ("pareto", "Optional Pareto search", "resource profiles +\nnon-dominated archive", "pareto"),
+        ("baseline", "Deterministic fallback", "direct ANF and\nstrongest baseline", "baseline"),
+        ("guard", "Guarded selection", "reject invalid/dominated;\npreserve stronger baseline", "guard"),
+        ("emit", "Circuit emission", "compute / reuse / uncompute\nX, CNOT and MCT", "emission"),
+        ("verify", "Semantic verification", "plan ANF; circuit GF(2);\ntruth table or phase", "verification"),
+        ("output", "Verified output", "circuit + T, CNOT, depth,\ngates and peak ancilla", "output"),
     ]
-    write_source("fig1_pipeline", rows, ["step", "module", "claim"])
-
-    fig, ax = plt.subplots(figsize=(7.2, 2.45))
-    ax.set_axis_off()
-    xs = [0.03, 0.18, 0.34, 0.50, 0.66, 0.82]
-    labels = [
-        ("Input", "truth table\nor ANF"),
-        ("State", "ANF/FPRM\nterm set"),
-        ("Action space", "factors,\npolarity,\naffine phase"),
-        ("Search", "neural prior\n+ MCTS"),
-        ("Guard", "baseline-safe\nPareto pick"),
-        ("Oracle", "logic-layer\ncircuit"),
+    edges = [
+        ("input", "state", ""),
+        ("state", "actions", ""),
+        ("actions", "search", ""),
+        ("search", "base", ""),
+        ("base", "decision", "features"),
+        ("decision", "pareto", "run"),
+        ("decision", "guard", "stop"),
+        ("pareto", "guard", "verified candidates"),
+        ("baseline", "guard", "fallback"),
+        ("guard", "emit", "selected plan"),
+        ("emit", "verify", "emitted circuit"),
+        ("verify", "output", "pass"),
+        ("verify", "baseline", "fail: reject and fall back"),
     ]
-    for i, (x, (title, text)) in enumerate(zip(xs, labels)):
-        color = PALETTE["resource"] if i in (2, 3, 4) else PALETTE["baseline"]
-        box = FancyBboxPatch(
-            (x, 0.43),
-            0.12,
-            0.34,
-            boxstyle="round,pad=0.018,rounding_size=0.02",
-            linewidth=0.8,
-            edgecolor=color,
-            facecolor="#F7F9FB",
+    rows: list[dict[str, object]] = []
+    for node_id, title, detail, role in nodes:
+        rows.append(
+            {
+                "record_type": "node",
+                "id": node_id,
+                "source": "",
+                "target": "",
+                "branch": "",
+                "title": title,
+                "detail": detail.replace("\n", " "),
+                "role": role,
+            }
         )
-        ax.add_patch(box)
-        ax.text(x + 0.06, 0.66, title, ha="center", va="center", weight="bold", color=color)
-        ax.text(x + 0.06, 0.54, text, ha="center", va="center", color="#2A2E35")
-        if i < len(xs) - 1:
-            ax.add_patch(
-                FancyArrowPatch(
-                    (x + 0.125, 0.60),
-                    (xs[i + 1] - 0.006, 0.60),
-                    arrowstyle="-|>",
-                    mutation_scale=8,
-                    linewidth=0.8,
-                    color="#6A717C",
-                )
+    for source, target, branch in edges:
+        rows.append(
+            {
+                "record_type": "edge",
+                "id": f"{source}_to_{target}",
+                "source": source,
+                "target": target,
+                "branch": branch,
+                "title": "",
+                "detail": "",
+                "role": "control_flow",
+            }
+        )
+    write_source(
+        "fig1_pipeline",
+        rows,
+        ["record_type", "id", "source", "target", "branch", "title", "detail", "role"],
+    )
+
+    fig, ax = plt.subplots(figsize=(7.2, 4.25))
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_axis_off()
+
+    positions = {
+        "input": (0.02, 0.72, 0.11, 0.15),
+        "state": (0.17, 0.72, 0.16, 0.15),
+        "actions": (0.37, 0.72, 0.16, 0.15),
+        "search": (0.57, 0.72, 0.18, 0.15),
+        "base": (0.79, 0.72, 0.18, 0.15),
+        "pareto": (0.42, 0.42, 0.22, 0.14),
+        "baseline": (0.14, 0.23, 0.19, 0.13),
+        "guard": (0.42, 0.23, 0.21, 0.13),
+        "emit": (0.70, 0.23, 0.18, 0.13),
+        "verify": (0.70, 0.03, 0.18, 0.14),
+        "output": (0.42, 0.03, 0.21, 0.11),
+    }
+    styles = {
+        "input": (PALETTE["neutral"], "#F5F7F9"),
+        "state": (PALETTE["resource"], "#F2F6FA"),
+        "algebra": (PALETTE["resource"], "#F2F6FA"),
+        "actions": (PALETTE["resource"], "#F2F6FA"),
+        "learned": (PALETTE["phase"], "#F5F3FB"),
+        "candidate": (PALETTE["resource"], "#F2F6FA"),
+        "pareto": (PALETTE["pareto"], "#EEF4F8"),
+        "baseline": (PALETTE["neutral"], "#F5F7F9"),
+        "guard": (PALETTE["warn"], "#FBF5F1"),
+        "emission": (PALETTE["resource"], "#F2F6FA"),
+        "verification": (PALETTE["gain"], "#F1F8F3"),
+        "output": (PALETTE["gain"], "#F1F8F3"),
+    }
+
+    def add_box(node_id: str, title: str, detail: str, role: str) -> None:
+        x, y, width, height = positions[node_id]
+        edge, face = styles[role]
+        ax.add_patch(
+            FancyBboxPatch(
+                (x, y),
+                width,
+                height,
+                boxstyle="round,pad=0.010,rounding_size=0.012",
+                linewidth=0.9,
+                edgecolor=edge,
+                facecolor=face,
+                zorder=3,
+            )
+        )
+        ax.text(x + width / 2, y + height * 0.67, title, ha="center", va="center", fontsize=7.0, weight="bold", color=edge, zorder=4)
+        ax.text(x + width / 2, y + height * 0.31, detail, ha="center", va="center", fontsize=5.7, color="#252A31", linespacing=1.15, zorder=4)
+
+    def add_arrow(
+        start: tuple[float, float],
+        end: tuple[float, float],
+        *,
+        label: str = "",
+        color: str = "#6A717C",
+        dashed: bool = False,
+        rad: float = 0.0,
+        label_offset: tuple[float, float] = (0.0, 0.0),
+    ) -> None:
+        ax.add_patch(
+            FancyArrowPatch(
+                start,
+                end,
+                arrowstyle="-|>",
+                mutation_scale=8,
+                linewidth=0.9,
+                linestyle="--" if dashed else "-",
+                color=color,
+                connectionstyle=f"arc3,rad={rad}",
+                zorder=2,
+            )
+        )
+        if label:
+            ax.text(
+                (start[0] + end[0]) / 2 + label_offset[0],
+                (start[1] + end[1]) / 2 + label_offset[1],
+                label,
+                ha="center",
+                va="center",
+                fontsize=5.5,
+                color=color,
+                bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.8},
+                zorder=5,
             )
 
-    checks = [
-        ("Plan ANF", "symbolic expansion"),
-        ("Circuit ANF", "emitted-circuit simulation"),
-        ("Truth table", "complete bridge n=21--30"),
-    ]
-    for j, (title, text) in enumerate(checks):
-        x = 0.19 + j * 0.22
-        box = FancyBboxPatch(
-            (x, 0.09),
-            0.19,
-            0.18,
-            boxstyle="round,pad=0.012,rounding_size=0.018",
-            linewidth=0.7,
-            edgecolor=PALETTE["gain"],
-            facecolor="#F3FAF5",
-        )
-        ax.add_patch(box)
-        ax.text(x + 0.095, 0.20, title, ha="center", va="center", weight="bold", color=PALETTE["gain"])
-        ax.text(x + 0.095, 0.13, text, ha="center", va="center", fontsize=5.9, color="#2A2E35")
-    ax.text(0.03, 0.93, "a", fontsize=10, weight="bold")
-    ax.text(0.06, 0.90, "Resource-constrained neural MCTS oracle synthesis remains verifiable at every layer.", weight="bold")
+    for node_id, title, detail, role in nodes:
+        if node_id != "decision":
+            add_box(node_id, title, detail, role)
+
+    decision_center = (0.88, 0.50)
+    diamond = Polygon(
+        [
+            (decision_center[0], decision_center[1] + 0.085),
+            (decision_center[0] + 0.085, decision_center[1]),
+            (decision_center[0], decision_center[1] - 0.085),
+            (decision_center[0] - 0.085, decision_center[1]),
+        ],
+        closed=True,
+        linewidth=0.9,
+        edgecolor=PALETTE["phase"],
+        facecolor="#F5F3FB",
+        zorder=3,
+    )
+    ax.add_patch(diamond)
+    ax.text(decision_center[0], decision_center[1] + 0.018, "Fitted-Q", ha="center", va="center", fontsize=6.8, weight="bold", color=PALETTE["phase"], zorder=4)
+    ax.text(decision_center[0], decision_center[1] - 0.022, "run Pareto?", ha="center", va="center", fontsize=5.8, color="#252A31", zorder=4)
+
+    top_ids = ["input", "state", "actions", "search", "base"]
+    for left_id, right_id in zip(top_ids, top_ids[1:]):
+        lx, ly, lw, lh = positions[left_id]
+        rx, ry, _rw, rh = positions[right_id]
+        add_arrow((lx + lw, ly + lh / 2), (rx, ry + rh / 2))
+    bx, by, bw, _bh = positions["base"]
+    add_arrow((bx + bw / 2, by), (decision_center[0], decision_center[1] + 0.085), label="features", label_offset=(0.035, 0.0))
+    px, py, pw, ph = positions["pareto"]
+    add_arrow((decision_center[0] - 0.085, decision_center[1]), (px + pw, py + ph / 2), label="run", color=PALETTE["phase"], label_offset=(0.0, 0.018))
+    gx, gy, gw, gh = positions["guard"]
+    add_arrow((decision_center[0], decision_center[1] - 0.085), (gx + gw, gy + gh), label="stop", color=PALETTE["phase"], label_offset=(0.030, 0.0))
+    add_arrow((px + pw / 2, py), (gx + gw / 2, gy + gh), label="verified candidates", color=PALETTE["pareto"], label_offset=(0.075, 0.0))
+    dx, dy, dw, dh = positions["baseline"]
+    add_arrow((dx + dw, dy + dh / 2), (gx, gy + gh / 2), label="fallback", label_offset=(0.0, 0.018))
+    ex, ey, ew, eh = positions["emit"]
+    add_arrow((gx + gw, gy + gh / 2), (ex, ey + eh / 2), label="selected plan", label_offset=(0.0, 0.018))
+    vx, vy, vw, vh = positions["verify"]
+    add_arrow((ex + ew / 2, ey), (vx + vw / 2, vy + vh), label="circuit", label_offset=(0.040, 0.0))
+    ox, oy, ow, oh = positions["output"]
+    add_arrow((vx, vy + vh / 2), (ox + ow, oy + oh / 2), label="pass", color=PALETTE["gain"], label_offset=(0.0, 0.018))
+    add_arrow(
+        (vx + vw, vy + vh * 0.45),
+        (gx + gw, gy + gh * 0.78),
+        label="fail: reject / fall back",
+        color=PALETTE["warn"],
+        dashed=True,
+        rad=-0.55,
+        label_offset=(0.035, 0.015),
+    )
+
+    ax.text(0.02, 0.955, "Resource-NMCTS separates learned search control from semantic authority.", fontsize=9.0, weight="bold", color="#20242A")
+    ax.text(0.66, 0.915, "AI: rank, explore, or allocate budget", fontsize=6.2, color=PALETTE["phase"], ha="center")
+    fig.tight_layout(pad=0.25)
     save(fig, "fig1_pipeline")
 
 
