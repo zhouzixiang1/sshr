@@ -282,9 +282,13 @@ def specs() -> list[EvidenceFamily]:
         ),
         EvidenceFamily(
             family="Benchmark suite composition and representativeness",
-            claim_use="Summarizes benchmark-family roles, n ranges, instance counts, raw/verified rows, verification routes, function-structure diversity, and residual representativeness boundaries.",
+            claim_use="Summarizes benchmark-family roles, n ranges, instance counts, raw/verified rows, verification routes, function-structure diversity, verification-strength ladder, and residual representativeness boundaries.",
             rerun_tier="quick benchmark audit",
-            scripts=("analyze_benchmark_suite_audit.py", "analyze_benchmark_function_diversity_audit.py"),
+            scripts=(
+                "analyze_benchmark_suite_audit.py",
+                "analyze_benchmark_function_diversity_audit.py",
+                "analyze_experimental_evidence_ladder.py",
+            ),
             raw_patterns=(
                 "raw_traditional_resource.csv",
                 "raw_external_traditional_resource_n*.csv",
@@ -301,9 +305,21 @@ def specs() -> list[EvidenceFamily]:
                 "raw_bitflip_*.csv",
                 "raw_sparse_depth4_gate_generalization.csv",
             ),
-            manifest_patterns=("manifest_benchmark_suite_audit.json", "manifest_benchmark_function_diversity_audit.json"),
-            summary_patterns=("summary_benchmark_suite_audit.csv", "summary_benchmark_function_diversity_audit.csv"),
-            analysis_patterns=("analysis_benchmark_suite_audit.md", "analysis_benchmark_function_diversity_audit.md"),
+            manifest_patterns=(
+                "manifest_benchmark_suite_audit.json",
+                "manifest_benchmark_function_diversity_audit.json",
+                "manifest_experimental_evidence_ladder.json",
+            ),
+            summary_patterns=(
+                "summary_benchmark_suite_audit.csv",
+                "summary_benchmark_function_diversity_audit.csv",
+                "summary_experimental_evidence_ladder.csv",
+            ),
+            analysis_patterns=(
+                "analysis_benchmark_suite_audit.md",
+                "analysis_benchmark_function_diversity_audit.md",
+                "analysis_experimental_evidence_ladder.md",
+            ),
             dependency_boundary="Descriptive derived audit over existing raw CSVs; it records coverage and verification routes but does not rerun synthesis, training, or external toolchains.",
         ),
         EvidenceFamily(
@@ -349,31 +365,35 @@ def specs() -> list[EvidenceFamily]:
         ),
         EvidenceFamily(
             family="SSHR reproduction-scope audit",
-            claim_use="Separates source-anchored SSHR paper references, same-function SSHR-H rows, timed SSHR-I rows, exact n<=4 pilot checks, and excluded full-paper SSHR reruns.",
+            claim_use="Separates reproduced SSHR Table VIII candidate-space counts, same-function SSHR-H rows, timed SSHR-I rows, exact n<=4 pilot checks, and excluded full-paper SSHR reruns.",
             rerun_tier="quick comparison audit",
-            scripts=("analyze_sshr_reproduction_scope_audit.py",),
+            scripts=("reproduce_sshr_table8_candidate_counts.py", "analyze_sshr_reproduction_scope_audit.py"),
             raw_patterns=(
+                "raw_sshr_table8_candidate_counts.csv",
                 "raw_traditional_resource.csv",
                 "raw_external_traditional_resource_n4.csv",
                 "raw_external_traditional_resource_n6.csv",
             ),
             manifest_patterns=(
+                "manifest_sshr_table8_candidate_counts.json",
                 "manifest_sshr_reproduction_scope_audit.json",
                 "manifest_traditional_resource.json",
                 "manifest_external_traditional_resource_n4.json",
                 "manifest_external_traditional_resource_n6.json",
             ),
             summary_patterns=(
+                "summary_sshr_table8_candidate_counts.csv",
                 "summary_sshr_reproduction_scope_audit.csv",
                 "summary_exact_fprm_dp.csv",
                 "summary_exact_xag_mc.csv",
             ),
             analysis_patterns=(
+                "analysis_sshr_table8_candidate_counts.md",
                 "analysis_sshr_reproduction_scope_audit.md",
                 "analysis_exact_fprm_dp.md",
                 "analysis_resource_weight_sensitivity_audit.md",
             ),
-            dependency_boundary="Quick scope audit over existing SSHR-facing rows and references; it does not rerun heavy SSHR-I/Gurobi or every published random table.",
+            dependency_boundary="Reruns the bounded Table VIII parallelotope count check and audits existing SSHR-facing rows; it does not rerun heavy SSHR-I/Gurobi or every published random table.",
         ),
         EvidenceFamily(
             family="Resource-weight sensitivity and robustness",

@@ -9,7 +9,7 @@
   "python": "3.11.15",
   "rows": [
     {
-      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1226; error=none.",
+      "evidence": "archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1237; error=none.",
       "item": "Payload extraction",
       "next_action": "Regenerate the payload archive if it cannot be safely extracted.",
       "status": "pass"
@@ -35,6 +35,12 @@
     {
       "evidence": "returncode=0; manifest=results/manifest_comparison_claim_hierarchy.json; needs_revision_count=0; rows=7; stderr=none",
       "item": "Comparison claim hierarchy",
+      "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
+      "status": "pass"
+    },
+    {
+      "evidence": "returncode=0; manifest=results/manifest_experimental_evidence_ladder.json; needs_revision_count=0; experiment_levels=7; stderr=none",
+      "item": "Experimental evidence ladder",
       "next_action": "Inspect the extracted payload audit output and regenerate the archive if this smoke test fails.",
       "status": "pass"
     },
@@ -368,6 +374,13 @@
       "minimum_rows_key": "rows",
       "name": "Comparison claim hierarchy",
       "script": "analyze_comparison_claim_hierarchy.py"
+    },
+    {
+      "expected_key": "needs_revision_count",
+      "manifest": "results/manifest_experimental_evidence_ladder.json",
+      "minimum_rows_key": "experiment_levels",
+      "name": "Experimental evidence ladder",
+      "script": "analyze_experimental_evidence_ladder.py"
     },
     {
       "expected_key": "needs_revision_count",
@@ -721,6 +734,6 @@
     }
   ],
   "status_counts": {
-    "pass": 55
+    "pass": 56
   }
 }

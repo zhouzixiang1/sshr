@@ -1,0 +1,7 @@
+n,esop_count,parallelotope_dim_ge_1_count,singleton_count,sshr_count,reference_sshr_count,factor_vs_esop,matches_reference
+3,27,41,8,49,49,1.814815,True
+4,81,241,16,257,257,3.172840,True
+5,243,1507,32,1539,1539,6.333333,True
+6,729,10235,64,10299,10299,14.127572,True
+7,2187,75777,128,75905,75905,34.707362,True
+8,6561,609185,256,609441,609441,92.888432,True

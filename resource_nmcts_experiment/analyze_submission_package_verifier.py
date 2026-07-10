@@ -9,6 +9,7 @@ comparison-target validity,
 comparison-claim hierarchy,
 comparison-route decision support,
 benchmark-suite composition,
+experimental evidence ladder,
 score-weight robustness,
 rerun CNOT-constraint profile,
 SSHR reproduction-scope support,
@@ -103,6 +104,8 @@ BENCHMARK_SUITE_MANIFEST = RESULTS / "manifest_benchmark_suite_audit.json"
 BENCHMARK_SUITE_TABLE = THIS_DIR / "paper_latex" / "tables" / "benchmark_suite_audit.tex"
 BENCHMARK_FUNCTION_DIVERSITY_MANIFEST = RESULTS / "manifest_benchmark_function_diversity_audit.json"
 BENCHMARK_FUNCTION_DIVERSITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "benchmark_function_diversity_audit.tex"
+EXPERIMENTAL_EVIDENCE_LADDER_MANIFEST = RESULTS / "manifest_experimental_evidence_ladder.json"
+EXPERIMENTAL_EVIDENCE_LADDER_TABLE = THIS_DIR / "paper_latex" / "tables" / "experimental_evidence_ladder.tex"
 WEIGHT_ROBUSTNESS_MANIFEST = RESULTS / "manifest_weight_robustness.json"
 WEIGHT_ROBUSTNESS_TABLE = THIS_DIR / "paper_latex" / "tables" / "weight_robustness_compact.tex"
 RESOURCE_WEIGHT_SENSITIVITY_MANIFEST = RESULTS / "manifest_resource_weight_sensitivity_audit.json"
@@ -111,6 +114,9 @@ CNOT_CONSTRAINT_PROFILE_MANIFEST = RESULTS / "manifest_cnot_constraint_profile_a
 CNOT_CONSTRAINT_PROFILE_TABLE = THIS_DIR / "paper_latex" / "tables" / "cnot_constraint_profile_audit.tex"
 SSHR_REPRODUCTION_MANIFEST = RESULTS / "manifest_sshr_reproduction_scope_audit.json"
 SSHR_REPRODUCTION_TABLE = THIS_DIR / "paper_latex" / "tables" / "sshr_reproduction_scope_audit.tex"
+SSHR_TABLE8_RAW = RESULTS / "raw_sshr_table8_candidate_counts.csv"
+SSHR_TABLE8_MANIFEST = RESULTS / "manifest_sshr_table8_candidate_counts.json"
+SSHR_TABLE8_TABLE = THIS_DIR / "paper_latex" / "tables" / "sshr_table8_candidate_counts.tex"
 THREATS_VALIDITY_MANIFEST = RESULTS / "manifest_threats_to_validity_audit.json"
 THREATS_VALIDITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "threats_to_validity_audit.tex"
 NOVELTY_SCORECARD_MANIFEST = RESULTS / "manifest_novelty_comparison_scorecard.json"
@@ -576,6 +582,41 @@ def verify_benchmark_function_diversity_audit() -> dict[str, str]:
     )
 
 
+def verify_experimental_evidence_ladder() -> dict[str, str]:
+    manifest = read_json(EXPERIMENTAL_EVIDENCE_LADDER_MANIFEST)
+    revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
+    counts = manifest.get("status_counts", {}) if manifest else {}
+    rows = int(manifest.get("rows", -1)) if manifest else -1
+    levels = int(manifest.get("experiment_levels", -1)) if manifest else -1
+    verified_rows = int(manifest.get("verified_rows", -1)) if manifest else -1
+    scopes = manifest.get("n_scopes", []) if manifest else []
+    semantic_bridge = bool(manifest.get("semantic_bridge_present", False)) if manifest else False
+    ultra_scale = bool(manifest.get("ultra_scale_present", False)) if manifest else False
+    table_exists = EXPERIMENTAL_EVIDENCE_LADDER_TABLE.exists()
+    anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
+    status = (
+        "pass"
+        if manifest
+        and revisions == 0
+        and rows >= 8
+        and levels >= 7
+        and verified_rows >= 30000
+        and "n=20--64" in scopes
+        and "n=21--30" in scopes
+        and semantic_bridge
+        and ultra_scale
+        and table_exists
+        and anchor
+        else "needs revision"
+    )
+    return row(
+        "Experimental evidence ladder",
+        status,
+        f"rows={rows}; levels={levels}; verified_rows={verified_rows}; scopes={scopes}; semantic_bridge_present={semantic_bridge}; ultra_scale_present={ultra_scale}; needs_revision_count={revisions}; status_counts={counts}; table_exists={table_exists}; table_anchor_present={anchor}.",
+        "Run analyze_experimental_evidence_ladder.py and restore evidence-ladder rows, generated table, or manuscript anchor.",
+    )
+
+
 def verify_weight_robustness() -> dict[str, str]:
     manifest = read_json(WEIGHT_ROBUSTNESS_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
@@ -674,21 +715,34 @@ def verify_cnot_constraint_profile() -> dict[str, str]:
 
 def verify_sshr_reproduction_scope() -> dict[str, str]:
     manifest = read_json(SSHR_REPRODUCTION_MANIFEST)
+    table8_manifest = read_json(SSHR_TABLE8_MANIFEST)
     revisions = int(manifest.get("needs_revision_count", -1)) if manifest else -1
     counts = manifest.get("status_counts", {}) if manifest else {}
     coverage = manifest.get("coverage_counts", {}) if manifest else {}
     rows = int(manifest.get("rows", -1)) if manifest else -1
     source_tree = manifest.get("source_tree_available", "missing") if manifest else "missing"
+    table8_rows = int(table8_manifest.get("rows", -1)) if table8_manifest else -1
+    table8_match = bool(table8_manifest.get("all_match", False)) if table8_manifest else False
+    table8_max_n = int(table8_manifest.get("max_n", -1)) if table8_manifest else -1
+    table8_max_count = int(table8_manifest.get("max_sshr_count", -1)) if table8_manifest else -1
     table_exists = SSHR_REPRODUCTION_TABLE.exists()
+    table8_exists = SSHR_TABLE8_TABLE.exists()
     anchor = bool(manifest.get("table_anchor_present", False)) if manifest else False
     anonymous_anchor = bool(manifest.get("anonymous_table_anchor_present", False)) if manifest else False
     acm_anchor = bool(manifest.get("acm_table_anchor_present", False)) if manifest else False
     status = (
         "pass"
         if manifest
+        and table8_manifest
         and revisions == 0
         and rows >= 8
+        and SSHR_TABLE8_RAW.exists()
+        and table8_rows == 6
+        and table8_match
+        and table8_max_n == 8
+        and table8_max_count == 609441
         and table_exists
+        and table8_exists
         and anchor
         and anonymous_anchor
         and acm_anchor
@@ -697,8 +751,8 @@ def verify_sshr_reproduction_scope() -> dict[str, str]:
     return row(
         "SSHR reproduction-scope audit",
         status,
-        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; coverage_counts={coverage}; source_tree_available={source_tree}; table_exists={table_exists}; table_anchor_present={anchor}; anonymous_anchor={anonymous_anchor}; acm_anchor={acm_anchor}.",
-        "Run analyze_sshr_reproduction_scope_audit.py and restore SSHR reproduction-scope rows, generated table, or manuscript anchors.",
+        f"rows={rows}; needs_revision_count={revisions}; status_counts={counts}; coverage_counts={coverage}; source_tree_available={source_tree}; table8_rows={table8_rows}; table8_all_match={table8_match}; table8_max_n={table8_max_n}; table8_max_count={table8_max_count}; table_exists={table_exists}; table8_table_exists={table8_exists}; table_anchor_present={anchor}; anonymous_anchor={anonymous_anchor}; acm_anchor={acm_anchor}.",
+        "Rerun reproduce_sshr_table8_candidate_counts.py and analyze_sshr_reproduction_scope_audit.py; restore SSHR reproduction rows, generated tables, or manuscript anchors.",
     )
 
 
@@ -2415,6 +2469,7 @@ def build_rows() -> list[dict[str, str]]:
             verify_comparison_route_decision(),
             verify_benchmark_suite_audit(),
             verify_benchmark_function_diversity_audit(),
+            verify_experimental_evidence_ladder(),
             verify_weight_robustness(),
             verify_resource_weight_sensitivity(),
             verify_cnot_constraint_profile(),

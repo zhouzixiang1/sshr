@@ -5,8 +5,8 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 ## Status counts
 
 - complete: 31
-- unique raw files covered by registry: 161
-- unique raw CSV rows covered by registry: 80312
+- unique raw files covered by registry: 162
+- unique raw CSV rows covered by registry: 80318
 
 | evidence family | rerun tier | raw files | raw rows | manifests | status | dependency boundary |
 |---|---|---:|---:|---:|---|---|
@@ -19,10 +19,10 @@ This registry maps paper-facing evidence families to rerun entry points, existin
 | Runtime envelope and execution cost | quick derived audit | 20 | 7582 | 1 | complete | Derived from existing raw timing columns; it records workstation feasibility and does not claim portable runtime speedups. |
 | Method workflow, algorithm, and budget contracts | quick method audit | 0 | 0 | 2 | complete | Quick derived audit; checks implementation anchors and manuscript method exposition, not raw benchmark outcomes. |
 | Comparison protocol and claim boundaries | quick comparison audit | 0 | 0 | 5 | complete | Quick derived audit; it supports comparison wording but does not rerun raw baseline sweeps. |
-| Benchmark suite composition and representativeness | quick benchmark audit | 51 | 34954 | 2 | complete | Descriptive derived audit over existing raw CSVs; it records coverage and verification routes but does not rerun synthesis, training, or external toolchains. |
+| Benchmark suite composition and representativeness | quick benchmark audit | 51 | 34954 | 3 | complete | Descriptive derived audit over existing raw CSVs; it records coverage and verification routes but does not rerun synthesis, training, or external toolchains. |
 | Novelty and comparison scorecard | quick comparison audit | 0 | 0 | 1 | complete | Quick derived audit; it strengthens reviewer-facing positioning without rerunning raw experiments. |
 | Related-work and citation verification | quick literature audit | 0 | 0 | 3 | complete | Offline locator and scope-boundary audit; it records source-backed related-work and oracle-resource positioning but does not claim that adjacent papers are same-task baselines. |
-| SSHR reproduction-scope audit | quick comparison audit | 3 | 3402 | 4 | complete | Quick scope audit over existing SSHR-facing rows and references; it does not rerun heavy SSHR-I/Gurobi or every published random table. |
+| SSHR reproduction-scope audit | quick comparison audit | 4 | 3408 | 5 | complete | Reruns the bounded Table VIII parallelotope count check and audits existing SSHR-facing rows; it does not rerun heavy SSHR-I/Gurobi or every published random table. |
 | Resource-weight sensitivity and robustness | quick derived audit | 12 | 20630 | 2 | complete | Post-hoc logical-resource rescoring only; it does not rerun synthesis and is not a hardware cost model. |
 | Traditional logical baselines | raw Python rerun | 6 | 4518 | 5 | complete | Python rerun; ILP-based subbaselines need Gurobi where enabled. |
 | External logical baseline extension | raw Python plus optional solvers | 3 | 2049 | 3 | complete | Python with optional Gurobi/logic-tool components; rows with skips/errors remain explicit. |
@@ -81,8 +81,8 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - scripts: `analyze_baseline_claim_matrix.py; analyze_comparison_evidence_matrix.py; analyze_baseline_comparability_audit.py; analyze_counterpoint_claim_boundary.py; analyze_comparison_protocol_audit.py; analyze_comparison_target_validity_audit.py; analyze_comparison_claim_hierarchy.py; analyze_comparison_answer_scorecard.py; analyze_comparison_route_decision_audit.py`
   - representative raw: not applicable for this tier
 - **Benchmark suite composition and representativeness**
-  - claim use: Summarizes benchmark-family roles, n ranges, instance counts, raw/verified rows, verification routes, function-structure diversity, and residual representativeness boundaries.
-  - scripts: `analyze_benchmark_suite_audit.py; analyze_benchmark_function_diversity_audit.py`
+  - claim use: Summarizes benchmark-family roles, n ranges, instance counts, raw/verified rows, verification routes, function-structure diversity, verification-strength ladder, and residual representativeness boundaries.
+  - scripts: `analyze_benchmark_suite_audit.py; analyze_benchmark_function_diversity_audit.py; analyze_experimental_evidence_ladder.py`
   - representative raw: `results/raw_bitflip_neural_budget_sweep.csv; results/raw_bitflip_random_prior_control.csv; results/raw_caterpillar_xag_api_best.csv; results/raw_cirkit_aig_highdim_probe.csv; +47 more`
 - **Novelty and comparison scorecard**
   - claim use: Checks that reviewer-facing novelty/comparison questions are tied to manuscript evidence, support-brief anchors, and explicit limitations.
@@ -93,9 +93,9 @@ This registry maps paper-facing evidence families to rerun entry points, existin
   - scripts: `analyze_related_work_positioning.py; analyze_citation_support_audit.py; analyze_oracle_resource_citation_audit.py; analyze_learning_citation_verification.py`
   - representative raw: not applicable for this tier
 - **SSHR reproduction-scope audit**
-  - claim use: Separates source-anchored SSHR paper references, same-function SSHR-H rows, timed SSHR-I rows, exact n<=4 pilot checks, and excluded full-paper SSHR reruns.
-  - scripts: `analyze_sshr_reproduction_scope_audit.py`
-  - representative raw: `results/raw_external_traditional_resource_n4.csv; results/raw_external_traditional_resource_n6.csv; results/raw_traditional_resource.csv`
+  - claim use: Separates reproduced SSHR Table VIII candidate-space counts, same-function SSHR-H rows, timed SSHR-I rows, exact n<=4 pilot checks, and excluded full-paper SSHR reruns.
+  - scripts: `reproduce_sshr_table8_candidate_counts.py; analyze_sshr_reproduction_scope_audit.py`
+  - representative raw: `results/raw_external_traditional_resource_n4.csv; results/raw_external_traditional_resource_n6.csv; results/raw_sshr_table8_candidate_counts.csv; results/raw_traditional_resource.csv`
 - **Resource-weight sensitivity and robustness**
   - claim use: Recomputes verified internal and external resource rows under alternative logical-resource weights so weighted-score conclusions are not tied only to the paper coefficients.
   - scripts: `analyze_weight_robustness.py; analyze_resource_weight_sensitivity_audit.py`

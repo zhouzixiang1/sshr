@@ -1,0 +1,89 @@
+{
+  "all_match": true,
+  "matching_rows": 6,
+  "max_n": 8,
+  "max_sshr_count": 609441,
+  "min_n": 3,
+  "outputs": {
+    "analysis": "results/analysis_sshr_table8_candidate_counts.md",
+    "manifest": "results/manifest_sshr_table8_candidate_counts.json",
+    "raw": "results/raw_sshr_table8_candidate_counts.csv",
+    "summary": "results/summary_sshr_table8_candidate_counts.csv",
+    "table": "paper_latex/tables/sshr_table8_candidate_counts.tex"
+  },
+  "python": "3.11.15",
+  "reference_counts": {
+    "3": 49,
+    "4": 257,
+    "5": 1539,
+    "6": 10299,
+    "7": 75905,
+    "8": 609441
+  },
+  "rows": 6,
+  "rows_detail": [
+    {
+      "esop_count": 27,
+      "factor_vs_esop": 1.8148148148148149,
+      "matches_reference": true,
+      "n": 3,
+      "parallelotope_dim_ge_1_count": 41,
+      "reference_sshr_count": 49,
+      "singleton_count": 8,
+      "sshr_count": 49
+    },
+    {
+      "esop_count": 81,
+      "factor_vs_esop": 3.1728395061728394,
+      "matches_reference": true,
+      "n": 4,
+      "parallelotope_dim_ge_1_count": 241,
+      "reference_sshr_count": 257,
+      "singleton_count": 16,
+      "sshr_count": 257
+    },
+    {
+      "esop_count": 243,
+      "factor_vs_esop": 6.333333333333333,
+      "matches_reference": true,
+      "n": 5,
+      "parallelotope_dim_ge_1_count": 1507,
+      "reference_sshr_count": 1539,
+      "singleton_count": 32,
+      "sshr_count": 1539
+    },
+    {
+      "esop_count": 729,
+      "factor_vs_esop": 14.127572016460906,
+      "matches_reference": true,
+      "n": 6,
+      "parallelotope_dim_ge_1_count": 10235,
+      "reference_sshr_count": 10299,
+      "singleton_count": 64,
+      "sshr_count": 10299
+    },
+    {
+      "esop_count": 2187,
+      "factor_vs_esop": 34.707361682670324,
+      "matches_reference": true,
+      "n": 7,
+      "parallelotope_dim_ge_1_count": 75777,
+      "reference_sshr_count": 75905,
+      "singleton_count": 128,
+      "sshr_count": 75905
+    },
+    {
+      "esop_count": 6561,
+      "factor_vs_esop": 92.88843164151807,
+      "matches_reference": true,
+      "n": 8,
+      "parallelotope_dim_ge_1_count": 609185,
+      "reference_sshr_count": 609441,
+      "singleton_count": 256,
+      "sshr_count": 609441
+    }
+  ],
+  "runtime_policy": "wall-clock timings are printed to the terminal only and are not stored in tracked artifacts",
+  "script": "reproduce_sshr_table8_candidate_counts.py",
+  "source": "../sshr"
+}

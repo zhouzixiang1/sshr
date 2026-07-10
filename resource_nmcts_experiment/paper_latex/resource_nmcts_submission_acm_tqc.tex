@@ -466,6 +466,28 @@ route, and residual representativeness boundary for one benchmark family.}
 \input{tables/benchmark_suite_audit}
 \end{table}
 
+Table~\ref{tab:experimental-evidence-ladder} reorganizes the same experiment
+package by verification strength.  The ladder separates exact small-function
+headline evidence, public optimum counterpoints, external toolchain stress,
+reversible/phase boundaries, complete high-dimensional truth-table bridges,
+ultra-scale symbolic resource stress, and AI/search-control attribution.  This
+prevents the large symbolic rows from being over-read as exhaustive
+truth-table evidence while making clear that the manuscript is not only a
+small-$n$ demonstration.
+
+\begin{table}[H]
+\centering
+\tiny
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{0.94}
+\caption{Experimental evidence ladder.  Each row states the verification
+strength, resource dimensions, claim use, and boundary for one experimental
+layer, from exact same-task rows through symbolic ultra-scale stress and
+learned-control attribution.}
+\label{tab:experimental-evidence-ladder}
+\input{tables/experimental_evidence_ladder}
+\end{table}
+
 Table~\ref{tab:benchmark-function-diversity-audit} then audits the functions
 inside those suites.  Exact \ttable{} rows are stratified by family, onset
 density, \anf{} degree, and \anf{} term count, while larger symbolic and bridge
@@ -615,11 +637,24 @@ logical-layer comparison meaningful.}
 Table~\ref{tab:sshr-reproduction-scope} gives the corresponding SSHR
 reproduction-scope audit.  This table is included because SSHR is both the
 closest geometric small-function baseline and the easiest comparison to
-over-read.  The audit separates source-anchored paper-reference checks,
+over-read.  Table~\ref{tab:sshr-table8-counts} first reruns the bounded SSHR
+Table VIII candidate-space check: the local parallelotope enumerator matches
+all six published counts for $n=3,\ldots,8$, including the $n=8$ count of
+609441 candidates.  The broader audit then separates this count reproduction,
 same-function SSHR-H rows, time-limited SSHR-I rows, and the exact $n\leq4$
 pilot from the stronger claim that the lightweight rebuild fully reruns every
 published SSHR random experiment.  The results section therefore uses SSHR as
 a CNOT-oriented counterpoint, not as the definition of the proposed method.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{SSHR Table VIII candidate-space count reproduction.}
+\label{tab:sshr-table8-counts}
+\input{tables/sshr_table8_candidate_counts}
+\end{table}
 
 \begin{table}[H]
 \centering
@@ -729,7 +764,7 @@ manuscript anchors that carry the evidence.
 \centering
 \scriptsize
 \setlength{\tabcolsep}{2pt}
-\renewcommand{\arraystretch}{1.05}
+\renewcommand{\arraystretch}{1.02}
 \caption{Submission traceability audit.  Each row links a paper-facing claim
 family to the manuscript location and artifact chain used to support it.}
 \label{tab:traceability-audit}

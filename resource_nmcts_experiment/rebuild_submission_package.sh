@@ -48,6 +48,7 @@ run_py analyze_comparison_claim_hierarchy.py
 run_py analyze_comparison_answer_scorecard.py
 run_py analyze_comparison_route_decision_audit.py
 run_py analyze_comparison_support_reference_integrity.py
+run_py reproduce_sshr_table8_candidate_counts.py
 run_py analyze_sshr_reproduction_scope_audit.py
 run_py analyze_claim_scope_lint.py
 run_py analyze_stg_published_benchmark.py
@@ -104,6 +105,7 @@ run_py analyze_ultra_scale64_resource_profile.py
 run_py analyze_scaling_resource_audit.py
 run_py analyze_benchmark_suite_audit.py
 run_py analyze_benchmark_function_diversity_audit.py
+run_py analyze_experimental_evidence_ladder.py
 run_py analyze_weight_robustness.py
 run_py analyze_resource_weight_sensitivity_audit.py
 run_py analyze_cnot_constraint_profile_audit.py

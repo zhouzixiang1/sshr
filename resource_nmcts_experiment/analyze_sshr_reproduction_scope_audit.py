@@ -53,6 +53,11 @@ SSHR_PAPER_DATA = SSHR_DIR / "paper_data.py"
 SSHR_H_IMPL = SSHR_DIR / "sshr_h.py"
 SSHR_I_IMPL = SSHR_DIR / "sshr_i.py"
 SSHR_ENUM = SSHR_DIR / "parallelotope_enum.py"
+TABLE8_RAW = RESULTS / "raw_sshr_table8_candidate_counts.csv"
+TABLE8_SUMMARY = RESULTS / "summary_sshr_table8_candidate_counts.csv"
+TABLE8_ANALYSIS = RESULTS / "analysis_sshr_table8_candidate_counts.md"
+TABLE8_MANIFEST = RESULTS / "manifest_sshr_table8_candidate_counts.json"
+TABLE8_LATEX = TABLES / "sshr_table8_candidate_counts.tex"
 
 TABLE_VIII_COUNTS = {3: 49, 4: 257, 5: 1539, 6: 10299, 7: 75905, 8: 609441}
 
@@ -169,6 +174,38 @@ def table_viii_source_check() -> tuple[bool, str]:
     return ok, f"source_tree_available=True; table_viii_counts={TABLE_VIII_COUNTS}; missing_counts={missing or 'none'}; missing_tokens={missing_tokens or 'none'}"
 
 
+def table_viii_reproduction_check() -> tuple[bool, str]:
+    manifest = read_json(TABLE8_MANIFEST)
+    raw_rows = read_csv(TABLE8_RAW)
+    summary_rows = read_csv(TABLE8_SUMMARY)
+    analysis_exists = TABLE8_ANALYSIS.exists()
+    table_exists = TABLE8_LATEX.exists()
+    source_ok, source_detail = table_viii_source_check()
+    all_match = bool(manifest.get("all_match", False)) if manifest else False
+    rows = int(manifest.get("rows", -1)) if manifest else -1
+    max_n = int(manifest.get("max_n", -1)) if manifest else -1
+    max_count = int(manifest.get("max_sshr_count", -1)) if manifest else -1
+    raw_match_count = sum(1 for row in raw_rows if str(row.get("matches_reference", "")).lower() == "true")
+    ok = (
+        source_ok
+        and all_match
+        and rows == 6
+        and max_n == 8
+        and max_count == TABLE_VIII_COUNTS[8]
+        and len(raw_rows) == 6
+        and raw_match_count == 6
+        and len(summary_rows) == 1
+        and analysis_exists
+        and table_exists
+    )
+    detail = (
+        f"{source_detail}; table8_raw_rows={len(raw_rows)}; raw_matches={raw_match_count}; "
+        f"manifest_rows={rows}; all_match={all_match}; max_n={max_n}; max_count={max_count}; "
+        f"summary_rows={len(summary_rows)}; analysis_exists={analysis_exists}; table_exists={table_exists}"
+    )
+    return ok, detail
+
+
 def specs() -> list[AuditSpec]:
     return [
         AuditSpec(
@@ -183,15 +220,15 @@ def specs() -> list[AuditSpec]:
             excluded_claim="The proposed method is not an SSHR variant and does not inherit SSHR's CNOT-only objective.",
         ),
         AuditSpec(
-            item="SSHR Table VIII candidate-space anchor",
-            coverage="source-anchored",
-            current_evidence="The development repository contains the SSHR candidate-count reference and table runner when the full source tree is present; the upload payload records the boundary without requiring that parent source tree.",
-            files=(DELIVERABLE, PAPER),
-            tokens=("SSHR", "parallelotope", "resource-constrained", "logical-layer"),
+            item="SSHR Table VIII candidate-space reproduction",
+            coverage="covered",
+            current_evidence="The package reruns the local SSHR parallelotope enumerator on full n=3..8 hypercubes and matches all six Table VIII candidate-space counts, including n=8 -> 609441.",
+            files=(TABLE8_RAW, TABLE8_SUMMARY, TABLE8_ANALYSIS, TABLE8_MANIFEST, TABLE8_LATEX, DELIVERABLE, PAPER),
+            tokens=("SSHR", "parallelotope", "candidate-space", "609441"),
             csv_checks=(),
             json_checks=(),
             supported_claim="The paper can explain why SSHR's search space is a CNOT-oriented parallelotope counterpoint rather than the proposed ANF/FPRM action space.",
-            excluded_claim="This audit does not rerun every published SSHR random benchmark table inside the lightweight submission rebuild.",
+            excluded_claim="This count reproduction does not rerun SSHR-I Gurobi tables or every published SSHR random benchmark.",
         ),
         AuditSpec(
             item="SSHR-H same-task baseline rows",
@@ -288,8 +325,8 @@ def evaluate(spec: AuditSpec) -> dict[str, str]:
     json_results = [check_json(check) for check in spec.json_checks]
     table_viii_ok = True
     table_viii_detail = ""
-    if spec.item == "SSHR Table VIII candidate-space anchor":
-        table_viii_ok, table_viii_detail = table_viii_source_check()
+    if spec.item == "SSHR Table VIII candidate-space reproduction":
+        table_viii_ok, table_viii_detail = table_viii_reproduction_check()
     status = (
         "pass"
         if not missing_files
@@ -408,6 +445,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
     status_counts = {status: sum(1 for row in rows if row["audit_status"] == status) for status in sorted({row["audit_status"] for row in rows})}
     coverage_counts = {status: sum(1 for row in rows if row["coverage"] == status) for status in sorted({row["coverage"] for row in rows})}
     failures = status_counts.get("needs revision", 0)
+    table8_manifest = read_json(TABLE8_MANIFEST)
     paper_text = read_text(PAPER)
     anonymous_text = read_text(ANONYMOUS_PAPER)
     acm_text = read_text(ACM_PAPER)
@@ -420,6 +458,12 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "needs_revision_count": failures,
         "source_tree_available": source_tree_available(),
         "table_viii_counts": TABLE_VIII_COUNTS,
+        "table_viii_reproduction_rows": table8_manifest.get("rows", "missing") if table8_manifest else "missing",
+        "table_viii_reproduction_all_match": table8_manifest.get("all_match", False) if table8_manifest else False,
+        "table_viii_reproduction_max_n": table8_manifest.get("max_n", "missing") if table8_manifest else "missing",
+        "table_viii_reproduction_max_count": table8_manifest.get("max_sshr_count", "missing") if table8_manifest else "missing",
+        "table_viii_reproduction_runtime_policy": table8_manifest.get("runtime_policy", "missing") if table8_manifest else "missing",
+        "table_viii_reproduction_table_present": TABLE8_LATEX.exists(),
         "table_anchor_present": "tab:sshr-reproduction-scope" in paper_text,
         "anonymous_table_anchor_present": "tab:sshr-reproduction-scope" in anonymous_text,
         "acm_table_anchor_present": "tab:sshr-reproduction-scope" in acm_text,

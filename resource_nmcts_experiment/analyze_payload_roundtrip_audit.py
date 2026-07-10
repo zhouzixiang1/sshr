@@ -88,6 +88,13 @@ COMPARISON_CLAIM_HIERARCHY_PATHS = {
     "results/manifest_comparison_claim_hierarchy.json",
     "paper_latex/tables/comparison_claim_hierarchy.tex",
 }
+EXPERIMENTAL_EVIDENCE_LADDER_PATHS = {
+    "analyze_experimental_evidence_ladder.py",
+    "results/analysis_experimental_evidence_ladder.md",
+    "results/summary_experimental_evidence_ladder.csv",
+    "results/manifest_experimental_evidence_ladder.json",
+    "paper_latex/tables/experimental_evidence_ladder.tex",
+}
 WEIGHT_ROBUSTNESS_PATHS = {
     "analyze_weight_robustness.py",
     "results/analysis_weight_robustness.md",
@@ -113,7 +120,12 @@ CNOT_CONSTRAINT_PROFILE_PATHS = {
     "paper_latex/tables/cnot_constraint_profile_audit.tex",
 }
 SSHR_REPRODUCTION_SCOPE_PATHS = {
+    "reproduce_sshr_table8_candidate_counts.py",
     "analyze_sshr_reproduction_scope_audit.py",
+    "results/raw_sshr_table8_candidate_counts.csv",
+    "results/analysis_sshr_table8_candidate_counts.md",
+    "results/summary_sshr_table8_candidate_counts.csv",
+    "results/manifest_sshr_table8_candidate_counts.json",
     "results/raw_traditional_resource.csv",
     "results/manifest_traditional_resource.json",
     "results/raw_external_traditional_resource_n4.csv",
@@ -133,6 +145,7 @@ SSHR_REPRODUCTION_SCOPE_PATHS = {
     "results/analysis_sshr_reproduction_scope_audit.md",
     "results/summary_sshr_reproduction_scope_audit.csv",
     "results/manifest_sshr_reproduction_scope_audit.json",
+    "paper_latex/tables/sshr_table8_candidate_counts.tex",
     "paper_latex/tables/sshr_reproduction_scope_audit.tex",
 }
 NOVELTY_SCORECARD_PATHS = {
@@ -605,6 +618,16 @@ def build_rows() -> list[dict[str, str]]:
         )
     )
 
+    experimental_ladder_missing = sorted(EXPERIMENTAL_EVIDENCE_LADDER_PATHS - set(archive_paths))
+    rows.append(
+        row(
+            "Payload experimental evidence ladder",
+            "pass" if not experimental_ladder_missing else "needs revision",
+            f"experimental_evidence_ladder_files={len(EXPERIMENTAL_EVIDENCE_LADDER_PATHS)}; missing={experimental_ladder_missing or 'none'}.",
+            "Ensure the uploadable archive includes the evidence-ladder script, generated evidence, and manuscript table.",
+        )
+    )
+
     weight_robustness_missing = sorted(WEIGHT_ROBUSTNESS_PATHS - set(archive_paths))
     rows.append(
         row(
@@ -1010,6 +1033,7 @@ def write_manifest(path: Path, rows: list[dict[str, str]]) -> None:
         "comparison_target_validity_paths": sorted(COMPARISON_TARGET_VALIDITY_PATHS),
         "comparison_answer_scorecard_paths": sorted(COMPARISON_ANSWER_SCORECARD_PATHS),
         "comparison_claim_hierarchy_paths": sorted(COMPARISON_CLAIM_HIERARCHY_PATHS),
+        "experimental_evidence_ladder_paths": sorted(EXPERIMENTAL_EVIDENCE_LADDER_PATHS),
         "weight_robustness_paths": sorted(WEIGHT_ROBUSTNESS_PATHS),
         "resource_weight_sensitivity_paths": sorted(RESOURCE_WEIGHT_SENSITIVITY_PATHS),
         "cnot_constraint_profile_paths": sorted(CNOT_CONSTRAINT_PROFILE_PATHS),

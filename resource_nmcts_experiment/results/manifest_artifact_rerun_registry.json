@@ -146,20 +146,20 @@
       "summary_files": "9"
     },
     {
-      "analysis_files": "2",
-      "claim_use": "Summarizes benchmark-family roles, n ranges, instance counts, raw/verified rows, verification routes, function-structure diversity, and residual representativeness boundaries.",
+      "analysis_files": "3",
+      "claim_use": "Summarizes benchmark-family roles, n ranges, instance counts, raw/verified rows, verification routes, function-structure diversity, verification-strength ladder, and residual representativeness boundaries.",
       "dependency_boundary": "Descriptive derived audit over existing raw CSVs; it records coverage and verification routes but does not rerun synthesis, training, or external toolchains.",
-      "driver_scripts": "analyze_benchmark_suite_audit.py; analyze_benchmark_function_diversity_audit.py",
+      "driver_scripts": "analyze_benchmark_suite_audit.py; analyze_benchmark_function_diversity_audit.py; analyze_experimental_evidence_ladder.py",
       "evidence_family": "Benchmark suite composition and representativeness",
-      "manifest_files": "2",
+      "manifest_files": "3",
       "raw_files": "51",
       "raw_rows": "34954",
       "representative_raw": "results/raw_bitflip_neural_budget_sweep.csv; results/raw_bitflip_random_prior_control.csv; results/raw_caterpillar_xag_api_best.csv; results/raw_cirkit_aig_highdim_probe.csv; +47 more",
       "rerun_tier": "quick benchmark audit",
       "scripts_missing": "",
-      "scripts_present": "2",
+      "scripts_present": "3",
       "status": "complete",
-      "summary_files": "2"
+      "summary_files": "3"
     },
     {
       "analysis_files": "1",
@@ -194,20 +194,20 @@
       "summary_files": "4"
     },
     {
-      "analysis_files": "3",
-      "claim_use": "Separates source-anchored SSHR paper references, same-function SSHR-H rows, timed SSHR-I rows, exact n<=4 pilot checks, and excluded full-paper SSHR reruns.",
-      "dependency_boundary": "Quick scope audit over existing SSHR-facing rows and references; it does not rerun heavy SSHR-I/Gurobi or every published random table.",
-      "driver_scripts": "analyze_sshr_reproduction_scope_audit.py",
+      "analysis_files": "4",
+      "claim_use": "Separates reproduced SSHR Table VIII candidate-space counts, same-function SSHR-H rows, timed SSHR-I rows, exact n<=4 pilot checks, and excluded full-paper SSHR reruns.",
+      "dependency_boundary": "Reruns the bounded Table VIII parallelotope count check and audits existing SSHR-facing rows; it does not rerun heavy SSHR-I/Gurobi or every published random table.",
+      "driver_scripts": "reproduce_sshr_table8_candidate_counts.py; analyze_sshr_reproduction_scope_audit.py",
       "evidence_family": "SSHR reproduction-scope audit",
-      "manifest_files": "4",
-      "raw_files": "3",
-      "raw_rows": "3402",
-      "representative_raw": "results/raw_external_traditional_resource_n4.csv; results/raw_external_traditional_resource_n6.csv; results/raw_traditional_resource.csv",
+      "manifest_files": "5",
+      "raw_files": "4",
+      "raw_rows": "3408",
+      "representative_raw": "results/raw_external_traditional_resource_n4.csv; results/raw_external_traditional_resource_n6.csv; results/raw_sshr_table8_candidate_counts.csv; results/raw_traditional_resource.csv",
       "rerun_tier": "quick comparison audit",
       "scripts_missing": "",
-      "scripts_present": "1",
+      "scripts_present": "2",
       "status": "complete",
-      "summary_files": "3"
+      "summary_files": "4"
     },
     {
       "analysis_files": "2",
@@ -636,6 +636,7 @@
     "results/raw_smoke.csv",
     "results/raw_sparse_depth4_gate.csv",
     "results/raw_sparse_depth4_gate_generalization.csv",
+    "results/raw_sshr_table8_candidate_counts.csv",
     "results/raw_stage_gated_frontier.csv",
     "results/raw_stg_published_benchmark.csv",
     "results/raw_traditional_resource.csv",
@@ -669,6 +670,6 @@
   ],
   "rows": 31,
   "script": "analyze_artifact_rerun_registry.py",
-  "unique_raw_files": 161,
-  "unique_raw_rows": 80312
+  "unique_raw_files": 162,
+  "unique_raw_rows": 80318
 }

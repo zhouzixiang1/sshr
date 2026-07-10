@@ -130,6 +130,10 @@ BENCHMARK_FUNCTION_DIVERSITY_ANALYSIS = RESULTS / "analysis_benchmark_function_d
 BENCHMARK_FUNCTION_DIVERSITY_SUMMARY = RESULTS / "summary_benchmark_function_diversity_audit.csv"
 BENCHMARK_FUNCTION_DIVERSITY_MANIFEST = RESULTS / "manifest_benchmark_function_diversity_audit.json"
 BENCHMARK_FUNCTION_DIVERSITY_TABLE = THIS_DIR / "paper_latex" / "tables" / "benchmark_function_diversity_audit.tex"
+EXPERIMENTAL_EVIDENCE_LADDER_ANALYSIS = RESULTS / "analysis_experimental_evidence_ladder.md"
+EXPERIMENTAL_EVIDENCE_LADDER_SUMMARY = RESULTS / "summary_experimental_evidence_ladder.csv"
+EXPERIMENTAL_EVIDENCE_LADDER_MANIFEST = RESULTS / "manifest_experimental_evidence_ladder.json"
+EXPERIMENTAL_EVIDENCE_LADDER_TABLE = THIS_DIR / "paper_latex" / "tables" / "experimental_evidence_ladder.tex"
 RESOURCE_WEIGHT_SENSITIVITY_ANALYSIS = RESULTS / "analysis_resource_weight_sensitivity_audit.md"
 RESOURCE_WEIGHT_SENSITIVITY_SUMMARY = RESULTS / "summary_resource_weight_sensitivity_audit.csv"
 RESOURCE_WEIGHT_SENSITIVITY_RAW = RESULTS / "raw_resource_weight_sensitivity_audit.csv"
@@ -144,6 +148,9 @@ SSHR_REPRODUCTION_ANALYSIS = RESULTS / "analysis_sshr_reproduction_scope_audit.m
 SSHR_REPRODUCTION_SUMMARY = RESULTS / "summary_sshr_reproduction_scope_audit.csv"
 SSHR_REPRODUCTION_MANIFEST = RESULTS / "manifest_sshr_reproduction_scope_audit.json"
 SSHR_REPRODUCTION_TABLE = THIS_DIR / "paper_latex" / "tables" / "sshr_reproduction_scope_audit.tex"
+SSHR_TABLE8_RAW = RESULTS / "raw_sshr_table8_candidate_counts.csv"
+SSHR_TABLE8_MANIFEST = RESULTS / "manifest_sshr_table8_candidate_counts.json"
+SSHR_TABLE8_TABLE = THIS_DIR / "paper_latex" / "tables" / "sshr_table8_candidate_counts.tex"
 THREATS_VALIDITY_ANALYSIS = RESULTS / "analysis_threats_to_validity_audit.md"
 THREATS_VALIDITY_SUMMARY = RESULTS / "summary_threats_to_validity_audit.csv"
 THREATS_VALIDITY_MANIFEST = RESULTS / "manifest_threats_to_validity_audit.json"
@@ -456,6 +463,32 @@ def build_rows() -> list[dict[str, str]]:
     benchmark_function_anchor = (
         bool(benchmark_function_manifest.get("table_anchor_present", False)) if benchmark_function_manifest else False
     )
+    experimental_ladder_manifest = read_json(EXPERIMENTAL_EVIDENCE_LADDER_MANIFEST)
+    experimental_ladder_revisions = (
+        int(experimental_ladder_manifest.get("needs_revision_count", -1)) if experimental_ladder_manifest else -1
+    )
+    experimental_ladder_counts = experimental_ladder_manifest.get("status_counts", {}) if experimental_ladder_manifest else {}
+    experimental_ladder_rows = (
+        experimental_ladder_manifest.get("rows", "missing") if experimental_ladder_manifest else "missing"
+    )
+    experimental_ladder_levels = (
+        experimental_ladder_manifest.get("experiment_levels", "missing") if experimental_ladder_manifest else "missing"
+    )
+    experimental_ladder_verified_rows = (
+        experimental_ladder_manifest.get("verified_rows", "missing") if experimental_ladder_manifest else "missing"
+    )
+    experimental_ladder_scopes = experimental_ladder_manifest.get("n_scopes", []) if experimental_ladder_manifest else []
+    experimental_ladder_semantic_bridge = (
+        bool(experimental_ladder_manifest.get("semantic_bridge_present", False))
+        if experimental_ladder_manifest
+        else False
+    )
+    experimental_ladder_ultra = (
+        bool(experimental_ladder_manifest.get("ultra_scale_present", False)) if experimental_ladder_manifest else False
+    )
+    experimental_ladder_anchor = (
+        bool(experimental_ladder_manifest.get("table_anchor_present", False)) if experimental_ladder_manifest else False
+    )
     resource_weight_manifest = read_json(RESOURCE_WEIGHT_SENSITIVITY_MANIFEST)
     resource_weight_revisions = (
         int(resource_weight_manifest.get("needs_revision_count", -1)) if resource_weight_manifest else -1
@@ -493,6 +526,7 @@ def build_rows() -> list[dict[str, str]]:
         bool(cnot_constraint_manifest.get("acm_table_anchor_present", False)) if cnot_constraint_manifest else False
     )
     sshr_reproduction_manifest = read_json(SSHR_REPRODUCTION_MANIFEST)
+    sshr_table8_manifest = read_json(SSHR_TABLE8_MANIFEST)
     sshr_reproduction_revisions = (
         int(sshr_reproduction_manifest.get("needs_revision_count", -1)) if sshr_reproduction_manifest else -1
     )
@@ -506,6 +540,10 @@ def build_rows() -> list[dict[str, str]]:
     sshr_source_tree_available = (
         sshr_reproduction_manifest.get("source_tree_available", "missing") if sshr_reproduction_manifest else "missing"
     )
+    sshr_table8_rows = int(sshr_table8_manifest.get("rows", -1)) if sshr_table8_manifest else -1
+    sshr_table8_all_match = bool(sshr_table8_manifest.get("all_match", False)) if sshr_table8_manifest else False
+    sshr_table8_max_n = int(sshr_table8_manifest.get("max_n", -1)) if sshr_table8_manifest else -1
+    sshr_table8_max_count = int(sshr_table8_manifest.get("max_sshr_count", -1)) if sshr_table8_manifest else -1
     sshr_reproduction_anchor = (
         bool(sshr_reproduction_manifest.get("table_anchor_present", False)) if sshr_reproduction_manifest else False
     )
@@ -1270,6 +1308,30 @@ def build_rows() -> list[dict[str, str]]:
             "next_action": "Rerun analyze_benchmark_function_diversity_audit.py after changing benchmark raw CSV families, function generators, or representativeness wording.",
         },
         {
+            "item": "Experimental evidence ladder",
+            "status": "pass"
+            if "tab:experimental-evidence-ladder" in text
+            and EXPERIMENTAL_EVIDENCE_LADDER_ANALYSIS.exists()
+            and EXPERIMENTAL_EVIDENCE_LADDER_SUMMARY.exists()
+            and EXPERIMENTAL_EVIDENCE_LADDER_MANIFEST.exists()
+            and EXPERIMENTAL_EVIDENCE_LADDER_TABLE.exists()
+            and experimental_ladder_revisions == 0
+            and isinstance(experimental_ladder_rows, int)
+            and experimental_ladder_rows >= 8
+            and isinstance(experimental_ladder_levels, int)
+            and experimental_ladder_levels >= 7
+            and isinstance(experimental_ladder_verified_rows, int)
+            and experimental_ladder_verified_rows >= 30000
+            and "n=20--64" in experimental_ladder_scopes
+            and "n=21--30" in experimental_ladder_scopes
+            and experimental_ladder_semantic_bridge
+            and experimental_ladder_ultra
+            and experimental_ladder_anchor
+            else "needs revision",
+            "evidence": f"Experimental evidence ladder separates exact same-task, public optimum, external toolchain, reversible/phase, complete high-n bridge, ultra-scale symbolic, and AI/search-control evidence; rows={experimental_ladder_rows}; levels={experimental_ladder_levels}; verified_rows={experimental_ladder_verified_rows}; scopes={experimental_ladder_scopes}; semantic_bridge_present={experimental_ladder_semantic_bridge}; ultra_scale_present={experimental_ladder_ultra}; status_counts={experimental_ladder_counts}; needs_revision_count={experimental_ladder_revisions}; table_anchor_present={experimental_ladder_anchor}.",
+            "next_action": "Rerun analyze_experimental_evidence_ladder.py after changing benchmark-suite rows, scale/bridge evidence, learned-control evidence, or experiment-design manuscript text.",
+        },
+        {
             "item": "Resource-weight sensitivity audit",
             "status": "pass"
             if "tab:resource-weight-sensitivity" in text
@@ -1322,15 +1384,22 @@ def build_rows() -> list[dict[str, str]]:
             and SSHR_REPRODUCTION_SUMMARY.exists()
             and SSHR_REPRODUCTION_MANIFEST.exists()
             and SSHR_REPRODUCTION_TABLE.exists()
+            and SSHR_TABLE8_RAW.exists()
+            and SSHR_TABLE8_MANIFEST.exists()
+            and SSHR_TABLE8_TABLE.exists()
             and sshr_reproduction_revisions == 0
             and isinstance(sshr_reproduction_rows, int)
             and sshr_reproduction_rows >= 8
+            and sshr_table8_rows == 6
+            and sshr_table8_all_match
+            and sshr_table8_max_n == 8
+            and sshr_table8_max_count == 609441
             and sshr_reproduction_anchor
             and sshr_reproduction_anonymous_anchor
             and sshr_reproduction_acm_anchor
             else "needs revision",
-            "evidence": f"SSHR reproduction-scope audit separates source-anchored SSHR paper-reference checks, same-function SSHR-H rows, timed SSHR-I rows, exact n<=4 pilot checks, and claim boundaries; rows={sshr_reproduction_rows}; status_counts={sshr_reproduction_counts}; coverage_counts={sshr_reproduction_coverage}; source_tree_available={sshr_source_tree_available}; needs_revision_count={sshr_reproduction_revisions}; table_anchor_present={sshr_reproduction_anchor}; anonymous_anchor={sshr_reproduction_anonymous_anchor}; acm_anchor={sshr_reproduction_acm_anchor}.",
-            "next_action": "Rerun analyze_sshr_reproduction_scope_audit.py after changing SSHR baselines, source-reference wording, or comparison-boundary manuscript text.",
+            "evidence": f"SSHR reproduction-scope audit separates reproduced Table VIII candidate-space counts, same-function SSHR-H rows, timed SSHR-I rows, exact n<=4 pilot checks, and claim boundaries; rows={sshr_reproduction_rows}; table8_rows={sshr_table8_rows}; table8_all_match={sshr_table8_all_match}; table8_max_n={sshr_table8_max_n}; table8_max_count={sshr_table8_max_count}; status_counts={sshr_reproduction_counts}; coverage_counts={sshr_reproduction_coverage}; source_tree_available={sshr_source_tree_available}; needs_revision_count={sshr_reproduction_revisions}; table_anchor_present={sshr_reproduction_anchor}; anonymous_anchor={sshr_reproduction_anonymous_anchor}; acm_anchor={sshr_reproduction_acm_anchor}.",
+            "next_action": "Rerun reproduce_sshr_table8_candidate_counts.py and analyze_sshr_reproduction_scope_audit.py after changing SSHR baselines, source-reference wording, or comparison-boundary manuscript text.",
         },
         {
             "item": "Threats-to-validity audit",

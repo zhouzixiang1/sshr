@@ -2,9 +2,8 @@
   "acm_table_anchor_present": true,
   "anonymous_table_anchor_present": true,
   "coverage_counts": {
-    "covered": 6,
-    "partial": 1,
-    "source-anchored": 1
+    "covered": 7,
+    "partial": 1
   },
   "needs_revision_count": 0,
   "outputs": {
@@ -27,11 +26,11 @@
     },
     {
       "audit_status": "pass",
-      "coverage": "source-anchored",
-      "current_evidence": "The development repository contains the SSHR candidate-count reference and table runner when the full source tree is present; the upload payload records the boundary without requiring that parent source tree.",
-      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; source_tree_available=True; table_viii_counts={3: 49, 4: 257, 5: 1539, 6: 10299, 7: 75905, 8: 609441}; missing_counts=none; missing_tokens=none",
-      "excluded_claim": "This audit does not rerun every published SSHR random benchmark table inside the lightweight submission rebuild.",
-      "item": "SSHR Table VIII candidate-space anchor",
+      "coverage": "covered",
+      "current_evidence": "The package reruns the local SSHR parallelotope enumerator on full n=3..8 hypercubes and matches all six Table VIII candidate-space counts, including n=8 -> 609441.",
+      "evidence": "files_missing=none; tokens=4/4; missing_tokens=none; source_tree_available=True; table_viii_counts={3: 49, 4: 257, 5: 1539, 6: 10299, 7: 75905, 8: 609441}; missing_counts=none; missing_tokens=none; table8_raw_rows=6; raw_matches=6; manifest_rows=6; all_match=True; max_n=8; max_count=609441; summary_rows=1; analysis_exists=True; table_exists=True",
+      "excluded_claim": "This count reproduction does not rerun SSHR-I Gurobi tables or every published SSHR random benchmark.",
+      "item": "SSHR Table VIII candidate-space reproduction",
       "supported_claim": "The paper can explain why SSHR's search space is a CNOT-oriented parallelotope counterpoint rather than the proposed ANF/FPRM action space."
     },
     {
@@ -108,5 +107,11 @@
     "6": 10299,
     "7": 75905,
     "8": 609441
-  }
+  },
+  "table_viii_reproduction_all_match": true,
+  "table_viii_reproduction_max_count": 609441,
+  "table_viii_reproduction_max_n": 8,
+  "table_viii_reproduction_rows": 6,
+  "table_viii_reproduction_runtime_policy": "wall-clock timings are printed to the terminal only and are not stored in tracked artifacts",
+  "table_viii_reproduction_table_present": true
 }

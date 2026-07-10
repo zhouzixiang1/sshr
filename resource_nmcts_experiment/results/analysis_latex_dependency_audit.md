@@ -4,14 +4,14 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 
 ## Status counts
 
-- pass: 243
+- pass: 249
 
 ## Dependency types
 
 - bibliography: 3
 - figure: 21
 - main_source: 3
-- tex_input: 216
+- tex_input: 222
 
 ## Missing dependencies
 
@@ -30,6 +30,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/algorithm_contract` | `paper_latex/tables/algorithm_contract.tex` | True | True | pass |
 | author | tex_input | `tables/search_budget_contract` | `paper_latex/tables/search_budget_contract.tex` | True | True | pass |
 | author | tex_input | `tables/benchmark_suite_audit` | `paper_latex/tables/benchmark_suite_audit.tex` | True | True | pass |
+| author | tex_input | `tables/experimental_evidence_ladder` | `paper_latex/tables/experimental_evidence_ladder.tex` | True | True | pass |
 | author | tex_input | `tables/benchmark_function_diversity_audit` | `paper_latex/tables/benchmark_function_diversity_audit.tex` | True | True | pass |
 | author | tex_input | `tables/baseline_claim_matrix` | `paper_latex/tables/baseline_claim_matrix.tex` | True | True | pass |
 | author | tex_input | `tables/comparison_evidence_matrix` | `paper_latex/tables/comparison_evidence_matrix.tex` | True | True | pass |
@@ -38,6 +39,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | author | tex_input | `tables/comparison_claim_hierarchy` | `paper_latex/tables/comparison_claim_hierarchy.tex` | True | True | pass |
 | author | tex_input | `tables/comparison_route_decision_audit` | `paper_latex/tables/comparison_route_decision_audit.tex` | True | True | pass |
 | author | tex_input | `tables/comparison_answer_scorecard` | `paper_latex/tables/comparison_answer_scorecard.tex` | True | True | pass |
+| author | tex_input | `tables/sshr_table8_candidate_counts` | `paper_latex/tables/sshr_table8_candidate_counts.tex` | True | True | pass |
 | author | tex_input | `tables/sshr_reproduction_scope_audit` | `paper_latex/tables/sshr_reproduction_scope_audit.tex` | True | True | pass |
 | author | tex_input | `tables/baseline_comparability_audit` | `paper_latex/tables/baseline_comparability_audit.tex` | True | True | pass |
 | author | tex_input | `tables/counterpoint_claim_boundary` | `paper_latex/tables/counterpoint_claim_boundary.tex` | True | True | pass |
@@ -111,6 +113,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/algorithm_contract` | `paper_latex/tables/algorithm_contract.tex` | True | True | pass |
 | anonymous | tex_input | `tables/search_budget_contract` | `paper_latex/tables/search_budget_contract.tex` | True | True | pass |
 | anonymous | tex_input | `tables/benchmark_suite_audit` | `paper_latex/tables/benchmark_suite_audit.tex` | True | True | pass |
+| anonymous | tex_input | `tables/experimental_evidence_ladder` | `paper_latex/tables/experimental_evidence_ladder.tex` | True | True | pass |
 | anonymous | tex_input | `tables/benchmark_function_diversity_audit` | `paper_latex/tables/benchmark_function_diversity_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/baseline_claim_matrix` | `paper_latex/tables/baseline_claim_matrix.tex` | True | True | pass |
 | anonymous | tex_input | `tables/comparison_evidence_matrix` | `paper_latex/tables/comparison_evidence_matrix.tex` | True | True | pass |
@@ -119,6 +122,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | anonymous | tex_input | `tables/comparison_claim_hierarchy` | `paper_latex/tables/comparison_claim_hierarchy.tex` | True | True | pass |
 | anonymous | tex_input | `tables/comparison_route_decision_audit` | `paper_latex/tables/comparison_route_decision_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/comparison_answer_scorecard` | `paper_latex/tables/comparison_answer_scorecard.tex` | True | True | pass |
+| anonymous | tex_input | `tables/sshr_table8_candidate_counts` | `paper_latex/tables/sshr_table8_candidate_counts.tex` | True | True | pass |
 | anonymous | tex_input | `tables/sshr_reproduction_scope_audit` | `paper_latex/tables/sshr_reproduction_scope_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/baseline_comparability_audit` | `paper_latex/tables/baseline_comparability_audit.tex` | True | True | pass |
 | anonymous | tex_input | `tables/counterpoint_claim_boundary` | `paper_latex/tables/counterpoint_claim_boundary.tex` | True | True | pass |
@@ -192,6 +196,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/algorithm_contract` | `paper_latex/tables/algorithm_contract.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/search_budget_contract` | `paper_latex/tables/search_budget_contract.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/benchmark_suite_audit` | `paper_latex/tables/benchmark_suite_audit.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/experimental_evidence_ladder` | `paper_latex/tables/experimental_evidence_ladder.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/benchmark_function_diversity_audit` | `paper_latex/tables/benchmark_function_diversity_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/baseline_claim_matrix` | `paper_latex/tables/baseline_claim_matrix.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/comparison_evidence_matrix` | `paper_latex/tables/comparison_evidence_matrix.tex` | True | True | pass |
@@ -200,6 +205,7 @@ This terminal audit parses the author, anonymous, and ACM/TQC LaTeX sources and 
 | acm_tqc | tex_input | `tables/comparison_claim_hierarchy` | `paper_latex/tables/comparison_claim_hierarchy.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/comparison_route_decision_audit` | `paper_latex/tables/comparison_route_decision_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/comparison_answer_scorecard` | `paper_latex/tables/comparison_answer_scorecard.tex` | True | True | pass |
+| acm_tqc | tex_input | `tables/sshr_table8_candidate_counts` | `paper_latex/tables/sshr_table8_candidate_counts.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/sshr_reproduction_scope_audit` | `paper_latex/tables/sshr_reproduction_scope_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/baseline_comparability_audit` | `paper_latex/tables/baseline_comparability_audit.tex` | True | True | pass |
 | acm_tqc | tex_input | `tables/counterpoint_claim_boundary` | `paper_latex/tables/counterpoint_claim_boundary.tex` | True | True | pass |

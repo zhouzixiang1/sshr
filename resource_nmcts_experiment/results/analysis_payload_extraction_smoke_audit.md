@@ -4,15 +4,16 @@ This terminal audit extracts the reviewer/upload payload into a temporary direct
 
 ## Status counts
 
-- pass: 55
+- pass: 56
 
 | item | status | evidence | next action |
 |---|---|---|---|
-| Payload extraction | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1226; error=none. | Regenerate the payload archive if it cannot be safely extracted. |
+| Payload extraction | pass | archive=submission_package/dist/resource_nmcts_submission_payload.tar.gz; extracted_files=1237; error=none. | Regenerate the payload archive if it cannot be safely extracted. |
 | Comparison protocol audit | pass | returncode=0; manifest=results/manifest_comparison_protocol_audit.json; needs_revision_count=0; layers=7; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Comparison target validity audit | pass | returncode=0; manifest=results/manifest_comparison_target_validity_audit.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Comparison answer scorecard | pass | returncode=0; manifest=results/manifest_comparison_answer_scorecard.json; needs_revision_count=0; rows=8; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Comparison claim hierarchy | pass | returncode=0; manifest=results/manifest_comparison_claim_hierarchy.json; needs_revision_count=0; rows=7; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
+| Experimental evidence ladder | pass | returncode=0; manifest=results/manifest_experimental_evidence_ladder.json; needs_revision_count=0; experiment_levels=7; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Score-weight robustness audit | pass | returncode=0; manifest=results/manifest_weight_robustness.json; needs_revision_count=0; compact_checks=28; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | Resource-weight sensitivity audit | pass | returncode=0; manifest=results/manifest_resource_weight_sensitivity_audit.json; needs_revision_count=0; raw_rows=13794; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |
 | CNOT constraint profile audit | pass | returncode=0; manifest=results/manifest_cnot_constraint_profile_audit.json; needs_revision_count=0; summary_rows=6; stderr=none | Inspect the extracted payload audit output and regenerate the archive if this smoke test fails. |

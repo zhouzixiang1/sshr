@@ -1,0 +1,28 @@
+{
+  "acm_table_anchor_present": true,
+  "anonymous_table_anchor_present": true,
+  "benchmark_suite_manifest_rows": 7,
+  "experiment_levels": 7,
+  "function_diversity_rows": 5,
+  "n_scopes": [
+    "n=20--64",
+    "n=21--30",
+    "n=3--18",
+    "n=3--40",
+    "n=3--6",
+    "n=4--5"
+  ],
+  "needs_revision_count": 0,
+  "python": "3.11.15",
+  "raw_rows": 39689,
+  "rows": 8,
+  "script": "analyze_experimental_evidence_ladder.py",
+  "semantic_bridge_present": true,
+  "status_counts": {
+    "pass": 8
+  },
+  "table": "paper_latex/tables/experimental_evidence_ladder.tex",
+  "table_anchor_present": true,
+  "ultra_scale_present": true,
+  "verified_rows": 39368
+}

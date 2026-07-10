@@ -65,8 +65,8 @@
     },
     {
       "boundary": "High-dimensional rows outside generated bridge slices are symbolic checks, not exhaustive truth-table enumeration for all n=31--64 functions.",
-      "evidence": "Scaling audit and function-diversity audit cover n=20,24,28,32,40 plus an n=48,56,64 ultra-scale symbolic stress and resource-profile slice and complete truth-table bridge checks for n=21--30 generated functions.",
-      "evidence_files": "results/analysis_scaling_resource_audit.md; results/analysis_screen_scale_ultra_scale64_stress.md; results/analysis_screen_scale_ultra_scale64_resource_profile.md; results/manifest_screen_scale_ultra_scale64_stress.json; results/manifest_screen_scale_ultra_scale64_resource_profile.json; results/analysis_benchmark_function_diversity_audit.md; paper_latex/tables/scaling_resource_audit.tex; paper_latex/tables/screen_scale_ultra_scale64_stress.tex; paper_latex/tables/screen_scale_ultra_scale64_resource_profile.tex; results/raw_screen_scale_ultra_scale64_terms.csv; results/raw_truth_bridge_terms.csv; results/raw_truth_bridge_n24_terms.csv; results/raw_truth_bridge_n25_terms.csv; results/raw_truth_bridge_n26_terms.csv; results/raw_truth_bridge_n27_terms.csv; results/raw_truth_bridge_n28_terms.csv; results/raw_truth_bridge_n29_terms.csv; results/raw_truth_bridge_n30_terms.csv; paper_latex/figures/submission_v36/fig5_validation.pdf",
+      "evidence": "Scaling, function-diversity, and evidence-ladder audits cover n=20,24,28,32,40 plus an n=48,56,64 ultra-scale symbolic stress/resource-profile slice and complete truth-table bridge checks for n=21--30 generated functions.",
+      "evidence_files": "results/analysis_scaling_resource_audit.md; results/analysis_screen_scale_ultra_scale64_stress.md; results/analysis_screen_scale_ultra_scale64_resource_profile.md; results/manifest_screen_scale_ultra_scale64_stress.json; results/manifest_screen_scale_ultra_scale64_resource_profile.json; results/analysis_benchmark_function_diversity_audit.md; results/analysis_experimental_evidence_ladder.md; paper_latex/tables/scaling_resource_audit.tex; paper_latex/tables/screen_scale_ultra_scale64_stress.tex; paper_latex/tables/screen_scale_ultra_scale64_resource_profile.tex; paper_latex/tables/experimental_evidence_ladder.tex; results/raw_screen_scale_ultra_scale64_terms.csv; results/raw_truth_bridge_terms.csv; results/raw_truth_bridge_n24_terms.csv; results/raw_truth_bridge_n25_terms.csv; results/raw_truth_bridge_n26_terms.csv; results/raw_truth_bridge_n27_terms.csv; results/raw_truth_bridge_n28_terms.csv; results/raw_truth_bridge_n29_terms.csv; results/raw_truth_bridge_n30_terms.csv; paper_latex/figures/submission_v36/fig5_validation.pdf",
       "next_action": "Keep large-scale claims tied to the scaling audit and bridge scope.",
       "requirement": "Large-scale and bridge experiments",
       "status": "pass"
@@ -81,7 +81,7 @@
     },
     {
       "boundary": "Counts describe manuscript artifacts, not independent experimental datasets.",
-      "evidence": "Current package has 7 submitted figure panels and 208 generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
+      "evidence": "Current package has 7 submitted figure panels and 210 generated paper tables; figure asset audit checks PDF/PNG/SVG outputs and source-data CSVs.",
       "evidence_files": "paper_latex/figures/submission_v36; paper_latex/tables; results/analysis_figure_asset_audit.md; results/analysis_reproducibility_audit.md; results/analysis_runtime_envelope_audit.md",
       "next_action": "Spot-check figure/table readability after every layout or data update.",
       "requirement": "Rich paper figures and tables",
@@ -89,7 +89,7 @@
     },
     {
       "boundary": "Author names, ACM CCS/rights metadata, target-venue final policy choices, and final declarations remain external author inputs.",
-      "evidence": "Compiled submission PDF exists with 56 pages and the TeX source is present; an ACM/TQC anonymous review-format smoke draft is generated and audited separately.",
+      "evidence": "Compiled submission PDF exists with 57 pages and the TeX source is present; an ACM/TQC anonymous review-format smoke draft is generated and audited separately.",
       "evidence_files": "paper_latex/resource_nmcts_submission_v1.tex; paper_latex/resource_nmcts_submission_v1.pdf; paper_latex/resource_nmcts_submission_acm_tqc.tex; paper_latex/resource_nmcts_submission_acm_tqc.pdf; results/analysis_target_venue_format_smoke.md; results/analysis_submission_readiness_audit.md",
       "next_action": "After author metadata is supplied, recompile the author, anonymous, and ACM/TQC drafts and rerun readiness checks.",
       "requirement": "Complete LaTeX manuscript draft",

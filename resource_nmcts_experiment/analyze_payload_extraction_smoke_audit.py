@@ -76,6 +76,15 @@ SMOKE_SPECS = (
         minimum_rows=7,
     ),
     SmokeSpec(
+        name="Experimental evidence ladder",
+        script="analyze_experimental_evidence_ladder.py",
+        manifest="results/manifest_experimental_evidence_ladder.json",
+        expected_key="needs_revision_count",
+        expected_value=0,
+        minimum_rows_key="experiment_levels",
+        minimum_rows=7,
+    ),
+    SmokeSpec(
         name="Score-weight robustness audit",
         script="analyze_weight_robustness.py",
         manifest="results/manifest_weight_robustness.json",
