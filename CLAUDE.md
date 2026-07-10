@@ -1,77 +1,120 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+此文件为 Claude Code (claude.ai/code) 提供项目指导。
 
-## Project Overview
+## 项目概述
 
-Reproduction and extension of the SSHR algorithm from "CNOT Oriented Synthesis for Small-Scale Boolean Functions Using Spatial Structures of Parallelotopes" (Zheng et al., 2025). The project synthesizes quantum circuit oracles for small Boolean functions (n=3–8 variables) using geometric parallelotope structures, minimizing CNOT/T gate counts.
+**Resource-Constrained Neural MCTS Oracle Synthesis** — 基于逻辑层的 AI 搜索框架，用于布尔函数量子 Oracle 线路的资源约束综合。
 
-## Environment
+核心思路：将布尔函数 Oracle 表示为 ANF/XAG 风格的符号分解方案，使用神经增强的 MCTS 搜索最优的 compute/uncompute 计划，支持 T/CNOT/Depth/Gates/Ancilla 多目标资源优化。
 
-All code runs in the `mcts-qoracle` conda environment. Use the direct interpreter path (conda run has permission issues on this machine):
+## 目录结构
+
+| 目录 | 用途 |
+|------|------|
+| `src/` | 核心库（neural_policy, nmcts_solver, synthesizers, factor_plan 等） |
+| `src/sshr_lib/` | 自包含的 SSHR 依赖（平行多面体枚举、SSHR-H/I/Beam 基线、MCT 成本表） |
+| `scripts/` | 运行和训练脚本（`run_*.py`, `train_*.py`） |
+| `analysis/` | 123 个分析/审计脚本（`analyze_*.py`） |
+| `submission/` | 投稿工具（`make_*`, `validate_*`, `rebuild_*`） |
+| `tests/` | 测试文件 |
+| `models/` | 21 个训练好的 PyTorch 模型 |
+| `results/` | 实验数据（CSV, JSON, Markdown） |
+| `paper_latex/` | 英文投稿（ACM TQC 格式） |
+| `paper_latex_zh/` | 中文手稿（v6~v40 历史版本） |
+| `submission_package/` | 投稿材料包 |
+| `benchmark_exports/` | 导出的基准文件（BLIF, PLA, JSON） |
+
+归档项目在 `_archive/` 目录（只读参考）。
+
+## 开发环境
+
+| 环境 | 解释器路径 | 用途 |
+|---|---|---|
+| `mcts-qoracle` | `/opt/anaconda3/envs/mcts-qoracle/bin/python` | 核心合成、训练、大部分脚本 |
+| `sshr` | `/opt/anaconda3/envs/sshr/bin/python` | ILP/Gurobi 相关脚本 |
+
+Gurobi 仅安装在 `sshr` 环境，许可证路径 `~/.gurobi/gurobi.lic`。
+
+## 常用命令
+
+### 导入测试
 
 ```bash
-/opt/anaconda3/envs/mcts-qoracle/bin/python <script>.py
+cd resource_nmcts
+/opt/anaconda3/envs/mcts-qoracle/bin/python -c "
+from src.synthesizers import synthesize
+from src.resource_model import ResourceWeights
+from src.factor_plan import SearchConfig
+print('All imports OK')
+"
 ```
 
-Key dependency: **Gurobi** (`gurobipy`) is required for ILP solvers (SSHR-I, ESOP ILP). Not needed for SSHR-H or enumeration.
-
-## Main Code Areas
-
-### `src/` — Main project directory
-
-This directory is the Git repository and contains the SSHR implementation, AI-SSHR experiments, GNN-SSHR project, paper assets, and project-level guidance files.
-
-### `src/sshr/` — Core SSHR implementation
-
-Contains the core SSHR algorithms and extensive experiment scripts. See `src/sshr/CLAUDE.md` for full documentation.
-
-Key additions beyond `src/`:
-- **SSHR-MCTS v2** (`sshr_mcts_v2.py`) — Numpy-accelerated UCT Monte Carlo tree search, 4–5x faster than v1
-- **SSHR-Beam** (`sshr_beam.py`) — Beam search synthesis, outperforms MCTS at n≤6
-- **SSHR-H variant** (`sshr_h_paper.py`) — Faithful paper implementation (enumerates from current onset, not full hypercube)
-- **ESOP ILP** (`esop_ilp.py`) — Exact ESOP solver for comparison
-- NPN representative constants for n=4 (`npn_reps_n4.py`)
+### 冒烟测试
 
 ```bash
-cd src/sshr && /opt/anaconda3/envs/mcts-qoracle/bin/python -m pytest tests/ -v
-/opt/anaconda3/envs/mcts-qoracle/bin/python src/sshr/experiments/run_tables.py --tables 8
+cd resource_nmcts
+/opt/anaconda3/envs/mcts-qoracle/bin/python tests/tests_smoke.py
 ```
 
-### `src/ai_sshr_experiment/` — AI-SSHR prototype
+### 运行实验
 
-Early AI-guided search and pruning experiments using rule rankers, LightGBM rankers, XOR-Beam, and pruned ILP utilities.
+```bash
+cd resource_nmcts
+./scripts/run_experiments.py --preset smoke
+```
 
-### `src/gnn-sshr/` — GNN-SSHR project
+### 投稿重建
 
-Self-contained GNN/LightGBM candidate-pruning project. It copies the SSHR core into `src/gnn-sshr/src/sshr_core/` so experiments remain isolated from changes in `src/sshr/`.
+```bash
+cd resource_nmcts
+bash submission/rebuild_submission_package.sh
+```
 
-### `src/tex/` — LaTeX paper source
+## 核心架构
 
-Chinese paper source, bibliography, journal styles, and figures.
+### 表示层
 
-## Algorithm Summary
+- **ANF（代数范式）**：布尔函数表示为 GF(2) 上的单项式集合，通过 `anf_utils.py` 的快速 Möbius 变换计算
+- **分解计划**（`factor_plan.py`）：树形 compute/uncompute 结构 — 提取共享子项作为临时合取，用 logical-AND 计算，Clifford 门反计算
+- **资源成本**（`resource_model.py`）：多目标成本模型（T, CNOT, Depth, Gates, Ancilla），可配置权重
 
-| Algorithm | File | Method | Update Semantics | Scalability |
-|-----------|------|--------|-----------------|-------------|
-| SSHR-H | `sshr_h.py` | Greedy, R=3/4 threshold | XOR (allows off-set contamination) | n≤8 |
-| SSHR-I | `sshr_i.py` | ILP parity cover (Gurobi) | XOR | n≤6 (timeout beyond) |
-| ESOP | `esop.py` | ILP over product terms {0,1,*}^n | XOR | n≤6 |
-| SSHR-MCTS v2 | `sshr_mcts_v2.py` | UCT with numpy rollout | Set subtract (monotone) | n≤7 |
-| SSHR-Beam | `sshr_beam.py` | Beam search + greedy lower bound | Set subtract (monotone) | n≤6 |
+### 搜索层
 
-XOR semantics (`src/` and `src/sshr/`) match the paper but cause cascading pollution at n≥7. Monotone semantics (MCTS/Beam) avoid this at the cost of restricted candidate set.
+- **NMCTS 求解器**（`nmcts_solver.py`）：递归 PUCT/MCTS，状态 = (residual terms, prefix, ancilla count)，动作 = 分解操作
+- **神经策略**（`neural_policy.py`）：3 层 MLP 动作打分器（12 维输入 → 96 隐藏 → 1 分数），用作 MCTS 的先验
+- **综合器**（`synthesizers.py`）：对外统一的 `synthesize()` 接口，支持 direct_anf、greedy_factor、neural_mcts、resource_nmcts、pareto_resource_nmcts 等方法
 
-## Key Domain Concepts
+### 扩展
 
-- **Bitmask convention**: Sets of minterms are represented as Python integers throughout. Bit k set = minterm k is in the set.
-- **Parallelotope**: A geometric block in {0,1}^n defined by a base pattern and disjoint basis vectors. Equivalent to a grouped-flipping-variable structure. Dimension = number of basis vectors; size = 2^dimension.
-- **Parity cover (WP-SCP)**: Each minterm in on-set must be covered by an odd number of blocks; off-set by an even number. This is the ILP formulation.
-- **Candidate counts** (Table VIII): n=3→49, n=4→257, n=5→1539, n=6→10299, n=7→75905, n=8→609441. Enumeration is the performance bottleneck for large n.
+- **仿射搜索**（`affine_search.py`）：可逆线性变换预条件的输入搜索
+- **FPRM 搜索**：固定极性 Reed-Muller 展开搜索
+- **Phase/Rz 后端**：逻辑层到相位旋转的映射
+- **屏幕门控**：高维函数的结构判断和深度选择策略
 
-## Other Directories
+### 基线后端
 
-- `ECC/` — Elliptic curve discrete logarithm quantum resource papers (5 PDFs)
-- `lunwen/` — Logic synthesis / quantum compilation papers (11 PDFs)
-- `src1/` — Reference paper copy (1 PDF)
-- `榜题方案汇总材料/` — Competition proposal materials across multiple regions and domains
+- **SSHR-H/SSHR-I**（`src/sshr_lib/`）：基于平行多面体的贪心和 ILP 综合
+- **ESOP MILP**（`esop_milp.py`）：精确 ESOP 求解器
+- **Cube Search**（`cube_search.py`）：ESOP 风格立方体搜索
+- **外部工具链**：ABC AIG/XAG/LUT, mockturtle, CirKit, RevKit, Caterpillar (通过 `scripts/run_external_baselines.py`)
+
+## 关键设计决策
+
+- 项目**不依赖**外部 `src/sshr/` 目录 — 所有 SSHR 依赖已复制到 `src/sshr_lib/` 并修改导入路径
+- 使用 `resource_nmcts/` 作为工作目录（非 `src/`），所有脚本从项目根目录运行
+- 训练模型保存在 `models/`，可通过 `NeuralScorer(model_path)` 加载
+
+## 归档项目
+
+`_archive/` 包含此前的 4 个研究轨道，仅供查阅：
+
+| 子目录 | 内容 |
+|--------|------|
+| `sshr/` | 原始 SSHR 核心实现 |
+| `ai-sshr-experiment/` | AI 引导 SSHR 原型（规则排序器, LightGBM, XOR-Beam） |
+| `gnn-sshr/` | GNN 候选剪枝项目 |
+| `rl-mcts-experiment/` | RL+MCTS 块搜索概念验证 |
+| `papers/` | 参考文献 PDF |
+| `tex-paper/` | 稀疏量子态制备论文 |
+| `legacy-drafts/` | 早期设计文档 |
