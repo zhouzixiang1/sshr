@@ -317,7 +317,7 @@ def _ilp_core(
         onset-filtered parallelotopes list) to use as Gurobi MIPStart.
     """
     from src.sshr_lib.sshr_h import sshr_h as _sshr_h
-    from parallelotope import Parallelotope as _P
+    from src.sshr_lib.parallelotope import Parallelotope as _P
 
     n = bf.n
     if not bf.onset:

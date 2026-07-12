@@ -25,7 +25,7 @@ from src.nmcts_solver import NeuralMCTSSolver
 from src.resource_model import ResourceCost, ResourceWeights
 
 
-STRUCTURE_GATE_MODEL = Path(__file__).resolve().parent / "models" / "resource_structure_gate.json"
+STRUCTURE_GATE_MODEL = Path(__file__).resolve().parent.parent / "models" / "resource_structure_gate.json"
 
 
 @dataclass
