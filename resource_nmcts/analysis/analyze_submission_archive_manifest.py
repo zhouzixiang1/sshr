@@ -18,8 +18,10 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-THIS_DIR = Path(__file__).resolve().parent
+_THIS_FILE = Path(__file__).resolve()
+THIS_DIR = _THIS_FILE.parent if (_THIS_FILE.parent / "results").exists() else _THIS_FILE.parent.parent
 RESULTS = THIS_DIR / "results"
+from _paths import find as _find  # noqa: E402
 TABLES = THIS_DIR / "paper_latex" / "tables"
 FIGURES = THIS_DIR / "paper_latex" / "figures" / "submission_v36"
 SOURCE_DATA = FIGURES / "source_data"
@@ -216,13 +218,13 @@ def specs() -> list[CategorySpec]:
             explicit=(
                 THIS_DIR / "README.md",
                 THIS_DIR / "DELIVERABLE_zh.md",
-                THIS_DIR / "rebuild_submission_package.sh",
-                THIS_DIR / "verify_submission_package.sh",
-                THIS_DIR / "factor_plan.py",
-                THIS_DIR / "nmcts_solver.py",
-                THIS_DIR / "synthesizers.py",
-                THIS_DIR / "validate_submission_metadata.py",
-                THIS_DIR / "selftest_submission_metadata_pipeline.py",
+                _find("rebuild_submission_package.sh"),
+                _find("verify_submission_package.sh"),
+                _find("factor_plan.py"),
+                _find("nmcts_solver.py"),
+                _find("synthesizers.py"),
+                _find("validate_submission_metadata.py"),
+                _find("selftest_submission_metadata_pipeline.py"),
             ),
             patterns=((THIS_DIR, "*.py"),),
             boundary="Includes reproducible entry points and top-level core implementation modules; raw sweeps still require their individual drivers.",

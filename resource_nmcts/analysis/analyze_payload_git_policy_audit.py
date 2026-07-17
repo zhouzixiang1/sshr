@@ -16,12 +16,14 @@ import sys
 from pathlib import Path
 
 
-THIS_DIR = Path(__file__).resolve().parent
+_THIS_FILE = Path(__file__).resolve()
+THIS_DIR = _THIS_FILE.parent if (_THIS_FILE.parent / "results").exists() else _THIS_FILE.parent.parent
 RESULTS = THIS_DIR / "results"
+from _paths import find as _find  # noqa: E402
 ARCHIVE = THIS_DIR / "submission_package" / "dist" / "resource_nmcts_submission_payload.tar.gz"
 SHA256 = THIS_DIR / "submission_package" / "dist" / "resource_nmcts_submission_payload.tar.gz.sha256"
-REBUILD_SCRIPT = THIS_DIR / "rebuild_submission_package.sh"
-VERIFY_SCRIPT = THIS_DIR / "verify_submission_package.sh"
+REBUILD_SCRIPT = _find("rebuild_submission_package.sh")
+VERIFY_SCRIPT = _find("verify_submission_package.sh")
 EXTRACTED_PAYLOAD_MODE = os.environ.get("RESOURCE_NMCTS_EXTRACTED_PAYLOAD") == "1"
 
 

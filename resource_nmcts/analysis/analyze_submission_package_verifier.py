@@ -71,8 +71,10 @@ import sys
 from pathlib import Path
 
 
-THIS_DIR = Path(__file__).resolve().parent
+_THIS_FILE = Path(__file__).resolve()
+THIS_DIR = _THIS_FILE.parent if (_THIS_FILE.parent / "results").exists() else _THIS_FILE.parent.parent
 RESULTS = THIS_DIR / "results"
+from _paths import find as _find  # noqa: E402
 PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.pdf"
 LOG = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.log"
 AUTHOR_TEX = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.tex"
@@ -245,8 +247,8 @@ PAYLOAD_GIT_POLICY_MANIFEST = RESULTS / "manifest_payload_git_policy_audit.json"
 PAYLOAD_EXTRACTION_SMOKE_MANIFEST = RESULTS / "manifest_payload_extraction_smoke_audit.json"
 PAYLOAD_VERIFIER_SMOKE_MANIFEST = RESULTS / "manifest_payload_verifier_smoke_audit.json"
 PAYLOAD_LATEX_COMPILE_MANIFEST = RESULTS / "manifest_payload_latex_compile_audit.json"
-METADATA_FROM_ANSWERS = THIS_DIR / "make_submission_metadata_from_answers.py"
-METADATA_STARTER = THIS_DIR / "make_submission_metadata_starter.py"
+METADATA_FROM_ANSWERS = _find("make_submission_metadata_from_answers.py")
+METADATA_STARTER = _find("make_submission_metadata_starter.py")
 METADATA_ANSWERS_FILE = THIS_DIR / "submission_package" / "submission_metadata_answers.json"
 METADATA_FILE = THIS_DIR / "submission_package" / "submission_metadata.json"
 

@@ -20,7 +20,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-THIS_DIR = Path(__file__).resolve().parent
+_THIS_FILE = Path(__file__).resolve()
+THIS_DIR = _THIS_FILE.parent if (_THIS_FILE.parent / "results").exists() else _THIS_FILE.parent.parent
 RESULTS = THIS_DIR / "results"
 AUTHOR_PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.pdf"
 ANONYMOUS_PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.pdf"

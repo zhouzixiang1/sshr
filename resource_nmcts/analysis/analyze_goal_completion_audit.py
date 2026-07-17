@@ -17,7 +17,9 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-THIS_DIR = Path(__file__).resolve().parent
+_THIS_FILE = Path(__file__).resolve()
+THIS_DIR = _THIS_FILE.parent if (_THIS_FILE.parent / "results").exists() else _THIS_FILE.parent.parent
+from _paths import find as _find  # noqa: E402
 RESULTS = THIS_DIR / "results"
 PAPER = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.tex"
 PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.pdf"
@@ -426,9 +428,9 @@ def build_items() -> list[GoalItem]:
             requirement="Reproducible submission payload",
             status=status_if(
                 (
-                    THIS_DIR / "rebuild_submission_package.sh",
-                    THIS_DIR / "make_submission_payload_archive.py",
-                    THIS_DIR / "analyze_payload_roundtrip_audit.py",
+                    _find("rebuild_submission_package.sh"),
+                    _find("make_submission_payload_archive.py"),
+                    _find("analyze_payload_roundtrip_audit.py"),
                     RESULTS / "analysis_submission_archive_manifest.md",
                     RESULTS / "analysis_submission_payload_archive.md",
                     RESULTS / "analysis_payload_roundtrip_audit.md",
@@ -438,9 +440,9 @@ def build_items() -> list[GoalItem]:
             ),
             evidence="Rebuild script regenerates paper-facing outputs and the payload archive; archive, SHA256 sidecar, and payload round-trip integrity audit are present.",
             evidence_files=(
-                THIS_DIR / "rebuild_submission_package.sh",
-                THIS_DIR / "make_submission_payload_archive.py",
-                THIS_DIR / "analyze_payload_roundtrip_audit.py",
+                _find("rebuild_submission_package.sh"),
+                _find("make_submission_payload_archive.py"),
+                _find("analyze_payload_roundtrip_audit.py"),
                 RESULTS / "analysis_submission_archive_manifest.md",
                 RESULTS / "analysis_submission_payload_archive.md",
                 RESULTS / "analysis_payload_roundtrip_audit.md",

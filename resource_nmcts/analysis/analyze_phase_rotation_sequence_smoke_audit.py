@@ -35,7 +35,8 @@ from typing import Iterable, Sequence
 import numpy as np
 
 
-THIS_DIR = Path(__file__).resolve().parent
+_THIS_FILE = Path(__file__).resolve()
+THIS_DIR = _THIS_FILE.parent if (_THIS_FILE.parent / "results").exists() else _THIS_FILE.parent.parent
 ROOT = THIS_DIR.parent
 SSHR_DIR = ROOT / "sshr"
 if str(SSHR_DIR) not in sys.path:

@@ -40,7 +40,8 @@ from run_experiments import make_suite
 from src.synthesizers import synthesize
 
 
-THIS_DIR = Path(__file__).resolve().parent
+_THIS_FILE = Path(__file__).resolve()
+THIS_DIR = _THIS_FILE.parent if (_THIS_FILE.parent / "results").exists() else _THIS_FILE.parent.parent
 RESULTS = THIS_DIR / "results"
 PAPER_TABLES = THIS_DIR / "paper_latex" / "tables"
 METHOD = "and_exact_fprm_dp"

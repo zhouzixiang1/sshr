@@ -22,7 +22,8 @@ import subprocess
 from pathlib import Path
 
 
-THIS_DIR = Path(__file__).resolve().parent
+_THIS_FILE = Path(__file__).resolve()
+THIS_DIR = _THIS_FILE.parent if (_THIS_FILE.parent / "results").exists() else _THIS_FILE.parent.parent
 ROOT = THIS_DIR.parent
 RESULTS = THIS_DIR / "results"
 ENV_BIN = Path("/opt/anaconda3/envs/mcts-qoracle/bin")

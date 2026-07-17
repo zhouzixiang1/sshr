@@ -22,7 +22,8 @@ from pathlib import Path
 from typing import Any
 
 
-THIS_DIR = Path(__file__).resolve().parent
+_THIS_FILE = Path(__file__).resolve()
+THIS_DIR = _THIS_FILE.parent if (_THIS_FILE.parent / "results").exists() else _THIS_FILE.parent.parent
 ROOT = THIS_DIR.parent
 RESULTS = THIS_DIR / "results"
 TABLES = THIS_DIR / "paper_latex" / "tables"

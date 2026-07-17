@@ -14,11 +14,12 @@ from analyze_submission_metadata_audit import METADATA_TEMPLATE, THIS_DIR, read_
 
 
 RESULTS = THIS_DIR / "results"
+from _paths import find as _find  # noqa: E402
 SUMMARY = RESULTS / "summary_final_upload_plan_tool_audit.csv"
 ANALYSIS = RESULTS / "analysis_final_upload_plan_tool_audit.md"
 MANIFEST = RESULTS / "manifest_final_upload_plan_tool_audit.json"
 
-GENERATOR = THIS_DIR / "make_final_upload_plan.py"
+GENERATOR = _find("make_final_upload_plan.py")
 PRIVATE_OUTPUT = THIS_DIR / "submission_package" / "generated_upload_plan.md"
 CURRENT_PLAN_MANIFEST = RESULTS / "manifest_final_upload_plan.json"
 

@@ -15,14 +15,17 @@ import subprocess
 from pathlib import Path
 
 
-THIS_DIR = Path(__file__).resolve().parent
+_THIS_FILE = Path(__file__).resolve()
+# Support both flat (payload) and layered (dev worktree) layouts
+THIS_DIR = _THIS_FILE.parent if (_THIS_FILE.parent / "results").exists() else _THIS_FILE.parent.parent
 RESULTS = THIS_DIR / "results"
+from _paths import find as _find  # noqa: E402
 PAPER = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.tex"
 PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_v1.pdf"
 ANONYMOUS_PAPER = THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.tex"
 ANONYMOUS_PDF = THIS_DIR / "paper_latex" / "resource_nmcts_submission_anonymous.pdf"
-REBUILD_SCRIPT = THIS_DIR / "rebuild_submission_package.sh"
-VERIFY_SCRIPT = THIS_DIR / "verify_submission_package.sh"
+REBUILD_SCRIPT = _find("rebuild_submission_package.sh")
+VERIFY_SCRIPT = _find("verify_submission_package.sh")
 ARCHIVE_ANALYSIS = RESULTS / "analysis_submission_archive_manifest.md"
 ARCHIVE_SUMMARY = RESULTS / "summary_submission_archive_manifest.csv"
 ARCHIVE_MANIFEST = RESULTS / "manifest_submission_archive_manifest.json"

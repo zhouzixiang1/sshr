@@ -10,13 +10,15 @@ from collections import Counter
 from pathlib import Path
 
 
-THIS_DIR = Path(__file__).resolve().parent
+_THIS_FILE = Path(__file__).resolve()
+THIS_DIR = _THIS_FILE.parent if (_THIS_FILE.parent / "results").exists() else _THIS_FILE.parent.parent
 RESULTS = THIS_DIR / "results"
+from _paths import find as _find  # noqa: E402
 TABLES = THIS_DIR / "paper_latex" / "tables"
 
 
 def config_values() -> dict[str, str]:
-    text = (THIS_DIR / "factor_plan.py").read_text(encoding="utf-8")
+    text = (_find("factor_plan.py")).read_text(encoding="utf-8")
     values: dict[str, str] = {}
     for key in (
         "candidate_top_k",

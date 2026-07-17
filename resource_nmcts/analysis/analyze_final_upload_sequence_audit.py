@@ -15,8 +15,10 @@ import sys
 from pathlib import Path
 
 
-THIS_DIR = Path(__file__).resolve().parent
+_THIS_FILE = Path(__file__).resolve()
+THIS_DIR = _THIS_FILE.parent if (_THIS_FILE.parent / "results").exists() else _THIS_FILE.parent.parent
 RESULTS = THIS_DIR / "results"
+from _paths import find as _find  # noqa: E402
 SUBMISSION_PACKAGE = THIS_DIR / "submission_package"
 
 FINAL_HANDOFF = SUBMISSION_PACKAGE / "FINAL_SUBMISSION_HANDOFF_zh.md"
@@ -30,9 +32,9 @@ COMPARISON_HANDOFF = SUBMISSION_PACKAGE / "COMPARISON_HANDOFF_zh.md"
 COMPARISON_MATRIX = SUBMISSION_PACKAGE / "COMPARISON_SIGNIFICANCE_MATRIX_zh.md"
 ANSWER_TEMPLATE = SUBMISSION_PACKAGE / "submission_metadata_answers_template.json"
 METADATA_TEMPLATE = SUBMISSION_PACKAGE / "submission_metadata_template.json"
-REBUILD_SCRIPT = THIS_DIR / "rebuild_submission_package.sh"
-VERIFY_SCRIPT = THIS_DIR / "verify_submission_package.sh"
-METADATA_FROM_ANSWERS = THIS_DIR / "make_submission_metadata_from_answers.py"
+REBUILD_SCRIPT = _find("rebuild_submission_package.sh")
+VERIFY_SCRIPT = _find("verify_submission_package.sh")
+METADATA_FROM_ANSWERS = _find("make_submission_metadata_from_answers.py")
 
 TARGET_VENUE_DECISION_MANIFEST = RESULTS / "manifest_target_venue_decision_audit.json"
 TARGET_POLICY_MANIFEST = RESULTS / "manifest_target_venue_policy_checklist.json"
