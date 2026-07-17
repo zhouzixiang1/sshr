@@ -1,0 +1,6 @@
+comparison,model,feature_dim,label_mode,mean_score,wins,losses,ties,delta_pct,baseline
+old_vs_noprior,old_12d,12,immediate,55.0126,0,0,177,-0.376,no_prior
+v2_vs_noprior,v2_24d,24,immediate,54.3016,41,0,136,0.921,no_prior
+v2_vs_old,v2_24d,24,immediate,54.3016,51,0,126,1.292,old_12d
+v2_rollout_vs_noprior,v2_24d_rollout,24,rollout,54.369,38,0,139,0.798,no_prior
+v2_vs_random_mean,v2_24d,24,immediate,54.3016,various,various,various,0.052,random_prior_mean

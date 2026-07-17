@@ -1,0 +1,16 @@
+{
+  "experiment": "rotation_synthesis_clifford_t",
+  "description": "Ross-Selinger Clifford+T rotation synthesis T-count estimates for phase/Rz branch angles",
+  "method": "Ross-Selinger bound: T-count = ceil(3*log2(1/epsilon))",
+  "n_angles": 14,
+  "precisions": [
+    0.0001,
+    1e-06,
+    1e-08,
+    1e-10,
+    1e-12
+  ],
+  "verified": true,
+  "backend": "python_ross_selinger_bound",
+  "replaces": "gridsynth command-line tool (not available in this environment)"
+}

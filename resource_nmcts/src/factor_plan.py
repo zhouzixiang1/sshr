@@ -910,6 +910,61 @@ def action_features(
 ) -> List[float]:
     degrees = [t.bit_count() for t in terms] or [0]
     residual_degrees = [t.bit_count() for t in residuals] or [0]
+    rest_degrees = [t.bit_count() for t in rest] or [0]
+
+    # --- Structural features ---
+    # Variable co-occurrence: how many terms each factor variable appears in
+    factor_vars = [i for i in range(factor.bit_length()) if factor & (1 << i)]
+    n_factor_vars = max(len(factor_vars), 1)
+    factor_var_freq = []
+    for v in factor_vars:
+        cnt = sum(1 for t in terms if t & (1 << v))
+        factor_var_freq.append(cnt)
+    mean_factor_var_freq = sum(factor_var_freq) / n_factor_vars
+    max_factor_var_freq = max(factor_var_freq) if factor_var_freq else 0.0
+
+    # Co-occurrence density among factor variable pairs
+    pair_cooccur = 0
+    pair_total = 0
+    for i in range(len(factor_vars)):
+        for j in range(i + 1, len(factor_vars)):
+            pair_total += 1
+            cnt = sum(1 for t in terms if (t & (1 << factor_vars[i])) and (t & (1 << factor_vars[j])))
+            pair_cooccur += cnt
+    pair_density = pair_cooccur / max(pair_total * max(len(terms), 1), 1)
+
+    # All variable frequency stats (for context)
+    max_bit = max((t.bit_length() for t in terms), default=1)
+    all_var_freq = [sum(1 for t in terms if t & (1 << v)) for v in range(max_bit)]
+    n_all_vars = max(len(all_var_freq), 1)
+    mean_var_freq = sum(all_var_freq) / n_all_vars
+    var_freq_std = (sum((f - mean_var_freq) ** 2 for f in all_var_freq) / n_all_vars) ** 0.5
+
+    # Degree distribution shape
+    degree_hist = {}
+    for d in degrees:
+        degree_hist[d] = degree_hist.get(d, 0) + 1
+    degree_concentration = max(degree_hist.values()) / max(len(terms), 1)
+
+    # Residual overlap: do residuals share structure?
+    residual_overlap = 0
+    if len(residuals) > 1:
+        res_list = list(residuals)
+        for i in range(len(res_list)):
+            for j in range(i + 1, len(res_list)):
+                residual_overlap += (res_list[i] & res_list[j]).bit_count()
+        residual_overlap /= max(len(res_list) * (len(res_list) - 1) / 2 * max_bit, 1)
+
+    # Gain efficiency: gain per group term (how much each factored term saves)
+    gain_per_term = gain / max(len(group), 1)
+
+    # Recursive potential: residuals have lower degree -> easier to factor further
+    avg_term_degree = sum(degrees) / max(len(degrees), 1)
+    avg_residual_degree = sum(residual_degrees) / max(len(residual_degrees), 1)
+    degree_reduction = (avg_term_degree - avg_residual_degree) / max(avg_term_degree, 1.0)
+
+    # Rest similarity: if rest terms are similar to each other, future factoring is promising
+    rest_avg_degree = sum(rest_degrees) / max(len(rest_degrees), 1)
     return [
         float(len(terms)),
         float(sum(degrees) / len(degrees)),
@@ -923,6 +978,19 @@ def action_features(
         float(max(residual_degrees)),
         float(gain / max(direct_total, 1.0)),
         float(len(group) / max(len(terms), 1)),
+        # --- 12 new structural features ---
+        float(mean_factor_var_freq),
+        float(max_factor_var_freq),
+        float(pair_density),
+        float(mean_var_freq),
+        float(var_freq_std),
+        float(degree_concentration),
+        float(residual_overlap),
+        float(gain_per_term),
+        float(degree_reduction),
+        float(rest_avg_degree),
+        float(max_factor_var_freq / max(mean_var_freq, 1.0)),  # factor var selectivity
+        float(len(factor_vars) / max(max_bit, 1)),  # factor covers this fraction of all variables
     ]
 
 

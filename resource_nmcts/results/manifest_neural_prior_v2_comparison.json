@@ -1,0 +1,6 @@
+{
+  "experiment": "neural_prior_v2_comparison",
+  "description": "New 24-feature neural prior vs old 12-feature and no-prior, 177 traditional functions",
+  "finding": "24-feature model improves over old 12-feature by 1.29% (51/0/126 W/L/T); vs no-prior by 0.92% (41/0/136). vs random prior mean 0.05%.",
+  "rows": 5
+}

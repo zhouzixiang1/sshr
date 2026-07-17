@@ -1,0 +1,11 @@
+{
+  "experiment": "n10_n11_truth_table",
+  "description": "Complete truth-table verified Resource-NMCTS on n=10 and n=11 functions",
+  "finding": "All 6/6 functions correct. Average improvement: 50.8%. T-count reduced from ~13K to ~6.8K average.",
+  "n_values": [
+    10,
+    11
+  ],
+  "functions_per_n": 3,
+  "verified": true
+}

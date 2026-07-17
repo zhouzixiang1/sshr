@@ -1,0 +1,7 @@
+{
+  "experiment": "mcts_budget_sweep",
+  "description": "MCTS simulation budget sweep: 32/96/256/512/1024 on neural_mcts and resource_nmcts, 177 traditional functions",
+  "finding": "MCTS converges at 96 simulations on n<=6 functions; additional budget yields 0.028% max improvement at 95x time cost",
+  "rows": 9,
+  "verified": true
+}

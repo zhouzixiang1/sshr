@@ -1,0 +1,9 @@
+name,n,direct_score,resource_score,improvement_pct,correct,direct_T,resource_T,direct_CNOT,resource_CNOT
+majority_n7,7,473.0,153.66,67.51,True,420,132,665,238
+majority_n8,8,1879.8,535.55,71.51,True,1676,464,2607,799
+inner_product_n6,6,13.56,13.56,0.0,True,12,12,21,21
+inner_product_n8,8,18.08,18.08,0.0,True,16,16,28,28
+carry_n6,6,80.04,42.46,46.95,True,68,32,109,60
+carry_n8,8,224.76,102.8,54.26,True,196,84,309,146
+symmetric_n7_t4,7,473.0,153.66,67.51,True,420,132,665,238
+symmetric_n8_t4,8,981.16,535.04,45.47,True,868,464,1373,799
