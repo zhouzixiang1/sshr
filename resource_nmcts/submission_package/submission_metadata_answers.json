@@ -5,87 +5,87 @@
     "autofill": "Repository URL, current commit hash, and environment notes are filled from the current checkout by the conversion script."
   },
   "target_venue": {
-    "name": "AUTHOR INPUT REQUIRED",
-    "manuscript_type": "AUTHOR INPUT REQUIRED",
-    "formatting_policy_checked": "AUTHOR INPUT REQUIRED",
-    "reference_style_checked": "AUTHOR INPUT REQUIRED",
-    "word_limit_checked": "AUTHOR INPUT REQUIRED",
-    "supplementary_material_policy_checked": "AUTHOR INPUT REQUIRED",
-    "ai_disclosure_policy_checked": "AUTHOR INPUT REQUIRED",
-    "anonymous_review_required": "AUTHOR INPUT REQUIRED"
+    "name": "ACM Transactions on Quantum Computing",
+    "manuscript_type": "Research Article",
+    "formatting_policy_checked": "yes",
+    "reference_style_checked": "yes",
+    "word_limit_checked": "yes",
+    "supplementary_material_policy_checked": "yes",
+    "ai_disclosure_policy_checked": "yes",
+    "anonymous_review_required": "no"
   },
   "authors": [
     {
-      "order": "AUTHOR INPUT REQUIRED",
-      "name": "AUTHOR INPUT REQUIRED",
-      "orcid": "AUTHOR INPUT REQUIRED",
+      "order": 1,
+      "name": "Zixiang Zhou",
+      "orcid": "0009-0006-7485-9581",
       "affiliations": [
-        "AUTHOR INPUT REQUIRED"
+        "Hangzhou Dianzi University, Hangzhou, China"
       ],
-      "email": "AUTHOR INPUT REQUIRED",
-      "corresponding": "AUTHOR INPUT REQUIRED"
+      "email": "zhouzixiang@hdu.edu.cn",
+      "corresponding": true
     }
   ],
   "corresponding_author": {
-    "name": "AUTHOR INPUT REQUIRED",
-    "email": "AUTHOR INPUT REQUIRED",
-    "affiliation": "AUTHOR INPUT REQUIRED",
-    "postal_address": "AUTHOR INPUT REQUIRED"
+    "name": "Zixiang Zhou",
+    "email": "zhouzixiang@hdu.edu.cn",
+    "affiliation": "Hangzhou Dianzi University, Hangzhou, China",
+    "postal_address": "Hangzhou, Zhejiang, China"
   },
   "author_contributions": {
-    "conceptualization": "AUTHOR INPUT REQUIRED",
-    "methodology": "AUTHOR INPUT REQUIRED",
-    "software": "AUTHOR INPUT REQUIRED",
-    "validation": "AUTHOR INPUT REQUIRED",
-    "formal_analysis": "AUTHOR INPUT REQUIRED",
-    "investigation": "AUTHOR INPUT REQUIRED",
-    "data_curation": "AUTHOR INPUT REQUIRED",
-    "writing_original_draft": "AUTHOR INPUT REQUIRED",
-    "writing_review_editing": "AUTHOR INPUT REQUIRED",
-    "visualization": "AUTHOR INPUT REQUIRED",
-    "supervision": "AUTHOR INPUT REQUIRED",
-    "funding_acquisition": "AUTHOR INPUT REQUIRED"
+    "conceptualization": "Zixiang Zhou",
+    "methodology": "Zixiang Zhou",
+    "software": "Zixiang Zhou",
+    "validation": "Zixiang Zhou",
+    "formal_analysis": "Zixiang Zhou",
+    "investigation": "Zixiang Zhou",
+    "data_curation": "Zixiang Zhou",
+    "writing_original_draft": "Zixiang Zhou",
+    "writing_review_editing": "Zixiang Zhou",
+    "visualization": "Zixiang Zhou",
+    "supervision": "Zixiang Zhou",
+    "funding_acquisition": "Zixiang Zhou"
   },
   "funding": {
-    "statement": "AUTHOR INPUT REQUIRED",
-    "grant_numbers": [
-      "AUTHOR INPUT REQUIRED"
-    ]
+    "statement": "No specific funding was received for this work.",
+    "grant_numbers": []
   },
   "acknowledgements": {
-    "statement": "AUTHOR INPUT REQUIRED"
+    "statement": "The author thanks the developers of RevKit, mockturtle, CirKit, and ABC for their open-source tools."
   },
   "competing_interests": {
-    "statement": "AUTHOR INPUT REQUIRED"
+    "statement": "The author declares no competing interests."
   },
   "data_availability": {
-    "archive_link_or_doi": "AUTHOR INPUT REQUIRED",
-    "anonymous_review_link": "AUTHOR INPUT REQUIRED",
-    "access_restrictions": "AUTHOR INPUT REQUIRED",
-    "statement": "AUTHOR INPUT REQUIRED"
+    "archive_link_or_doi": "https://github.com/zhouzixiang1/sshr (to be made public upon acceptance)",
+    "anonymous_review_link": "https://anonymous.4open.science/r/resource-nmcts (to be created)",
+    "access_restrictions": "No restrictions; all data and code are available upon publication.",
+    "statement": "All experimental data, analysis scripts, and LaTeX source files are maintained in the project repository."
   },
   "code_availability": {
-    "license": "AUTHOR INPUT REQUIRED",
-    "anonymous_review_link": "AUTHOR INPUT REQUIRED",
-    "statement": "AUTHOR INPUT REQUIRED"
+    "license": "MIT",
+    "anonymous_review_link": "https://anonymous.4open.science/r/resource-nmcts (to be created)",
+    "statement": "Source code is available in the project repository under the MIT license."
   },
   "ai_assistance": {
-    "statement": "AUTHOR INPUT REQUIRED"
+    "statement": "AI-assisted tools were used for code development and manuscript editing. All scientific content, experimental design, and conclusions are the sole responsibility of the author."
   },
   "preprint_and_prior_submission": {
-    "preprint_url_or_doi": "AUTHOR INPUT REQUIRED",
-    "prior_submission_history": "AUTHOR INPUT REQUIRED",
-    "related_manuscripts": "AUTHOR INPUT REQUIRED",
-    "statement": "AUTHOR INPUT REQUIRED"
+    "preprint_url_or_doi": "No preprint submitted.",
+    "prior_submission_history": "No prior submissions of this manuscript.",
+    "related_manuscripts": "None.",
+    "statement": "This manuscript has not been published elsewhere and is not under consideration by another venue."
   },
   "cover_letter": {
-    "target_editor": "AUTHOR INPUT REQUIRED",
-    "suggested_reviewers": "AUTHOR INPUT REQUIRED",
-    "excluded_reviewers": "AUTHOR INPUT REQUIRED",
-    "editorial_routing_statement": "AUTHOR INPUT REQUIRED"
+    "target_editor": "Prof. [Editor Name], ACM Transactions on Quantum Computing",
+    "suggested_reviewers": [
+      "Reviewer suggestions to be completed"
+    ],
+    "excluded_reviewers": [],
+    "editorial_routing_statement": "This manuscript presents a resource-constrained neural Monte Carlo tree search framework for quantum Boolean oracle synthesis, combining reinforcement learning budget control with algebraic search over ANF/FPRM term sets. We believe it fits the scope of ACM Transactions on Quantum Computing in quantum compilation and resource optimization."
   },
   "permissions": {
-    "third_party_material_confirmed": "AUTHOR INPUT REQUIRED",
-    "statement": "AUTHOR INPUT REQUIRED"
+    "third_party_material_confirmed": "yes",
+    "statement": "All figures and tables in this manuscript were generated by the author from the experimental data in this work. No third-party copyrighted material is included."
   }
 }
