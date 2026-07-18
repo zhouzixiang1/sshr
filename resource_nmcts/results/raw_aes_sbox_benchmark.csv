@@ -1,0 +1,17 @@
+name,n,method,model_path,score,T,CNOT,depth,peak_ancilla,correct,time_s
+aes_sbox_bit1,8,and_direct_anf,,1801.03,1604,2538,2539,5,True,0.0
+aes_sbox_bit5,8,and_direct_anf,,1515.3500000000001,1348,2135,2136,5,True,0.0
+aes_sbox_bit6,8,and_direct_anf,,1461.9099999999999,1300,2061,2062,5,True,0.0
+aes_sbox_bit3,8,and_direct_anf,,1894.56,1688,2668,2668,5,True,0.0
+aes_sbox_bit4,8,and_direct_anf,,1707.68,1520,2411,2411,5,True,0.0
+aes_sbox_bit2,8,and_direct_anf,,1988.52,1772,2803,2803,5,True,0.0
+aes_sbox_bit0,8,and_direct_anf,,1743.23,1552,2459,2460,5,True,0.0
+aes_sbox_bit7,8,and_direct_anf,,1457.36,1296,2054,2054,5,True,0.0
+aes_sbox_bit5,8,and_resource_nmcts,models/action_scorer_v2.pt,772.99,672,1224,1237,5,True,32.12
+aes_sbox_bit6,8,and_resource_nmcts,models/action_scorer_v2.pt,716.5500000000001,624,1110,1123,5,True,33.92
+aes_sbox_bit7,8,and_resource_nmcts,models/action_scorer_v2.pt,756.4200000000001,660,1165,1173,5,True,27.4
+aes_sbox_bit1,8,and_resource_nmcts,models/action_scorer_v2.pt,871.6999999999999,760,1370,1382,5,True,35.98
+aes_sbox_bit4,8,and_resource_nmcts,models/action_scorer_v2.pt,843.4200000000001,736,1314,1322,5,True,38.52
+aes_sbox_bit3,8,and_resource_nmcts,models/action_scorer_v2.pt,875.51,764,1367,1380,5,True,41.01
+aes_sbox_bit2,8,and_resource_nmcts,models/action_scorer_v2.pt,920.16,804,1432,1440,5,True,42.16
+aes_sbox_bit0,8,and_resource_nmcts,models/action_scorer_v2.pt,797.19,692,1283,1292,5,True,42.55

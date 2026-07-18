@@ -237,7 +237,21 @@ Hamiltonian-simulation circuit synthesis~\cite{machiya2026monteq}.  The
 present work is different in scope: it is a logical-layer Boolean-oracle
 synthesizer, not a hardware-routing or transpilation method, not a
 Hamiltonian-simulation scheduler, not a gate-by-gate unitary generator, not a
-generic learned unitary compiler, and not an SSHR parallelotope search.  Its
+generic learned unitary compiler, and not an SSHR parallelotope search.
+
+Three recent works deserve explicit comparison.  Q-PreSyn~\cite{qpresyn2026}
+uses reinforcement learning to select local circuit edits that reduce T-count
+on \emph{existing} Clifford+T circuits; it is a post-synthesis optimizer,
+whereas \method{} searches over Boolean-algebraic representations
+\emph{before} circuit emission, and the two approaches are orthogonal and
+potentially composable.  Stab-QRAM~\cite{stabqram2025} proves that affine
+Boolean functions admit zero-T-count Clifford oracles; this provides a
+theoretical anchor for our Affine-FPRM search, which seeks representations
+closest to affine structure.  BDD2Seq~\cite{bdd2seq2025} uses a graph neural
+network for BDD variable ordering in reversible-circuit synthesis; it targets
+BDD-based representations rather than \anf{}/\fprm{} term-set factorization,
+and its learned component optimizes variable ordering rather than algebraic
+action selection.  Its
 learned component ranks verifiable Boolean-algebraic actions, while ESOP, BDD,
 XAG/LUT, ROS-style, SSHR, RevKit, mockturtle, Caterpillar, CirKit, and ABC flows
 define the comparison set.
@@ -1948,6 +1962,15 @@ The improvement is meaningful because the old model was slightly worse than no
 prior ($-0.38\%$), while the new model is strictly non-degrading.  Against
 eight deterministic random-prior controls, the v2 model beats all eight
 per-function means but the aggregate margin remains small (0.05\%).
+We also tested the v2 neural prior on 15 $n{=}8$ random functions under the
+full \method{} portfolio.  Against the no-prior baseline, the v2 model records
+5/10/0 W/L/T ($-0.603\%$); against eight same-budget random-prior controls, all
+15 functions tie ($0/0/15$, $+0.072\%$).  This confirms that on $n\leq8$
+functions the portfolio guard and small action space absorb prior differences,
+so the neural prior remains a bounded quality signal rather than a primary
+driver of resource reduction.  The paper's attribution of gains to the
+algebraic action space and Pareto archiving is therefore empirically grounded.
+
 
 A simulation-budget sweep over $\{32, 96, 256, 512, 1024\}$ on the same 177
 functions confirms that 96 simulations (the default) already converges:

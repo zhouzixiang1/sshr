@@ -1,0 +1,3 @@
+comparison,n,functions,v2_mean,baseline_mean,delta_pct,wins,losses,ties,note
+v2_vs_noprior,8,15,831.83,826.84,-0.603,5,10,0,V2 worse than no-prior
+v2_vs_random_mean,8,15,831.83,832.43,0.072,0,0,15,No difference vs random prior

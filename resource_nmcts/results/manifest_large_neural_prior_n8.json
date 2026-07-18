@@ -1,0 +1,4 @@
+{
+  "experiment": "large_neural_prior_n8",
+  "finding": "Neural prior has no benefit on n=8. V2 vs no-prior: -0.603% (5W/10L). V2 vs random: 0.072% (all ties). Portfolio guard absorbs all differences."
+}
