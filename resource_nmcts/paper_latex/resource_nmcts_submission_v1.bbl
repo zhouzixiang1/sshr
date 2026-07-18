@@ -5,6 +5,12 @@ Majd Assaad, Abhoy Kole, and Rolf Drechsler.
 \newblock Performance gains in quantum {SAT} solvers using {ESOP} encoding,
   2026.
 
+\bibitem{bdd2seq2025}
+{BDD2Seq authors}.
+\newblock {BDD2Seq}: Enabling scalable reversible-circuit synthesis via
+  graph-to-sequence learning.
+\newblock \url{https://arxiv.org/abs/2511.06442}, 2025.
+
 \bibitem{brayton2010abc}
 Robert~K. Brayton and Alan Mishchenko.
 \newblock {ABC}: An academic industrial-strength verification tool.
@@ -89,6 +95,12 @@ Giulia Meuli, Mathias Soeken, Martin Roetteler, and Giovanni De~Micheli.
 \newblock {\em Electronic Proceedings in Theoretical Computer Science},
   318:119--130, 2020.
 
+\bibitem{qpresyn2026}
+{Q-PreSyn authors}.
+\newblock Quantum circuit pre-synthesis: Learning local edits to reduce
+  $t$-count.
+\newblock \url{https://arxiv.org/abs/2601.19738}, 2026.
+
 \bibitem{rietsch2024unitary}
 Sebastian Rietsch, Abhishek~Y. Dubey, Christian Ufrecht, Maniraman Periyasamy,
   Axel Plinge, Christopher Mutschler, and Daniel~D. Scherer.
@@ -141,6 +153,12 @@ Mathias Soeken, Heinz Riener, Winston Haaswijk, Eleonora Testa, Bruno Schmitt,
   Dewmini~Sudara Marakkalage, and Giovanni De~Micheli.
 \newblock The {EPFL} logic synthesis libraries, 2018.
 \newblock arXiv:1805.05121.
+
+\bibitem{stabqram2025}
+{Stab-QRAM authors}.
+\newblock {Stab-QRAM}: A {Clifford}-only quantum oracle for affine {Boolean}
+  data.
+\newblock \url{https://arxiv.org/abs/2509.26494}, 2025.
 
 \bibitem{theissinger2026beyondrl}
 Lukas Thei{\ss}inger, Thore Gerlach, David Berghaus, and Christian Bauckhage.

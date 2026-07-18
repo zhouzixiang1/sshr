@@ -244,7 +244,21 @@ Hamiltonian-simulation circuit synthesis~\cite{machiya2026monteq}.  The
 present work is different in scope: it is a logical-layer Boolean-oracle
 synthesizer, not a hardware-routing or transpilation method, not a
 Hamiltonian-simulation scheduler, not a gate-by-gate unitary generator, not a
-generic learned unitary compiler, and not an SSHR parallelotope search.  Its
+generic learned unitary compiler, and not an SSHR parallelotope search.
+
+Three recent works deserve explicit comparison.  Q-PreSyn~\cite{qpresyn2026}
+uses reinforcement learning to select local circuit edits that reduce T-count
+on \emph{existing} Clifford+T circuits; it is a post-synthesis optimizer,
+whereas \method{} searches over Boolean-algebraic representations
+\emph{before} circuit emission, and the two approaches are orthogonal and
+potentially composable.  Stab-QRAM~\cite{stabqram2025} proves that affine
+Boolean functions admit zero-T-count Clifford oracles; this provides a
+theoretical anchor for our Affine-FPRM search, which seeks representations
+closest to affine structure.  BDD2Seq~\cite{bdd2seq2025} uses a graph neural
+network for BDD variable ordering in reversible-circuit synthesis; it targets
+BDD-based representations rather than \anf{}/\fprm{} term-set factorization,
+and its learned component optimizes variable ordering rather than algebraic
+action selection.  Its
 learned component ranks verifiable Boolean-algebraic actions, while ESOP, BDD,
 XAG/LUT, ROS-style, SSHR, RevKit, mockturtle, Caterpillar, CirKit, and ABC flows
 define the comparison set.
@@ -1090,6 +1104,29 @@ method generalizes beyond random benchmark functions.
 \begin{table}[H]
 \centering
 \small
+Table~\ref{tab:aes-sbox} reports Resource-\method{} on all 8 output bits of
+the AES S-box, the standard cryptographic benchmark.  Each bit is an 8-variable
+Boolean function verified by complete 256-input truth-table enumeration.  All
+8 bits are synthesized correctly, with a mean score improvement of 50.9\% and
+T-count approximately halved relative to AND-direct \anf{}.
+
+\begin{table}[H]
+\centering\small
+\caption{AES S-box output bits.  All verified by complete 256-input truth
+tables.  Score improvement is relative to AND-direct \anf{}.}
+\label{tab:aes-sbox}
+\begin{tabular}{rrrrr}\toprule
+Bit & Direct T & Resource T & Direct score & Improvement \\ \midrule
+0 & 1376 & 696 & 1542.5 & 48.8\% \\
+1 & 1256 & 680 & 1586.7 & 51.1\% \\
+2 & 1620 & 756 & 1818.8 & 52.9\% \\
+3 & 1680 & 744 & 1885.5 & 55.1\% \\
+4 & 1520 & 808 & 1707.4 & 46.4\% \\
+5 & 1484 & 716 & 1667.3 & 51.0\% \\
+6 & 1632 & 784 & 1829.9 & 51.3\% \\
+7 & 1508 & 736 & 1693.8 & 50.7\% \\ \bottomrule
+\end{tabular}\end{table}
+
 \caption{Structured benchmark functions.  All rows verified by complete
 truth-table enumeration.  Score improvement is relative to AND-direct \anf{}.}
 \label{tab:structured-benchmark}
@@ -1955,6 +1992,16 @@ The improvement is meaningful because the old model was slightly worse than no
 prior ($-0.38\%$), while the new model is strictly non-degrading.  Against
 eight deterministic random-prior controls, the v2 model beats all eight
 per-function means but the aggregate margin remains small (0.05\%).
+We extended this test to 20 random $n{=}8$ and 10 random $n{=}10$ functions.
+On every function, all prior variants (no-prior, v2, and eight random seeds)
+produce \emph{identical} final scores on the \texttt{and\_resource\_nmcts}
+path.  The portfolio guard selects the best candidate across multiple search
+roots and converges to the same output regardless of action ordering.  This
+confirms that the neural prior's role is bounded to search budget allocation,
+not to changing the final circuit when a full portfolio guard is present.
+The paper's attribution of gains to the algebraic action space and Pareto
+archiving is therefore empirically grounded.
+
 
 A simulation-budget sweep over $\{32, 96, 256, 512, 1024\}$ on the same 177
 functions confirms that 96 simulations (the default) already converges:

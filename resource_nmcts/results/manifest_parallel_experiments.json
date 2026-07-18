@@ -1,0 +1,16 @@
+{
+  "experiment": "parallel_aes_and_large_prior",
+  "total_tasks": 316,
+  "aes_sbox": {
+    "bits": 8,
+    "all_correct": true,
+    "mean_improvement": 50.9
+  },
+  "large_prior": {
+    "n_values": [
+      8,
+      10
+    ],
+    "finding": "Portfolio guard makes neural prior irrelevant on and_resource_nmcts path for all tested functions"
+  }
+}

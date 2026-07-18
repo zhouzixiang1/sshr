@@ -3,44 +3,44 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: resource_nmcts_submission_v1.aux
 The style file: plain.bst
 Database file #1: references.bib
-You've used 33 entries,
+You've used 36 entries,
             2118 wiz_defined-function locations,
-            676 strings with 10756 characters,
-and the built_in function-call counts, 12296 in all, are:
-= -- 1175
-> -- 748
+            688 strings with 11188 characters,
+and the built_in function-call counts, 12920 in all, are:
+= -- 1235
+> -- 769
 < -- 10
-+ -- 297
-- -- 260
-* -- 851
-:= -- 2027
-add.period$ -- 110
-call.type$ -- 33
-change.case$ -- 229
++ -- 306
+- -- 266
+* -- 869
+:= -- 2132
+add.period$ -- 119
+call.type$ -- 36
+change.case$ -- 241
 chr.to.int$ -- 0
-cite$ -- 33
-duplicate$ -- 392
-empty$ -- 894
-format.name$ -- 260
-if$ -- 2580
+cite$ -- 36
+duplicate$ -- 413
+empty$ -- 960
+format.name$ -- 266
+if$ -- 2718
 int.to.chr$ -- 0
-int.to.str$ -- 33
+int.to.str$ -- 36
 missing$ -- 18
-newline$ -- 170
-num.names$ -- 66
-pop$ -- 296
+newline$ -- 185
+num.names$ -- 72
+pop$ -- 320
 preamble$ -- 1
-purify$ -- 196
+purify$ -- 205
 quote$ -- 0
-skip$ -- 314
+skip$ -- 335
 stack$ -- 0
-substring$ -- 549
-swap$ -- 106
+substring$ -- 564
+swap$ -- 109
 text.length$ -- 10
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 132
+type$ -- 144
 warning$ -- 0
-while$ -- 106
-width$ -- 35
-write$ -- 365
+while$ -- 112
+width$ -- 38
+write$ -- 395
