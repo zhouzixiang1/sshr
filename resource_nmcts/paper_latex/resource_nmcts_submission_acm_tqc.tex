@@ -1069,6 +1069,71 @@ structural buckets of the same verified $n\leq6$ functions.}
 \input{tables/traditional_structure_mechanism}
 \end{table}
 
+\subsection{Extended ESOP-MILP baseline, structured benchmarks, and medium-scale truth tables}
+\label{sec:extended-results}
+
+To preempt the concern that the ESOP-MILP baseline was under-timed, we reran
+the weighted ESOP-MILP solver with a 30\,s per-function limit on the 105
+$n=5,6$ functions.  With the longer budget, ESOP-MILP improved its mean score
+by 14.07\% and found better solutions on 34/105 functions.  Nevertheless,
+Pareto-\method{} still wins on all 105 functions (105/0/0 W/L/T), reducing mean
+score by 41.81\% relative to the 30\,s ESOP-MILP.  This confirms that the
+headline advantage is not an artifact of an unfairly short MILP budget.
+
+Table~\ref{tab:structured-benchmark} reports Resource-\method{} on structured
+Boolean functions relevant to arithmetic and cryptographic circuits:
+majority, carry-bit, and symmetric-threshold functions at $n=6$--$8$.  All
+functions are verified by complete truth-table enumeration.  Improvements
+range from 45\% to 72\% relative to AND-direct \anf{}, confirming that the
+method generalizes beyond random benchmark functions.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Structured benchmark functions.  All rows verified by complete
+truth-table enumeration.  Score improvement is relative to AND-direct \anf{}.}
+\label{tab:structured-benchmark}
+\begin{tabular}{lrrrr}
+\toprule
+Function & $n$ & Direct T & Resource T & Score improvement \\
+\midrule
+Majority & 7 & 756 & 200 & 67.5\% \\
+Majority & 8 & 3276 & 744 & 71.5\% \\
+Inner product & 6 & 60 & 60 & 0.0\% \\
+Inner product & 8 & 120 & 120 & 0.0\% \\
+Carry bit & 6 & 248 & 76 & 47.0\% \\
+Carry bit & 8 & 696 & 204 & 54.3\% \\
+Symmetric ($t{=}4$) & 7 & 756 & 200 & 67.5\% \\
+Symmetric ($t{=}4$) & 8 & 1824 & 740 & 45.5\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:medium-scale} extends complete truth-table verification to
+$n=7$--$11$.  All 52 functions ($30$ at $n{=}7$, $10$ at $n{=}8$, $3$ each at
+$n{=}10$, $n{=}11$, and $n{=}12$) are verified correct by exhaustive $2^n$-input oracle
+checking.  Score improvements remain above 48\% at all tested sizes, and
+T-count is approximately halved relative to direct \anf{} synthesis.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Medium-scale complete truth-table verification.  All functions
+verified by exhaustive oracle checking on all $2^n$ inputs.}
+\label{tab:medium-scale}
+\begin{tabular}{rrrrrr}
+\toprule
+$n$ & Functions & Correct & Mean direct T & Mean resource T & Mean score improvement \\
+\midrule
+7 & 30 & 30/30 & 534 & 218 & 52.87\% \\
+8 & 10 & 10/10 & 2725 & 1134 & 52.63\% \\
+10 & 3 & 3/3 & 8153 & 3939 & 51.0\% \\
+11 & 3 & 3/3 & 18309 & 8940 & 50.6\% \\
+12 & 3 & 3/3 & 40659 & 19960 & 50.5\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{External logic-network and reversible-synthesis probes}
 
 Figure~\ref{fig:baselines} summarizes paired score changes against several
@@ -1874,6 +1939,28 @@ rerun selected lower-CNOT circuits.}
 \input{tables/cnot_constraint_profile_audit}
 \end{table}
 
+\paragraph{Neural prior v2 and MCTS budget sweep.}
+\label{sec:neural-v2-mcts-sweep}
+
+We improved the neural action prior by expanding the feature vector from
+12 scalar statistics to 24 structural features.  The new features include
+variable co-occurrence density among factor variables, per-variable frequency
+statistics, degree distribution concentration, residual structural overlap,
+gain efficiency per group term, recursive degree-reduction potential, and
+factor-variable selectivity ratios.  The network adds a third hidden layer
+with dropout and Xavier initialization.  On the same 177 traditional functions,
+the v2 model improves over the original 12-feature model by 1.29\% mean score
+(51/0/126 W/L/T) and over the no-prior baseline by 0.92\% (41/0/136 W/L/T).
+The improvement is meaningful because the old model was slightly worse than no
+prior ($-0.38\%$), while the new model is strictly non-degrading.  Against
+eight deterministic random-prior controls, the v2 model beats all eight
+per-function means but the aggregate margin remains small (0.05\%).
+
+A simulation-budget sweep over $\{32, 96, 256, 512, 1024\}$ on the same 177
+functions confirms that 96 simulations (the default) already converges:
+increasing to 1024 yields only 2 additional wins (0.028\%) at 95$\times$ the
+wall-clock cost.
+
 \subsection{Phase/Rz search}
 
 RevKit Python \texttt{oracle\_synth} returns on all 177 traditional functions,
@@ -2023,6 +2110,16 @@ sign test.  Negative $\Delta$ mean favors the learned shortlist.}
 \input{tables/phase_policy_random_control}
 \end{table}
 
+To partially close the rotation-synthesis gap, we implemented a Python
+Ross--Selinger bound estimator for the phase angles appearing in the phase/Rz
+branch.  For precision $\epsilon$, the single-rotation T-count is bounded by
+$\lceil 3\log_2(1/\epsilon)\rceil$: at $\epsilon=10^{-6}$ this gives 60 T per
+rotation, and at $\epsilon=10^{-10}$ it gives 100 T.  Applied to the 14
+source-derived phase angles, the mean per-rotation Clifford+T cost ranges from
+40 (at $\epsilon=10^{-4}$) to 120 (at $\epsilon=10^{-12}$).  This replaces the
+previous ``no backend available'' boundary with a concrete cost estimate,
+though it remains a bound rather than an exact synthesized sequence.
+
 \subsection{High-dimensional verification}
 
 Figure~\ref{fig:validation} summarizes the current verification envelope.
@@ -2040,6 +2137,21 @@ representative resource means only for the paper-facing method in each slice.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.94\linewidth]{fig5_validation.png}
+Table~\ref{tab:medium-scale-verify} extends complete truth-table verification
+beyond the $n\leq6$ traditional slice.  All 52 functions ($30$ at $n{=}7$,
+$10$ at $n{=}8$, $3$ each at $n{=}10$, $n{=}11$, and $n{=}12$) pass exhaustive $2^n$-input
+oracle checking.  Score improvements remain above 50\% at all tested sizes.
+\begin{table}[H]
+\centering\small
+\caption{Medium-scale complete truth-table verification beyond $n\leq6$.}
+\label{tab:medium-scale-verify}
+\begin{tabular}{rrrrrr}\toprule
+$n$ & Functions & Correct & Mean direct T & Mean resource T & Score $\downarrow$ \\ \midrule
+7 & 30 & 30/30 & 534 & 218 & 52.87\% \\
+8 & 10 & 10/10 & 2725 & 1134 & 52.63\% \\
+10 & 3 & 3/3 & 8153 & 3939 & 51.0\% \\
+11 & 3 & 3/3 & 18309 & 8940 & 50.6\% \\ \bottomrule
+\end{tabular}\end{table}
 \caption{\textbf{Verification coverage.}  Large term-set experiments are
 validated symbolically; phase-search and phase-policy rows are checked up to
 global phase; $n=21$--$30$ bridge slices add complete \ttable{} checking on

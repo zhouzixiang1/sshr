@@ -89,7 +89,7 @@
     },
     {
       "boundary": "Author names, ACM CCS/rights metadata, target-venue final policy choices, and final declarations remain external author inputs.",
-      "evidence": "Compiled submission PDF exists with 64 pages and the TeX source is present; an ACM/TQC anonymous review-format smoke draft is generated and audited separately.",
+      "evidence": "Compiled submission PDF exists with 65 pages and the TeX source is present; an ACM/TQC anonymous review-format smoke draft is generated and audited separately.",
       "evidence_files": "paper_latex/resource_nmcts_submission_v1.tex; paper_latex/resource_nmcts_submission_v1.pdf; paper_latex/resource_nmcts_submission_acm_tqc.tex; paper_latex/resource_nmcts_submission_acm_tqc.pdf; results/analysis_target_venue_format_smoke.md; results/analysis_submission_readiness_audit.md",
       "next_action": "After author metadata is supplied, recompile the author, anonymous, and ACM/TQC drafts and rerun readiness checks.",
       "requirement": "Complete LaTeX manuscript draft",

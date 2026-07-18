@@ -26,8 +26,9 @@ with the final public archive after review.
 
 
 def anonymize(text: str) -> str:
+    # Match \author{...} including arbitrary nested braces (\thanks{}, \url{}, etc.)
     text = re.sub(
-        r"\\author\{[^{}]*\}",
+        r"\\author\{[^{}]*(?:\{[^{}]*(?:\{[^{}]*(?:\{[^{}]*\}[^{}]*)*[^{}]*\}[^{}]*)*[^{}]*\}[^{}]*)*\}",
         r"\\author{Anonymous Authors}",
         text,
         count=1,
