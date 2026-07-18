@@ -1103,8 +1103,8 @@ Symmetric ($t{=}4$) & 8 & 1824 & 740 & 45.5\% \\
 \end{table}
 
 Table~\ref{tab:medium-scale} extends complete truth-table verification to
-$n=7$--$11$.  All 49 functions ($30$ at $n{=}7$, $10$ at $n{=}8$, $3$ each at
-$n{=}10$ and $n{=}11$) are verified correct by exhaustive $2^n$-input oracle
+$n=7$--$11$.  All 52 functions ($30$ at $n{=}7$, $10$ at $n{=}8$, $3$ each at
+$n{=}10$, $n{=}11$, and $n{=}12$) are verified correct by exhaustive $2^n$-input oracle
 checking.  Score improvements remain above 48\% at all tested sizes, and
 T-count is approximately halved relative to direct \anf{} synthesis.
 
@@ -1122,6 +1122,7 @@ $n$ & Functions & Correct & Mean direct T & Mean resource T & Mean score improve
 8 & 10 & 10/10 & 2725 & 1134 & 52.63\% \\
 10 & 3 & 3/3 & 8153 & 3939 & 51.0\% \\
 11 & 3 & 3/3 & 18309 & 8940 & 50.6\% \\
+12 & 3 & 3/3 & 40659 & 19960 & 50.5\% \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -2130,8 +2131,8 @@ representative resource means only for the paper-facing method in each slice.
 \centering
 \includegraphics[width=0.94\linewidth]{fig5_validation.png}
 Table~\ref{tab:medium-scale-verify} extends complete truth-table verification
-beyond the $n\leq6$ traditional slice.  All 49 functions ($30$ at $n{=}7$,
-$10$ at $n{=}8$, $3$ each at $n{=}10$ and $n{=}11$) pass exhaustive $2^n$-input
+beyond the $n\leq6$ traditional slice.  All 52 functions ($30$ at $n{=}7$,
+$10$ at $n{=}8$, $3$ each at $n{=}10$, $n{=}11$, and $n{=}12$) pass exhaustive $2^n$-input
 oracle checking.  Score improvements remain above 50\% at all tested sizes.
 \begin{table}[H]
 \centering\small

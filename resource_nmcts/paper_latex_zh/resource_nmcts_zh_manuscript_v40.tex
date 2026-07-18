@@ -393,7 +393,8 @@ $n$ & 函数数 & 正确 & Direct T 均值 & Resource T 均值 & Score 改善 \\
 7 & 30 & 30/30 & 534 & 218 & 52.87\% \\
 8 & 10 & 10/10 & 2725 & 1134 & 52.63\% \\
 10 & 3 & 3/3 & 8153 & 3939 & 51.0\% \\
-11 & 3 & 3/3 & 18309 & 8940 & 50.6\% \\ \bottomrule
+11 & 3 & 3/3 & 18309 & 8940 & 50.6\% \\
+12 & 3 & 3/3 & 40659 & 19960 & 50.5\% \\ \bottomrule
 \end{tabular}\end{table}
 
 图~\ref{fig:baselines} 汇总外部和传统 baseline 的配对比较。Pareto-\method{} 相对 ESOP beam 为 174/0/3，平均 score 降低 36.09\%；相对 ESOP-MILP 为 167/3/7，平均 score 降低 29.84\%；相对 SSHR-H 的 T-count 为 173/0/4，平均降低 47.93\%。ROS-style LUT proxy 覆盖 309 个函数，best-$K$ proxy 比固定 $K=4$ 更强，但 Pareto-\method{} 相对该 proxy 仍为 309/0/0。mockturtle probe 用官方 header 将 KLUT network 重综合为 XAG；在传统 177 个函数上为 166/11/0，在 $n=14$ 的 64 个函数上为 64/0/0。
