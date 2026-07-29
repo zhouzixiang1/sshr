@@ -376,6 +376,25 @@ def _subsets(mask: int, max_size: int) -> Iterable[int]:
             yield s
 
 
+def _combine_action_priors(
+    actions: List[FactorAction],
+    scores: Iterable[float],
+    config: SearchConfig,
+    scorer,
+) -> List[FactorAction]:
+    """Apply an additive learned/random prior or a replacement control."""
+    replace_prior = getattr(scorer, "prior_combination", "additive") == "replace"
+    if replace_prior:
+        return [
+            replace(action, prior=config.neural_prior_weight * float(score))
+            for action, score in zip(actions, scores)
+        ]
+    return [
+        replace(action, prior=action.prior + config.neural_prior_weight * float(score))
+        for action, score in zip(actions, scores)
+    ]
+
+
 def candidate_actions(
     terms: frozenset[int],
     prefix_len: int,
@@ -472,10 +491,7 @@ def candidate_actions(
             for action in actions
         ]
         scores = neural_scorer.score_many(features)
-        actions = [
-            replace(action, prior=action.prior + config.neural_prior_weight * float(score))
-            for action, score in zip(actions, scores)
-        ]
+        actions = _combine_action_priors(actions, scores, config, neural_scorer)
 
     actions.sort(key=lambda a: (-a.prior, -a.immediate_gain, -a.factor.bit_count(), a.factor))
     return actions[: config.candidate_top_k]
@@ -623,10 +639,7 @@ def linear_factor_actions(
             for action in actions
         ]
         scores = neural_scorer.score_many(features)
-        actions = [
-            replace(action, prior=action.prior + config.neural_prior_weight * float(score))
-            for action, score in zip(actions, scores)
-        ]
+        actions = _combine_action_priors(actions, scores, config, neural_scorer)
 
     width = action_width if action_width is not None else max(2, min(config.candidate_top_k, 8))
     actions.sort(key=lambda a: (-a.prior, -a.immediate_gain, -len(a.group), a.factor))
@@ -773,10 +786,7 @@ def boolean_linear_factor_actions(
             for action in actions
         ]
         scores = neural_scorer.score_many(features)
-        actions = [
-            replace(action, prior=action.prior + config.neural_prior_weight * float(score))
-            for action, score in zip(actions, scores)
-        ]
+        actions = _combine_action_priors(actions, scores, config, neural_scorer)
 
     width = action_width if action_width is not None else max(2, min(config.candidate_top_k, 8))
     actions.sort(key=lambda a: (-a.prior, -a.immediate_gain, -len(a.group), a.factor))
@@ -887,10 +897,7 @@ def affine_linear_factor_actions(
             for action in actions
         ]
         scores = neural_scorer.score_many(features)
-        actions = [
-            replace(action, prior=action.prior + config.neural_prior_weight * float(score))
-            for action, score in zip(actions, scores)
-        ]
+        actions = _combine_action_priors(actions, scores, config, neural_scorer)
 
     width = action_width if action_width is not None else max(2, min(config.candidate_top_k, 8))
     actions.sort(key=lambda a: (-a.prior, -a.immediate_gain, -len(a.group), a.factor))

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import time
 import json
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from dataclasses import replace
 from functools import lru_cache
 from pathlib import Path
@@ -20,7 +20,7 @@ from src.anf_utils import anf_monomials, shifted_function
 from src.cube_search import cube_beam_plan, cube_greedy_plan, emit_cube_plan
 from src.esop_milp import synthesize_esop_milp_circuit
 from src.factor_plan import SearchConfig, affine_linear_pair_beam_plan, direct_plan, emit_plan_to_circuit, greedy_plan, linear_pair_beam_plan, linear_pair_screen_plan, root_beam_plan, root_child_beam_plan, verify_oracle
-from src.neural_policy import NeuralScorer, RandomPriorScorer
+from src.neural_policy import NeuralScorer, RandomPriorScorer, UniformPriorScorer
 from src.nmcts_solver import NeuralMCTSSolver
 from src.resource_model import ResourceCost, ResourceWeights
 
@@ -37,12 +37,44 @@ class SynthesisResult:
     terms: int
     gates: int
     n_qubits: int
+    selected_method: str | None = None
+    circuit: QuantumCircuit | None = field(default=None, repr=False, compare=False)
 
     def to_row(self) -> dict:
-        row = asdict(self)
+        # Keep the exact circuit as an in-memory artifact.  Experiment tables
+        # store scalar provenance only; serialising a mutable gate list here
+        # would both bloat CSVs and break existing tabular consumers.
+        row = {
+            "method": self.method,
+            "selected_method": self.selected_method or self.method,
+            "time_s": self.time_s,
+            "correct": self.correct,
+            "terms": self.terms,
+            "gates": self.gates,
+            "n_qubits": self.n_qubits,
+        }
         row.update(asdict(self.cost))
-        row.pop("cost", None)
         return row
+
+
+@dataclass(frozen=True)
+class SynthesisArtifact:
+    """Public synthesis product containing metrics and the exact gate list."""
+
+    result: SynthesisResult
+
+    @property
+    def circuit(self) -> QuantumCircuit:
+        if self.result.circuit is None:
+            raise RuntimeError("synthesis result is missing its circuit artifact")
+        return self.result.circuit
+
+    @property
+    def selected_method(self) -> str:
+        return self.result.selected_method or self.result.method
+
+    def to_row(self) -> dict:
+        return self.result.to_row()
 
 
 def circuit_resource_cost(circ: QuantumCircuit) -> ResourceCost:
@@ -89,6 +121,8 @@ def _cached_scorer(model_path: str):
     if model_path.startswith("random-prior:"):
         _, seed = model_path.split(":", 1)
         return RandomPriorScorer(int(seed))
+    if model_path == "uniform-prior":
+        return UniformPriorScorer()
     return NeuralScorer(model_path) if model_path else None
 
 
@@ -1195,6 +1229,25 @@ def _structure_gate_static_skip_resource(bf: BooleanFunction) -> bool | None:
     return value >= threshold if skip_if_ge else value < threshold
 
 
+def _relabel_result(
+    requested_method: str,
+    selected: SynthesisResult,
+    elapsed_s: float,
+) -> SynthesisResult:
+    """Return a portfolio/wrapper result without discarding its circuit."""
+    return SynthesisResult(
+        method=requested_method,
+        cost=selected.cost,
+        time_s=elapsed_s,
+        correct=selected.correct,
+        terms=selected.terms,
+        gates=selected.gates,
+        n_qubits=selected.n_qubits,
+        selected_method=selected.selected_method or selected.method,
+        circuit=selected.circuit,
+    )
+
+
 def _portfolio_result(
     requested_method: str,
     portfolio: list[SynthesisResult],
@@ -1204,15 +1257,7 @@ def _portfolio_result(
     if not portfolio:
         raise RuntimeError(f"{requested_method} portfolio produced no correct candidate")
     best = min(portfolio, key=lambda r: _resource_selection_key(r, weights))
-    return SynthesisResult(
-        method=requested_method,
-        cost=best.cost,
-        time_s=elapsed_s,
-        correct=best.correct,
-        terms=best.terms,
-        gates=best.gates,
-        n_qubits=best.n_qubits,
-    )
+    return _relabel_result(requested_method, best, elapsed_s)
 
 
 def _run_child_portfolio(
@@ -1304,27 +1349,11 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
     if method == "resource_nmcts_screen_gate":
         if bf.n < 18:
             child = synthesize("resource_nmcts", bf, config, seed=seed, model_path=model_path)
-            return SynthesisResult(
-                method=requested_method,
-                cost=child.cost,
-                time_s=time.time() - t0,
-                correct=child.correct,
-                terms=child.terms,
-                gates=child.gates,
-                n_qubits=child.n_qubits,
-            )
+            return _relabel_result(requested_method, child, time.time() - t0)
         static_skip = _structure_gate_static_skip_resource(bf)
         if static_skip is False:
             child = synthesize("resource_nmcts", bf, config, seed=seed, model_path=model_path)
-            return SynthesisResult(
-                method=requested_method,
-                cost=child.cost,
-                time_s=time.time() - t0,
-                correct=child.correct,
-                terms=child.terms,
-                gates=child.gates,
-                n_qubits=child.n_qubits,
-            )
+            return _relabel_result(requested_method, child, time.time() - t0)
         if static_skip is True:
             adaptive_screen = synthesize(
                 "boolean_linear_pair_screen_adaptive",
@@ -1334,25 +1363,9 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
                 model_path=model_path,
             )
             if adaptive_screen.correct:
-                return SynthesisResult(
-                    method=requested_method,
-                    cost=adaptive_screen.cost,
-                    time_s=time.time() - t0,
-                    correct=adaptive_screen.correct,
-                    terms=adaptive_screen.terms,
-                    gates=adaptive_screen.gates,
-                    n_qubits=adaptive_screen.n_qubits,
-                )
+                return _relabel_result(requested_method, adaptive_screen, time.time() - t0)
             child = synthesize("resource_nmcts", bf, config, seed=seed, model_path=model_path)
-            return SynthesisResult(
-                method=requested_method,
-                cost=child.cost,
-                time_s=time.time() - t0,
-                correct=child.correct,
-                terms=child.terms,
-                gates=child.gates,
-                n_qubits=child.n_qubits,
-            )
+            return _relabel_result(requested_method, child, time.time() - t0)
         single_screen = synthesize("boolean_linear_pair_screen", bf, config, seed=seed, model_path=model_path)
         adaptive_screen = synthesize(
             "boolean_linear_pair_screen_adaptive",
@@ -1364,15 +1377,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         if adaptive_screen.correct and _structure_gate_skip_resource(
             _structure_gate_features(bf, adaptive_screen, single_screen, config.weights)
         ):
-            return SynthesisResult(
-                method=requested_method,
-                cost=adaptive_screen.cost,
-                time_s=time.time() - t0,
-                correct=adaptive_screen.correct,
-                terms=adaptive_screen.terms,
-                gates=adaptive_screen.gates,
-                n_qubits=adaptive_screen.n_qubits,
-            )
+            return _relabel_result(requested_method, adaptive_screen, time.time() - t0)
         portfolio = [adaptive_screen] if adaptive_screen.correct else []
         try:
             resource = synthesize("resource_nmcts", bf, config, seed=seed, model_path=model_path)
@@ -1384,15 +1389,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         if not portfolio:
             raise RuntimeError("screen-gated Resource-NMCTS produced no correct candidate")
         best = min(portfolio, key=lambda r: _resource_selection_key(r, config.weights))
-        return SynthesisResult(
-            method=requested_method,
-            cost=best.cost,
-            time_s=time.time() - t0,
-            correct=best.correct,
-            terms=best.terms,
-            gates=best.gates,
-            n_qubits=best.n_qubits,
-        )
+        return _relabel_result(requested_method, best, time.time() - t0)
     if method == "rc_nmcts":
         fast_config = replace(
             config,
@@ -1421,15 +1418,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         if not portfolio:
             raise RuntimeError("RC-NMCTS portfolio produced no correct candidate")
         best = min(portfolio, key=lambda r: (r.cost.score(config.weights), r.cost.T, r.cost.CNOT, r.cost.depth))
-        return SynthesisResult(
-            method=requested_method,
-            cost=best.cost,
-            time_s=time.time() - t0,
-            correct=best.correct,
-            terms=best.terms,
-            gates=best.gates,
-            n_qubits=best.n_qubits,
-        )
+        return _relabel_result(requested_method, best, time.time() - t0)
     if method in {"resource_nmcts", "resource_nmcts_wide"}:
         fast_config = replace(
             config,
@@ -1506,15 +1495,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         if not portfolio:
             raise RuntimeError("Resource-NMCTS portfolio produced no correct candidate")
         best = min(portfolio, key=lambda r: _resource_selection_key(r, config.weights))
-        return SynthesisResult(
-            method=requested_method,
-            cost=best.cost,
-            time_s=time.time() - t0,
-            correct=best.correct,
-            terms=best.terms,
-            gates=best.gates,
-            n_qubits=best.n_qubits,
-        )
+        return _relabel_result(requested_method, best, time.time() - t0)
     if method == "pareto_resource_nmcts":
         portfolio: list[SynthesisResult] = []
         pareto_configs = _highdim_pareto_candidate_configs(config, bf.n) if bf.n > 12 else _pareto_candidate_configs(config)
@@ -1618,27 +1599,11 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
             raise RuntimeError("Pareto-Resource-NMCTS portfolio produced no correct candidate")
         front = _pareto_front(portfolio)
         best = min(front, key=lambda r: _resource_selection_key(r, config.weights))
-        return SynthesisResult(
-            method=requested_method,
-            cost=best.cost,
-            time_s=time.time() - t0,
-            correct=best.correct,
-            terms=best.terms,
-            gates=best.gates,
-            n_qubits=best.n_qubits,
-        )
+        return _relabel_result(requested_method, best, time.time() - t0)
     if method == "profile_resource_nmcts":
         if bf.n > 12:
             child = synthesize("resource_nmcts", bf, config, seed=seed, model_path=model_path)
-            return SynthesisResult(
-                method=requested_method,
-                cost=child.cost,
-                time_s=time.time() - t0,
-                correct=child.correct,
-                terms=child.terms,
-                gates=child.gates,
-                n_qubits=child.n_qubits,
-            )
+            return _relabel_result(requested_method, child, time.time() - t0)
         portfolio: list[SynthesisResult] = []
         profile_configs = _profile_candidate_configs(config)
         base_config = profile_configs[0][1]
@@ -1710,15 +1675,7 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         if not portfolio:
             raise RuntimeError("Profile-Resource-NMCTS portfolio produced no correct candidate")
         best = min(portfolio, key=lambda r: _resource_selection_key(r, config.weights))
-        return SynthesisResult(
-            method=requested_method,
-            cost=best.cost,
-            time_s=time.time() - t0,
-            correct=best.correct,
-            terms=best.terms,
-            gates=best.gates,
-            n_qubits=best.n_qubits,
-        )
+        return _relabel_result(requested_method, best, time.time() - t0)
     terms = frozenset(anf_monomials(bf))
     neural = _cached_scorer(model_path or "")
 
@@ -1865,4 +1822,25 @@ def synthesize(method: str, bf: BooleanFunction, config: SearchConfig, seed: int
         terms=len(terms),
         gates=len(circ.gates),
         n_qubits=circ.n_qubits,
+        selected_method=requested_method,
+        circuit=circ,
     )
+
+
+def synthesize_artifact(
+    method: str,
+    bf: BooleanFunction,
+    config: SearchConfig,
+    seed: int = 0,
+    model_path: str | None = None,
+) -> SynthesisArtifact:
+    """Synthesize and return both scalar metrics and the exact circuit.
+
+    This is the public entry point for hardware mapping, simulation and
+    figure generation.  ``synthesize()`` remains backward compatible for
+    existing metric-only callers; both APIs execute the same code path.
+    """
+    result = synthesize(method, bf, config, seed=seed, model_path=model_path)
+    if result.circuit is None:
+        raise RuntimeError(f"{method} synthesis did not expose a circuit artifact")
+    return SynthesisArtifact(result=result)

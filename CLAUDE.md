@@ -10,7 +10,7 @@
 
 ## 目录结构
 
-Git 仓库根是本目录（`/Users/zhouzixiang/Desktop/tzb`），工作目录是 `resource_nmcts/`。所有命令都从 `resource_nmcts/` 下执行。
+Git 仓库根是本目录（Windows 本机 `D:\University\code\sshr`，macOS 旧机曾为 `/Users/zhouzixiang/Desktop/tzb`），工作目录是 `resource_nmcts/`。所有命令都从 `resource_nmcts/` 下执行。
 
 | 目录 | 用途 |
 |------|------|
@@ -54,7 +54,7 @@ Gurobi 仅安装在 macOS `sshr` 环境，许可证路径 `~/.gurobi/gurobi.lic`
 
 ```bash
 cd resource_nmcts
-/opt/anaconda3/envs/mcts-qoracle/bin/python -c "
+python -c "
 from src.synthesizers import synthesize
 from src.resource_model import ResourceWeights
 from src.factor_plan import SearchConfig
@@ -62,25 +62,28 @@ print('All imports OK')
 "
 ```
 
+> Windows 下 `python` 需指向 `mcts-qoracle` 环境：要么 `conda activate mcts-qoracle`，要么直接用
+> `C:\Users\32143\.conda\envs\mcts-qoracle\python.exe`（直接调 exe 时前置 `KMP_DUPLICATE_LIB_OK=TRUE`）。
+
 ### 冒烟测试
 
 ```bash
 cd resource_nmcts
-/opt/anaconda3/envs/mcts-qoracle/bin/python tests/tests_smoke.py
+python tests/tests_smoke.py
 ```
 
 ### 运行实验
 
 ```bash
 cd resource_nmcts
-./scripts/run_experiments.py --preset smoke
+python scripts/run_experiments.py --preset smoke
 ```
 
 ### 投稿重建
 
 ```bash
 cd resource_nmcts
-bash submission/rebuild_submission_package.sh
+bash submission/rebuild_submission_package.sh    # PYTHON_BIN 默认为 python，可用 PYTHON_BIN=... 覆盖
 ```
 
 ## 核心架构
@@ -127,6 +130,18 @@ bash submission/rebuild_submission_package.sh
 - `src/bool_func.py` 是影子副本/死代码（无任何模块 import 它，引擎实际用 `src.sshr_lib.bool_func`）
 - `circuit_resource_cost`（synthesizers.py）的 depth 计算恒为 0（死代码，主路径未用）
 - 无 `requirements.txt`/`environment.yml`，依赖关系仅通过命令行里的 conda 绝对路径隐式表达
+
+## Windows 平台兼容性（windows-dev 分支）
+
+针对 Windows 本机开发已做的平台化修复（均在 `windows-dev` 分支）：
+
+- **`.gitattributes`（新增）**：强制 `*.sh`/`*.ps1`/`*.py`/`*.md`/`*.json` 等用 LF，根治 `core.autocrlf=true` 下 `.sh` shebang `\r` 导致 Git Bash 报 `No such file or directory` 的问题。
+- **并行实验脚本**：`scripts/run_parallel_v2.py`、`scripts/run_parallel_final.py` 的子进程解释器从写死的 `/opt/anaconda3/envs/mcts-qoracle/bin/python` 改为 `sys.executable`，并为 `run_parallel_final.py` 的 subprocess 补上 `cwd=str(_PROJ_ROOT)`（worker 经 `src.` 导入，需在 `resource_nmcts/` 下执行）。
+- **工具链就绪探针**：`analysis/analyze_toolchain_readiness.py` 的 `ENV_BIN`/`ENV_PYTHON` 从写死的 macOS 路径改为 `sys.executable` 推导，install 指令文本改为中性 `python ...`。
+- **Caterpillar XAG 探针**：`scripts/run_caterpillar_xag_api_probe.py` 的编译器从写死的 `/usr/bin/c++` 改为 `shutil.which(c++/g++/clang++)` 探测，`-arch arm64` 仅在 macOS arm64 下生效，可执行文件在 Windows 加 `.exe` 后缀。
+- **投稿脚本**：`verify_submission_package.sh`、`submission/rebuild_submission_package.sh` 的 `PYTHON_BIN` 默认值从 macOS 路径改为可移植的 `python`（可用环境变量覆盖）。
+
+Gurobi/SSHR-I 与外部 EDA 工具链（ABC/CirKit/mockturtle/RevKit/Caterpillar 二进制）仍是可选能力，不在默认综合路径上：SSHR-I 缺 Gurobi 时优雅报错；各外部探针在缺二进制时抛 `FileNotFoundError`，不影响核心综合/训练/审计流程。
 
 ## 归档项目
 

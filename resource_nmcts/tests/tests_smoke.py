@@ -17,13 +17,16 @@ from src.anf_utils import anf_monomials, boolean_from_anf, majority_function, pa
 from submission.export_benchmarks import export_suite, selected_formats
 from src.factor_plan import (
     SearchConfig,
+    candidate_actions,
     direct_plan,
     emit_plan_to_circuit,
     expand_plan_anf_terms,
     linear_pair_screen_plan,
+    verify_oracle,
     verify_circuit_anf,
     verify_plan_anf,
 )
+from src.neural_policy import UniformPriorScorer
 from src.resource_model import ResourceWeights
 from scripts.run_external_baselines import (
     EsopCube,
@@ -39,7 +42,7 @@ from scripts.run_external_baselines import (
     verify_esop,
 )
 from scripts.run_worked_example import build_example
-from src.synthesizers import synthesize
+from src.synthesizers import synthesize, synthesize_artifact
 
 
 def check_roundtrip() -> None:
@@ -200,6 +203,15 @@ def main() -> int:
         boolean_from_anf(5, [0b00111, 0b01111, 0b10111, 0b11111, 0b00011]),
         boolean_from_anf(5, [0b001, 0b010, 0b1101, 0b1110, 0b10101, 0b10110]),
     ]
+    uniform_actions = candidate_actions(
+        frozenset(anf_monomials(majority_function(4))),
+        0,
+        0,
+        config,
+        UniformPriorScorer(),
+    )
+    assert uniform_actions
+    assert all(action.prior == 0.0 for action in uniform_actions)
     for bf in functions:
         direct = synthesize("direct_anf", bf, config)
         greedy = synthesize("greedy_factor", bf, config)
@@ -222,6 +234,12 @@ def main() -> int:
         pareto_resource_nmcts = synthesize("and_pareto_resource_nmcts", bf, config, seed=7)
         for result in [direct, greedy, mcts, fprm, cube_greedy, cube_beam, and_fprm, and_fprm_neural, and_fprm_linear, and_fprm_linear_fast, and_fprm_linear_deep, and_fprm_linear_parity, and_fprm_affine_linear, and_fprm_affine_linear_deep, and_fprm_polarity_archive, and_affine, rc_nmcts, resource_nmcts, pareto_resource_nmcts]:
             assert result.correct, (result.method, bf.n, bf.truth_table)
+            assert result.circuit is not None, result.method
+            assert result.selected_method
+            assert result.gates == len(result.circuit.gates)
+            assert result.n_qubits == result.circuit.n_qubits
+            assert verify_oracle(result.circuit, bf)
+            assert "circuit" not in result.to_row()
         assert greedy.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
         assert mcts.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
         assert fprm.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
@@ -238,6 +256,20 @@ def main() -> int:
         assert rc_nmcts.cost.score(config.weights) <= direct.cost.score(config.weights) + 1e-9
         assert resource_nmcts.cost.score(config.weights) <= and_affine.cost.score(config.weights) + 1e-9
         assert pareto_resource_nmcts.cost.score(config.weights) <= resource_nmcts.cost.score(config.weights) + 1e-9
+    artifact = synthesize_artifact("resource_nmcts", majority_function(3), config, seed=7)
+    assert artifact.circuit is artifact.result.circuit
+    assert artifact.selected_method == artifact.result.selected_method
+    assert verify_oracle(artifact.circuit, majority_function(3))
+    for prior_control in ("uniform-prior", "random-prior:7"):
+        control = synthesize_artifact(
+            "neural_mcts",
+            majority_function(3),
+            config,
+            seed=7,
+            model_path=prior_control,
+        )
+        assert control.result.correct, prior_control
+        assert verify_oracle(control.circuit, majority_function(3)), prior_control
     highdim_bf = boolean_from_anf(
         13,
         [

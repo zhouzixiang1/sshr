@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 import hashlib
-from typing import Iterable, List, Sequence
+from typing import Any, Iterable, List, Mapping, Sequence
 
 import torch
 from torch import nn
@@ -43,6 +43,8 @@ def default_device() -> torch.device:
 
 
 class NeuralScorer:
+    prior_combination = "additive"
+
     def __init__(self, model_path: str | Path, device: torch.device | None = None) -> None:
         # Inference is dominated by many small action batches.  CPU is faster and
         # more stable than MPS for this workload; training can still use MPS.
@@ -50,6 +52,7 @@ class NeuralScorer:
         payload = torch.load(model_path, map_location="cpu")
         self.mean = torch.tensor(payload["mean"], dtype=torch.float32, device=self.device)
         self.std = torch.tensor(payload["std"], dtype=torch.float32, device=self.device)
+        self.metadata = payload.get("metadata", {})
         feat_dim = len(payload.get("mean", []))
         self.model = ActionNet(hidden=int(payload.get("hidden", 96)), feature_dim=max(feat_dim, 1))
         self.model.load_state_dict(payload["state_dict"])
@@ -77,6 +80,8 @@ class NeuralScorer:
 class RandomPriorScorer:
     """Deterministic same-budget random scorer for prior-control experiments."""
 
+    prior_combination = "additive"
+
     def __init__(self, seed: int = 0) -> None:
         self.seed = int(seed)
 
@@ -93,17 +98,62 @@ class RandomPriorScorer:
         return [self._score(row) for row in features]
 
 
-def save_model(path: str | Path, model: ActionNet, mean: torch.Tensor, std: torch.Tensor) -> None:
+class UniformPriorScorer:
+    """Replace heuristic PUCT priors by an equal-prior control.
+
+    A zero-valued additive scorer would merely recover the heuristic-only
+    baseline.  ``prior_combination='replace'`` is consumed by the action
+    generators so every retained action receives the same PUCT prior.  This
+    makes the uniform control scientifically distinct and prevents reports
+    from mislabelling the heuristic baseline as uniform.
+    """
+
+    prior_combination = "replace"
+
+    def score_one(self, features: Sequence[float]) -> float:
+        del features
+        return 0.0
+
+    def score_many(self, features: Iterable[Sequence[float]]) -> List[float]:
+        return [0.0 for _ in features]
+
+
+def file_sha256(path: str | Path) -> str:
+    """Return the SHA256 of a saved model or other artifact."""
+
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def save_model(
+    path: str | Path,
+    model: ActionNet,
+    mean: torch.Tensor,
+    std: torch.Tensor,
+    metadata: Mapping[str, Any] | None = None,
+) -> None:
+    """Save an action scorer with optional training provenance.
+
+    The original four-argument call remains valid and produces a payload that
+    old readers can load.  New models add only backwards-compatible keys.
+    """
+
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     first_linear = model.net[0]
     hidden = int(first_linear.out_features) if isinstance(first_linear, nn.Linear) else 96
     torch.save(
         {
+            "format_version": 2,
             "state_dict": model.state_dict(),
             "mean": mean.detach().cpu().tolist(),
             "std": std.detach().cpu().tolist(),
             "hidden": hidden,
+            "feature_dim": int(model.feature_dim),
+            "metadata": dict(metadata or {}),
         },
         path,
     )
