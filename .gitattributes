@@ -1,0 +1,55 @@
+# Normalize line endings in the working tree regardless of core.autocrlf.
+#
+# On Windows checkouts core.autocrlf=true would otherwise rewrite these
+# shell/PowerShell scripts with CRLF, which breaks the `#!/usr/bin/env bash`
+# shebang under Git Bash ("No such file or directory"). Force LF for the
+# scripts that must stay Unix-line-ending to be executable.
+
+# Shell scripts: always LF (executed by bash via Git Bash on Windows).
+*.sh           text eol=lf
+
+# PowerShell scripts: always LF (executed by pwsh/powershell on Windows).
+*.ps1          text eol=lf
+
+# Python source: keep LF for consistent diffs and hash-stable artifacts.
+*.py           text eol=lf
+
+# Markdown / JSON / YAML / TOML / CSV / BibTeX text artifacts: LF.
+*.md           text eol=lf
+*.json         text eol=lf
+*.jsonl        text eol=lf
+*.yaml         text eol=lf
+*.yml          text eol=lf
+*.toml         text eol=lf
+*.csv          text eol=lf
+*.tsv          text eol=lf
+*.bib          text eol=lf
+*.tex          text eol=lf
+*.sty          text eol=lf
+*.cls          text eol=lf
+*.bst          text eol=lf
+
+# Shell-independent makefiles / requirements.
+Makefile       text eol=lf
+*.mk           text eol=lf
+requirements*.txt text eol=lf
+
+# Binary artifacts: never touch.
+*.pdf          binary
+*.png          binary
+*.jpg          binary
+*.jpeg         binary
+*.gz           binary
+*.zip          binary
+*.duckdb       binary
+*.pt           binary
+*.npz          binary
+*.pickle       binary
+*.pkl          binary
+
+# Read-only historical archive: do NOT touch line endings here. This rule MUST
+# come after the extension rules above, because for a path matching multiple
+# patterns git applies the last matching one. The archive was committed with
+# mixed CRLF/LF and must stay byte-identical; normalizing it would create huge
+# spurious diffs. `-text` disables any EOL conversion for everything under it.
+/_archive/**   -text

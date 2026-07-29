@@ -34,10 +34,19 @@ Git 仓库根是本目录（`/Users/zhouzixiang/Desktop/tzb`），工作目录�
 
 | 环境 | 解释器路径 | 用途 |
 |---|---|---|
-| `mcts-qoracle` | `/opt/anaconda3/envs/mcts-qoracle/bin/python` | 核心合成、训练、大部分脚本 |
-| `sshr` | `/opt/anaconda3/envs/sshr/bin/python` | ILP/Gurobi 相关脚本 |
+| `mcts-qoracle`（Windows 本机，当前主环境） | `C:\Users\32143\.conda\envs\mcts-qoracle\python.exe` | 核心合成、训练、Qiskit 本地仿真、绘图、DuckDB |
+| `mcts-qoracle`（macOS 旧机） | `/opt/anaconda3/envs/mcts-qoracle/bin/python` | 历史实验 |
+| `sshr`（macOS 旧机） | `/opt/anaconda3/envs/sshr/bin/python` | ILP/Gurobi 相关脚本 |
 
-Gurobi 仅安装在 `sshr` 环境，许可证路径 `~/.gurobi/gurobi.lic`。
+Windows 本机 `mcts-qoracle` 环境要点（2026-07 重建，RTX 5090 Laptop / sm_120）：
+
+- torch 2.9.1+cu128（pip 装入 conda 环境，GPU 已验证）；qiskit 2.5.0 + qiskit-aer 0.17.2、pulp 2.8、duckdb 1.5、seaborn、scipy（conda 安装）
+- **加载顺序约束**：必须 `import torch` 先于 `import qiskit_aer`（否则 shm.dll WinError 127）
+- 直接调用 `python.exe`（非 `conda activate`）时需前置环境变量 `KMP_DUPLICATE_LIB_OK=TRUE`（MKL 与 torch 的 OpenMP 共存）
+- conda 官方 pytorch 包在本机不可装（Windows 长路径开关关闭且需管理员权限），故 torch 走 pip；pip 缓存目录曾配置为 `C:\p`（保留）
+- TeX Live 2025 在 `C:\texlive\2025\bin\windows\`（不在 PATH），xelatex/pdflatex/latexmk 齐全
+
+Gurobi 仅安装在 macOS `sshr` 环境，许可证路径 `~/.gurobi/gurobi.lic`；Windows 本机无 Gurobi（用 SciPy milp / PuLP 替代）。
 
 ## 常用命令
 

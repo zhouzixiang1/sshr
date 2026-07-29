@@ -19,6 +19,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 
@@ -26,8 +27,11 @@ _THIS_FILE = Path(__file__).resolve()
 THIS_DIR = _THIS_FILE.parent if (_THIS_FILE.parent / "results").exists() else _THIS_FILE.parent.parent
 ROOT = THIS_DIR.parent
 RESULTS = THIS_DIR / "results"
-ENV_BIN = Path("/opt/anaconda3/envs/mcts-qoracle/bin")
-ENV_PYTHON = ENV_BIN / "python"
+# Derive the interpreter/bin dir from the running process instead of a hardcoded
+# macOS path, so the readiness probe is correct on any platform (Windows conda,
+# macOS anaconda, Linux, etc.).
+ENV_PYTHON = Path(sys.executable)
+ENV_BIN = ENV_PYTHON.parent
 MOCKTURTLE_ADAPTER_SRC = THIS_DIR / "tools" / "mockturtle_blif_xag_stats.cpp"
 MOCKTURTLE_PROBE_ANALYSIS = RESULTS / "analysis_mockturtle_xag_probe.md"
 CIRKIT_AIG_PROBE_ANALYSIS = RESULTS / "analysis_cirkit_aig_probe.md"
@@ -86,7 +90,7 @@ TOOLS = [
         "branches": ["master"],
         "install": [
             "git clone --recursive https://github.com/lsils/mockturtle.git tmp/mockturtle",
-            "/opt/anaconda3/envs/mcts-qoracle/bin/python resource_nmcts_experiment/run_mockturtle_xag_probe.py --workers 4 --timeout 20",
+            "python resource_nmcts_experiment/run_mockturtle_xag_probe.py --workers 4 --timeout 20",
         ],
     },
     {
@@ -100,7 +104,7 @@ TOOLS = [
         "remote": "https://github.com/msoeken/revkit.git",
         "branches": ["develop", "master"],
         "install": [
-            "/opt/anaconda3/envs/mcts-qoracle/bin/python -m pip install 'git+https://github.com/msoeken/revkit@develop'",
+            "python -m pip install 'git+https://github.com/msoeken/revkit@develop'",
             "or: git clone -b develop https://github.com/msoeken/revkit tmp/revkit && cd tmp/revkit && make devbuild",
         ],
     },
@@ -117,7 +121,7 @@ TOOLS = [
         "install": [
             "git clone --recursive https://github.com/msoeken/cirkit.git tmp/cirkit",
             "cd tmp/cirkit && mkdir -p build && cd build && cmake .. && cmake --build . --target cirkit --parallel 8",
-            "/opt/anaconda3/envs/mcts-qoracle/bin/python resource_nmcts_experiment/run_cirkit_aig_probe.py --workers 8 --timeout 45",
+            "python resource_nmcts_experiment/run_cirkit_aig_probe.py --workers 8 --timeout 45",
         ],
     },
     {
@@ -137,7 +141,7 @@ TOOLS = [
         "install": [
             "git -C tmp/cirkit worktree add ../cirkit_legacy origin/develop && git -C tmp/cirkit_legacy submodule update --init --recursive",
             "cd tmp/cirkit_legacy && mkdir -p build && cd build && cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -Denable_cirkit-addon-reversible=ON .. && cmake --build . --target revkit --parallel 8",
-            "/opt/anaconda3/envs/mcts-qoracle/bin/python resource_nmcts_experiment/run_revkit_cli_probe.py --workers 8 --timeout 20 --flow tbs=tbs --flow dbs=dbs --flow rms=rms",
+            "python resource_nmcts_experiment/run_revkit_cli_probe.py --workers 8 --timeout 20 --flow tbs=tbs --flow dbs=dbs --flow rms=rms",
         ],
     },
     {

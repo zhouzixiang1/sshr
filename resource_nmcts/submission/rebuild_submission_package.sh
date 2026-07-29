@@ -9,7 +9,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PYTHON_BIN="${PYTHON_BIN:-/opt/anaconda3/envs/mcts-qoracle/bin/python}"
+PYTHON_BIN="${PYTHON_BIN:-python}"
 LATEXMK_BIN="${LATEXMK_BIN:-latexmk}"
 PDFLATEX_BIN="${PDFLATEX_BIN:-pdflatex}"
 SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1767225600}"

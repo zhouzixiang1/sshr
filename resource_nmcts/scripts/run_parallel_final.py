@@ -101,10 +101,11 @@ def main():
         import subprocess
         def _run_subprocess(task):
             name, n, tt_int, method, model_path = task
-            cmd = ['/opt/anaconda3/envs/mcts-qoracle/bin/python', 'scripts/_worker_synth.py',
+            cmd = [sys.executable, 'scripts/_worker_synth.py',
                    name, str(n), str(tt_int), method, model_path]
             try:
-                result = subprocess.run(cmd, capture_output=True, text=True, timeout=3600)
+                result = subprocess.run(cmd, capture_output=True, text=True, timeout=3600,
+                                        cwd=str(_PROJ_ROOT))
                 if result.returncode == 0:
                     import json
                     return json.loads(result.stdout.strip())

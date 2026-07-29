@@ -20,6 +20,7 @@ if str(_PROJ_ROOT) not in _sys.path:
 import csv
 import json
 import argparse
+import platform
 import shutil
 import statistics
 import subprocess
@@ -423,7 +424,14 @@ int main() {{
 
 
 def build_and_run_tool(tasks: list[Task], commit: str, timeout: int) -> list[dict[str, str]]:
-    compiler = Path("/usr/bin/c++")
+    # Locate a C++17 compiler from PATH instead of assuming /usr/bin/c++ (Linux/macOS only).
+    compiler = next((shutil.which(c) for c in ("c++", "g++", "clang++") if shutil.which(c)), None)
+    if compiler is None:
+        raise FileNotFoundError(
+            "no C++ compiler found on PATH (looked for c++, g++, clang++). "
+            "Install one or add it to PATH to build the Caterpillar probe."
+        )
+    compiler = Path(compiler)
     libabcsat = CATERPILLAR / "build-test" / "lib" / "abcsat" / "liblibabcsat.a"
     include_dirs = [
         CATERPILLAR / "include",
@@ -447,15 +455,14 @@ def build_and_run_tool(tasks: list[Task], commit: str, timeout: int) -> list[dic
     with tempfile.TemporaryDirectory(prefix="caterpillar_xag_api_") as tmp_name:
         tmp = Path(tmp_name)
         source = tmp / "caterpillar_xag_api_probe.cpp"
-        exe = tmp / "caterpillar_xag_api_probe"
+        # Windows executables need an .exe suffix; *nix does not.
+        exe = tmp / ("caterpillar_xag_api_probe" + (".exe" if sys.platform == "win32" else ""))
         source.write_text(cxx_source(tasks, commit), encoding="utf-8")
         cmd = [
             str(compiler),
             "-std=gnu++17",
             "-O2",
             "-DNDEBUG",
-            "-arch",
-            "arm64",
             "-DABC_NAMESPACE=pabc",
             "-DABC_NO_USE_READLINE",
             "-DDISABLE_NAUTY",
@@ -463,6 +470,11 @@ def build_and_run_tool(tasks: list[Task], commit: str, timeout: int) -> list[dic
             "-DLIN64",
             "-w",
         ]
+        # `-arch arm64` is an Apple-clang-only flag for Apple Silicon builds.
+        # Only emit it when actually targeting macOS on arm64 so the probe stays
+        # portable to Windows/Linux/x86-64.
+        if sys.platform == "darwin" and platform.machine() == "arm64":
+            cmd += ["-arch", "arm64"]
         for include_dir in include_dirs[:-2]:
             cmd.extend(["-I", str(include_dir)])
         for include_dir in include_dirs[-2:]:

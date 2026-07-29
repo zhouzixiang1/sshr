@@ -9,7 +9,9 @@ _PROJ_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_DIR = _PROJ_ROOT / "results"
 LOG = _PROJ_ROOT / "tmp" / "parallel_v2.log"
 WORKER = _PROJ_ROOT / "scripts" / "_worker_synth.py"
-PYTHON = "/opt/anaconda3/envs/mcts-qoracle/bin/python"
+# Use the current interpreter so the script is portable across platforms
+# (Windows conda env, macOS /opt/anaconda3, etc.) rather than a hardcoded path.
+PYTHON = sys.executable
 
 AES_SBOX = [
     0x63,0x7c,0x77,0x7b,0xf2,0x6b,0x6f,0xc5,0x30,0x01,0x67,0x2b,0xfe,0xd7,0xab,0x76,
