@@ -90,6 +90,16 @@ class _BeamEngine:
             self._mode = "double"
             self.P_lo = np.array([m & ((1 << 64) - 1) for m in bitmasks_int], dtype=np.uint64)
             self.P_hi = np.array([m >> 64 for m in bitmasks_int], dtype=np.uint64)
+        elif n == 8:
+            # 256-bit vertex bitmasks split into four uint64 lanes so the
+            # validity checks stay fully numpy-vectorised (the pure-Python
+            # "object" mode was the performance cliff that timed out on n=8 AES).
+            self._mode = "quad"
+            _mask64 = (1 << 64) - 1
+            self.P_l0 = np.array([m & _mask64 for m in bitmasks_int], dtype=np.uint64)
+            self.P_l1 = np.array([(m >> 64) & _mask64 for m in bitmasks_int], dtype=np.uint64)
+            self.P_l2 = np.array([(m >> 128) & _mask64 for m in bitmasks_int], dtype=np.uint64)
+            self.P_l3 = np.array([(m >> 192) & _mask64 for m in bitmasks_int], dtype=np.uint64)
         else:
             self._mode = "object"
             self.P_masks_py = bitmasks_int
@@ -113,6 +123,20 @@ class _BeamEngine:
             self.sorted_hi = np.array(
                 [bitmasks_int[i] >> 64 for i in sorted_idx], dtype=np.uint64
             )
+        elif n == 8:
+            _mask64 = (1 << 64) - 1
+            self.sorted_l0 = np.array(
+                [bitmasks_int[i] & _mask64 for i in sorted_idx], dtype=np.uint64
+            )
+            self.sorted_l1 = np.array(
+                [(bitmasks_int[i] >> 64) & _mask64 for i in sorted_idx], dtype=np.uint64
+            )
+            self.sorted_l2 = np.array(
+                [(bitmasks_int[i] >> 128) & _mask64 for i in sorted_idx], dtype=np.uint64
+            )
+            self.sorted_l3 = np.array(
+                [(bitmasks_int[i] >> 192) & _mask64 for i in sorted_idx], dtype=np.uint64
+            )
 
     def _valid(self, A_mask: int) -> np.ndarray:
         if self._mode == "single":
@@ -122,6 +146,18 @@ class _BeamEngine:
             Al = np.uint64(A_mask & ((1 << 64) - 1))
             Ah = np.uint64((A_mask >> 64) & ((1 << 64) - 1))
             return ((self.P_lo & Al) == self.P_lo) & ((self.P_hi & Ah) == self.P_hi)
+        elif self._mode == "quad":
+            _mask64 = (1 << 64) - 1
+            a0 = np.uint64(A_mask & _mask64)
+            a1 = np.uint64((A_mask >> 64) & _mask64)
+            a2 = np.uint64((A_mask >> 128) & _mask64)
+            a3 = np.uint64((A_mask >> 192) & _mask64)
+            return (
+                ((self.P_l0 & a0) == self.P_l0)
+                & ((self.P_l1 & a1) == self.P_l1)
+                & ((self.P_l2 & a2) == self.P_l2)
+                & ((self.P_l3 & a3) == self.P_l3)
+            )
         else:
             return np.array([(m & A_mask) == m for m in self.P_masks_py], dtype=bool)
 
@@ -134,6 +170,18 @@ class _BeamEngine:
             Al = np.uint64(A_mask & ((1 << 64) - 1))
             Ah = np.uint64((A_mask >> 64) & ((1 << 64) - 1))
             return ((self.sorted_lo & Al) == self.sorted_lo) & ((self.sorted_hi & Ah) == self.sorted_hi)
+        elif self._mode == "quad":
+            _mask64 = (1 << 64) - 1
+            a0 = np.uint64(A_mask & _mask64)
+            a1 = np.uint64((A_mask >> 64) & _mask64)
+            a2 = np.uint64((A_mask >> 128) & _mask64)
+            a3 = np.uint64((A_mask >> 192) & _mask64)
+            return (
+                ((self.sorted_l0 & a0) == self.sorted_l0)
+                & ((self.sorted_l1 & a1) == self.sorted_l1)
+                & ((self.sorted_l2 & a2) == self.sorted_l2)
+                & ((self.sorted_l3 & a3) == self.sorted_l3)
+            )
         else:
             bm = self.bitmasks_list
             so = self.sorted_idx
