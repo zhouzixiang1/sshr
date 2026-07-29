@@ -45,7 +45,7 @@
 \maketitle
 
 \begin{abstract}
-量子布尔函数 Oracle 是 Grover 型搜索与量子密码分析中的基础编译对象，但从真值表到可执行线路之间同时存在逻辑表示、资源权衡、辅助比特管理和硬件拓扑约束。本文实现 \method{}，将 bit-flip Boolean Oracle 综合写成 ANF/FPRM 项集合上的资源约束搜索，并以可验证的候选组合机制在 Direct-ANF、因子贪心、启发式 MCTS、仿射/FPRM 变换和可选的监督动作评分器之间选择线路。公共 artifact API 保存真实 X/CNOT/MCT 门序列；Qiskit Target、HLS 与 SABRE 完成无校准 synthetic Target 映射；逻辑穷举和映射后全部 $(x,y)$ 基态验证共同检查功能、辅助位、泄漏与输入相关相位。冻结主分析覆盖 20 个函数、6 个方法和 3 个综合 seed：360 个计划单元中 354 个完成双层精确验证，6 个缺口均为 SSHR-Beam 在两个 AES 分量上的 300~s 综合超时。以独立 Boolean 函数为推断单位，相对 Direct-ANF，\method{} 的逻辑 T、逻辑 CNOT、native-2Q 和 mapped depth 中位相对改善分别为 $51.5\%$、$16.6\%$、$42.0\%$ 和 $45.2\%$，四项 95\% bootstrap 区间均严格位于有利方向，分族 Holm 校正 $p_{\mathrm H}\leq0.00184$。相对 Greedy/MCTS，严格支持集中在逻辑 T；相对 SSHR-H，严格支持 native-2Q；相对 SSHR-Beam 的 18 个完整函数，严格支持逻辑 T、native-2Q 和 mapped depth，而 CNOT 不占优。监督评分器的独立 clean pilot 主要为平局，完整 60 个 \method{} 单元中 54 个选择确定性分支，因此上述组合收益不归因于 learned prior，也不外推为真实硬件保真度收益。
+量子布尔函数 Oracle 是 Grover 型搜索与量子密码分析中的基础编译对象，但从真值表到可执行线路之间同时存在逻辑表示、资源权衡、辅助比特管理和硬件拓扑约束。本文实现 \method{}，将 bit-flip Boolean Oracle 综合写成 ANF/FPRM 项集合上的资源约束搜索，并以可验证的候选组合机制在 Direct-ANF、因子贪心、启发式 MCTS、仿射/FPRM 变换和可选的监督动作评分器之间选择线路。公共 artifact API 保存真实 X/CNOT/MCT 门序列；Qiskit Target、HLS 与 SABRE 完成无校准 synthetic Target 映射；逻辑穷举和映射后全部 $(x,y)$ 基态验证共同检查功能、辅助位、泄漏与输入相关相位。冻结主分析覆盖 20 个函数、6 个方法和 3 个综合 seed：360 个计划单元全部完成双层精确验证。以独立 Boolean 函数为推断单位，相对 Direct-ANF，\method{} 的逻辑 T、逻辑 CNOT、native-2Q 和 mapped depth 中位相对改善分别为 $51.5\%$、$16.6\%$、$42.0\%$ 和 $45.2\%$，四项 95\% bootstrap 区间均严格位于有利方向，分族 Holm 校正 $p_{\mathrm H}\leq0.00184$。相对 Greedy/MCTS，严格支持集中在逻辑 T；相对 SSHR-H，严格支持 native-2Q；相对 SSHR-Beam 的 20 个完整函数，严格支持逻辑 T、native-2Q 和 mapped depth，而 CNOT 不占优。监督评分器的独立 clean pilot 主要为平局，完整 60 个 \method{} 单元中 54 个选择确定性分支，因此上述组合收益不归因于 learned prior，也不外推为真实硬件保真度收益。
 \end{abstract}
 
 \noindent\textbf{关键词：}量子编译；bit-flip Boolean Oracle；资源感知综合；蒙特卡洛树搜索；学习先验；硬件映射
@@ -286,17 +286,17 @@ MCTS-Factor 使用启发式先验和有限 simulation budget，因而寻找的�
     Greedy-Factor & 20 & \textbf{23.6 [17.3, 34.4]} & $18.1 [0.0, 23.0]^{\dagger}$ & $16.1 [0.0, 22.8]^{\dagger}$ & $16.9 [0.0, 25.1]^{\dagger}$ \\
     MCTS-Factor & 20 & \textbf{23.6 [15.5, 34.4]} & $19.6 [0.0, 22.8]^{\dagger}$ & $12.8 [0.0, 22.8]^{\dagger}$ & $10.3 [0.0, 25.1]^{\dagger}$ \\
     SSHR-H & 20 & $10.0 [-5.3, 29.2]$ & $-28.0 [-54.5, 0.0]$ & \textbf{30.6 [3.0, 40.2]} & $38.3 [-0.9, 47.7]^{\dagger}$ \\
-    SSHR-Beam & 18 & \textbf{46.1 [24.0, 52.1]} & $-2.9 [-24.6, 17.4]$ & \textbf{43.4 [22.7, 56.9]} & \textbf{51.8 [29.9, 61.0]} \\
+    SSHR-Beam & 20 & \textbf{40.9 [21.2, 50.0]} & $-7.1 [-39.8, 12.1]$ & \textbf{45.3 [34.1, 50.5]} & \textbf{51.8 [40.6, 55.7]} \\
     \bottomrule
   \end{tabular}}
 \end{table}
 
-相对 Direct-ANF，四个预注册主指标全部严格支持改善，胜/平/负依次为 T 的 $17/3/0$ 和其余三项的 $14/3/3$，最大分族 Holm $p_{\mathrm H}=0.00184$。相对 Greedy-Factor 和 MCTS-Factor，逻辑 T 的严格改善均为 23.6\%；其他三项的 Holm 检验支持方向性差异，但中位区间触 0。相对 SSHR-H，只有 native-2Q 的 30.6\% 改善满足严格门槛；逻辑 T/CNOT 不显著，mapped depth 的区间跨 0。SSHR-Beam 因两个 AES 函数均三 seed 超时而仅有 $n=18$；在该完整子集上逻辑 T、native-2Q 和 mapped depth 严格改善，逻辑 CNOT 为负中位改善且不显著。由此，本项目可以在上述限定指标与基线上使用“显著优于”，但不能声称全基线、全指标支配。
+相对 Direct-ANF，四个预注册主指标全部严格支持改善，胜/平/负依次为 T 的 $17/3/0$ 和其余三项的 $14/3/3$，最大分族 Holm $p_{\mathrm H}=0.00184$。相对 Greedy-Factor 和 MCTS-Factor，逻辑 T 的严格改善均为 23.6\%；其他三项的 Holm 检验支持方向性差异，但中位区间触 0。相对 SSHR-H，只有 native-2Q 的 30.6\% 改善满足严格门槛；逻辑 T/CNOT 不显著，mapped depth 的区间跨 0。SSHR-Beam 的两个 AES 函数在补全 quad 向量化后已三 seed 全部完成，比较覆盖全部 $n=20$；在该完整集合上逻辑 T、native-2Q 和 mapped depth 严格改善，逻辑 CNOT 为负中位改善且不显著。由此，本项目可以在上述限定指标与基线上使用“显著优于”，但不能声称全基线、全指标支配。
 
 \begin{figure}[p]
   \centering
   \includegraphics[width=\linewidth]{F4_frozen_primary_results.pdf}
-  \caption{冻结主结果与推断审计。\textbf{a} \method{} 相对五个基线的函数级中位相对改善及 95\% bootstrap CI，正值有利；实心绿色仅标记同时通过双区间与分族 Holm 门槛的比较。\textbf{b} 每格给出独立函数数、胜/平/负和分族 Holm 校正 $p_{\mathrm H}$。每个函数先严格配对 seed 7/17/29；SSHR-Beam 的两个 AES 函数均达到 300~s 综合超时，故该比较 $n=18$。Source data are provided in the figure source CSV/JSON.}
+  \caption{冻结主结果与推断审计。\textbf{a} \method{} 相对五个基线的函数级中位相对改善及 95\% bootstrap CI，正值有利；实心绿色仅标记同时通过双区间与分族 Holm 门槛的比较。\textbf{b} 每格给出独立函数数、胜/平/负和分族 Holm 校正 $p_{\mathrm H}$。每个函数先严格配对 seed 7/17/29；SSHR-Beam 比较覆盖全部 $n=20$（两个 AES 分量经 quad 向量化补全后三 seed 均完成）。Source data are provided in the figure source CSV/JSON.}
   \label{fig:primary-results}
 \end{figure}
 
@@ -411,7 +411,7 @@ heavy-hex 耦合图上的本地结果属于拓扑压力测试，不能被表述�
 \subsection{已知瓶颈}
 
 \begin{itemize}
-  \item \textbf{coverage 未达 100\%：}primary20 为 354/360；六个缺口集中在 SSHR-Beam 的两个 AES 函数。该基线比较只在 18 个完整函数上推断，不能外推到被超时排除的 AES 情形。
+  \item \textbf{SSHR-Beam 的 n=8 性能边界：}SSHR-Beam 在 $n\geq8$ 上曾因逐元素 Python 掩码循环而在 AES 分量上综合超时；本作品已为其增加 4-lane uint64 向量化路径补全至 360/360，但该基线在大函数上仍可能受束宽与候选枚举开销限制。
   \item \textbf{learned prior 增益有限：}先导消融尚未观察到稳定独立收益；组合系统的优势可能主要来自表示变换和确定性候选。
   \item \textbf{硬件模型有限：}当前仅有无校准 synthetic Target 和无噪声 CPU Aer，不能推断真实保真度、时长或 QEC 总成本。
   \item \textbf{精确验证指数扩展：}正式全 $(x,y)$ 验证限定在 $n\leq8$；更大规模需把符号证明、抽样验证和适用边界分别报告。
@@ -421,7 +421,7 @@ heavy-hex 耦合图上的本地结果属于拓扑压力测试，不能被表述�
 
 \section{结论}
 
-本文完成了从 Boolean 函数、资源感知组合综合、synthetic Target 映射、本地精确验证到 DuckDB 审计的闭环。冻结分析 \texttt{\FinalAnalysisID} 在 354/360 个计划单元上形成可追溯证据；相对 Direct-ANF，逻辑 T/CNOT、native-2Q 与 mapped depth 四个主指标分别严格改善 51.5\%、16.6\%、42.0\% 和 45.2\%。更强基线揭示了真实边界：Greedy/MCTS 只有逻辑 T 严格改善，SSHR-H 只有 native-2Q，SSHR-Beam 的完整 18 函数上有三项严格改善而 CNOT 不占优。完整组合中 54/60 个输出来自确定性分支，clean learned-prior pilot 未显示稳定独立收益。因此可支持的结论是“在冻结匹配协议的若干主指标上显著优于对应基线”，而不是全指标支配、神经网络单独增益或真实硬件保真度提升。
+本文完成了从 Boolean 函数、资源感知组合综合、synthetic Target 映射、本地精确验证到 DuckDB 审计的闭环。冻结分析 \texttt{\FinalAnalysisID} 在 360/360 个计划单元上形成可追溯证据；相对 Direct-ANF，逻辑 T/CNOT、native-2Q 与 mapped depth 四个主指标分别严格改善 51.5\%、16.6\%、42.0\% 和 45.2\%。更强基线揭示了真实边界：Greedy/MCTS 只有逻辑 T 严格改善，SSHR-H 只有 native-2Q，SSHR-Beam 的完整 20 函数上有三项严格改善而 CNOT 不占优。完整组合中 54/60 个输出来自确定性分支，clean learned-prior pilot 未显示稳定独立收益。因此可支持的结论是“在冻结匹配协议的若干主指标上显著优于对应基线”，而不是全指标支配、神经网络单独增益或真实硬件保真度提升。
 
 \appendix
 \section{运行与复现说明}
