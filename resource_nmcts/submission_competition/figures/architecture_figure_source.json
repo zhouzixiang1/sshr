@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "figure_id": "F2_system_architecture",
+  "competition": "XA-202609",
+  "core_conclusion": "The implemented system closes the loop from ablatable candidate ranking through executable circuit artifacts and topology-aware compilation to exact verification and append-only evidence archival; learned-prior gain is not assumed.",
+  "archetype": "schematic-led composite",
+  "dimensions_mm": {
+    "width": 183.0,
+    "height": 105.0
+  },
+  "panels": {
+    "a": {
+      "title": "端到端主流程",
+      "nodes": [
+        {
+          "id": "input",
+          "title": "Boolean 函数",
+          "detail": [
+            "冻结 benchmark",
+            "真值表 + 函数哈希"
+          ]
+        },
+        {
+          "id": "candidates",
+          "title": "候选综合",
+          "detail": [
+            "ANF / FPRM",
+            "affine / Direct"
+          ]
+        },
+        {
+          "id": "search",
+          "title": "搜索与排序",
+          "detail": [
+            "heuristic / MCTS",
+            "learned prior 可消融"
+          ]
+        },
+        {
+          "id": "artifact",
+          "title": "SynthesisArtifact",
+          "detail": [
+            "真实 gate list",
+            "winner + 逻辑资源"
+          ]
+        },
+        {
+          "id": "mapping",
+          "title": "拓扑约束编译",
+          "detail": [
+            "Qiskit Target",
+            "layout + SABRE"
+          ]
+        },
+        {
+          "id": "native",
+          "title": "原生门线路",
+          "detail": [
+            "native basis",
+            "物理比特 + 耦合边"
+          ]
+        }
+      ],
+      "controls": [
+        "heuristic",
+        "uniform",
+        "random",
+        "learned prior"
+      ],
+      "control_policy": "same search budget; learned prior can be disabled",
+      "claim_boundary": "Portfolio-level gains must not be attributed to the learned prior without matched ablation evidence."
+    },
+    "b": {
+      "title": "验证与证据闭环",
+      "verification_gates": [
+        {
+          "id": "truth",
+          "title": "符号真值",
+          "detail": "全输入逻辑检查"
+        },
+        {
+          "id": "logical",
+          "title": "逻辑线路",
+          "detail": "artifact 一致性"
+        },
+        {
+          "id": "target",
+          "title": "原生门/耦合",
+          "detail": "Target 合法性"
+        },
+        {
+          "id": "exact",
+          "title": "精确 (x,y)",
+          "detail": "相位·辅助位·泄漏"
+        }
+      ],
+      "pass_sink": [
+        "append-only JSONL",
+        "DuckDB typed facts"
+      ],
+      "failure_policy": "Failures remain as status/error evidence in the audit trail."
+    },
+    "c": {
+      "title": "算力分工与外推边界",
+      "compute": [
+        {
+          "role": "model",
+          "device": "NVIDIA GeForce RTX 5090 Laptop GPU",
+          "runtime": "PyTorch 2.9.1+cu128",
+          "work": "模型训练 / 批推理"
+        },
+        {
+          "role": "verification",
+          "device": "Aer device=CPU",
+          "runtime": "Qiskit Aer 0.17.2",
+          "work": "无噪声精确验证"
+        }
+      ],
+      "boundary": "Synthetic Target is a topology/basis proxy, not a calibrated device; no real-hardware fidelity or noise claim is made."
+    }
+  },
+  "environment_snapshot": {
+    "path": "submission_competition/environment_manifest.json",
+    "sha256": "926252bceea9c947532e9e3a19ad9819d3bbb06ec31958f245cd872985117919",
+    "captured_at_utc": "2026-07-22T09:07:49+00:00",
+    "environment_name": "mcts-qoracle",
+    "python": "3.11.15",
+    "gpu_name": "NVIDIA GeForce RTX 5090 Laptop GPU",
+    "torch_cuda_available": true,
+    "aer_available_devices": [
+      "CPU"
+    ]
+  },
+  "evidence_files": [
+    {
+      "path": "src/competition_benchmarks.py",
+      "role": "frozen benchmark definitions and function identities",
+      "sha256": "2ff5e0d17e7691cb4688f00589dd285ab79937c02ef62cd269c3696f9475d88a",
+      "size_bytes": 6432
+    },
+    {
+      "path": "src/synthesizers.py",
+      "role": "public SynthesisArtifact API and portfolio selection",
+      "sha256": "fe2bae64ae893d3bf7dbb4abb2e20debaab4e2c088e8602fee64e5c43c5fa47c",
+      "size_bytes": 76674
+    },
+    {
+      "path": "src/neural_policy.py",
+      "role": "learned, uniform, and random prior scorers",
+      "sha256": "f2a3edaf44b0870a1fdb4fc854ffb543de5f27059777db3caf7dcf3232b417a6",
+      "size_bytes": 5834
+    },
+    {
+      "path": "src/hardware_map.py",
+      "role": "Qiskit conversion, topology mapping, and exact mapped verification",
+      "sha256": "4f80248177a940c6f402aed38738f2a36bc92cfc897694005ea2b2710a299124",
+      "size_bytes": 39500
+    },
+    {
+      "path": "scripts/run_hardware_validation.py",
+      "role": "synthesis-once/map-many experiment runner",
+      "sha256": "110c73273179466f5062d52aba9a93355192ab8ea3839eb5400e2839ed0eec8c",
+      "size_bytes": 59703
+    },
+    {
+      "path": "src/hardware_validation_ingest.py",
+      "role": "validated JSONL ingestion and failure preservation",
+      "sha256": "61a1cd29e42164d3f235bf23f12a294fbb78573b85e9905cabdb4efd5cdb70e9",
+      "size_bytes": 30241
+    },
+    {
+      "path": "src/experiment_db.py",
+      "role": "append-only DuckDB schema, attempts, verification, and provenance",
+      "sha256": "d5db5bba73c40873a9e535273fa711cd041dac6a3786006b7922526c1122a559",
+      "size_bytes": 63450
+    }
+  ],
+  "claim_policy": {
+    "performance_statistics_in_figure": false,
+    "learned_prior_independent_gain_claimed": false,
+    "aer_gpu_claimed": false,
+    "real_hardware_execution_claimed": false,
+    "noise_awareness_claimed": false
+  }
+}

@@ -1,0 +1,1023 @@
+{
+  "schema_version": 1,
+  "figure_id": "F3_ai_ablation_attribution",
+  "competition": "XA-202609",
+  "core_conclusion": "The current matched evidence does not isolate a stable circuit-resource gain from the learned prior: clean pilot controls are mostly tied, hard cases are mixed or adverse, and 54/60 verified Resource-NMCTS outcomes select explicitly deterministic branches.",
+  "archetype": "quantitative grid",
+  "dimensions_mm": {
+    "width": 183.0,
+    "height": 112.0
+  },
+  "panel_a_training_fact": {
+    "role": "supervised immediate-label action scorer; changes candidate ordering only",
+    "architecture": "24→96→96→96→1",
+    "feature_dim": 24,
+    "hidden": 96,
+    "total_function_count": 1416,
+    "total_action_row_count": 1623060,
+    "split_function_counts": {
+      "train": 991,
+      "valid": 212,
+      "test": 213
+    },
+    "split_row_counts": {
+      "train": 1168843,
+      "valid": 212796,
+      "test": 241421
+    },
+    "split_seed": 202609,
+    "normalization_source": "train",
+    "training_seed": 202609,
+    "label_mode": "immediate",
+    "loss_mode": "regression",
+    "checkpoint_selection": "minimum validation loss only",
+    "best_epoch": 80,
+    "test_loss_once_after_selection": 0.00049098941963166,
+    "checkpoint_sha256": "6ba157fb9b5504d815d250ce55bb7d6509bce05ead24547e07dc6644ba8b3617",
+    "checkpoint_sha12": "6ba157fb9b55",
+    "training_device": "cuda",
+    "cuda_device_name": "NVIDIA GeForce RTX 5090 Laptop GPU",
+    "torch_version": "2.9.1+cu128",
+    "torch_cuda_version": "12.8",
+    "integrity": {
+      "function_hash_splits_disjoint": true,
+      "all_action_rows_assigned_once": true,
+      "normalization_source_is_train_only": true,
+      "checkpoint_uses_test": false,
+      "test_evaluations": 1
+    },
+    "claim_boundary": "offline regression MSE is not a downstream circuit-resource effect"
+  },
+  "panel_b_clean_pilot": {
+    "n_functions": 4,
+    "seeds": [
+      7,
+      17
+    ],
+    "n_paired_cells": 8,
+    "deduplication": "cx_full/cx_line map-many rows collapse to one synthesis-level cell",
+    "comparisons": [
+      {
+        "control": "heuristic",
+        "control_label": "heuristic prior",
+        "pairing_unit": "Boolean function truth table × synthesis seed",
+        "joint_metric": "Pareto dominance on logical T and logical CNOT (lower is better)",
+        "wins": 0,
+        "ties": 8,
+        "losses": 0,
+        "tradeoffs": 0,
+        "n": 8,
+        "wilcoxon_T": {
+          "p_two_sided": 1.0,
+          "nonzero_pairs": 0,
+          "statistic": 0.0
+        },
+        "wilcoxon_CNOT": {
+          "p_two_sided": 1.0,
+          "nonzero_pairs": 0,
+          "statistic": 0.0
+        },
+        "median_runtime_ratio_learned_over_control": 1.2772263007751823
+      },
+      {
+        "control": "uniform",
+        "control_label": "uniform prior",
+        "pairing_unit": "Boolean function truth table × synthesis seed",
+        "joint_metric": "Pareto dominance on logical T and logical CNOT (lower is better)",
+        "wins": 0,
+        "ties": 8,
+        "losses": 0,
+        "tradeoffs": 0,
+        "n": 8,
+        "wilcoxon_T": {
+          "p_two_sided": 1.0,
+          "nonzero_pairs": 0,
+          "statistic": 0.0
+        },
+        "wilcoxon_CNOT": {
+          "p_two_sided": 1.0,
+          "nonzero_pairs": 0,
+          "statistic": 0.0
+        },
+        "median_runtime_ratio_learned_over_control": 1.3050475911350339
+      },
+      {
+        "control": "rollout",
+        "control_label": "rollout scorer",
+        "pairing_unit": "Boolean function truth table × synthesis seed",
+        "joint_metric": "Pareto dominance on logical T and logical CNOT (lower is better)",
+        "wins": 0,
+        "ties": 8,
+        "losses": 0,
+        "tradeoffs": 0,
+        "n": 8,
+        "wilcoxon_T": {
+          "p_two_sided": 1.0,
+          "nonzero_pairs": 0,
+          "statistic": 0.0
+        },
+        "wilcoxon_CNOT": {
+          "p_two_sided": 1.0,
+          "nonzero_pairs": 0,
+          "statistic": 0.0
+        },
+        "median_runtime_ratio_learned_over_control": 0.7663989904920577
+      },
+      {
+        "control": "random",
+        "control_label": "random prior",
+        "pairing_unit": "Boolean function truth table × synthesis seed",
+        "joint_metric": "Pareto dominance on logical T and logical CNOT (lower is better)",
+        "wins": 2,
+        "ties": 6,
+        "losses": 0,
+        "tradeoffs": 0,
+        "n": 8,
+        "wilcoxon_T": {
+          "p_two_sided": 0.5,
+          "nonzero_pairs": 2,
+          "statistic": 0.0
+        },
+        "wilcoxon_CNOT": {
+          "p_two_sided": 0.5,
+          "nonzero_pairs": 2,
+          "statistic": 0.0
+        },
+        "median_runtime_ratio_learned_over_control": 1.0649011021405927
+      }
+    ]
+  },
+  "panel_c_hard_cases": {
+    "variants": [
+      {
+        "variant": "immediate",
+        "variant_label": "Immediate scorer",
+        "reference": "heuristic prior",
+        "n_cases": 3,
+        "case_ids": [
+          "maj7",
+          "randtt6_s139",
+          "aes_sbox_b0"
+        ],
+        "metrics": [
+          {
+            "metric": "逻辑 T",
+            "field": "logic_T",
+            "wins": 0,
+            "ties": 2,
+            "losses": 1,
+            "n": 3
+          },
+          {
+            "metric": "逻辑 CNOT",
+            "field": "logic_CNOT",
+            "wins": 0,
+            "ties": 2,
+            "losses": 1,
+            "n": 3
+          },
+          {
+            "metric": "映射深度",
+            "field": "mapped_depth",
+            "wins": 1,
+            "ties": 0,
+            "losses": 2,
+            "n": 3
+          }
+        ],
+        "median_runtime_ratio_over_heuristic": 3.804637275956938,
+        "case_values": [
+          {
+            "case_id": "maj7",
+            "candidate": {
+              "逻辑 T": 552,
+              "逻辑 CNOT": 538,
+              "映射深度": 905
+            },
+            "heuristic": {
+              "逻辑 T": 536,
+              "逻辑 CNOT": 534,
+              "映射深度": 846
+            }
+          },
+          {
+            "case_id": "randtt6_s139",
+            "candidate": {
+              "逻辑 T": 228,
+              "逻辑 CNOT": 271,
+              "映射深度": 436
+            },
+            "heuristic": {
+              "逻辑 T": 228,
+              "逻辑 CNOT": 271,
+              "映射深度": 434
+            }
+          },
+          {
+            "case_id": "aes_sbox_b0",
+            "candidate": {
+              "逻辑 T": 1564,
+              "逻辑 CNOT": 1568,
+              "映射深度": 3225
+            },
+            "heuristic": {
+              "逻辑 T": 1564,
+              "逻辑 CNOT": 1568,
+              "映射深度": 3226
+            }
+          }
+        ]
+      },
+      {
+        "variant": "rollout",
+        "variant_label": "Rollout scorer",
+        "reference": "heuristic prior",
+        "n_cases": 3,
+        "case_ids": [
+          "maj7",
+          "randtt6_s139",
+          "aes_sbox_b0"
+        ],
+        "metrics": [
+          {
+            "metric": "逻辑 T",
+            "field": "logic_T",
+            "wins": 1,
+            "ties": 1,
+            "losses": 1,
+            "n": 3
+          },
+          {
+            "metric": "逻辑 CNOT",
+            "field": "logic_CNOT",
+            "wins": 1,
+            "ties": 1,
+            "losses": 1,
+            "n": 3
+          },
+          {
+            "metric": "映射深度",
+            "field": "mapped_depth",
+            "wins": 0,
+            "ties": 0,
+            "losses": 3,
+            "n": 3
+          }
+        ],
+        "median_runtime_ratio_over_heuristic": 12.011662733704691,
+        "case_values": [
+          {
+            "case_id": "maj7",
+            "candidate": {
+              "逻辑 T": 524,
+              "逻辑 CNOT": 546,
+              "映射深度": 855
+            },
+            "heuristic": {
+              "逻辑 T": 536,
+              "逻辑 CNOT": 534,
+              "映射深度": 846
+            }
+          },
+          {
+            "case_id": "randtt6_s139",
+            "candidate": {
+              "逻辑 T": 228,
+              "逻辑 CNOT": 271,
+              "映射深度": 436
+            },
+            "heuristic": {
+              "逻辑 T": 228,
+              "逻辑 CNOT": 271,
+              "映射深度": 434
+            }
+          },
+          {
+            "case_id": "aes_sbox_b0",
+            "candidate": {
+              "逻辑 T": 1612,
+              "逻辑 CNOT": 1524,
+              "映射深度": 3740
+            },
+            "heuristic": {
+              "逻辑 T": 1564,
+              "逻辑 CNOT": 1568,
+              "映射深度": 3226
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "panel_d_portfolio_attribution": {
+    "audit_unit": "unique verified primary20 Resource-NMCTS function×synthesis-seed cell",
+    "seeds": [
+      7,
+      17,
+      29
+    ],
+    "total_verified_cells": 60,
+    "deterministic_selected_cells": 54,
+    "possible_ai_influence_cells": 6,
+    "deterministic_fraction": 0.9,
+    "possible_ai_fraction": 0.1,
+    "possible_ai_rule": "selected_method == affine_nmcts; influence remains possible, not isolated",
+    "selected_method_counts": {
+      "fprm_greedy": 16,
+      "affine_greedy": 17,
+      "affine_nmcts": 6,
+      "fprm_linear_pair": 12,
+      "direct_anf": 9
+    },
+    "cell_provenance": [
+      {
+        "function_id": "aes_sbox_b0",
+        "synthesis_seed": 7,
+        "selected_method": "fprm_linear_pair",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/recovery_aes_b0_s7_v2_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "aes_sbox_b0",
+        "synthesis_seed": 17,
+        "selected_method": "fprm_linear_pair",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_aes_b0_fast_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "aes_sbox_b0",
+        "synthesis_seed": 29,
+        "selected_method": "fprm_linear_pair",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_aes_b0_fast_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "aes_sbox_b7",
+        "synthesis_seed": 7,
+        "selected_method": "fprm_linear_pair",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_aes_b7_s7_fast_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "aes_sbox_b7",
+        "synthesis_seed": 17,
+        "selected_method": "fprm_linear_pair",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "aes_sbox_b7",
+        "synthesis_seed": 29,
+        "selected_method": "fprm_linear_pair",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "and3",
+        "synthesis_seed": 7,
+        "selected_method": "fprm_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "and3",
+        "synthesis_seed": 17,
+        "selected_method": "fprm_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "and3",
+        "synthesis_seed": 29,
+        "selected_method": "fprm_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "and4",
+        "synthesis_seed": 7,
+        "selected_method": "direct_anf",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "and4",
+        "synthesis_seed": 17,
+        "selected_method": "direct_anf",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "and4",
+        "synthesis_seed": 29,
+        "selected_method": "direct_anf",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "maj3",
+        "synthesis_seed": 7,
+        "selected_method": "affine_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "maj3",
+        "synthesis_seed": 17,
+        "selected_method": "affine_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "maj3",
+        "synthesis_seed": 29,
+        "selected_method": "affine_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "maj5",
+        "synthesis_seed": 7,
+        "selected_method": "affine_nmcts",
+        "attribution_class": "possible_ai_influence",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "maj5",
+        "synthesis_seed": 17,
+        "selected_method": "affine_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "maj5",
+        "synthesis_seed": 29,
+        "selected_method": "affine_nmcts",
+        "attribution_class": "possible_ai_influence",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "maj7",
+        "synthesis_seed": 7,
+        "selected_method": "affine_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_maj7_s7_fast_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "maj7",
+        "synthesis_seed": 17,
+        "selected_method": "affine_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_maj7_s17_fast_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "maj7",
+        "synthesis_seed": 29,
+        "selected_method": "affine_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_maj7_s29_fast_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "parity4",
+        "synthesis_seed": 7,
+        "selected_method": "direct_anf",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "parity4",
+        "synthesis_seed": 17,
+        "selected_method": "direct_anf",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "parity4",
+        "synthesis_seed": 29,
+        "selected_method": "direct_anf",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "parity6",
+        "synthesis_seed": 7,
+        "selected_method": "direct_anf",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "parity6",
+        "synthesis_seed": 17,
+        "selected_method": "direct_anf",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "parity6",
+        "synthesis_seed": 29,
+        "selected_method": "direct_anf",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_structured_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randanf6_s151",
+        "synthesis_seed": 7,
+        "selected_method": "fprm_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_random_anf_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randanf6_s151",
+        "synthesis_seed": 17,
+        "selected_method": "fprm_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_random_anf_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randanf6_s151",
+        "synthesis_seed": 29,
+        "selected_method": "fprm_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_random_anf_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randanf6_s157",
+        "synthesis_seed": 7,
+        "selected_method": "fprm_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_random_anf_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randanf6_s157",
+        "synthesis_seed": 17,
+        "selected_method": "fprm_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_random_anf_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randanf6_s157",
+        "synthesis_seed": 29,
+        "selected_method": "fprm_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_random_anf_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randanf7_s163",
+        "synthesis_seed": 7,
+        "selected_method": "fprm_linear_pair",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_randanf7_resource_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "randanf7_s163",
+        "synthesis_seed": 17,
+        "selected_method": "fprm_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_randanf7_resource_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "randanf7_s163",
+        "synthesis_seed": 29,
+        "selected_method": "fprm_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_randanf7_resource_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "randanf8_s173",
+        "synthesis_seed": 7,
+        "selected_method": "fprm_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_randanf8_s173_resource_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "randanf8_s173",
+        "synthesis_seed": 17,
+        "selected_method": "fprm_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_randanf8_s173_resource_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "randanf8_s173",
+        "synthesis_seed": 29,
+        "selected_method": "fprm_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_randanf8_s173_resource_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt4_s101",
+        "synthesis_seed": 7,
+        "selected_method": "affine_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_random_truth_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt4_s101",
+        "synthesis_seed": 17,
+        "selected_method": "affine_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_random_truth_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt4_s101",
+        "synthesis_seed": 29,
+        "selected_method": "affine_nmcts",
+        "attribution_class": "possible_ai_influence",
+        "sources": [
+          "results/recovered/final_core_random_truth_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt4_s103",
+        "synthesis_seed": 7,
+        "selected_method": "fprm_linear_pair",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_random_truth_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt4_s103",
+        "synthesis_seed": 17,
+        "selected_method": "fprm_linear_pair",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_random_truth_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt4_s103",
+        "synthesis_seed": 29,
+        "selected_method": "affine_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_random_truth_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt4_s107",
+        "synthesis_seed": 7,
+        "selected_method": "affine_nmcts",
+        "attribution_class": "possible_ai_influence",
+        "sources": [
+          "results/recovered/final_core_random_truth_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt4_s107",
+        "synthesis_seed": 17,
+        "selected_method": "fprm_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_random_truth_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt4_s107",
+        "synthesis_seed": 29,
+        "selected_method": "fprm_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_random_truth_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt4_s109",
+        "synthesis_seed": 7,
+        "selected_method": "affine_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_random_truth_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt4_s109",
+        "synthesis_seed": 17,
+        "selected_method": "affine_nmcts",
+        "attribution_class": "possible_ai_influence",
+        "sources": [
+          "results/recovered/final_core_random_truth_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt4_s109",
+        "synthesis_seed": 29,
+        "selected_method": "affine_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_random_truth_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt5_s113",
+        "synthesis_seed": 7,
+        "selected_method": "affine_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_random_truth_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt5_s113",
+        "synthesis_seed": 17,
+        "selected_method": "affine_nmcts",
+        "attribution_class": "possible_ai_influence",
+        "sources": [
+          "results/recovered/final_core_random_truth_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt5_s113",
+        "synthesis_seed": 29,
+        "selected_method": "affine_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovered/final_core_random_truth_v1_ok.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt6_s139",
+        "synthesis_seed": 7,
+        "selected_method": "affine_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_randtt6_fast_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt6_s139",
+        "synthesis_seed": 17,
+        "selected_method": "affine_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_randtt6_fast_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "randtt6_s139",
+        "synthesis_seed": 29,
+        "selected_method": "affine_greedy",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_randtt6_fast_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "thr6_t3",
+        "synthesis_seed": 7,
+        "selected_method": "fprm_linear_pair",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_thr6_t3_fast_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "thr6_t3",
+        "synthesis_seed": 17,
+        "selected_method": "fprm_linear_pair",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_thr6_t3_fast_v3.jsonl"
+        ]
+      },
+      {
+        "function_id": "thr6_t3",
+        "synthesis_seed": 29,
+        "selected_method": "fprm_linear_pair",
+        "attribution_class": "explicitly_deterministic_selected_branch",
+        "sources": [
+          "results/recovery_primary20_thr6_t3_fast_v3.jsonl"
+        ]
+      }
+    ]
+  },
+  "statistics_policy": {
+    "pairing_unit": "Boolean function truth table × synthesis seed",
+    "lower_is_better": true,
+    "pilot_joint_wtl": "Pareto dominance over logical T and logical CNOT",
+    "hard_wtl": "per-metric paired comparison",
+    "wilcoxon": "two-sided signed-rank after discarding exact-zero deltas",
+    "all_tie_p_value": 1.0,
+    "multiple_comparison_claim": "none; no significance claim is made"
+  },
+  "claim_policy": {
+    "learned_prior_independent_gain_claimed": false,
+    "training_loss_used_as_circuit_metric": false,
+    "portfolio_gain_attributed_to_ai": false,
+    "affine_nmcts_selected_cells_called_causal_ai_gain": false,
+    "fitted_q_offline_result_included": false
+  },
+  "evidence_files": [
+    {
+      "path": "submission_competition/training_manifest_competition.json",
+      "sha256": "ae2ede6a79e9d3d823de4270f759c7fe348c2ee060c94634a276ed9062663d83",
+      "size_bytes": 1294818
+    },
+    {
+      "path": "models/action_scorer_competition.pt",
+      "sha256": "6ba157fb9b5504d815d250ce55bb7d6509bce05ead24547e07dc6644ba8b3617",
+      "size_bytes": 194825
+    },
+    {
+      "path": "submission_competition/figures/FIGURE_CONTRACT_AI_ABLATION.md",
+      "sha256": "15e16cebc428079b5bc019c656840e3284e48f1a83f8108b3564dfaea580d14e",
+      "size_bytes": 2257
+    },
+    {
+      "path": "results/pilot_ai_heuristic_v1.jsonl",
+      "sha256": "0b21b8926d8b11aaeae224490bad742c0ba8700acb3c0f710704ac1265276aa7",
+      "size_bytes": 75467
+    },
+    {
+      "path": "results/pilot_ai_learned_v1.jsonl",
+      "sha256": "3fd5a9fbfc651b46635bbe4c793b058289614ab1b9e01d76c8ddb213a2c72329",
+      "size_bytes": 76898
+    },
+    {
+      "path": "results/pilot_ai_rollout_v1.jsonl",
+      "sha256": "0db10058fdc9abd114c0a973b75bb532ff269cb9d9534ead17671e758697d06f",
+      "size_bytes": 77051
+    },
+    {
+      "path": "results/pilot_ai_uniform_v1.jsonl",
+      "sha256": "9fa5e4969a35bbf9a8865db0385b64f308b8b635a7f1a5b8d3e5cfbf6a6084b0",
+      "size_bytes": 76659
+    },
+    {
+      "path": "results/pilot_ai_random_v1.jsonl",
+      "sha256": "ae4ed710725f967e6664180dbeeb833f9ad91ec6949bda9166030648c9054403",
+      "size_bytes": 76729
+    },
+    {
+      "path": "results/ai_hard_heuristic_v1.jsonl",
+      "sha256": "f5c3a33f0d66287445227ec752da855e585214282b7f0deae3a966e1f0d0f9e8",
+      "size_bytes": 15740
+    },
+    {
+      "path": "results/ai_hard_immediate_v1.jsonl",
+      "sha256": "9bea9bfe17c1c1f5b5b03da3bf874fa8c202b2fa6c73620166dc869859d815b7",
+      "size_bytes": 16005
+    },
+    {
+      "path": "results/ai_hard_rollout_v1.jsonl",
+      "sha256": "79fa70805b11cf309431a5b21299efabc1787ab18a3717b9afaae6eb1c1d2ee6",
+      "size_bytes": 15996
+    },
+    {
+      "path": "results/recovered/final_core_aes_v1_ok.jsonl",
+      "sha256": "997b18f1f6bb6f085aa8a7ffab3fb6a546482eeb23adac10663808063fc52201",
+      "size_bytes": 5269
+    },
+    {
+      "path": "results/recovered/final_core_random_anf_v1_ok.jsonl",
+      "sha256": "6df5bba39e4ca499c0288bfe8882c32f6a8c096dce5a857e48001c262f04ce58",
+      "size_bytes": 260431
+    },
+    {
+      "path": "results/recovered/final_core_random_truth_v1_ok.jsonl",
+      "sha256": "025ee9728dadc0e87ae407218c594b86c32d532d32b180f3ea5892cfe8f5b684",
+      "size_bytes": 669310
+    },
+    {
+      "path": "results/recovered/final_core_structured_v1_ok.jsonl",
+      "sha256": "2145f9f48d17050bbc20d6092088645ee22c21b0f5dd22731787156179b15513",
+      "size_bytes": 581522
+    },
+    {
+      "path": "results/recovered/recovery_aes_b0_s7_v2_ok.jsonl",
+      "sha256": "1b246829d432e210e4ea84eb99ac3ea828d64fa01001f086a6c6056dbb648566",
+      "size_bytes": 26868
+    },
+    {
+      "path": "results/recovery_primary20_randanf7_resource_v3.jsonl",
+      "sha256": "6d2aa632a6024138e84a9a5f1ad9f8b652982eef4973c04b10af6929dba7c794",
+      "size_bytes": 18750
+    },
+    {
+      "path": "results/recovery_primary20_randanf8_s173_resource_v3.jsonl",
+      "sha256": "7f1e4634843745c0648a4d2d55f80f050e89ed132087e6cc1233c0dbdb089ab6",
+      "size_bytes": 18870
+    },
+    {
+      "path": "results/recovery_primary20_maj7_s7_fast_v3.jsonl",
+      "sha256": "037069d91c1b8a36dce2aac2950d3bea7708c252b9f511a6338bc76ec89a2534",
+      "size_bytes": 12392
+    },
+    {
+      "path": "results/recovery_primary20_maj7_s17_fast_v3.jsonl",
+      "sha256": "168f07ab6d9641f5d4877816a6f9a05a9de98186fc155587b2f3c23ff3c233e2",
+      "size_bytes": 24710
+    },
+    {
+      "path": "results/recovery_primary20_maj7_s29_fast_v3.jsonl",
+      "sha256": "df5484a71a6a15c411abeaaef42cc24a930d505c735b98ae96fb499141e57581",
+      "size_bytes": 24671
+    },
+    {
+      "path": "results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+      "sha256": "9ac149da64dc16b10255b3fa73d99b4be3c4b7a8b6b56092a4f62a3a618e1bdc",
+      "size_bytes": 92239
+    },
+    {
+      "path": "results/recovery_primary20_randtt6_fast_v3.jsonl",
+      "sha256": "f42577c2556f7a04e65eb2e32cb4f0bc6fade131490b74b5db960eec25587fe3",
+      "size_bytes": 92382
+    },
+    {
+      "path": "results/recovery_primary20_aes_b0_fast_v3.jsonl",
+      "sha256": "c87c1f09acb32cbf79972688f9c7f2fdbb0c259e3d691ddb009b8c414ea79cb7",
+      "size_bytes": 50010
+    },
+    {
+      "path": "results/recovery_primary20_aes_b7_s7_fast_v3.jsonl",
+      "sha256": "f80d78699bcf0ac04096dd8fa5e8a7d6deaf9f9dd5a25f056704ccbf9a156f2f",
+      "size_bytes": 25002
+    },
+    {
+      "path": "results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl",
+      "sha256": "d32b0468a031a3c49c775a6e718d6d6a759df166002ca891b8fe776a8527fd10",
+      "size_bytes": 62407
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+﻿attribution_class,label,losses,metric,n,p_CNOT_two_sided,p_T_two_sided,panel,record_type,runtime_ratio,ties,value,wins
+,functions,,,,,,a,training_fact,,,1416,
+,action_rows,,,,,,a,training_fact,,,1623060,
+,test_mse,,,,,,a,training_fact,,,0.00049098941963166,
+,checkpoint_sha12,,,,,,a,training_fact,,,6ba157fb9b55,
+,heuristic,0,logical_T_and_CNOT_Pareto,8,1.0,1.0,b,clean_pilot_joint_wtl,1.2772263007751823,8,,0
+,uniform,0,logical_T_and_CNOT_Pareto,8,1.0,1.0,b,clean_pilot_joint_wtl,1.3050475911350339,8,,0
+,rollout,0,logical_T_and_CNOT_Pareto,8,1.0,1.0,b,clean_pilot_joint_wtl,0.7663989904920577,8,,0
+,random,0,logical_T_and_CNOT_Pareto,8,0.5,0.5,b,clean_pilot_joint_wtl,1.0649011021405927,6,,2
+,immediate,1,逻辑 T,3,,,c,hard3_metric_wtl,3.804637275956938,2,,0
+,immediate,1,逻辑 CNOT,3,,,c,hard3_metric_wtl,3.804637275956938,2,,0
+,immediate,2,映射深度,3,,,c,hard3_metric_wtl,3.804637275956938,0,,1
+,rollout,1,逻辑 T,3,,,c,hard3_metric_wtl,12.011662733704691,1,,1
+,rollout,1,逻辑 CNOT,3,,,c,hard3_metric_wtl,12.011662733704691,1,,1
+,rollout,3,映射深度,3,,,c,hard3_metric_wtl,12.011662733704691,0,,0
+explicitly_deterministic_selected_branch,affine_greedy,,,60,,,d,selected_method_count,,,17,
+possible_ai_influence,affine_nmcts,,,60,,,d,selected_method_count,,,6,
+explicitly_deterministic_selected_branch,direct_anf,,,60,,,d,selected_method_count,,,9,
+explicitly_deterministic_selected_branch,fprm_greedy,,,60,,,d,selected_method_count,,,16,
+explicitly_deterministic_selected_branch,fprm_linear_pair,,,60,,,d,selected_method_count,,,12,

@@ -1,0 +1,337 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-07-22T09:19:04.801834+00:00",
+  "purpose": "recover validated facts from interrupted memory-pressure runs",
+  "mutation_policy": "no source file changed; excluded rows remain only in raw source",
+  "files": [
+    {
+      "source": "D:/University/code/sshr/resource_nmcts/results/final_core_structured_v1.jsonl",
+      "source_sha256": "a14d98954935e523ef3a1fa5334393cd4e6b856ee99b73ea962b0572cc7cd7ff",
+      "source_rows": 119,
+      "source_status_counts": {
+        "error": 6,
+        "ok": 113
+      },
+      "output": "D:/University/code/sshr/resource_nmcts/results/recovered/final_core_structured_v1_ok.jsonl",
+      "output_sha256": "2145f9f48d17050bbc20d6092088645ee22c21b0f5dd22731787156179b15513",
+      "output_rows": 113,
+      "selection_predicate": "status == 'ok' after full fixed-schema/hash validation",
+      "excluded_rows": [
+        {
+          "record_key": "785b98505bc5e2405f3d303fd33466882d24686870bf683ecbd4bd1b223c9509",
+          "function_id": "maj7",
+          "requested_method": "direct_anf",
+          "synthesis_seed": 7,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "MemoryError",
+          "error_message": "bad allocation"
+        },
+        {
+          "record_key": "19f274ccb497dde70d47f774553995c3315b75a6ef302617dcb972e3fa06df4e",
+          "function_id": "maj7",
+          "requested_method": "direct_anf",
+          "synthesis_seed": 17,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "MemoryError",
+          "error_message": "bad allocation"
+        },
+        {
+          "record_key": "1f1e4007b9de4fb85ed61691e792dabc2705b372f594dd9a12acf4da301e4cf8",
+          "function_id": "maj7",
+          "requested_method": "direct_anf",
+          "synthesis_seed": 29,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "MemoryError",
+          "error_message": "bad allocation"
+        },
+        {
+          "record_key": "97e902533b2e84db6f716edd4fc0ffe89c3b481c2a7756d014a9ca87bdfadc63",
+          "function_id": "maj7",
+          "requested_method": "greedy_factor",
+          "synthesis_seed": 17,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "MemoryError",
+          "error_message": "bad allocation"
+        },
+        {
+          "record_key": "f2ba50edad3bcf905aabb0d2a0f8c493aa6ac65cf624f8b35a6d10289e7034e6",
+          "function_id": "maj7",
+          "requested_method": "greedy_factor",
+          "synthesis_seed": 29,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "MemoryError",
+          "error_message": "bad allocation"
+        },
+        {
+          "record_key": "87f3a7cb4e353e38aec15ff4f9feb0a959018ef1e1dd8b2b25e6bfbb08a438e4",
+          "function_id": "maj7",
+          "requested_method": "mcts_factor",
+          "synthesis_seed": 17,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "MemoryError",
+          "error_message": "bad allocation"
+        }
+      ]
+    },
+    {
+      "source": "D:/University/code/sshr/resource_nmcts/results/final_core_random_truth_v1.jsonl",
+      "source_sha256": "90e264ea4ff662b418ee69e5ba8a8bf67408b864f24fe17efd50bc39f242af60",
+      "source_rows": 135,
+      "source_status_counts": {
+        "error": 6,
+        "ok": 129
+      },
+      "output": "D:/University/code/sshr/resource_nmcts/results/recovered/final_core_random_truth_v1_ok.jsonl",
+      "output_sha256": "025ee9728dadc0e87ae407218c594b86c32d532d32b180f3ea5892cfe8f5b684",
+      "output_rows": 129,
+      "selection_predicate": "status == 'ok' after full fixed-schema/hash validation",
+      "excluded_rows": [
+        {
+          "record_key": "e8e5421636d7171b87210b7949757dcc06a4011af2592ed394d0d6aad8a1ab36",
+          "function_id": "randtt5_s113",
+          "requested_method": "direct_anf",
+          "synthesis_seed": 29,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "MemoryError",
+          "error_message": "bad allocation"
+        },
+        {
+          "record_key": "39607a6761b8db707f7eebf0ae223d44da1369d66db38513933c3ee8eb0650ab",
+          "function_id": "randtt5_s127",
+          "requested_method": "direct_anf",
+          "synthesis_seed": 29,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "MemoryError",
+          "error_message": "bad allocation"
+        },
+        {
+          "record_key": "2a32431572ce6cd10acd4fc1b9b03a0ea45bc7b7119a4b8355e5e9ab30d20f15",
+          "function_id": "randtt5_s127",
+          "requested_method": "mcts_factor",
+          "synthesis_seed": 29,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "worker_exit",
+          "error_message": "spawned worker exited with code 3221225477"
+        },
+        {
+          "record_key": "bf11195dab16c8406a72ab4645c9c622324d318381b78c8a8cbc0630a77b562a",
+          "function_id": "randtt5_s127",
+          "requested_method": "sshr_beam",
+          "synthesis_seed": 7,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "RuntimeError",
+          "error_message": "Aer mapped verification failed: PARTIAL COMPLETED"
+        },
+        {
+          "record_key": "f4852919f818b303234b6247199ff50f7538b9bf320f1483b8ede583736ee337",
+          "function_id": "randtt5_s131",
+          "requested_method": "direct_anf",
+          "synthesis_seed": 17,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "MemoryError",
+          "error_message": "bad allocation"
+        },
+        {
+          "record_key": "08ef5ceace832e534fa1aa5dd0314635ba31c55b073c2c022fda3c256230b72a",
+          "function_id": "randtt5_s137",
+          "requested_method": "mcts_factor",
+          "synthesis_seed": 29,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "RuntimeError",
+          "error_message": "Aer mapped verification failed: PARTIAL COMPLETED"
+        }
+      ]
+    },
+    {
+      "source": "D:/University/code/sshr/resource_nmcts/results/final_core_random_anf_v1.jsonl",
+      "source_sha256": "bcb95f4e81befcbc1b6c5a2ec058f84de06d7d3a8cf5ca754e14cb0eacba5c50",
+      "source_rows": 51,
+      "source_status_counts": {
+        "error": 1,
+        "ok": 50
+      },
+      "output": "D:/University/code/sshr/resource_nmcts/results/recovered/final_core_random_anf_v1_ok.jsonl",
+      "output_sha256": "6df5bba39e4ca499c0288bfe8882c32f6a8c096dce5a857e48001c262f04ce58",
+      "output_rows": 50,
+      "selection_predicate": "status == 'ok' after full fixed-schema/hash validation",
+      "excluded_rows": [
+        {
+          "record_key": "72d0f02f8e7b6dd13bf7da0558dc14ca53898ae0df473d42acd6a342b21cefd8",
+          "function_id": "randanf7_s163",
+          "requested_method": "sshr_h",
+          "synthesis_seed": 7,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "synthesis",
+          "error_code": "MemoryError",
+          "error_message": ""
+        }
+      ]
+    },
+    {
+      "source": "D:/University/code/sshr/resource_nmcts/results/final_core_aes_v1.jsonl",
+      "source_sha256": "9d5130b3097fa5b9b823ab81cf0cabb644b423223ad055fe1cf8f1691866c4c8",
+      "source_rows": 10,
+      "source_status_counts": {
+        "error": 9,
+        "ok": 1
+      },
+      "output": "D:/University/code/sshr/resource_nmcts/results/recovered/final_core_aes_v1_ok.jsonl",
+      "output_sha256": "997b18f1f6bb6f085aa8a7ffab3fb6a546482eeb23adac10663808063fc52201",
+      "output_rows": 1,
+      "selection_predicate": "status == 'ok' after full fixed-schema/hash validation",
+      "excluded_rows": [
+        {
+          "record_key": "e3bc6523674376f878215f5909b6ed16b1f737d65e7de77fd2c28e14f7c43953",
+          "function_id": "aes_sbox_b0",
+          "requested_method": "direct_anf",
+          "synthesis_seed": 7,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "MemoryError",
+          "error_message": "bad allocation"
+        },
+        {
+          "record_key": "e2a3434baf6ef3c6ff03cff74a64df0d0d3a2cda344b511a42596e6b12f506c4",
+          "function_id": "aes_sbox_b0",
+          "requested_method": "direct_anf",
+          "synthesis_seed": 17,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "MemoryError",
+          "error_message": "bad allocation"
+        },
+        {
+          "record_key": "879176b08ffa8686149d1f60e5db9a1d5823b0e39dcd874b3745be25801e327a",
+          "function_id": "aes_sbox_b0",
+          "requested_method": "direct_anf",
+          "synthesis_seed": 29,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "worker_exit",
+          "error_message": "spawned worker exited with code 3221226505"
+        },
+        {
+          "record_key": "2295ac130d1be7052aa53244090706f4d9803bbb24ed461e90c88cbf63321a1d",
+          "function_id": "aes_sbox_b0",
+          "requested_method": "greedy_factor",
+          "synthesis_seed": 7,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "MemoryError",
+          "error_message": "bad allocation"
+        },
+        {
+          "record_key": "368b2cc09088eb63998f4593b5a615b765c50ea566655cc0e94606a2ae2292db",
+          "function_id": "aes_sbox_b0",
+          "requested_method": "greedy_factor",
+          "synthesis_seed": 17,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "MemoryError",
+          "error_message": "bad allocation"
+        },
+        {
+          "record_key": "833fb4d480b56176f366c95d7dcf6e629d3e448342d276fcd28f2ae72787a15a",
+          "function_id": "aes_sbox_b0",
+          "requested_method": "greedy_factor",
+          "synthesis_seed": 29,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "MemoryError",
+          "error_message": "bad allocation"
+        },
+        {
+          "record_key": "83d89d36e3069c79dc54e6f8e9dd3b5eeebfa822c499097d880fb5c1c4fb5028",
+          "function_id": "aes_sbox_b0",
+          "requested_method": "mcts_factor",
+          "synthesis_seed": 7,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "RuntimeError",
+          "error_message": "Aer mapped verification failed: PARTIAL COMPLETED"
+        },
+        {
+          "record_key": "caf70f7bc87e3160defe28cda850ed5bd697abd62e78430b06ee23fe1616166a",
+          "function_id": "aes_sbox_b0",
+          "requested_method": "mcts_factor",
+          "synthesis_seed": 17,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "MemoryError",
+          "error_message": "bad allocation"
+        },
+        {
+          "record_key": "03441cd67ad87e9e9a89cea86c316dd2ad10ce587f617a3618727737d71e74ce",
+          "function_id": "aes_sbox_b0",
+          "requested_method": "mcts_factor",
+          "synthesis_seed": 29,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "error",
+          "stage": "mapped_verification",
+          "error_code": "MemoryError",
+          "error_message": "bad allocation"
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "source_rows": 315,
+    "selected_rows": 293,
+    "excluded_rows": 22
+  }
+}

@@ -1,0 +1,208 @@
+\begin{thebibliography}{23}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{#1}
+\expandafter\ifx\csname urlstyle\endcsname\relax\else
+  \urlstyle{same}\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \DeclareUrlCommand\doi{\urlstyle{rm}}
+  \def\eprint#1#2{#2}
+\else
+  \def\doi#1{\href{https://doi.org/#1}{\nolinkurl{#1}}}
+  \let\eprint\href
+\fi
+
+\bibitem[Gupta et~al.(2006)Gupta, Agrawal, and Jha]{gupta2006pprm}
+GUPTA P, AGRAWAL A, JHA N~K.
+\newblock An algorithm for synthesis of reversible logic
+  circuits\allowbreak[J/OL].
+\newblock IEEE Transactions on Computer-Aided Design of Integrated Circuits and
+  Systems, 2006, 25\allowbreak (11): 2317-2329.
+\newblock \url{https://doi.org/10.1109/TCAD.2006.871622}.
+
+\bibitem[Fazel et~al.(2007)Fazel, Thornton, and Rice]{fazel2007esop}
+FAZEL K, THORNTON M~A, RICE J~E.
+\newblock {ESOP}-based toffoli gate cascade
+  generation\allowbreak[C/OL]//\allowbreak
+2007 IEEE Pacific Rim Conference on Communications, Computers and Signal
+  Processing.
+\newblock 2007: 206-209.
+\newblock \url{https://doi.org/10.1109/PACRIM.2007.4313212}.
+
+\bibitem[Wille et~al.(2009)Wille and Drechsler]{wille2009bdd}
+WILLE R, DRECHSLER R.
+\newblock {BDD}-based synthesis of reversible logic for large
+  functions\allowbreak[C/OL]//\allowbreak
+Proceedings of the 46th Annual Design Automation Conference.
+\newblock 2009: 270-275.
+\newblock \url{https://doi.org/10.1145/1629911.1629984}.
+
+\bibitem[Henderson et~al.(2023)Henderson, Henderson, Sinha, Thornton, and
+  Miller]{henderson2023minimal}
+HENDERSON J~M, HENDERSON E~R, SINHA A, et~al.
+\newblock Automated quantum oracle synthesis with a minimal number of
+  qubits\allowbreak[C/OL]//\allowbreak
+Quantum Information Science, Sensing, and Computation XV.
+\newblock 2023: 1251706.
+\newblock \url{https://doi.org/10.1117/12.2663240}.
+
+\bibitem[Meuli et~al.(2019)Meuli, Soeken, Campbell, Roetteler, and
+  De~Micheli]{meuli2019multiplicative}
+MEULI G, SOEKEN M, CAMPBELL E, et~al.
+\newblock The role of multiplicative complexity in compiling low {T}-count
+  oracle circuits\allowbreak[C/OL]//\allowbreak
+2019 IEEE/ACM International Conference on Computer-Aided Design (ICCAD).
+\newblock 2019.
+\newblock \url{https://doi.org/10.1109/ICCAD45719.2019.8942093}.
+
+\bibitem[Meuli et~al.(2020)Meuli, Soeken, Roetteler, and
+  De~Micheli]{meuli2020ros}
+MEULI G, SOEKEN M, ROETTELER M, et~al.
+\newblock {ROS}: Resource-constrained oracle synthesis for quantum
+  computers\allowbreak[J/OL].
+\newblock Electronic Proceedings in Theoretical Computer Science, 2020, 318:
+  119-130.
+\newblock \url{https://doi.org/10.4204/EPTCS.318.8}.
+
+\bibitem[Meuli et~al.(2022)Meuli, Soeken, and De~Micheli]{meuli2022xag}
+MEULI G, SOEKEN M, DE~MICHELI G.
+\newblock Xor-and-inverter graphs for quantum compilation\allowbreak[J/OL].
+\newblock npj Quantum Information, 2022, 8\allowbreak (1): 7.
+\newblock \url{https://doi.org/10.1038/s41534-021-00514-y}.
+
+\bibitem[Yu et~al.(2025)Yu, Tempia~Calvino, Soeken, and
+  De~Micheli]{yu2025backend}
+YU M, TEMPIA~CALVINO A, SOEKEN M, et~al.
+\newblock Back-end-aware fault-tolerant quantum oracle
+  synthesis\allowbreak[C/OL]//\allowbreak
+Proceedings of the 30th Asia and South Pacific Design Automation Conference.
+\newblock 2025: 930-937.
+\newblock \url{https://doi.org/10.1145/3658617.3697776}.
+
+\bibitem[Zheng et~al.(2025)Zheng, Xu, Zhang, Su, and Zheng]{zheng2025sshr}
+ZHENG Q, XU Y, ZHANG J, et~al.
+\newblock {CNOT} oriented synthesis for small-scale boolean functions using
+  spatial structures of parallelotopes\allowbreak[C/OL]//\allowbreak
+2025 IEEE/ACM International Conference on Computer-Aided Design (ICCAD).
+\newblock 2025: 1-9.
+\newblock \url{https://doi.org/10.1109/ICCAD66269.2025.11240690}.
+
+\bibitem[Wang et~al.(2023)Wang, Usman, Parampalli, Hollenberg, and
+  Myers]{wang2023nestedmcts}
+WANG P~Y, USMAN M, PARAMPALLI U, et~al.
+\newblock Automated quantum circuit design with nested monte carlo tree
+  search\allowbreak[J/OL].
+\newblock IEEE Transactions on Quantum Engineering, 2023, 4: 1-20.
+\newblock \url{https://doi.org/10.1109/TQE.2023.3265709}.
+
+\bibitem[Weiden et~al.(2023)Weiden, Younis, Kalloor, Kubiatowicz, and
+  Iancu]{weiden2023qseed}
+WEIDEN M, YOUNIS E, KALLOOR J, et~al.
+\newblock Improving quantum circuit synthesis with machine
+  learning\allowbreak[C/OL]//\allowbreak
+2023 IEEE International Conference on Quantum Computing and Engineering (QCE).
+\newblock 2023: 1-11.
+\newblock \url{https://doi.org/10.1109/QCE57702.2023.00093}.
+
+\bibitem[Rietsch et~al.(2024)Rietsch, Dubey, Ufrecht, Periyasamy, Plinge,
+  Mutschler, and Scherer]{rietsch2024rlsynthesis}
+RIETSCH S, DUBEY A~Y, UFRECHT C, et~al.
+\newblock Unitary synthesis of clifford+{T} circuits with reinforcement
+  learning\allowbreak[C/OL]//\allowbreak
+2024 IEEE International Conference on Quantum Computing and Engineering (QCE):
+  Vol.~1.
+\newblock 2024: 824-835.
+\newblock \url{https://doi.org/10.1109/QCE60285.2024.00102}.
+
+\bibitem[Tsaras et~al.(2024)Tsaras, Grosnit, Chen, Xie, Bou-Ammar, and
+  Yuan]{tsaras2024shortcircuit}
+TSARAS D, GROSNIT A, CHEN L, et~al.
+\newblock Shortcircuit: {AlphaZero}-driven circuit design\allowbreak[A/OL].
+\newblock 2024.
+\newblock arXiv: \eprint{https://arxiv.org/abs/2408.09858}{2408.09858}.
+\newblock \url{https://arxiv.org/abs/2408.09858}.
+
+\bibitem[F{\"u}rrutter et~al.(2024)F{\"u}rrutter, Mu{\~n}oz-Gil, and
+  Briegel]{fuerrutter2024diffusion}
+F{\"U}RRUTTER F, MU{\~N}OZ-GIL G, BRIEGEL H~J.
+\newblock Quantum circuit synthesis with diffusion models\allowbreak[J/OL].
+\newblock Nature Machine Intelligence, 2024, 6: 515-524.
+\newblock \url{https://doi.org/10.1038/s42256-024-00831-9}.
+
+\bibitem[Ruiz et~al.(2025)Ruiz, Laakkonen, Bausch, Balog, Barekatain, Heras,
+  Novikov, Fitzpatrick, Romera-Paredes, van~de Wetering, Fawzi, Meichanetzidis,
+  and Kohli]{ruiz2025alphatensor}
+RUIZ F~J~R, LAAKKONEN T, BAUSCH J, et~al.
+\newblock Quantum circuit optimization with {AlphaTensor}\allowbreak[J/OL].
+\newblock Nature Machine Intelligence, 2025, 7: 374-385.
+\newblock \url{https://doi.org/10.1038/s42256-025-01001-1}.
+
+\bibitem[Riu et~al.(2025)Riu, Nogu{\'e}, Vilaplana, Garcia-Saez, and
+  Estarellas]{riu2025rlzx}
+RIU J, NOGU{\'E} J, VILAPLANA G, et~al.
+\newblock Reinforcement learning based quantum circuit optimization via
+  {ZX}-calculus\allowbreak[J/OL].
+\newblock Quantum, 2025, 9: 1758.
+\newblock \url{https://doi.org/10.22331/q-2025-05-28-1758}.
+
+\bibitem[Zen et~al.(2025)Zen, Olle, Colmenarez, Puviani, M{\"u}ller, and
+  Marquardt]{zen2025rlft}
+ZEN R, OLLE J, COLMENAREZ L, et~al.
+\newblock Quantum circuit discovery for fault-tolerant logical state
+  preparation with reinforcement learning\allowbreak[J/OL].
+\newblock Physical Review X, 2025, 15\allowbreak (4): 041012.
+\newblock \url{https://doi.org/10.1103/gqpr-dgz7}.
+
+\bibitem[Li et~al.(2019)Li, Ding, and Xie]{li2019sabre}
+LI G, DING Y, XIE Y.
+\newblock Tackling the qubit mapping problem for {NISQ}-era quantum
+  devices\allowbreak[C/OL]//\allowbreak
+Proceedings of the Twenty-Fourth International Conference on Architectural
+  Support for Programming Languages and Operating Systems.
+\newblock 2019: 1001-1014.
+\newblock \url{https://doi.org/10.1145/3297858.3304023}.
+
+\bibitem[Cowtan et~al.(2019)Cowtan, Dilkes, Duncan, Krajenbrink, Simmons, and
+  Sivarajah]{cowtan2019routing}
+COWTAN A, DILKES S, DUNCAN R, et~al.
+\newblock On the qubit routing problem\allowbreak[C/OL]//\allowbreak
+Leibniz International Proceedings in Informatics: Vol. 135\quad 14th Conference
+  on the Theory of Quantum Computation, Communication and Cryptography (TQC
+  2019).
+\newblock 2019: 5:1-5:32.
+\newblock \url{https://doi.org/10.4230/LIPIcs.TQC.2019.5}.
+
+\bibitem[Nannicini et~al.(2023)Nannicini, Bishop, G{\"u}nl{\"u}k, and
+  Jurcevic]{nannicini2022ilp}
+NANNICINI G, BISHOP L~S, G{\"U}NL{\"U}K O, et~al.
+\newblock Optimal qubit assignment and routing via integer
+  programming\allowbreak[J/OL].
+\newblock ACM Transactions on Quantum Computing, 2023, 4\allowbreak (1): 1-31.
+\newblock \url{https://doi.org/10.1145/3544563}.
+
+\bibitem[Murali et~al.(2019)Murali, Baker, Javadi-Abhari, Chong, and
+  Martonosi]{murali2019noiseadaptive}
+MURALI P, BAKER J~M, JAVADI-ABHARI A, et~al.
+\newblock Noise-adaptive compiler mappings for noisy intermediate-scale quantum
+  computers\allowbreak[C/OL]//\allowbreak
+Proceedings of the Twenty-Fourth International Conference on Architectural
+  Support for Programming Languages and Operating Systems.
+\newblock 2019: 1015-1029.
+\newblock \url{https://doi.org/10.1145/3297858.3304075}.
+
+\bibitem[Hartnett et~al.(2024)Hartnett, Barbosa, Mundada, Hush, Biercuk, and
+  Baum]{hartnett2024learningtorank}
+HARTNETT G~S, BARBOSA A, MUNDADA P~S, et~al.
+\newblock Learning to rank quantum circuits for hardware-optimized performance
+  enhancement\allowbreak[J/OL].
+\newblock Quantum, 2024, 8: 1542.
+\newblock \url{https://doi.org/10.22331/q-2024-11-27-1542}.
+
+\bibitem[Li et~al.(2025)Li, Liu, Xu, Hovland, and Chaudhary]{li2025hopps}
+LI X, LIU J, XU S, et~al.
+\newblock {HOPPS}: Hardware-aware optimal phase polynomial synthesis with
+  blockwise optimization for quantum circuits\allowbreak[A/OL].
+\newblock 2025.
+\newblock arXiv: \eprint{https://arxiv.org/abs/2511.18770}{2511.18770}.
+\newblock \url{https://arxiv.org/abs/2511.18770}.
+
+\end{thebibliography}

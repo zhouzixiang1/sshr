@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "figure_id": "F5_coverage_correctness_resource",
+  "purpose": "XA-202609 primary20 coverage, correctness, and resource-safety evidence",
+  "contract": "submission_competition/figures/FIGURE_CONTRACT_COVERAGE_RESOURCE.md",
+  "contract_sha256": "93516410cba5501607af171671473893300727650c469c4a389b26fcf7ae9c3d",
+  "generator": "submission_competition/figures/make_coverage_resource_figure.py",
+  "generator_sha256": "018437910409e4259b022b8520ebaf7e446a040f5e7891e5747730768756c685",
+  "source_data": [
+    "submission_competition/figures/coverage_resource_figure_source.json",
+    "submission_competition/figures/coverage_resource_figure_source.csv"
+  ],
+  "source_data_sha256": {
+    "submission_competition/figures/coverage_resource_figure_source.json": "046f187125bf9cefbfb59bd5d711bdcf7150bf7676858f3b542fbe34400e3ca0",
+    "submission_competition/figures/coverage_resource_figure_source.csv": "a965b1e07b50888fc1a65083a3868bb023880afc4b4ed8e0e6cd326450e573e7"
+  },
+  "backend": "Python/matplotlib only",
+  "python": "3.11.15",
+  "matplotlib": "3.10.9",
+  "dimensions_mm": {
+    "width": 183.0,
+    "height": 110.0
+  },
+  "font_policy": {
+    "requested_fallback": [
+      "Microsoft YaHei",
+      "SimHei",
+      "Arial",
+      "DejaVu Sans"
+    ],
+    "resolved_primary": "Microsoft YaHei",
+    "minimum_figure_label_pt": 6.0,
+    "minimum_caption_note_pt": 6.0,
+    "svg_fonttype": "none",
+    "pdf_fonttype": 42
+  },
+  "headline_values": {
+    "planned_cells": 360,
+    "verified_cells": 354,
+    "timeout_cells": 6,
+    "coverage_percent": 98.33333333333333,
+    "mapped_mismatches": 0,
+    "coupling_violations": 0,
+    "memory_guard_events_v3": 0,
+    "v3_telemetry_records": 100,
+    "v3_max_system_memory_percent": 30.7,
+    "resource_guard_limit_percent": 70.0,
+    "aer_available_devices": [
+      "CPU"
+    ]
+  },
+  "claim_boundaries": [
+    "The six timeout cells are missing measurements, not incorrect circuits.",
+    "Resource telemetry is reported for 100 v3 recovery records only.",
+    "Qiskit Aer reports CPU as its only available device in the captured environment.",
+    "The 70% limit is a software memory guard, not a hardware capacity claim."
+  ],
+  "inputs": {
+    "results/recovered/final_core_aes_v1_ok.jsonl": "997b18f1f6bb6f085aa8a7ffab3fb6a546482eeb23adac10663808063fc52201",
+    "results/recovered/final_core_random_anf_v1_ok.jsonl": "6df5bba39e4ca499c0288bfe8882c32f6a8c096dce5a857e48001c262f04ce58",
+    "results/recovered/final_core_random_truth_v1_ok.jsonl": "025ee9728dadc0e87ae407218c594b86c32d532d32b180f3ea5892cfe8f5b684",
+    "results/recovered/final_core_structured_v1_ok.jsonl": "2145f9f48d17050bbc20d6092088645ee22c21b0f5dd22731787156179b15513",
+    "results/recovered/recovery_aes_b0_s7_v2_ok.jsonl": "1b246829d432e210e4ea84eb99ac3ea828d64fa01001f086a6c6056dbb648566",
+    "results/recovery_primary20_aes_b0_fast_v3.jsonl": "c87c1f09acb32cbf79972688f9c7f2fdbb0c259e3d691ddb009b8c414ea79cb7",
+    "results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl": "d32b0468a031a3c49c775a6e718d6d6a759df166002ca891b8fe776a8527fd10",
+    "results/recovery_primary20_aes_b7_s7_fast_v3.jsonl": "f80d78699bcf0ac04096dd8fa5e8a7d6deaf9f9dd5a25f056704ccbf9a156f2f",
+    "results/recovery_primary20_beam_aes_b7_parallel_v3.jsonl": "7ec8e30670569b447e983e38da3029d25e943ea1a3cd62068738adf5ee6399b8",
+    "results/recovery_primary20_beam_aes_v3.jsonl": "02dd69be86655206b04d844829b44306f40b463815bea06633783cc6903e829b",
+    "results/recovery_primary20_beam_struct_random_v3.jsonl": "60fcfe49d7e6eb5218a989868bc02d767e2eb4dd1e82e4cc2a6543d3ac57ac45",
+    "results/recovery_primary20_maj7_s17_fast_v3.jsonl": "168f07ab6d9641f5d4877816a6f9a05a9de98186fc155587b2f3c23ff3c233e2",
+    "results/recovery_primary20_maj7_s29_fast_v3.jsonl": "df5484a71a6a15c411abeaaef42cc24a930d505c735b98ae96fb499141e57581",
+    "results/recovery_primary20_maj7_s7_fast_v3.jsonl": "037069d91c1b8a36dce2aac2950d3bea7708c252b9f511a6338bc76ec89a2534",
+    "results/recovery_primary20_randanf7_resource_v3.jsonl": "6d2aa632a6024138e84a9a5f1ad9f8b652982eef4973c04b10af6929dba7c794",
+    "results/recovery_primary20_randanf7_sshrh_s7_v3.jsonl": "35671b7233f8c2d59a10002ae4cc616dc1af9a5d7c7dbcb00a5da4257f84bb92",
+    "results/recovery_primary20_randanf8_s173_resource_v3.jsonl": "7f1e4634843745c0648a4d2d55f80f050e89ed132087e6cc1233c0dbdb089ab6",
+    "results/recovery_primary20_randanf8_s173_sshrbeam_s29_v3.jsonl": "a1276a4457422492de75375ac644ad1d62bf00dde4d8b3842a996906d2f264f6",
+    "results/recovery_primary20_randanf8_s173_v3.jsonl": "9adff28a6610c6d126bc933286b0ceb755d580af23fe594d48ec0c62b4f5b9ad",
+    "results/recovery_primary20_randtt5_s113_s29_v3.jsonl": "6f45cb32456659492847a1da8ed711823b837909f35912cd0c3233a317fa16ad",
+    "results/recovery_primary20_randtt6_fast_v3.jsonl": "f42577c2556f7a04e65eb2e32cb4f0bc6fade131490b74b5db960eec25587fe3",
+    "results/recovery_primary20_thr6_t3_fast_v3.jsonl": "9ac149da64dc16b10255b3fa73d99b4be3c4b7a8b6b56092a4f62a3a618e1bdc",
+    "results/stress_aes_b0_direct_s17_b8t8_v1.jsonl": "7597f7d563b6edadaf6f31ec20a6450d405e50b6dcacf96e7038388e710fbf92",
+    "results/stress_aes_b0_direct_s29_b8t8e8_v1.jsonl": "9093cb0508993545b66143793ccfcf72429550ce82f1bdc361f2a21570662fd5",
+    "results/stress_aes_b7_direct_s7_b16t16e16_v1.jsonl": "c37378ee89f42a8a10d5192d87f41b0ad0c0bbfa68ebe0304af40d880c825601",
+    "submission_competition/formal_coverage_audit.json": "e6d29aced0ebeffcd8ee45d3c28ed69a1c3c1d8fcadba0d6f37988f44d91b1a2",
+    "submission_competition/formal_primary20_core3_final_manifest_v2.json": "8a08cfa52533ec9cf163544259ebe4c7f3e6a476041b9ae9be647bb14fd37fbe",
+    "submission_competition/primary20_execution_environment_manifest.json": "0d391f79380b6e0f7a8ee56a61e417668546bb0ba3c3e21c8318247b4b4d611a"
+  },
+  "outputs": [
+    {
+      "path": "submission_competition/figures/F5_coverage_correctness_resource.svg",
+      "sha256": "98bfe651343acd5079da0ab3c0c9705ee37bc31644590767bc40b0d209ec1e24",
+      "size_bytes": 132205
+    },
+    {
+      "path": "submission_competition/figures/F5_coverage_correctness_resource.pdf",
+      "sha256": "ef8d08d665b05ad4d9dc027584f668a5876a9688e8ae4831813ee20f7e41cbcc",
+      "size_bytes": 89941
+    },
+    {
+      "path": "submission_competition/figures/F5_coverage_correctness_resource.png",
+      "sha256": "896b02530fdcd3925a177d48eeb50c067a9935828dc2ca62a4dae650d5b8c946",
+      "size_bytes": 888615
+    }
+  ],
+  "qa_preview": [
+    "submission_competition/figures/_qa_f5_preview.png",
+    "submission_competition/figures/_qa_f5_pdf_preview.png"
+  ],
+  "qa_notes": "submission_competition/figures/coverage_resource_figure_qa.md",
+  "qa_artifacts": [
+    {
+      "path": "submission_competition/figures/_qa_f5_preview.png",
+      "sha256": "bed4a491e42fa25d6db9e412fdb2ecb53daa0756652b2cd63503c23000ad8f54",
+      "size_bytes": 1028016
+    },
+    {
+      "path": "submission_competition/figures/_qa_f5_pdf_preview.png",
+      "sha256": "745df156ac07d59476f349bdcf2884f001323c2eddc1bd79faf2de62d70e99e7",
+      "size_bytes": 172074
+    },
+    {
+      "path": "submission_competition/figures/coverage_resource_figure_qa.md",
+      "sha256": "4602a6e177a5cd58c1f54b3f257770b6edc93c9d890e12c4f2b3a4c13d38898d",
+      "size_bytes": 1096
+    }
+  ],
+  "qa": {
+    "svg": {
+      "embedded_image_elements": 0,
+      "text_elements": 202,
+      "editable_text_pass": true
+    },
+    "pdf": {
+      "pages": 1,
+      "width_mm": 183.00000559488933,
+      "height_mm": 110.00000406901042,
+      "single_page_pass": true,
+      "declared_size_pass": true
+    },
+    "png": {
+      "pixels": [
+        4322,
+        2598
+      ],
+      "dpi_metadata": [
+        599.999,
+        599.999
+      ],
+      "expected_pixels_at_600dpi": [
+        4323,
+        2598
+      ],
+      "resolution_pass": true
+    }
+  }
+}

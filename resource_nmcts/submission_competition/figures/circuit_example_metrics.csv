@@ -1,0 +1,9 @@
+﻿figure,instance,function,truth_table_hex,n_inputs,anf_terms,method,seed,logic_T_est,logic_CNOT_est,logic_depth_est,logic_gate_count,logic_qubits,symbolic_verified,aer_verified,aer_basis_states,aer_mismatches,topology,native_basis,mapped_gate_count,mapped_depth,mapped_twoq_count,mapped_twoq_depth,coupling_verified,mapped_operator_equivalent
+F0_worked_oracle_circuit,maj3,x0*x1 XOR x0*x2 XOR x1*x2,0xE8,3,3,direct_anf,42,12,18,18,3,4,True,True,8,0,line_4,"cx,rz,sx,x",68.0,57.0,42.0,38.0,True,True
+F0_worked_oracle_circuit,maj3,x0*x1 XOR x0*x2 XOR x1*x2,0xE8,3,3,resource_nmcts,42,4,11,11,6,4,True,True,8,0,line_4,"cx,rz,sx,x",38.0,32.0,26.0,24.0,True,True
+A1_circuit_gallery,maj5,5 输入多数表决,0xfee8e880,5,15,resource_nmcts,42,44,66,75,27,7,True,True,32,0,,,,,,,,
+A1_circuit_gallery,thr6_t2,6 变量阈值函数（至少 2 个 1）,0xfffffffefffefee8,6,31,resource_nmcts,42,160,138,151,28,9,True,True,64,0,,,,,,,,
+A1_circuit_gallery,randtt5_s3,5 变量随机真值表（seed 3）,0x3ceb3ffd,5,18,resource_nmcts,42,68,72,82,25,8,True,True,32,0,,,,,,,,
+A1_circuit_gallery,randtt5_s17,5 变量随机真值表（seed 17）,0x85a0bcc1,5,21,resource_nmcts,42,68,105,106,28,8,True,True,32,0,,,,,,,,
+A1_circuit_gallery,randanf6_s23,6 变量随机 ANF（seed 23）,0xe4806c88d000d888,6,9,resource_nmcts,42,96,116,116,17,9,True,True,64,0,,,,,,,,
+A1_circuit_gallery,thr7_t4,7 变量多数/阈值函数（至少 4 个 1）,0xfffefee8fee8e880fee8e880e8808000,7,35,resource_nmcts,42,264,259,259,34,9,True,True,128,0,,,,,,,,

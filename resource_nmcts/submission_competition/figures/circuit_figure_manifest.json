@@ -1,0 +1,51 @@
+{
+  "purpose": "XA-202609 competition circuit-figure provenance",
+  "generator": "submission_competition\\figures\\make_circuit_figures.py",
+  "seed": 42,
+  "python": "3.11.15",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "torch": "2.9.1+cu128",
+  "qiskit": "2.5.0",
+  "qiskit_aer": "0.17.2",
+  "pylatexenc": "2.10",
+  "matplotlib": "3.10.9",
+  "numpy": "2.4.6",
+  "pandas": "3.0.2",
+  "pillow": "12.2.0",
+  "model": "models\\action_scorer.pt",
+  "model_sha256": "14805602dda40b01de04d7727901f320d926a541b3a1bba8f86b750655fe9334",
+  "source_contract": {
+    "logical_circuit": "scripts/run_hardware_validation.py:synthesize_circuit",
+    "symbolic_verifier": "src/factor_plan.py:verify_oracle",
+    "aer_verifier": "src/hardware_map.py:verify_oracle_aer",
+    "topology_mapper": "Qiskit transpile + CouplingMap.from_line + SABRE"
+  },
+  "worked_example_summary": {
+    "instance": "maj3",
+    "seed": 42,
+    "logic_T_reduction_pct": 66.66666666666667,
+    "logic_CNOT_reduction_pct": 38.888888888888886,
+    "mapped_gate_reduction_pct": 44.11764705882353,
+    "mapped_CX_reduction_pct": 38.095238095238095,
+    "mapped_depth_reduction_pct": 43.85964912280702
+  },
+  "artifacts": [
+    "submission_competition\\figures\\F0b_direct_anf_circuit.svg",
+    "submission_competition\\figures\\F0b_direct_anf_circuit.pdf",
+    "submission_competition\\figures\\F0b_direct_anf_circuit.png",
+    "submission_competition\\figures\\F0c_resource_nmcts_circuit.svg",
+    "submission_competition\\figures\\F0c_resource_nmcts_circuit.pdf",
+    "submission_competition\\figures\\F0c_resource_nmcts_circuit.png",
+    "submission_competition\\figures\\F0d_resource_nmcts_line_mapped_circuit.svg",
+    "submission_competition\\figures\\F0d_resource_nmcts_line_mapped_circuit.pdf",
+    "submission_competition\\figures\\F0d_resource_nmcts_line_mapped_circuit.png",
+    "submission_competition\\figures\\F0_worked_oracle_circuit.svg",
+    "submission_competition\\figures\\F0_worked_oracle_circuit.pdf",
+    "submission_competition\\figures\\F0_worked_oracle_circuit.png",
+    "submission_competition\\figures\\A1_circuit_gallery.svg",
+    "submission_competition\\figures\\A1_circuit_gallery.pdf",
+    "submission_competition\\figures\\A1_circuit_gallery.png",
+    "submission_competition\\figures\\circuit_example_metrics.csv"
+  ],
+  "all_rows_verified": true
+}

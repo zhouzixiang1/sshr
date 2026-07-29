@@ -1,0 +1,257 @@
+{
+  "schema_version": 1,
+  "captured_at_utc": "2026-07-22T12:25:59+00:00",
+  "environment_name": "mcts-qoracle",
+  "python": {
+    "version": "3.11.15",
+    "implementation": "CPython",
+    "executable_name": "python.exe"
+  },
+  "platform": {
+    "system": "Windows",
+    "release": "10",
+    "version": "10.0.26200",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+    "logical_cpu_count": 24
+  },
+  "key_packages": {
+    "torch": "2.9.1+cu128",
+    "qiskit": "2.5.0",
+    "qiskit-aer": "0.17.2",
+    "duckdb": "1.5.4",
+    "numpy": "2.4.6",
+    "pandas": "3.0.2",
+    "scipy": "1.17.1",
+    "matplotlib": "3.10.9",
+    "pylatexenc": "2.10",
+    "PyMuPDF": "1.27.2.3"
+  },
+  "gpu": {
+    "torch_cuda_available": true,
+    "torch_cuda_version": "12.8",
+    "cudnn_version": 91002,
+    "device_count": 1,
+    "devices": [
+      {
+        "index": 0,
+        "name": "NVIDIA GeForce RTX 5090 Laptop GPU",
+        "compute_capability": [
+          12,
+          0
+        ],
+        "total_memory_bytes": 25650855936,
+        "multi_processor_count": 82
+      }
+    ],
+    "nvidia_smi_query": [
+      "NVIDIA GeForce RTX 5090 Laptop GPU, 610.62, 24463, 12.0, P8, [N/A]"
+    ],
+    "smoke": {
+      "requested": false,
+      "ok": null
+    }
+  },
+  "aer": {
+    "available_devices": [
+      "CPU"
+    ],
+    "available_methods": [
+      "automatic",
+      "statevector",
+      "density_matrix",
+      "stabilizer",
+      "matrix_product_state",
+      "extended_stabilizer",
+      "unitary",
+      "superop"
+    ]
+  },
+  "git": {
+    "commit": "9b9898d459e2dcdcc1da68727274fee9672f0664",
+    "dirty": true,
+    "status_lines": [
+      "M ../CLAUDE.md",
+      " M scripts/train_neural_policy.py",
+      " M src/factor_plan.py",
+      " M src/neural_policy.py",
+      " M src/synthesizers.py",
+      " M tests/tests_smoke.py",
+      "?? analysis/analyze_competition_results.py",
+      "?? analysis/audit_formal_coverage.py",
+      "?? analysis/build_experiments_db.py",
+      "?? analysis/consolidate_verified_experiment.py",
+      "?? analysis/filter_validated_hardware_rows.py",
+      "?? analysis/ingest_hardware_validation.py",
+      "?? models/action_scorer_competition.pt",
+      "?? models/action_scorer_rollout_competition.pt",
+      "?? results/ai_hard_heuristic_v1.jsonl",
+      "?? results/ai_hard_immediate_v1.jsonl",
+      "?? results/ai_hard_random_v1.jsonl",
+      "?? results/ai_hard_rollout_v1.jsonl",
+      "?? results/ai_smoke_heuristic.jsonl",
+      "?? results/ai_smoke_learned.jsonl",
+      "?? results/ai_smoke_random.jsonl",
+      "?? results/ai_smoke_uniform.jsonl",
+      "?? results/competition_experiments.duckdb",
+      "?? results/competition_experiments.pre_schema_v2_20260722.duckdb",
+      "?? results/final_core_aes_v1.jsonl",
+      "?? results/final_core_random_anf_v1.jsonl",
+      "?? results/final_core_random_truth_v1.jsonl",
+      "?? results/final_core_structured_v1.jsonl",
+      "?? results/hardware_validation.duckdb",
+      "?? results/hardware_validation_smoke_v2.jsonl",
+      "?? results/legacy_csv_inventory.duckdb",
+      "?? results/pilot_ai_heuristic_v1.jsonl",
+      "?? results/pilot_ai_learned_v1.jsonl",
+      "?? results/pilot_ai_random_v1.jsonl",
+      "?? results/pilot_ai_rollout_v1.jsonl",
+      "?? results/pilot_ai_uniform_v1.jsonl",
+      "?? results/pilot_baselines_v1.jsonl",
+      "?? results/pilot_baselines_v2.jsonl",
+      "?? results/recovered/",
+      "?? results/recovery_aes_b0_s7_v2.jsonl",
+      "?? results/recovery_primary20_aes_b0_fast_v3.jsonl",
+      "?? results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl",
+      "?? results/recovery_primary20_aes_b7_s7_fast_v3.jsonl",
+      "?? results/recovery_primary20_beam_aes_b7_parallel_v3.jsonl",
+      "?? results/recovery_primary20_beam_aes_v3.jsonl",
+      "?? results/recovery_primary20_beam_struct_random_v3.jsonl",
+      "?? results/recovery_primary20_maj7_s17_fast_v3.jsonl",
+      "?? results/recovery_primary20_maj7_s29_fast_v3.jsonl",
+      "?? results/recovery_primary20_maj7_s7_fast_v3.jsonl",
+      "?? results/recovery_primary20_randanf7_resource_v3.jsonl",
+      "?? results/recovery_primary20_randanf7_sshrh_s7_v3.jsonl",
+      "?? results/recovery_primary20_randanf8_s173_resource_v3.jsonl",
+      "?? results/recovery_primary20_randanf8_s173_sshrbeam_s29_v3.jsonl",
+      "?? results/recovery_primary20_randanf8_s173_v3.jsonl",
+      "?? results/recovery_primary20_randtt5_s113_s29_v3.jsonl",
+      "?? results/recovery_primary20_randtt6_fast_v3.jsonl",
+      "?? results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+      "?? results/stress_aes_b0_direct_s17_b8t8_v1.jsonl",
+      "?? results/stress_aes_b0_direct_s29_b8t8e8_v1.jsonl",
+      "?? results/stress_aes_b7_direct_s7_b16t16e16_v1.jsonl",
+      "?? results/summary_formal_current_contract_v1.csv",
+      "?? results/summary_formal_current_contract_v1.json",
+      "?? results/summary_formal_vs_greedy_contract_v1.csv",
+      "?? results/summary_formal_vs_greedy_contract_v1.json",
+      "?? results/summary_formal_vs_mcts_contract_v1.csv",
+      "?? results/summary_formal_vs_mcts_contract_v1.json",
+      "?? results/summary_formal_vs_sshr_beam_contract_v1.csv",
+      "?? results/summary_formal_vs_sshr_beam_contract_v1.json",
+      "?? results/summary_formal_vs_sshr_h_contract_v1.csv",
+      "?? results/summary_formal_vs_sshr_h_contract_v1.json",
+      "?? results/summary_hardware_validation.csv",
+      "?? results/summary_pilot_ai_v1.csv",
+      "?? results/summary_pilot_ai_v1.json",
+      "?? results/summary_pilot_baselines_v2.csv",
+      "?? results/summary_pilot_baselines_v2.json",
+      "?? scripts/capture_competition_environment.py",
+      "?? scripts/export_competition_benchmarks.py",
+      "?? scripts/run_hardware_validation.py",
+      "?? src/competition_benchmarks.py",
+      "?? src/experiment_db.py",
+      "?? src/hardware_map.py",
+      "?? src/hardware_validation_ingest.py",
+      "?? submission_competition/",
+      "?? tests/test_competition_benchmarks.py",
+      "?? tests/test_competition_results_analysis.py",
+      "?? tests/test_experiment_db.py",
+      "?? tests/test_formal_coverage_audit.py",
+      "?? tests/test_hardware_runner.py",
+      "?? tests/test_hardware_validation_ingest.py",
+      "?? tests/test_legacy_db_builder.py",
+      "?? tests/test_neural_training_split.py",
+      "?? tests/test_topology_mapping.py"
+    ],
+    "tracked_diff_sha256": "6864518c67b5bbb71e18096c9584847dfac2cb3f4c2b7252300c5bfe8227cc59"
+  },
+  "critical_artifacts": [
+    {
+      "path": "src/competition_benchmarks.py",
+      "size_bytes": 6432,
+      "sha256": "2ff5e0d17e7691cb4688f00589dd285ab79937c02ef62cd269c3696f9475d88a"
+    },
+    {
+      "path": "src/factor_plan.py",
+      "size_bytes": 59616,
+      "sha256": "060cf331c527a44e5641d14bdf9dbbf1d6499f09d5f12fd8efec7c93f900d40d"
+    },
+    {
+      "path": "src/neural_policy.py",
+      "size_bytes": 5834,
+      "sha256": "f2a3edaf44b0870a1fdb4fc854ffb543de5f27059777db3caf7dcf3232b417a6"
+    },
+    {
+      "path": "src/synthesizers.py",
+      "size_bytes": 76674,
+      "sha256": "fe2bae64ae893d3bf7dbb4abb2e20debaab4e2c088e8602fee64e5c43c5fa47c"
+    },
+    {
+      "path": "src/hardware_map.py",
+      "size_bytes": 39500,
+      "sha256": "4f80248177a940c6f402aed38738f2a36bc92cfc897694005ea2b2710a299124"
+    },
+    {
+      "path": "src/experiment_db.py",
+      "size_bytes": 63450,
+      "sha256": "d5db5bba73c40873a9e535273fa711cd041dac6a3786006b7922526c1122a559"
+    },
+    {
+      "path": "src/hardware_validation_ingest.py",
+      "size_bytes": 32885,
+      "sha256": "4a036945377cd86fd913bb5fe9c40096db9d1098a715ecd1793d73e2c5522662"
+    },
+    {
+      "path": "scripts/train_neural_policy.py",
+      "size_bytes": 41259,
+      "sha256": "208ce3676fcb3bdf044d2686416de6dea22e1047f0aeced9f87b6e1773f083c4"
+    },
+    {
+      "path": "scripts/run_hardware_validation.py",
+      "size_bytes": 59703,
+      "sha256": "110c73273179466f5062d52aba9a93355192ab8ea3839eb5400e2839ed0eec8c"
+    },
+    {
+      "path": "analysis/analyze_competition_results.py",
+      "size_bytes": 75693,
+      "sha256": "d4518b0c4a06b03bb481dafd161d4397b8ebe4ba8bc33cb3ee7a45bb3cfe6014"
+    },
+    {
+      "path": "models/action_scorer.pt",
+      "size_bytes": 46045,
+      "sha256": "14805602dda40b01de04d7727901f320d926a541b3a1bba8f86b750655fe9334"
+    },
+    {
+      "path": "models/action_scorer_competition.pt",
+      "size_bytes": 194825,
+      "sha256": "6ba157fb9b5504d815d250ce55bb7d6509bce05ead24547e07dc6644ba8b3617"
+    },
+    {
+      "path": "models/action_scorer_rollout_competition.pt",
+      "size_bytes": 136185,
+      "sha256": "08416f16cc7ad0c24dec3c2cead5c540adb7ff45f1e089773bf44c1f14b9cf08"
+    },
+    {
+      "path": "submission_competition/benchmark_suite_v1.json",
+      "size_bytes": 13745,
+      "sha256": "e60006c1a83215aebffba408292992cd90ffea846580cf29ea04ba978b0d4c33"
+    },
+    {
+      "path": "submission_competition/training_manifest_competition.json",
+      "size_bytes": 1294818,
+      "sha256": "ae2ede6a79e9d3d823de4270f759c7fe348c2ee060c94634a276ed9062663d83"
+    },
+    {
+      "path": "submission_competition/training_manifest_rollout_competition.json",
+      "size_bytes": 596956,
+      "sha256": "69aee0f493f1a42d5a5d46ac076b927f221481b1b85d5b19ca6a3fe29a78710a"
+    }
+  ],
+  "package_inventory": {
+    "path": "primary20_execution_packages.txt",
+    "entries": 58,
+    "sha256": "904aafb182c87d4563b38ba0fe50356042560fbf161da3fe9d1adafda9b3e8d7"
+  },
+  "privacy": "absolute user/home paths and host name intentionally omitted"
+}

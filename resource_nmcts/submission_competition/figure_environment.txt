@@ -1,0 +1,15 @@
+# Verified figure-generation environment (2026-07-22)
+# Conda environment: C:\Users\32143\.conda\envs\mcts-qoracle
+python==3.11.15
+torch==2.9.1+cu128
+qiskit==2.5.0
+qiskit-aer==0.17.2
+matplotlib==3.10.9
+pylatexenc==2.10
+numpy==2.4.6
+pandas==3.0.2
+Pillow==12.2.0
+
+# pylatexenc 2.10 was installed into mcts-qoracle to enable Qiskit's
+# standard Matplotlib/IQP circuit drawer.  Exact model and platform hashes
+# are recorded by figures/circuit_figure_manifest.json on every run.

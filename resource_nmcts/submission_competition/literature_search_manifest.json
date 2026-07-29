@@ -1,0 +1,495 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-07-22T16:45:00+08:00",
+  "purpose": "Competition-document literature matrix for Boolean oracle synthesis, learning-guided quantum compilation, and hardware-aware mapping/routing.",
+  "scope": {
+    "topics": [
+      "Boolean oracle synthesis",
+      "ESOP, ANF, PPRM and MCT synthesis",
+      "XAG and multiplicative-complexity oracle compilation",
+      "MCTS, AlphaZero, reinforcement learning and generative circuit synthesis",
+      "topology-aware qubit mapping and routing",
+      "NISQ and fault-tolerant hardware-aware compilation"
+    ],
+    "year_range": [2000, 2026],
+    "language": ["English"],
+    "inclusion": [
+      "Primary research paper or primary preprint with enough metadata to verify identity",
+      "Direct task match, strong representation baseline, search-method precedent, or mapping/hardware boundary relevant to Resource-NMCTS",
+      "Stable DOI, arXiv identifier, or official proceedings/institutional record",
+      "Classic foundations plus substantial coverage of 2022-2025 work"
+    ],
+    "exclusion": [
+      "Blogs, unsourced summaries, and vendor marketing pages",
+      "Records whose title, authors and publication identity could not be resolved",
+      "Papers about quantum applications with no synthesis, optimization or mapping contribution",
+      "Duplicate publisher, repository and preprint manifestations of the same work"
+    ]
+  },
+  "source_policy": {
+    "preferred_tiers": [
+      "T1 publisher or journal article page",
+      "T1 official proceedings or arXiv record",
+      "T1 author institutional repository or author-hosted accepted paper",
+      "T2 DBLP or institutional bibliography as metadata cross-check only"
+    ],
+    "rule": "At least one primary or official source was required for every retained record. Secondary indexes were not used as the sole support for technical claims.",
+    "retraction_and_correction_policy": "No systematic all-record Crossmark audit was possible in this run. Publication status should be rechecked from DOI/Crossmark immediately before the final PDF freeze."
+  },
+  "workflows": [
+    "multi-source-search",
+    "citation-verification",
+    "reference-management"
+  ],
+  "queries": [
+    {
+      "cluster": "oracle-classic",
+      "queries": [
+        "reversible logic synthesis PPRM factor sharing generalized Toffoli",
+        "ESOP based Toffoli gate cascade generation",
+        "BDD based synthesis reversible logic large functions"
+      ]
+    },
+    {
+      "cluster": "oracle-modern",
+      "queries": [
+        "quantum oracle synthesis XAG multiplicative complexity T count ancilla",
+        "resource constrained oracle synthesis ROS LUT SAT garbage management",
+        "backend aware fault tolerant quantum oracle synthesis",
+        "CNOT oriented Boolean synthesis SSHR parallelotopes"
+      ]
+    },
+    {
+      "cluster": "learning-search",
+      "queries": [
+        "Monte Carlo tree search quantum circuit synthesis design",
+        "machine learning seeded unitary synthesis QSeed",
+        "Gumbel AlphaZero Clifford T unitary synthesis",
+        "AlphaZero truth table AIG synthesis ShortCircuit",
+        "diffusion model quantum circuit synthesis",
+        "reinforcement learning T-count quantum circuit optimization AlphaTensor",
+        "reinforcement learning ZX calculus circuit optimization"
+      ]
+    },
+    {
+      "cluster": "mapping-hardware",
+      "queries": [
+        "SABRE qubit mapping routing NISQ",
+        "noise adaptive compiler mapping NISQ calibration",
+        "qubit routing problem architecture graph",
+        "optimal qubit assignment routing integer programming",
+        "learning to rank quantum circuits hardware optimized performance"
+      ]
+    }
+  ],
+  "provider_events": [
+    {
+      "provider": "academic MCP tools",
+      "status": "unavailable",
+      "attempts": 1,
+      "detail": "No PubMed, CrossRef, arXiv, Scopus or ScienceDirect academic MCP tool was exposed in the active tool registry."
+    },
+    {
+      "provider": "nature-academic-search preflight: PubMed, CrossRef and arXiv direct APIs",
+      "status": "failed",
+      "attempts": 1,
+      "successful_endpoints": 0,
+      "total_endpoints": 3,
+      "detail": "All three HTTPS probes failed with [ASN1: NOT_ENOUGH_DATA] not enough data (_ssl.c:4057)."
+    },
+    {
+      "provider": "OpenAlex via academic_search.py",
+      "status": "failed",
+      "attempts": 2,
+      "detail": "Both HTTPS attempts failed with [ASN1: NOT_ENOUGH_DATA] not enough data (_ssl.c:4057)."
+    },
+    {
+      "provider": "browser search/open fallback",
+      "status": "success",
+      "detail": "Used DOI landing pages, publisher/journal pages, official proceedings, arXiv, and author institutional repositories."
+    }
+  ],
+  "deduplication": {
+    "normalization": [
+      "lowercase DOI and strip https://doi.org/ prefix",
+      "normalize arXiv identifiers to bare numeric IDs",
+      "case-fold titles and collapse punctuation/whitespace",
+      "compare title plus first author plus year when DOI is absent"
+    ],
+    "priority": "Keep the version of record as the canonical citation and retain arXiv metadata inside that record.",
+    "publisher_preprint_manifestations_collapsed": 14,
+    "retained_unique_records": 20
+  },
+  "summary": {
+    "total_records": 20,
+    "peer_reviewed_records": 19,
+    "preprint_only_records": 1,
+    "direct_boolean_oracle_or_reversible_synthesis": 8,
+    "learning_or_search_method_context": 7,
+    "mapping_routing_or_hardware_context": 5,
+    "records_from_2022_through_2025": 12,
+    "records_with_publication_doi": 19,
+    "records_with_arxiv_datacite_doi_only": 1
+  },
+  "records": [
+    {
+      "cite_key": "gupta2006pprm",
+      "title": "An Algorithm for Synthesis of Reversible Logic Circuits",
+      "authors": ["Pallav Gupta", "Abhinav Agrawal", "Niraj K. Jha"],
+      "year": 2006,
+      "venue": "IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems",
+      "doi": "10.1109/TCAD.2006.871622",
+      "arxiv": null,
+      "publication_status": "peer-reviewed journal article",
+      "verification_status": "verified",
+      "comparison_class": "direct-representation",
+      "primary_urls": [
+        "https://doi.org/10.1109/TCAD.2006.871622",
+        "https://collaborate.princeton.edu/en/publications/an-algorithm-for-synthesis-of-reversible-logic-circuits/"
+      ],
+      "verified_fields": ["title", "authors", "year", "venue", "volume", "issue", "pages", "doi"]
+    },
+    {
+      "cite_key": "fazel2007esop",
+      "title": "ESOP-based Toffoli Gate Cascade Generation",
+      "authors": ["K. Fazel", "Mitchell A. Thornton", "Jacqueline E. Rice"],
+      "year": 2007,
+      "venue": "IEEE Pacific Rim Conference on Communications, Computers and Signal Processing",
+      "doi": "10.1109/PACRIM.2007.4313212",
+      "arxiv": null,
+      "publication_status": "peer-reviewed conference paper",
+      "verification_status": "verified",
+      "comparison_class": "direct-baseline",
+      "primary_urls": [
+        "https://doi.org/10.1109/PACRIM.2007.4313212",
+        "https://s2.smu.edu/~mitch/ftp_dir/pubs/pacrim07.pdf"
+      ],
+      "verified_fields": ["title", "authors", "year", "venue", "pages", "doi"]
+    },
+    {
+      "cite_key": "wille2009bdd",
+      "title": "BDD-based Synthesis of Reversible Logic for Large Functions",
+      "authors": ["Robert Wille", "Rolf Drechsler"],
+      "year": 2009,
+      "venue": "Design Automation Conference",
+      "doi": "10.1145/1629911.1629984",
+      "arxiv": null,
+      "publication_status": "peer-reviewed conference paper",
+      "verification_status": "verified",
+      "comparison_class": "direct-scalability-context",
+      "primary_urls": [
+        "https://doi.org/10.1145/1629911.1629984",
+        "https://portal.fis.tum.de/en/publications/bdd-based-synthesis-of-reversible-logic-for-large-functions-2/"
+      ],
+      "verified_fields": ["title", "authors", "year", "venue", "pages", "doi"]
+    },
+    {
+      "cite_key": "meuli2019multiplicative",
+      "title": "The Role of Multiplicative Complexity in Compiling Low T-count Oracle Circuits",
+      "authors": ["Giulia Meuli", "Mathias Soeken", "Earl Campbell", "Martin Roetteler", "Giovanni De Micheli"],
+      "year": 2019,
+      "venue": "IEEE/ACM International Conference on Computer-Aided Design",
+      "doi": "10.1109/ICCAD45719.2019.8942093",
+      "arxiv": "1908.01609",
+      "publication_status": "peer-reviewed conference paper",
+      "verification_status": "verified",
+      "comparison_class": "direct-strong",
+      "primary_urls": [
+        "https://doi.org/10.1109/ICCAD45719.2019.8942093",
+        "https://arxiv.org/abs/1908.01609",
+        "https://infoscience.epfl.ch/entities/publication/5aac8c4a-fc17-459c-bda0-d11068f5e9eb"
+      ],
+      "verified_fields": ["title", "authors", "year", "venue", "doi", "arxiv", "abstract scope"]
+    },
+    {
+      "cite_key": "meuli2020ros",
+      "title": "ROS: Resource-constrained Oracle Synthesis for Quantum Computers",
+      "authors": ["Giulia Meuli", "Mathias Soeken", "Martin Roetteler", "Giovanni De Micheli"],
+      "year": 2020,
+      "venue": "Electronic Proceedings in Theoretical Computer Science 318",
+      "doi": "10.4204/EPTCS.318.8",
+      "arxiv": "2005.00211",
+      "publication_status": "peer-reviewed proceedings paper",
+      "verification_status": "verified",
+      "comparison_class": "direct-strong",
+      "primary_urls": [
+        "https://doi.org/10.4204/EPTCS.318.8",
+        "https://arxiv.org/abs/2005.00211"
+      ],
+      "crosscheck_urls": ["https://inspirehep.net/literature/3053128"],
+      "verified_fields": ["title", "authors", "year", "volume", "pages", "doi", "arxiv", "abstract scope"]
+    },
+    {
+      "cite_key": "meuli2022xag",
+      "title": "Xor-And-Inverter Graphs for Quantum Compilation",
+      "authors": ["Giulia Meuli", "Mathias Soeken", "Giovanni De Micheli"],
+      "year": 2022,
+      "venue": "npj Quantum Information",
+      "doi": "10.1038/s41534-021-00514-y",
+      "arxiv": null,
+      "publication_status": "peer-reviewed journal article",
+      "verification_status": "verified",
+      "comparison_class": "direct-strong",
+      "primary_urls": [
+        "https://doi.org/10.1038/s41534-021-00514-y",
+        "https://www.nature.com/articles/s41534-021-00514-y"
+      ],
+      "verified_fields": ["title", "authors", "year", "venue", "volume", "article number", "doi", "abstract scope"]
+    },
+    {
+      "cite_key": "yu2025backend",
+      "title": "Back-end-aware Fault-tolerant Quantum Oracle Synthesis",
+      "authors": ["Mingfei Yu", "Alessandro Tempia Calvino", "Mathias Soeken", "Giovanni De Micheli"],
+      "year": 2025,
+      "venue": "Asia and South Pacific Design Automation Conference",
+      "doi": "10.1145/3658617.3697776",
+      "arxiv": null,
+      "publication_status": "peer-reviewed conference paper",
+      "verification_status": "verified",
+      "comparison_class": "direct-backend-boundary",
+      "primary_urls": [
+        "https://doi.org/10.1145/3658617.3697776",
+        "https://si2.epfl.ch/~demichel/publications/archive/2025/ASPDAC25_YU.pdf",
+        "https://www.aspdac.com/aspdac2025/archive/pdf/6C-3.pdf"
+      ],
+      "crosscheck_urls": ["https://dblp.dagstuhl.de/rec/conf/aspdac/YuCSM25.html"],
+      "verified_fields": ["title", "authors", "year", "venue", "pages", "doi", "abstract scope"]
+    },
+    {
+      "cite_key": "zheng2025sshr",
+      "title": "CNOT Oriented Synthesis for Small-Scale Boolean Functions Using Spatial Structures of Parallelotopes",
+      "authors": ["Qiang Zheng", "Yongzhen Xu", "Jiaxi Zhang", "Zhaofeng Su", "Shenggen Zheng"],
+      "year": 2025,
+      "venue": "IEEE/ACM International Conference on Computer-Aided Design",
+      "doi": "10.1109/ICCAD66269.2025.11240690",
+      "arxiv": "2509.01912",
+      "publication_status": "peer-reviewed conference paper with preprint",
+      "verification_status": "verified",
+      "comparison_class": "direct-closest",
+      "primary_urls": [
+        "https://doi.org/10.1109/ICCAD66269.2025.11240690",
+        "https://arxiv.org/abs/2509.01912",
+        "https://confcats-event-sessions.s3.us-east-1.amazonaws.com/iccad25/uploads/ICCAD_2025_Program_v8.pdf"
+      ],
+      "verified_fields": ["title", "authors", "year", "venue", "pages", "doi", "arxiv", "abstract scope"]
+    },
+    {
+      "cite_key": "wang2023nestedmcts",
+      "title": "Automated Quantum Circuit Design With Nested Monte Carlo Tree Search",
+      "authors": ["Pei-Yong Wang", "Muhammad Usman", "Udaya Parampalli", "Lloyd C. L. Hollenberg", "Casey R. Myers"],
+      "year": 2023,
+      "venue": "IEEE Transactions on Quantum Engineering",
+      "doi": "10.1109/TQE.2023.3265709",
+      "arxiv": "2207.00132",
+      "publication_status": "peer-reviewed journal article",
+      "verification_status": "verified",
+      "comparison_class": "search-method-context",
+      "primary_urls": [
+        "https://doi.org/10.1109/TQE.2023.3265709",
+        "https://arxiv.org/abs/2207.00132"
+      ],
+      "verified_fields": ["title", "authors", "year", "venue", "volume", "pages", "doi", "arxiv", "abstract scope"]
+    },
+    {
+      "cite_key": "weiden2023qseed",
+      "title": "Improving Quantum Circuit Synthesis with Machine Learning",
+      "authors": ["Mathias Weiden", "Ed Younis", "Justin Kalloor", "John Kubiatowicz", "Costin Iancu"],
+      "year": 2023,
+      "venue": "IEEE International Conference on Quantum Computing and Engineering",
+      "doi": "10.1109/QCE57702.2023.00093",
+      "arxiv": "2306.05622",
+      "publication_status": "peer-reviewed conference paper",
+      "verification_status": "verified",
+      "comparison_class": "search-method-context",
+      "primary_urls": [
+        "https://doi.org/10.1109/QCE57702.2023.00093",
+        "https://arxiv.org/abs/2306.05622"
+      ],
+      "verified_fields": ["title", "authors", "year", "venue", "pages", "doi", "arxiv", "abstract scope"]
+    },
+    {
+      "cite_key": "rietsch2024rlsynthesis",
+      "title": "Unitary Synthesis of Clifford+T Circuits with Reinforcement Learning",
+      "authors": ["Sebastian Rietsch", "Abhishek Y. Dubey", "Christian Ufrecht", "Maniraman Periyasamy", "Axel Plinge", "Christopher Mutschler", "Daniel D. Scherer"],
+      "year": 2024,
+      "venue": "IEEE International Conference on Quantum Computing and Engineering",
+      "doi": "10.1109/QCE60285.2024.00102",
+      "arxiv": "2404.14865",
+      "publication_status": "peer-reviewed conference paper",
+      "verification_status": "verified",
+      "comparison_class": "search-method-context",
+      "primary_urls": [
+        "https://doi.org/10.1109/QCE60285.2024.00102",
+        "https://arxiv.org/abs/2404.14865"
+      ],
+      "verified_fields": ["title", "authors", "year", "venue", "pages", "doi", "arxiv", "abstract scope"]
+    },
+    {
+      "cite_key": "tsaras2024shortcircuit",
+      "title": "ShortCircuit: AlphaZero-Driven Circuit Design",
+      "authors": ["Dimitrios Tsaras", "Antoine Grosnit", "Lei Chen", "Zhiyao Xie", "Haitham Bou-Ammar", "Mingxuan Yuan"],
+      "year": 2024,
+      "venue": "arXiv",
+      "doi": "10.48550/arXiv.2408.09858",
+      "arxiv": "2408.09858",
+      "publication_status": "preprint only",
+      "verification_status": "verified-preprint-v2",
+      "comparison_class": "classical-search-boundary",
+      "primary_urls": ["https://arxiv.org/abs/2408.09858"],
+      "verified_fields": ["title", "authors", "year", "arxiv", "version", "abstract scope"],
+      "warning": "The arXiv DataCite DOI is not evidence of peer review. The work synthesizes classical AIGs, not quantum oracles."
+    },
+    {
+      "cite_key": "fuerrutter2024diffusion",
+      "title": "Quantum Circuit Synthesis with Diffusion Models",
+      "authors": ["Florian Fuerrutter", "Gorka Munoz-Gil", "Hans J. Briegel"],
+      "year": 2024,
+      "venue": "Nature Machine Intelligence",
+      "doi": "10.1038/s42256-024-00831-9",
+      "arxiv": "2311.02041",
+      "publication_status": "peer-reviewed journal article",
+      "verification_status": "verified",
+      "comparison_class": "generative-method-context",
+      "primary_urls": [
+        "https://doi.org/10.1038/s42256-024-00831-9",
+        "https://www.nature.com/articles/s42256-024-00831-9",
+        "https://arxiv.org/abs/2311.02041"
+      ],
+      "verified_fields": ["title", "authors", "year", "venue", "volume", "pages", "doi", "arxiv", "abstract scope"]
+    },
+    {
+      "cite_key": "ruiz2025alphatensor",
+      "title": "Quantum Circuit Optimization with AlphaTensor",
+      "authors": ["Francisco J. R. Ruiz", "Tuomas Laakkonen", "Johannes Bausch", "Matej Balog", "Mohammadamin Barekatain", "Francisco J. H. Heras", "Alexander Novikov", "Nathan Fitzpatrick", "Bernardino Romera-Paredes", "John van de Wetering", "Alhussein Fawzi", "Konstantinos Meichanetzidis", "Pushmeet Kohli"],
+      "year": 2025,
+      "venue": "Nature Machine Intelligence",
+      "doi": "10.1038/s42256-025-01001-1",
+      "arxiv": "2402.14396",
+      "publication_status": "peer-reviewed journal article",
+      "verification_status": "verified",
+      "comparison_class": "post-synthesis-learning-context",
+      "primary_urls": [
+        "https://doi.org/10.1038/s42256-025-01001-1",
+        "https://www.nature.com/articles/s42256-025-01001-1",
+        "https://arxiv.org/abs/2402.14396"
+      ],
+      "verified_fields": ["title", "authors", "year", "venue", "volume", "pages", "doi", "arxiv", "abstract scope"]
+    },
+    {
+      "cite_key": "riu2025rlzx",
+      "title": "Reinforcement Learning Based Quantum Circuit Optimization via ZX-Calculus",
+      "authors": ["Jordi Riu", "Jan Nogue", "Gerard Vilaplana", "Artur Garcia-Saez", "Marta P. Estarellas"],
+      "year": 2025,
+      "venue": "Quantum",
+      "doi": "10.22331/q-2025-05-28-1758",
+      "arxiv": "2312.11597",
+      "publication_status": "peer-reviewed journal article",
+      "verification_status": "verified",
+      "comparison_class": "post-synthesis-learning-context",
+      "primary_urls": [
+        "https://doi.org/10.22331/q-2025-05-28-1758",
+        "https://quantum-journal.org/papers/q-2025-05-28-1758/",
+        "https://arxiv.org/abs/2312.11597"
+      ],
+      "verified_fields": ["title", "authors", "year", "venue", "volume", "page", "doi", "arxiv", "abstract scope"]
+    },
+    {
+      "cite_key": "li2019sabre",
+      "title": "Tackling the Qubit Mapping Problem for NISQ-Era Quantum Devices",
+      "authors": ["Gushu Li", "Yufei Ding", "Yuan Xie"],
+      "year": 2019,
+      "venue": "Architectural Support for Programming Languages and Operating Systems",
+      "doi": "10.1145/3297858.3304023",
+      "arxiv": "1809.02573",
+      "publication_status": "peer-reviewed conference paper",
+      "verification_status": "verified",
+      "comparison_class": "mapping-strong",
+      "primary_urls": [
+        "https://doi.org/10.1145/3297858.3304023",
+        "https://arxiv.org/abs/1809.02573",
+        "https://researchportal.hkust.edu.hk/en/publications/tackling-the-qubit-mapping-problem-for-nisq-era-quantum-devices/"
+      ],
+      "verified_fields": ["title", "authors", "year", "venue", "pages", "doi", "arxiv", "abstract scope"]
+    },
+    {
+      "cite_key": "murali2019noiseadaptive",
+      "title": "Noise-Adaptive Compiler Mappings for Noisy Intermediate-Scale Quantum Computers",
+      "authors": ["Prakash Murali", "Jonathan M. Baker", "Ali Javadi-Abhari", "Frederic T. Chong", "Margaret Martonosi"],
+      "year": 2019,
+      "venue": "Architectural Support for Programming Languages and Operating Systems",
+      "doi": "10.1145/3297858.3304075",
+      "arxiv": "1901.11054",
+      "publication_status": "peer-reviewed conference paper",
+      "verification_status": "verified",
+      "comparison_class": "calibration-aware-boundary",
+      "primary_urls": [
+        "https://doi.org/10.1145/3297858.3304075",
+        "https://arxiv.org/abs/1901.11054",
+        "https://mrmgroup.cs.princeton.edu/papers/pmurali-asplos.pdf"
+      ],
+      "verified_fields": ["title", "authors", "year", "venue", "pages", "doi", "arxiv", "abstract scope"]
+    },
+    {
+      "cite_key": "cowtan2019routing",
+      "title": "On the Qubit Routing Problem",
+      "authors": ["Alexander Cowtan", "Silas Dilkes", "Ross Duncan", "Alexandre Krajenbrink", "Will Simmons", "Seyon Sivarajah"],
+      "year": 2019,
+      "venue": "Theory of Quantum Computation, Communication and Cryptography",
+      "doi": "10.4230/LIPIcs.TQC.2019.5",
+      "arxiv": "1902.08091",
+      "publication_status": "peer-reviewed conference paper",
+      "verification_status": "verified",
+      "comparison_class": "routing-theory",
+      "primary_urls": [
+        "https://doi.org/10.4230/LIPIcs.TQC.2019.5",
+        "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.TQC.2019.5",
+        "https://arxiv.org/abs/1902.08091"
+      ],
+      "verified_fields": ["title", "authors", "year", "venue", "volume", "article pages", "doi", "arxiv", "abstract scope"]
+    },
+    {
+      "cite_key": "nannicini2022ilp",
+      "title": "Optimal Qubit Assignment and Routing via Integer Programming",
+      "authors": ["Giacomo Nannicini", "Lev S. Bishop", "Oktay Gunluk", "Petar Jurcevic"],
+      "year": 2022,
+      "venue": "ACM Transactions on Quantum Computing",
+      "doi": "10.1145/3544563",
+      "arxiv": "2106.06446",
+      "publication_status": "peer-reviewed journal article; online publication 2022",
+      "verification_status": "verified",
+      "comparison_class": "mapping-optimality-reference",
+      "primary_urls": [
+        "https://doi.org/10.1145/3544563",
+        "https://arxiv.org/abs/2106.06446",
+        "https://research.ibm.com/publications/optimal-qubit-assignment-and-routing-via-integer-programming"
+      ],
+      "verified_fields": ["title", "authors", "online year", "venue", "volume", "issue", "article number", "pages", "doi", "arxiv", "abstract scope"]
+    },
+    {
+      "cite_key": "hartnett2024learningtorank",
+      "title": "Learning to Rank Quantum Circuits for Hardware-optimized Performance Enhancement",
+      "authors": ["Gavin S. Hartnett", "Aaron Barbosa", "Pranav S. Mundada", "Michael Hush", "Michael J. Biercuk", "Yuval Baum"],
+      "year": 2024,
+      "venue": "Quantum",
+      "doi": "10.22331/q-2024-11-27-1542",
+      "arxiv": "2404.06535",
+      "publication_status": "peer-reviewed journal article",
+      "verification_status": "verified",
+      "comparison_class": "hardware-learning-boundary",
+      "primary_urls": [
+        "https://doi.org/10.22331/q-2024-11-27-1542",
+        "https://quantum-journal.org/papers/q-2024-11-27-1542/",
+        "https://arxiv.org/abs/2404.06535"
+      ],
+      "verified_fields": ["title", "authors", "year", "venue", "volume", "page", "doi", "arxiv", "abstract scope"]
+    }
+  ],
+  "claim_guardrails": [
+    "Do not claim Resource-NMCTS is significantly better than a paper without matched experiments and function-level statistics.",
+    "Do not call synthetic topology mapping calibration-aware or real-hardware validation.",
+    "Do not equate XAG, AIG or MCT node counts with final Clifford+T or native-gate resources unless a fixed verified decomposition is applied.",
+    "Do not describe a mockturtle or CirKit logic-network probe as a reproduction of ROS.",
+    "Do not use ShortCircuit as a direct quantum-oracle baseline or describe it as peer reviewed.",
+    "Keep front-end Boolean synthesis, post-synthesis circuit optimization, and qubit mapping results in separate comparison layers."
+  ]
+}

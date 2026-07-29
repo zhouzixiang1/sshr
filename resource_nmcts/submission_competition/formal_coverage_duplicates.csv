@@ -1,0 +1,827 @@
+﻿duplicate_kind,case_id,requested_method,synthesis_seed,count,extra_rows,note
+database_canonical,aes_sbox_b0,direct_anf,7,2,1,multiple rows within one evidence representation
+database_canonical,aes_sbox_b0,direct_anf,17,2,1,multiple rows within one evidence representation
+database_canonical,aes_sbox_b0,direct_anf,29,2,1,multiple rows within one evidence representation
+database_canonical,aes_sbox_b0,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,aes_sbox_b0,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,aes_sbox_b0,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_canonical,aes_sbox_b0,sshr_h,7,3,2,multiple rows within one evidence representation
+database_canonical,aes_sbox_b7,direct_anf,7,2,1,multiple rows within one evidence representation
+database_canonical,and3,direct_anf,7,2,1,multiple rows within one evidence representation
+database_canonical,and3,direct_anf,17,2,1,multiple rows within one evidence representation
+database_canonical,and3,direct_anf,29,2,1,multiple rows within one evidence representation
+database_canonical,and3,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,and3,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,and3,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,and3,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,and3,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,and3,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,and3,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_canonical,and3,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_canonical,and3,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_canonical,and3,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_canonical,and3,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_canonical,and3,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_canonical,and3,sshr_h,7,2,1,multiple rows within one evidence representation
+database_canonical,and3,sshr_h,17,2,1,multiple rows within one evidence representation
+database_canonical,and3,sshr_h,29,2,1,multiple rows within one evidence representation
+database_canonical,and4,direct_anf,7,2,1,multiple rows within one evidence representation
+database_canonical,and4,direct_anf,17,2,1,multiple rows within one evidence representation
+database_canonical,and4,direct_anf,29,2,1,multiple rows within one evidence representation
+database_canonical,and4,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,and4,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,and4,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,and4,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,and4,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,and4,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,and4,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_canonical,and4,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_canonical,and4,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_canonical,and4,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_canonical,and4,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_canonical,and4,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_canonical,and4,sshr_h,7,2,1,multiple rows within one evidence representation
+database_canonical,and4,sshr_h,17,2,1,multiple rows within one evidence representation
+database_canonical,and4,sshr_h,29,2,1,multiple rows within one evidence representation
+database_canonical,maj3,direct_anf,7,2,1,multiple rows within one evidence representation
+database_canonical,maj3,direct_anf,17,2,1,multiple rows within one evidence representation
+database_canonical,maj3,direct_anf,29,2,1,multiple rows within one evidence representation
+database_canonical,maj3,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,maj3,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,maj3,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,maj3,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,maj3,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,maj3,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,maj3,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_canonical,maj3,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_canonical,maj3,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_canonical,maj3,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_canonical,maj3,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_canonical,maj3,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_canonical,maj3,sshr_h,7,2,1,multiple rows within one evidence representation
+database_canonical,maj3,sshr_h,17,2,1,multiple rows within one evidence representation
+database_canonical,maj3,sshr_h,29,2,1,multiple rows within one evidence representation
+database_canonical,maj5,direct_anf,7,2,1,multiple rows within one evidence representation
+database_canonical,maj5,direct_anf,17,2,1,multiple rows within one evidence representation
+database_canonical,maj5,direct_anf,29,2,1,multiple rows within one evidence representation
+database_canonical,maj5,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,maj5,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,maj5,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,maj5,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,maj5,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,maj5,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,maj5,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_canonical,maj5,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_canonical,maj5,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_canonical,maj5,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_canonical,maj5,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_canonical,maj5,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_canonical,maj5,sshr_h,7,2,1,multiple rows within one evidence representation
+database_canonical,maj5,sshr_h,17,2,1,multiple rows within one evidence representation
+database_canonical,maj5,sshr_h,29,2,1,multiple rows within one evidence representation
+database_canonical,maj7,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,maj7,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,maj7,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,maj7,sshr_h,7,2,1,multiple rows within one evidence representation
+database_canonical,maj7,sshr_h,17,2,1,multiple rows within one evidence representation
+database_canonical,parity4,direct_anf,7,2,1,multiple rows within one evidence representation
+database_canonical,parity4,direct_anf,17,2,1,multiple rows within one evidence representation
+database_canonical,parity4,direct_anf,29,2,1,multiple rows within one evidence representation
+database_canonical,parity4,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,parity4,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,parity4,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,parity4,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,parity4,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,parity4,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,parity4,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_canonical,parity4,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_canonical,parity4,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_canonical,parity4,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_canonical,parity4,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_canonical,parity4,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_canonical,parity4,sshr_h,7,2,1,multiple rows within one evidence representation
+database_canonical,parity4,sshr_h,17,2,1,multiple rows within one evidence representation
+database_canonical,parity4,sshr_h,29,2,1,multiple rows within one evidence representation
+database_canonical,parity6,direct_anf,7,2,1,multiple rows within one evidence representation
+database_canonical,parity6,direct_anf,17,2,1,multiple rows within one evidence representation
+database_canonical,parity6,direct_anf,29,2,1,multiple rows within one evidence representation
+database_canonical,parity6,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,parity6,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,parity6,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,parity6,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,parity6,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,parity6,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,parity6,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_canonical,parity6,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_canonical,parity6,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_canonical,parity6,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_canonical,parity6,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_canonical,parity6,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_canonical,parity6,sshr_h,7,2,1,multiple rows within one evidence representation
+database_canonical,parity6,sshr_h,17,2,1,multiple rows within one evidence representation
+database_canonical,parity6,sshr_h,29,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,direct_anf,7,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,direct_anf,17,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,direct_anf,29,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,sshr_h,7,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,sshr_h,17,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s151,sshr_h,29,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,direct_anf,7,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,direct_anf,17,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,direct_anf,29,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,sshr_h,7,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,sshr_h,17,2,1,multiple rows within one evidence representation
+database_canonical,randanf6_s157,sshr_h,29,2,1,multiple rows within one evidence representation
+database_canonical,randanf7_s163,direct_anf,7,2,1,multiple rows within one evidence representation
+database_canonical,randanf7_s163,direct_anf,17,2,1,multiple rows within one evidence representation
+database_canonical,randanf7_s163,direct_anf,29,2,1,multiple rows within one evidence representation
+database_canonical,randanf7_s163,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,randanf7_s163,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,randanf7_s163,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,randanf7_s163,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,randanf7_s163,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,randanf7_s163,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,randanf7_s163,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_canonical,randanf7_s163,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_canonical,randanf7_s163,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_canonical,randanf7_s163,sshr_h,17,2,1,multiple rows within one evidence representation
+database_canonical,randanf7_s163,sshr_h,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,direct_anf,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,direct_anf,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,direct_anf,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,sshr_h,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,sshr_h,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s101,sshr_h,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,direct_anf,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,direct_anf,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,direct_anf,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,sshr_h,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,sshr_h,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s103,sshr_h,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,direct_anf,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,direct_anf,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,direct_anf,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,sshr_h,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,sshr_h,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s107,sshr_h,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,direct_anf,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,direct_anf,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,direct_anf,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,sshr_h,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,sshr_h,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt4_s109,sshr_h,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt5_s113,direct_anf,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt5_s113,direct_anf,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt5_s113,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt5_s113,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt5_s113,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt5_s113,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt5_s113,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt5_s113,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt5_s113,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt5_s113,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt5_s113,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt5_s113,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt5_s113,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt5_s113,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_canonical,randtt5_s113,sshr_h,7,2,1,multiple rows within one evidence representation
+database_canonical,randtt5_s113,sshr_h,17,2,1,multiple rows within one evidence representation
+database_canonical,randtt5_s113,sshr_h,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,aes_sbox_b0,direct_anf,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,aes_sbox_b0,direct_anf,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,aes_sbox_b0,direct_anf,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,aes_sbox_b0,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,aes_sbox_b0,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,aes_sbox_b0,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,aes_sbox_b0,sshr_h,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,aes_sbox_b7,direct_anf,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,direct_anf,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,direct_anf,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,direct_anf,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,sshr_h,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,sshr_h,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,and3,sshr_h,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,and4,direct_anf,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,and4,direct_anf,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,and4,direct_anf,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,and4,greedy_factor,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,and4,greedy_factor,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,and4,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,and4,mcts_factor,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,and4,mcts_factor,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,and4,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,and4,resource_nmcts,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,and4,resource_nmcts,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,and4,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,and4,sshr_beam,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,and4,sshr_beam,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,and4,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,and4,sshr_h,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,and4,sshr_h,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,and4,sshr_h,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,direct_anf,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,direct_anf,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,direct_anf,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,sshr_h,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,sshr_h,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj3,sshr_h,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj5,direct_anf,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,maj5,direct_anf,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,maj5,direct_anf,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj5,greedy_factor,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,maj5,greedy_factor,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,maj5,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj5,mcts_factor,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,maj5,mcts_factor,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,maj5,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj5,resource_nmcts,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,maj5,resource_nmcts,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,maj5,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj5,sshr_beam,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,maj5,sshr_beam,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,maj5,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj5,sshr_h,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,maj5,sshr_h,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,maj5,sshr_h,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj7,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj7,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj7,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj7,sshr_h,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,maj7,sshr_h,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,direct_anf,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,direct_anf,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,direct_anf,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,sshr_h,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,sshr_h,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity4,sshr_h,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,direct_anf,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,direct_anf,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,direct_anf,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,sshr_h,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,sshr_h,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,parity6,sshr_h,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,direct_anf,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,direct_anf,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,direct_anf,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,greedy_factor,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,greedy_factor,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,mcts_factor,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,mcts_factor,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,resource_nmcts,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,resource_nmcts,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,sshr_beam,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,sshr_beam,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,sshr_h,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,sshr_h,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s151,sshr_h,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,direct_anf,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,direct_anf,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,direct_anf,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,sshr_h,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,sshr_h,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf6_s157,sshr_h,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf7_s163,direct_anf,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf7_s163,direct_anf,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf7_s163,direct_anf,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf7_s163,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf7_s163,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf7_s163,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf7_s163,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf7_s163,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf7_s163,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf7_s163,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf7_s163,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf7_s163,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf7_s163,sshr_h,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randanf7_s163,sshr_h,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,direct_anf,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,direct_anf,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,direct_anf,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,greedy_factor,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,greedy_factor,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,mcts_factor,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,mcts_factor,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,resource_nmcts,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,resource_nmcts,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,sshr_beam,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,sshr_beam,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,sshr_h,7,3,2,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,sshr_h,17,3,2,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s101,sshr_h,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,direct_anf,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,direct_anf,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,direct_anf,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,sshr_h,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,sshr_h,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s103,sshr_h,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,direct_anf,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,direct_anf,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,direct_anf,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,sshr_h,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,sshr_h,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s107,sshr_h,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,direct_anf,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,direct_anf,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,direct_anf,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,sshr_h,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,sshr_h,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt4_s109,sshr_h,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt5_s113,direct_anf,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt5_s113,direct_anf,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt5_s113,greedy_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt5_s113,greedy_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt5_s113,greedy_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt5_s113,mcts_factor,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt5_s113,mcts_factor,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt5_s113,mcts_factor,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt5_s113,resource_nmcts,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt5_s113,resource_nmcts,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt5_s113,resource_nmcts,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt5_s113,sshr_beam,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt5_s113,sshr_beam,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt5_s113,sshr_beam,29,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt5_s113,sshr_h,7,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt5_s113,sshr_h,17,2,1,multiple rows within one evidence representation
+database_verified_attempts,randtt5_s113,sshr_h,29,2,1,multiple rows within one evidence representation
+recovered_jsonl,aes_sbox_b0,sshr_h,7,2,1,multiple rows within one evidence representation
+database_recovered_overlap,aes_sbox_b0,direct_anf,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,aes_sbox_b0,direct_anf,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,aes_sbox_b0,direct_anf,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,aes_sbox_b0,greedy_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,aes_sbox_b0,mcts_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,aes_sbox_b0,resource_nmcts,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,aes_sbox_b0,sshr_h,7,5,2,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,aes_sbox_b7,direct_anf,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,direct_anf,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,direct_anf,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,direct_anf,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,greedy_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,greedy_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,greedy_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,mcts_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,mcts_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,mcts_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,resource_nmcts,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,resource_nmcts,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,resource_nmcts,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,sshr_beam,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,sshr_beam,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,sshr_beam,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,sshr_h,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,sshr_h,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and3,sshr_h,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,direct_anf,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,direct_anf,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,direct_anf,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,greedy_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,greedy_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,greedy_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,mcts_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,mcts_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,mcts_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,resource_nmcts,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,resource_nmcts,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,resource_nmcts,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,sshr_beam,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,sshr_beam,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,sshr_beam,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,sshr_h,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,sshr_h,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,and4,sshr_h,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,direct_anf,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,direct_anf,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,direct_anf,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,greedy_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,greedy_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,greedy_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,mcts_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,mcts_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,mcts_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,resource_nmcts,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,resource_nmcts,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,resource_nmcts,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,sshr_beam,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,sshr_beam,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,sshr_beam,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,sshr_h,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,sshr_h,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj3,sshr_h,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,direct_anf,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,direct_anf,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,direct_anf,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,greedy_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,greedy_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,greedy_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,mcts_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,mcts_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,mcts_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,resource_nmcts,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,resource_nmcts,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,resource_nmcts,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,sshr_beam,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,sshr_beam,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,sshr_beam,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,sshr_h,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,sshr_h,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj5,sshr_h,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj7,greedy_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj7,mcts_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj7,mcts_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj7,sshr_h,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,maj7,sshr_h,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,direct_anf,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,direct_anf,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,direct_anf,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,greedy_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,greedy_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,greedy_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,mcts_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,mcts_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,mcts_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,resource_nmcts,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,resource_nmcts,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,resource_nmcts,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,sshr_beam,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,sshr_beam,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,sshr_beam,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,sshr_h,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,sshr_h,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity4,sshr_h,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,direct_anf,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,direct_anf,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,direct_anf,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,greedy_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,greedy_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,greedy_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,mcts_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,mcts_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,mcts_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,resource_nmcts,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,resource_nmcts,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,resource_nmcts,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,sshr_beam,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,sshr_beam,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,sshr_beam,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,sshr_h,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,sshr_h,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,parity6,sshr_h,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,direct_anf,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,direct_anf,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,direct_anf,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,greedy_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,greedy_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,greedy_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,mcts_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,mcts_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,mcts_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,resource_nmcts,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,resource_nmcts,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,resource_nmcts,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,sshr_beam,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,sshr_beam,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,sshr_beam,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,sshr_h,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,sshr_h,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s151,sshr_h,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,direct_anf,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,direct_anf,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,direct_anf,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,greedy_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,greedy_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,greedy_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,mcts_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,mcts_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,mcts_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,resource_nmcts,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,resource_nmcts,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,resource_nmcts,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,sshr_beam,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,sshr_beam,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,sshr_beam,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,sshr_h,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,sshr_h,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf6_s157,sshr_h,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,direct_anf,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,direct_anf,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,direct_anf,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,greedy_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,greedy_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,greedy_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,mcts_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,mcts_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,mcts_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,resource_nmcts,7,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,resource_nmcts,17,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,resource_nmcts,29,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,sshr_beam,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,sshr_beam,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,sshr_beam,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,sshr_h,7,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,sshr_h,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randanf7_s163,sshr_h,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,direct_anf,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,direct_anf,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,direct_anf,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,greedy_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,greedy_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,greedy_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,mcts_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,mcts_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,mcts_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,resource_nmcts,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,resource_nmcts,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,resource_nmcts,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,sshr_beam,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,sshr_beam,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,sshr_beam,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,sshr_h,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,sshr_h,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s101,sshr_h,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,direct_anf,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,direct_anf,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,direct_anf,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,greedy_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,greedy_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,greedy_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,mcts_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,mcts_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,mcts_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,resource_nmcts,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,resource_nmcts,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,resource_nmcts,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,sshr_beam,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,sshr_beam,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,sshr_beam,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,sshr_h,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,sshr_h,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s103,sshr_h,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,direct_anf,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,direct_anf,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,direct_anf,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,greedy_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,greedy_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,greedy_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,mcts_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,mcts_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,mcts_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,resource_nmcts,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,resource_nmcts,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,resource_nmcts,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,sshr_beam,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,sshr_beam,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,sshr_beam,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,sshr_h,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,sshr_h,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s107,sshr_h,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,direct_anf,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,direct_anf,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,direct_anf,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,greedy_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,greedy_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,greedy_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,mcts_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,mcts_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,mcts_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,resource_nmcts,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,resource_nmcts,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,resource_nmcts,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,sshr_beam,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,sshr_beam,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,sshr_beam,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,sshr_h,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,sshr_h,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt4_s109,sshr_h,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,direct_anf,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,direct_anf,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,direct_anf,29,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,greedy_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,greedy_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,greedy_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,mcts_factor,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,mcts_factor,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,mcts_factor,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,resource_nmcts,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,resource_nmcts,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,resource_nmcts,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,sshr_beam,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,sshr_beam,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,sshr_beam,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,sshr_h,7,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,sshr_h,17,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s113,sshr_h,29,3,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s127,direct_anf,7,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s127,direct_anf,17,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s127,greedy_factor,7,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s127,greedy_factor,17,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s127,greedy_factor,29,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s127,mcts_factor,7,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s127,mcts_factor,17,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s127,resource_nmcts,7,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s127,resource_nmcts,17,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s127,resource_nmcts,29,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s127,sshr_beam,17,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s127,sshr_beam,29,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s127,sshr_h,7,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s127,sshr_h,17,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s127,sshr_h,29,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s131,direct_anf,7,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s131,direct_anf,29,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s131,greedy_factor,7,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s131,greedy_factor,17,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s131,greedy_factor,29,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s131,mcts_factor,7,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s131,mcts_factor,17,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s131,mcts_factor,29,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s131,resource_nmcts,7,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s131,resource_nmcts,17,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s131,resource_nmcts,29,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s131,sshr_beam,7,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s131,sshr_beam,17,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s131,sshr_beam,29,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s131,sshr_h,7,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s131,sshr_h,17,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s131,sshr_h,29,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s137,direct_anf,7,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s137,direct_anf,17,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s137,direct_anf,29,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s137,greedy_factor,7,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s137,greedy_factor,17,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s137,greedy_factor,29,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s137,mcts_factor,7,2,1,same semantic cell represented in DB and source JSONL; not independent coverage
+database_recovered_overlap,randtt5_s137,mcts_factor,17,2,1,same semantic cell represented in DB and source JSONL; not independent coverage

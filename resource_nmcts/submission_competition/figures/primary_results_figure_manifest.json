@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "figure_id": "F4_frozen_primary_results",
+  "purpose": "XA-202609 frozen primary20 function-level resource comparison",
+  "generated_utc": "2026-07-22T13:02:47.885960+00:00",
+  "contract": "submission_competition/figures/FIGURE_CONTRACT_PRIMARY_RESULTS.md",
+  "contract_sha256": "a60072b0721b6dce0643b3192d9c722ff11822a2b5f6040dddc45b6681a5f3cd",
+  "generator": "submission_competition/figures/make_primary_results_figure.py",
+  "generator_sha256": "89c5fd8ef0e0ffd5a9e47b9d3c1d8bcd4ab8fe6caab0d1ad2a5fcc5d06688737",
+  "backend": "Python/matplotlib only",
+  "python": "3.11.15",
+  "matplotlib": "3.10.9",
+  "dimensions_mm": {
+    "width": 183.0,
+    "height": 130.0
+  },
+  "font_policy": {
+    "requested_fallback": [
+      "Arial",
+      "Microsoft YaHei",
+      "DejaVu Sans",
+      "Liberation Sans"
+    ],
+    "resolved_primary": "Arial",
+    "minimum_displayed_text_pt": 5.1,
+    "svg_fonttype": "none",
+    "pdf_fonttype": 42
+  },
+  "frozen_inputs": [
+    {
+      "path": "results/final_stats/resource_vs_direct_anf.json",
+      "sha256": "c46e1a68eb4c8b44a1c49cccdb4193cebc939ee7549a232f15a69afa6e052b93",
+      "generated_utc": "2026-07-22T12:43:42.685290+00:00"
+    },
+    {
+      "path": "results/final_stats/resource_vs_greedy_factor.json",
+      "sha256": "813a8ca639e66817d4a9ff8bc20b2cc3cf3f10b1465d03aecac85ca642ef72d8",
+      "generated_utc": "2026-07-22T12:43:42.095166+00:00"
+    },
+    {
+      "path": "results/final_stats/resource_vs_mcts_factor.json",
+      "sha256": "5b26ffd47225fadd7b43956b764c32d0e7c8b85206462a2dcd6a809805a909db",
+      "generated_utc": "2026-07-22T12:43:41.952728+00:00"
+    },
+    {
+      "path": "results/final_stats/resource_vs_sshr_h.json",
+      "sha256": "1f815423d84dc371e5288025dcea2ddf6cd900b408a87efabf4c758059d4aade",
+      "generated_utc": "2026-07-22T12:43:42.842535+00:00"
+    },
+    {
+      "path": "results/final_stats/resource_vs_sshr_beam.json",
+      "sha256": "ec04119170c543a2348b19cdfcf9a76f0e09e7a69a206771042322e1be0a93d9",
+      "generated_utc": "2026-07-22T12:43:41.971697+00:00"
+    },
+    {
+      "path": "submission_competition/final_analysis_manifest.json",
+      "sha256": "a75800e5e84541df44ab59f6fbc2e702fa5fd9f747e6538a0c8991b1071345f4",
+      "generated_utc": "2026-07-22T12:51:28.317915+00:00"
+    },
+    {
+      "path": "results/final_stats/primary20_headline.json",
+      "sha256": "504bcea57c4a0919d55307a1298664ae393f0ce42851552370e2c69ad91458c3",
+      "generated_utc": null
+    }
+  ],
+  "database_sha256": "76f0369d09d74f6910126d84faa3162e9216edbea7ab23801c30a257b16774c3",
+  "analysis_contract_sha256": "aebc28f87703717d4dc6c5b48b8421e8c1c7b9d5b801b53ce46d165671d4bf48",
+  "final_analysis_id": "xa202609-primary20-b36257a3f41d",
+  "final_analysis_payload_sha256": "b36257a3f41de85b6ae0aafb711ec0bc30fa6502cd43891f1381ce1f7de72443",
+  "strict_gate": "holm_reject == true and median_delta_ci_high < 0 and median_relative_improvement_pct_ci_low > 0; zero-touching is not strict",
+  "strict_significant_better_count": 10,
+  "sshr_beam_coverage_boundary": {
+    "method": "sshr_beam",
+    "family": "aes_sbox",
+    "case_ids": [
+      "aes_sbox_b0",
+      "aes_sbox_b7"
+    ],
+    "case_count": 2,
+    "seeds": [
+      7,
+      17,
+      29
+    ],
+    "seeds_per_case": 3,
+    "timeout_seconds": 300,
+    "missing_cells": 6,
+    "complete_case_n": 18
+  },
+  "source_data": [
+    "submission_competition/figures/primary_results_figure_source.csv",
+    "submission_competition/figures/primary_results_figure_source.json"
+  ],
+  "source_data_sha256": {
+    "submission_competition/figures/primary_results_figure_source.csv": "a8303a37d47bc1468e09ac6c1c89ad6c1569b7656d2faaa5bcb39c66551c5f4f",
+    "submission_competition/figures/primary_results_figure_source.json": "c2963c8727a1b01dd508bdb4f175b0c66b77612bf27de54eead9507e5f48c429"
+  },
+  "qa_notes": "submission_competition/figures/PRIMARY_RESULTS_FIGURE_QA.md",
+  "qa_notes_sha256": "16722b098be84b33d162e8f993e84c13977b0615a74a482c094a31c76f7a1281",
+  "manual_visual_qa_pass": true,
+  "outputs": [
+    {
+      "path": "submission_competition/figures/F4_frozen_primary_results.svg",
+      "sha256": "66bf73b344f2ad696f0623dfca82203bb2a9b79b5e7f0ab8892d76ad35bf45d0",
+      "size_bytes": 70392
+    },
+    {
+      "path": "submission_competition/figures/F4_frozen_primary_results.pdf",
+      "sha256": "572b637293de4e088d1bf877c102a3823df80bdf846881ccab1f57cb0eebf7de",
+      "size_bytes": 66755
+    },
+    {
+      "path": "submission_competition/figures/F4_frozen_primary_results.png",
+      "sha256": "7fd0e80e985713ec00789310496604c0c128c1c845eab0a82f7dd35371cd1772",
+      "size_bytes": 710882
+    },
+    {
+      "path": "submission_competition/figures/_qa_f4_preview.png",
+      "sha256": "242352923fc6628e080594c17b8a15df2f2c12d44c5403506fa2fba3e8803d59",
+      "size_bytes": 561161
+    }
+  ],
+  "qa": {
+    "backend_exclusivity": "Python/matplotlib for figure and exports; Pillow for same-backend preview",
+    "source": {
+      "comparison_rows": 20,
+      "expected_comparison_rows": 20,
+      "complete_grid_pass": true,
+      "strict_supported_cells": 10,
+      "neutral_cells": 10,
+      "strict_gate_recomputed_pass": true,
+      "zero_touching_neutral_pass": true,
+      "final_analysis_strict_count": 10,
+      "final_analysis_alignment_pass": true,
+      "final_analysis_id": "xa202609-primary20-b36257a3f41d",
+      "all_ci_bounds_visible_pass": true,
+      "common_x_limits_pct": [
+        -70.0,
+        80.0
+      ]
+    },
+    "svg": {
+      "embedded_image_elements": 0,
+      "text_elements": 129,
+      "editable_text_pass": true
+    },
+    "pdf": {
+      "pages": 1,
+      "width_mm": 183.00000559488933,
+      "height_mm": 129.99999991522895,
+      "text_characters_extracted": 1720,
+      "single_page_pass": true,
+      "declared_size_pass": true,
+      "extractable_text_pass": true
+    },
+    "png": {
+      "pixels": [
+        4322,
+        3070
+      ],
+      "dpi_metadata": [
+        599.999,
+        599.999
+      ],
+      "expected_pixels_at_600dpi": [
+        4323,
+        3071
+      ],
+      "dimensions_pass": true,
+      "dpi_metadata_pass": true
+    },
+    "preview": {
+      "pixels": [
+        1800,
+        1279
+      ],
+      "width_contract_pass": true
+    }
+  }
+}

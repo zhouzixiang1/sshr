@@ -1,0 +1,7 @@
+﻿case_id,family,n_inputs,anf_terms,synthesis_seed,missing_method_count,missing_methods,target_alias,target_name,transpile_seed
+aes_sbox_b0,aes_sbox,8,132,7,1,sshr_beam,cx_full,cx_full_12,3
+aes_sbox_b0,aes_sbox,8,132,17,1,sshr_beam,cx_full,cx_full_12,3
+aes_sbox_b0,aes_sbox,8,132,29,1,sshr_beam,cx_full,cx_full_12,3
+aes_sbox_b7,aes_sbox,8,110,7,1,sshr_beam,cx_full,cx_full_12,3
+aes_sbox_b7,aes_sbox,8,110,17,1,sshr_beam,cx_full,cx_full_12,3
+aes_sbox_b7,aes_sbox,8,110,29,1,sshr_beam,cx_full,cx_full_12,3

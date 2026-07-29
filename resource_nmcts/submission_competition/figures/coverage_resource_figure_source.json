@@ -1,0 +1,4177 @@
+{
+  "schema_version": 1,
+  "figure_id": "F5_coverage_correctness_resource",
+  "generated_at_utc": "2026-07-22T13:02:43.011250+00:00",
+  "core_conclusion": "primary20 core3 verifies 354/360 planned cells; the exact six-cell boundary is AES b0/b7 × SSHR-Beam × seeds 7/17/29 at a 300 s synthesis timeout, with no wrong result, coupling violation, or v3 memory-guard event.",
+  "scope": {
+    "cases": 20,
+    "methods": 6,
+    "seeds": [
+      7,
+      17,
+      29
+    ],
+    "target_id": "cx_full_12",
+    "transpile_seed": 3,
+    "planned_cells": 360,
+    "verified_cells": 354,
+    "timeout_cells": 6,
+    "coverage_fraction": 0.9833333333333333
+  },
+  "coverage_cells": [
+    {
+      "case_id": "and3",
+      "case_label": "AND-3",
+      "family": "structured",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "and3",
+      "case_label": "AND-3",
+      "family": "structured",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "and3",
+      "case_label": "AND-3",
+      "family": "structured",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "and3",
+      "case_label": "AND-3",
+      "family": "structured",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "and3",
+      "case_label": "AND-3",
+      "family": "structured",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "and3",
+      "case_label": "AND-3",
+      "family": "structured",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "and4",
+      "case_label": "AND-4",
+      "family": "structured",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "and4",
+      "case_label": "AND-4",
+      "family": "structured",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "and4",
+      "case_label": "AND-4",
+      "family": "structured",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "and4",
+      "case_label": "AND-4",
+      "family": "structured",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "and4",
+      "case_label": "AND-4",
+      "family": "structured",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "and4",
+      "case_label": "AND-4",
+      "family": "structured",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "parity4",
+      "case_label": "Parity-4",
+      "family": "structured",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "parity4",
+      "case_label": "Parity-4",
+      "family": "structured",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "parity4",
+      "case_label": "Parity-4",
+      "family": "structured",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "parity4",
+      "case_label": "Parity-4",
+      "family": "structured",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "parity4",
+      "case_label": "Parity-4",
+      "family": "structured",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "parity4",
+      "case_label": "Parity-4",
+      "family": "structured",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "parity6",
+      "case_label": "Parity-6",
+      "family": "structured",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "parity6",
+      "case_label": "Parity-6",
+      "family": "structured",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "parity6",
+      "case_label": "Parity-6",
+      "family": "structured",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "parity6",
+      "case_label": "Parity-6",
+      "family": "structured",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "parity6",
+      "case_label": "Parity-6",
+      "family": "structured",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "parity6",
+      "case_label": "Parity-6",
+      "family": "structured",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj3",
+      "case_label": "Majority-3",
+      "family": "structured",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj3",
+      "case_label": "Majority-3",
+      "family": "structured",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj3",
+      "case_label": "Majority-3",
+      "family": "structured",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj3",
+      "case_label": "Majority-3",
+      "family": "structured",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj3",
+      "case_label": "Majority-3",
+      "family": "structured",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj3",
+      "case_label": "Majority-3",
+      "family": "structured",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj5",
+      "case_label": "Majority-5",
+      "family": "structured",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj5",
+      "case_label": "Majority-5",
+      "family": "structured",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj5",
+      "case_label": "Majority-5",
+      "family": "structured",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj5",
+      "case_label": "Majority-5",
+      "family": "structured",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj5",
+      "case_label": "Majority-5",
+      "family": "structured",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj5",
+      "case_label": "Majority-5",
+      "family": "structured",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj7",
+      "case_label": "Majority-7",
+      "family": "structured",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj7",
+      "case_label": "Majority-7",
+      "family": "structured",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj7",
+      "case_label": "Majority-7",
+      "family": "structured",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj7",
+      "case_label": "Majority-7",
+      "family": "structured",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj7",
+      "case_label": "Majority-7",
+      "family": "structured",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "maj7",
+      "case_label": "Majority-7",
+      "family": "structured",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "thr6_t3",
+      "case_label": "Threshold-6",
+      "family": "structured",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "thr6_t3",
+      "case_label": "Threshold-6",
+      "family": "structured",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "thr6_t3",
+      "case_label": "Threshold-6",
+      "family": "structured",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "thr6_t3",
+      "case_label": "Threshold-6",
+      "family": "structured",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "thr6_t3",
+      "case_label": "Threshold-6",
+      "family": "structured",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "thr6_t3",
+      "case_label": "Threshold-6",
+      "family": "structured",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s101",
+      "case_label": "Random TT-4/101",
+      "family": "random_truth",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s101",
+      "case_label": "Random TT-4/101",
+      "family": "random_truth",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s101",
+      "case_label": "Random TT-4/101",
+      "family": "random_truth",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s101",
+      "case_label": "Random TT-4/101",
+      "family": "random_truth",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s101",
+      "case_label": "Random TT-4/101",
+      "family": "random_truth",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s101",
+      "case_label": "Random TT-4/101",
+      "family": "random_truth",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s103",
+      "case_label": "Random TT-4/103",
+      "family": "random_truth",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s103",
+      "case_label": "Random TT-4/103",
+      "family": "random_truth",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s103",
+      "case_label": "Random TT-4/103",
+      "family": "random_truth",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s103",
+      "case_label": "Random TT-4/103",
+      "family": "random_truth",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s103",
+      "case_label": "Random TT-4/103",
+      "family": "random_truth",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s103",
+      "case_label": "Random TT-4/103",
+      "family": "random_truth",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s107",
+      "case_label": "Random TT-4/107",
+      "family": "random_truth",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s107",
+      "case_label": "Random TT-4/107",
+      "family": "random_truth",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s107",
+      "case_label": "Random TT-4/107",
+      "family": "random_truth",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s107",
+      "case_label": "Random TT-4/107",
+      "family": "random_truth",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s107",
+      "case_label": "Random TT-4/107",
+      "family": "random_truth",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s107",
+      "case_label": "Random TT-4/107",
+      "family": "random_truth",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s109",
+      "case_label": "Random TT-4/109",
+      "family": "random_truth",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s109",
+      "case_label": "Random TT-4/109",
+      "family": "random_truth",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s109",
+      "case_label": "Random TT-4/109",
+      "family": "random_truth",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s109",
+      "case_label": "Random TT-4/109",
+      "family": "random_truth",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s109",
+      "case_label": "Random TT-4/109",
+      "family": "random_truth",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt4_s109",
+      "case_label": "Random TT-4/109",
+      "family": "random_truth",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt5_s113",
+      "case_label": "Random TT-5/113",
+      "family": "random_truth",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt5_s113",
+      "case_label": "Random TT-5/113",
+      "family": "random_truth",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt5_s113",
+      "case_label": "Random TT-5/113",
+      "family": "random_truth",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt5_s113",
+      "case_label": "Random TT-5/113",
+      "family": "random_truth",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt5_s113",
+      "case_label": "Random TT-5/113",
+      "family": "random_truth",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt5_s113",
+      "case_label": "Random TT-5/113",
+      "family": "random_truth",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt6_s139",
+      "case_label": "Random TT-6/139",
+      "family": "random_truth",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt6_s139",
+      "case_label": "Random TT-6/139",
+      "family": "random_truth",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt6_s139",
+      "case_label": "Random TT-6/139",
+      "family": "random_truth",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt6_s139",
+      "case_label": "Random TT-6/139",
+      "family": "random_truth",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt6_s139",
+      "case_label": "Random TT-6/139",
+      "family": "random_truth",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randtt6_s139",
+      "case_label": "Random TT-6/139",
+      "family": "random_truth",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf6_s151",
+      "case_label": "Random ANF-6/151",
+      "family": "random_anf",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf6_s151",
+      "case_label": "Random ANF-6/151",
+      "family": "random_anf",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf6_s151",
+      "case_label": "Random ANF-6/151",
+      "family": "random_anf",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf6_s151",
+      "case_label": "Random ANF-6/151",
+      "family": "random_anf",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf6_s151",
+      "case_label": "Random ANF-6/151",
+      "family": "random_anf",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf6_s151",
+      "case_label": "Random ANF-6/151",
+      "family": "random_anf",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf6_s157",
+      "case_label": "Random ANF-6/157",
+      "family": "random_anf",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf6_s157",
+      "case_label": "Random ANF-6/157",
+      "family": "random_anf",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf6_s157",
+      "case_label": "Random ANF-6/157",
+      "family": "random_anf",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf6_s157",
+      "case_label": "Random ANF-6/157",
+      "family": "random_anf",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf6_s157",
+      "case_label": "Random ANF-6/157",
+      "family": "random_anf",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf6_s157",
+      "case_label": "Random ANF-6/157",
+      "family": "random_anf",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf7_s163",
+      "case_label": "Random ANF-7/163",
+      "family": "random_anf",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf7_s163",
+      "case_label": "Random ANF-7/163",
+      "family": "random_anf",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf7_s163",
+      "case_label": "Random ANF-7/163",
+      "family": "random_anf",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf7_s163",
+      "case_label": "Random ANF-7/163",
+      "family": "random_anf",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf7_s163",
+      "case_label": "Random ANF-7/163",
+      "family": "random_anf",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf7_s163",
+      "case_label": "Random ANF-7/163",
+      "family": "random_anf",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf8_s173",
+      "case_label": "Random ANF-8/173",
+      "family": "random_anf",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf8_s173",
+      "case_label": "Random ANF-8/173",
+      "family": "random_anf",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf8_s173",
+      "case_label": "Random ANF-8/173",
+      "family": "random_anf",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf8_s173",
+      "case_label": "Random ANF-8/173",
+      "family": "random_anf",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf8_s173",
+      "case_label": "Random ANF-8/173",
+      "family": "random_anf",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "randanf8_s173",
+      "case_label": "Random ANF-8/173",
+      "family": "random_anf",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "aes_sbox_b0",
+      "case_label": "AES S-box b0",
+      "family": "aes_sbox",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "aes_sbox_b0",
+      "case_label": "AES S-box b0",
+      "family": "aes_sbox",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "aes_sbox_b0",
+      "case_label": "AES S-box b0",
+      "family": "aes_sbox",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "aes_sbox_b0",
+      "case_label": "AES S-box b0",
+      "family": "aes_sbox",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "aes_sbox_b0",
+      "case_label": "AES S-box b0",
+      "family": "aes_sbox",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [],
+      "timeout_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_count": 0,
+      "planned_count": 3,
+      "coverage_fraction": 0.0,
+      "state": "timeout_0_of_3"
+    },
+    {
+      "case_id": "aes_sbox_b0",
+      "case_label": "AES S-box b0",
+      "family": "aes_sbox",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "aes_sbox_b7",
+      "case_label": "AES S-box b7",
+      "family": "aes_sbox",
+      "method": "direct_anf",
+      "method_label": "Direct- ANF",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "aes_sbox_b7",
+      "case_label": "AES S-box b7",
+      "family": "aes_sbox",
+      "method": "greedy_factor",
+      "method_label": "Greedy",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "aes_sbox_b7",
+      "case_label": "AES S-box b7",
+      "family": "aes_sbox",
+      "method": "mcts_factor",
+      "method_label": "MCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "aes_sbox_b7",
+      "case_label": "AES S-box b7",
+      "family": "aes_sbox",
+      "method": "resource_nmcts",
+      "method_label": "Resource- NMCTS",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    },
+    {
+      "case_id": "aes_sbox_b7",
+      "case_label": "AES S-box b7",
+      "family": "aes_sbox",
+      "method": "sshr_beam",
+      "method_label": "SSHR- Beam",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [],
+      "timeout_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_count": 0,
+      "planned_count": 3,
+      "coverage_fraction": 0.0,
+      "state": "timeout_0_of_3"
+    },
+    {
+      "case_id": "aes_sbox_b7",
+      "case_label": "AES S-box b7",
+      "family": "aes_sbox",
+      "method": "sshr_h",
+      "method_label": "SSHR-H",
+      "planned_seeds": [
+        7,
+        17,
+        29
+      ],
+      "verified_seeds": [
+        7,
+        17,
+        29
+      ],
+      "timeout_seeds": [],
+      "verified_count": 3,
+      "planned_count": 3,
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
+    }
+  ],
+  "timeout_cells": [
+    {
+      "case_id": "aes_sbox_b0",
+      "method": "sshr_beam",
+      "synthesis_seed": 7,
+      "stage": "synthesis",
+      "timeout_seconds": 300.0
+    },
+    {
+      "case_id": "aes_sbox_b0",
+      "method": "sshr_beam",
+      "synthesis_seed": 17,
+      "stage": "synthesis",
+      "timeout_seconds": 300.0
+    },
+    {
+      "case_id": "aes_sbox_b0",
+      "method": "sshr_beam",
+      "synthesis_seed": 29,
+      "stage": "synthesis",
+      "timeout_seconds": 300.0
+    },
+    {
+      "case_id": "aes_sbox_b7",
+      "method": "sshr_beam",
+      "synthesis_seed": 7,
+      "stage": "synthesis",
+      "timeout_seconds": 300.0
+    },
+    {
+      "case_id": "aes_sbox_b7",
+      "method": "sshr_beam",
+      "synthesis_seed": 17,
+      "stage": "synthesis",
+      "timeout_seconds": 300.0
+    },
+    {
+      "case_id": "aes_sbox_b7",
+      "method": "sshr_beam",
+      "synthesis_seed": 29,
+      "stage": "synthesis",
+      "timeout_seconds": 300.0
+    }
+  ],
+  "integrity_checks": [
+    {
+      "check": "logical_truth_table_exact",
+      "label": "逻辑真值表正确",
+      "passed": 354,
+      "total": 354,
+      "display": "354/354"
+    },
+    {
+      "check": "mapped_exact_verification",
+      "label": "映射后精确验证",
+      "passed": 354,
+      "total": 354,
+      "display": "354/354"
+    },
+    {
+      "check": "mapped_truth_table_mismatches",
+      "label": "truth-table mismatch",
+      "passed": 0,
+      "total": 354,
+      "display": "0"
+    },
+    {
+      "check": "coupling_violations",
+      "label": "coupling violation",
+      "passed": 0,
+      "total": 354,
+      "display": "0"
+    },
+    {
+      "check": "unsupported_instructions",
+      "label": "unsupported instruction",
+      "passed": 0,
+      "total": 354,
+      "display": "0"
+    },
+    {
+      "check": "memory_guard_events_v3",
+      "label": "memory guard（v3）",
+      "passed": 0,
+      "total": 100,
+      "display": "0"
+    }
+  ],
+  "resource_telemetry": {
+    "summary": {
+      "n_records": 100,
+      "status_counts": {
+        "ok": 94,
+        "timeout": 6
+      },
+      "system_memory_peak_percent": {
+        "min": 23.8,
+        "median": 26.55,
+        "p95_nearest_rank": 29.8,
+        "max": 30.7
+      },
+      "process_rss_peak_mb": {
+        "min": 566.262,
+        "median": 618.125,
+        "p95_nearest_rank": 1573.82,
+        "max": 1740.312
+      },
+      "resource_guard_limit_percent": 70.0,
+      "memory_guard_events": 0,
+      "monitor_backend": [
+        "psutil"
+      ],
+      "aer_available_devices": [
+        "CPU"
+      ],
+      "gpu_inventory_context_only": [
+        "NVIDIA GeForce RTX 5090 Laptop GPU"
+      ],
+      "boundary": "Resource telemetry covers v3 recovery records only; it is not extrapolated to all 354 verified cells."
+    },
+    "records": [
+      {
+        "source_path": "results/recovery_primary20_aes_b0_fast_v3.jsonl",
+        "source_line": 1,
+        "status": "ok",
+        "function_id": "aes_sbox_b0",
+        "method": "greedy_factor",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 26.2,
+        "total_peak_rss_mb": 774.141,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b0_fast_v3.jsonl",
+        "source_line": 2,
+        "status": "ok",
+        "function_id": "aes_sbox_b0",
+        "method": "greedy_factor",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 25.8,
+        "total_peak_rss_mb": 783.078,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b0_fast_v3.jsonl",
+        "source_line": 3,
+        "status": "ok",
+        "function_id": "aes_sbox_b0",
+        "method": "mcts_factor",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 25.8,
+        "total_peak_rss_mb": 802.703,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b0_fast_v3.jsonl",
+        "source_line": 4,
+        "status": "ok",
+        "function_id": "aes_sbox_b0",
+        "method": "mcts_factor",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 25.9,
+        "total_peak_rss_mb": 800.875,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b0_fast_v3.jsonl",
+        "source_line": 5,
+        "status": "ok",
+        "function_id": "aes_sbox_b0",
+        "method": "sshr_h",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 26.6,
+        "total_peak_rss_mb": 1657.91,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b0_fast_v3.jsonl",
+        "source_line": 6,
+        "status": "ok",
+        "function_id": "aes_sbox_b0",
+        "method": "sshr_h",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 28.5,
+        "total_peak_rss_mb": 1684.129,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b0_fast_v3.jsonl",
+        "source_line": 7,
+        "status": "ok",
+        "function_id": "aes_sbox_b0",
+        "method": "resource_nmcts",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 29.5,
+        "total_peak_rss_mb": 1573.82,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b0_fast_v3.jsonl",
+        "source_line": 8,
+        "status": "ok",
+        "function_id": "aes_sbox_b0",
+        "method": "resource_nmcts",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 29.5,
+        "total_peak_rss_mb": 1568.5,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl",
+        "source_line": 1,
+        "status": "ok",
+        "function_id": "aes_sbox_b7",
+        "method": "direct_anf",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 29.0,
+        "total_peak_rss_mb": 1147.832,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl",
+        "source_line": 2,
+        "status": "ok",
+        "function_id": "aes_sbox_b7",
+        "method": "direct_anf",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 28.9,
+        "total_peak_rss_mb": 1286.621,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl",
+        "source_line": 3,
+        "status": "ok",
+        "function_id": "aes_sbox_b7",
+        "method": "greedy_factor",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 28.5,
+        "total_peak_rss_mb": 810.465,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl",
+        "source_line": 4,
+        "status": "ok",
+        "function_id": "aes_sbox_b7",
+        "method": "greedy_factor",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 29.2,
+        "total_peak_rss_mb": 838.371,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl",
+        "source_line": 5,
+        "status": "ok",
+        "function_id": "aes_sbox_b7",
+        "method": "mcts_factor",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 28.8,
+        "total_peak_rss_mb": 761.488,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl",
+        "source_line": 6,
+        "status": "ok",
+        "function_id": "aes_sbox_b7",
+        "method": "mcts_factor",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 28.5,
+        "total_peak_rss_mb": 781.457,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl",
+        "source_line": 7,
+        "status": "ok",
+        "function_id": "aes_sbox_b7",
+        "method": "sshr_h",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 29.8,
+        "total_peak_rss_mb": 1690.68,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl",
+        "source_line": 8,
+        "status": "ok",
+        "function_id": "aes_sbox_b7",
+        "method": "sshr_h",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 27.9,
+        "total_peak_rss_mb": 1740.312,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl",
+        "source_line": 9,
+        "status": "ok",
+        "function_id": "aes_sbox_b7",
+        "method": "resource_nmcts",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 25.9,
+        "total_peak_rss_mb": 791.25,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl",
+        "source_line": 10,
+        "status": "ok",
+        "function_id": "aes_sbox_b7",
+        "method": "resource_nmcts",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 26.6,
+        "total_peak_rss_mb": 824.32,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b7_s7_fast_v3.jsonl",
+        "source_line": 1,
+        "status": "ok",
+        "function_id": "aes_sbox_b7",
+        "method": "greedy_factor",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 28.2,
+        "total_peak_rss_mb": 699.258,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b7_s7_fast_v3.jsonl",
+        "source_line": 2,
+        "status": "ok",
+        "function_id": "aes_sbox_b7",
+        "method": "mcts_factor",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 28.3,
+        "total_peak_rss_mb": 747.551,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b7_s7_fast_v3.jsonl",
+        "source_line": 3,
+        "status": "ok",
+        "function_id": "aes_sbox_b7",
+        "method": "sshr_h",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 30.1,
+        "total_peak_rss_mb": 1697.32,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_aes_b7_s7_fast_v3.jsonl",
+        "source_line": 4,
+        "status": "ok",
+        "function_id": "aes_sbox_b7",
+        "method": "resource_nmcts",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 30.2,
+        "total_peak_rss_mb": 1538.648,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_beam_aes_b7_parallel_v3.jsonl",
+        "source_line": 1,
+        "status": "timeout",
+        "function_id": "aes_sbox_b7",
+        "method": "sshr_beam",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 30.2,
+        "total_peak_rss_mb": 1475.992,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": "stage_timeout"
+      },
+      {
+        "source_path": "results/recovery_primary20_beam_aes_b7_parallel_v3.jsonl",
+        "source_line": 2,
+        "status": "timeout",
+        "function_id": "aes_sbox_b7",
+        "method": "sshr_beam",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 29.8,
+        "total_peak_rss_mb": 1480.863,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": "stage_timeout"
+      },
+      {
+        "source_path": "results/recovery_primary20_beam_aes_b7_parallel_v3.jsonl",
+        "source_line": 3,
+        "status": "timeout",
+        "function_id": "aes_sbox_b7",
+        "method": "sshr_beam",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 27.8,
+        "total_peak_rss_mb": 1475.09,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": "stage_timeout"
+      },
+      {
+        "source_path": "results/recovery_primary20_beam_aes_v3.jsonl",
+        "source_line": 1,
+        "status": "timeout",
+        "function_id": "aes_sbox_b0",
+        "method": "sshr_beam",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 26.7,
+        "total_peak_rss_mb": 1475.859,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": "stage_timeout"
+      },
+      {
+        "source_path": "results/recovery_primary20_beam_aes_v3.jsonl",
+        "source_line": 2,
+        "status": "timeout",
+        "function_id": "aes_sbox_b0",
+        "method": "sshr_beam",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 30.2,
+        "total_peak_rss_mb": 1476.027,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": "stage_timeout"
+      },
+      {
+        "source_path": "results/recovery_primary20_beam_aes_v3.jsonl",
+        "source_line": 3,
+        "status": "timeout",
+        "function_id": "aes_sbox_b0",
+        "method": "sshr_beam",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 29.7,
+        "total_peak_rss_mb": 1475.41,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": "stage_timeout"
+      },
+      {
+        "source_path": "results/recovery_primary20_beam_struct_random_v3.jsonl",
+        "source_line": 1,
+        "status": "ok",
+        "function_id": "maj7",
+        "method": "sshr_beam",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 24.6,
+        "total_peak_rss_mb": 649.078,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_beam_struct_random_v3.jsonl",
+        "source_line": 2,
+        "status": "ok",
+        "function_id": "maj7",
+        "method": "sshr_beam",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 25.9,
+        "total_peak_rss_mb": 671.754,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_beam_struct_random_v3.jsonl",
+        "source_line": 3,
+        "status": "ok",
+        "function_id": "maj7",
+        "method": "sshr_beam",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 26.7,
+        "total_peak_rss_mb": 675.0,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_beam_struct_random_v3.jsonl",
+        "source_line": 4,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "sshr_beam",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 26.6,
+        "total_peak_rss_mb": 649.238,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_beam_struct_random_v3.jsonl",
+        "source_line": 5,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "sshr_beam",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 26.2,
+        "total_peak_rss_mb": 588.199,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_beam_struct_random_v3.jsonl",
+        "source_line": 6,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "sshr_beam",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 26.4,
+        "total_peak_rss_mb": 588.582,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_beam_struct_random_v3.jsonl",
+        "source_line": 7,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "sshr_beam",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 26.5,
+        "total_peak_rss_mb": 595.152,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_beam_struct_random_v3.jsonl",
+        "source_line": 8,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "sshr_beam",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 26.4,
+        "total_peak_rss_mb": 610.699,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_beam_struct_random_v3.jsonl",
+        "source_line": 9,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "sshr_beam",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 26.2,
+        "total_peak_rss_mb": 588.711,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_maj7_s17_fast_v3.jsonl",
+        "source_line": 1,
+        "status": "ok",
+        "function_id": "maj7",
+        "method": "direct_anf",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 25.6,
+        "total_peak_rss_mb": 677.789,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_maj7_s17_fast_v3.jsonl",
+        "source_line": 2,
+        "status": "ok",
+        "function_id": "maj7",
+        "method": "greedy_factor",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 25.4,
+        "total_peak_rss_mb": 615.68,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_maj7_s17_fast_v3.jsonl",
+        "source_line": 3,
+        "status": "ok",
+        "function_id": "maj7",
+        "method": "mcts_factor",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 24.8,
+        "total_peak_rss_mb": 630.398,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_maj7_s17_fast_v3.jsonl",
+        "source_line": 4,
+        "status": "ok",
+        "function_id": "maj7",
+        "method": "resource_nmcts",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 25.3,
+        "total_peak_rss_mb": 645.398,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_maj7_s29_fast_v3.jsonl",
+        "source_line": 1,
+        "status": "ok",
+        "function_id": "maj7",
+        "method": "direct_anf",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 25.6,
+        "total_peak_rss_mb": 683.598,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_maj7_s29_fast_v3.jsonl",
+        "source_line": 2,
+        "status": "ok",
+        "function_id": "maj7",
+        "method": "greedy_factor",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 24.6,
+        "total_peak_rss_mb": 642.957,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_maj7_s29_fast_v3.jsonl",
+        "source_line": 3,
+        "status": "ok",
+        "function_id": "maj7",
+        "method": "sshr_h",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 25.1,
+        "total_peak_rss_mb": 691.875,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_maj7_s29_fast_v3.jsonl",
+        "source_line": 4,
+        "status": "ok",
+        "function_id": "maj7",
+        "method": "resource_nmcts",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 25.3,
+        "total_peak_rss_mb": 693.559,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_maj7_s7_fast_v3.jsonl",
+        "source_line": 1,
+        "status": "ok",
+        "function_id": "maj7",
+        "method": "direct_anf",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 25.0,
+        "total_peak_rss_mb": 682.941,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_maj7_s7_fast_v3.jsonl",
+        "source_line": 2,
+        "status": "ok",
+        "function_id": "maj7",
+        "method": "resource_nmcts",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 24.8,
+        "total_peak_rss_mb": 617.582,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf7_resource_v3.jsonl",
+        "source_line": 1,
+        "status": "ok",
+        "function_id": "randanf7_s163",
+        "method": "resource_nmcts",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 27.1,
+        "total_peak_rss_mb": 570.91,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf7_resource_v3.jsonl",
+        "source_line": 2,
+        "status": "ok",
+        "function_id": "randanf7_s163",
+        "method": "resource_nmcts",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 27.2,
+        "total_peak_rss_mb": 571.738,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf7_resource_v3.jsonl",
+        "source_line": 3,
+        "status": "ok",
+        "function_id": "randanf7_s163",
+        "method": "resource_nmcts",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 27.2,
+        "total_peak_rss_mb": 572.492,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf7_sshrh_s7_v3.jsonl",
+        "source_line": 1,
+        "status": "ok",
+        "function_id": "randanf7_s163",
+        "method": "sshr_h",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 27.5,
+        "total_peak_rss_mb": 647.57,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_resource_v3.jsonl",
+        "source_line": 1,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "resource_nmcts",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 27.4,
+        "total_peak_rss_mb": 570.332,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_resource_v3.jsonl",
+        "source_line": 2,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "resource_nmcts",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 27.3,
+        "total_peak_rss_mb": 573.203,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_resource_v3.jsonl",
+        "source_line": 3,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "resource_nmcts",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 27.4,
+        "total_peak_rss_mb": 574.047,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_sshrbeam_s29_v3.jsonl",
+        "source_line": 1,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "sshr_beam",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 25.6,
+        "total_peak_rss_mb": 1480.465,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_v3.jsonl",
+        "source_line": 1,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "direct_anf",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 27.2,
+        "total_peak_rss_mb": 566.734,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_v3.jsonl",
+        "source_line": 2,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "direct_anf",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 27.3,
+        "total_peak_rss_mb": 568.43,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_v3.jsonl",
+        "source_line": 3,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "direct_anf",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 27.3,
+        "total_peak_rss_mb": 569.82,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_v3.jsonl",
+        "source_line": 4,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "greedy_factor",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 27.3,
+        "total_peak_rss_mb": 570.191,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_v3.jsonl",
+        "source_line": 5,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "greedy_factor",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 27.7,
+        "total_peak_rss_mb": 566.262,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_v3.jsonl",
+        "source_line": 6,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "greedy_factor",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 27.2,
+        "total_peak_rss_mb": 567.762,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_v3.jsonl",
+        "source_line": 7,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "mcts_factor",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 27.0,
+        "total_peak_rss_mb": 568.84,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_v3.jsonl",
+        "source_line": 8,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "mcts_factor",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 27.0,
+        "total_peak_rss_mb": 569.434,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_v3.jsonl",
+        "source_line": 9,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "mcts_factor",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 27.0,
+        "total_peak_rss_mb": 566.59,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_v3.jsonl",
+        "source_line": 10,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "sshr_h",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 28.7,
+        "total_peak_rss_mb": 1510.016,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_v3.jsonl",
+        "source_line": 11,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "sshr_h",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 27.9,
+        "total_peak_rss_mb": 1359.645,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_v3.jsonl",
+        "source_line": 12,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "sshr_h",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 28.2,
+        "total_peak_rss_mb": 1361.973,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_v3.jsonl",
+        "source_line": 13,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "sshr_beam",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 29.2,
+        "total_peak_rss_mb": 1476.129,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randanf8_s173_v3.jsonl",
+        "source_line": 14,
+        "status": "ok",
+        "function_id": "randanf8_s173",
+        "method": "sshr_beam",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 30.7,
+        "total_peak_rss_mb": 1513.207,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randtt5_s113_s29_v3.jsonl",
+        "source_line": 1,
+        "status": "ok",
+        "function_id": "randtt5_s113",
+        "method": "direct_anf",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 26.9,
+        "total_peak_rss_mb": 579.078,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randtt6_fast_v3.jsonl",
+        "source_line": 1,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "direct_anf",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 25.7,
+        "total_peak_rss_mb": 613.977,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randtt6_fast_v3.jsonl",
+        "source_line": 2,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "direct_anf",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 25.9,
+        "total_peak_rss_mb": 637.25,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randtt6_fast_v3.jsonl",
+        "source_line": 3,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "direct_anf",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 26.0,
+        "total_peak_rss_mb": 618.668,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randtt6_fast_v3.jsonl",
+        "source_line": 4,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "greedy_factor",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 26.1,
+        "total_peak_rss_mb": 607.992,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randtt6_fast_v3.jsonl",
+        "source_line": 5,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "greedy_factor",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 26.2,
+        "total_peak_rss_mb": 576.746,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randtt6_fast_v3.jsonl",
+        "source_line": 6,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "greedy_factor",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 26.2,
+        "total_peak_rss_mb": 577.809,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randtt6_fast_v3.jsonl",
+        "source_line": 7,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "mcts_factor",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 26.3,
+        "total_peak_rss_mb": 579.285,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randtt6_fast_v3.jsonl",
+        "source_line": 8,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "mcts_factor",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 26.7,
+        "total_peak_rss_mb": 579.789,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randtt6_fast_v3.jsonl",
+        "source_line": 9,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "mcts_factor",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 26.7,
+        "total_peak_rss_mb": 587.473,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randtt6_fast_v3.jsonl",
+        "source_line": 10,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "sshr_h",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 25.6,
+        "total_peak_rss_mb": 599.207,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randtt6_fast_v3.jsonl",
+        "source_line": 11,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "sshr_h",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 26.1,
+        "total_peak_rss_mb": 591.086,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randtt6_fast_v3.jsonl",
+        "source_line": 12,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "sshr_h",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 26.1,
+        "total_peak_rss_mb": 605.43,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randtt6_fast_v3.jsonl",
+        "source_line": 13,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "resource_nmcts",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 26.6,
+        "total_peak_rss_mb": 592.387,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randtt6_fast_v3.jsonl",
+        "source_line": 14,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "resource_nmcts",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 26.0,
+        "total_peak_rss_mb": 585.855,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_randtt6_fast_v3.jsonl",
+        "source_line": 15,
+        "status": "ok",
+        "function_id": "randtt6_s139",
+        "method": "resource_nmcts",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 26.4,
+        "total_peak_rss_mb": 595.027,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+        "source_line": 1,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "direct_anf",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 25.1,
+        "total_peak_rss_mb": 607.602,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+        "source_line": 2,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "direct_anf",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 25.2,
+        "total_peak_rss_mb": 610.035,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+        "source_line": 3,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "direct_anf",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 25.1,
+        "total_peak_rss_mb": 649.02,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+        "source_line": 4,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "greedy_factor",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 25.3,
+        "total_peak_rss_mb": 607.57,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+        "source_line": 5,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "greedy_factor",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 25.2,
+        "total_peak_rss_mb": 579.504,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+        "source_line": 6,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "greedy_factor",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 25.2,
+        "total_peak_rss_mb": 579.969,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+        "source_line": 7,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "mcts_factor",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 25.3,
+        "total_peak_rss_mb": 597.836,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+        "source_line": 8,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "mcts_factor",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 25.4,
+        "total_peak_rss_mb": 600.492,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+        "source_line": 9,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "mcts_factor",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 24.8,
+        "total_peak_rss_mb": 584.02,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+        "source_line": 10,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "sshr_h",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 24.7,
+        "total_peak_rss_mb": 587.969,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+        "source_line": 11,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "sshr_h",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 24.7,
+        "total_peak_rss_mb": 594.031,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+        "source_line": 12,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "sshr_h",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 24.7,
+        "total_peak_rss_mb": 595.547,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+        "source_line": 13,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "resource_nmcts",
+        "synthesis_seed": 7,
+        "total_peak_system_memory_percent": 24.9,
+        "total_peak_rss_mb": 581.219,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+        "source_line": 14,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "resource_nmcts",
+        "synthesis_seed": 17,
+        "total_peak_system_memory_percent": 23.8,
+        "total_peak_rss_mb": 583.574,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      },
+      {
+        "source_path": "results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+        "source_line": 15,
+        "status": "ok",
+        "function_id": "thr6_t3",
+        "method": "resource_nmcts",
+        "synthesis_seed": 29,
+        "total_peak_system_memory_percent": 23.8,
+        "total_peak_rss_mb": 584.555,
+        "resource_guard_limit_percent": 70.0,
+        "resource_monitor_backend": "psutil",
+        "error_code": null
+      }
+    ]
+  },
+  "source_inventory": {
+    "manifest_declared_jsonl": [
+      "results/recovered/final_core_aes_v1_ok.jsonl",
+      "results/recovered/final_core_random_anf_v1_ok.jsonl",
+      "results/recovered/final_core_random_truth_v1_ok.jsonl",
+      "results/recovered/final_core_structured_v1_ok.jsonl",
+      "results/recovered/recovery_aes_b0_s7_v2_ok.jsonl",
+      "results/recovery_primary20_aes_b0_fast_v3.jsonl",
+      "results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl",
+      "results/recovery_primary20_aes_b7_s7_fast_v3.jsonl",
+      "results/recovery_primary20_beam_aes_b7_parallel_v3.jsonl",
+      "results/recovery_primary20_beam_aes_v3.jsonl",
+      "results/recovery_primary20_beam_struct_random_v3.jsonl",
+      "results/recovery_primary20_maj7_s17_fast_v3.jsonl",
+      "results/recovery_primary20_maj7_s29_fast_v3.jsonl",
+      "results/recovery_primary20_maj7_s7_fast_v3.jsonl",
+      "results/recovery_primary20_randanf7_resource_v3.jsonl",
+      "results/recovery_primary20_randanf7_sshrh_s7_v3.jsonl",
+      "results/recovery_primary20_randanf8_s173_resource_v3.jsonl",
+      "results/recovery_primary20_randanf8_s173_sshrbeam_s29_v3.jsonl",
+      "results/recovery_primary20_randanf8_s173_v3.jsonl",
+      "results/recovery_primary20_randtt5_s113_s29_v3.jsonl",
+      "results/recovery_primary20_randtt6_fast_v3.jsonl",
+      "results/recovery_primary20_thr6_t3_fast_v3.jsonl",
+      "results/stress_aes_b0_direct_s17_b8t8_v1.jsonl",
+      "results/stress_aes_b0_direct_s29_b8t8e8_v1.jsonl",
+      "results/stress_aes_b7_direct_s7_b16t16e16_v1.jsonl"
+    ],
+    "recovered_jsonl": [
+      "results/recovered/final_core_aes_v1_ok.jsonl",
+      "results/recovered/final_core_random_anf_v1_ok.jsonl",
+      "results/recovered/final_core_random_truth_v1_ok.jsonl",
+      "results/recovered/final_core_structured_v1_ok.jsonl",
+      "results/recovered/recovery_aes_b0_s7_v2_ok.jsonl"
+    ],
+    "v3_recovery_jsonl": [
+      "results/recovery_primary20_aes_b0_fast_v3.jsonl",
+      "results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl",
+      "results/recovery_primary20_aes_b7_s7_fast_v3.jsonl",
+      "results/recovery_primary20_beam_aes_b7_parallel_v3.jsonl",
+      "results/recovery_primary20_beam_aes_v3.jsonl",
+      "results/recovery_primary20_beam_struct_random_v3.jsonl",
+      "results/recovery_primary20_maj7_s17_fast_v3.jsonl",
+      "results/recovery_primary20_maj7_s29_fast_v3.jsonl",
+      "results/recovery_primary20_maj7_s7_fast_v3.jsonl",
+      "results/recovery_primary20_randanf7_resource_v3.jsonl",
+      "results/recovery_primary20_randanf7_sshrh_s7_v3.jsonl",
+      "results/recovery_primary20_randanf8_s173_resource_v3.jsonl",
+      "results/recovery_primary20_randanf8_s173_sshrbeam_s29_v3.jsonl",
+      "results/recovery_primary20_randanf8_s173_v3.jsonl",
+      "results/recovery_primary20_randtt5_s113_s29_v3.jsonl",
+      "results/recovery_primary20_randtt6_fast_v3.jsonl",
+      "results/recovery_primary20_thr6_t3_fast_v3.jsonl"
+    ],
+    "input_sha256": {
+      "results/recovered/final_core_aes_v1_ok.jsonl": "997b18f1f6bb6f085aa8a7ffab3fb6a546482eeb23adac10663808063fc52201",
+      "results/recovered/final_core_random_anf_v1_ok.jsonl": "6df5bba39e4ca499c0288bfe8882c32f6a8c096dce5a857e48001c262f04ce58",
+      "results/recovered/final_core_random_truth_v1_ok.jsonl": "025ee9728dadc0e87ae407218c594b86c32d532d32b180f3ea5892cfe8f5b684",
+      "results/recovered/final_core_structured_v1_ok.jsonl": "2145f9f48d17050bbc20d6092088645ee22c21b0f5dd22731787156179b15513",
+      "results/recovered/recovery_aes_b0_s7_v2_ok.jsonl": "1b246829d432e210e4ea84eb99ac3ea828d64fa01001f086a6c6056dbb648566",
+      "results/recovery_primary20_aes_b0_fast_v3.jsonl": "c87c1f09acb32cbf79972688f9c7f2fdbb0c259e3d691ddb009b8c414ea79cb7",
+      "results/recovery_primary20_aes_b7_s17_s29_fast_v3.jsonl": "d32b0468a031a3c49c775a6e718d6d6a759df166002ca891b8fe776a8527fd10",
+      "results/recovery_primary20_aes_b7_s7_fast_v3.jsonl": "f80d78699bcf0ac04096dd8fa5e8a7d6deaf9f9dd5a25f056704ccbf9a156f2f",
+      "results/recovery_primary20_beam_aes_b7_parallel_v3.jsonl": "7ec8e30670569b447e983e38da3029d25e943ea1a3cd62068738adf5ee6399b8",
+      "results/recovery_primary20_beam_aes_v3.jsonl": "02dd69be86655206b04d844829b44306f40b463815bea06633783cc6903e829b",
+      "results/recovery_primary20_beam_struct_random_v3.jsonl": "60fcfe49d7e6eb5218a989868bc02d767e2eb4dd1e82e4cc2a6543d3ac57ac45",
+      "results/recovery_primary20_maj7_s17_fast_v3.jsonl": "168f07ab6d9641f5d4877816a6f9a05a9de98186fc155587b2f3c23ff3c233e2",
+      "results/recovery_primary20_maj7_s29_fast_v3.jsonl": "df5484a71a6a15c411abeaaef42cc24a930d505c735b98ae96fb499141e57581",
+      "results/recovery_primary20_maj7_s7_fast_v3.jsonl": "037069d91c1b8a36dce2aac2950d3bea7708c252b9f511a6338bc76ec89a2534",
+      "results/recovery_primary20_randanf7_resource_v3.jsonl": "6d2aa632a6024138e84a9a5f1ad9f8b652982eef4973c04b10af6929dba7c794",
+      "results/recovery_primary20_randanf7_sshrh_s7_v3.jsonl": "35671b7233f8c2d59a10002ae4cc616dc1af9a5d7c7dbcb00a5da4257f84bb92",
+      "results/recovery_primary20_randanf8_s173_resource_v3.jsonl": "7f1e4634843745c0648a4d2d55f80f050e89ed132087e6cc1233c0dbdb089ab6",
+      "results/recovery_primary20_randanf8_s173_sshrbeam_s29_v3.jsonl": "a1276a4457422492de75375ac644ad1d62bf00dde4d8b3842a996906d2f264f6",
+      "results/recovery_primary20_randanf8_s173_v3.jsonl": "9adff28a6610c6d126bc933286b0ceb755d580af23fe594d48ec0c62b4f5b9ad",
+      "results/recovery_primary20_randtt5_s113_s29_v3.jsonl": "6f45cb32456659492847a1da8ed711823b837909f35912cd0c3233a317fa16ad",
+      "results/recovery_primary20_randtt6_fast_v3.jsonl": "f42577c2556f7a04e65eb2e32cb4f0bc6fade131490b74b5db960eec25587fe3",
+      "results/recovery_primary20_thr6_t3_fast_v3.jsonl": "9ac149da64dc16b10255b3fa73d99b4be3c4b7a8b6b56092a4f62a3a618e1bdc",
+      "results/stress_aes_b0_direct_s17_b8t8_v1.jsonl": "7597f7d563b6edadaf6f31ec20a6450d405e50b6dcacf96e7038388e710fbf92",
+      "results/stress_aes_b0_direct_s29_b8t8e8_v1.jsonl": "9093cb0508993545b66143793ccfcf72429550ce82f1bdc361f2a21570662fd5",
+      "results/stress_aes_b7_direct_s7_b16t16e16_v1.jsonl": "c37378ee89f42a8a10d5192d87f41b0ad0c0bbfa68ebe0304af40d880c825601",
+      "submission_competition/formal_coverage_audit.json": "e6d29aced0ebeffcd8ee45d3c28ed69a1c3c1d8fcadba0d6f37988f44d91b1a2",
+      "submission_competition/formal_primary20_core3_final_manifest_v2.json": "8a08cfa52533ec9cf163544259ebe4c7f3e6a476041b9ae9be647bb14fd37fbe",
+      "submission_competition/primary20_execution_environment_manifest.json": "0d391f79380b6e0f7a8ee56a61e417668546bb0ba3c3e21c8318247b4b4d611a"
+    }
+  },
+  "claim_boundaries": [
+    "The six timeout cells are missing measurements, not incorrect circuits.",
+    "Resource telemetry is reported for 100 v3 recovery records only.",
+    "Qiskit Aer reports CPU as its only available device in the captured environment.",
+    "The 70% limit is a software memory guard, not a hardware capacity claim."
+  ]
+}

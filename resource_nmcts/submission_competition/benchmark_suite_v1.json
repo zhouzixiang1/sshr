@@ -1,0 +1,443 @@
+{
+  "suite_version": "xa202609-final-v1",
+  "case_count": 30,
+  "function_key_algorithm": "sha256(canonical-json(n,truth_table_hex-without-0x))",
+  "cases": [
+    {
+      "case_id": "and3",
+      "family": "structured",
+      "n_inputs": 3,
+      "truth_table_hex": "0x80",
+      "function_key": "e6fa3eb963df59a3287fe018df2377b76371554bfb0bec0d286d4fd0307a073e",
+      "anf_terms": 1,
+      "onset_size": 1,
+      "generator": "and",
+      "generator_params": {
+        "n": 3
+      },
+      "source": "analytic"
+    },
+    {
+      "case_id": "and4",
+      "family": "structured",
+      "n_inputs": 4,
+      "truth_table_hex": "0x8000",
+      "function_key": "3da0127608447572437ca1ca0a073f26e1659f3dea7483d454e03fd7b699bbea",
+      "anf_terms": 1,
+      "onset_size": 1,
+      "generator": "and",
+      "generator_params": {
+        "n": 4
+      },
+      "source": "analytic"
+    },
+    {
+      "case_id": "parity4",
+      "family": "structured",
+      "n_inputs": 4,
+      "truth_table_hex": "0x6996",
+      "function_key": "1d59a7420d4e13f077eceb9121bd7df876c97b111def0f9170f0d90e4de94b72",
+      "anf_terms": 4,
+      "onset_size": 8,
+      "generator": "parity",
+      "generator_params": {
+        "n": 4
+      },
+      "source": "analytic"
+    },
+    {
+      "case_id": "parity6",
+      "family": "structured",
+      "n_inputs": 6,
+      "truth_table_hex": "0x6996966996696996",
+      "function_key": "0107d2f6c51aa37affbbe09c7b5f32a5f69a747729d1592596143df2543a70d6",
+      "anf_terms": 6,
+      "onset_size": 32,
+      "generator": "parity",
+      "generator_params": {
+        "n": 6
+      },
+      "source": "analytic"
+    },
+    {
+      "case_id": "maj3",
+      "family": "structured",
+      "n_inputs": 3,
+      "truth_table_hex": "0xe8",
+      "function_key": "53d0c3dfa2b89cad4be8dbf19c2610fb24844b27d474ca471b808c4103167ac7",
+      "anf_terms": 3,
+      "onset_size": 4,
+      "generator": "majority",
+      "generator_params": {
+        "n": 3
+      },
+      "source": "analytic"
+    },
+    {
+      "case_id": "maj5",
+      "family": "structured",
+      "n_inputs": 5,
+      "truth_table_hex": "0xfee8e880",
+      "function_key": "9d4ed9a4c0b71ea69c01660ba9f9db65ff8ccf96228aa35f71ec17f39ca7e4ed",
+      "anf_terms": 15,
+      "onset_size": 16,
+      "generator": "majority",
+      "generator_params": {
+        "n": 5
+      },
+      "source": "analytic"
+    },
+    {
+      "case_id": "maj7",
+      "family": "structured",
+      "n_inputs": 7,
+      "truth_table_hex": "0xfffefee8fee8e880fee8e880e8808000",
+      "function_key": "2443dea4f40b41d86eb149e1a482efdaa394592d53ca0e51eab49f2b98373129",
+      "anf_terms": 35,
+      "onset_size": 64,
+      "generator": "majority",
+      "generator_params": {
+        "n": 7
+      },
+      "source": "analytic"
+    },
+    {
+      "case_id": "thr5_t2",
+      "family": "structured",
+      "n_inputs": 5,
+      "truth_table_hex": "0xfffefee8",
+      "function_key": "6ad4c62df7845d28fb39a714ee3ee67d101d845cce1b2fac8e2f07f165d67517",
+      "anf_terms": 15,
+      "onset_size": 26,
+      "generator": "threshold",
+      "generator_params": {
+        "n": 5,
+        "threshold": 2
+      },
+      "source": "analytic"
+    },
+    {
+      "case_id": "thr6_t3",
+      "family": "structured",
+      "n_inputs": 6,
+      "truth_table_hex": "0xfffefee8fee8e880",
+      "function_key": "efd56e5491a2188acecb8cff031ff44413292d78e7b9061924e57302f98a5be4",
+      "anf_terms": 35,
+      "onset_size": 42,
+      "generator": "threshold",
+      "generator_params": {
+        "n": 6,
+        "threshold": 3
+      },
+      "source": "analytic"
+    },
+    {
+      "case_id": "thr7_t5",
+      "family": "structured",
+      "n_inputs": 7,
+      "truth_table_hex": "0xfee8e880e8808000e880800080000000",
+      "function_key": "f8bf14472bcabb20ce946793fc9d03d4f9aeb46c47a81787c2ef38d3fba81504",
+      "anf_terms": 29,
+      "onset_size": 29,
+      "generator": "threshold",
+      "generator_params": {
+        "n": 7,
+        "threshold": 5
+      },
+      "source": "analytic"
+    },
+    {
+      "case_id": "randtt4_s101",
+      "family": "random_truth",
+      "n_inputs": 4,
+      "truth_table_hex": "0x94c6",
+      "function_key": "4210792f85b01df5e13969132a3321400d65eb8aca66ba59f1d0b63f2ae471ee",
+      "anf_terms": 7,
+      "onset_size": 7,
+      "generator": "random_truth_function",
+      "generator_params": {
+        "seed": 101
+      },
+      "source": "project deterministic generator"
+    },
+    {
+      "case_id": "randtt4_s103",
+      "family": "random_truth",
+      "n_inputs": 4,
+      "truth_table_hex": "0xfaa3",
+      "function_key": "7bcb284ae0304d7310532180b935e24de4988dcdf57db99d82fd39a8f1e69071",
+      "anf_terms": 9,
+      "onset_size": 10,
+      "generator": "random_truth_function",
+      "generator_params": {
+        "seed": 103
+      },
+      "source": "project deterministic generator"
+    },
+    {
+      "case_id": "randtt4_s107",
+      "family": "random_truth",
+      "n_inputs": 4,
+      "truth_table_hex": "0x3f19",
+      "function_key": "4f48e380f31d1061c48396c03b2dd1a84b6b312ab2de004d72dfdcffb851bca1",
+      "anf_terms": 8,
+      "onset_size": 9,
+      "generator": "random_truth_function",
+      "generator_params": {
+        "seed": 107
+      },
+      "source": "project deterministic generator"
+    },
+    {
+      "case_id": "randtt4_s109",
+      "family": "random_truth",
+      "n_inputs": 4,
+      "truth_table_hex": "0x4792",
+      "function_key": "0adda8f566af6bd27132fa92a134ed471be59bad7e4574a8307dc256fa34f520",
+      "anf_terms": 8,
+      "onset_size": 7,
+      "generator": "random_truth_function",
+      "generator_params": {
+        "seed": 109
+      },
+      "source": "project deterministic generator"
+    },
+    {
+      "case_id": "randtt5_s113",
+      "family": "random_truth",
+      "n_inputs": 5,
+      "truth_table_hex": "0x07d27934",
+      "function_key": "c56a3bce0bf40e0fab9d6bd33076573144deb76c52d5d98a8b3bddce0683fda8",
+      "anf_terms": 18,
+      "onset_size": 15,
+      "generator": "random_truth_function",
+      "generator_params": {
+        "seed": 113
+      },
+      "source": "project deterministic generator"
+    },
+    {
+      "case_id": "randtt5_s127",
+      "family": "random_truth",
+      "n_inputs": 5,
+      "truth_table_hex": "0x0b6951b3",
+      "function_key": "64a708fbb7cab5d231d5e41d1f46b8166b29c1062d1dd6987ee0e4593846511e",
+      "anf_terms": 10,
+      "onset_size": 15,
+      "generator": "random_truth_function",
+      "generator_params": {
+        "seed": 127
+      },
+      "source": "project deterministic generator"
+    },
+    {
+      "case_id": "randtt5_s131",
+      "family": "random_truth",
+      "n_inputs": 5,
+      "truth_table_hex": "0x50c05c5b",
+      "function_key": "b9f20848d50373e3d33da107a9e4403a702fba3026e93d3bc6b48186cb2c1e07",
+      "anf_terms": 20,
+      "onset_size": 13,
+      "generator": "random_truth_function",
+      "generator_params": {
+        "seed": 131
+      },
+      "source": "project deterministic generator"
+    },
+    {
+      "case_id": "randtt5_s137",
+      "family": "random_truth",
+      "n_inputs": 5,
+      "truth_table_hex": "0x12869db2",
+      "function_key": "c370a3cb5e1f39273ad5a56052a666f2a2554ec8d2994facfa872265855f7402",
+      "anf_terms": 16,
+      "onset_size": 14,
+      "generator": "random_truth_function",
+      "generator_params": {
+        "seed": 137
+      },
+      "source": "project deterministic generator"
+    },
+    {
+      "case_id": "randtt6_s139",
+      "family": "random_truth",
+      "n_inputs": 6,
+      "truth_table_hex": "0xf59dfd410062f861",
+      "function_key": "ab41aaaf1731c217c8a47a5bdf29b32cb8774ce7dad4e3d3d3cae376e2711aed",
+      "anf_terms": 31,
+      "onset_size": 31,
+      "generator": "random_truth_function",
+      "generator_params": {
+        "seed": 139
+      },
+      "source": "project deterministic generator"
+    },
+    {
+      "case_id": "randtt6_s149",
+      "family": "random_truth",
+      "n_inputs": 6,
+      "truth_table_hex": "0x191d93ba12341a02",
+      "function_key": "56432dc6c53a042637d2c81544d82803bc5ce660aff7ee1488def9b687f31328",
+      "anf_terms": 36,
+      "onset_size": 25,
+      "generator": "random_truth_function",
+      "generator_params": {
+        "seed": 149
+      },
+      "source": "project deterministic generator"
+    },
+    {
+      "case_id": "randanf6_s151",
+      "family": "random_anf",
+      "n_inputs": 6,
+      "truth_table_hex": "0x0a0aa0a0aaaa0000",
+      "function_key": "e043f9dffa703574eb8cbd1e29b0506787c3021968db29b08787e1cfae9e346b",
+      "anf_terms": 2,
+      "onset_size": 16,
+      "generator": "random_anf_function",
+      "generator_params": {
+        "seed": 151,
+        "term_prob": 0.16,
+        "max_degree": 3
+      },
+      "source": "project deterministic generator"
+    },
+    {
+      "case_id": "randanf6_s157",
+      "family": "random_anf",
+      "n_inputs": 6,
+      "truth_table_hex": "0x1c7513b6b0e583d6",
+      "function_key": "a539b98e4cc562808d14b705993d0f215d1520ac581e28b1d3bb8edbff0ea7a6",
+      "anf_terms": 14,
+      "onset_size": 32,
+      "generator": "random_anf_function",
+      "generator_params": {
+        "seed": 157,
+        "term_prob": 0.24,
+        "max_degree": 4
+      },
+      "source": "project deterministic generator"
+    },
+    {
+      "case_id": "randanf7_s163",
+      "family": "random_anf",
+      "n_inputs": 7,
+      "truth_table_hex": "0x7df5e4a022aa44007df5e4a022aa4400",
+      "function_key": "da7d9075c1536563bde50718869a1f786f4e3b677a0a7b18843776d154ee28f3",
+      "anf_terms": 6,
+      "onset_size": 52,
+      "generator": "random_anf_function",
+      "generator_params": {
+        "seed": 163,
+        "term_prob": 0.1,
+        "max_degree": 3
+      },
+      "source": "project deterministic generator"
+    },
+    {
+      "case_id": "randanf7_s167",
+      "family": "random_anf",
+      "n_inputs": 7,
+      "truth_table_hex": "0x719c125593a3cf551df012aaaa309aaa",
+      "function_key": "c1a5e74c1c81e4f8be100e70a29edef20403c5478034cdbe3b2f68e7f6c94361",
+      "anf_terms": 18,
+      "onset_size": 60,
+      "generator": "random_anf_function",
+      "generator_params": {
+        "seed": 167,
+        "term_prob": 0.16,
+        "max_degree": 4
+      },
+      "source": "project deterministic generator"
+    },
+    {
+      "case_id": "randanf8_s173",
+      "family": "random_anf",
+      "n_inputs": 8,
+      "truth_table_hex": "0x3c5accaa96f066003c5accaa96f06600965a66aa3cf0cc00965a66aa3cf0cc00",
+      "function_key": "b3d7a7e2a70cd8d202bc0295697bb07ec4c1564e803cd1cc92e5a453191be3f5",
+      "anf_terms": 4,
+      "onset_size": 112,
+      "generator": "random_anf_function",
+      "generator_params": {
+        "seed": 173,
+        "term_prob": 0.07,
+        "max_degree": 3
+      },
+      "source": "project deterministic generator"
+    },
+    {
+      "case_id": "randanf8_s179",
+      "family": "random_anf",
+      "n_inputs": 8,
+      "truth_table_hex": "0xa2c8bdbd25bf3f3f8ae0c0c052c848482a403535ad37b7b78ae0c0c052c84848",
+      "function_key": "c0982706d0e88be1eb62f2f398a73b7014d6b6e3837b4dbb7fe44a8a57a19fc9",
+      "anf_terms": 15,
+      "onset_size": 114,
+      "generator": "random_anf_function",
+      "generator_params": {
+        "seed": 179,
+        "term_prob": 0.11,
+        "max_degree": 4
+      },
+      "source": "project deterministic generator"
+    },
+    {
+      "case_id": "aes_sbox_b0",
+      "family": "aes_sbox",
+      "n_inputs": 8,
+      "truth_table_hex": "0x4f1ead396f247a0410bdb210c006eab568ab4bfa8acb7a13b14ede67096c6eed",
+      "function_key": "b5a89962a032874c6082ba8002d49d4c8f2ff2369512322c87190dbc67cf3c6c",
+      "anf_terms": 132,
+      "onset_size": 128,
+      "generator": "aes_sbox_component",
+      "generator_params": {
+        "output_bit": 0
+      },
+      "source": "results/aes_sbox_functions.json"
+    },
+    {
+      "case_id": "aes_sbox_b2",
+      "family": "aes_sbox",
+      "n_inputs": 8,
+      "truth_table_hex": "0xac39b6c0d6ce2efc577d64e03b0c3ffb23a869a2a428c424a16387fb3b48b4c6",
+      "function_key": "de2db60ea6cd04ed0379e175d8612416674bb91fa2b884add1677ca8c8704405",
+      "anf_terms": 145,
+      "onset_size": 128,
+      "generator": "aes_sbox_component",
+      "generator_params": {
+        "output_bit": 2
+      },
+      "source": "results/aes_sbox_functions.json"
+    },
+    {
+      "case_id": "aes_sbox_b5",
+      "family": "aes_sbox",
+      "n_inputs": 8,
+      "truth_table_hex": "0x54b248130b4f256f7d8dcc4706319e086bc2aa4e0d787aa4f8045f7b6d98dd7f",
+      "function_key": "6d9c62a02463524ddaddba301a2346284ef2487f78485160c117299ca5e7a982",
+      "anf_terms": 114,
+      "onset_size": 128,
+      "generator": "aes_sbox_component",
+      "generator_params": {
+        "output_bit": 5
+      },
+      "source": "results/aes_sbox_functions.json"
+    },
+    {
+      "case_id": "aes_sbox_b7",
+      "family": "aes_sbox",
+      "n_inputs": 8,
+      "truth_table_hex": "0x52379de7b844e3e14cb3770196ca0329e7bac28f866aac825caa2ec7bf977090",
+      "function_key": "69f1c2857e7aa57c30671cd552caadf6a93b257035e94c80495ba74d4d0131d0",
+      "anf_terms": 110,
+      "onset_size": 128,
+      "generator": "aes_sbox_component",
+      "generator_params": {
+        "output_bit": 7
+      },
+      "source": "results/aes_sbox_functions.json"
+    }
+  ],
+  "suite_id": "7fb4fdfd4251637cc8ff0bb605cef20ec4d0dea63830c7e167759c1d9ad75b5b"
+}

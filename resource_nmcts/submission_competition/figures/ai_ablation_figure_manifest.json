@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "figure_id": "F3_ai_ablation_attribution",
+  "purpose": "XA-202609 matched AI ablation and portfolio-attribution boundary",
+  "contract": "submission_competition/figures/FIGURE_CONTRACT_AI_ABLATION.md",
+  "contract_sha256": "15e16cebc428079b5bc019c656840e3284e48f1a83f8108b3564dfaea580d14e",
+  "generator": "submission_competition/figures/make_ai_ablation_figure.py",
+  "generator_sha256": "d4a1bfb9a2eaa1606cd5e32df2e8066713309e54c3490bcab7c266f8f4375e5c",
+  "source_data": [
+    "submission_competition/figures/ai_ablation_figure_source.json",
+    "submission_competition/figures/ai_ablation_figure_source.csv"
+  ],
+  "source_data_sha256": {
+    "submission_competition/figures/ai_ablation_figure_source.json": "51b81fbac4de4913eeedd8cc3588a257d82bf8977584d02febd7c358d903cfb8",
+    "submission_competition/figures/ai_ablation_figure_source.csv": "04826a81eab50cd2e3c59987556d62ccc2e3f702bc58cb57d0c20c052a679b50"
+  },
+  "backend": "Python/matplotlib only",
+  "python": "3.11.15",
+  "matplotlib": "3.10.9",
+  "dimensions_mm": {
+    "width": 183.0,
+    "height": 112.0
+  },
+  "font_policy": {
+    "requested_fallback": [
+      "Microsoft YaHei",
+      "SimHei",
+      "Arial",
+      "DejaVu Sans"
+    ],
+    "resolved_primary": "Microsoft YaHei",
+    "minimum_figure_label_pt": 6.0,
+    "svg_fonttype": "none",
+    "pdf_fonttype": 42
+  },
+  "headline_values": {
+    "clean_pilot_pairs": 8,
+    "learned_vs_random_wtl": [
+      2,
+      6,
+      0
+    ],
+    "learned_vs_random_wilcoxon_p_T": 0.5,
+    "learned_vs_random_wilcoxon_p_CNOT": 0.5,
+    "resource_verified_cells": 60,
+    "explicitly_deterministic_selected_cells": 54,
+    "possible_ai_influence_cells": 6
+  },
+  "claim_policy": {
+    "learned_prior_independent_gain_claimed": false,
+    "training_loss_used_as_circuit_metric": false,
+    "portfolio_gain_attributed_to_ai": false,
+    "affine_nmcts_selected_cells_called_causal_ai_gain": false,
+    "fitted_q_offline_result_included": false
+  },
+  "outputs": [
+    {
+      "path": "submission_competition/figures/F3_ai_ablation_attribution.svg",
+      "sha256": "ebe1be237e25dba79e2af071ed8e5fb0e4191c20a345940bac1b7206ab6efa0b",
+      "size_bytes": 202868
+    },
+    {
+      "path": "submission_competition/figures/F3_ai_ablation_attribution.pdf",
+      "sha256": "d31ff87ce1af16ba651cae886e5f55df425db6ad3a95c4ea7f64201d50065714",
+      "size_bytes": 132236
+    },
+    {
+      "path": "submission_competition/figures/F3_ai_ablation_attribution.png",
+      "sha256": "0c15a50716e74f9d7f8da7242266ee957542006adcac68223914fa5ed56f3805",
+      "size_bytes": 971227
+    }
+  ],
+  "qa": {
+    "svg": {
+      "embedded_image_elements": 0,
+      "text_elements": 95,
+      "editable_text_pass": true
+    },
+    "pdf": {
+      "pages": 1,
+      "width_mm": 183.00000559488933,
+      "height_mm": 112.00000042385525,
+      "single_page_pass": true,
+      "declared_size_pass": true
+    },
+    "png": {
+      "pixels": [
+        4322,
+        2645
+      ],
+      "dpi_metadata": [
+        599.999,
+        599.999
+      ],
+      "expected_pixels_at_600dpi": [
+        4323,
+        2646
+      ],
+      "preview_pass": true
+    }
+  }
+}

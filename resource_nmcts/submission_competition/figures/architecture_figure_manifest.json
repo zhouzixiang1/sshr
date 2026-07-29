@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "figure_id": "F2_system_architecture",
+  "purpose": "XA-202609 traceable end-to-end system architecture",
+  "contract": "submission_competition/figures/FIGURE_CONTRACT_ARCHITECTURE.md",
+  "contract_sha256": "651de158a5636ac17d7c4e73eeecb29eb1a8f41d62afd7c73e4a89bb321f25b5",
+  "generator": "submission_competition/figures/make_architecture_figure.py",
+  "generator_sha256": "70ba55764bd303ee67f9b230c7b71612332409d1bb5513c5423dc85c0889757a",
+  "source_data": "submission_competition/figures/architecture_figure_source.json",
+  "source_data_sha256": "4cfe9e117946b2b738088af2d06cbc42842af9d92b57e42e2798067776ac8862",
+  "backend": "Python/matplotlib only",
+  "python": "3.11.15",
+  "matplotlib": "3.10.9",
+  "dimensions_mm": {
+    "width": 183.0,
+    "height": 105.0
+  },
+  "font_policy": {
+    "requested_fallback": [
+      "Microsoft YaHei",
+      "SimHei",
+      "Arial",
+      "DejaVu Sans"
+    ],
+    "resolved_primary": "Microsoft YaHei",
+    "minimum_figure_label_pt": 6.0,
+    "svg_fonttype": "none",
+    "pdf_fonttype": 42
+  },
+  "claim_policy": {
+    "performance_statistics_in_figure": false,
+    "learned_prior_independent_gain_claimed": false,
+    "aer_gpu_claimed": false,
+    "real_hardware_execution_claimed": false,
+    "noise_awareness_claimed": false
+  },
+  "outputs": [
+    {
+      "path": "submission_competition/figures/F2_system_architecture.svg",
+      "sha256": "458c5afd640ff70739d651effd877f876c3dd27d7d6373736017e91b4b5e413e",
+      "size_bytes": 56019
+    },
+    {
+      "path": "submission_competition/figures/F2_system_architecture.pdf",
+      "sha256": "f07ec8cbc2b7e80915c9a4ef86766b38fc485029de6bbd8da60dfd3736a6fcc1",
+      "size_bytes": 123277
+    },
+    {
+      "path": "submission_competition/figures/F2_system_architecture.png",
+      "sha256": "fe79d5754deb0244c07942c441f44e868c366e9fefd49800ab1cdcf5b4c5c1fe",
+      "size_bytes": 854775
+    }
+  ],
+  "qa": {
+    "svg": {
+      "embedded_image_elements": 0,
+      "text_elements": 67,
+      "editable_text_pass": true
+    },
+    "pdf": {
+      "pages": 1,
+      "width_mm": 183.0,
+      "height_mm": 105.0,
+      "single_page_pass": true,
+      "declared_size_pass": true
+    },
+    "png": {
+      "pixels": [
+        4322,
+        2480
+      ],
+      "dpi_metadata": [
+        600.0,
+        600.0
+      ],
+      "preview_pass": true
+    }
+  }
+}

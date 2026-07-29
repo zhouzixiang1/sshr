@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-07-22T09:33:41.173070+00:00",
+  "purpose": "recover validated facts from interrupted memory-pressure runs",
+  "mutation_policy": "no source file changed; excluded rows remain only in raw source",
+  "files": [
+    {
+      "source": "D:/University/code/sshr/resource_nmcts/results/recovery_aes_b0_s7_v2.jsonl",
+      "source_sha256": "8de287ce0e7d1d6e9886790f23111c3dce23f9054546f3c14846f7b4c813fa07",
+      "source_rows": 6,
+      "source_status_counts": {
+        "ok": 5,
+        "timeout": 1
+      },
+      "output": "D:/University/code/sshr/resource_nmcts/results/recovered/recovery_aes_b0_s7_v2_ok.jsonl",
+      "output_sha256": "1b246829d432e210e4ea84eb99ac3ea828d64fa01001f086a6c6056dbb648566",
+      "output_rows": 5,
+      "selection_predicate": "status == 'ok' after full fixed-schema/hash validation",
+      "excluded_rows": [
+        {
+          "record_key": "0084880dd4a9e75ed8f20d410df205d9e41c904d8e6f1371d874b924189b435a",
+          "function_id": "aes_sbox_b0",
+          "requested_method": "sshr_beam",
+          "synthesis_seed": 7,
+          "target_id": "cx_full_12",
+          "transpile_seed": 3,
+          "status": "timeout",
+          "stage": "synthesis",
+          "error_code": "stage_timeout",
+          "error_message": "synthesis exceeded 300.000 seconds"
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "source_rows": 6,
+    "selected_rows": 5,
+    "excluded_rows": 1
+  }
+}
