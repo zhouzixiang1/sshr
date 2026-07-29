@@ -27,3 +27,6 @@ _archive/misc/
 
 # Editor/tool metadata
 .zcode/
+
+# Re-derivable legacy CSV inventory (251MB, exceeds GitHub limit; rebuild via build_experiments_db.py)
+resource_nmcts/results/legacy_csv_inventory.duckdb
