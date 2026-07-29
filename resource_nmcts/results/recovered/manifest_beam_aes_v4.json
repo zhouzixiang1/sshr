@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-07-29T16:38:49.293005+00:00",
+  "purpose": "recover validated facts from interrupted memory-pressure runs",
+  "mutation_policy": "no source file changed; excluded rows remain only in raw source",
+  "files": [
+    {
+      "source": "D:/University/code/sshr/resource_nmcts/results/recovery_v4c/beam_aes_sbox_b0_s17.jsonl",
+      "source_sha256": "4cb792508b28c0b511e0bb7a59e82c1f034cd027815152e6a150af2de47aaa6c",
+      "source_rows": 1,
+      "source_status_counts": {
+        "ok": 1
+      },
+      "output": "D:/University/code/sshr/resource_nmcts/results/recovered/beam_aes_sbox_b0_s17_ok.jsonl",
+      "output_sha256": "4cb792508b28c0b511e0bb7a59e82c1f034cd027815152e6a150af2de47aaa6c",
+      "output_rows": 1,
+      "selection_predicate": "status == 'ok' after full fixed-schema/hash validation",
+      "excluded_rows": []
+    },
+    {
+      "source": "D:/University/code/sshr/resource_nmcts/results/recovery_v4c/beam_aes_sbox_b0_s29.jsonl",
+      "source_sha256": "a3ca04f2eaf2c1a04ca161c46b19c5dfc55cd4e344fa5c2b27e913e61304af6e",
+      "source_rows": 1,
+      "source_status_counts": {
+        "ok": 1
+      },
+      "output": "D:/University/code/sshr/resource_nmcts/results/recovered/beam_aes_sbox_b0_s29_ok.jsonl",
+      "output_sha256": "a3ca04f2eaf2c1a04ca161c46b19c5dfc55cd4e344fa5c2b27e913e61304af6e",
+      "output_rows": 1,
+      "selection_predicate": "status == 'ok' after full fixed-schema/hash validation",
+      "excluded_rows": []
+    },
+    {
+      "source": "D:/University/code/sshr/resource_nmcts/results/recovery_v4c/beam_aes_sbox_b0_s7.jsonl",
+      "source_sha256": "39036a24f2e9342e3de4fb79399b3280ea07d834cbdf8bd7b40dc8691200da4a",
+      "source_rows": 1,
+      "source_status_counts": {
+        "ok": 1
+      },
+      "output": "D:/University/code/sshr/resource_nmcts/results/recovered/beam_aes_sbox_b0_s7_ok.jsonl",
+      "output_sha256": "39036a24f2e9342e3de4fb79399b3280ea07d834cbdf8bd7b40dc8691200da4a",
+      "output_rows": 1,
+      "selection_predicate": "status == 'ok' after full fixed-schema/hash validation",
+      "excluded_rows": []
+    },
+    {
+      "source": "D:/University/code/sshr/resource_nmcts/results/recovery_v4c/beam_aes_sbox_b7_s17.jsonl",
+      "source_sha256": "0c6b33b4cbc687e5353478092535ca523b3ead325299977420d27d6a25a6f262",
+      "source_rows": 1,
+      "source_status_counts": {
+        "ok": 1
+      },
+      "output": "D:/University/code/sshr/resource_nmcts/results/recovered/beam_aes_sbox_b7_s17_ok.jsonl",
+      "output_sha256": "0c6b33b4cbc687e5353478092535ca523b3ead325299977420d27d6a25a6f262",
+      "output_rows": 1,
+      "selection_predicate": "status == 'ok' after full fixed-schema/hash validation",
+      "excluded_rows": []
+    },
+    {
+      "source": "D:/University/code/sshr/resource_nmcts/results/recovery_v4c/beam_aes_sbox_b7_s29.jsonl",
+      "source_sha256": "0f1386dd86b9e82f29954dc7b1edaf2f33b958226e44fd3b23ead31218052a15",
+      "source_rows": 1,
+      "source_status_counts": {
+        "ok": 1
+      },
+      "output": "D:/University/code/sshr/resource_nmcts/results/recovered/beam_aes_sbox_b7_s29_ok.jsonl",
+      "output_sha256": "0f1386dd86b9e82f29954dc7b1edaf2f33b958226e44fd3b23ead31218052a15",
+      "output_rows": 1,
+      "selection_predicate": "status == 'ok' after full fixed-schema/hash validation",
+      "excluded_rows": []
+    },
+    {
+      "source": "D:/University/code/sshr/resource_nmcts/results/recovery_v4c/beam_aes_sbox_b7_s7.jsonl",
+      "source_sha256": "84b3f0549ad0187efbc60f296fc5ba0a06a6b377f6c185cad6aab2a47bb171c6",
+      "source_rows": 1,
+      "source_status_counts": {
+        "ok": 1
+      },
+      "output": "D:/University/code/sshr/resource_nmcts/results/recovered/beam_aes_sbox_b7_s7_ok.jsonl",
+      "output_sha256": "84b3f0549ad0187efbc60f296fc5ba0a06a6b377f6c185cad6aab2a47bb171c6",
+      "output_rows": 1,
+      "selection_predicate": "status == 'ok' after full fixed-schema/hash validation",
+      "excluded_rows": []
+    }
+  ],
+  "totals": {
+    "source_rows": 6,
+    "selected_rows": 6,
+    "excluded_rows": 0
+  }
+}

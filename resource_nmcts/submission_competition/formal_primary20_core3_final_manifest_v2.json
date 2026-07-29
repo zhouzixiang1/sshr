@@ -2,17 +2,17 @@
   "counts": {
     "divergent_duplicate_cells": 0,
     "duplicate_rows_removed": 1,
-    "eligible_rows_before_deduplication": 355,
+    "eligible_rows_before_deduplication": 361,
     "exclusions": {
       "not_ok": 6,
       "outside_primary_cases": 40
     },
     "intended_cells": 360,
-    "missing_cells": 6,
-    "selected_verified_cells": 354,
-    "source_rows": 401
+    "missing_cells": 0,
+    "selected_verified_cells": 360,
+    "source_rows": 407
   },
-  "created_utc": "2026-07-22T12:42:37.948337+00:00",
+  "created_utc": "2026-07-29T16:38:53.013084+00:00",
   "divergent_duplicates": [],
   "failure_policy": "quality experiment contains verified successes only; raw sources and recovery manifests remain authoritative for failure/coverage reporting",
   "purpose": "single-experiment verified paired analysis for primary20 core3",
@@ -50,6 +50,15 @@
       "record_key": "a4029f14b1834aca45ce15970efaed0f621e6803495a55c924bd329e13e1c219",
       "requested_method": "resource_nmcts",
       "source_run_id": "2026-07-22T09:19:46+00:00-3a7f7c12",
+      "synthesis_seed": 7,
+      "target_id": "cx_full_12",
+      "transpile_seed": 3
+    },
+    {
+      "function_id": "aes_sbox_b0",
+      "record_key": "c5229d1a9223e3b8ee853b283f9fe63b2c6fe87007b5f1f591ef33d0af478c78",
+      "requested_method": "sshr_beam",
+      "source_run_id": "2026-07-29T16:24:06+00:00-32e9703f",
       "synthesis_seed": 7,
       "target_id": "cx_full_12",
       "transpile_seed": 3
@@ -101,6 +110,15 @@
     },
     {
       "function_id": "aes_sbox_b0",
+      "record_key": "ec076bdeeded3e9c258fb3637243ac3c64d30e76ff56570e36e2aece00628918",
+      "requested_method": "sshr_beam",
+      "source_run_id": "2026-07-29T16:24:06+00:00-a0915c23",
+      "synthesis_seed": 17,
+      "target_id": "cx_full_12",
+      "transpile_seed": 3
+    },
+    {
+      "function_id": "aes_sbox_b0",
       "record_key": "4ea571a022ca68ab061e74dbd23b134fac8b4a16d2b3d89a7020622a4c8c06c6",
       "requested_method": "sshr_h",
       "source_run_id": "2026-07-22T12:09:26+00:00-db5779de",
@@ -140,6 +158,15 @@
       "record_key": "385aca2118e3885967541c563440f681dd1f2de81330c98d5b64b7e5edb60d04",
       "requested_method": "resource_nmcts",
       "source_run_id": "2026-07-22T12:09:26+00:00-db5779de",
+      "synthesis_seed": 29,
+      "target_id": "cx_full_12",
+      "transpile_seed": 3
+    },
+    {
+      "function_id": "aes_sbox_b0",
+      "record_key": "321c77e5ec8a83315db73050aba6b847207a3d4deccd231e7b1e2e0d7079a34c",
+      "requested_method": "sshr_beam",
+      "source_run_id": "2026-07-29T16:24:06+00:00-f4f45ced",
       "synthesis_seed": 29,
       "target_id": "cx_full_12",
       "transpile_seed": 3
@@ -191,6 +218,15 @@
     },
     {
       "function_id": "aes_sbox_b7",
+      "record_key": "fd9caa3aa00b6e58060c16a7fd036c4dce4510c80e6ebc843b8efed9426d3268",
+      "requested_method": "sshr_beam",
+      "source_run_id": "2026-07-29T16:24:06+00:00-6d35247f",
+      "synthesis_seed": 7,
+      "target_id": "cx_full_12",
+      "transpile_seed": 3
+    },
+    {
+      "function_id": "aes_sbox_b7",
       "record_key": "471532989dbd0e86f1c5f4460bd941ef964b969e273dcc3f8a1d9d58737c2af1",
       "requested_method": "sshr_h",
       "source_run_id": "2026-07-22T12:15:12+00:00-3682881a",
@@ -236,6 +272,15 @@
     },
     {
       "function_id": "aes_sbox_b7",
+      "record_key": "cccc611ed9db775148ba57ac68007a0e58310f0d01565b7a818bf109ba5106d9",
+      "requested_method": "sshr_beam",
+      "source_run_id": "2026-07-29T16:24:06+00:00-bc4790b2",
+      "synthesis_seed": 17,
+      "target_id": "cx_full_12",
+      "transpile_seed": 3
+    },
+    {
+      "function_id": "aes_sbox_b7",
       "record_key": "34c23e1bc86db00ebaed5426c162b1755582310f48755254f3286a1623b6523a",
       "requested_method": "sshr_h",
       "source_run_id": "2026-07-22T12:18:28+00:00-5ec323b3",
@@ -275,6 +320,15 @@
       "record_key": "13fb6f180338b323e5ea5ee1b84f1fdb3fdde8a9b732db62349dcbdd0dbf100f",
       "requested_method": "resource_nmcts",
       "source_run_id": "2026-07-22T12:18:28+00:00-5ec323b3",
+      "synthesis_seed": 29,
+      "target_id": "cx_full_12",
+      "transpile_seed": 3
+    },
+    {
+      "function_id": "aes_sbox_b7",
+      "record_key": "0fb8d6916f55c9f50ba1be0bd76d76253d865cc81bb3a45a6150312bb63808bf",
+      "requested_method": "sshr_beam",
+      "source_run_id": "2026-07-29T16:24:06+00:00-acb99d39",
       "synthesis_seed": 29,
       "target_id": "cx_full_12",
       "transpile_seed": 3
@@ -3450,6 +3504,54 @@
       "sha256": "9ac149da64dc16b10255b3fa73d99b4be3c4b7a8b6b56092a4f62a3a618e1bdc",
       "status_counts": {
         "ok": 15
+      }
+    },
+    {
+      "path": "D:/University/code/sshr/resource_nmcts/results/recovered/beam_aes_sbox_b0_s17_ok.jsonl",
+      "rows": 1,
+      "sha256": "4cb792508b28c0b511e0bb7a59e82c1f034cd027815152e6a150af2de47aaa6c",
+      "status_counts": {
+        "ok": 1
+      }
+    },
+    {
+      "path": "D:/University/code/sshr/resource_nmcts/results/recovered/beam_aes_sbox_b0_s29_ok.jsonl",
+      "rows": 1,
+      "sha256": "a3ca04f2eaf2c1a04ca161c46b19c5dfc55cd4e344fa5c2b27e913e61304af6e",
+      "status_counts": {
+        "ok": 1
+      }
+    },
+    {
+      "path": "D:/University/code/sshr/resource_nmcts/results/recovered/beam_aes_sbox_b0_s7_ok.jsonl",
+      "rows": 1,
+      "sha256": "39036a24f2e9342e3de4fb79399b3280ea07d834cbdf8bd7b40dc8691200da4a",
+      "status_counts": {
+        "ok": 1
+      }
+    },
+    {
+      "path": "D:/University/code/sshr/resource_nmcts/results/recovered/beam_aes_sbox_b7_s17_ok.jsonl",
+      "rows": 1,
+      "sha256": "0c6b33b4cbc687e5353478092535ca523b3ead325299977420d27d6a25a6f262",
+      "status_counts": {
+        "ok": 1
+      }
+    },
+    {
+      "path": "D:/University/code/sshr/resource_nmcts/results/recovered/beam_aes_sbox_b7_s29_ok.jsonl",
+      "rows": 1,
+      "sha256": "0f1386dd86b9e82f29954dc7b1edaf2f33b958226e44fd3b23ead31218052a15",
+      "status_counts": {
+        "ok": 1
+      }
+    },
+    {
+      "path": "D:/University/code/sshr/resource_nmcts/results/recovered/beam_aes_sbox_b7_s7_ok.jsonl",
+      "rows": 1,
+      "sha256": "84b3f0549ad0187efbc60f296fc5ba0a06a6b377f6c185cad6aab2a47bb171c6",
+      "status_counts": {
+        "ok": 1
       }
     }
   ]

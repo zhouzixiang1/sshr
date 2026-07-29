@@ -1,113 +1,58 @@
 {
   "analysis_contract_sha256": "aebc28f87703717d4dc6c5b48b8421e8c1c7b9d5b801b53ce46d165671d4bf48",
-  "analysis_id": "xa202609-primary20-b36257a3f41d",
-  "analysis_payload_sha256": "b36257a3f41de85b6ae0aafb711ec0bc30fa6502cd43891f1381ce1f7de72443",
+  "analysis_id": "xa202609-primary20-836553591061",
+  "analysis_payload_sha256": "83655359106149c7ef53d545ac2e770d9038e39dc74b66ec3dc6c732c8554ff4",
   "coverage": {
-    "coverage_fraction": 0.9833333333333333,
+    "coverage_fraction": 1.0,
     "divergent_duplicate_cells": 0,
     "duplicate_rows_removed": 1,
-    "missing": [
-      {
-        "case_id": "aes_sbox_b0",
-        "family": "aes_sbox",
-        "requested_method": "sshr_beam",
-        "status": "synthesis_timeout_300s",
-        "synthesis_seed": 7,
-        "target_name": "cx_full_12",
-        "transpile_seed": 3
-      },
-      {
-        "case_id": "aes_sbox_b0",
-        "family": "aes_sbox",
-        "requested_method": "sshr_beam",
-        "status": "synthesis_timeout_300s",
-        "synthesis_seed": 17,
-        "target_name": "cx_full_12",
-        "transpile_seed": 3
-      },
-      {
-        "case_id": "aes_sbox_b0",
-        "family": "aes_sbox",
-        "requested_method": "sshr_beam",
-        "status": "synthesis_timeout_300s",
-        "synthesis_seed": 29,
-        "target_name": "cx_full_12",
-        "transpile_seed": 3
-      },
-      {
-        "case_id": "aes_sbox_b7",
-        "family": "aes_sbox",
-        "requested_method": "sshr_beam",
-        "status": "synthesis_timeout_300s",
-        "synthesis_seed": 7,
-        "target_name": "cx_full_12",
-        "transpile_seed": 3
-      },
-      {
-        "case_id": "aes_sbox_b7",
-        "family": "aes_sbox",
-        "requested_method": "sshr_beam",
-        "status": "synthesis_timeout_300s",
-        "synthesis_seed": 17,
-        "target_name": "cx_full_12",
-        "transpile_seed": 3
-      },
-      {
-        "case_id": "aes_sbox_b7",
-        "family": "aes_sbox",
-        "requested_method": "sshr_beam",
-        "status": "synthesis_timeout_300s",
-        "synthesis_seed": 29,
-        "target_name": "cx_full_12",
-        "transpile_seed": 3
-      }
-    ],
-    "missing_cells": 6,
+    "missing": [],
+    "missing_cells": 0,
     "planned_cells": 360,
-    "verified_cells": 354
+    "verified_cells": 360
   },
   "database_access": "hash-only by this aggregator; detailed statistics were generated read-only",
-  "database_sha256": "76f0369d09d74f6910126d84faa3162e9216edbea7ab23801c30a257b16774c3",
-  "generated_utc": "2026-07-22T12:51:28.317915+00:00",
+  "database_sha256": "8cc494ed4506f245d29bebbb8e328a991558c0d4f67d0d2b9244bab2bad77be7",
+  "generated_utc": "2026-07-29T16:41:23.925409+00:00",
   "headline_row_count": 20,
   "inputs": {
     "consolidation_manifest": {
-      "path": "submission_competition/formal_primary20_core3_final_manifest_v2.json",
-      "sha256": "8a08cfa52533ec9cf163544259ebe4c7f3e6a476041b9ae9be647bb14fd37fbe"
+      "path": "D:/University/code/sshr/resource_nmcts/submission_competition/formal_primary20_core3_final_manifest_v2.json",
+      "sha256": "2666b7d41da15cdb7e1e80c47812e0ce294698b7e3c8b9a4624160cc1401c83d"
     },
     "coverage_audit": {
-      "path": "submission_competition/formal_coverage_audit.json",
-      "sha256": "e6d29aced0ebeffcd8ee45d3c28ed69a1c3c1d8fcadba0d6f37988f44d91b1a2"
+      "path": "D:/University/code/sshr/resource_nmcts/submission_competition/formal_coverage_audit.json",
+      "sha256": "d020ce4298acc69eb52044d4de893d114f0f44ccf821c97de39309464fc3b65e"
     },
     "database": {
-      "path": "results/competition_primary20_final.duckdb",
-      "sha256": "76f0369d09d74f6910126d84faa3162e9216edbea7ab23801c30a257b16774c3"
+      "path": "D:/University/code/sshr/resource_nmcts/results/competition_primary20_final.duckdb",
+      "sha256": "8cc494ed4506f245d29bebbb8e328a991558c0d4f67d0d2b9244bab2bad77be7"
     },
     "statistics/direct_anf": {
-      "path": "results/final_stats/resource_vs_direct_anf.json",
-      "sha256": "c46e1a68eb4c8b44a1c49cccdb4193cebc939ee7549a232f15a69afa6e052b93"
+      "path": "D:/University/code/sshr/resource_nmcts/results/final_stats/resource_vs_direct_anf.json",
+      "sha256": "3425ae145c9e75aea998304aef04d8f92b83c773178c134e4c333f754772fd75"
     },
     "statistics/greedy_factor": {
-      "path": "results/final_stats/resource_vs_greedy_factor.json",
-      "sha256": "813a8ca639e66817d4a9ff8bc20b2cc3cf3f10b1465d03aecac85ca642ef72d8"
+      "path": "D:/University/code/sshr/resource_nmcts/results/final_stats/resource_vs_greedy_factor.json",
+      "sha256": "e5034b37644628605b862a768ee3deae65dea6f8ba5e5161365ac2398f8fea97"
     },
     "statistics/mcts_factor": {
-      "path": "results/final_stats/resource_vs_mcts_factor.json",
-      "sha256": "5b26ffd47225fadd7b43956b764c32d0e7c8b85206462a2dcd6a809805a909db"
+      "path": "D:/University/code/sshr/resource_nmcts/results/final_stats/resource_vs_mcts_factor.json",
+      "sha256": "6e759d9f198d828c7a4e09e560be7c2fff57039ebb4aabee8b6504ea2bf64466"
     },
     "statistics/sshr_beam": {
-      "path": "results/final_stats/resource_vs_sshr_beam.json",
-      "sha256": "ec04119170c543a2348b19cdfcf9a76f0e09e7a69a206771042322e1be0a93d9"
+      "path": "D:/University/code/sshr/resource_nmcts/results/final_stats/resource_vs_sshr_beam.json",
+      "sha256": "25b89a3ba2d71b307297a00aee22b91f27bfa5d983ee7bf4f30aac7fd4709018"
     },
     "statistics/sshr_h": {
-      "path": "results/final_stats/resource_vs_sshr_h.json",
-      "sha256": "1f815423d84dc371e5288025dcea2ddf6cd900b408a87efabf4c758059d4aade"
+      "path": "D:/University/code/sshr/resource_nmcts/results/final_stats/resource_vs_sshr_h.json",
+      "sha256": "7e20252efcfd856729056cb77344ccdca1351b686d9df4e28052b2fcd8816f97"
     }
   },
   "outputs": {
-    "results/final_stats/primary20_headline.csv": "cfa2dbc33bd8cd2b8e4254bae619f71b8f8751a8649d42c7e948bbe2a6bedf19",
-    "results/final_stats/primary20_headline.json": "504bcea57c4a0919d55307a1298664ae393f0ce42851552370e2c69ad91458c3",
-    "submission_competition/generated_final_numbers.tex": "aa280a0a7171af40722f137629604c1f72cb987dcfee8f62a300fe5d565ceda5"
+    "D:/University/code/sshr/resource_nmcts/results/final_stats/primary20_headline.csv": "6b6c60f31f6582e5eacf55aa6986b5175ec4b6f0246640f33745606573bc45c0",
+    "D:/University/code/sshr/resource_nmcts/results/final_stats/primary20_headline.json": "236e538f97f28970c5bae91679527634c932d61cb1ee61718e2a6eefc87ed798",
+    "D:/University/code/sshr/resource_nmcts/submission_competition/generated_final_numbers.tex": "106c556044585ab9919896e4a774be5b0ce99724440bd816a890ff913c4544e7"
   },
   "schema_version": 1,
   "strict_significant_better_count": 10

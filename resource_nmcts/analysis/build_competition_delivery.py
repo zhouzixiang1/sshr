@@ -265,18 +265,18 @@ def validate_frozen_state() -> dict[str, object]:
     pdf = ROOT / "submission_competition" / "main.pdf"
     database = ROOT / "results" / "competition_primary20_final.duckdb"
 
-    expected_db_sha = "76f0369d09d74f6910126d84faa3162e9216edbea7ab23801c30a257b16774c3"
-    expected_analysis_id = "xa202609-primary20-b36257a3f41d"
+    expected_db_sha = "8cc494ed4506f245d29bebbb8e328a991558c0d4f67d0d2b9244bab2bad77be7"
+    expected_analysis_id = "xa202609-primary20-836553591061"
     if sha256_file(database) != expected_db_sha or analysis["database_sha256"] != expected_db_sha:
         raise ValueError("frozen DuckDB hash mismatch")
     if analysis["analysis_id"] != expected_analysis_id:
         raise ValueError("unexpected final analysis ID")
     if analysis["strict_significant_better_count"] != 10:
         raise ValueError("strict-significance count drifted")
-    if analysis["coverage"]["planned_cells"] != 360 or analysis["coverage"]["verified_cells"] != 354:
+    if analysis["coverage"]["planned_cells"] != 360 or analysis["coverage"]["verified_cells"] != 360:
         raise ValueError("analysis coverage drifted")
     primary_coverage = coverage["coverage"]["primary20_core3"]
-    if primary_coverage["intended_cells"] != 360 or primary_coverage["union_verified_cells"] != 354:
+    if primary_coverage["intended_cells"] != 360 or primary_coverage["union_verified_cells"] != 360:
         raise ValueError("coverage audit drifted")
     status_counts = literature.get("counts", {})
     if status_counts.get("verified") != 23 or any(status_counts.get(key, 0) for key in ("suspicious", "mismatch", "not_found")):
@@ -289,7 +289,7 @@ def validate_frozen_state() -> dict[str, object]:
         "database_sha256": expected_db_sha,
         "pdf_sha256": pdf_sha,
         "planned_cells": 360,
-        "verified_cells": 354,
+        "verified_cells": 360,
         "strict_significant_better_count": 10,
         "literature_verified": 23,
         "pdf_pages": 20,
