@@ -1,52 +1,52 @@
 {
   "schema_version": 1,
   "figure_id": "F4_frozen_primary_results",
-  "generated_utc": "2026-07-22T13:02:46.318989+00:00",
+  "generated_utc": "2026-07-30T00:29:22.246162+00:00",
   "candidate_method": "resource_nmcts[model-configured:6ba157fb9b55]",
-  "experiment_slug": "xa202609-primary20-core3-v2",
+  "experiment_slug": "primary20-core3",
   "suite": "xa202609-final-v1",
-  "database_sha256": "76f0369d09d74f6910126d84faa3162e9216edbea7ab23801c30a257b16774c3",
+  "database_sha256": "8cc494ed4506f245d29bebbb8e328a991558c0d4f67d0d2b9244bab2bad77be7",
   "analysis_contract_sha256": "aebc28f87703717d4dc6c5b48b8421e8c1c7b9d5b801b53ce46d165671d4bf48",
   "input_files": [
     {
       "path": "results/final_stats/resource_vs_direct_anf.json",
-      "sha256": "c46e1a68eb4c8b44a1c49cccdb4193cebc939ee7549a232f15a69afa6e052b93",
-      "generated_utc": "2026-07-22T12:43:42.685290+00:00"
+      "sha256": "3425ae145c9e75aea998304aef04d8f92b83c773178c134e4c333f754772fd75",
+      "generated_utc": "2026-07-29T16:39:35.743473+00:00"
     },
     {
       "path": "results/final_stats/resource_vs_greedy_factor.json",
-      "sha256": "813a8ca639e66817d4a9ff8bc20b2cc3cf3f10b1465d03aecac85ca642ef72d8",
-      "generated_utc": "2026-07-22T12:43:42.095166+00:00"
+      "sha256": "e5034b37644628605b862a768ee3deae65dea6f8ba5e5161365ac2398f8fea97",
+      "generated_utc": "2026-07-29T16:40:02.275653+00:00"
     },
     {
       "path": "results/final_stats/resource_vs_mcts_factor.json",
-      "sha256": "5b26ffd47225fadd7b43956b764c32d0e7c8b85206462a2dcd6a809805a909db",
-      "generated_utc": "2026-07-22T12:43:41.952728+00:00"
+      "sha256": "6e759d9f198d828c7a4e09e560be7c2fff57039ebb4aabee8b6504ea2bf64466",
+      "generated_utc": "2026-07-29T16:40:28.533885+00:00"
     },
     {
       "path": "results/final_stats/resource_vs_sshr_h.json",
-      "sha256": "1f815423d84dc371e5288025dcea2ddf6cd900b408a87efabf4c758059d4aade",
-      "generated_utc": "2026-07-22T12:43:42.842535+00:00"
+      "sha256": "7e20252efcfd856729056cb77344ccdca1351b686d9df4e28052b2fcd8816f97",
+      "generated_utc": "2026-07-29T16:40:55.907978+00:00"
     },
     {
       "path": "results/final_stats/resource_vs_sshr_beam.json",
-      "sha256": "ec04119170c543a2348b19cdfcf9a76f0e09e7a69a206771042322e1be0a93d9",
-      "generated_utc": "2026-07-22T12:43:41.971697+00:00"
+      "sha256": "25b89a3ba2d71b307297a00aee22b91f27bfa5d983ee7bf4f30aac7fd4709018",
+      "generated_utc": "2026-07-29T16:41:23.692334+00:00"
     },
     {
       "path": "submission_competition/final_analysis_manifest.json",
-      "sha256": "a75800e5e84541df44ab59f6fbc2e702fa5fd9f747e6538a0c8991b1071345f4",
-      "generated_utc": "2026-07-22T12:51:28.317915+00:00"
+      "sha256": "1aaff4d4f8592b4a0933a62ae4ee7e119fa310bec7f7dfb10b5e347dc2ea03a8",
+      "generated_utc": "2026-07-30T00:27:32.896982+00:00"
     },
     {
       "path": "results/final_stats/primary20_headline.json",
-      "sha256": "504bcea57c4a0919d55307a1298664ae393f0ce42851552370e2c69ad91458c3",
+      "sha256": "236e538f97f28970c5bae91679527634c932d61cb1ee61718e2a6eefc87ed798",
       "generated_utc": null
     }
   ],
   "final_analysis_alignment": {
-    "analysis_id": "xa202609-primary20-b36257a3f41d",
-    "analysis_payload_sha256": "b36257a3f41de85b6ae0aafb711ec0bc30fa6502cd43891f1381ce1f7de72443",
+    "analysis_id": "xa202609-primary20-836553591061",
+    "analysis_payload_sha256": "83655359106149c7ef53d545ac2e770d9038e39dc74b66ec3dc6c732c8554ff4",
     "claim_gate": {
       "alpha": 0.05,
       "multiple_testing": "Holm within frozen logical-primary and mapping-primary families",
@@ -56,20 +56,17 @@
     "coverage_boundary": {
       "method": "sshr_beam",
       "family": "aes_sbox",
-      "case_ids": [
-        "aes_sbox_b0",
-        "aes_sbox_b7"
-      ],
-      "case_count": 2,
+      "case_ids": [],
+      "case_count": 0,
       "seeds": [
         7,
         17,
         29
       ],
       "seeds_per_case": 3,
-      "timeout_seconds": 300,
-      "missing_cells": 6,
-      "complete_case_n": 18
+      "timeout_seconds": null,
+      "missing_cells": 0,
+      "complete_case_n": 20
     }
   },
   "statistics": {
@@ -120,7 +117,7 @@
     {
       "key": "sshr_beam",
       "label": "SSHR-Beam",
-      "n_functions": 18,
+      "n_functions": 20,
       "strict_supported_metric_count": 3
     }
   ],
@@ -163,7 +160,7 @@
       "scope": "logical",
       "target_name": "logical",
       "transpile_spec_name": null,
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
       "n_functions": 20,
       "required_seeds": [
@@ -177,7 +174,7 @@
       "losses": 0,
       "median_relative_improvement_pct": 51.489028213166144,
       "median_relative_improvement_pct_ci_low": 39.08045977011494,
-      "median_relative_improvement_pct_ci_high": 61.111111111111114,
+      "median_relative_improvement_pct_ci_high": 63.01169590643275,
       "median_delta": -26.0,
       "median_delta_ci_low": -192.0,
       "median_delta_ci_high": -6.0,
@@ -201,7 +198,7 @@
       "scope": "logical",
       "target_name": "logical",
       "transpile_spec_name": null,
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
       "n_functions": 20,
       "required_seeds": [
@@ -239,7 +236,7 @@
       "scope": "mapping",
       "target_name": "cx_full_12",
       "transpile_spec_name": "cx_full_12:seed-3",
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
       "n_functions": 20,
       "required_seeds": [
@@ -277,7 +274,7 @@
       "scope": "mapping",
       "target_name": "cx_full_12",
       "transpile_spec_name": "cx_full_12:seed-3",
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
       "n_functions": 20,
       "required_seeds": [
@@ -315,7 +312,7 @@
       "scope": "logical",
       "target_name": "logical",
       "transpile_spec_name": null,
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
       "n_functions": 20,
       "required_seeds": [
@@ -353,7 +350,7 @@
       "scope": "logical",
       "target_name": "logical",
       "transpile_spec_name": null,
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
       "n_functions": 20,
       "required_seeds": [
@@ -391,7 +388,7 @@
       "scope": "mapping",
       "target_name": "cx_full_12",
       "transpile_spec_name": "cx_full_12:seed-3",
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
       "n_functions": 20,
       "required_seeds": [
@@ -429,7 +426,7 @@
       "scope": "mapping",
       "target_name": "cx_full_12",
       "transpile_spec_name": "cx_full_12:seed-3",
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
       "n_functions": 20,
       "required_seeds": [
@@ -467,7 +464,7 @@
       "scope": "logical",
       "target_name": "logical",
       "transpile_spec_name": null,
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
       "n_functions": 20,
       "required_seeds": [
@@ -505,7 +502,7 @@
       "scope": "logical",
       "target_name": "logical",
       "transpile_spec_name": null,
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
       "n_functions": 20,
       "required_seeds": [
@@ -543,7 +540,7 @@
       "scope": "mapping",
       "target_name": "cx_full_12",
       "transpile_spec_name": "cx_full_12:seed-3",
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
       "n_functions": 20,
       "required_seeds": [
@@ -581,7 +578,7 @@
       "scope": "mapping",
       "target_name": "cx_full_12",
       "transpile_spec_name": "cx_full_12:seed-3",
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
       "n_functions": 20,
       "required_seeds": [
@@ -619,7 +616,7 @@
       "scope": "logical",
       "target_name": "logical",
       "transpile_spec_name": null,
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
       "n_functions": 20,
       "required_seeds": [
@@ -657,7 +654,7 @@
       "scope": "logical",
       "target_name": "logical",
       "transpile_spec_name": null,
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
       "n_functions": 20,
       "required_seeds": [
@@ -695,7 +692,7 @@
       "scope": "mapping",
       "target_name": "cx_full_12",
       "transpile_spec_name": "cx_full_12:seed-3",
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
       "n_functions": 20,
       "required_seeds": [
@@ -733,7 +730,7 @@
       "scope": "mapping",
       "target_name": "cx_full_12",
       "transpile_spec_name": "cx_full_12:seed-3",
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
       "n_functions": 20,
       "required_seeds": [
@@ -771,28 +768,28 @@
       "scope": "logical",
       "target_name": "logical",
       "transpile_spec_name": null,
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
-      "n_functions": 18,
+      "n_functions": 20,
       "required_seeds": [
         7,
         17,
         29
       ],
-      "n_seed_pairs": 54,
+      "n_seed_pairs": 60,
       "wins": 17,
       "ties": 1,
-      "losses": 0,
-      "median_relative_improvement_pct": 46.06060606060606,
-      "median_relative_improvement_pct_ci_low": 24.03846153846154,
-      "median_relative_improvement_pct_ci_high": 52.08333333333333,
-      "median_delta": -22.0,
-      "median_delta_ci_low": -50.0,
+      "losses": 2,
+      "median_relative_improvement_pct": 40.90909090909091,
+      "median_relative_improvement_pct_ci_low": 21.153846153846153,
+      "median_relative_improvement_pct_ci_high": 50.0,
+      "median_delta": -18.0,
+      "median_delta_ci_low": -44.0,
       "median_delta_ci_high": -8.0,
-      "wilcoxon_p_raw": 0.00028905006410405866,
+      "wilcoxon_p_raw": 0.019506779113924577,
       "holm_family": "logical_primary",
       "holm_family_size": 2,
-      "holm_p_adjusted": 0.0005781001282081173,
+      "holm_p_adjusted": 0.03901355822784915,
       "holm_reject": true,
       "strict_supported": true,
       "strict_status_reason": "Holm rejected; raw median-delta CI is strictly below zero; median-relative-improvement CI is strictly above zero"
@@ -809,28 +806,28 @@
       "scope": "logical",
       "target_name": "logical",
       "transpile_spec_name": null,
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
-      "n_functions": 18,
+      "n_functions": 20,
       "required_seeds": [
         7,
         17,
         29
       ],
-      "n_seed_pairs": 54,
+      "n_seed_pairs": 60,
       "wins": 8,
       "ties": 1,
-      "losses": 9,
-      "median_relative_improvement_pct": -2.9411764705882355,
-      "median_relative_improvement_pct_ci_low": -24.56445993031359,
-      "median_relative_improvement_pct_ci_high": 17.38095238095238,
-      "median_delta": 1.0,
-      "median_delta_ci_low": -6.0,
-      "median_delta_ci_high": 8.0,
-      "wilcoxon_p_raw": 0.831193733416755,
+      "losses": 11,
+      "median_relative_improvement_pct": -7.1078431372549025,
+      "median_relative_improvement_pct_ci_low": -39.82683982683983,
+      "median_relative_improvement_pct_ci_high": 12.072072072072071,
+      "median_delta": 2.5,
+      "median_delta_ci_low": -4.0,
+      "median_delta_ci_high": 26.0,
+      "wilcoxon_p_raw": 0.35442574198809573,
       "holm_family": "logical_primary",
       "holm_family_size": 2,
-      "holm_p_adjusted": 0.831193733416755,
+      "holm_p_adjusted": 0.35442574198809573,
       "holm_reject": false,
       "strict_supported": false,
       "strict_status_reason": "family-Holm test did not reject"
@@ -847,28 +844,28 @@
       "scope": "mapping",
       "target_name": "cx_full_12",
       "transpile_spec_name": "cx_full_12:seed-3",
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
-      "n_functions": 18,
+      "n_functions": 20,
       "required_seeds": [
         7,
         17,
         29
       ],
-      "n_seed_pairs": 54,
-      "wins": 15,
+      "n_seed_pairs": 60,
+      "wins": 17,
       "ties": 1,
       "losses": 2,
-      "median_relative_improvement_pct": 43.37692823608316,
-      "median_relative_improvement_pct_ci_low": 22.71505376344086,
-      "median_relative_improvement_pct_ci_high": 56.89079530482692,
-      "median_delta": -41.5,
-      "median_delta_ci_low": -139.0,
-      "median_delta_ci_high": -12.0,
-      "wilcoxon_p_raw": 0.001000239683091897,
+      "median_relative_improvement_pct": 45.33545358170528,
+      "median_relative_improvement_pct_ci_low": 34.13662239089184,
+      "median_relative_improvement_pct_ci_high": 50.45867255615221,
+      "median_delta": -54.5,
+      "median_delta_ci_low": -192.5,
+      "median_delta_ci_high": -17.5,
+      "wilcoxon_p_raw": 0.0003976018230173289,
       "holm_family": "mapping_primary",
       "holm_family_size": 2,
-      "holm_p_adjusted": 0.0018385641046216481,
+      "holm_p_adjusted": 0.0007366597652775672,
       "holm_reject": true,
       "strict_supported": true,
       "strict_status_reason": "Holm rejected; raw median-delta CI is strictly below zero; median-relative-improvement CI is strictly above zero"
@@ -885,28 +882,28 @@
       "scope": "mapping",
       "target_name": "cx_full_12",
       "transpile_spec_name": "cx_full_12:seed-3",
-      "experiment_slug": "xa202609-primary20-core3-v2",
+      "experiment_slug": "primary20-core3",
       "suite": "xa202609-final-v1",
-      "n_functions": 18,
+      "n_functions": 20,
       "required_seeds": [
         7,
         17,
         29
       ],
-      "n_seed_pairs": 54,
-      "wins": 15,
+      "n_seed_pairs": 60,
+      "wins": 17,
       "ties": 1,
       "losses": 2,
       "median_relative_improvement_pct": 51.76745321896273,
-      "median_relative_improvement_pct_ci_low": 29.924242424242422,
-      "median_relative_improvement_pct_ci_high": 61.021995708154506,
-      "median_delta": -90.5,
-      "median_delta_ci_low": -307.0,
-      "median_delta_ci_high": -14.5,
-      "wilcoxon_p_raw": 0.0009192820523108241,
+      "median_relative_improvement_pct_ci_low": 40.61181434599156,
+      "median_relative_improvement_pct_ci_high": 55.736330888209906,
+      "median_delta": -115.0,
+      "median_delta_ci_low": -415.5,
+      "median_delta_ci_high": -36.0,
+      "wilcoxon_p_raw": 0.0003683298826387836,
       "holm_family": "mapping_primary",
       "holm_family_size": 2,
-      "holm_p_adjusted": 0.0018385641046216481,
+      "holm_p_adjusted": 0.0007366597652775672,
       "holm_reject": true,
       "strict_supported": true,
       "strict_status_reason": "Holm rejected; raw median-delta CI is strictly below zero; median-relative-improvement CI is strictly above zero"

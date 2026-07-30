@@ -13,46 +13,46 @@
   },
   "database_access": "hash-only by this aggregator; detailed statistics were generated read-only",
   "database_sha256": "8cc494ed4506f245d29bebbb8e328a991558c0d4f67d0d2b9244bab2bad77be7",
-  "generated_utc": "2026-07-29T16:41:23.925409+00:00",
+  "generated_utc": "2026-07-30T00:27:32.896982+00:00",
   "headline_row_count": 20,
   "inputs": {
     "consolidation_manifest": {
-      "path": "D:/University/code/sshr/resource_nmcts/submission_competition/formal_primary20_core3_final_manifest_v2.json",
+      "path": "submission_competition/formal_primary20_core3_final_manifest_v2.json",
       "sha256": "2666b7d41da15cdb7e1e80c47812e0ce294698b7e3c8b9a4624160cc1401c83d"
     },
     "coverage_audit": {
-      "path": "D:/University/code/sshr/resource_nmcts/submission_competition/formal_coverage_audit.json",
+      "path": "submission_competition/formal_coverage_audit.json",
       "sha256": "d020ce4298acc69eb52044d4de893d114f0f44ccf821c97de39309464fc3b65e"
     },
     "database": {
-      "path": "D:/University/code/sshr/resource_nmcts/results/competition_primary20_final.duckdb",
+      "path": "results/competition_primary20_final.duckdb",
       "sha256": "8cc494ed4506f245d29bebbb8e328a991558c0d4f67d0d2b9244bab2bad77be7"
     },
     "statistics/direct_anf": {
-      "path": "D:/University/code/sshr/resource_nmcts/results/final_stats/resource_vs_direct_anf.json",
+      "path": "results/final_stats/resource_vs_direct_anf.json",
       "sha256": "3425ae145c9e75aea998304aef04d8f92b83c773178c134e4c333f754772fd75"
     },
     "statistics/greedy_factor": {
-      "path": "D:/University/code/sshr/resource_nmcts/results/final_stats/resource_vs_greedy_factor.json",
+      "path": "results/final_stats/resource_vs_greedy_factor.json",
       "sha256": "e5034b37644628605b862a768ee3deae65dea6f8ba5e5161365ac2398f8fea97"
     },
     "statistics/mcts_factor": {
-      "path": "D:/University/code/sshr/resource_nmcts/results/final_stats/resource_vs_mcts_factor.json",
+      "path": "results/final_stats/resource_vs_mcts_factor.json",
       "sha256": "6e759d9f198d828c7a4e09e560be7c2fff57039ebb4aabee8b6504ea2bf64466"
     },
     "statistics/sshr_beam": {
-      "path": "D:/University/code/sshr/resource_nmcts/results/final_stats/resource_vs_sshr_beam.json",
+      "path": "results/final_stats/resource_vs_sshr_beam.json",
       "sha256": "25b89a3ba2d71b307297a00aee22b91f27bfa5d983ee7bf4f30aac7fd4709018"
     },
     "statistics/sshr_h": {
-      "path": "D:/University/code/sshr/resource_nmcts/results/final_stats/resource_vs_sshr_h.json",
+      "path": "results/final_stats/resource_vs_sshr_h.json",
       "sha256": "7e20252efcfd856729056cb77344ccdca1351b686d9df4e28052b2fcd8816f97"
     }
   },
   "outputs": {
-    "D:/University/code/sshr/resource_nmcts/results/final_stats/primary20_headline.csv": "6b6c60f31f6582e5eacf55aa6986b5175ec4b6f0246640f33745606573bc45c0",
-    "D:/University/code/sshr/resource_nmcts/results/final_stats/primary20_headline.json": "236e538f97f28970c5bae91679527634c932d61cb1ee61718e2a6eefc87ed798",
-    "D:/University/code/sshr/resource_nmcts/submission_competition/generated_final_numbers.tex": "106c556044585ab9919896e4a774be5b0ce99724440bd816a890ff913c4544e7"
+    "results/final_stats/primary20_headline.csv": "6b6c60f31f6582e5eacf55aa6986b5175ec4b6f0246640f33745606573bc45c0",
+    "results/final_stats/primary20_headline.json": "236e538f97f28970c5bae91679527634c932d61cb1ee61718e2a6eefc87ed798",
+    "submission_competition/generated_final_numbers.tex": "106c556044585ab9919896e4a774be5b0ce99724440bd816a890ff913c4544e7"
   },
   "schema_version": 1,
   "strict_significant_better_count": 10

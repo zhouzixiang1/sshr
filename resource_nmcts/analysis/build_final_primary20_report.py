@@ -18,6 +18,11 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
+# Project root (resource_nmcts/), matching the figure script's ROOT so that the
+# content-addressed manifest keys are relative paths shared by all consumers.
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+
 BASELINES = {
     "resource_vs_direct_anf.json": ("direct_anf", "Direct-ANF"),
     "resource_vs_greedy_factor.json": ("greedy_factor", "Greedy-Factor"),
@@ -437,9 +442,9 @@ def main() -> int:
         "analysis_contract_sha256": payload["analysis_contract_sha256"],
         "inputs": input_records,
         "outputs": {
-            str(args.output_json.as_posix()): sha256_file(args.output_json),
-            str(args.output_csv.as_posix()): sha256_file(args.output_csv),
-            str(args.output_tex.as_posix()): sha256_file(args.output_tex),
+            str(args.output_json.resolve().relative_to(PROJECT_ROOT).as_posix()): sha256_file(args.output_json),
+            str(args.output_csv.resolve().relative_to(PROJECT_ROOT).as_posix()): sha256_file(args.output_csv),
+            str(args.output_tex.resolve().relative_to(PROJECT_ROOT).as_posix()): sha256_file(args.output_tex),
         },
         "coverage": payload["coverage"],
         "strict_significant_better_count": sum(

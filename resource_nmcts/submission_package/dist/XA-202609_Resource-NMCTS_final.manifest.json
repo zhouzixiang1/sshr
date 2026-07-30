@@ -1,14 +1,14 @@
 {
   "build_date": "2026-07-22",
   "competition": "XA-202609",
-  "content_manifest_sha256": "8074d937b6d5ced1983caaa1c4462de70c6320390f4fc47cde301f1aac945fac",
+  "content_manifest_sha256": "a692f879db367139d501e7ce1da8a497d9ad226bb8497cd6e270f28d3a26a01f",
   "file_count_excluding_manifest": 230,
   "files": [
     {
       "path": "README.md",
       "role": "delivery guide",
-      "sha256": "d6ff0780c045be3954f05a18e6e294a0f4964a2bd52e8534ea1b2f0862c93099",
-      "size_bytes": 5163,
+      "sha256": "e18478da7aeed51b0c79ed72e0571584c94e8fbd7f870f2b3330ccc86dafa3f3",
+      "size_bytes": 5182,
       "source": "submission_competition/DELIVERY_README.md"
     },
     {
@@ -49,8 +49,8 @@
     {
       "path": "analysis/build_final_primary20_report.py",
       "role": "analysis/audit source",
-      "sha256": "35ef08950dca8082f9385c5ee0904ca76f4022ca6700f9bb41b4556638ece60a",
-      "size_bytes": 19165,
+      "sha256": "5ed1401d922c108ed7265ceb041b52bcab8f0b21eaa7fb8907b1ecd14bf714a9",
+      "size_bytes": 19484,
       "source": "analysis/build_final_primary20_report.py"
     },
     {
@@ -161,8 +161,8 @@
     {
       "path": "evidence/final_analysis_manifest.json",
       "role": "frozen evidence/contract",
-      "sha256": "b07e251203a19cc93f535868ee5dce74347da8a28e5088b1befa45d676c6daf2",
-      "size_bytes": 3173,
+      "sha256": "1aaff4d4f8592b4a0933a62ae4ee7e119fa310bec7f7dfb10b5e347dc2ea03a8",
+      "size_bytes": 2744,
       "source": "submission_competition/final_analysis_manifest.json"
     },
     {
@@ -245,15 +245,15 @@
     {
       "path": "evidence/pdf_qa/VISUAL_QA.md",
       "role": "final PDF visual QA",
-      "sha256": "e0fd67891fb0ba3d5a17a5f4c328bafe9b3ac9cf39f65c99d0bdb2d575cf924b",
+      "sha256": "5f6a3cc20922e63bc76a66ec995ebfa891d8c75020f094ed59b5c39c785756d0",
       "size_bytes": 1381,
       "source": "submission_competition/pdf_qa/VISUAL_QA.md"
     },
     {
       "path": "evidence/pdf_qa/contact_sheet_01.png",
       "role": "final PDF visual QA",
-      "sha256": "2f9cb3a05438b26c97cb25b3eb0ef79c7a2c7c4262cb21b62fb321673f5e3430",
-      "size_bytes": 928623,
+      "sha256": "85fe90cb13148280142180caf4743295b13ac9eeacc0f6c8c75c87858f6ea362",
+      "size_bytes": 921655,
       "source": "submission_competition/pdf_qa/contact_sheet_01.png"
     },
     {
@@ -266,36 +266,36 @@
     {
       "path": "evidence/pdf_qa/contact_sheet_03.png",
       "role": "final PDF visual QA",
-      "sha256": "908905fd5dd96bcd854fefd7c2d1bd9d233d9c55e5830801fb93d9a12ad223cd",
-      "size_bytes": 685621,
+      "sha256": "f955fcba54a11eb3e7adc4eb8574530a8f59661ad43ba41f5447031b8034ef49",
+      "size_bytes": 689899,
       "source": "submission_competition/pdf_qa/contact_sheet_03.png"
     },
     {
       "path": "evidence/pdf_qa/contact_sheet_04.png",
       "role": "final PDF visual QA",
-      "sha256": "a9b4909a853d091d546eb4db91773be5be479e82099ed989e4ed134ef790f7a3",
-      "size_bytes": 984413,
+      "sha256": "6fd2be3403809f06124d3f75a35087ea07981bfce674235c12eabb6100ab1080",
+      "size_bytes": 986429,
       "source": "submission_competition/pdf_qa/contact_sheet_04.png"
     },
     {
       "path": "evidence/pdf_qa/contact_sheet_05.png",
       "role": "final PDF visual QA",
-      "sha256": "8c13e98bcfbbae87e262ba04195ed2babf06d29ef465e1b412f714f4ac268ab9",
-      "size_bytes": 878727,
+      "sha256": "980d37ad2a4f2e135d931e4d71df44bba392f4b173f82c5394093f877aeb7fd9",
+      "size_bytes": 885689,
       "source": "submission_competition/pdf_qa/contact_sheet_05.png"
     },
     {
       "path": "evidence/pdf_qa/page_metrics.csv",
       "role": "final PDF visual QA",
-      "sha256": "3d5efa09c8840d604f0af02c324fd900cdf813a82c64eac2bdfa03d324200ce4",
-      "size_bytes": 1406,
+      "sha256": "c1c19e5877dd894226549fc6e911e91eda1895e9ce46c1792181ddee2415a44c",
+      "size_bytes": 1403,
       "source": "submission_competition/pdf_qa/page_metrics.csv"
     },
     {
       "path": "evidence/pdf_qa/visual_qa_manifest.json",
       "role": "final PDF visual QA",
-      "sha256": "c29584e27d3504eb2db77587e64e3152bcfe59beafc8f1b10a10c93e14d04615",
-      "size_bytes": 7532,
+      "sha256": "f2af2b29c295f6f92a2126bc18afc9be5eb8bae6e77d0169c0eae390a5ae075f",
+      "size_bytes": 7529,
       "source": "submission_competition/pdf_qa/visual_qa_manifest.json"
     },
     {
@@ -483,22 +483,22 @@
     {
       "path": "paper/figures/F4_frozen_primary_results.pdf",
       "role": "figure output/source/contract",
-      "sha256": "572b637293de4e088d1bf877c102a3823df80bdf846881ccab1f57cb0eebf7de",
-      "size_bytes": 66755,
+      "sha256": "c8e8219adeab5cc4161d449087bee1fde7b111a03ef179f9fe58db9dd8a38dc3",
+      "size_bytes": 66761,
       "source": "submission_competition/figures/F4_frozen_primary_results.pdf"
     },
     {
       "path": "paper/figures/F4_frozen_primary_results.png",
       "role": "figure output/source/contract",
-      "sha256": "7fd0e80e985713ec00789310496604c0c128c1c845eab0a82f7dd35371cd1772",
-      "size_bytes": 710882,
+      "sha256": "014d85e3ea1db498a643ade480fc58067eb678ec2b96f682f8ec24ae7106c6fc",
+      "size_bytes": 712089,
       "source": "submission_competition/figures/F4_frozen_primary_results.png"
     },
     {
       "path": "paper/figures/F4_frozen_primary_results.svg",
       "role": "figure output/source/contract",
-      "sha256": "66bf73b344f2ad696f0623dfca82203bb2a9b79b5e7f0ab8892d76ad35bf45d0",
-      "size_bytes": 70392,
+      "sha256": "f6ced4a17415190a136c78ff233311345af4bd9fa420c2b7b281e99d1fd1ae0e",
+      "size_bytes": 70410,
       "source": "submission_competition/figures/F4_frozen_primary_results.svg"
     },
     {
@@ -553,8 +553,8 @@
     {
       "path": "paper/figures/PRIMARY_RESULTS_FIGURE_QA.md",
       "role": "figure output/source/contract",
-      "sha256": "16722b098be84b33d162e8f993e84c13977b0615a74a482c094a31c76f7a1281",
-      "size_bytes": 1571,
+      "sha256": "107c6b588196354112a0b16abd0208d306fed8677f9b6666eac8b7d97964f49b",
+      "size_bytes": 1590,
       "source": "submission_competition/figures/PRIMARY_RESULTS_FIGURE_QA.md"
     },
     {
@@ -644,8 +644,8 @@
     {
       "path": "paper/figures/make_primary_results_figure.py",
       "role": "figure output/source/contract",
-      "sha256": "89c5fd8ef0e0ffd5a9e47b9d3c1d8bcd4ab8fe6caab0d1ad2a5fcc5d06688737",
-      "size_bytes": 44451,
+      "sha256": "593c67c628724f20f06d12571eeec0d4696b357e23cad518a36c199fcb19f325",
+      "size_bytes": 45615,
       "source": "submission_competition/figures/make_primary_results_figure.py"
     },
     {
@@ -658,22 +658,22 @@
     {
       "path": "paper/figures/primary_results_figure_manifest.json",
       "role": "figure output/source/contract",
-      "sha256": "0a333e02b577fe41d1ff5c8a2066da2fd3e1bf735dd5c0f94f3d9865d1d769db",
-      "size_bytes": 6446,
+      "sha256": "bd7401e73edd469540292aac190068b7e8a015948345489f477bc2021d457287",
+      "size_bytes": 6398,
       "source": "submission_competition/figures/primary_results_figure_manifest.json"
     },
     {
       "path": "paper/figures/primary_results_figure_source.csv",
       "role": "figure output/source/contract",
-      "sha256": "a8303a37d47bc1468e09ac6c1c89ad6c1569b7656d2faaa5bcb39c66551c5f4f",
-      "size_bytes": 8762,
+      "sha256": "aa63a3fadb18e07e81d406e68c07a967eea0e56969ea599936846e207ec06e69",
+      "size_bytes": 8513,
       "source": "submission_competition/figures/primary_results_figure_source.csv"
     },
     {
       "path": "paper/figures/primary_results_figure_source.json",
       "role": "figure output/source/contract",
-      "sha256": "c2963c8727a1b01dd508bdb4f175b0c66b77612bf27de54eead9507e5f48c429",
-      "size_bytes": 32259,
+      "sha256": "b253100429af4c2d0c163e33a95294b2d9ac21f47e5c5ac59e1fcd8b4daa2013",
+      "size_bytes": 31944,
       "source": "submission_competition/figures/primary_results_figure_source.json"
     },
     {
@@ -707,15 +707,15 @@
     {
       "path": "paper/main.pdf",
       "role": "final competition PDF",
-      "sha256": "b37d02768242ceb72bd1694faf2031544c14060a0c8a596c830e058b45f525f5",
-      "size_bytes": 898629,
+      "sha256": "91664f3c0c9439bf9d75649c6ad6f96dcdd6093debc59923c3806f66d8ab2c72",
+      "size_bytes": 898347,
       "source": "submission_competition/main.pdf"
     },
     {
       "path": "paper/main.tex",
       "role": "LaTeX manuscript source",
-      "sha256": "0caba8f456e734b9d32f03ee5b618a866f092e25e3fcb439297435846a8955cc",
-      "size_bytes": 37099,
+      "sha256": "dccb93adb5a4d9bd501ba3d216d676193fc345360cb94682be77e794d7762ed1",
+      "size_bytes": 37162,
       "source": "submission_competition/main.tex"
     },
     {
@@ -1620,7 +1620,7 @@
     "database_sha256": "8cc494ed4506f245d29bebbb8e328a991558c0d4f67d0d2b9244bab2bad77be7",
     "literature_verified": 23,
     "pdf_pages": 20,
-    "pdf_sha256": "b37d02768242ceb72bd1694faf2031544c14060a0c8a596c830e058b45f525f5",
+    "pdf_sha256": "91664f3c0c9439bf9d75649c6ad6f96dcdd6093debc59923c3806f66d8ab2c72",
     "pdf_visual_review_pages": [],
     "planned_cells": 360,
     "regression_tests": "60 passed, 15 subtests passed; smoke ok",

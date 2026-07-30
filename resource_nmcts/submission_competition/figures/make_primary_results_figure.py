@@ -255,26 +255,6 @@ def _load_final_alignment(
     missing = list(coverage.get("missing", []))
     if int(coverage.get("missing_cells", -1)) != len(missing):
         raise ValueError("final-analysis missing-cell count is inconsistent")
-    if not missing:
-        raise ValueError("expected the frozen SSHR-Beam timeout boundary")
-    if any(row.get("requested_method") != "sshr_beam" for row in missing):
-        raise ValueError("non-SSHR-Beam cell appears in the frozen missing set")
-    if any(row.get("family") != "aes_sbox" for row in missing):
-        raise ValueError("non-AES function appears in the SSHR-Beam missing set")
-
-    timeout_values: set[int] = set()
-    timeout_cases: dict[str, set[int]] = {}
-    for row in missing:
-        match = re.fullmatch(r"synthesis_timeout_(\d+)s", str(row.get("status")))
-        if match is None:
-            raise ValueError("unexpected missing-cell status in final analysis")
-        timeout_values.add(int(match.group(1)))
-        timeout_cases.setdefault(str(row["case_id"]), set()).add(int(row["synthesis_seed"]))
-    if len(timeout_values) != 1:
-        raise ValueError("SSHR-Beam timeout duration is not unique")
-    expected_seeds = {int(value) for value in required_seeds}
-    if any(seeds != expected_seeds for seeds in timeout_cases.values()):
-        raise ValueError("not every missing AES function timed out for all required seeds")
 
     beam_n = next(
         int(row["n_functions"])
@@ -282,15 +262,29 @@ def _load_final_alignment(
         if row["baseline_key"] == "sshr_beam"
     )
     shared_n = max(int(row["n_functions"]) for row in comparisons)
-    if shared_n - beam_n != len(timeout_cases):
-        raise ValueError("SSHR-Beam complete-case n does not match the timeout case count")
 
-    return {
-        "analysis_id": manifest["analysis_id"],
-        "analysis_payload_sha256": manifest["analysis_payload_sha256"],
-        "claim_gate": headline["claim_gate"],
-        "strict_significant_better_count": computed_strict_count,
-        "coverage_boundary": {
+    if missing:
+        # Legacy 354/360 boundary: SSHR-Beam AES synthesis timeouts.
+        if any(row.get("requested_method") != "sshr_beam" for row in missing):
+            raise ValueError("non-SSHR-Beam cell appears in the frozen missing set")
+        if any(row.get("family") != "aes_sbox" for row in missing):
+            raise ValueError("non-AES function appears in the SSHR-Beam missing set")
+        timeout_values: set[int] = set()
+        timeout_cases: dict[str, set[int]] = {}
+        for row in missing:
+            match = re.fullmatch(r"synthesis_timeout_(\d+)s", str(row.get("status")))
+            if match is None:
+                raise ValueError("unexpected missing-cell status in final analysis")
+            timeout_values.add(int(match.group(1)))
+            timeout_cases.setdefault(str(row["case_id"]), set()).add(int(row["synthesis_seed"]))
+        if len(timeout_values) != 1:
+            raise ValueError("SSHR-Beam timeout duration is not unique")
+        expected_seeds = {int(value) for value in required_seeds}
+        if any(seeds != expected_seeds for seeds in timeout_cases.values()):
+            raise ValueError("not every missing AES function timed out for all required seeds")
+        if shared_n - beam_n != len(timeout_cases):
+            raise ValueError("SSHR-Beam complete-case n does not match the timeout case count")
+        boundary = {
             "method": "sshr_beam",
             "family": "aes_sbox",
             "case_ids": sorted(timeout_cases),
@@ -300,7 +294,30 @@ def _load_final_alignment(
             "timeout_seconds": next(iter(timeout_values)),
             "missing_cells": len(missing),
             "complete_case_n": beam_n,
-        },
+        }
+    else:
+        # Completed 360/360: the SSHR-Beam AES cells are filled (quad-mode fix),
+        # so there is no timeout boundary and the comparison covers all functions.
+        if beam_n != shared_n:
+            raise ValueError("SSHR-Beam n does not match the shared complete-case n")
+        boundary = {
+            "method": "sshr_beam",
+            "family": "aes_sbox",
+            "case_ids": [],
+            "case_count": 0,
+            "seeds": list(required_seeds),
+            "seeds_per_case": len(required_seeds),
+            "timeout_seconds": None,
+            "missing_cells": 0,
+            "complete_case_n": beam_n,
+        }
+
+    return {
+        "analysis_id": manifest["analysis_id"],
+        "analysis_payload_sha256": manifest["analysis_payload_sha256"],
+        "claim_gate": headline["claim_gate"],
+        "strict_significant_better_count": computed_strict_count,
+        "coverage_boundary": boundary,
         "alignment_inputs": [
             {
                 "path": _relative(FINAL_ANALYSIS_MANIFEST),
@@ -568,11 +585,19 @@ def _paired_seed_and_beam_note(source: Mapping[str, Any]) -> tuple[str, str]:
     seed_text = ", ".join(str(value) for value in seeds)
     boundary = source["final_analysis_alignment"]["coverage_boundary"]
     seed_note = f"{len(seeds)} strictly paired seeds per function ({seed_text})"
-    beam_note = (
-        f"for SSHR-Beam, all {boundary['seeds_per_case']} seeds for "
-        f"{boundary['case_count']} AES functions hit the {boundary['timeout_seconds']} s "
-        f"synthesis timeout; hence n={boundary['complete_case_n']}"
-    )
+    if boundary.get("timeout_seconds") is None:
+        # 360/360 completed state: SSHR-Beam AES cells are filled, so the
+        # comparison covers all functions with no timeout boundary.
+        beam_note = (
+            f"SSHR-Beam comparison covers all {boundary['complete_case_n']} functions "
+            f"(AES cells completed via n=8 vectorisation; no timeout boundary)"
+        )
+    else:
+        beam_note = (
+            f"for SSHR-Beam, all {boundary['seeds_per_case']} seeds for "
+            f"{boundary['case_count']} AES functions hit the {boundary['timeout_seconds']} s "
+            f"synthesis timeout; hence n={boundary['complete_case_n']}"
+        )
     return seed_note, beam_note
 
 
