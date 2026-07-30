@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "figure_id": "F5_coverage_correctness_resource",
-  "generated_at_utc": "2026-07-22T13:02:43.011250+00:00",
-  "core_conclusion": "primary20 core3 verifies 354/360 planned cells; the exact six-cell boundary is AES b0/b7 × SSHR-Beam × seeds 7/17/29 at a 300 s synthesis timeout, with no wrong result, coupling violation, or v3 memory-guard event.",
+  "generated_at_utc": "2026-07-30T00:39:51.128110+00:00",
+  "core_conclusion": "primary20 core3 verifies 360/360 planned cells (0 synthesis-timeout boundary cells remaining). The earlier SSHR-Beam AES synthesis timeouts were filled via n=8 vectorisation; there is no wrong result, coupling violation, or v3 memory-guard event.",
   "scope": {
     "cases": 20,
     "methods": 6,
@@ -14,9 +14,9 @@
     "target_id": "cx_full_12",
     "transpile_seed": 3,
     "planned_cells": 360,
-    "verified_cells": 354,
-    "timeout_cells": 6,
-    "coverage_fraction": 0.9833333333333333
+    "verified_cells": 360,
+    "timeout_cells": 0,
+    "coverage_fraction": 1.0
   },
   "coverage_cells": [
     {
@@ -2494,16 +2494,16 @@
         17,
         29
       ],
-      "verified_seeds": [],
-      "timeout_seeds": [
+      "verified_seeds": [
         7,
         17,
         29
       ],
-      "verified_count": 0,
+      "timeout_seeds": [],
+      "verified_count": 3,
       "planned_count": 3,
-      "coverage_fraction": 0.0,
-      "state": "timeout_0_of_3"
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
     },
     {
       "case_id": "aes_sbox_b0",
@@ -2626,16 +2626,16 @@
         17,
         29
       ],
-      "verified_seeds": [],
-      "timeout_seeds": [
+      "verified_seeds": [
         7,
         17,
         29
       ],
-      "verified_count": 0,
+      "timeout_seeds": [],
+      "verified_count": 3,
       "planned_count": 3,
-      "coverage_fraction": 0.0,
-      "state": "timeout_0_of_3"
+      "coverage_fraction": 1.0,
+      "state": "verified_3_of_3"
     },
     {
       "case_id": "aes_sbox_b7",
@@ -2660,84 +2660,41 @@
       "state": "verified_3_of_3"
     }
   ],
-  "timeout_cells": [
-    {
-      "case_id": "aes_sbox_b0",
-      "method": "sshr_beam",
-      "synthesis_seed": 7,
-      "stage": "synthesis",
-      "timeout_seconds": 300.0
-    },
-    {
-      "case_id": "aes_sbox_b0",
-      "method": "sshr_beam",
-      "synthesis_seed": 17,
-      "stage": "synthesis",
-      "timeout_seconds": 300.0
-    },
-    {
-      "case_id": "aes_sbox_b0",
-      "method": "sshr_beam",
-      "synthesis_seed": 29,
-      "stage": "synthesis",
-      "timeout_seconds": 300.0
-    },
-    {
-      "case_id": "aes_sbox_b7",
-      "method": "sshr_beam",
-      "synthesis_seed": 7,
-      "stage": "synthesis",
-      "timeout_seconds": 300.0
-    },
-    {
-      "case_id": "aes_sbox_b7",
-      "method": "sshr_beam",
-      "synthesis_seed": 17,
-      "stage": "synthesis",
-      "timeout_seconds": 300.0
-    },
-    {
-      "case_id": "aes_sbox_b7",
-      "method": "sshr_beam",
-      "synthesis_seed": 29,
-      "stage": "synthesis",
-      "timeout_seconds": 300.0
-    }
-  ],
+  "timeout_cells": [],
   "integrity_checks": [
     {
       "check": "logical_truth_table_exact",
       "label": "逻辑真值表正确",
-      "passed": 354,
-      "total": 354,
-      "display": "354/354"
+      "passed": 360,
+      "total": 360,
+      "display": "360/360"
     },
     {
       "check": "mapped_exact_verification",
       "label": "映射后精确验证",
-      "passed": 354,
-      "total": 354,
-      "display": "354/354"
+      "passed": 360,
+      "total": 360,
+      "display": "360/360"
     },
     {
       "check": "mapped_truth_table_mismatches",
       "label": "truth-table mismatch",
       "passed": 0,
-      "total": 354,
+      "total": 360,
       "display": "0"
     },
     {
       "check": "coupling_violations",
       "label": "coupling violation",
       "passed": 0,
-      "total": 354,
+      "total": 360,
       "display": "0"
     },
     {
       "check": "unsupported_instructions",
       "label": "unsupported instruction",
       "passed": 0,
-      "total": 354,
+      "total": 360,
       "display": "0"
     },
     {
@@ -2778,7 +2735,7 @@
       "gpu_inventory_context_only": [
         "NVIDIA GeForce RTX 5090 Laptop GPU"
       ],
-      "boundary": "Resource telemetry covers v3 recovery records only; it is not extrapolated to all 354 verified cells."
+      "boundary": "Resource telemetry covers v3 recovery records only; it is not extrapolated to all verified cells."
     },
     "records": [
       {
@@ -4085,6 +4042,12 @@
   },
   "source_inventory": {
     "manifest_declared_jsonl": [
+      "results/recovered/beam_aes_sbox_b0_s17_ok.jsonl",
+      "results/recovered/beam_aes_sbox_b0_s29_ok.jsonl",
+      "results/recovered/beam_aes_sbox_b0_s7_ok.jsonl",
+      "results/recovered/beam_aes_sbox_b7_s17_ok.jsonl",
+      "results/recovered/beam_aes_sbox_b7_s29_ok.jsonl",
+      "results/recovered/beam_aes_sbox_b7_s7_ok.jsonl",
       "results/recovered/final_core_aes_v1_ok.jsonl",
       "results/recovered/final_core_random_anf_v1_ok.jsonl",
       "results/recovered/final_core_random_truth_v1_ok.jsonl",
@@ -4112,6 +4075,12 @@
       "results/stress_aes_b7_direct_s7_b16t16e16_v1.jsonl"
     ],
     "recovered_jsonl": [
+      "results/recovered/beam_aes_sbox_b0_s17_ok.jsonl",
+      "results/recovered/beam_aes_sbox_b0_s29_ok.jsonl",
+      "results/recovered/beam_aes_sbox_b0_s7_ok.jsonl",
+      "results/recovered/beam_aes_sbox_b7_s17_ok.jsonl",
+      "results/recovered/beam_aes_sbox_b7_s29_ok.jsonl",
+      "results/recovered/beam_aes_sbox_b7_s7_ok.jsonl",
       "results/recovered/final_core_aes_v1_ok.jsonl",
       "results/recovered/final_core_random_anf_v1_ok.jsonl",
       "results/recovered/final_core_random_truth_v1_ok.jsonl",
@@ -4138,6 +4107,12 @@
       "results/recovery_primary20_thr6_t3_fast_v3.jsonl"
     ],
     "input_sha256": {
+      "results/recovered/beam_aes_sbox_b0_s17_ok.jsonl": "4cb792508b28c0b511e0bb7a59e82c1f034cd027815152e6a150af2de47aaa6c",
+      "results/recovered/beam_aes_sbox_b0_s29_ok.jsonl": "a3ca04f2eaf2c1a04ca161c46b19c5dfc55cd4e344fa5c2b27e913e61304af6e",
+      "results/recovered/beam_aes_sbox_b0_s7_ok.jsonl": "39036a24f2e9342e3de4fb79399b3280ea07d834cbdf8bd7b40dc8691200da4a",
+      "results/recovered/beam_aes_sbox_b7_s17_ok.jsonl": "0c6b33b4cbc687e5353478092535ca523b3ead325299977420d27d6a25a6f262",
+      "results/recovered/beam_aes_sbox_b7_s29_ok.jsonl": "0f1386dd86b9e82f29954dc7b1edaf2f33b958226e44fd3b23ead31218052a15",
+      "results/recovered/beam_aes_sbox_b7_s7_ok.jsonl": "84b3f0549ad0187efbc60f296fc5ba0a06a6b377f6c185cad6aab2a47bb171c6",
       "results/recovered/final_core_aes_v1_ok.jsonl": "997b18f1f6bb6f085aa8a7ffab3fb6a546482eeb23adac10663808063fc52201",
       "results/recovered/final_core_random_anf_v1_ok.jsonl": "6df5bba39e4ca499c0288bfe8882c32f6a8c096dce5a857e48001c262f04ce58",
       "results/recovered/final_core_random_truth_v1_ok.jsonl": "025ee9728dadc0e87ae407218c594b86c32d532d32b180f3ea5892cfe8f5b684",
@@ -4163,8 +4138,8 @@
       "results/stress_aes_b0_direct_s17_b8t8_v1.jsonl": "7597f7d563b6edadaf6f31ec20a6450d405e50b6dcacf96e7038388e710fbf92",
       "results/stress_aes_b0_direct_s29_b8t8e8_v1.jsonl": "9093cb0508993545b66143793ccfcf72429550ce82f1bdc361f2a21570662fd5",
       "results/stress_aes_b7_direct_s7_b16t16e16_v1.jsonl": "c37378ee89f42a8a10d5192d87f41b0ad0c0bbfa68ebe0304af40d880c825601",
-      "submission_competition/formal_coverage_audit.json": "e6d29aced0ebeffcd8ee45d3c28ed69a1c3c1d8fcadba0d6f37988f44d91b1a2",
-      "submission_competition/formal_primary20_core3_final_manifest_v2.json": "8a08cfa52533ec9cf163544259ebe4c7f3e6a476041b9ae9be647bb14fd37fbe",
+      "submission_competition/formal_coverage_audit.json": "d020ce4298acc69eb52044d4de893d114f0f44ccf821c97de39309464fc3b65e",
+      "submission_competition/formal_primary20_core3_final_manifest_v2.json": "2666b7d41da15cdb7e1e80c47812e0ce294698b7e3c8b9a4624160cc1401c83d",
       "submission_competition/primary20_execution_environment_manifest.json": "0d391f79380b6e0f7a8ee56a61e417668546bb0ba3c3e21c8318247b4b4d611a"
     }
   },

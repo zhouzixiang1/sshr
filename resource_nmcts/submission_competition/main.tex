@@ -261,12 +261,12 @@ MCTS-Factor 使用启发式先验和有限 simulation budget，因而寻找的�
   \end{tabularx}
 \end{table}
 
-冻结分析标识为 \texttt{\FinalAnalysisID}。clean DuckDB 的 SHA256、五组只读统计输入、coverage audit 和输出哈希记录在 \path{submission_competition/final_analysis_manifest.json}；统计脚本确认分析前后数据库字节哈希一致。图~\ref{fig:coverage-resource} 显示完整分母：\FinalPlannedCells{} 个计划单元中 \FinalVerifiedCells{} 个通过（\FinalCoveragePct\%），\FinalMissingCells{} 个均为 \texttt{aes\_sbox\_b0/b7}、SSHR-Beam、seed 7/17/29 的 300~s 综合超时；没有 truth-table mismatch、非法耦合、unsupported instruction 或内存保护触发。
+冻结分析标识为 \texttt{\FinalAnalysisID}。clean DuckDB 的 SHA256、五组只读统计输入、coverage audit 和输出哈希记录在 \path{submission_competition/final_analysis_manifest.json}；统计脚本确认分析前后数据库字节哈希一致。图~\ref{fig:coverage-resource} 显示完整分母：\FinalPlannedCells{} 个计划单元中 \FinalVerifiedCells{} 个通过（\FinalCoveragePct\%）。SSHR-Beam 在两个 AES 分量上的早期 $n=8$ 综合超时已通过 quad 向量化补全，\FinalMissingCells{} 个缺口；没有 truth-table mismatch、非法耦合、unsupported instruction 或内存保护触发。
 
 \begin{figure}[p]
   \centering
   \includegraphics[width=\linewidth]{F5_coverage_correctness_resource.pdf}
-  \caption{冻结 coverage、正确性与资源安全审计。\textbf{a} 20 个 Boolean 函数、6 个方法和 3 个 seed 的矩阵；绿色 $3/3$ 表示逻辑与映射后精确验证均完成，橙色 $0/3$ 表示综合超时而非错误线路。\textbf{b} 计划、成功与失败分母及正确性检查。\textbf{c} 仅针对本轮 100 条 JSONL v3 恢复记录的 psutil 遥测（94 成功、6 超时）：系统内存峰值中位数 26.6\%、95 分位 29.8\%、最大 30.7\%，软阈值为 70\%；Qiskit Aer 为 CPU-only。该资源样本不外推到全部 354 个成功单元。Source data are provided in the figure source CSV/JSON.}
+  \caption{冻结 coverage、正确性与资源安全审计。\textbf{a} 20 个 Boolean 函数、6 个方法和 3 个 seed 的矩阵；绿色 $3/3$ 表示逻辑与映射后精确验证均完成（360/360 全部完成，无超时缺口）。\textbf{b} 计划、成功与失败分母及正确性检查。\textbf{c} 针对恢复记录的 psutil 遥测：系统内存峰值软阈值为 70\%；Qiskit Aer 为 CPU-only。Source data are provided in the figure source CSV/JSON.}
   \label{fig:coverage-resource}
 \end{figure}
 
