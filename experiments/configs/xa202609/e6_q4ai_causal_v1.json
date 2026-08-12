@@ -1,0 +1,128 @@
+{
+  "schema_version": "xa.e6-q4ai-causal-config.v1",
+  "status": "development_causal_experiment_not_formal_or_performance_evidence",
+  "experiment": "e6-q4ai-final-measurement-replay-to-ai4q-shared-head",
+  "seed": 20260912,
+  "arms": [
+    "classical_random_bitstring_replay",
+    "classical_greedy_repeated_selection_replay",
+    "qaoa_final_measurement_replay",
+    "qaoa_permuted_label_control"
+  ],
+  "primary_comparison": {
+    "treatment": "qaoa_final_measurement_replay",
+    "control": "qaoa_permuted_label_control",
+    "estimand": "paired_mean_heldout_total_abstract_score_ratio_difference",
+    "direction": "lower_is_better",
+    "interpretation": "effect of preserving the action-label association in the same QAOA final-measurement distribution"
+  },
+  "training_corpus": {
+    "generator": "portable_sha_ranked_structured_vector_anf_v1",
+    "input_counts": [6, 7],
+    "output_count": 6,
+    "monomial_shared_blocks": 4,
+    "semi_affine_shared_blocks": 1,
+    "unique_fillers_per_output": 1,
+    "full_action_enumeration": true,
+    "source_action_cap": 6,
+    "scheduler_budget": 2,
+    "learned_utility_for_replay_source": "raw_analytic_utility_arm_neutral",
+    "origin": "synthetic",
+    "split": "train_replay"
+  },
+  "replay": {
+    "observation_budget": 512,
+    "qaoa_p": 1,
+    "qaoa_optimizer_restarts": 2,
+    "qaoa_optimizer_steps": 6,
+    "required_execution_class": "direct_unrepaired",
+    "equal_observation_budget": true,
+    "compute_budget_equal": false,
+    "measurement_semantics": "final_bitstring_counts_only_not_optimizer_trajectory"
+  },
+  "head_training": {
+    "foundation_checkpoint_sha256": "5b7cb23accde48915f619562b5be34221d4f0637422b7ec2e980e1a348c719f7",
+    "head_hidden": 32,
+    "head_seed": 20260907,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "policy_loss_weight": 1.0,
+    "value_loss_weight": 1.0,
+    "max_grad_norm": 1.0,
+    "sampler_seed": 20260913,
+    "device": "cpu",
+    "dtype": "float32",
+    "cpu_threads": 1,
+    "optimizer": "HeadOnlyIntegrityAdamW",
+    "scheduler": "none",
+    "early_stopping": false,
+    "resume": false
+  },
+  "heldout_evaluation": {
+    "generator": "portable_sha_ranked_bijection_v1",
+    "dataset_seed_scope": "profile_specific_pre_run",
+    "input_counts": [4, 5],
+    "candidate_universe_order": "raw_utility_desc_then_action_sha256",
+    "candidate_universe_cap": 256,
+    "learned_top_k": 10,
+    "head_role": "rank_top_k_only",
+    "scheduler_utility": "arm_neutral_raw_analytic_utility",
+    "scheduler": "exact",
+    "scheduler_budget": 2,
+    "direct_baseline": "no_shared_actions",
+    "endpoint": "total_abstract_score_over_direct_total_abstract_score",
+    "semantic_verification": "all_x_all_initial_y_inputs_preserved_ancillas_zero",
+    "cluster_unit": "whole_vector_function",
+    "bootstrap_resamples": 10000,
+    "bootstrap_seed": 20260914,
+    "sign_flip_resamples": 100000,
+    "sign_flip_seed": 20260915,
+    "claim_rule": "mean_below_zero_and_bootstrap_upper_below_zero_and_sign_flip_p_below_0.05_and_both_input_strata_below_zero_and_no_primary_arm_degradation"
+  },
+  "resource_weights": {
+    "t": 1.0,
+    "cnot": 0.04,
+    "depth": 0.015,
+    "gates": 0.01,
+    "ancilla": 2.0
+  },
+  "profiles": {
+    "tiny": {
+      "train_case_count": 4,
+      "update_steps": 8,
+      "batch_size": 2,
+      "heldout_cases_per_input_count": 2,
+      "replay_observation_budget": 64,
+      "qaoa_optimizer_restarts": 1,
+      "qaoa_optimizer_steps": 2,
+      "bootstrap_resamples": 1000,
+      "sign_flip_resamples": 4096,
+      "heldout_dataset_seed": 20260917
+    },
+    "full": {
+      "train_case_count": 64,
+      "update_steps": 256,
+      "batch_size": 4,
+      "heldout_cases_per_input_count": 16,
+      "replay_observation_budget": 512,
+      "qaoa_optimizer_restarts": 2,
+      "qaoa_optimizer_steps": 6,
+      "bootstrap_resamples": 10000,
+      "sign_flip_resamples": 100000,
+      "heldout_dataset_seed": 20260921
+    }
+  },
+  "output_contract": {
+    "files": [
+      "config.json",
+      "results.json",
+      "raw.jsonl",
+      "heldout_evaluation.json",
+      "checksums.sha256"
+    ],
+    "overwrite": false,
+    "performance_evidence": false,
+    "formal_evaluation": false
+  },
+  "claim_boundary": "single-researcher deterministic development causal experiment; no equal-compute claim, hardware evidence, quantum advantage, cryptographic generalization, or formal performance evidence"
+}
