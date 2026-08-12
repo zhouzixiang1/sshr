@@ -12,6 +12,7 @@ import random
 import pytest
 import torch
 
+import e6.frozen_foundation_v4_shared_head_v2 as frozen_head_module
 from e6.frozen_foundation_v4_shared_head_v2 import (
     CLAIM_BOUNDARY,
     DEFAULT_FORMAL_V4_CHECKPOINT,
@@ -109,6 +110,35 @@ def _assert_foundation_snapshot(
     assert all(torch.equal(actual[name].detach(), value) for name, value in expected.items())
 
 
+def _head_snapshot(
+    model: FrozenFoundationV4SharedPolicyValueV2,
+) -> dict[str, torch.Tensor]:
+    return {
+        name: parameter.detach().clone()
+        for name, parameter in model.head_named_parameters()
+    }
+
+
+def _assert_head_snapshot(
+    model: FrozenFoundationV4SharedPolicyValueV2,
+    expected: dict[str, torch.Tensor],
+) -> None:
+    actual = dict(model.head_named_parameters())
+    assert set(actual) == set(expected)
+    assert all(torch.equal(actual[name].detach(), value) for name, value in expected.items())
+
+
+def _same_shape_head_pair(
+    model: FrozenFoundationV4SharedPolicyValueV2,
+) -> tuple[torch.nn.Parameter, torch.nn.Parameter]:
+    named = tuple(model.head_named_parameters())
+    for left_index, (_, left) in enumerate(named):
+        for _, right in named[left_index + 1 :]:
+            if tuple(left.shape) == tuple(right.shape):
+                return left, right
+    raise AssertionError("test fixture requires two same-shape head parameters")
+
+
 def _head_and_foundation_alias_view(
     model: FrozenFoundationV4SharedPolicyValueV2,
 ) -> tuple[torch.nn.Parameter, torch.Tensor]:
@@ -161,6 +191,86 @@ def test_checkpoint_sha_mismatch_fails_before_loading(tmp_path: Path) -> None:
 
     with pytest.raises(ValueError, match="checkpoint SHA-256 mismatch"):
         load_frozen_foundation_v4_trunk(tampered)
+
+
+def test_foundation_checkpoint_uses_weights_only_on_the_real_artifact(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    original = torch.load
+    calls: list[dict[str, object]] = []
+
+    def recording_load(*args: object, **kwargs: object) -> object:
+        calls.append(dict(kwargs))
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(torch, "load", recording_load)
+    trunk, identity = load_frozen_foundation_v4_trunk()
+
+    assert calls and all(call.get("weights_only") is True for call in calls)
+    assert identity.checkpoint_sha256 == FORMAL_V4_CHECKPOINT_SHA256
+    assert all(parameter.dtype == torch.float32 for parameter in trunk.parameters())
+
+
+def test_foundation_weights_only_rejects_pickle_execution_after_sha_gate(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    checkpoint = tmp_path / "malicious-foundation.pt"
+    marker = tmp_path / "foundation-pickle-executed.txt"
+    torch.save(_MaliciousCheckpointPayload(marker), checkpoint)
+    monkeypatch.setattr(
+        frozen_head_module,
+        "FORMAL_V4_CHECKPOINT_SHA256",
+        frozen_head_module._file_sha256(checkpoint),  # noqa: SLF001
+    )
+
+    with pytest.raises(pickle.UnpicklingError):
+        load_frozen_foundation_v4_trunk(checkpoint)
+    assert not marker.exists()
+
+
+@pytest.mark.parametrize(
+    ("mutation", "message"),
+    (
+        ("bool_architecture", "must be a native int"),
+        ("extra_provenance", "provenance key set mismatch"),
+        ("non_tensor_state", "must be a Tensor"),
+        ("fp64_state", "tensor contract mismatch"),
+    ),
+)
+def test_foundation_checkpoint_exact_schema_fails_closed_after_reanchoring(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    mutation: str,
+    message: str,
+) -> None:
+    payload = torch.load(
+        DEFAULT_FORMAL_V4_CHECKPOINT, map_location="cpu", weights_only=True
+    )
+    payload["state_dict"] = OrderedDict(payload["state_dict"])
+    first_state = next(iter(payload["state_dict"]))
+    if mutation == "bool_architecture":
+        payload["in_channels"] = True
+    elif mutation == "extra_provenance":
+        payload["provenance"] = {**payload["provenance"], "extra": "forbidden"}
+    elif mutation == "non_tensor_state":
+        payload["state_dict"][first_state] = "not-a-tensor"
+    elif mutation == "fp64_state":
+        payload["state_dict"][first_state] = payload["state_dict"][
+            first_state
+        ].double()
+    else:  # pragma: no cover - closed parameter table above.
+        raise AssertionError(mutation)
+    checkpoint = tmp_path / f"safe-malformed-{mutation}.pt"
+    torch.save(payload, checkpoint)
+    monkeypatch.setattr(
+        frozen_head_module,
+        "FORMAL_V4_CHECKPOINT_SHA256",
+        frozen_head_module._file_sha256(checkpoint),  # noqa: SLF001
+    )
+
+    with pytest.raises(ValueError, match=message):
+        load_frozen_foundation_v4_trunk(checkpoint)
 
 
 @pytest.mark.parametrize(
@@ -548,6 +658,56 @@ def test_optimizer_constructor_and_parameter_groups_are_head_only() -> None:
         )
 
 
+def test_optimizer_constructor_requires_canonical_parameter_order() -> None:
+    model = _model().train().requires_grad_(True)
+
+    with pytest.raises(ValueError, match="canonical order"):
+        HeadOnlyIntegrityAdamW(
+            model,
+            tuple(reversed(model.head_parameters())),
+            learning_rate=1.0e-3,
+            weight_decay=1.0e-4,
+        )
+
+
+@pytest.mark.parametrize(
+    ("location", "field", "value"),
+    (
+        ("group", "lr", 0.123),
+        ("group", "foreach", None),
+        ("group", "betas", (0.8, 0.999)),
+        ("defaults", "weight_decay", 0.5),
+        ("defaults", "fused", None),
+    ),
+)
+def test_optimizer_option_mutation_fails_before_parameter_mutation(
+    location: str, field: str, value: object
+) -> None:
+    model = _model().train().requires_grad_(True)
+    optimiser = build_head_only_optimizer(model)
+    for parameter in model.head_parameters():
+        parameter.grad = torch.zeros_like(parameter)
+    before = _head_snapshot(model)
+    target = optimiser.param_groups[0] if location == "group" else optimiser.defaults
+    target[field] = value
+
+    with pytest.raises(RuntimeError, match="option changed"):
+        optimiser.step()
+    _assert_head_snapshot(model, before)
+
+
+def test_optimizer_requires_every_head_to_remain_trainable() -> None:
+    model = _model().train().requires_grad_(True)
+    optimiser = build_head_only_optimizer(model)
+    parameter = next(iter(model.head_parameters()))
+    parameter.requires_grad_(False)
+    before = _head_snapshot(model)
+
+    with pytest.raises(RuntimeError, match="parameter tensor contract changed"):
+        optimiser.step()
+    _assert_head_snapshot(model, before)
+
+
 def test_optimizer_rejects_direct_group_injection_before_step() -> None:
     model = _model().train().requires_grad_(True)
     optimiser = build_head_only_optimizer(model)
@@ -605,6 +765,48 @@ def test_step_rejects_head_data_aliased_to_foundation_before_mutation() -> None:
     _assert_foundation_snapshot(model, snapshot)
 
 
+def test_step_rejects_head_to_head_alias_before_mutation() -> None:
+    model = _model().train().requires_grad_(True)
+    optimiser = build_head_only_optimizer(model)
+    left, right = _same_shape_head_pair(model)
+    right.data = left.data
+    before = _head_snapshot(model)
+
+    with pytest.raises(RuntimeError, match="storage aliases"):
+        optimiser.step()
+    _assert_head_snapshot(model, before)
+
+
+def test_step_rejects_replaced_head_storage_before_mutation() -> None:
+    model = _model().train().requires_grad_(True)
+    optimiser = build_head_only_optimizer(model)
+    head = next(iter(model.head_parameters()))
+    head.data = head.detach().clone()
+    before = _head_snapshot(model)
+
+    with pytest.raises(RuntimeError, match="backing storage changed"):
+        optimiser.step()
+    _assert_head_snapshot(model, before)
+
+
+def test_step_rejects_partial_and_nonfinite_gradients_before_mutation() -> None:
+    model = _model().train().requires_grad_(True)
+    optimiser = build_head_only_optimizer(model)
+    first = next(iter(model.head_parameters()))
+    first.grad = torch.zeros_like(first)
+    before = _head_snapshot(model)
+    with pytest.raises(RuntimeError, match="gradients are partially populated"):
+        optimiser.step()
+    _assert_head_snapshot(model, before)
+
+    for parameter in model.head_parameters():
+        parameter.grad = torch.zeros_like(parameter)
+    first.grad.view(-1)[0] = float("nan")
+    with pytest.raises(RuntimeError, match="non-finite"):
+        optimiser.step()
+    _assert_head_snapshot(model, before)
+
+
 def test_step_rejects_adam_state_aliased_to_foundation_before_mutation() -> None:
     model = _model().train().requires_grad_(True)
     optimiser = build_head_only_optimizer(model)
@@ -621,6 +823,30 @@ def test_step_rejects_adam_state_aliased_to_foundation_before_mutation() -> None
     with pytest.raises(RuntimeError, match="storage aliases frozen foundation"):
         optimiser.step()
     _assert_foundation_snapshot(model, snapshot)
+
+
+def test_optimizer_state_schema_and_storage_are_pinned_after_first_step() -> None:
+    model = _model().train().requires_grad_(True)
+    optimiser = build_head_only_optimizer(model)
+    for parameter in model.head_parameters():
+        parameter.grad = torch.zeros_like(parameter)
+    optimiser.step()
+    optimiser.zero_grad()
+    head = next(iter(model.head_parameters()))
+    before = _head_snapshot(model)
+
+    optimiser.state[head]["extra"] = torch.zeros(())
+    with pytest.raises(RuntimeError, match="state schema changed"):
+        optimiser.step()
+    _assert_head_snapshot(model, before)
+    del optimiser.state[head]["extra"]
+
+    optimiser.state[head]["exp_avg"] = optimiser.state[head][
+        "exp_avg"
+    ].clone()
+    with pytest.raises(RuntimeError, match="backing storage changed"):
+        optimiser.step()
+    _assert_head_snapshot(model, before)
 
 
 def test_optimizer_state_loading_is_deferred_to_future_sealed_schema() -> None:
@@ -923,7 +1149,8 @@ def test_claim_boundary_and_active_trainer_disconnect_are_explicit() -> None:
     metadata = model.metadata()
 
     assert "not arbitrary term identities" in SYMMETRY_CONTRACT
-    assert "not connected to the active trainer" in CLAIM_BOUNDARY
+    assert "contains no embedded trainer" in CLAIM_BOUNDARY
+    assert "Separate audited trainer and sealed-head contracts exist" in CLAIM_BOUNDARY
     assert model.foundation_training_completed is True
     assert model.foundation_performance is False
     assert model.head_training_status == "initialized"

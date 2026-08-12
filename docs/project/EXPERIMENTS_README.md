@@ -12,8 +12,9 @@ cd experiments
 /opt/anaconda3/envs/mcts-qoracle/bin/python tests/tests_smoke.py
 ```
 
-当前开发树全套测试结果为 `501 passed in 318.53s`；legacy smoke 与默认
-`verify_clean_install.py` 的最近一次结果均为 `ok`。其中新增的
+当前开发树全套为 `557 passed in 316.28s`；E6 head/replay/trainer/seal 四组
+对抗回归为 `150 passed`。legacy smoke 与默认 `verify_clean_install.py` 最近一次均为
+`ok`。其中新增的
 安装合同回归覆盖 repository-relative quick self-check；完整 clean-install 验收
 仍应使用默认模式执行 smoke 与临时竞赛 demo。
 
@@ -48,7 +49,7 @@ checkpoint SHA，隔离环境当时树全套为 `217 passed in 62.50s`。该历�
 `dd75a9bcf06f37390c43acf6a019ea8a130ba26a998269ae10fe8bce78441d23`；外部 anchor
 `configs/xa202609/e5_v11_portable_fresh_validation_v2.anchor.json` 的 SHA-256 为
 `036dc0cad2cbe6eabac70793e3be1de44fd8f1882753e595560870bc3eddd686`。该证据只证明
-该锚定树的软件安装与证据复验合同；它不是当前 501 项回归。anchor 与完整 bundle
+该锚定树的软件安装与证据复验合同；它不是当前 557 项回归。anchor 与完整 bundle
 已由内部审计包外层 manifest 绑定。内部 draft 位于
 `docs/competition/submission/generated/ppt-cdb66ca7-pdf-f6a19cf8/XA-202609-internal-audit-draft/`，
 共 366 文件；tar 为 4,665,696 bytes，SHA-256 为
@@ -169,7 +170,7 @@ E4 已完成密码 Oracle 端到端 pilot；其当前树单命令竞赛 demo 也
 checksum 和 verification。独立 verifier 13/13 通过；QAOA 实际 direct 且无
 fallback。输出显式记录 `hardware_execution=false` 和
 `performance_evidence=false`，只用于展示链路与核验契约。对应回归测试
-`tests/test_competition_demo.py` 已通过，当前开发树全套为 501 项。
+`tests/test_competition_demo.py` 已通过，并纳入当前开发树通过的 557 项测试。
 
 ## E4-v2：正式 post-E4 frozen replication
 
@@ -240,7 +241,7 @@ native、endpoint 与 summary 均严格一致。该跨构建一致性只加固�
   --expected-anchor-sha256 036dc0cad2cbe6eabac70793e3be1de44fd8f1882753e595560870bc3eddd686
 ```
 
-## E6-MSO 下一方向
+## E6-MSO 当前开发边界
 
 E6-MSO 多输出共享表达式 mechanism MVP 已实现并独立复审：`VectorANF` 跨输出
 共享 monomial/semi-affine action，完整枚举 partial-fanout target 子集，以
@@ -249,17 +250,19 @@ E6-MSO 多输出共享表达式 mechanism MVP 已实现并独立复审：`Vector
 再对测量结果进行可行筛选/repair/fallback 分账。资源仅为 abstract logical
 X/CNOT/MCT proxy，不包含 MCT 隐式分解 ancilla 或硬件精确资源主张。
 
-隔离 v2 还实现并测试了两项开发合同：一是冻结 formal-v4 scalar trunk、仅训练薄
-head 的 output/input/candidate-equivariant shared policy/value；二是把 QAOA 最终
+隔离 v2 还实现并对抗测试了四项开发合同：一是冻结 formal-v4 scalar trunk、仅训练
+薄 head 的 output/input/candidate-equivariant shared policy/value；二是把 QAOA 最终
 测量 bitstring-count observation 与 random/greedy/exact 对照绑定到 split registry、
-外部锁和完整 ITT 记账。它不是 optimizer trajectory replay，且当前没有 active
-trainer、训练/封印 head checkpoint、真实 replay 数据、因果实验或 formal bundle。
+外部锁和完整 ITT 记账；三是每次只训练一个 source arm、固定日程的确定性 head-only
+trainer；四是 development sealed-head schema 与窄范围 inference loader。replay 合同
+不是 optimizer trajectory replay；当前仍无真实 replay 训练 run、真实 trained/sealed
+head artifact、因果实验、formal runner/bundle/verifier/result 或性能证据。
 正式盲测只使用 protocol lock 后由 SHA 派生、此前未见的 `n=4/5` 双射 S-box，且不
 按 candidate 是否存在筛选。`598→581` 是开发观察，不是正式 evidence。
 
 能力边界：这些结果仅来自 synthetic heavy-hex-like profile 和 NumPy 模拟器，
 无真机或真实校准证据，也不证明量子优势。离子阱、光量子两条适配路线及三路线
 统一 manifest 尚未完成；QAOA 最终测量 observation 经外部锁验证后被 trainer
-消费并更新 policy/value 的因果闭环也尚未完成。E4 在 AES 尺度没有逐 trial 运行原生全基态等价；其逻辑 Oracle 语义
+真实消费并更新 policy/value 的因果闭环也尚未运行。E4 在 AES 尺度没有逐 trial 运行原生全基态等价；其逻辑 Oracle 语义
 已对 256 个输入和两个目标值穷举验证，原生层只做了声明范围内的映射契约与采样
 含噪端点，不得混称为 AES 原生层穷举等价。

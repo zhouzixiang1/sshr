@@ -34,9 +34,11 @@ formal v4 provenance bundle，以及 E5 preflight/seal/v1.1/negative-audit 记�
 目录存在不等于实验验收：E4-v2 改善未获支持，E5 没有 accepted endpoint。
 探索性阈值扫描、被替代的 pilot、E5 首次 release 失败记录和旧论文实验在
 `../../misc/archive/experiments/`；这些归档只读，不得覆盖。下一核心方向为
-E6-MSO 多输出共享 Oracle：机制 MVP 与隔离 v2 frozen-head/final-measurement replay
-结构合同已实现并测试，但无 trainer、训练/封印模型或 formal 结果；598→581 不作
-正式证据。
+E6-MSO 多输出共享 Oracle：机制 MVP、隔离 frozen-formal-v4 shared head、外部锁
+final-measurement replay 合同、确定性单 arm head-only trainer 和 development
+sealed-head schema/inference loader 均已实现并完成对抗测试；但尚无真实 replay 训练
+run、真实 trained/sealed artifact、因果实验、formal runner/bundle/verifier/result 或
+性能证据，598→581 不作正式证据。
 
 `paper_latex`、`paper_latex_zh` 和 `submission_package` 是指向文档/归档的兼容
 链接，目的是让旧的投稿工具仍能定位历史资源；新文稿从 `../../docs/papers/` 管理。

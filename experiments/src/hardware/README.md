@@ -74,3 +74,4 @@ builder 输出 canonical JSON、route artifact SHA、artifact manifest 和外层
 重新编译超导/离子阱路线、重跑 seeded noisy trajectory，并用自带矩阵实现重算离子阱
 全基态及全酉矩阵。测试还覆盖“修改 RXX 角度后重签所有结构哈希”的攻击，此时结构哈希
 仍正确，但语义重算必须失败。
+

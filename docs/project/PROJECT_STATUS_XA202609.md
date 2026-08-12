@@ -2,7 +2,7 @@
 
 > 快照日期：2026-08-12
 > 历史 Git 基线：`2d264f23bbdcfaf7bf844beefb7df58af90b7b37`
-> 状态：**IN PROGRESS / formal v4 provenance 已闭环 / E4-v2 冻结复验未支持改善 / E5 跨构建负审计通过但无已接受端点 / E6-MSO 机制 MVP 与隔离 v2 head/replay 合同已验证、无 formal 结果 / 当前树 clean install 已验证**
+> 状态：**IN PROGRESS / formal v4 provenance 已闭环 / E4-v2 冻结复验未支持改善 / E5 跨构建负审计通过但无已接受端点 / E6-MSO 机制、隔离 v2 head/replay/trainer/seal 开发合同已验证、无 formal 结果 / 当前树 clean install 已验证**
 > 用途：回答“当前做什么、完成了什么、还缺什么、什么证据才算完成”
 > 权威完成门：`../contracts/COMPETITION_ACCEPTANCE_MATRIX.json`
 
@@ -29,11 +29,12 @@
 - E5 V3 可移植负审计在当前 Conda 与全新 venv 均通过 20/20，离散输出严格一致，
   仅白名单 learned continuous 字段出现受限数值漂移；该证据不改变协议失败；
 - E6-MSO 多输出共享表达式 Boolean Oracle 已完成机制 MVP 与独立整改复审；隔离
-  v2 已实现冻结 formal-v4 trunk 的 shared head 与最终测量 replay 结构合同；
+  v2 已实现冻结 formal-v4 trunk 的 shared head、最终测量 replay 外锁合同、
+  确定性单臂 head-only trainer 与 development-only trained-head seal/推理 loader；
 - 全新 CPython 3.11 venv 从 exact-pinned `dev.txt` 安装后通过 `pip check`、默认
   clean-install verifier、完整临时 demo 和隔离环境全套测试；
 - fresh-validation V2 以外部 anchor SHA 约束 9/9 历史命令与 19/19 独立检查；当前
-  当前开发树 Conda 为 501 项，锚定 fresh venv 记录保持 383 项，且外部 anchor/bundle 已由
+  当前开发树 Conda 为 557 项，锚定 fresh venv 记录保持 383 项，且外部 anchor/bundle 已由
   内部审计包绑定；
 - 权威内部审计 draft 共 366 文件，tar 为 4,665,696 bytes，目录与 tar 在
   poisoned-env 下均 PASS；tree digest 前后均为 `e850a3b9...` 且 cache 为 0，包内
@@ -55,9 +56,10 @@
   fail-closed，E5-v1.1 又因 ASCON 无可调度根动作而未通过 family-activity gate；
 - E5 V3 只证明同一负结论跨 Torch/数值构建可复验；`protocol_acceptance=false`、
   `experiment_completed=false`，不能升级为性能、硬件或量子优势主张；
-- E6-v2 只定义带外部锁的 QAOA 最终测量 observation replay 结构合同；尚无
-  trainer 消费、训练/封印 checkpoint、真实因果实验或 formal 结果，598→581 的
-  prototype 观察不得作为正式结果；
+- E6-v2 已实现同调用重验外部锁/原始 bytes 的最终测量 replay 合同、
+  确定性单臂 head-only trainer 与开发态 sealed-head schema/loader；尚无真实
+  replay 训练 run、真实 trained/sealed artifact、因果实验或 formal 结果，
+  598→581 的 prototype 观察不得作为正式结果；
 - AES bit0 已封装为当前树单命令竞赛 demo，持久化输出与独立 verifier 已通过；
   clean install 也已在全新 venv 通过，内部审计 staging 的目录/归档复验已通过，
   但尚未绑定 clean frozen commit，且没有独立离线 fallback 资产；
@@ -270,7 +272,7 @@ profile 上最小反馈机制可执行且可审计，不是真机结果、真实
 
 ```text
 python -m pytest tests -q
-501 passed in 318.53s
+557 passed in 316.28s
 
 python tests/tests_smoke.py
 smoke ok
@@ -317,7 +319,7 @@ QAOA 8/8、greedy 3/8；两者选择在 5/8 坐标不同，最终 logical QASM �
 该 demo 实际记录 QAOA direct non-fallback，同时明确
 `hardware_execution=false`、`performance_evidence=false` 和
 `quantum_advantage_claimed=false`；缩小后的演示数字只证明执行/验证契约，不能
-替代 E4 正式性能证据。`tests/test_competition_demo.py` 已通过并纳入当前 501 项测试。
+替代 E4 正式性能证据。`tests/test_competition_demo.py` 已通过并纳入当前 557 项测试。
 默认 clean-install verifier 已在隔离环境执行临时完整 demo；当前缺口是独立离线
 deterministic fallback 资产和提交包验收。
 
@@ -396,7 +398,7 @@ stdout 本机路径例外，均位于历史 `raw.jsonl` 的 `stdout.text`，不�
 外层包 verifier 还显式将 `XA_E5_PROJECT_ROOT` 重绑定到包内 `experiments/`，避免
 继承测试收集或调用环境的污染值；对应 polluted-environment 回归已闭合。
 这仍只是锚定树的软件/证据可移植性与 non-distributable internal staging 证明，
-不是当前 501 项回归、冻结 commit、最终可提交包或科学性能证据；final 仍因 7 份
+不是当前 557 项回归、冻结 commit、最终可提交包或科学性能证据；final 仍因 7 份
 人工授权/身份文档与 4 个技术 blocker 缺失而 fail-closed。
 
 ### 4.10 E6-MSO：多输出共享表达式 Boolean Oracle
@@ -407,18 +409,22 @@ clean ancilla 显式实现共享计算；greedy、exact 与 QAOA 必须在同一
 候选池/QUBO 和同一预算下比较。AI for Quantum 侧的隔离 v2 已实现冻结 formal-v4
 trunk 的 output/input/candidate-equivariant shared policy/value thin head；Quantum
 for AI 侧已实现带 split registry/外部锁的等预算 QAOA 最终测量 bitstring-count
-observation replay 结构合同。两者尚未通过 active trainer 和真实因果实验连接。
+observation replay 结构合同。隔离的确定性单臂 trainer 在同一调用内重验全局
+split registry、外部 lock 与原始 counts/parameter/attestation bytes，并使用固定
+head-only AdamW 合同；独立 seal/loader 只允许已外锚的 development trained-head
+进行 inference-only 加载。这些是可执行开发合同，不是已运行的因果实验。
 
 当前机制 MVP 已实现并通过独立复审：完整枚举合法 partial-fanout target 子集，
 以冻结 QUBO 执行 QAOA phase 后再作可行样本筛选/repair/fallback 分账，解析拒绝
 不足罚项，并把资源口径限定为 abstract logical X/CNOT/MCT proxy；显式可复用
 workspace 的整程序 peak 不超过 2，MCT 隐式分解 ancilla 不在该口径内。机制层相关
-E6、QAOA 与 scheduler 回归 109 项和 legacy smoke 通过；隔离 v2 head/replay 目标
-测试另有 94 项通过，当前全套为 501 项。ASCON/PRESENT 已观察，只能作 development；正式盲测
+E6、QAOA 与 scheduler 回归 109 项和 legacy smoke 通过；隔离 v2
+head/replay/trainer/seal 四组目标回归为 150 项，当前全套 557 项全部通过。
+ASCON/PRESENT 已观察，只能作 development；正式盲测
 必须在协议锁定后由 SHA 派生未见的 `n=4/5` 双射 S-box，且实例抽样不能按候选池
 是否非空筛选。prototype 的 `598→581` 只是开发观察，不是正式 evidence。正式
-active trainer、训练/封印 head checkpoint、真实 replay 因果实验、formal runner、
-盲测 bundle/verifier 均未完成；无硬件、量子加速或量子优势主张。
+真实外锚 replay 训练 run、真实 trained/sealed head artifact、四臂因果实验、
+formal runner、盲测 bundle/verifier 均未完成；无硬件、量子加速或量子优势主张。
 
 ## 5. 核心技术轨状态
 
@@ -427,7 +433,7 @@ active trainer、训练/封印 head checkpoint、真实 replay 因果实验、fo
 | 等变 policy/value NMCTS | **provenance-closed candidate; performance unaccepted** | v3 pilots；formal v4 从随机初始化训练，208 条 n6/7 数据、checkpoint/model-card/source/log 哈希闭环 | 完整 C0–C7、独立盲测、replay 因果消融、最终许可；E5 未通过端点验收 |
 | QAOA diversity scheduler | **implemented + validated local mechanism; endpoint improvement unsupported** | E2 420 trials、E4 8/8 direct、E4-v2 64-row frozen replication/32 QAOA direct、同池和 ITT verifier | E2 端到端 CI 跨 1；E4-v2 native-2q CI 跨 0；QAOA→policy/value replay 与冻结提交复现 |
 | native/noise feedback | **synthetic-profile minimum loop validated; improvement unsupported** | 超导原生分解/路由、逐 shot Pauli trajectory、E3 两阶段、E4-v2 compile-time execution utility | 真机/真实校准、离子阱/光量子路线、三路线 manifest；E3/E4-v2 改善区间均未过门 |
-| E6-MSO 多输出共享 Oracle | **mechanism MVP + isolated v2 head/replay contracts validated; no formal result** | VectorANF、完整 partial-fanout、共享 action、同池 conflict/QUBO 与 109 项机制回归；冻结 formal-v4 trunk 的 shared thin head、最终测量 replay 外锁/split 合同与 94 项目标测试；598→581 仅开发观察 | active trainer、训练/封印 head、真实等预算 replay 因果实验、锁后 SHA 派生未见双射 S-box 正式 runner/bundle/verifier |
+| E6-MSO 多输出共享 Oracle | **mechanism MVP + isolated v2 head/replay/trainer/seal development contracts validated; no formal result** | VectorANF、完整 partial-fanout、共享 action、同池 conflict/QUBO 与 109 项机制回归；冻结 formal-v4 trunk 的 shared thin head、最终测量 replay 外锁/split 合同、单臂确定性 trainer 与 development seal/loader 共 150 项目标回归；598→581 仅开发观察 | 真实外锚 replay 训练 run、真实 trained/sealed artifact、四臂等预算因果实验、锁后 SHA 派生未见双射 S-box 正式 runner/bundle/verifier |
 
 ### 5.1 QAOA 当前事实
 
@@ -474,11 +480,11 @@ QAOA-shot 将 exact-objective 命中率从 greedy 的 65.0% 提高到 81.7%，re
 
 | 交付物 | 当前状态 | 当前证据 | 距离完成 |
 |---|---|---|---|
-| 可运行原型 | **partial validated in current tree** | `foundation_nmcts`、QAOA 根节点调度、E4-v2 execution-aware 四臂复验、逻辑 QASM、E3/E4 原生/含噪链路、单命令 demo、隔离 clean install，以及 E6 隔离 v2 head/replay 结构合同 | E5 无 accepted endpoint；E6 无 trainer/训练后模型/formal 结果；仍缺离线 fallback 与冻结提交复演 |
-| 可复现实验 | **partial** | E2、E3、E4、E4-v2、formal v4、E5 preflight/seal/v1.1/V3 portability 均保留可核验 bundle；当前环境 501 项，smoke/default clean-install 最近一次通过，锚定 fresh 记录为 383 项 | E5 验收失败；缺 E6 正式盲测、冻结的大矩阵、三路线统一 manifest 和最终冻结复现 |
+| 可运行原型 | **partial validated in current tree** | `foundation_nmcts`、QAOA 根节点调度、E4-v2 execution-aware 四臂复验、逻辑 QASM、E3/E4 原生/含噪链路、单命令 demo、隔离 clean install，以及 E6 隔离 v2 head/replay/trainer/seal 开发合同 | E5 无 accepted endpoint；E6 无真实 replay 训练 artifact/因果实验/formal 结果；仍缺离线 fallback 与最终交付冻结复演 |
+| 可复现实验 | **partial** | E2、E3、E4、E4-v2、formal v4、E5 preflight/seal/v1.1/V3 portability 均保留可核验 bundle；当前环境 557 项，smoke/default clean-install 最近一次通过，锚定 fresh 记录为 383 项 | E5 验收失败；缺 E6 正式盲测、冻结的大矩阵、三路线统一 manifest 和最终冻结复现 |
 | 完整源码与模型 | **incomplete** | 开发源码；formal v4 的数据/训练/源码/log/model-card/checkpoint 哈希闭环 | v4 尚无 accepted 外部性能端点；主要文件未冻结；许可证与再分发权未闭环 |
 | 技术报告 PDF | **partial synchronized** | 35 页唯一中文主稿已吸收 formal v4、E4-v2、E5 可移植负审计/全新安装证据与已验证的 E6-MSO 机制合同；PDF SHA-256 `f6a19cf8a7d2e245505777838a934f30219b378a063703784bf6cf535f908d8f`，Overleaf 已同步到 `c5c6993d1589469a61dfe18000a313d798b1c02f` | E6 只在形成 formal evidence 后更新性能结果；仍需最终 claim 审计与交付冻结 |
-| 安装使用文档 | **validated current tree; internal package bound** | exact-pinned core/dev requirements、可选 quantum/Gurobi 分组、安装 README；锚定 fresh V2 在空 venv 完成 9/9 命令、383 tests 与 19/19 独立检查，V3 跨构建 20/20；当前开发树 501 项回归通过，内部包仍绑定 pre-E6-v2 交付基线的 anchor/bundle | 缺新冻结 commit 的 fresh-install/包重建、最终包内用户指南、final SBOM/第三方许可材料 |
+| 安装使用文档 | **validated current tree; internal package bound** | exact-pinned core/dev requirements、可选 quantum/Gurobi 分组、安装 README；锚定 fresh V2 在空 venv 完成 9/9 命令、383 tests 与 19/19 独立检查，V3 跨构建 20/20；当前开发树 557 项回归通过，内部包仍绑定 pre-E6-v2 交付基线的 anchor/bundle | 缺新冻结 commit 的 fresh-install/包重建、最终包内用户指南、final SBOM/第三方许可材料 |
 | 演示材料 | **partial validated** | 单命令 demo 与独立 verifier 13/13 通过；当前 PPT SHA-256 `cdb66ca733a6783cd020fd7b9ab8c568e7a80ef876d1109330cb62b3084680ae` | 仍缺独立离线 fallback 资产与 final 分发授权 |
 | 合规提交包 | **internal audit draft technical PASS; final fail-closed** | 权威 non-distributable staging 共 366 文件、4,665,696-byte tar；目录/tar poisoned-env verifier PASS；tar SHA `86b1b75b…`；tree digest `e850a3b9...` 前后一致且 0 cache；包内 fresh-v2 19/19 | 缺 7 份人工授权/身份文档与 4 个技术 blocker；不能作为最终可提交包分发 |
 
@@ -541,11 +547,11 @@ E2 QAOA 使用主环境中的 NumPy statevector 后端，不依赖 Qiskit/Aer。
 
 | 等级 | 含义 | 当前例子 |
 |---|---|---|
-| A-install 软件安装验收（范围受限） | 全新隔离环境、exact pins、`pip check`、SHA-aware 安装 verifier 与全套测试通过 | 历史快照为 217 passed；锚定 fresh V2 为 383 passed、19/19，V3 跨构建为 20/20；当前开发树已增至 501 passed；仍不替代新冻结提交的 fresh-install 或最终提交包验收 |
+| A-install 软件安装验收（范围受限） | 全新隔离环境、exact pins、`pip check`、SHA-aware 安装 verifier 与全套测试通过 | 历史快照为 217 passed；锚定 fresh V2 为 383 passed、19/19，V3 跨构建为 20/20；当前开发树已增至 557 passed；仍不替代新冻结提交的 fresh-install 或最终提交包验收 |
 | A-full 已冻结可复现 | 固定 commit/依赖/数据/seed、原始结果和 verifier 全通过 | 当前仍无完成冻结 commit 的 XA 全项目复现 |
 | B 当前树实测 | 当前工作树可运行，有明确命令和输出，但未冻结提交 | 当前全套测试/smoke；E2/E3/E4/E4-v2 verifier；formal v4 self-check；E5 V3 portability（20/20，明确 protocol acceptance=false） |
 | C 开发记录 | 有结果文字或开发 checkpoint，但无可接受正式端点 | E6-MSO prototype 598→581；E5-v1.1 的未接受 effect estimates |
-| D 设计/实现中 | 只有规格、公式或未闭环 MVP | E6 isolated trainer、训练/封印 head、真实 replay 因果实验与盲测，离子阱/光量子路线、三路线 manifest |
+| D 设计/实现中 | 只有规格、公式或未闭环 MVP | E6 真实外锚 replay 训练/封印 artifact、四臂因果实验与盲测，离子阱/光量子路线、三路线 manifest |
 | E 人工确认 | 必须由团队、学校或权利人批准 | 报名与竞赛 IP 条款已确认；许可证、`sshr_lib` 初始来源仍待确认 |
 
 最终报告的主要数值必须达到 A；B/C 只能作为开发过程记录，D 不能写成已实现。
@@ -559,11 +565,12 @@ E2 QAOA 使用主环境中的 NumPy statevector 后端，不依赖 Qiskit/Aer。
 3. **M3 E4-v2（formal replication 已完成，改善未获支持）**：保留 post-E4、
    `generalization=false`、primary CI 跨 0 和 noisy 仅诊断的完整边界，不再把它列为
    待运行 held-out 实验；
-4. **M4 E6-MSO 多输出共享 Oracle（机制与隔离接口已完成）**：VectorANF、共享
+4. **M4 E6-MSO 多输出共享 Oracle（机制与隔离开发链已完成）**：VectorANF、共享
    monomial/semi-affine action、compute–fanout–uncompute、2 clean ancilla 语义、同池
-   conflict/QUBO，以及 isolated frozen-head/final-measurement replay 合同均已实现；
-5. **M5 E6 trainer、盲测与 replay（当前最优先）**：先接入严格 head-only trainer，
-   形成训练/封印 checkpoint 与外锁 replay 因果消融；随后协议锁后用 SHA 派生未见
+   conflict/QUBO，以及 isolated frozen-head/final-measurement replay、单臂 trainer 与
+   development seal/loader 合同均已实现；
+5. **M5 E6 真实训练、盲测与 replay（当前最优先）**：先用预封外部锁材料
+   运行四个互斥单臂训练并形成真实 sealed artifact/因果消融；随后协议锁后用 SHA 派生未见
    `n=4/5` 双射 S-box，实例不按 candidate 筛选，ASCON/PRESENT 仅作 development；
 6. **M6 AES/E5 证据表达**：保留 E4 的受限正/负证据和 E5 的失败/未验收事实；
    CLI/demo 已独立复验，继续完成离线 fallback；

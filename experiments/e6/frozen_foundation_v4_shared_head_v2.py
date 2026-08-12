@@ -11,15 +11,19 @@ outputs, shared term features and shared input features.
 The supported symmetry is intentionally narrow: output-coordinate
 permutations, input-variable permutations and candidate-list reorderings.
 ``S_T`` means invariance to the row ordering of a term *set*; it does not make
-arbitrary monomial identities interchangeable.  This isolated architecture is
-not connected to the active E6 trainer and performs no replay, head training,
-formal evaluation or performance assessment.
+arbitrary monomial identities interchangeable. This base model does not embed
+training or replay; the separate isolated trainer and sealed-head contracts
+must revalidate their own external roots. No real replay run, formal evaluation
+or performance assessment is implied by this architecture.
 """
 
 from __future__ import annotations
 
+from collections import OrderedDict
 from dataclasses import dataclass
+from functools import lru_cache
 import hashlib
+import io
 import math
 from pathlib import Path
 from typing import Iterator, Mapping, Sequence
@@ -48,6 +52,7 @@ from src.foundation.equivariant import (
     ExchangeableBlock,
     ExchangeableLayer,
 )
+from src.foundation.heads import BooleanOracleModel
 
 
 FROZEN_SHARED_HEAD_SCHEMA = "xa.e6-frozen-foundation-v4-shared-head.v2-development"
@@ -59,9 +64,28 @@ FORMAL_V4_HIDDEN = 32
 FORMAL_V4_LAYERS = 2
 FORMAL_V4_SEED = 20260904
 FORMAL_V4_MAX_FACTOR_ANCILLA = 4
+FORMAL_V4_MLP_HIDDEN = 128
+_MAX_FORMAL_V4_CHECKPOINT_BYTES = 16 * 1024 * 1024
 FORMAL_V4_CANARY_OUTPUT_SHA256 = (
     "3dde070b83bd325dcd9fdfe98facc09e85813444e6b75170b2c9d843b6d1192c"
 )
+
+_FORMAL_V4_TOP_LEVEL_KEYS = frozenset(
+    {"state_dict", "in_channels", "hidden", "layers", "mlp_hidden", "provenance"}
+)
+_FORMAL_V4_PROVENANCE = {
+    "schema_version": FORMAL_V4_PROVENANCE_SCHEMA,
+    "profile": "formal",
+    "seed": FORMAL_V4_SEED,
+    "initialization": "seeded_random_from_scratch",
+    "parent_checkpoint": None,
+    "v3_weights_loaded": False,
+    "config_sha256": "45b6f8094b2866a6dcaa51e5f7975761ff315352c349058a1d984ebfb921af92",
+    "source_manifest_sha256": "1ba583be4575a057fd30de5dc08addd910873d10f8c8a72e5fa2610e593b2b29",
+    "dataset_manifest_sha256": "415025ad4d62497e1a347bce4cff2388a700de5aa53a96911b9f25c11e32a5f8",
+    "command_sha256": "cc70c9fa2cb5a9a174281872bb0495caa149695dc8ad11eeaaf8573f35fc63b8",
+    "training_log_sha256": "a78616164c09018f8889e9cb51a99596615bcaf94b31fecae91cf6b1c83f30ae",
+}
 
 DEFAULT_FORMAL_V4_CHECKPOINT = (
     Path(__file__).resolve().parents[1]
@@ -77,9 +101,11 @@ SYMMETRY_CONTRACT = (
 )
 CLAIM_BOUNDARY = (
     "The formal-v4 foundation finished its provenance training, but has no "
-    "performance status. The E6-v2 head is initialized only, is not connected "
-    "to the active trainer, and has no formal or performance evidence. Modified "
-    "heads require a future separately sealed checkpoint schema."
+    "performance status. A newly constructed E6-v2 head is initialized only "
+    "and contains no embedded trainer. Separate audited trainer and sealed-head "
+    "contracts exist, but no real replay training run, formal evaluation or "
+    "performance evidence is implied. Modified heads must use the separate "
+    "externally anchored sealed schema, never this initialized-only loader."
 )
 THREAT_MODEL = (
     "Fail closed on foundation hooks, instance/class execution overrides and "
@@ -263,49 +289,116 @@ def _assert_pinned_execution_globals() -> None:
             )
 
 
+@lru_cache(maxsize=1)
+def _formal_v4_state_schema() -> tuple[tuple[str, tuple[int, ...]], ...]:
+    """Return the exact named FP32 tensor schema of the pinned v4 model."""
+
+    with torch.random.fork_rng(devices=[]):
+        torch.manual_seed(0)
+        expected_model = BooleanOracleModel(
+            EquivariantTrunk(
+                in_channels=STATE_CHANNELS,
+                hidden=FORMAL_V4_HIDDEN,
+                layers=FORMAL_V4_LAYERS,
+            ),
+            mlp_hidden=FORMAL_V4_MLP_HIDDEN,
+        )
+    return tuple(
+        (name, tuple(tensor.shape))
+        for name, tensor in expected_model.state_dict().items()
+    )
+
+
+def _validate_formal_v4_payload_schema(payload: object) -> dict[str, object]:
+    """Reject every non-native, extra or type-coerced checkpoint field."""
+
+    if type(payload) is not dict:
+        raise ValueError("formal-v4 checkpoint payload must be a native dict")
+    if any(type(key) is not str for key in payload):
+        raise ValueError("formal-v4 checkpoint keys must be native strings")
+    if set(payload) != _FORMAL_V4_TOP_LEVEL_KEYS:
+        raise ValueError("formal-v4 checkpoint top-level key set mismatch")
+
+    architecture = {
+        "in_channels": STATE_CHANNELS,
+        "hidden": FORMAL_V4_HIDDEN,
+        "layers": FORMAL_V4_LAYERS,
+        "mlp_hidden": FORMAL_V4_MLP_HIDDEN,
+    }
+    for key, expected in architecture.items():
+        value = payload[key]
+        if type(value) is not int:
+            raise ValueError(f"formal-v4 checkpoint {key} must be a native int")
+        if value != expected:
+            raise ValueError(
+                f"formal-v4 checkpoint {key} mismatch: "
+                f"expected {expected}, got {value!r}"
+            )
+
+    provenance = payload["provenance"]
+    if type(provenance) is not dict:
+        raise ValueError("formal-v4 checkpoint provenance must be a native dict")
+    if any(type(key) is not str for key in provenance):
+        raise ValueError("formal-v4 checkpoint provenance keys must be native strings")
+    if set(provenance) != set(_FORMAL_V4_PROVENANCE):
+        raise ValueError("formal-v4 checkpoint provenance key set mismatch")
+    for key, expected in _FORMAL_V4_PROVENANCE.items():
+        value = provenance[key]
+        if type(value) is not type(expected):
+            raise ValueError(
+                f"formal-v4 checkpoint provenance {key} type mismatch"
+            )
+        if value != expected:
+            raise ValueError(
+                f"formal-v4 checkpoint provenance {key} mismatch: "
+                f"expected {expected!r}, got {value!r}"
+            )
+
+    state_dict = payload["state_dict"]
+    if type(state_dict) is not OrderedDict:
+        raise ValueError("formal-v4 checkpoint state_dict must be an OrderedDict")
+    if any(type(key) is not str for key in state_dict):
+        raise ValueError("formal-v4 checkpoint state keys must be native strings")
+    expected_state = _formal_v4_state_schema()
+    if tuple(state_dict) != tuple(name for name, _ in expected_state):
+        raise ValueError("formal-v4 checkpoint state key/order contract mismatch")
+    for name, expected_shape in expected_state:
+        tensor = state_dict[name]
+        if type(tensor) is not torch.Tensor:
+            raise ValueError(f"formal-v4 checkpoint state {name!r} must be a Tensor")
+        if (
+            tensor.device.type != "cpu"
+            or tensor.layout != torch.strided
+            or tensor.dtype != torch.float32
+            or tuple(tensor.shape) != expected_shape
+            or tensor.requires_grad
+        ):
+            raise ValueError(
+                f"formal-v4 checkpoint state {name!r} tensor contract mismatch"
+            )
+        if not bool(torch.isfinite(tensor).all()):
+            raise ValueError(f"formal-v4 checkpoint state {name!r} is non-finite")
+    return payload
+
+
 def _validated_checkpoint_payload(path: Path) -> tuple[dict[str, object], str]:
     if not path.is_file():
         raise FileNotFoundError(f"formal-v4 checkpoint does not exist: {path}")
-    digest = _file_sha256(path)
+    with path.open("rb") as handle:
+        checkpoint_bytes = handle.read(_MAX_FORMAL_V4_CHECKPOINT_BYTES + 1)
+    if len(checkpoint_bytes) > _MAX_FORMAL_V4_CHECKPOINT_BYTES:
+        raise ValueError("formal-v4 checkpoint exceeds the bounded loader size")
+    digest = hashlib.sha256(checkpoint_bytes).hexdigest()
     if digest != FORMAL_V4_CHECKPOINT_SHA256:
         raise ValueError(
             "formal-v4 checkpoint SHA-256 mismatch: "
             f"expected {FORMAL_V4_CHECKPOINT_SHA256}, got {digest}"
         )
 
-    payload = torch.load(path, map_location="cpu", weights_only=False)
-    if not isinstance(payload, dict):
-        raise ValueError("formal-v4 checkpoint payload must be a mapping")
-    architecture = {
-        "in_channels": STATE_CHANNELS,
-        "hidden": FORMAL_V4_HIDDEN,
-        "layers": FORMAL_V4_LAYERS,
-    }
-    for key, expected in architecture.items():
-        if int(payload.get(key, -1)) != expected:
-            raise ValueError(
-                f"formal-v4 checkpoint {key} mismatch: "
-                f"expected {expected}, got {payload.get(key)!r}"
-            )
-
-    provenance = payload.get("provenance")
-    if not isinstance(provenance, Mapping):
-        raise ValueError("formal-v4 checkpoint provenance is missing")
-    expected_provenance = {
-        "schema_version": FORMAL_V4_PROVENANCE_SCHEMA,
-        "profile": "formal",
-        "seed": FORMAL_V4_SEED,
-        "initialization": "seeded_random_from_scratch",
-        "parent_checkpoint": None,
-        "v3_weights_loaded": False,
-    }
-    for key, expected in expected_provenance.items():
-        if provenance.get(key) != expected:
-            raise ValueError(
-                f"formal-v4 checkpoint provenance {key} mismatch: "
-                f"expected {expected!r}, got {provenance.get(key)!r}"
-            )
-    return payload, digest
+    payload = torch.load(
+        io.BytesIO(checkpoint_bytes), map_location="cpu", weights_only=True
+    )
+    return _validate_formal_v4_payload_schema(payload), digest
 
 
 def load_frozen_foundation_v4_trunk(
@@ -1272,6 +1365,23 @@ class FrozenFoundationV4SharedPolicyValueV2(nn.Module):
 class HeadOnlyIntegrityAdamW(torch.optim.AdamW):
     """Head-only AdamW that revalidates the foundation around every step."""
 
+    _OPTION_KEYS = frozenset(
+        {
+            "lr",
+            "betas",
+            "eps",
+            "weight_decay",
+            "amsgrad",
+            "maximize",
+            "foreach",
+            "capturable",
+            "differentiable",
+            "fused",
+            "decoupled_weight_decay",
+        }
+    )
+    _STATE_KEYS = frozenset({"step", "exp_avg", "exp_avg_sq"})
+
     def __init__(
         self,
         model: FrozenFoundationV4SharedPolicyValueV2,
@@ -1280,28 +1390,75 @@ class HeadOnlyIntegrityAdamW(torch.optim.AdamW):
         learning_rate: float,
         weight_decay: float,
     ) -> None:
+        if type(model) is not FrozenFoundationV4SharedPolicyValueV2:
+            raise TypeError("HeadOnlyIntegrityAdamW requires the exact E6-v2 model")
+        for name, value, positive in (
+            ("learning_rate", learning_rate, True),
+            ("weight_decay", weight_decay, False),
+        ):
+            if type(value) is not float or not math.isfinite(value):
+                raise TypeError(f"{name} must be a native finite float")
+            if (positive and value <= 0.0) or (not positive and value < 0.0):
+                raise ValueError(f"{name} is outside the allowed range")
         provided = tuple(parameters)
-        expected = tuple(model.head_parameters())
+        expected_named = tuple(model.head_named_parameters())
+        expected = tuple(parameter for _, parameter in expected_named)
         provided_ids = tuple(id(parameter) for parameter in provided)
         expected_ids = tuple(id(parameter) for parameter in expected)
-        if len(set(provided_ids)) != len(provided_ids) or set(provided_ids) != set(
-            expected_ids
-        ):
-            raise ValueError("HeadOnlyIntegrityAdamW accepts exactly E6-v2 heads")
+        if provided_ids != expected_ids or len(set(provided_ids)) != len(provided_ids):
+            raise ValueError(
+                "HeadOnlyIntegrityAdamW accepts exactly E6-v2 heads in canonical order"
+            )
         foundation_ids = {id(parameter) for parameter in model.foundation_trunk.parameters()}
         if set(provided_ids) & foundation_ids:
             raise ValueError("foundation parameters are forbidden from the optimiser")
         self._model_ref = weakref.ref(model)
-        self._frozen_parameter_ids = frozenset(expected_ids)
+        self._expected_parameter_ids = expected_ids
+        self._expected_parameter_names = tuple(name for name, _ in expected_named)
+        self._expected_parameter_signatures = tuple(
+            self._parameter_signature(name, parameter)
+            for name, parameter in expected_named
+        )
+        self._pinned_head_storage = tuple(
+            (name, self._storage_interval(parameter))
+            for name, parameter in expected_named
+        )
+        self._completed_steps = 0
+        self._pinned_state_storage: tuple[
+            tuple[str, tuple[str, int, int] | None], ...
+        ] | None = None
+        self._expected_options = {
+            "lr": learning_rate,
+            "betas": (0.9, 0.999),
+            "eps": 1.0e-8,
+            "weight_decay": weight_decay,
+            "amsgrad": False,
+            "maximize": False,
+            "foreach": False,
+            "capturable": False,
+            "differentiable": False,
+            "fused": False,
+            "decoupled_weight_decay": True,
+        }
         self._initialising_parameter_group = True
         super().__init__(
             provided,
             lr=learning_rate,
+            betas=(0.9, 0.999),
+            eps=1.0e-8,
             weight_decay=weight_decay,
+            amsgrad=False,
+            maximize=False,
+            foreach=False,
+            capturable=False,
+            differentiable=False,
+            fused=False,
         )
         self._initialising_parameter_group = False
         self._assert_parameter_contract()
-        self._assert_storage_isolation()
+        self._assert_hyperparameter_contract()
+        self._assert_optimizer_state_contract()
+        self._assert_storage_contract()
 
     def _model(self) -> FrozenFoundationV4SharedPolicyValueV2:
         model = self._model_ref()
@@ -1311,23 +1468,74 @@ class HeadOnlyIntegrityAdamW(torch.optim.AdamW):
 
     def _assert_parameter_contract(self) -> None:
         model = self._model()
-        current_head_ids = frozenset(id(parameter) for parameter in model.head_parameters())
+        current_named = tuple(model.head_named_parameters())
+        current_ids = tuple(id(parameter) for _, parameter in current_named)
         optimiser_ids = tuple(
             id(parameter)
             for group in self.param_groups
             for parameter in group["params"]
         )
         if (
-            current_head_ids != self._frozen_parameter_ids
-            or frozenset(optimiser_ids) != self._frozen_parameter_ids
-            or len(optimiser_ids) != len(self._frozen_parameter_ids)
+            current_ids != self._expected_parameter_ids
+            or optimiser_ids != self._expected_parameter_ids
+            or tuple(name for name, _ in current_named)
+            != self._expected_parameter_names
         ):
-            raise RuntimeError("E6-v2 optimiser parameter identity changed")
+            raise RuntimeError("E6-v2 optimiser ordered parameter identity changed")
+        signatures = tuple(
+            self._parameter_signature(name, parameter)
+            for name, parameter in current_named
+        )
+        if signatures != self._expected_parameter_signatures:
+            raise RuntimeError("E6-v2 optimiser parameter tensor contract changed")
         foundation_ids = {
             id(parameter) for parameter in model.foundation_trunk.parameters()
         }
         if set(optimiser_ids) & foundation_ids:
             raise RuntimeError("foundation parameter entered the E6-v2 optimiser")
+
+    @staticmethod
+    def _parameter_signature(name: str, parameter: nn.Parameter) -> tuple[object, ...]:
+        if type(parameter) is not nn.Parameter:
+            raise RuntimeError(f"E6-v2 head {name!r} must be an exact Parameter")
+        return (
+            name,
+            id(parameter),
+            tuple(parameter.shape),
+            tuple(parameter.stride()),
+            int(parameter.storage_offset()),
+            parameter.layout,
+            parameter.dtype,
+            str(parameter.device),
+            parameter.requires_grad,
+        )
+
+    @staticmethod
+    def _same_native_value(actual: object, expected: object) -> bool:
+        if type(actual) is not type(expected):
+            return False
+        if isinstance(expected, tuple):
+            return len(actual) == len(expected) and all(  # type: ignore[arg-type]
+                HeadOnlyIntegrityAdamW._same_native_value(left, right)
+                for left, right in zip(actual, expected)  # type: ignore[arg-type]
+            )
+        return bool(actual == expected)
+
+    def _assert_hyperparameter_contract(self) -> None:
+        if type(self.param_groups) is not list or len(self.param_groups) != 1:
+            raise RuntimeError("E6-v2 optimiser requires exactly one parameter group")
+        group = self.param_groups[0]
+        if type(group) is not dict or set(group) != self._OPTION_KEYS | {"params"}:
+            raise RuntimeError("E6-v2 optimiser parameter-group schema changed")
+        if type(self.defaults) is not dict or set(self.defaults) != self._OPTION_KEYS:
+            raise RuntimeError("E6-v2 optimiser defaults schema changed")
+        if type(group["params"]) is not list:
+            raise RuntimeError("E6-v2 optimiser params must remain a native list")
+        for key, expected in self._expected_options.items():
+            if not self._same_native_value(group[key], expected):
+                raise RuntimeError(f"E6-v2 optimiser group option changed: {key}")
+            if not self._same_native_value(self.defaults[key], expected):
+                raise RuntimeError(f"E6-v2 optimiser default option changed: {key}")
 
     @staticmethod
     def _storage_interval(
@@ -1365,38 +1573,142 @@ class HeadOnlyIntegrityAdamW(torch.optim.AdamW):
             and right[1] < left[2]
         )
 
-    def _assert_storage_isolation(self) -> None:
-        """Reject data/grad/state storage shared with the frozen foundation."""
-
+    def _all_training_tensors(self) -> list[tuple[str, torch.Tensor]]:
         model = self._model()
-        foundation_ranges: list[tuple[str, tuple[str, int, int]]] = []
+        tensors: list[tuple[str, torch.Tensor]] = []
         for name, tensor in tuple(model.foundation_trunk.named_parameters()) + tuple(
             model.foundation_trunk.named_buffers()
         ):
+            tensors.append((f"foundation.{name}", tensor))
+        for name, tensor in model.named_buffers(recurse=False):
+            tensors.append((f"identity_buffer.{name}", tensor))
+        for name, parameter in model.head_named_parameters():
+            tensors.append((f"head.data.{name}", parameter))
+            if parameter.grad is not None:
+                tensors.append((f"head.grad.{name}", parameter.grad))
+        names_by_id = {
+            id(parameter): name for name, parameter in model.head_named_parameters()
+        }
+        for parameter, state in self.state.items():
+            parameter_name = names_by_id.get(id(parameter), f"unknown.{id(parameter)}")
+            tensors.extend(
+                self._iter_state_tensors(
+                    state, f"optimizer.state.{parameter_name}"
+                )
+            )
+        return tensors
+
+    def _current_state_storage(
+        self,
+    ) -> tuple[tuple[str, tuple[str, int, int] | None], ...]:
+        model = self._model()
+        rows: list[tuple[str, tuple[str, int, int] | None]] = []
+        for name, parameter in model.head_named_parameters():
+            for state_name in ("step", "exp_avg", "exp_avg_sq"):
+                value = self.state.get(parameter, {}).get(state_name)
+                if isinstance(value, torch.Tensor):
+                    rows.append(
+                        (f"{name}.{state_name}", self._storage_interval(value))
+                    )
+        return tuple(rows)
+
+    def _assert_storage_contract(self) -> None:
+        """Require pinned head storage and global pairwise storage disjointness."""
+
+        tensors = self._all_training_tensors()
+        ranged: list[tuple[str, tuple[str, int, int]]] = []
+        for name, tensor in tensors:
             interval = self._storage_interval(tensor)
             if interval is not None:
-                foundation_ranges.append((name, interval))
-
-        candidates: list[tuple[str, torch.Tensor]] = []
-        for name, parameter in model.head_named_parameters():
-            candidates.append((f"head.data.{name}", parameter))
-            if parameter.grad is not None:
-                candidates.append((f"head.grad.{name}", parameter.grad))
-        for parameter, state in self.state.items():
-            candidates.extend(
-                self._iter_state_tensors(state, f"optimizer.state.{id(parameter)}")
-            )
-
-        for candidate_name, tensor in candidates:
-            candidate_interval = self._storage_interval(tensor)
-            if candidate_interval is None:
-                continue
-            for foundation_name, foundation_interval in foundation_ranges:
-                if self._intervals_overlap(candidate_interval, foundation_interval):
+                ranged.append((name, interval))
+        for left_index, (left_name, left) in enumerate(ranged):
+            for right_name, right in ranged[left_index + 1 :]:
+                if self._intervals_overlap(left, right):
                     raise RuntimeError(
-                        "E6-v2 optimiser storage aliases frozen foundation: "
-                        f"{candidate_name} overlaps {foundation_name}"
+                        "E6-v2 training tensor storage aliases frozen foundation "
+                        "or another tensor: "
+                        f"{left_name} overlaps {right_name}"
                     )
+        current_head = tuple(
+            (name, self._storage_interval(parameter))
+            for name, parameter in self._model().head_named_parameters()
+        )
+        if current_head != self._pinned_head_storage:
+            raise RuntimeError("E6-v2 head backing storage changed")
+        current_state = self._current_state_storage()
+        if self._pinned_state_storage is not None and (
+            current_state != self._pinned_state_storage
+        ):
+            raise RuntimeError("E6-v2 optimiser-state backing storage changed")
+
+    @staticmethod
+    def _assert_finite_tensor(tensor: torch.Tensor, name: str) -> None:
+        if not bool(torch.isfinite(tensor).all()):
+            raise RuntimeError(f"E6-v2 training tensor is non-finite: {name}")
+
+    def _assert_head_and_gradient_contract(self, *, require_gradients: bool) -> None:
+        gradients_present = []
+        for name, parameter in self._model().head_named_parameters():
+            self._assert_finite_tensor(parameter, f"head.data.{name}")
+            gradient = parameter.grad
+            gradients_present.append(gradient is not None)
+            if gradient is None:
+                continue
+            if (
+                type(gradient) is not torch.Tensor
+                or gradient.layout != torch.strided
+                or gradient.dtype != torch.float32
+                or gradient.device.type != "cpu"
+                or tuple(gradient.shape) != tuple(parameter.shape)
+                or gradient.requires_grad
+            ):
+                raise RuntimeError(f"E6-v2 head gradient contract changed: {name}")
+            self._assert_finite_tensor(gradient, f"head.grad.{name}")
+        if any(gradients_present) and not all(gradients_present):
+            raise RuntimeError("E6-v2 head gradients are partially populated")
+        if require_gradients and not all(gradients_present):
+            raise RuntimeError("E6-v2 optimiser step requires every head gradient")
+
+    def _assert_optimizer_state_contract(self) -> None:
+        parameters = self._model().head_parameters()
+        if self._completed_steps == 0:
+            if len(self.state) != 0:
+                raise RuntimeError("E6-v2 optimiser state must be empty before step one")
+            return
+        if set(self.state) != set(parameters) or len(self.state) != len(parameters):
+            raise RuntimeError("E6-v2 optimiser state parameter set changed")
+        for name, parameter in self._model().head_named_parameters():
+            state = self.state[parameter]
+            if type(state) is not dict or set(state) != self._STATE_KEYS:
+                raise RuntimeError(f"E6-v2 optimiser state schema changed: {name}")
+            step = state["step"]
+            if (
+                type(step) is not torch.Tensor
+                or step.layout != torch.strided
+                or step.dtype != torch.float32
+                or step.device.type != "cpu"
+                or tuple(step.shape) != ()
+                or step.requires_grad
+                or float(step) != float(self._completed_steps)
+            ):
+                raise RuntimeError(f"E6-v2 optimiser step state changed: {name}")
+            self._assert_finite_tensor(step, f"optimizer.state.{name}.step")
+            for state_name in ("exp_avg", "exp_avg_sq"):
+                tensor = state[state_name]
+                if (
+                    type(tensor) is not torch.Tensor
+                    or tensor.layout != torch.strided
+                    or tensor.dtype != torch.float32
+                    or tensor.device.type != "cpu"
+                    or tuple(tensor.shape) != tuple(parameter.shape)
+                    or tensor.requires_grad
+                ):
+                    raise RuntimeError(
+                        f"E6-v2 optimiser {state_name} contract changed: {name}"
+                    )
+                self._assert_finite_tensor(
+                    tensor, f"optimizer.state.{name}.{state_name}"
+                )
 
     def add_param_group(self, param_group: dict[str, object]) -> None:
         if not getattr(self, "_initialising_parameter_group", False):
@@ -1408,11 +1720,19 @@ class HeadOnlyIntegrityAdamW(torch.optim.AdamW):
             raise ValueError("E6-v2 zero_grad requires set_to_none=True")
         model = self._model()
         self._assert_parameter_contract()
-        self._assert_storage_isolation()
+        self._assert_hyperparameter_contract()
+        self._assert_storage_contract()
+        self._assert_optimizer_state_contract()
+        self._assert_head_and_gradient_contract(require_gradients=False)
         model.assert_foundation_integrity()
         super().zero_grad(set_to_none=True)
+        if any(parameter.grad is not None for parameter in model.head_parameters()):
+            raise RuntimeError("E6-v2 zero_grad did not clear every head gradient")
         self._assert_parameter_contract()
-        self._assert_storage_isolation()
+        self._assert_hyperparameter_contract()
+        self._assert_optimizer_state_contract()
+        self._assert_storage_contract()
+        self._assert_head_and_gradient_contract(require_gradients=False)
         model.assert_foundation_integrity()
 
     def load_state_dict(self, state_dict: dict[str, object]) -> None:
@@ -1425,11 +1745,20 @@ class HeadOnlyIntegrityAdamW(torch.optim.AdamW):
             raise ValueError("E6-v2 optimiser closures are forbidden")
         model = self._model()
         self._assert_parameter_contract()
-        self._assert_storage_isolation()
+        self._assert_hyperparameter_contract()
+        self._assert_storage_contract()
+        self._assert_optimizer_state_contract()
         model.assert_foundation_integrity()
+        self._assert_head_and_gradient_contract(require_gradients=True)
         result = super().step(closure=None)
+        self._completed_steps += 1
         self._assert_parameter_contract()
-        self._assert_storage_isolation()
+        self._assert_hyperparameter_contract()
+        self._assert_optimizer_state_contract()
+        self._assert_head_and_gradient_contract(require_gradients=True)
+        if self._pinned_state_storage is None:
+            self._pinned_state_storage = self._current_state_storage()
+        self._assert_storage_contract()
         model.assert_foundation_integrity()
         return result
 
@@ -1442,17 +1771,18 @@ def build_head_only_optimizer(
 ) -> HeadOnlyIntegrityAdamW:
     """Create an optimiser whose parameter set is exactly the two new heads."""
 
-    if not isinstance(model, FrozenFoundationV4SharedPolicyValueV2):
-        raise TypeError("model must be FrozenFoundationV4SharedPolicyValueV2")
+    if type(model) is not FrozenFoundationV4SharedPolicyValueV2:
+        raise TypeError("model must be exact FrozenFoundationV4SharedPolicyValueV2")
     model.assert_foundation_integrity()
     for name, value in (
         ("learning_rate", learning_rate),
         ("weight_decay", weight_decay),
     ):
-        converted = float(value)
-        if not math.isfinite(converted) or converted < 0.0:
-            raise ValueError(f"{name} must be finite and non-negative")
-    if float(learning_rate) <= 0.0:
+        if type(value) is not float or not math.isfinite(value):
+            raise TypeError(f"{name} must be a native finite float")
+        if value < 0.0:
+            raise ValueError(f"{name} must be non-negative")
+    if learning_rate <= 0.0:
         raise ValueError("learning_rate must be positive")
     head_parameters = model.head_parameters()
     if not head_parameters or any(not parameter.requires_grad for parameter in head_parameters):
@@ -1460,8 +1790,8 @@ def build_head_only_optimizer(
     optimiser = HeadOnlyIntegrityAdamW(
         model,
         head_parameters,
-        learning_rate=float(learning_rate),
-        weight_decay=float(weight_decay),
+        learning_rate=learning_rate,
+        weight_decay=weight_decay,
     )
     model.assert_foundation_integrity()
     return optimiser

@@ -1,3 +1,9 @@
 # This QA report is a frozen, hash-referenced delivery artifact. Preserve its
 # Markdown hard-break bytes while excluding them from whitespace diagnostics.
 docs/competition/slides/qa_report.md -whitespace
+
+# These two source-contract files intentionally end with a blank line because
+# historical provenance bundles bind their exact bytes. Keep other whitespace
+# checks active while allowing that evidence-locked terminator.
+experiments/environment/requirements/dev.txt whitespace=-blank-at-eof
+experiments/src/hardware/README.md whitespace=-blank-at-eof

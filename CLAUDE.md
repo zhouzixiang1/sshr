@@ -57,11 +57,13 @@ formal v4 已从随机初始化形成 provenance-closed 训练 bundle，checkpoi
 E6-MSO 多输出共享表达式 mechanism MVP 已实现并独立复审：VectorANF、完整
 partial-fanout、跨输出共享 monomial/semi-affine action、compute–fanout–uncompute、
 显式 workspace peak≤2，以及同池同预算 greedy/exact/QAOA。资源口径仅为 abstract
-logical X/CNOT/MCT proxy。隔离 v2 已实现并测试冻结 formal-v4 trunk 的
-output/input/candidate-equivariant shared policy/value head，以及带 split registry 和
-外部锁的 QAOA 最终测量 bitstring-count replay 结构合同；active trainer、训练/封印
-head checkpoint、真实 replay 因果实验、formal runner/bundle/verifier 与锁后 SHA
-派生未见 n4/5 双射 S-box 正式盲测仍未完成；598→581 仅为开发观察。
+logical X/CNOT/MCT proxy。隔离 v2 的冻结 formal-v4 trunk
+output/input/candidate-equivariant shared policy/value head、带 split registry 和外部锁的
+QAOA 最终测量 bitstring-count replay 合同、确定性单 arm head-only trainer，以及
+development sealed-head schema/inference loader 均已实现并完成对抗测试。当前仍无真实
+replay 训练 run、真实 trained/sealed head artifact、因果实验、formal
+runner/bundle/verifier/result 或性能证据；锁后 SHA 派生未见 n4/5 双射 S-box 正式盲测
+仍未完成，598→581 仅为开发观察。
 
 先读：
 
@@ -112,8 +114,9 @@ cd experiments
 /opt/anaconda3/envs/mcts-qoracle/bin/python tests/tests_smoke.py
 ```
 
-当前开发树验证结果为 `501 passed in 318.53s`；legacy smoke 与默认
-`verify_clean_install.py` 的最近一次结果均为 `ok`。锚定 fresh-validation V2 的
+当前开发树全套为 `557 passed in 316.28s`；E6 head/replay/trainer/seal 四组
+对抗回归为 `150 passed`。legacy smoke 与默认 `verify_clean_install.py` 最近一次均为 `ok`。
+锚定 fresh-validation V2 的
 全新 CPython 3.11 venv 记录仍为 `383 passed in 295.779s`；冻结 PPT、Overleaf、
 PDF 和内部审计包仍对应 pre-E6-v2 的 407-test 交付基线。
 
@@ -168,7 +171,7 @@ PDF 和内部审计包仍对应 pre-E6-v2 的 407-test 交付基线。
 
 当前持久化输出包含 input、机器/人读报告、执行日志、manifest、checksum 和
 verification；独立 verifier 13/13 为 `true`。回归测试
-`tests/test_competition_demo.py` 已纳入当前 501 项测试。clean-install 默认 verifier
+`tests/test_competition_demo.py` 已纳入当前通过的 557 项测试。clean-install 默认 verifier
 也已在隔离环境执行完整临时 demo；尚未完成的是独立离线 deterministic fallback
 资产和提交包验收。
 
@@ -202,7 +205,7 @@ python3.11 -m venv .venv
 完成 9/9 命令、383 项测试与 19/19 独立复验；bundle snapshot 为
 `dd75a9bcf06f37390c43acf6a019ea8a130ba26a998269ae10fe8bce78441d23`，外部 anchor
 SHA 为 `036dc0cad2cbe6eabac70793e3be1de44fd8f1882753e595560870bc3eddd686`。
-这只证明其锚定树的软件/证据可移植性，不是当前 501 项回归、冻结提交或性能证据；
+这只证明其锚定树的软件/证据可移植性，不是当前通过的 557 项回归、冻结提交或性能证据；
 anchor 与 bundle 已进入内部审计包外层 manifest。内部 draft 位于
 `docs/competition/submission/generated/ppt-cdb66ca7-pdf-f6a19cf8/XA-202609-internal-audit-draft/`，
 共 366 文件；tar 为 4,665,696 bytes，SHA-256 为
@@ -224,9 +227,10 @@ ancilla=2.0`；新实验必须显式使用它们。默认 dataclass 的 CNOT/dep
 - 逻辑 resource score 不是硬件编译成本；不得外推为映射/噪声优势。
 - E3 只证明 synthetic heavy-hex-like profile 上的分解、路由、模拟和反馈干预；
   它不是真机、真实设备校准或硬件性能证据，也不证明量子加速/量子优势。
-- 当前反馈模型只调整根调度 utility；E6-v2 仅定义带外部锁的 QAOA 最终测量
-  bitstring-count replay 结构合同，尚未由 trainer 消费并更新 policy/value；held-out
-  CI 未过改善门，必须保留负结果。
+- 当前反馈模型只调整根调度 utility；E6-v2 已实现带外部锁的 QAOA 最终测量
+  bitstring-count replay 合同、确定性单 arm head-only trainer 和 development
+  sealed-head loader，但尚无真实 replay 训练 run 消费 observation 并形成
+  policy/value 因果结果；held-out CI 未过改善门，必须保留负结果。
 - E4 证明 AES 端到端链路与 QAOA direct execution 可运行，不证明 AES 性能优势；
   5/4096 noisy success 太稀疏，AES 尺度的逐 trial 原生全基态等价也未执行。
 - 离子阱 RXX/MS 路线、光量子 capability/unsupported-boundary 路线和三路线

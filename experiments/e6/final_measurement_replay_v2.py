@@ -62,9 +62,10 @@ ORBIT_MAX_INPUT_COUNT = 7
 ORBIT_MAX_OUTPUT_COUNT = 8
 ORBIT_MAX_TOTAL_TERMS = 512
 TRAINER_REPLAY_CONTRACT = (
-    "trainer_consumes_verified_capability_only;_trainer_must_not_build_manifest_or_"
-    "external_lock_in_the_training_process;_formal_external_lock_requires_a_later_"
-    "independently_persisted_file_or_commit_anchor"
+    "trainer_revalidates_external_lock_manifest_records_and_actual_payload_bytes_"
+    "in_same_call;_trainer_accepts_no_prebuilt_python_capability_or_replay_targets;_"
+    "trainer_must_not_build_manifest_registry_or_external_lock;_external_roots_must_"
+    "be_persisted_before_training"
 )
 TRAIN_SPLIT_ROLE = "train_replay"
 SOURCE_ARMS = (
