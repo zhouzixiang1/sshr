@@ -1,8 +1,8 @@
 # XA-202609 项目当前状态总表
 
-> 快照日期：2026-08-12
+> 快照日期：2026-08-13
 > 历史 Git 基线：`2d264f23bbdcfaf7bf844beefb7df58af90b7b37`
-> 状态：**IN PROGRESS / formal v4 provenance 已闭环 / E4-v2 未支持改善 / E5 无已接受端点 / E6 四臂 development 因果实验已确定性复验且结果显著反向 / 当前全套 588 项通过**
+> 状态：**IN PROGRESS / formal v4 provenance 已闭环 / E4-v2 未支持改善 / E5 无已接受端点 / E6-D2 resource-gain teacher 已修复 source-label mechanism 但仍略弱于 greedy / 当前全套 631 项通过**
 > 用途：回答“当前做什么、完成了什么、还缺什么、什么证据才算完成”
 > 权威完成门：`../contracts/COMPETITION_ACCEPTANCE_MATRIX.json`
 
@@ -31,6 +31,10 @@
 - E6-MSO 多输出共享表达式 Boolean Oracle 已完成机制 MVP 与独立整改复审，并在
   代码提交 `e850c0c`、结果提交 `8cc5f3c` 上完成单研究者确定性四臂 development
   实验：64 个 n6/n7 training case、32 个 n4/n5 whole-vector heldout cluster；
+- D1 将该 run 的失败定位到旧 action-marginal teacher；D2 在全新且三层 orbit
+  不相交的 train/structured/OOD split 上只改用正整程序 resource-gain credit，
+  structured/OOD 的 gain-QAOA 对 permuted control 分别为 `delta Y=-0.1688789442`
+  （32/0/0）和 `-0.1535114735`（31/1/0）；
 - 全新 CPython 3.11 venv 从 exact-pinned `dev.txt` 安装后通过 `pip check`、默认
   clean-install verifier、完整临时 demo 和隔离环境全套测试；
 - fresh-validation V2 以外部 anchor SHA 约束 9/9 历史命令与 19/19 独立检查；锚定
@@ -55,12 +59,10 @@
   fail-closed，E5-v1.1 又因 ASCON 无可调度根动作而未通过 family-activity gate；
 - E5 V3 只证明同一负结论跨 Torch/数值构建可复验；`protocol_acceptance=false`、
   `experiment_completed=false`，不能升级为性能、硬件或量子优势主张；
-- E6 已实际消费 replay observation 并完成四臂因果对照；主比较
-  `QAOA final-measurement replay - permuted-label control` 的资源比 Y 差为
-  `+0.0949778`（越低越好），95% CI `[0.0696384, 0.1237673]`，双侧 sign-flip
-  `p=9.9999e-6`，W/T/L=`0/3/29`，n4/n5 分层均为正，
-  `claim_supported=false`。这只是固定语料、初始化和 seed 下的 synthetic
-  development 负证据，不是 formal、generalization、performance 或量子优势证据；
+- E6-D2 的 resource-gain teacher 已将 QAOA source-label 关联转化为 structured/OOD
+  的一致主效应，且语义 100%、0 fallback/degraded；但 QAOA 臂在两 split 上仍略弱于
+  greedy anchor。这只是 development mechanism repair，不是 formal、generalization、
+  performance 或量子优势证据，且不改写早期 legacy replay 的负结果；
 - AES bit0 已封装为当前树单命令竞赛 demo，持久化输出与独立 verifier 已通过；
   clean install 也已在全新 venv 通过，内部审计 staging 的目录/归档复验已通过，
   但尚未绑定 clean frozen commit，且没有独立离线 fallback 资产；
@@ -71,8 +73,8 @@
 
 > **逻辑综合底座 + provenance-closed formal v4 候选 + 已验证的 QAOA 固定预算调度原型
 > + synthetic-profile 原生/含噪反馈最小闭环 + 已验证语义与契约的 AES 端到端
-> pilot；E3、E4-v2 均未证明反馈改善，E5 没有通过预声明验收门，E6 四臂
-> development 对照显著反向于 QAOA replay 改善假设；真实
+> pilot；E3、E4-v2 均未证明反馈改善，E5 没有通过预声明验收门，E6-D2
+> 修复了 resource-aligned replay mechanism 但尚未超过 greedy；真实
 > 硬件、离线 fallback 和提交闭环仍未完成；当前树单命令 demo 与隔离 clean
 > install 已实现并独立复验，但尚不构成冻结提交复现。**
 
@@ -270,11 +272,11 @@ profile 上最小反馈机制可执行且可审计，不是真机结果、真实
 
 ### 4.5 当前测试
 
-2026-08-12 实际执行：
+2026-08-13 实际执行：
 
 ```text
 python -m pytest tests -q
-588 passed in 363.66s
+631 passed in 411.04s
 0 fail/error
 submission targeted: 10/10 passed
 
@@ -324,7 +326,7 @@ QAOA 8/8、greedy 3/8；两者选择在 5/8 坐标不同，最终 logical QASM �
 `hardware_execution=false`、`performance_evidence=false` 和
 `quantum_advantage_claimed=false`；缩小后的演示数字只证明执行/验证契约，不能
 替代 E4 正式性能证据。`tests/test_competition_demo.py` 已通过并纳入此前 557 项完整
-通过基线；当前全套为 `588 passed in 363.66s`。
+通过基线；当前全套为 `631 passed in 411.04s`。
 默认 clean-install verifier 已在隔离环境执行临时完整 demo；当前缺口是独立离线
 deterministic fallback 资产和提交包验收。
 
@@ -446,14 +448,38 @@ paired `delta Y<0`、95% CI upper `<0`、语义 100%、0 fallback；不得在当
 上事后调参。
 `598→581` 仍只保留为早期开发观察。
 
+### 4.11 E6-D2：resource-gain replay teacher
+
+D1 显示旧 QAOA action-marginal label 与 raw resource utility 反相关。D2 因而只做
+一个机制变化：对每个 QAOA 最终测量 bitstring 计算正整程序 resource gain，将
+`count × gain` credit 分配到其选中动作并归一化；control 对同一 source credit 做
+固定动作置换。两个主臂均冻结 formal-v4 trunk、使用相同初始化、64 个训练 group、
+1,024 次样本呈现、`value_loss_weight=0`，下游统一为 arm-neutral raw-utility exact
+scheduler。
+
+全新 train/structured/OOD seed 为 `20261011/20261012/20261013`，在 vector、
+whole-vector cluster、orbit cluster 三层均 0 overlap，且没有复用旧 E6 heldout。
+fresh structured expanded-cap256 中 `gain-QAOA - gain-permuted` 的资源比差为
+`-0.1688789442`，W/T/L=`32/0/0`；structured diagnostics 完成后打开的 OOD endpoint
+为 `-0.1535114735`，W/T/L=`31/1/0`。matched-6 view 只诊断 teacher/model 对齐，
+expanded/OOD view 均不使用 teacher 标签。所有 endpoint 语义验证通过且
+fallback/degraded 为 0。
+
+gain-QAOA 的 structured/OOD 平均 `Y` 为 `0.7470455/0.8116278`，仍略高于 greedy
+anchor 的 `0.7410552/0.7928633`。因此当前证据支持“resource-gain target 修复了
+source-label mechanism”，不支持 strongest-greedy 性能提升。五文件 bundle 为
+`results/xa202609/20260813-e6-d2-resource-gain-teacher-v1-full-s20261011/`，snapshot
+`b16715196ff1e456184eaae6654f73f28c12454c5190d288384739f8bc1576c1`；
+formal/performance/generalization/hardware/advantage 均为 false。
+
 ## 5. 核心技术轨状态
 
 | 技术轨 | 状态 | 已有证据 | 关键缺口 |
 |---|---|---|---|
-| 等变 policy/value NMCTS | **provenance-closed candidate; performance unaccepted** | v3 pilots；formal v4 provenance；E6 四臂真实训练与 32-case development held-out 已完成 | D1 后实现 resource-aligned replay，并通过全新未调参 strongest-greedy 提升门；E5 仍无 accepted endpoint |
-| QAOA diversity scheduler | **implemented + validated local mechanism; endpoint improvement unsupported** | E2 420 trials、E4 8/8 direct、E4-v2 32 QAOA direct、E6 QAOA-control 主差 `+0.0949778` 且 CI 全正 | 当前 E2/E4-v2/E6 均未形成端点提升；最终须匹配预算达到 paired `delta Y<0`、CI upper `<0`、语义 100%、0 fallback |
+| 等变 policy/value NMCTS | **provenance-closed candidate; performance unaccepted** | v3 pilots；formal v4 provenance；E6-D2 resource-gain teacher 在 fresh structured/OOD 上均优于 permuted control | D2 仍略弱于 greedy；E5 仍无 accepted endpoint，formal performance 与 final model 仍缺 |
+| QAOA diversity scheduler | **implemented + validated local mechanism; endpoint improvement unsupported** | E2 420 trials、E4 8/8 direct、E4-v2 32 QAOA direct；E6-D2 source-label 主差 structured/OOD 均为负 | source-label mechanism 已修复，但尚未超过 greedy，也无等算力或 formal performance 证据 |
 | native/noise feedback | **synthetic-profile minimum loop validated; improvement unsupported** | 超导原生分解/路由、逐 shot Pauli trajectory、E3 两阶段、E4-v2 compile-time execution utility | 真机/真实校准、离子阱/光量子路线、三路线 manifest；E3/E4-v2 改善区间均未过门 |
-| E6-MSO 多输出共享 Oracle | **deterministic development causal experiment verified; current QAOA replay regresses** | 64 train、32 held-out；QAOA-control `+0.0949778`、CI 全正、W/T/L=`0/3/29`；QAOA=random endpoint 32/32，31/32 空；语义全过、verifier 11/11 | D1 只确定改法；resource-aligned QAOA replay 必须在全新未调参数据上通过 strongest-greedy 提升门，不能改写当前负结果 |
+| E6-MSO 多输出共享 Oracle | **development mechanism repaired; performance unaccepted** | D2 64 train + 32 structured + 32 OOD；gain-QAOA 对 permuted 为 `-0.1688789442/-0.1535114735`，W/T/L=`32/0/0` 与 `31/1/0`；语义全过、0 fallback | 仍略弱于 greedy；formal performance、匹配预算和 final model 均未闭合 |
 
 ### 5.1 QAOA 当前事实
 
@@ -483,9 +509,9 @@ QAOA-shot 将 exact-objective 命中率从 greedy 的 65.0% 提高到 81.7%，re
 模型接入根动作 utility，但 held-out 含噪端点没有改善。E4 已完成 AES 8 坐标
 复验并证明 QAOA direct 调度会改变部分最终线路；E4-v2 的 post-E4 四臂冻结复验
 也已完成，但 native-2q primary CI 跨 0。E5-v1.1 没有通过 ASCON family-activity
-验收门，因此当前仍没有被协议接受的外部密码端点。E6 已完成 policy/value replay
-机制对照，但当前 QAOA replay 显著劣于 permuted control；greedy 的较低 `Y` 只作
-非等计算描述，不能提升为 causal baseline 结论。
+验收门，因此当前仍没有被协议接受的外部密码端点。E6-D2 已在全新 split 上修复
+resource-gain teacher 的 source-label 机制，但 gain-QAOA 仍略弱于 greedy anchor，
+不能提升为性能或量子优势结论。
 
 ### 5.2 硬件三路线当前事实
 
@@ -502,13 +528,16 @@ QAOA-shot 将 exact-objective 命中率从 greedy 的 65.0% 提高到 81.7%，re
 
 | 交付物 | 当前状态 | 当前证据 | 距离完成 |
 |---|---|---|---|
-| 可运行原型 | **partial validated in current tree** | `foundation_nmcts`、QAOA 根节点调度、E4-v2 四臂复验、逻辑 QASM、E3/E4 原生/含噪链路、单命令 demo、隔离 clean install，以及 E6 四臂 deterministic development runner/verifier | E5 无 accepted endpoint；E6 当前结果显著反向，D1 后仍须实现 resource-aligned replay 并通过全新 strongest-greedy 提升门；仍缺离线 fallback |
-| 可复现实验 | **partial** | E2、E3、E4、E4-v2、formal v4、E5 证据链与 E6 五文件 bundle 均可核验；当前全套 `588 passed in 363.66s`，submission 10/10，E6 verifier 11/11；锚定 fresh 记录为 383 项 | 三路线统一 manifest 未完成 |
+| 可运行原型 | **partial validated in current tree** | `foundation_nmcts`、QAOA 根节点调度、E4-v2 四臂复验、逻辑 QASM、E3/E4 原生/含噪链路、单命令 demo、隔离 clean install，以及 E6-D2 resource-gain runner | E5 无 accepted endpoint；E6-D2 仍略弱于 greedy；仍缺离线 fallback |
+| 可复现实验 | **partial** | E2、E3、E4、E4-v2、formal v4、E5 证据链与 E6/D2 五文件 bundle 均可核验；当前全套 `631 passed in 411.04s`，submission 10/10；锚定 fresh 记录为 383 项 | 三路线统一 manifest 未完成 |
 | 完整源码与模型 | **incomplete** | 开发源码；formal v4 的数据/训练/源码/log/model-card/checkpoint 哈希闭环 | v4 尚无 accepted 外部性能端点；主要文件未冻结；许可证与再分发权未闭环 |
-| 技术报告 PDF | **synchronized; E6 negative evidence integrated** | 38 页唯一中文主稿已吸收 E6 四臂 development negative evidence；PDF SHA-256 `fadd6965e39a390589086e1784e6e68984ce2121339dbace802775858d3fcfe3`，Overleaf `739b6c921e5c574871b12172024e2302aed8bb9c` | 负向边界已审校；旧内部审计包仍为 pre-E6 baseline |
-| 安装使用文档 | **validated current tree; historical anchor retained** | exact-pinned requirements；当前全套 `588 passed in 363.66s`；锚定 fresh V2 为 9/9、383 tests、19/19，V3 为 20/20 | 内部包仍绑定 pre-E6-v2 的 407-test 交付基线 |
-| 演示材料 | **partial validated** | 单命令 demo 与独立 verifier 13/13 通过；14 页 PPT 已同步 E6 负向结果并完成结构/渲染 QA，SHA-256 `bf830dee8dd9adf5e9110cbf8b73f0ebbfbb3fe453c3aad03c057b031581d4e3` | 仍缺独立离线 fallback 资产与 final 分发授权 |
+| 技术报告 PDF | **synchronized through E6-D2** | 39 页唯一中文主稿已吸收 E6 legacy 负结果与 D2 mechanism repair；PDF SHA-256 `f6826f61595e5a7de9b311a13e6027b061c99323fbbdc626196986a7c3cbda95`，Overleaf `cb6962eab16974ce7a5734ae43094a15abf99138` | formal/performance 边界已审校；旧内部审计包仍为 pre-E6 baseline |
+| 安装使用文档 | **validated current tree; historical anchor retained** | exact-pinned requirements；当前全套 `631 passed in 411.04s`；锚定 fresh V2 为 9/9、383 tests、19/19，V3 为 20/20 | 内部包仍绑定 pre-E6-v2 的 407-test 交付基线 |
+| 演示材料 | **partial validated** | 单命令 demo 与独立 verifier 13/13 通过；14 页 PPT 已同步 E6 legacy 负结果与 D2 mechanism repair，14/14 notes/[Sources] 与结构/渲染 QA 均通过，SHA-256 `fa7b319fa620a37a62302be24c04ed70fb432be91d7d0fafbd8cf2e08377412f` | 仍缺独立离线 fallback 资产与 final 分发授权 |
 | 合规提交包 | **internal audit draft technical PASS; final fail-closed** | 权威 non-distributable staging 共 366 文件、4,665,696-byte tar；目录/tar poisoned-env verifier PASS；tar SHA `86b1b75b…`；tree digest `e850a3b9...` 前后一致且 0 cache；包内 fresh-v2 19/19 | 缺 7 份人工授权/身份文档与 3 个固定技术 blocker；仓库 dirty 时另加第 4 个；不能作为最终可提交包分发 |
+
+日期说明：当前主稿内容与 PDF 已更新至 2026-08-13；封面保留的
+`2026-08-12` 是竞赛稿登记日期，不随后续修订日期滚动。
 
 七项必须全部有可检查证据；任一单测、旧论文或逻辑 QASM 都不能代表整体完成。
 
@@ -527,9 +556,10 @@ QAOA-shot 将 exact-objective 命中率从 greedy 的 65.0% 提高到 81.7%，re
 
 ## 8. 版本控制、环境和合规状态
 
-E6 极简实验的源码与结果已分别形成提交 `e850c0c` 和 `8cc5f3c`。本轮文档/主稿
-同步完成后应直接提交并以 `git status --short` 验证干净，不再为单研究者开发增加
-额外 seal/preseal 流程：
+E6 legacy 实验的源码与结果提交为 `e850c0c` 和 `8cc5f3c`；D2 普通开发代码由
+`46a370f`/`51288b1` 收口，五文件结果提交为 `5da75a4`。本轮文档/主稿
+同步完成后应直接提交并以 `git status --short` 验证干净，单研究者开发只采用普通
+Git 与五文件结果合同：
 
 - 目录已分为 `docs/`、`experiments/`、`misc/`；历史平铺结果和旧投稿包已移入本机归档；
 - `docs/competition/report/` 已有可编译草稿，`experiments/demo/` 已有实跑输出和
@@ -568,11 +598,11 @@ E2 QAOA 使用主环境中的 NumPy statevector 后端，不依赖 Qiskit/Aer。
 
 | 等级 | 含义 | 当前例子 |
 |---|---|---|
-| A-install 软件安装验收（范围受限） | 全新隔离环境、exact pins、`pip check`、SHA-aware 安装 verifier 与全套测试通过 | 历史快照为 217 passed；锚定 fresh V2 为 383 passed、19/19，V3 跨构建为 20/20；当前开发树为 `588 passed in 363.66s` |
+| A-install 软件安装验收（范围受限） | 全新隔离环境、exact pins、`pip check`、SHA-aware 安装 verifier 与全套测试通过 | 历史快照为 217 passed；锚定 fresh V2 为 383 passed、19/19，V3 跨构建为 20/20；当前开发树为 `631 passed in 411.04s` |
 | A-full 已冻结可复现 | 固定 commit/依赖/数据/seed、原始结果和 verifier 全通过 | 当前仍无完成冻结 commit 的 XA 全项目复现 |
-| B 当前树实测 | 当前工作树可运行，有明确命令和输出 | E6 四臂 deterministic development bundle/verifier 11/11；E2/E3/E4/E4-v2 verifier；formal v4 self-check；E5 V3 portability（20/20） |
-| C 开发记录 | 有可复验开发结果，但未跨性能门 | E6 QAOA-control `+0.0949778` 的诊断负基线；E6-MSO prototype 598→581；E5-v1.1 未接受 effect estimates |
-| D 设计/实现中 | 只有规格或尚未闭环的改进实验 | E6 空选择/标签/head/scheduler 作用链诊断；离子阱/光量子路线、三路线 manifest |
+| B 当前树实测 | 当前工作树可运行，有明确命令和输出 | E6-D2 五文件 development bundle；E6 legacy verifier 11/11；E2/E3/E4/E4-v2 verifier；formal v4 self-check；E5 V3 portability（20/20） |
+| C 开发记录 | 有可复验开发结果，但未跨性能门 | E6 legacy 负基线与 D2 mechanism repair；E6-MSO prototype 598→581；E5-v1.1 未接受 effect estimates |
+| D 设计/实现中 | 只有规格或尚未闭环的改进实验 | E6-D2 matched-compute formal evaluation；离子阱/光量子路线、三路线 manifest |
 | E 人工确认 | 必须由团队、学校或权利人批准 | 报名与竞赛 IP 条款已确认；许可证、`sshr_lib` 初始来源仍待确认 |
 
 最终报告的主要数值必须达到 A；B/C 只能作为开发过程记录，D 不能写成已实现。
@@ -582,18 +612,15 @@ E2 QAOA 使用主环境中的 NumPy statevector 后端，不依赖 Qiskit/Aer。
 1. **M1 AI provenance（formal v4 已闭环）**：保持唯一 v4 candidate、训练/数据/
    source/log/model-card SHA；下一门是独立、协议接受的性能评价，不把内部 holdout 当结果；
 2. **M2 QAOA 调度（E2 pilot 已通过）**：保留当前经典/QAOA/独立子节点证据；
-   E3 没有改善 held-out 端点，E6 当前 QAOA replay 也显著反向，只作诊断基线；
+   E3 没有改善 held-out 端点；E6-D2 修复 teacher mechanism 但仍略弱于 greedy；
 3. **M3 E4-v2（formal replication 已完成，改善未获支持）**：保留 post-E4、
    `generalization=false`、primary CI 跨 0 和 noisy 仅诊断的完整边界，不再把它列为
    待运行 held-out 实验；
-4. **M4 E6-MSO 多输出共享 Oracle（机制与四臂开发实验已完成）**：VectorANF、共享
+4. **M4 E6-MSO 多输出共享 Oracle（机制、legacy 对照与 D2 修复已完成）**：VectorANF、共享
    action、compute–fanout–uncompute、2 clean ancilla 语义、同池 conflict/QUBO 与
-   deterministic replay→trainer→heldout verifier 已闭环；当前 QAOA replay 显著反向；
-5. **M5 E6 resource-aligned replay 提升（当前最优先）**：先用 D1 解释 QAOA/random
-   endpoint 32/32 重合及 31/32 空选择，再实现资源对齐的 teacher 与匹配候选规模；
-   不在当前 heldout 上事后调参。最终在全新、未参与 teacher/阈值/候选选择的 evaluation
-   上与匹配预算 strongest greedy 同跑，要求 paired `delta Y<0`、95% CI upper `<0`、
-   语义 100%、0 fallback；
+   deterministic replay→trainer→endpoint 链已闭环；D2 source-label mechanism 已修复；
+5. **M5 E6 formal performance（当前最优先）**：在新数据上以匹配预算 strongest greedy
+   检验 D2，要求 paired `delta Y<0`、95% CI upper `<0`、语义 100%、0 fallback；
 6. **M6 AES/E5 证据表达**：保留 E4 的受限正/负证据和 E5 的失败/未验收事实；
    CLI/demo 已独立复验，继续完成离线 fallback；
 7. **M7 交付整理**：clean install、跨构建审计与内部目录/tar verifier 已完成；当前

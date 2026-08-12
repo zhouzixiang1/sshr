@@ -136,12 +136,27 @@ E6_RESULT_FILE_SHA256 = {
 E6_RESULT_SNAPSHOT_SHA256 = (
     "18b758ac3e432a5d4e9f0ba1f8be7e17bd1b848b6212234eea9d2e842d4cc76a"
 )
+E6_D2_RESULT_PREFIX = (
+    "experiments/results/xa202609/"
+    "20260813-e6-d2-resource-gain-teacher-v1-full-s20261011"
+)
+E6_D2_RESULT_FILE_SHA256 = {
+    "config.json": "35e0a08f788c2770740313d01ba89568b5944e41aec225a79f463b7e1f384d57",
+    "results.json": "4f5a40739c764efc01fcad5c5edb2b13ad5d9bf56cc0a7b1262ae7cd43364291",
+    "raw.jsonl": "0e9c8d74eaf836e04cc77b1f317646ad636bb4508ee83a97372038c248963135",
+    "diagnostics.json": "02bb269b8d38e711d2d1ff55fcda98c612b989c2bded89574797a66b5945fd44",
+    "checksums.sha256": "cec28225b9edcc970bacf6c3989eac3661ffaf1d387aece5108bb914b81ebda3",
+}
+E6_D2_RESULT_SNAPSHOT_SHA256 = (
+    "b16715196ff1e456184eaae6654f73f28c12454c5190d288384739f8bc1576c1"
+)
 EXACT_REPOSITORY_FILES |= {
     "experiments/configs/xa202609/e5_external_crypto_holdout_v1.json",
     "experiments/configs/xa202609/e5_external_crypto_holdout_v1.protocol.lock.json",
     "experiments/configs/xa202609/e5_v11_portable_fresh_validation_v2.anchor.json",
     "experiments/configs/xa202609/e6_multioutput_shared_mvp_v1.json",
     "experiments/configs/xa202609/e6_q4ai_causal_v1.json",
+    "experiments/configs/xa202609/e6_d2_resource_gain_teacher_v1.json",
     "experiments/configs/xa202609/foundation_v4_provenance.json",
     "experiments/src/hardware/README.md",
     "experiments/scripts/run_e4_v2_execution_aware.py",
@@ -150,6 +165,7 @@ EXACT_REPOSITORY_FILES |= {
     "experiments/scripts/verify_e5_external_crypto_holdout_bundle.py",
     "experiments/scripts/run_e6_q4ai_causal_v1.py",
     "experiments/scripts/verify_e6_replay_training_bundle_v1.py",
+    "experiments/scripts/run_e6_d2_resource_gain_teacher_v1.py",
     "experiments/scripts/train_foundation_v4.py",
     "experiments/scripts/verify_foundation_v4_bundle.py",
     "experiments/scripts/_pilot_artifacts.py",
@@ -160,8 +176,10 @@ EXACT_REPOSITORY_FILES |= {
     "experiments/tests/test_e5_v11_negative_audit.py",
     "experiments/tests/test_e5_v11_fresh_validation_v2.py",
     "docs/competition/evidence/E6_Q4AI_CAUSAL_NEGATIVE_EVIDENCE.md",
+    "docs/competition/evidence/E6_D2_RESOURCE_GAIN_MECHANISM_EVIDENCE.md",
     *(f"{FORMAL_V4_PREFIX}/{name}" for name in FORMAL_V4_BASENAMES),
     *(f"{E6_RESULT_PREFIX}/{name}" for name in E6_RESULT_FILE_SHA256),
+    *(f"{E6_D2_RESULT_PREFIX}/{name}" for name in E6_D2_RESULT_FILE_SHA256),
 }
 EXTERNAL_ANCHOR_PATH = "experiments/configs/xa202609/e5_v11_portable_fresh_validation_v2.anchor.json"
 EXTERNAL_ANCHOR_SHA256 = "036dc0cad2cbe6eabac70793e3be1de44fd8f1882753e595560870bc3eddd686"
@@ -283,12 +301,12 @@ FORBIDDEN_SEGMENTS = {
 MAX_FILE_BYTES = 50 * 1024 * 1024
 MAX_TOTAL_BYTES = 250 * 1024 * 1024
 PRESENTATION_PATH = "docs/competition/slides/XA-202609_双向智能Boolean_Oracle答辩稿.pptx"
-PRESENTATION_SHA256 = "bf830dee8dd9adf5e9110cbf8b73f0ebbfbb3fe453c3aad03c057b031581d4e3"
+PRESENTATION_SHA256 = "fa7b319fa620a37a62302be24c04ed70fb432be91d7d0fafbd8cf2e08377412f"
 MACHINE_MODEL_CARD_PATH = f"{FORMAL_V4_PREFIX}/model_card.json"
 FINAL_CHECKPOINT_PATH = f"{FORMAL_V4_PREFIX}/checkpoint.pt"
 REPORT_PATH = "docs/papers/resource_nmcts/chinese/resource_nmcts_competition_current.pdf"
-REPORT_SHA256 = "fadd6965e39a390589086e1784e6e68984ce2121339dbace802775858d3fcfe3"
-REPORT_PAGE_COUNT = 38
+REPORT_SHA256 = "f6826f61595e5a7de9b311a13e6027b061c99323fbbdc626196986a7c3cbda95"
+REPORT_PAGE_COUNT = 39
 LOCKED_LOCAL_PATH_FILES = {
     (
         "experiments/results/xa202609/"
@@ -367,9 +385,11 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def e6_result_snapshot_sha256(path: Path) -> str | None:
+def five_file_result_snapshot_sha256(
+    path: Path, expected_hashes: dict[str, str]
+) -> str | None:
     files = {item.name for item in path.iterdir() if item.is_file() and not item.is_symlink()}
-    if files != set(E6_RESULT_FILE_SHA256):
+    if files != set(expected_hashes):
         return None
     records = [
         {"name": name, "sha256": sha256_file(path / name), "bytes": (path / name).stat().st_size}
@@ -377,6 +397,34 @@ def e6_result_snapshot_sha256(path: Path) -> str | None:
     ]
     payload = (json.dumps(records, sort_keys=True, separators=(",", ":")) + "\n").encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
+
+
+def e6_d2_pair_counts(raw_path: Path, split: str) -> tuple[int, int, int] | None:
+    by_case: dict[str, dict[str, float]] = {}
+    try:
+        with raw_path.open("r", encoding="utf-8") as handle:
+            for line in handle:
+                row = json.loads(line)
+                if row.get("record_type") != "model_ranking_endpoint" or row.get("split") != split:
+                    continue
+                arm = row.get("arm")
+                if arm not in {"gain_weighted_qaoa_vw0", "gain_weighted_permuted_vw0"}:
+                    continue
+                by_case.setdefault(row["case_id"], {})[arm] = float(row["score_ratio_y"])
+    except (OSError, ValueError, TypeError, KeyError, json.JSONDecodeError):
+        return None
+    if len(by_case) != 32 or any(len(values) != 2 for values in by_case.values()):
+        return None
+    effects = [
+        values["gain_weighted_qaoa_vw0"]
+        - values["gain_weighted_permuted_vw0"]
+        for values in by_case.values()
+    ]
+    return (
+        sum(effect < 0.0 for effect in effects),
+        sum(effect == 0.0 for effect in effects),
+        sum(effect > 0.0 for effect in effects),
+    )
 
 
 def safe_rel(value: str) -> PurePosixPath | None:
@@ -1221,6 +1269,52 @@ def verify_research_claims(root: Path, status: dict[str, Any]) -> list[str]:
             "hardware_execution": False,
             "quantum_advantage_claimed": False,
         },
+        "e6_d2": {
+            "status": "development_resource_gain_mechanism_repaired",
+            "bundle_path": E6_D2_RESULT_PREFIX,
+            "bundle_snapshot_sha256": E6_D2_RESULT_SNAPSHOT_SHA256,
+            "run_id": "20260813-e6-d2-resource-gain-teacher-v1-full-s20261011",
+            "source_commit": "51288b1e2aab3c420ee93a7afd85bbc9c22b2243",
+            "source_dirty": False,
+            "train_case_count": 64,
+            "structured_case_count": 32,
+            "ood_case_count": 32,
+            "split_overlap_counts": {
+                "ood_vs_structured_validation": {
+                    "orbit_cluster_sha256": 0,
+                    "vector_sha256": 0,
+                    "whole_vector_cluster_sha256": 0,
+                },
+                "ood_vs_train": {
+                    "orbit_cluster_sha256": 0,
+                    "vector_sha256": 0,
+                    "whole_vector_cluster_sha256": 0,
+                },
+                "train_vs_structured_validation": {
+                    "orbit_cluster_sha256": 0,
+                    "vector_sha256": 0,
+                    "whole_vector_cluster_sha256": 0,
+                },
+            },
+            "primary_comparison": (
+                "gain_weighted_qaoa_vw0_minus_gain_weighted_permuted_vw0"
+            ),
+            "structured_mean_effect": -0.16887894417475724,
+            "structured_wins": 32,
+            "structured_ties": 0,
+            "structured_losses": 0,
+            "ood_mean_effect": -0.15351147345563865,
+            "ood_wins": 31,
+            "ood_ties": 1,
+            "ood_losses": 0,
+            "strongest_greedy_improvement_supported": False,
+            "development_mechanism_repair_only": True,
+            "formal_evaluation": False,
+            "performance_evidence": False,
+            "generalization_claim": False,
+            "hardware_execution": False,
+            "quantum_advantage_claimed": False,
+        },
     }
     if status.get("research_claims") != expected_claims:
         issues.append("technical research-claim boundary inventory mismatch")
@@ -1329,7 +1423,11 @@ def verify_research_claims(root: Path, status: dict[str, Any]) -> list[str]:
         target = e6_bundle / name
         if not target.is_file() or target.is_symlink() or sha256_file(target) != expected_sha:
             issues.append(f"E6 development result SHA mismatch: {name}")
-    if e6_bundle.is_dir() and e6_result_snapshot_sha256(e6_bundle) != E6_RESULT_SNAPSHOT_SHA256:
+    if (
+        e6_bundle.is_dir()
+        and five_file_result_snapshot_sha256(e6_bundle, E6_RESULT_FILE_SHA256)
+        != E6_RESULT_SNAPSHOT_SHA256
+    ):
         issues.append("E6 development result snapshot mismatch")
     try:
         e6_checksums, e6_checksum_issues = parse_checksums(e6_bundle / "checksums.sha256")
@@ -1430,6 +1528,169 @@ def verify_research_claims(root: Path, status: dict[str, Any]) -> list[str]:
         and rows_ok
     ):
         issues.append("E6 development negative result/claim boundary mismatch")
+
+    e6_d2_bundle = root / E6_D2_RESULT_PREFIX
+    actual_e6_d2_files = (
+        {item.name for item in e6_d2_bundle.iterdir() if item.is_file() and not item.is_symlink()}
+        if e6_d2_bundle.is_dir()
+        else set()
+    )
+    if actual_e6_d2_files != set(E6_D2_RESULT_FILE_SHA256):
+        issues.append("E6-D2 development result file set mismatch")
+    for name, expected_sha in E6_D2_RESULT_FILE_SHA256.items():
+        target = e6_d2_bundle / name
+        if not target.is_file() or target.is_symlink() or sha256_file(target) != expected_sha:
+            issues.append(f"E6-D2 development result SHA mismatch: {name}")
+    if (
+        e6_d2_bundle.is_dir()
+        and five_file_result_snapshot_sha256(
+            e6_d2_bundle, E6_D2_RESULT_FILE_SHA256
+        )
+        != E6_D2_RESULT_SNAPSHOT_SHA256
+    ):
+        issues.append("E6-D2 development result snapshot mismatch")
+    try:
+        e6_d2_checksums, e6_d2_checksum_issues = parse_checksums(
+            e6_d2_bundle / "checksums.sha256"
+        )
+    except OSError as exc:
+        e6_d2_checksums, e6_d2_checksum_issues = {}, [f"unreadable checksums: {exc}"]
+    issues.extend(
+        f"E6-D2 development result: {issue}" for issue in e6_d2_checksum_issues
+    )
+    expected_e6_d2_payload_hashes = {
+        name: digest
+        for name, digest in E6_D2_RESULT_FILE_SHA256.items()
+        if name != "checksums.sha256"
+    }
+    if e6_d2_checksums != expected_e6_d2_payload_hashes:
+        issues.append("E6-D2 development result checksum inventory mismatch")
+
+    e6_d2_config = load_object(
+        root / "experiments/configs/xa202609/e6_d2_resource_gain_teacher_v1.json",
+        "E6-D2 config",
+        issues,
+    )
+    e6_d2_results = load_object(
+        e6_d2_bundle / "results.json", "E6-D2 development results", issues
+    )
+    e6_d2_diagnostics = load_object(
+        e6_d2_bundle / "diagnostics.json", "E6-D2 development diagnostics", issues
+    )
+    structured = e6_d2_diagnostics.get(
+        "structured_primary_pair_contrasts", {}
+    ).get("expanded_cap256", {})
+    ood = e6_d2_diagnostics.get("ood_primary_pair_contrast", {})
+    structured_groups = {
+        row.get("arm"): row
+        for row in e6_d2_diagnostics.get("structured_expanded", {}).get("groups", [])
+        if isinstance(row, dict)
+    }
+    ood_groups = {
+        row.get("arm"): row
+        for row in e6_d2_diagnostics.get("ood_endpoint", {}).get("groups", [])
+        if isinstance(row, dict)
+    }
+    e6_d2_reports = e6_d2_results.get("training_report_by_cell", {})
+    overlap_rows = e6_d2_results.get("split_overlap_counts", {})
+    zero_overlap = (
+        isinstance(overlap_rows, dict)
+        and set(overlap_rows)
+        == {"train_vs_structured_validation", "ood_vs_train", "ood_vs_structured_validation"}
+        and all(
+            isinstance(row, dict)
+            and set(row)
+            == {"vector_sha256", "whole_vector_cluster_sha256", "orbit_cluster_sha256"}
+            and set(row.values()) == {0}
+            for row in overlap_rows.values()
+        )
+    )
+    gain_reports_ok = all(
+        isinstance(e6_d2_reports.get(cell), dict)
+        and e6_d2_reports[cell].get("target_mode")
+        == "qaoa_resource_gain_credit_v1"
+        and e6_d2_reports[cell].get("sample_count") == 64
+        and e6_d2_reports[cell].get("source_group_count") == 64
+        and e6_d2_reports[cell].get("zero_gain_skipped_group_count") == 0
+        and e6_d2_reports[cell].get("formal_evaluation") is False
+        and e6_d2_reports[cell].get("performance_evidence") is False
+        for cell in ("gain_weighted_qaoa_vw0", "gain_weighted_permuted_vw0")
+    )
+    endpoint_groups_ok = all(
+        isinstance(row, dict)
+        and row.get("case_count") == 32
+        and row.get("semantic_verification_rate") == 1.0
+        and row.get("direct_fallback_rate") == 0.0
+        and row.get("degraded_rate") == 0.0
+        for row in [*structured_groups.values(), *ood_groups.values()]
+    )
+    structured_qaoa_y = structured_groups.get("gain_weighted_qaoa_vw0", {}).get(
+        "score_ratio_y_mean"
+    )
+    structured_greedy_y = structured_groups.get("greedy_vw0", {}).get(
+        "score_ratio_y_mean"
+    )
+    ood_qaoa_y = ood_groups.get("gain_weighted_qaoa_vw0", {}).get(
+        "score_ratio_y_mean"
+    )
+    ood_greedy_y = ood_groups.get("greedy_vw0", {}).get("score_ratio_y_mean")
+    if not (
+        e6_d2_config.get("schema_version")
+        == "xa.e6-d2-resource-gain-teacher-config.v1"
+        and e6_d2_config.get("design", {}).get("primary_pair")
+        == ["gain_weighted_qaoa_vw0", "gain_weighted_permuted_vw0"]
+        and e6_d2_config.get("design", {}).get("value_loss_weight") == 0.0
+        and e6_d2_config.get("splits", {}).get("train", {}).get("seed") == 20261011
+        and e6_d2_config.get("splits", {}).get("structured_validation", {}).get("seed")
+        == 20261012
+        and e6_d2_config.get("splits", {}).get("ood_endpoint", {}).get("seed") == 20261013
+        and e6_d2_config.get("endpoint", {}).get("scheduler_utility")
+        == "arm_neutral_raw_analytic_utility"
+        and e6_d2_results.get("schema_version")
+        == "xa.e6-d2-resource-gain-teacher-results.v1-development"
+        and e6_d2_results.get("run_id")
+        == "20260813-e6-d2-resource-gain-teacher-v1-full-s20261011"
+        and e6_d2_results.get("source", {}).get("commit_sha")
+        == "51288b1e2aab3c420ee93a7afd85bbc9c22b2243"
+        and e6_d2_results.get("source", {}).get("dirty") is False
+        and e6_d2_results.get("raw_row_count") == 800
+        and e6_d2_results.get("split_case_counts")
+        == {"train": 64, "structured_validation": 32, "ood_endpoint": 32}
+        and zero_overlap
+        and gain_reports_ok
+        and e6_d2_results.get("formal_evaluation") is False
+        and e6_d2_results.get("performance_evidence") is False
+        and e6_d2_diagnostics.get("schema_version")
+        == "xa.e6-d2-resource-gain-teacher-diagnostics.v1-development"
+        and e6_d2_diagnostics.get("structured_diagnostics_computed_before_ood_evaluation")
+        is True
+        and e6_d2_diagnostics.get("formal_evaluation") is False
+        and e6_d2_diagnostics.get("performance_evidence") is False
+        and structured.get("paired_case_count") == 32
+        and structured.get("difference", {}).get("score_ratio_y")
+        == -0.16887894417475724
+        and e6_d2_pair_counts(
+            e6_d2_bundle / "raw.jsonl", "structured_validation_expanded_cap256"
+        )
+        == (32, 0, 0)
+        and ood.get("paired_case_count") == 32
+        and ood.get("difference", {}).get("score_ratio_y")
+        == -0.15351147345563865
+        and e6_d2_pair_counts(
+            e6_d2_bundle / "raw.jsonl", "ood_endpoint_expanded_cap256"
+        )
+        == (31, 1, 0)
+        and all(
+            isinstance(value, (int, float))
+            for value in (
+                structured_qaoa_y, structured_greedy_y, ood_qaoa_y, ood_greedy_y
+            )
+        )
+        and structured_qaoa_y > structured_greedy_y
+        and ood_qaoa_y > ood_greedy_y
+        and endpoint_groups_ok
+    ):
+        issues.append("E6-D2 development mechanism result/claim boundary mismatch")
     return issues
 
 
@@ -1615,10 +1876,10 @@ def verify_tree(root: Path, allow_incomplete: bool) -> dict[str, Any]:
             "path": REPORT_PATH,
             "sha256": REPORT_SHA256,
             "page_count": REPORT_PAGE_COUNT,
-            "release_note": "SHA-locked 38-page Chinese competition manuscript",
+            "release_note": "SHA-locked 39-page Chinese competition manuscript",
         }
     ):
-        issues.append("38-page Chinese manuscript release identity mismatch")
+        issues.append("39-page Chinese manuscript release identity mismatch")
     required_exact = EXACT_REPOSITORY_FILES - {PRESENTATION_PATH}
     missing_required = sorted((required_exact | REQUIRED_CORE_PATHS) - actual)
     if missing_required:

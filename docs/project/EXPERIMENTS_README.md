@@ -12,8 +12,8 @@ cd experiments
 /opt/anaconda3/envs/mcts-qoracle/bin/python tests/tests_smoke.py
 ```
 
-当前开发树全套为 `588 passed in 363.66s`，0 fail/error；submission 定向回归
-10/10，E6 Q4AI 五文件 bundle 独立 verifier 11/11 通过。legacy smoke 为
+当前开发树全套为 `631 passed in 411.04s`，0 fail/error；submission 定向回归
+10/10。legacy smoke 为
 `smoke ok`；默认 `verify_clean_install.py` 为 `ok=true`，且
 `hardware/performance=false`。其中新增的
 安装合同回归覆盖 repository-relative quick self-check；完整 clean-install 验收
@@ -50,7 +50,7 @@ checkpoint SHA，隔离环境当时树全套为 `217 passed in 62.50s`。该历�
 `dd75a9bcf06f37390c43acf6a019ea8a130ba26a998269ae10fe8bce78441d23`；外部 anchor
 `configs/xa202609/e5_v11_portable_fresh_validation_v2.anchor.json` 的 SHA-256 为
 `036dc0cad2cbe6eabac70793e3be1de44fd8f1882753e595560870bc3eddd686`。该证据只证明
-该锚定树的软件安装与证据复验合同；它不是当前 588 项回归。anchor 与完整 bundle
+该锚定树的软件安装与证据复验合同；它不是当前 631 项回归。anchor 与完整 bundle
 已由内部审计包外层 manifest 绑定。内部 draft 位于
 `docs/competition/submission/generated/ppt-cdb66ca7-pdf-f6a19cf8/XA-202609-internal-audit-draft/`，
 共 366 文件；tar 为 4,665,696 bytes，SHA-256 为
@@ -172,7 +172,7 @@ E4 已完成密码 Oracle 端到端 pilot；其当前树单命令竞赛 demo 也
 checksum 和 verification。独立 verifier 13/13 通过；QAOA 实际 direct 且无
 fallback。输出显式记录 `hardware_execution=false` 和
 `performance_evidence=false`，只用于展示链路与核验契约。对应回归测试
-`tests/test_competition_demo.py` 已通过，并纳入当前 `588 passed in 363.66s` 的
+`tests/test_competition_demo.py` 已通过，并纳入当前 `631 passed in 411.04s` 的
 完整回归。
 
 ## E4-v2：正式 post-E4 frozen replication
@@ -278,8 +278,7 @@ cd experiments
   results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912
 ```
 
-下一步是 D1 机制诊断：先查明空选择、random/QAOA endpoint 重合与标签边际对齐的
-作用链，再用预先指定的新数据验证；不得在当前 held-out 上事后调参。
+该 legacy 负结果保持不变；D1 已定位旧 teacher 错配，D2 机制修复见下节。
 
 能力边界：这些结果仅来自 synthetic heavy-hex-like profile 和 NumPy 模拟器，
 无真机或真实校准证据，也不证明量子优势。离子阱、光量子两条适配路线及三路线
@@ -287,3 +286,30 @@ cd experiments
 但结果显著反向且不构成性能证据。E4 在 AES 尺度没有逐 trial 运行原生全基态等价；其逻辑 Oracle 语义
 已对 256 个输入和两个目标值穷举验证，原生层只做了声明范围内的映射契约与采样
 含噪端点，不得混称为 AES 原生层穷举等价。
+
+## E6-D2 resource-gain teacher
+
+D1 将 legacy QAOA replay 的退化定位到 action-marginal teacher。D2 只用正整程序
+resource-gain credit 替换 policy target，并以同一 source credit 的固定置换作为
+control；value loss 为 0，formal-v4 trunk、初始化、训练呈现和 arm-neutral scheduler
+保持不变。全新 train/structured/OOD seed 为 `20261011/20261012/20261013`，三者在
+vector、whole-vector cluster、orbit cluster 层均 0 overlap。
+
+五文件 bundle：
+`results/xa202609/20260813-e6-d2-resource-gain-teacher-v1-full-s20261011/`，snapshot
+`b16715196ff1e456184eaae6654f73f28c12454c5190d288384739f8bc1576c1`。structured
+expanded-cap256 的 gain-QAOA 对 permuted control 为 `delta Y=-0.1688789442`、
+W/T/L=`32/0/0`；OOD 为 `-0.1535114735`、W/T/L=`31/1/0`。全部 endpoint 语义通过且
+0 fallback/degraded，但 QAOA 臂仍略弱于 greedy anchor。因此只支持 development
+mechanism repair，formal/performance/generalization/hardware/advantage 均为 false。
+
+在 clean source commit `51288b1e...` 的 checkout 中复演，并使用新的空输出目录：
+
+```bash
+/opt/anaconda3/envs/mcts-qoracle/bin/python \
+  scripts/run_e6_d2_resource_gain_teacher_v1.py \
+  --config configs/xa202609/e6_d2_resource_gain_teacher_v1.json \
+  --profile full \
+  --run-id 20260813-e6-d2-resource-gain-teacher-v1-full-s20261011 \
+  --output /tmp/e6-d2-resource-gain-rerun-full
+```

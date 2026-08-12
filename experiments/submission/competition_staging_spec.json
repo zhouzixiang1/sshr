@@ -29,6 +29,7 @@
     "docs/competition/evidence/E3_NATIVE_FEEDBACK_EVIDENCE.md",
     "docs/competition/evidence/E4_AES_BIDIRECTIONAL_EVIDENCE.md",
     "docs/competition/evidence/E6_Q4AI_CAUSAL_NEGATIVE_EVIDENCE.md",
+    "docs/competition/evidence/E6_D2_RESOURCE_GAIN_MECHANISM_EVIDENCE.md",
     "experiments/models/boolean_oracle_fm_v3.pt",
     "experiments/models/MODEL_CARD_boolean_oracle_fm_v3.md",
     "experiments/environment/environment.yml",
@@ -49,6 +50,7 @@
     "experiments/configs/xa202609/e5_v11_portable_fresh_validation_v2.anchor.json",
     "experiments/configs/xa202609/e6_multioutput_shared_mvp_v1.json",
     "experiments/configs/xa202609/e6_q4ai_causal_v1.json",
+    "experiments/configs/xa202609/e6_d2_resource_gain_teacher_v1.json",
     "experiments/configs/xa202609/foundation_v4_provenance.json",
     "experiments/src/hardware/README.md",
     "experiments/tests/fixtures/e4_execution_aware_v2.superseded-test-only.json",
@@ -86,6 +88,7 @@
     "experiments/scripts/verify_e5_external_crypto_holdout_bundle.py",
     "experiments/scripts/run_e6_q4ai_causal_v1.py",
     "experiments/scripts/verify_e6_replay_training_bundle_v1.py",
+    "experiments/scripts/run_e6_d2_resource_gain_teacher_v1.py",
     "experiments/scripts/train_foundation_v4.py",
     "experiments/scripts/verify_foundation_v4_bundle.py",
     "experiments/scripts/_pilot_artifacts.py",
@@ -112,6 +115,11 @@
     "experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/raw.jsonl",
     "experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/heldout_evaluation.json",
     "experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/checksums.sha256",
+    "experiments/results/xa202609/20260813-e6-d2-resource-gain-teacher-v1-full-s20261011/config.json",
+    "experiments/results/xa202609/20260813-e6-d2-resource-gain-teacher-v1-full-s20261011/results.json",
+    "experiments/results/xa202609/20260813-e6-d2-resource-gain-teacher-v1-full-s20261011/raw.jsonl",
+    "experiments/results/xa202609/20260813-e6-d2-resource-gain-teacher-v1-full-s20261011/diagnostics.json",
+    "experiments/results/xa202609/20260813-e6-d2-resource-gain-teacher-v1-full-s20261011/checksums.sha256",
     "experiments/submission/verify_competition_package.py"
   ],
   "required_globs": [
@@ -121,12 +129,12 @@
   ],
   "report_release": {
     "path": "docs/papers/resource_nmcts/chinese/resource_nmcts_competition_current.pdf",
-    "sha256": "fadd6965e39a390589086e1784e6e68984ce2121339dbace802775858d3fcfe3",
-    "page_count": 38
+    "sha256": "f6826f61595e5a7de9b311a13e6027b061c99323fbbdc626196986a7c3cbda95",
+    "page_count": 39
   },
   "presentation_release": {
     "path": "docs/competition/slides/XA-202609_双向智能Boolean_Oracle答辩稿.pptx",
-    "sha256": "bf830dee8dd9adf5e9110cbf8b73f0ebbfbb3fe453c3aad03c057b031581d4e3"
+    "sha256": "fa7b319fa620a37a62302be24c04ed70fb432be91d7d0fafbd8cf2e08377412f"
   },
   "presentation_candidates": [
     "docs/competition/slides/XA-202609_双向智能Boolean_Oracle答辩稿.pptx"

@@ -69,9 +69,9 @@
 {"kind":"textbox","id":"sh/fm5c3q54","slide":4,"name":"矩形 39","text":"QAOA 选 B/K","textPreview":"QAOA 选 B/K","textChars":10,"textLines":1,"bbox":[679.2,393.6,275.87,54.13]}
 {"kind":"textbox","id":"sh/p0batw72","slide":4,"name":"文本框 19","text":"正确性门：Plan ANF → Circuit GF(2) → Truth table → Native full-basis","textPreview":"正确性门：Plan ANF → Circuit GF(2) → Truth table → Native full-basis","textChars":63,"textLines":1,"bbox":[67.51,642.1,241.9,38.01]}
 {"kind":"shape","id":"sh/ilwf69kv","slide":4,"name":"箭头: 右 29","bbox":[809.21,327.15,38.01,43.97]}
-{"kind":"shape","id":"sh/476d076h","slide":4,"name":"直接箭头连接符 50","bbox":[1040.99,398.56,37.47,0]}
-{"kind":"shape","id":"sh/36xw7m5c","slide":4,"name":"直接箭头连接符 54","bbox":[1048.91,440.59,22.04,7.1]}
-{"kind":"shape","id":"sh/i5ovyhor","slide":4,"name":"直接箭头连接符 56","bbox":[1017.38,447.7,51.67,34.83]}
+{"kind":"shape","id":"sh/0vel4vet","slide":4,"name":"直接箭头连接符 50","bbox":[1040.99,398.56,37.47,0]}
+{"kind":"shape","id":"sh/zul4vqx8","slide":4,"name":"直接箭头连接符 54","bbox":[1048.91,440.59,22.04,7.1]}
+{"kind":"shape","id":"sh/etc32lw3","slide":4,"name":"直接箭头连接符 56","bbox":[1017.38,447.7,51.67,34.83]}
 {"kind":"textbox","id":"sh/wr694nm1","slide":4,"name":"文本框 57","text":"负结果\n也留痕","textPreview":"负结果 | 也留痕","textChars":7,"textLines":2,"bbox":[1082.91,430.21,93.84,60.53]}
 {"kind":"shape","id":"sh/1cj2d8b6","slide":4,"name":"箭头: 右 30","bbox":[831.2,454.69,38.01,43.97]}
 {"kind":"textbox","id":"sh/0ba143al","slide":4,"name":"矩形 2","text":"含噪执行","textPreview":"含噪执行","textChars":4,"textLines":1,"bbox":[985.78,588.67,228.7,54.12]}
@@ -81,7 +81,7 @@
 {"kind":"shape","id":"sh/ih8ju9sn","slide":4,"name":"矩形 8","bbox":[351.93,543.67,228.6,136]}
 {"kind":"textbox","id":"sh/kbm987y5","slide":4,"name":"矩形 9","text":"Pareto 档案","textPreview":"Pareto 档案","textChars":9,"textLines":1,"bbox":[369.67,617.53,193.2,54.07]}
 {"kind":"textbox","id":"sh/3ihk3et8","slide":4,"name":"文本框 7","text":"AI4Q：模型只排序可验证动作，不直接生成门序列","textPreview":"AI4Q：模型只排序可验证动作，不直接生成门序列","textChars":24,"textLines":1,"bbox":[67.51,427.36,241.9,38.01]}
-{"kind":"image","id":"im/kr2l4zyt","slide":4,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
+{"kind":"image","id":"im/sb21ovml","slide":4,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
 {"kind":"notes","id":"nt/jyx0ra1s","slide":4,"text":"从输入到输出，AI 和量子模块没有任何一步可以越过验证器。\n这使每个创新模块都能独立替换、消融或失败，而不会损坏 Oracle 语义。\n[Sources]\n- docs/papers/resource_nmcts/chinese/main.tex\n- docs/project/TECHNICAL_DESIGN.md\n- experiments/src/synthesizers.py"}
 {"kind":"slide","id":"sl/i107q5of","slide":5,"title":"等变策略消除重复","textShapes":11}
 {"kind":"shape","id":"sh/fid07u98","slide":5,"name":"矩形 39","bbox":[456.27,150.87,327.73,377.27]}
@@ -143,7 +143,7 @@
 {"kind":"textbox","id":"sh/lsj6t47m","slide":7,"name":"矩形 37","text":"固定基数选择","textPreview":"固定基数选择","textChars":6,"textLines":1,"bbox":[733.75,158.76,337.29,45.6]}
 {"kind":"textbox","id":"sh/fi9c369c","slide":7,"name":"矩形 8","text":"QUBO：效用 − λ·重叠","textPreview":"QUBO：效用 − λ·重叠","textChars":14,"textLines":1,"bbox":[612.63,233.27,286.27,60.35]}
 {"kind":"shape","id":"sh/p8fih03e","slide":7,"name":"椭圆 15","bbox":[1013.27,280.59,13.72,13.12]}
-{"kind":"shape","id":"sh/sj6l0zel","slide":7,"name":"直接箭头连接符 17","bbox":[961.74,291.82,53.53,32.8]}
+{"kind":"shape","id":"sh/y54r658z","slide":7,"name":"直接箭头连接符 17","bbox":[961.74,291.82,53.53,32.8]}
 {"kind":"textbox","id":"sh/eh4jil4r","slide":7,"name":"文本框 18","text":"高效用候选","textPreview":"高效用候选","textChars":5,"textLines":1,"bbox":[889.13,317.09,86.87,23.62]}
 {"kind":"textbox","id":"sh/r2dkrq5g","slide":7,"name":"矩形 24","text":"Exact / Greedy / QAOA\n共享输入","textPreview":"Exact / Greedy / QAOA | 共享输入","textChars":26,"textLines":2,"bbox":[612.6,395.53,286.33,89.87]}
 {"kind":"shape","id":"sh/d4f2t0nm","slide":7,"name":"椭圆 26","bbox":[1013.02,419.43,13.72,13.12]}
@@ -170,28 +170,28 @@
 {"kind":"shape","id":"sh/25ojml43","slide":7,"name":"椭圆 14","bbox":[202.04,564.06,13.72,13.12]}
 {"kind":"shape","id":"sh/9k3qx8ry","slide":7,"name":"椭圆 44","bbox":[238.34,635.7,13.72,13.12]}
 {"kind":"shape","id":"sh/mxc7mts7","slide":7,"name":"椭圆 45","bbox":[90.94,564.04,13.72,13.12]}
-{"kind":"shape","id":"sh/cj2lo3id","slide":7,"name":"直接箭头连接符 46","bbox":[102.67,575.27,25.6,26.73]}
-{"kind":"shape","id":"sh/dkb2h8ji","slide":7,"name":"直接箭头连接符 47","bbox":[138,541.73,28.67,60.27]}
-{"kind":"shape","id":"sh/qhk3mtk7","slide":7,"name":"直接箭头连接符 48","bbox":[140,575.27,64.07,31.4]}
-{"kind":"shape","id":"sh/ritkfy1s","slide":7,"name":"直接箭头连接符 49","bbox":[138,611.33,102.33,26.27]}
+{"kind":"shape","id":"sh/donadkbe","slide":7,"name":"直接箭头连接符 46","bbox":[102.67,575.27,25.6,26.73]}
+{"kind":"shape","id":"sh/cnet4fat","slide":7,"name":"直接箭头连接符 47","bbox":[138,541.73,28.67,60.27]}
+{"kind":"shape","id":"sh/bi9cnuts","slide":7,"name":"直接箭头连接符 48","bbox":[140,575.27,64.07,31.4]}
+{"kind":"shape","id":"sh/ahgbeps7","slide":7,"name":"直接箭头连接符 49","bbox":[138,611.33,102.33,26.27]}
 {"kind":"shape","id":"sh/q5s7edkj","slide":7,"name":"椭圆 76","bbox":[323.89,600.03,13.72,13.12]}
 {"kind":"shape","id":"sh/54jq58je","slide":7,"name":"椭圆 77","bbox":[362.23,530.46,13.72,13.12]}
 {"kind":"shape","id":"sh/4japc32t","slide":7,"name":"椭圆 78","bbox":[399.64,563.99,13.72,13.12]}
 {"kind":"shape","id":"sh/gj2doje1","slide":7,"name":"椭圆 79","bbox":[435.94,635.64,13.72,13.12]}
 {"kind":"shape","id":"sh/hkvuxovm","slide":7,"name":"椭圆 80","bbox":[288.54,565.57,13.72,13.12]}
-{"kind":"shape","id":"sh/jmxofml8","slide":7,"name":"直接箭头连接符 81","bbox":[300.27,576.8,25.6,26.73]}
-{"kind":"shape","id":"sh/ilonmhkn","slide":7,"name":"直接箭头连接符 82","bbox":[335.6,541.67,28.67,60.27]}
-{"kind":"shape","id":"sh/58z6hw3y","slide":7,"name":"直接箭头连接符 83","bbox":[337.6,575.2,64.07,31.4]}
-{"kind":"shape","id":"sh/k765or2d","slide":7,"name":"直接箭头连接符 84","bbox":[335.6,611.33,102.33,26.27]}
+{"kind":"shape","id":"sh/upsra18v","slide":7,"name":"直接箭头连接符 81","bbox":[300.27,576.8,25.6,26.73]}
+{"kind":"shape","id":"sh/fq18369g","slide":7,"name":"直接箭头连接符 82","bbox":[335.6,541.67,28.67,60.27]}
+{"kind":"shape","id":"sh/4vu9gbqx","slide":7,"name":"直接箭头连接符 83","bbox":[337.6,575.2,64.07,31.4]}
+{"kind":"shape","id":"sh/pw3q9gri","slide":7,"name":"直接箭头连接符 84","bbox":[335.6,611.33,102.33,26.27]}
 {"kind":"textbox","id":"sh/2l4vqtc7","slide":7,"name":"文本框 85","text":"准入预算 B","textPreview":"准入预算 B","textChars":6,"textLines":1,"bbox":[312.8,651.87,112.53,32.8]}
 {"kind":"textbox","id":"sh/3mdczydc","slide":7,"name":"文本框 86","text":"候选池 K","textPreview":"候选池 K","textChars":5,"textLines":1,"bbox":[115.8,651.87,112.53,32.8]}
-{"kind":"image","id":"im/axo7m9k3","slide":7,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
-{"kind":"image","id":"im/byhove18","slide":7,"name":"图片 9","bbox":[977.93,211.33,161.15,118.3]}
-{"kind":"image","id":"im/wzqpoj2t","slide":7,"name":"图片 25","bbox":[977.67,349.86,161.15,118.3]}
-{"kind":"image","id":"im/x0z6x4je","slide":7,"name":"图片 52","bbox":[976.83,517.52,161.15,118.3]}
-{"kind":"image","id":"im/y187q9kz","slide":7,"name":"图片 2","bbox":[82.33,308.6,373.93,200.8]}
-{"kind":"image","id":"im/j2hoze1k","slide":7,"name":"图片 7","bbox":[90.94,530.53,161.15,118.3]}
-{"kind":"image","id":"im/vq1onehs","slide":7,"name":"图片 75","bbox":[288.54,530.46,161.15,118.3]}
+{"kind":"image","id":"im/kraxs721","slide":7,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
+{"kind":"image","id":"im/5sjylcjm","slide":7,"name":"图片 9","bbox":[977.93,211.33,161.15,118.3]}
+{"kind":"image","id":"im/ip8fqxkb","slide":7,"name":"图片 25","bbox":[977.67,349.86,161.15,118.3]}
+{"kind":"image","id":"im/jqhgj21w","slide":7,"name":"图片 52","bbox":[976.83,517.52,161.15,118.3]}
+{"kind":"image","id":"im/wnqxon25","slide":7,"name":"图片 2","bbox":[82.33,308.6,373.93,200.8]}
+{"kind":"image","id":"im/xozehsjq","slide":7,"name":"图片 7","bbox":[90.94,530.53,161.15,118.3]}
+{"kind":"image","id":"im/al8fmxkz","slide":7,"name":"图片 75","bbox":[288.54,530.46,161.15,118.3]}
 {"kind":"notes","id":"nt/gnmp4jqx","slide":7,"text":"QAOA 不生成量子线路，它求解固定基数的效用—多样性组合优化。\n被选中的动作才成为独立 root action edge，排除动作的访问数保持为零。\n[Sources]\n- docs/competition/evidence/E2_QAOA_SCHEDULER_EVIDENCE.md\n- experiments/configs/xa202609/e2_qaoa_scheduler_v1.json\n- docs/papers/resource_nmcts/chinese/main.tex"}
 {"kind":"slide","id":"sl/fu1gfa1s","slide":8,"title":"E2：局部优，端点未定","textShapes":6}
 {"kind":"shape","id":"sh/ri9g7uhw","slide":8,"name":"矩形 3","bbox":[-0.47,128.13,1281.93,16]}
@@ -224,9 +224,9 @@
 {"kind":"textbox","id":"sh/7y14jyd8","slide":9,"name":"矩形 39","text":"ridge α=10","textPreview":"ridge α=10","textChars":10,"textLines":1,"bbox":[679.2,393.6,275.87,54.13]}
 {"kind":"textbox","id":"sh/98ji147e","slide":9,"name":"文本框 19","text":"加噪前：原生门白名单 + 耦合边 + 终态 layout 解码 + 全基态等价","textPreview":"加噪前：原生门白名单 + 耦合边 + 终态 layout 解码 + 全基态等价","textChars":39,"textLines":1,"bbox":[67.51,642.1,241.9,38.01]}
 {"kind":"shape","id":"sh/2l4faloj","slide":9,"name":"箭头: 右 29","bbox":[809.21,327.15,38.01,43.97]}
-{"kind":"shape","id":"sh/svitszu1","slide":9,"name":"直接箭头连接符 50","bbox":[1040.99,398.56,37.47,0]}
-{"kind":"shape","id":"sh/ru9sjudg","slide":9,"name":"直接箭头连接符 54","bbox":[1048.91,440.59,22.04,7.1]}
-{"kind":"shape","id":"sh/6t0bqpcv","slide":9,"name":"直接箭头连接符 56","bbox":[1017.38,447.7,51.67,34.83]}
+{"kind":"shape","id":"sh/wjutkf61","slide":9,"name":"直接箭头连接符 50","bbox":[1040.99,398.56,37.47,0]}
+{"kind":"shape","id":"sh/vilsbapg","slide":9,"name":"直接箭头连接符 54","bbox":[1048.91,440.59,22.04,7.1]}
+{"kind":"shape","id":"sh/uhcbi5ov","slide":9,"name":"直接箭头连接符 56","bbox":[1017.38,447.7,51.67,34.83]}
 {"kind":"textbox","id":"sh/43ul03a1","slide":9,"name":"文本框 57","text":"冻结后\n不再调参","textPreview":"冻结后 | 不再调参","textChars":8,"textLines":2,"bbox":[1082.91,430.21,93.84,60.53]}
 {"kind":"shape","id":"sh/1cfmhgne","slide":9,"name":"箭头: 右 30","bbox":[831.2,454.69,38.01,43.97]}
 {"kind":"textbox","id":"sh/0b65obm9","slide":9,"name":"矩形 2","text":"2×2 同池干预","textPreview":"2×2 同池干预","textChars":8,"textLines":1,"bbox":[985.78,588.67,228.7,54.12]}
@@ -236,7 +236,7 @@
 {"kind":"shape","id":"sh/ah8nu54b","slide":9,"name":"矩形 8","bbox":[351.93,543.67,228.6,136]}
 {"kind":"textbox","id":"sh/oza1gfyh","slide":9,"name":"矩形 9","text":"含噪轨迹","textPreview":"含噪轨迹","textChars":4,"textLines":1,"bbox":[369.67,617.53,193.2,54.07]}
 {"kind":"textbox","id":"sh/bih4na5w","slide":9,"name":"文本框 7","text":"synthetic heavy-hex-like profile｜57,344 calibration shots","textPreview":"synthetic heavy-hex-like profile｜57,344 calibration shots","textChars":57,"textLines":1,"bbox":[67.51,427.36,241.9,38.01]}
-{"kind":"image","id":"im/4f21wnmt","slide":9,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
+{"kind":"image","id":"im/4z6hwnq1","slide":9,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
 {"kind":"notes","id":"nt/udsvah03","slide":9,"text":"E3 将逻辑线路转换为 profile-specific 原生线路，并以实际 statevector Pauli trajectories 生成标签。\nCalibration 和 held-out test 完全隔离；test 标签不参与模型或反馈权重选择。\n[Sources]\n- docs/competition/evidence/E3_NATIVE_FEEDBACK_EVIDENCE.md\n- experiments/src/hardware/superconducting.py\n- experiments/src/hardware/noise.py\n- experiments/src/search/execution_feedback.py"}
 {"kind":"slide","id":"sl/m90b6t0r","slide":10,"title":"E3：端点未改善","textShapes":6}
 {"kind":"shape","id":"sh/zelojyl8","slide":10,"name":"矩形 3","bbox":[-0.47,128.13,1281.93,16]}
@@ -269,22 +269,22 @@
 {"kind":"shape","id":"sh/ra943il8","slide":12,"name":"矩形 3","bbox":[-0.47,128.13,1281.93,16]}
 {"kind":"textbox","id":"sh/dcbm583y","slide":12,"name":"文本框 5","text":"分层证据链约束主张","textPreview":"分层证据链约束主张","textChars":9,"textLines":1,"bbox":[93.47,26.47,595.2,90.67]}
 {"kind":"textbox","id":"sh/sb2lcnmd","slide":12,"name":"圆角矩形 6","text":"5","textPreview":"5","textChars":1,"textLines":1,"bbox":[36.2,41.07,57.27,61.47]}
-{"kind":"textbox","id":"sh/a543mx4r","slide":12,"name":"文本框 8","text":"● 588 tests + smoke ok｜E6 四臂 development 已闭合；语义全过、fallback=0、verifier 11/11\n● 38 页中文主稿已同步 Overleaf｜claim/formal/performance/generalization/hardware=false","textPreview":"● 588 tests + smoke ok｜E6 四臂 development 已闭合；语义全过、fallback=0、verifier 11/11 | ● 38 页中文主稿已同步 Overleaf｜claim/formal/performance/generalizat...","textChars":153,"textLines":2,"bbox":[24.53,144.13,857,240]}
-{"kind":"textbox","id":"sh/wvupgz6t","slide":12,"name":"文本框 9","text":"E6 full bundle｜verifier 11/11\nformal/performance/hardware=false","textPreview":"E6 full bundle｜verifier 11/11 | formal/performance/hardware=false","textChars":63,"textLines":2,"bbox":[993.8,660.07,234.27,44.07]}
+{"kind":"textbox","id":"sh/a543mx4r","slide":12,"name":"文本框 8","text":"● 631 tests + smoke ok｜D2 五文件 development：704/704 语义通过、fallback=0\n● 39 页中文主稿已同步 Overleaf｜mechanism repair；formal/performance/hardware=false","textPreview":"● 631 tests + smoke ok｜D2 五文件 development：704/704 语义通过、fallback=0 | ● 39 页中文主稿已同步 Overleaf｜mechanism repair；formal/performance/hardware=f...","textChars":139,"textLines":2,"bbox":[24.53,144.13,857,240]}
+{"kind":"textbox","id":"sh/wvupgz6t","slide":12,"name":"文本框 9","text":"D2 five-file bundle｜704/704 semantics\nmechanism repair｜performance=false","textPreview":"D2 five-file bundle｜704/704 semantics | mechanism repair｜performance=false","textChars":72,"textLines":2,"bbox":[993.8,660.07,234.27,44.07]}
 {"kind":"image","id":"im/qp47yl47","slide":12,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
 {"kind":"image","id":"im/dsv6903i","slide":12,"name":"图片 1","bbox":[962.33,147.07,297.27,521.67]}
 {"kind":"image","id":"im/srmp0vmd","slide":12,"name":"屏幕录制 2025-10-21 174103","bbox":[36.2,227.2,880.27,451.13]}
-{"kind":"notes","id":"nt/8f2psfyx","slide":12,"text":"分层验证把语义正确性、调度实现、原生门与 bundle 完整性分别交给独立检查。\n当前集成树完整回归为 588 passed in 363.66s；legacy smoke 为 smoke ok。\n锚定 fresh-validation V2 的 383 passed in 295.779s 仅为历史冻结锚定，不代表当前集成树。\nE6 五文件 full bundle 绑定 clean source e850c0c；固定语料、初始化和 seed 下四臂依次训练，独立 verifier 确定性重训并以 11/11 通过。该检查只闭合开发机制与复现，不是性能成功率。\n当前 38 页唯一中文主稿已同步 Overleaf origin/main 739b6c921e5c574871b12172024e2302aed8bb9c；本地 PDF SHA-256 为 fadd6965e39a390589086e1784e6e68984ce2121339dbace802775858d3fcfe3。\nE4-v2 与 E5 历史证据边界不变；所有执行证据仍为 synthetic profile，formal/performance/generalization/hardware/advantage 均为 false。\n[Sources]\n- docs/contracts/COMPETITION_ACCEPTANCE_MATRIX.json\n- experiments/results/xa202609/20260812-e5-v11-portable-fresh-validation-v2-s970000/verifier.json\n- experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/results.json\n- experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/heldout_evaluation.json\n- experiments/scripts/verify_e6_replay_training_bundle_v1.py\n- docs/competition/evidence/E6_Q4AI_CAUSAL_NEGATIVE_EVIDENCE.md\n- docs/papers/resource_nmcts/chinese/main.tex\n- docs/papers/resource_nmcts/overleaf/worktree (origin/main 739b6c921e5c574871b12172024e2302aed8bb9c)\n- docs/papers/resource_nmcts/chinese/resource_nmcts_competition_current.pdf (SHA-256 fadd6965e39a390589086e1784e6e68984ce2121339dbace802775858d3fcfe3)"}
-{"kind":"slide","id":"sl/hgzapcr6","slide":13,"title":"E6：反向结果指向 D1 诊断","textShapes":3}
+{"kind":"notes","id":"nt/8f2psfyx","slide":12,"text":"分层验证把语义正确性、调度实现、原生门与实验产物完整性分别交给独立检查。\n当前集成树完整回归为 631 passed in 411.04s；legacy smoke 为 smoke ok。\n锚定 fresh-validation V2 的 383 passed in 295.779s 仅为历史冻结锚定，不代表当前集成树。\nD2 是单研究者、确定性、五文件 development 实验：共 800 rows（96 audit + 384 matched + 320 endpoint）；704/704 program diagnostic rows 语义通过，fallback/degraded 均为 0。\nresource-gain teacher 只给观测到的可行 QAOA 联合 bitstring 正的 whole-program resource-gain credit；置换 control 只重排同一份 credit，不重算增益。\n当前 39 页中文主稿已同步 Overleaf origin/main cb6962eab16974ce7a5734ae43094a15abf99138；本地 PDF SHA-256 为 f6826f61595e5a7de9b311a13e6027b061c99323fbbdc626196986a7c3cbda95。\nD2 只支持标签语义与因果机制修复；所有执行证据仍为 synthetic profile，formal/performance/hardware/advantage 均为 false。\n[Sources]\n- docs/contracts/COMPETITION_ACCEPTANCE_MATRIX.json\n- experiments/results/xa202609/20260812-e5-v11-portable-fresh-validation-v2-s970000/verifier.json\n- experiments/results/xa202609/20260813-e6-d2-resource-gain-teacher-v1-full-s20261011/results.json\n- experiments/results/xa202609/20260813-e6-d2-resource-gain-teacher-v1-full-s20261011/diagnostics.json\n- experiments/results/xa202609/20260813-e6-d2-resource-gain-teacher-v1-full-s20261011/checksums.sha256\n- docs/competition/evidence/E6_D2_RESOURCE_GAIN_MECHANISM_EVIDENCE.md\n- docs/papers/resource_nmcts/chinese/main.tex\n- docs/papers/resource_nmcts/overleaf/worktree (origin/main cb6962eab16974ce7a5734ae43094a15abf99138)\n- docs/papers/resource_nmcts/chinese/resource_nmcts_competition_current.pdf (SHA-256 f6826f61595e5a7de9b311a13e6027b061c99323fbbdc626196986a7c3cbda95)"}
+{"kind":"slide","id":"sl/hgzapcr6","slide":13,"title":"E6-D2：资源增益标签修复机制","textShapes":3}
 {"kind":"shape","id":"sh/o3i5w3ad","slide":13,"name":"矩形 3","bbox":[-0.47,128.13,1281.93,16]}
-{"kind":"textbox","id":"sh/21gnuts7","slide":13,"name":"文本框 5","text":"E6：反向结果指向 D1 诊断","textPreview":"E6：反向结果指向 D1 诊断","textChars":15,"textLines":1,"bbox":[93.47,26.47,647.8,90.67]}
+{"kind":"textbox","id":"sh/21gnuts7","slide":13,"name":"文本框 5","text":"E6-D2：资源增益标签修复机制","textPreview":"E6-D2：资源增益标签修复机制","textChars":16,"textLines":1,"bbox":[93.47,26.47,647.8,90.67]}
 {"kind":"textbox","id":"sh/32ponyts","slide":13,"name":"圆角矩形 6","text":"6","textPreview":"6","textChars":1,"textLines":1,"bbox":[36.2,41.07,57.27,61.47]}
-{"kind":"textbox","id":"sh/q50nydsj","slide":13,"name":"文本框 1","text":"AI4Q｜shared head → replay → trainer 已贯通；64 train + 32 whole-vector development，语义全过、0 fallback。\nQ4AI｜固定条件下，当前 teacher 标签关联显著有害。\n资源比差（QAOA−置换标签）=+0.094978（越低越好）\n95% CI [0.069638,0.123767]｜p=9.9999e-6｜W/T/L=0/3/29\nQAOA/random：32/32 endpoint 相同，均有 31/32 空选择。\nD1｜拆解 replay 标签 → head top-K → exact scheduler；不在当前 heldout 事后调参。\n边界｜workspace peak≤2（MCT 分解未计）；claim/formal/performance/generalization/hardware/advantage=false。","textPreview":"AI4Q｜shared head → replay → trainer 已贯通；64 train + 32 whole-vector development，语义全过、0 fallback。 | Q4AI｜固定条件下，当前 teacher 标签关联显著有害。 | 资源比差（...","textChars":417,"textLines":7,"bbox":[36.13,155.13,1197.93,537]}
+{"kind":"textbox","id":"sh/q50nydsj","slide":13,"name":"文本框 1","text":"AI4Q｜resource-gain teacher → replay → shared head；704/704 语义通过，0 fallback。\nQ4AI｜structured：gain−permuted ΔY=−0.168879，W/T/L=32/0/0。\nOOD｜ΔY=−0.153511，W/T/L=31/1/0；D1 标签语义错位已被修复。\n边界｜对 strongest greedy 仍略差：structured +0.005990；OOD +0.018765。\n判读｜development mechanism repair；不构成 formal/performance/quantum-advantage evidence。\nNEXT｜冻结 D2；全新 seeds、matched compute 对 strongest greedy 做 paired evaluation。\n资源｜abstract logical X/CNOT/MCT proxy；workspace peak≤2（MCT 分解未计）。","textPreview":"AI4Q｜resource-gain teacher → replay → shared head；704/704 语义通过，0 fallback。 | Q4AI｜structured：gain−permuted ΔY=−0.168879，W/T/L=32/0/0。 | O...","textChars":462,"textLines":7,"bbox":[36.13,155.13,1197.93,537]}
 {"kind":"image","id":"im/p8bm9k72","slide":13,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
-{"kind":"notes","id":"nt/hgzapcr6","slide":13,"text":"E6 已实际运行 shared head、replay、trainer 与 exact scheduler 的四臂 development 机制消融，不再是尚未接入。\n主比较 QAOA final-measurement replay 减 permuted-label control 的下优资源比差为 +0.0949778，95% CI [0.0696384,0.1237673]，双侧 sign-flip p=9.9999e-6，W/T/L=0/3/29；n4/n5 分层均为正，claim_supported=false。\nQAOA 与 random 的 32/32 endpoint 相同，且两臂各有 31/32 空选择。固定设计下，当前 teacher 标签与下游资源目标错位；不能把单个置换标签 control 的胜出外推为置换标签普遍更好。\nD1 只诊断 replay 标签、head top-K 与 exact scheduler 的作用，不使用当前 heldout 选择模型或追逐正结果。\n这里的 workspace peak≤2 和资源比只指 abstract logical X/CNOT/MCT proxy；MCT 分解未计，不是硬件精确门数。formal/performance/generalization/hardware/advantage 均为 false。\n[Sources]\n- docs/competition/evidence/E6_Q4AI_CAUSAL_NEGATIVE_EVIDENCE.md\n- experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/results.json\n- experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/heldout_evaluation.json\n- docs/papers/resource_nmcts/chinese/main.tex\n- docs/project/PROJECT_STATUS_XA202609.md\n- docs/planning/EXPERIMENT_ROADMAP_XA202609.md\n- docs/contracts/COMPETITION_ACCEPTANCE_MATRIX.json"}
+{"kind":"notes","id":"nt/hgzapcr6","slide":13,"text":"D1 的主要问题是 teacher 标签与 whole-program resource objective 错位。D2 只做一项干预：观测到的可行 QAOA 联合 bitstring 按正的实际资源增益给被选动作分配 credit。\n在 32 个 fresh structured development case 上，gain-weighted QAOA 相对 exact permuted-label control 的 ΔY 为 -0.1688789442，W/T/L=32/0/0；OOD n=4/5 上为 -0.1535114735，W/T/L=31/1/0。\n这说明 resource-aligned QAOA action label 保留了有意义的因果信息，并修复 D1 的错位标签语义。\n但 gain-weighted QAOA 相对 strongest greedy 仍略差：structured ΔY=+0.005990，W/T/L=1/26/5；OOD ΔY=+0.018765，W/T/L=3/14/15。\n因此本轮只支持 development mechanism repair，不支持性能改善、量子优势、formal、generalization 或硬件主张。\n下一步冻结 D2，在全新 seeds 和 matched-compute 预算下做 gain-QAOA vs strongest-greedy paired evaluation；预注册门为 ΔY<0、95% CI upper<0、语义 100%、0 fallback。\n这里的 workspace peak≤2 和 Y 只指 abstract logical X/CNOT/MCT proxy；MCT 分解未计，不是硬件精确门数。\n[Sources]\n- docs/competition/evidence/E6_D2_RESOURCE_GAIN_MECHANISM_EVIDENCE.md\n- experiments/results/xa202609/20260813-e6-d2-resource-gain-teacher-v1-full-s20261011/results.json\n- experiments/results/xa202609/20260813-e6-d2-resource-gain-teacher-v1-full-s20261011/diagnostics.json\n- experiments/results/xa202609/20260813-e6-d2-resource-gain-teacher-v1-full-s20261011/raw.jsonl\n- experiments/configs/xa202609/e6_d2_resource_gain_teacher_v1.json\n- docs/papers/resource_nmcts/chinese/main.tex\n- docs/project/PROJECT_STATUS_XA202609.md\n- docs/planning/EXPERIMENT_ROADMAP_XA202609.md\n- docs/contracts/COMPETITION_ACCEPTANCE_MATRIX.json"}
 {"kind":"slide","id":"sl/6lsnupw7","slide":14,"title":"AI for Quantum × Quantum for AI","textShapes":3}
-{"kind":"textbox","id":"sh/xc7eds76","slide":14,"name":"矩形 1","text":"AI for Quantum × Quantum for AI\n四臂机制消融已经运行\n显著反向，进入 D1 诊断","textPreview":"AI for Quantum × Quantum for AI | 四臂机制消融已经运行 | 显著反向，进入 D1 诊断","textChars":56,"textLines":3,"bbox":[-0.07,106.93,1280.13,355.13]}
+{"kind":"textbox","id":"sh/xc7eds76","slide":14,"name":"矩形 1","text":"AI for Quantum × Quantum for AI\n资源一致 replay 修复标签语义\n下一门：新种子匹配预算对照","textPreview":"AI for Quantum × Quantum for AI | 资源一致 replay 修复标签语义 | 下一门：新种子匹配预算对照","textChars":64,"textLines":3,"bbox":[-0.07,106.93,1280.13,355.13]}
 {"kind":"textbox","id":"sh/wbydknq1","slide":14,"name":"文本框 2","text":"XA-202609｜答辩","textPreview":"XA-202609｜答辩","textChars":12,"textLines":1,"bbox":[510.87,624,291.53,96]}
 {"kind":"textbox","id":"sh/ehwvat8n","slide":14,"name":"文本框 8","text":"杭州电子科技大学量子线路编译组","textPreview":"杭州电子科技大学量子线路编译组","textChars":15,"textLines":1,"bbox":[635,524.47,593.87,66.73]}
 {"kind":"image","id":"im/fu1cza1s","slide":14,"name":"图片 7","bbox":[200.8,512.53,373.8,90.6]}
-{"kind":"notes","id":"nt/6lsnupw7","slide":14,"text":"收束：AI4Q 与 Q4AI 已在同一开发链中贯通，四臂实验给出显著反向而不是期望中的改善。\n固定条件下，当前 QAOA teacher 标签关联对资源目标有害；这不是量子优势、性能、泛化、formal 或硬件证据。\n下一步直接做 D1 机制诊断，拆解 replay 标签、head top-K 与 exact scheduler；不在当前 heldout 事后调参。\n[Sources]\n- docs/competition/evidence/E6_Q4AI_CAUSAL_NEGATIVE_EVIDENCE.md\n- experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/results.json\n- docs/papers/resource_nmcts/chinese/main.tex\n- docs/project/PROJECT_STATUS_XA202609.md\n- docs/planning/EXPERIMENT_ROADMAP_XA202609.md"}
+{"kind":"notes","id":"nt/6lsnupw7","slide":14,"text":"收束：AI4Q 与 Q4AI 的开发链已从 D1 错位标签推进到 D2 resource-aligned replay；相对 exact permuted-label control，structured 32/32 逐例更低，OOD 31/32 更低且 1 tie。\nstrongest greedy 仍略优，因此当前结论是机制修复，不是性能、量子优势、formal、generalization 或硬件证据。\n下一步不再改 teacher：冻结 D2，用全新 seeds 和匹配计算预算直接对 strongest greedy 做 paired evaluation。\n[Sources]\n- docs/competition/evidence/E6_D2_RESOURCE_GAIN_MECHANISM_EVIDENCE.md\n- experiments/results/xa202609/20260813-e6-d2-resource-gain-teacher-v1-full-s20261011/results.json\n- docs/papers/resource_nmcts/chinese/main.tex\n- docs/project/PROJECT_STATUS_XA202609.md\n- docs/planning/EXPERIMENT_ROADMAP_XA202609.md"}

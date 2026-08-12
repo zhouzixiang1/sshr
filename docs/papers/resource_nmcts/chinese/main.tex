@@ -60,7 +60,7 @@
 
 在后续的冻结检验中，执行感知 \qaoa{} 相对历史 \qaoa{} 的原生双比特门数差为 $-513.9375$，按 AES 输出坐标聚类的 95\% bootstrap 区间为 $[-2059.0625,589.9375]$，仍未通过改善门；这些 AES 坐标已在 E4 中出现，因而只构成 post-E4 复现而非泛化证据。进一步使用训练来源闭合的模型检验 ASCON 与 PRESENT 外部密码族时，标量坐标表示分别只产生 0 与 6 个可调度组。尽管事后负向审计对 90/90 条记录重建了搜索、线路和原生端点，预设的逐家族活动门仍失败，性能端点不能接受。两项负结果把尚未解决的问题从“怎样继续调权”收缩为“怎样构造同时可验证且具有可调度共享结构的多输出表示”。
 
-最后，E6-MSO 在单配置、确定性串行运行条件下贯通了真实的 replay--head--held-out 开发评估链：四个回放臂在 64 个 $n=6,7$ 训练函数上分别训练 head，并在 32 个 $n=4,5$ 多输出函数簇上比较。主比较中，\qaoa{} 最终测量回放相对同 counts 的置换标签对照使资源比 $Y$ 的均值增加 $0.094978$（越低越好），95\% bootstrap 区间为 $[0.069638,0.123767]$。该反向结果不支持改善主张，只是单一固定语料、初始化与 seed 下的 development conditional 机制诊断；它不是正式或性能评估、密码家族泛化、硬件执行或量子优势证据。
+最后，E6-MSO 在单配置、确定性串行运行条件下贯通了 replay--head--开发评估链。初始实验中，\qaoa{} 最终测量边际标签相对同 counts 的置换对照使资源比 $Y$ 增加 $0.094978$（越低越好）；D1 随后把主要失效定位为标签语义，而非 value 分支。D2 因而只把 teacher 改为“观测到的可行联合子集所产生的正向整程序资源增益”，保持候选池、模型、预算和优化器不变。在 32 个 structured validation 函数与 32 个 $n=4,5$ OOD 函数上，增益标签相对其置换对照的平均 $\Delta Y$ 分别为 $-0.168879$（胜/平/负 32/0/0）和 $-0.153511$（31/1/0）；但相对 greedy 仍分别高 $0.005990$ 和 $0.018765$。96/96 个 teacher case 可用，704/704 条程序语义检查通过且无 fallback 或 degraded。该结果只支持“资源对齐标签修复了原有有害关联”这一开发机制结论，不构成正式性能评估、硬件执行或量子优势证据。
 \end{abstract}
 
 \noindent\textbf{关键词：}AI for Quantum；Quantum for AI；量子 oracle 综合；置换等变学习；蒙特卡洛树搜索；QAOA；密码布尔函数
@@ -87,7 +87,7 @@
   \item 将固定预算下的独立 MCTS 分支准入写成效用--多样性组合优化，给出 greedy、exact 与 \qaoa{} 的同池 QUBO 对照，使量子子程序能够真实改变 AI 搜索轨迹而不改变 Oracle 语义。
   \item 在 FIPS~197 AES S-box 的八个标量坐标函数上贯通等变 policy、冻结候选池、greedy/\qaoa{} 调度、逻辑发射、原生映射和 seeded 含噪轨迹，以完整逻辑语义验证和受限执行证据揭示局部调度目标与下游资源目标的错配。
   \item 以来源闭合的 policy/value 模型和冻结执行感知权重开展 post-E4 AES 复现及 ASCON/PRESENT 外部家族检验；区间跨零和家族活动门失败均作为负向证据保留，从而区分“机制可运行”“记录可重建”与“性能端点可接受”。
-  \item 在 E6-MSO 中贯通 \qaoa{} 最终测量 replay、等变 shared head、top-$K$ 共享动作选择与完整多输出语义验证，并以同 counts 的置换标签对照形成可重算的 development conditional 诊断；该结果用于定位训练标签与下游资源目标的错配，不被升级为性能或泛化证据。
+  \item 在 E6-MSO 中贯通 \qaoa{} 最终测量 replay、等变 shared head、top-$K$ 共享动作选择与完整多输出语义验证；D1 定位标签语义失配后，D2 只以可行联合子集的正向整程序资源增益重定义 teacher，并用同信号置换对照检验因果方向。该结果仍是 development conditional 机制证据，不被升级为性能或泛化结论。
   \item 构造从逻辑 MCT 到合成局部耦合图上 $\{\rz,\mathrm{SX},X,\mathrm{CX}\}$ 的可追溯分解与路由，并以 calibration/test 隔离的 Pauli trajectory 标签冻结执行反馈模型；held-out 负结果用于界定当前结构代理的失效边界，而不被删去或改写为正向优势。
   \item 在统一 $X$/CNOT/MCT 逻辑 IR 上建立证据分级的三路线适配：超导路线提供 synthetic 原生编译与含噪执行，离子阱路线提供全连接 $\{R_z,R_x,R_{XX}\}$ 理想酉适配，光量子路线只声明编码、资源态、测量前馈与损耗前提；统一 manifest 不把不同强度的证据折叠为“硬件已支持”。
   \item 设计由布尔环线性因子、\mcts{}、depth-frontier controller、Pareto archive 和 baseline-preserving guard 组成的逻辑层 synthesis pipeline，并给出强 no-\mcts{}、随机先验和随机深度对照。
@@ -378,6 +378,15 @@ $X$ 映射为 $R_x(\pi)$，CNOT 由一个 $R_{XX}(\pi/2)$ 与局部 $R_z/R_x$ �
 
 E6 采用单一配置与确定性串行运行。该配置生成 64 个 synthetic VectorANF 训练函数（$n=6,7$ 各 32 个），固定来源闭合的置换等变 trunk，并从同一 head 初始化分别训练四个臂：classical random bitstring replay、classical greedy repeated-selection replay、\qaoa{} final-measurement replay，以及 \qaoa{} permuted-label control。\qaoa{} 使用 $p=1$ 和 512 shots；回放只读取最终测量 bitstring counts，不读取优化器轨迹。置换标签对照保留与 \qaoa{} 臂完全相同的 counts 和 value target，只置换 action--label 对应关系，因此主比较隔离的是保留该对应关系的条件效应。四臂的观察预算相同，但经典 greedy 与 \qaoa{} 的计算预算并不相等，故两者只作描述性次比较。
 
+D1 在不改变 teacher、候选池、观察/训练预算或 exact scheduler 的条件下，比较原标签/置换标签与 value weight 1/0，并以 greedy 和冻结初始 head 为诊断锚。其读数把主要失效定位为原始 action-marginal 标签与下游资源效用的反向关联；候选支持变化会放大该错误，而关闭 value loss 只带来很小变化。D2 因而只修改 teacher。对每个观测到的可行 bitstring $z$，令其选择的真实动作集合为 $A_z$，direct 与所选程序的资源分数分别为 $S_0$ 和 $S_z$，定义
+\begin{equation}
+g_z=\max\!\left(0,1-\frac{S_z}{S_0}\right),\qquad
+c_i=\sum_z n_z g_z\,\mathbf{1}[i\in A_z],\qquad
+p_i=\frac{c_i}{\sum_j c_j}.
+\label{eq:e6-resource-gain-teacher}
+\end{equation}
+不可行、dummy 或零增益观测不贡献信用；若整组没有正增益则跳过，而不回退为均匀或 greedy 标签。主对照先从同一 QAOA counts 计算源标签，再确定性置换 $p_i$ 与 $c_i$；两臂保持相同训练组、初始 head、采样日程、1024 次样本呈现、256 次更新和 value weight 0。Greedy、旧 QAOA 边际标签及冻结 head 仅作诊断锚。
+
 固定的 held-out 开发评估包含 32 个 synthetic 多输出双射函数（$n=4,5$ 各 16 个），并以完整 vector function 为聚类单位；该集合不含密码函数，也不承担跨家族检验。对每个函数，候选先按 arm-neutral raw analytic utility 排序并截断为至多 256 个动作，head 再将该公共池排序并截取 top-$K=10$，不直接向调度器传递 logit 数值。随后所有臂共享同一 raw utility 和同一 exact scheduler，从 shortlist 中选择至多 $B=2$ 个无冲突共享动作。资源分数固定为
 \begin{equation}
 S=T+0.04\,\mathrm{CNOT}+0.015\,\mathrm{depth}+0.01\,\mathrm{gates}+2\,\mathrm{ancilla},
@@ -389,7 +398,7 @@ Y=\frac{S_{\mathrm{shared}}}{S_{\mathrm{direct}}},
 
 \section{实验设置}
 
-实验围绕十个可证伪问题展开。H0 检查所有进入比较的线路是否严格保持 Oracle 语义；H1/H2 分别检查置换等变归纳偏置以及 policy、value、progressive widening 的可分离贡献；H3 检查 \qaoa{} 是否能在冻结候选池上改善固定预算多样性目标，并追踪这种局部改善能否转化为最终资源收益；H4 检查执行标定能否缩小逻辑代理与合成硬件 profile 上含噪指标之间的偏差；H5 检查同一调度干预在 AES S-box 坐标上能否从 exact-objective 命中传导到逻辑、原生和含噪端点；H6 检查同一 $X$/CNOT/MCT 逻辑契约能否在三条硬件路线上保留可验证语义或显式的不支持边界；H7 检查在 calibration 内冻结的执行感知 utility 能否在 post-E4 AES 复现中稳定降低原生双比特门数；H8 检查同一机制在 ASCON/PRESENT 外部密码族上是否具有足够的根动作活动度，从而使调度对比可识别；H9 检查在 E6-MSO 中保留 \qaoa{} 最终测量回放的 action--label 对应关系，能否相对同 counts 的置换标签对照降低固定开发集上的资源比 $Y$。传统逻辑层比较同时回答 \method{} 相对同任务代数基线、SSHR、公开最优库及外部工具链的结论边界。H4--H9 与前述逻辑结果使用独立证据 bundle，不把 development、synthetic 或 ideal profile 外推为真机性能。
+实验围绕十个可证伪问题展开。H0 检查所有进入比较的线路是否严格保持 Oracle 语义；H1/H2 分别检查置换等变归纳偏置以及 policy、value、progressive widening 的可分离贡献；H3 检查 \qaoa{} 是否能在冻结候选池上改善固定预算多样性目标，并追踪这种局部改善能否转化为最终资源收益；H4 检查执行标定能否缩小逻辑代理与合成硬件 profile 上含噪指标之间的偏差；H5 检查同一调度干预在 AES S-box 坐标上能否从 exact-objective 命中传导到逻辑、原生和含噪端点；H6 检查同一 $X$/CNOT/MCT 逻辑契约能否在三条硬件路线上保留可验证语义或显式的不支持边界；H7 检查在 calibration 内冻结的执行感知 utility 能否在 post-E4 AES 复现中稳定降低原生双比特门数；H8 检查同一机制在 ASCON/PRESENT 外部密码族上是否具有足够的根动作活动度，从而使调度对比可识别；H9 检查 E6-MSO 的回放标签是否与下游资源目标一致：先用旧边际标签与置换标签确定失效，再检验资源增益标签相对同信号置换对照能否恢复较低的开发集资源比 $Y$。传统逻辑层比较同时回答 \method{} 相对同任务代数基线、SSHR、公开最优库及外部工具链的结论边界。H4--H9 与前述逻辑结果使用独立证据 bundle，不把 development、synthetic 或 ideal profile 外推为真机性能。
 
 传统核心切片包含 $n\leq6$ 的 177 个函数。weighted ESOP-MILP 对每个函数设置 10~s 求解上限，报告该加权 ESOP 模型返回的可行 incumbent；它不是量子线路全局最优证书。外部逻辑网络覆盖 ABC/BDD、ROS-style LUT、mockturtle、Caterpillar 和 CirKit；RevKit CLI 使用完整 permutation 上的 exact-oracle reversible synthesis，RevKit Python \texttt{oracle\_synth} 则单独作为 phase/Rz 边界。高维实验包括 $n=20,24,28,32,40$ 项集、$n=48,56,64$ 超大规模符号压力切片，以及 $n=21$--$30$ 的完整 \ttable{} bridge。所有配对比较只纳入名称匹配、语义检查成功且满足各自 timeout 契约的行。
 
@@ -410,6 +419,8 @@ E5 先在不导入密码表的条件下，用 $n=6,7$ 各 6 个 calibration 函�
 为检验上述负向结论是否依赖单一数值软件构建，E5 另设跨构建可移植性审计。V3 审计只对预先列举的 learned prior、raw/adjusted utility 及其确定性连续派生量允许有限浮点差异，阈值固定为 $\operatorname{rtol}=10^{-6}$、$\operatorname{atol}=5\times10^{-6}$，并要求所有值有限；候选结构与顺序、准入集合、\qaoa{} 离散输出、Plan、逻辑 QASM、原生线路、端点和 summary 仍须严格一致。独立 fresh-validation v2 则从空 CPython~3.11 venv 记录依赖闭包、安装报告、测试与 verifier 命令，并要求调用方在解析 bundle 前提供外置 anchor SHA。该层只检验软件与证据可移植性，不把协议拒绝改写为性能结果，也不把版本固定等同于二进制完全复现。
 
 E6 full profile 固定总 seed 为 20260912、head 初始化 seed 为 20260907、训练采样 seed 为 20260913，开发评估数据 seed 为 20260921；四个 head 均在 CPU 单线程、float32 下执行 256 个 AdamW update，不使用 early stopping、resume 或基于开发端点的模型选择。主效应定义为 32 个 whole-vector 函数簇上 \qaoa{} final-measurement replay 减 permuted-label control 的配对平均 $Y$ 差；95\% 区间使用 10,000 次簇 bootstrap，并辅以 100,000 次 sign-flip 检验和 $n=4,5$ 分层方向门。全部超参数、语料生成器与统计种子在运行前由同一配置文件固定，但这仍是单一配置、单一初始化与单一运行 seed 的 development conditional 实验，不是 formal evaluation 或泛化检验。
+
+D1 使用独立 seed 20261001；D2 再使用训练、structured validation 与 OOD seed 20261011、20261012 和 20261013。D2 的训练集为 64 个 $n=6,7$ 函数，structured validation 为 32 个 $n=6,7$ 函数，OOD 为 32 个 $n=4,5$ 函数；三者的 vector、orbit 与 whole-vector identity 交集均为空。主比较只包含资源增益 QAOA 标签及其置换对照；旧标签、greedy 和冻结 head 不进入性能主张。所有结果均标记为 deterministic development diagnostic，且不记录运行时间以避免把当前运行环境误作同算力证据。
 
 \begin{table}[H]
 \centering
@@ -868,6 +879,29 @@ Greedy repeated-selection & 0.775639 & 0/32 & 最强当前描述性基线，非�
 
 主比较的配对平均差 $\Delta Y=Y_{\mathrm{QAOA}}-Y_{\mathrm{perm}}$ 为 $+0.094978$，95\% 簇 bootstrap 区间为 $[+0.069638,+0.123767]$，双侧 sign-flip $p=9.9999\times10^{-6}$，函数级胜/平/负为 0/3/29；分层均值在 $n=4$ 和 $n=5$ 上分别为 $+0.154025$ 与 $+0.035931$。32/32 个函数在四臂下均通过完整语义检查且没有 fallback，独立 verifier 对配置、语料、确定性重训、top-$K$、exact 调度、发射、语义、统计与 checksum 的 11/11 项重算全部通过。由于效应方向与预设改善方向相反，\texttt{claim\_supported=false} 且 \texttt{performance\_evidence=false}；formal evaluation、hardware execution 与 quantum advantage 也均未建立，故 H9 未获支持。
 
+D1 的 teacher 审计解释了这一反向结果。旧 QAOA 边际标签在训练和 fresh structured validation 上与 raw action utility 均呈负相关；关闭 value loss 没有改变主要方向，而 expanded 与 OOD 候选池进一步放大了错误排序。相反，greedy 标签与冻结初始 head 仍保留正相关和非空 shortlist。因此，支持域迁移是放大器，value 分支是次要干扰，主要原因是标签把“动作在最终测量中出现”误当成了“动作对整程序资源有正贡献”。
+
+D2 只替换该标签语义。训练 64 个函数与 structured validation 32 个函数的 96/96 个 QAOA 观测组都产生了正增益信用，跳过数为 0；源标签与其置换对照在 96/96 组上不同。表~\ref{tab:e6-d2-resource-gain-zh} 给出保持相同模型、候选池、训练日程和 exact scheduler 后的结果。Structured validation 上，增益标签相对置换对照的平均 $\Delta Y=-0.168879$，逐函数胜/平/负为 32/0/0；OOD 上为 $-0.153511$ 和 31/1/0。两层的平均 raw-utility Spearman 改变量分别为 $+0.849891$ 与 $+0.952345$，说明恢复的不只是端点差异，还包括 head 对动作资源效用的排序方向。
+
+\begin{table}[H]
+\centering
+\small
+\caption{E6-D2 资源增益 teacher 的开发诊断。$Y$ 越低越好；greedy 只作计算预算不匹配的诊断锚。}
+\label{tab:e6-d2-resource-gain-zh}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}Xrrr}
+\toprule
+数据层与训练臂 & 平均 $Y$ & 相对置换 $\Delta Y$ & 相对 greedy $\Delta Y$ \\
+\midrule
+Structured，资源增益 QAOA & 0.747045 & $-0.168879$ & $+0.005990$ \\
+Structured，置换对照 & 0.915924 & --- & $+0.174869$ \\
+OOD，资源增益 QAOA & 0.811628 & $-0.153511$ & $+0.018765$ \\
+OOD，置换对照 & 0.965139 & --- & $+0.172276$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+全部 704 条 matched/expanded/OOD 程序行通过完整多输出语义检查，fallback 与 degraded 均为 0。尽管资源增益 teacher 相对其严格置换对照恢复了正向信号，它在 structured 与 OOD 上仍分别比 greedy 高 $0.005990$ 和 $0.018765$；训练/validation 的平均 policy observation weight 也只有 0.0100/0.0081。故 D2 支持“整程序增益信用修复了旧标签的有害关联”，但尚未支持“超过最强经典 teacher”或正式性能改善。
+
 \subsection{Phase/Rz 边界与 Affine-FPRM 搜索}
 
 RevKit \texttt{oracle\_synth} 在 177 个传统函数上全部返回，但 171/177 行含非 Clifford \rz{}，总数为 9242。因此，如果只按 lower-bound phase netlist 计分，比较会低估 RevKit 输出在 Clifford+T 近似综合中的成本。为把该边界转化为本文内部可验证分支，我们实现 phase-parity \anf{} emitter，并进一步加入 fixed-polarity \fprm{} search 和 Affine-FPRM phase search。
@@ -977,7 +1011,9 @@ E4-v2 实际执行了上述目标修正，却没有把点估计升级为稳定�
 
 训练损失下降却没有转化为可用 shortlist。\qaoa{} replay head 的 top-$K$ 平均 raw analytic utility 仅为 0.2103，32 个函数中只有 1 个 shortlist 含可被 exact scheduler 接受的正收益组合，因此 31/32 个函数退化为空选择；置换标签对照与 greedy replay 的对应均值分别为 6.974 和 42.391。其训练 teacher 来自最终测量的可行 bitstring 边际，而不是直接的 raw-utility 排序标签；64 个训练函数中又有 41 个 \qaoa{} 终态取 $\gamma=0$，这些分布不携带 cost-Hamiltonian 的 utility phase 信息。与此同时，训练时每个六输出函数只保留 6 个候选，held-out 的四/五输出函数却向 head 提供 33--256 个候选后再截取 top-10，构成明显的候选支持域变化。三项观测共同支持“当前 teacher 与下游 raw utility 未对齐，且候选支持域发生迁移”这一机制诊断，但单一固定语料、初始化与 seed 不能排除偶然初始化、语料构成和表征容量等竞争解释。置换标签对照优于原标签也不能被解释为置换本身具有一般收益，它可能只是在本次条件下破坏了有害关联。Greedy replay 虽给出最低平均 $Y$，但其计算预算与 \qaoa{} 不相等，当前实验不能据此声称同算力优势。
 
-因此，E6 的下一步不是依据当前 held-out 开发集直接修改 replay teacher、候选池或超参数，而是先在全新 seed 上预注册 D1 机制诊断。D1 固定现有 teacher、候选池构造与上限、观察/训练预算及 exact scheduler，在 structured $n=6,7$ validation 与 OOD $n=4,5$ endpoint 上运行 $\{\text{QAOA labels},\text{permuted labels}\}\times\{\text{value weight}=1,0\}$ 的 $2\times2$ 分解；greedy replay 与冻结初始 head 只作为诊断锚，不进入改善主张。预注册读数分别检验 teacher target 与 raw utility 的一致性、候选支持变化后的 top-$K$ 正收益覆盖/空选择，以及 shared value loss 是否干扰 policy 排序。旧 seed 20260921 只保留为本节负向证据，不用于选择 D1 方案、阈值或解释。只有 D1 在预设读数上确认 target、support 或 shared-value 机制后，才另开 D2、使用再一组新 seed 修改 teacher 或候选池，并单独注册比较与验收门。ASCON 与 PRESENT 已在 E5 中被观察，不能充当新的跨家族证据。
+D1 与 D2 把上述竞争解释进一步排序。D1 在全新 seed 上保持原 teacher、候选池、预算与 scheduler 不变，显示原始标签在 matched structured 数据中已经与 raw utility 负相关；support expansion 只会放大这种反向信号，value weight 从 1 降到 0 则没有消除它。D2 随后只把监督改为式~\eqref{eq:e6-resource-gain-teacher} 的正向整程序资源增益，并使用另一组 train/structured/OOD seed。资源增益标签相对同信号置换对照在 structured 和 OOD 上均降低 $Y$，且不再产生空选择；这一单变量变化支持 label semantics 是 D1 主要根因。
+
+然而，D2 的 teacher 仍弱于 greedy。其信用只来自 QAOA 实际观测到的可行联合子集，正增益覆盖和平均观察权重都较低；它保留了量子采样的联合支持，却没有获得 greedy repeated-selection 的密集资源排序信息。Greedy 的计算预算又与 QAOA 不同，因此当前差距既不能写成同算力失败，也不能被相对置换对照的恢复掩盖。下一步应在全新、未参与 D1/D2 选择的 evaluation 上，以匹配预算直接比较 resource-aligned QAOA replay 与 strongest greedy，并预先要求配对 $\Delta Y<0$、置信区间上界小于 0、语义 100\% 和 0 fallback；在该门通过前，D2 仍只是机制修复而非性能证据。
 
 三条硬件路线进一步表明，可移植性应拆分为逻辑契约的可接入性、路线内的语义保真性与执行证据三层。超导路线达到合成拓扑上的完整基态与含噪轨迹，离子阱路线达到 ideal 全酉矩阵等价，光量子路线只达到可机器检查的先决条件边界。这种不对称不是把三条路线拼成一个模块列表，而是使未获得的证据成为 manifest 中的可审计状态。由于原生字母表、耦合模型和资源定义不同，当前门数不能跨路线直接比较，也不能用 ideal 等价推断设备级性能。
 
@@ -997,9 +1033,9 @@ E3 完成了闭环机制，却没有通过改善门：冻结执行反馈相对�
 
 E5 的跨构建 V3 与 fresh-validation v2 又表明，这一拒绝在不同 Torch 二进制构建及全新依赖安装中保持同一离散搜索、线路和端点。它闭合的是负向证据的可移植性，而非 AI for Quantum 的性能收益或 Quantum for AI 的量子优势。
 
-这些证据把后续创新问题从“是否接入硬件代理”推进为“多输出共享动作的训练标签是否与下游资源目标一致”。E6-MSO 已把 VectorANF、跨输出 monomial/semi-affine 共享、compute--fanout--uncompute、冲突 QUBO 以及真实 final-measurement replay--head--held-out 开发评估纳入同一可重算链；32/32 个函数均保持语义且无 fallback。然而，\qaoa{} replay 相对同 counts 置换标签对照的 $\Delta Y=+0.094978$，95\% CI 为 $[+0.069638,+0.123767]$，表明当前标签关联没有形成资源改善。这一结果是用于定位目标错配的诊断基线，不是 E6 的最终目标，也不是 formal、generalization 或 performance evidence。
+这些证据把后续创新问题从“是否接入硬件代理”推进为“多输出共享动作的训练标签是否与下游资源目标一致”。E6-MSO 已把 VectorANF、跨输出 monomial/semi-affine 共享、compute--fanout--uncompute、冲突 QUBO 以及真实 final-measurement replay--head--开发评估纳入同一可重算链。初始标签相对置换对照的 $\Delta Y=+0.094978$ 构成诊断基线；D1 将主要根因定位为 label semantics，D2 再以正向整程序资源增益作为唯一机制变化。
 
-下一阶段先在全新 seed 上预注册 D1：保持当前 teacher、候选池与预算不变，以 structured $n=6,7$ validation 和 OOD $n=4,5$ endpoint 执行 $\{\text{QAOA labels},\text{permuted labels}\}\times\{\text{value weight}=1,0\}$；greedy 与冻结初始 head 仅作诊断锚，旧 seed 20260921 不参与方案选择。只有 D1 确认 target、candidate-support 或 shared-value 机制，才在独立 D2 新 seed 上修改 teacher 或候选池并重新注册性能门。D1 本身不改变本轮负结论，也不支持 AI for Quantum 性能改善、Quantum for AI 优势或密码家族泛化。
+D2 在 32 个 structured 与 32 个 OOD 函数上相对置换对照分别得到 $\Delta Y=-0.168879$（32/0/0）和 $-0.153511$（31/1/0），96/96 个 teacher case 可用，704/704 条程序语义正确且无 fallback/degraded。这证明资源对齐信用能够修复旧标签的有害关联；但它相对 greedy 仍分别高 $0.005990$ 和 $0.018765$，而两者计算预算并不相等。因此，当前结论是一个可复算的 Quantum for AI teacher 机制改进，不是 AI for Quantum 性能改善、密码家族泛化、硬件执行或量子优势。
 
 三路线硬件 bundle 把这一闭环置于可审计的设备抽象之上：超导 synthetic 路线提供原生/含噪执行层，离子阱 ideal 路线提供全酉矩阵级语义保真，光量子路线则在先决条件不足时显式拒绝伪映射。这一结果扩展的是 AI for Quantum 与 Quantum for AI 共享的证据接口，并不改变无真机、无跨路线性能比较与无量子优势的结论边界。
 
@@ -1018,6 +1054,8 @@ E5 使用的来源闭合模型 bundle 为 \path{20260812-foundation-v4-provenanc
 E5 的跨构建科学审计与全新安装证据分别位于 \path{20260812-e5-v11-portable-negative-audit-v3-s950000} 和 \path{20260812-e5-v11-portable-fresh-validation-v2-s970000}。前者的 bundle snapshot SHA-256 为 \texttt{4ba1d958\ldots02ea}，后者为 \texttt{dd75a9bc\ldots1d23}；fresh-validation 外置 anchor 位于 \path{experiments/configs/xa202609/e5_v11_portable_fresh_validation_v2.anchor.json}，其 SHA-256 为 \texttt{036dc0ca\ldots{}d686}。验证器必须由 bundle 外部获得该 anchor 值后再解析内容，从而避免用自含 checksum 证明自身；当前内部审计包的上层 manifest 已同时固定 anchor、八个完整依赖九件套及其逐文件 SHA。两个证据层均保持 \texttt{protocol\_acceptance=false} 与 \texttt{experiment\_completed=false}，不构成性能、真机或量子优势证据。
 
 E6 replay--head 开发诊断位于 \path{experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/}，目录只含 \path{config.json}、\path{results.json}、\path{raw.jsonl}、\path{heldout_evaluation.json} 与 \path{checksums.sha256} 五个文件。独立 verifier 从配置重建训练语料，依次重训四个 head，并重算 held-out 的 top-$K$、exact 调度、发射、语义与统计，11/11 项检查全部通过。Bundle 显式记录 \texttt{performance\_evidence=false} 与 \texttt{formal\_evaluation=false}；该路径保存的是单一固定运行的 development conditional 负向诊断，不是正式或泛化结果。
+
+E6-D1 与 D2 的开发诊断分别位于 \path{experiments/results/xa202609/20260813-e6-d1-signal-chain-v1-full-s20261001/} 和 \path{experiments/results/xa202609/20260813-e6-d2-resource-gain-teacher-v1-full-s20261011/}。D2 目录只含 \path{config.json}、\path{results.json}、\path{raw.jsonl}、\path{diagnostics.json} 与 \path{checksums.sha256} 五个文件；其 64/32/32 train/structured/OOD case、96 个 teacher audit 和 704 条程序诊断可由原始 JSONL 重算。两个 bundle 均明确记录 \texttt{formal\_evaluation=false} 与 \texttt{performance\_evidence=false}，不得用相对置换对照的正向差异替代尚未完成的匹配预算 greedy 评估。
 
 硬件路线正式 run ID 为 \texttt{20260812-hardware-routes-v1-s202609}，routes manifest SHA-256 前缀为 \texttt{6c3b3758}。独立 bundle verifier 的 27 项检查全部为 true，并重算超导路线、离子阱路线与光量子边界的语义而不信任 builder 摘要。三条路线均显式记录 \texttt{hardware\_execution=false}。
 

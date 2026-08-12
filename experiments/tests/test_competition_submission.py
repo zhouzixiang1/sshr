@@ -118,6 +118,19 @@ def test_staging_spec_is_explicit_and_excludes_archives_except_anchored_raw() ->
             "heldout_evaluation.json", "checksums.sha256",
         )),
     } <= required_files
+    e6_d2_bundle = (
+        "experiments/results/xa202609/"
+        "20260813-e6-d2-resource-gain-teacher-v1-full-s20261011"
+    )
+    assert {
+        "docs/competition/evidence/E6_D2_RESOURCE_GAIN_MECHANISM_EVIDENCE.md",
+        "experiments/configs/xa202609/e6_d2_resource_gain_teacher_v1.json",
+        "experiments/scripts/run_e6_d2_resource_gain_teacher_v1.py",
+        *(f"{e6_d2_bundle}/{name}" for name in (
+            "config.json", "results.json", "raw.jsonl",
+            "diagnostics.json", "checksums.sha256",
+        )),
+    } <= required_files
     assert payload["final_authorization_documents"] == [
         "LICENSE",
         "IP_STATEMENT.md",
@@ -137,12 +150,12 @@ def test_staging_spec_is_explicit_and_excludes_archives_except_anchored_raw() ->
     assert payload["final_model_release"]["evidence_files"]
     assert payload["report_release"] == {
         "path": "docs/papers/resource_nmcts/chinese/resource_nmcts_competition_current.pdf",
-        "sha256": "fadd6965e39a390589086e1784e6e68984ce2121339dbace802775858d3fcfe3",
-        "page_count": 38,
+        "sha256": "f6826f61595e5a7de9b311a13e6027b061c99323fbbdc626196986a7c3cbda95",
+        "page_count": 39,
     }
     assert payload["presentation_release"] == {
         "path": "docs/competition/slides/XA-202609_双向智能Boolean_Oracle答辩稿.pptx",
-        "sha256": "bf830dee8dd9adf5e9110cbf8b73f0ebbfbb3fe453c3aad03c057b031581d4e3",
+        "sha256": "fa7b319fa620a37a62302be24c04ed70fb432be91d7d0fafbd8cf2e08377412f",
     }
     assert payload["presentation_candidates"] == [payload["presentation_release"]["path"]]
     assert "experiments/e6/*.py" in payload["required_globs"]
@@ -335,6 +348,10 @@ def test_internal_draft_has_closed_manifest_and_verifies_only_with_override(
         "experiments/results/xa202609/"
         "20260812-e6-q4ai-causal-v1-full-s20260912/raw.jsonl"
     )
+    expected_raw.add(
+        "experiments/results/xa202609/"
+        "20260813-e6-d2-resource-gain-teacher-v1-full-s20261011/raw.jsonl"
+    )
     assert included_raw == expected_raw
     for rel in (
         "experiments/demo/output/checksums.sha256",
@@ -446,6 +463,57 @@ def test_claim_boundaries_are_explicit_and_not_promoted(
     assert claims["e6"]["claim_supported"] is False
     assert claims["e6"]["formal_evaluation"] is False
     assert claims["e6"]["performance_evidence"] is False
+    assert claims["e6_d2"] == {
+        "status": "development_resource_gain_mechanism_repaired",
+        "bundle_path": (
+            "experiments/results/xa202609/"
+            "20260813-e6-d2-resource-gain-teacher-v1-full-s20261011"
+        ),
+        "bundle_snapshot_sha256": (
+            "b16715196ff1e456184eaae6654f73f28c12454c5190d288384739f8bc1576c1"
+        ),
+        "run_id": "20260813-e6-d2-resource-gain-teacher-v1-full-s20261011",
+        "source_commit": "51288b1e2aab3c420ee93a7afd85bbc9c22b2243",
+        "source_dirty": False,
+        "train_case_count": 64,
+        "structured_case_count": 32,
+        "ood_case_count": 32,
+        "split_overlap_counts": {
+            "ood_vs_structured_validation": {
+                "orbit_cluster_sha256": 0,
+                "vector_sha256": 0,
+                "whole_vector_cluster_sha256": 0,
+            },
+            "ood_vs_train": {
+                "orbit_cluster_sha256": 0,
+                "vector_sha256": 0,
+                "whole_vector_cluster_sha256": 0,
+            },
+            "train_vs_structured_validation": {
+                "orbit_cluster_sha256": 0,
+                "vector_sha256": 0,
+                "whole_vector_cluster_sha256": 0,
+            },
+        },
+        "primary_comparison": (
+            "gain_weighted_qaoa_vw0_minus_gain_weighted_permuted_vw0"
+        ),
+        "structured_mean_effect": -0.16887894417475724,
+        "structured_wins": 32,
+        "structured_ties": 0,
+        "structured_losses": 0,
+        "ood_mean_effect": -0.15351147345563865,
+        "ood_wins": 31,
+        "ood_ties": 1,
+        "ood_losses": 0,
+        "strongest_greedy_improvement_supported": False,
+        "development_mechanism_repair_only": True,
+        "formal_evaluation": False,
+        "performance_evidence": False,
+        "generalization_claim": False,
+        "hardware_execution": False,
+        "quantum_advantage_claimed": False,
+    }
     e6_config = json.loads(
         (staging / "experiments/configs/xa202609/e6_multioutput_shared_mvp_v1.json").read_text(
             encoding="utf-8"
@@ -473,6 +541,31 @@ def test_claim_boundaries_are_explicit_and_not_promoted(
     assert e6_heldout["performance_evidence"] is False
     assert e6_heldout["statistics"]["claim_gate"]["claim_supported"] is False
     assert len(e6_heldout["case_rows"]) == 32
+    e6_d2_bundle = staging / claims["e6_d2"]["bundle_path"]
+    assert {path.name for path in e6_d2_bundle.iterdir()} == {
+        "config.json", "results.json", "raw.jsonl",
+        "diagnostics.json", "checksums.sha256",
+    }
+    e6_d2_results = json.loads(
+        (e6_d2_bundle / "results.json").read_text(encoding="utf-8")
+    )
+    e6_d2_diagnostics = json.loads(
+        (e6_d2_bundle / "diagnostics.json").read_text(encoding="utf-8")
+    )
+    assert e6_d2_results["raw_row_count"] == 800
+    assert e6_d2_results["source"]["dirty"] is False
+    assert e6_d2_diagnostics["formal_evaluation"] is False
+    assert e6_d2_diagnostics["performance_evidence"] is False
+    assert (
+        e6_d2_diagnostics["structured_primary_pair_contrasts"]
+        ["expanded_cap256"]["difference"]["score_ratio_y"]
+        == -0.16887894417475724
+    )
+    assert (
+        e6_d2_diagnostics["ood_primary_pair_contrast"]["difference"]
+        ["score_ratio_y"]
+        == -0.15351147345563865
+    )
     assert (staging / "experiments/e6/shared_oracle.py").is_file()
     assert (staging / "experiments/e6/shared_scheduler.py").is_file()
     assert (staging / "experiments/tests/test_e6_shared_semantics.py").is_file()

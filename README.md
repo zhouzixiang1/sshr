@@ -35,9 +35,11 @@ X/CNOT/MCT 层的布尔 Oracle 综合。QAOA 固定预算调度、synthetic-prof
 
 当前 XA 证据只保留在 `experiments/results/xa202609/`，覆盖 P0/E1、E2 QAOA、
 E3 原生/含噪反馈、E4/E4-v2、formal v4、E5 负审计/可移植性链，以及 E6
-QAOA replay→shared-head 的四臂开发因果实验；每个目录是否完成必须以对应
-verifier 为准。E6 的五文件 bundle 已完成 64 个训练 case、32 个 `n=4/5`
-held-out case 和 11/11 独立复验，但主比较显著反向于改善，因此只构成开发负证据。
+replay→shared-head 的开发机制实验。早期 legacy QAOA replay 主比较显著反向；D2
+将 teacher 改为正整程序 resource-gain credit 后，在 fresh structured 与 OOD 的同源
+permuted-control 对比分别得到 `delta Y=-0.1688789442`（32/0/0）和
+`-0.1535114735`（31/1/0）。QAOA 臂仍略弱于 greedy anchor，因此只构成
+development mechanism repair，不是 formal/performance/advantage evidence。
 参数扫描、被替代的 run 和旧论文实验均在 `misc/archive/`，只读且不应被重写。
 
 ## 文稿原则

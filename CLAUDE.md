@@ -56,24 +56,23 @@ formal v4 已从随机初始化形成 provenance-closed 训练 bundle，checkpoi
 
 E6-MSO 多输出共享表达式 mechanism MVP 已实现并独立复审：VectorANF、完整
 partial-fanout、跨输出共享 monomial/semi-affine action、compute–fanout–uncompute、
-显式 workspace peak≤2，以及同池同预算 greedy/exact/QAOA。资源口径仅为 abstract
-logical X/CNOT/MCT proxy。极简单研究者确定性 development 实验已完成（代码
-`e850c0c`，结果 `8cc5f3c`）：在固定语料、初始化和 seed 下依次训练 random、greedy、
-QAOA final-measurement replay 与 permuted-label control 四臂；训练集为 64 个 n6/n7
-case，评估集为 32 个 n4/n5 whole-vector development cluster。五文件 bundle 位于
-`experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/`，clean source
-为 `e850c0c`，snapshot 为
-`18b758ac3e432a5d4e9f0ba1f8be7e17bd1b848b6212234eea9d2e842d4cc76a`。主比较
-QAOA-control 的资源比 $Y$ 差为 `+0.0949778`（越低越好），95% CI
-`[0.0696384, 0.1237673]`，双侧 sign-flip `p=9.9999e-6`，W/T/L=`0/3/29`，
-且 n4/n5 分层均为正，`claim_supported=false`。QAOA 与 random endpoint 32/32
-相同且各有 31/32 空选择；greedy 平均 `Y=0.775639` 仅作非等计算描述。所有语义
-检查通过且无 fallback/degraded，独立 verifier 11/11 通过。这只是固定条件下的
-synthetic development 负证据，formal/performance/generalization/hardware/advantage
-均为 false，也是诊断基线而非可接受终点。当前 QAOA/permuted 只作机制对照。
-D1 机制诊断只用于确定改法；最终目标是 resource-aligned QAOA replay 在全新未调参
-evaluation 上以匹配预算相对 strongest greedy 达到 paired `delta Y<0`、95% CI upper
-`<0`、语义 100%、0 fallback；不在当前 heldout 上事后调参。
+显式 workspace peak≤2，以及同池同预算 greedy/exact/QAOA。早期四臂 development
+run 的 legacy action-marginal QAOA replay 相对 permuted control 明显退化
+（`delta Y=+0.0949778`）；D1 将主要失败点定位到 replay teacher。
+
+D2 只将 policy target 改为 QAOA 样本产生的正整程序 resource-gain credit，并用同源
+固定置换作为 control；formal-v4 trunk、初始化、训练呈现数、value weight 和下游
+arm-neutral scheduler 均保持一致。开发代码提交为 `46a370f`/`51288b1`，结果提交为
+`5da75a4`。五文件 bundle 位于
+`experiments/results/xa202609/20260813-e6-d2-resource-gain-teacher-v1-full-s20261011/`，
+clean source 为 `51288b1e2aab3c420ee93a7afd85bbc9c22b2243`，snapshot 为
+`b16715196ff1e456184eaae6654f73f28c12454c5190d288384739f8bc1576c1`。fresh structured
+expanded-cap256 的 `gain-QAOA - gain-permuted` 为 `delta Y=-0.1688789442`、
+W/T/L=`32/0/0`；structured diagnostics 后才打开的 OOD endpoint 为
+`-0.1535114735`、W/T/L=`31/1/0`。三 split 在 vector/whole-vector/orbit 层均
+0 overlap，所有 endpoint 语义验证通过且 0 fallback/degraded。gain-QAOA 仍略弱于
+greedy anchor，因此结论仅是 development mechanism repair；
+formal/performance/generalization/hardware/advantage 均为 false。
 
 先读：
 
@@ -106,6 +105,7 @@ evaluation 上以匹配预算相对 strongest greedy 达到 paired `delta Y<0`�
 - `experiments/analysis/verify_e5_v11_negative_audit_bundle.py`：E5-v1.1 独立负审计及 V3 跨构建复验，不改变协议验收失败
 - `experiments/analysis/verify_e5_v11_fresh_validation_v2.py`：外部 anchor SHA 约束下复验当前树全新安装证据
 - `experiments/scripts/run_e6_q4ai_causal_v1.py`、`verify_e6_replay_training_bundle_v1.py`：E6 极简四臂训练与确定性重训复验
+- `experiments/scripts/run_e6_d2_resource_gain_teacher_v1.py`：E6-D2 resource-gain replay teacher 开发诊断
 - `experiments/scripts/demo_competition.py`：竞赛 AES bit0 单命令演示
 - `experiments/scripts/verify_demo_output.py`：演示输出的独立 hash/语义/主张复验器
 
@@ -125,13 +125,12 @@ cd experiments
 /opt/anaconda3/envs/mcts-qoracle/bin/python tests/tests_smoke.py
 ```
 
-当前开发树全套为 `588 passed in 363.66s`，0 fail/error；submission 定向回归
-10/10，E6 Q4AI 五文件 bundle 的独立 verifier 11/11 通过。legacy smoke 为
-`smoke ok`；默认 `verify_clean_install.py` 为 `ok=true`，并明确
+当前开发树全套为 `631 passed in 411.04s`，0 fail/error；submission 定向回归
+10/10。legacy smoke 为 `smoke ok`；默认 `verify_clean_install.py` 为 `ok=true`，并明确
 `hardware/performance=false`。
 锚定 fresh-validation V2 的
 全新 CPython 3.11 venv 记录仍为 `383 passed in 295.779s`；旧内部审计包仍对应
-pre-E6-v2 的 407-test 交付基线，当前主稿与 PPT 已同步 E6 负向结果。
+pre-E6-v2 的 407-test 交付基线；当前主稿与 PPT 已同步 E6-D2 mechanism repair。
 
 ## E3 冻结证据
 
@@ -184,7 +183,7 @@ pre-E6-v2 的 407-test 交付基线，当前主稿与 PPT 已同步 E6 负向结
 
 当前持久化输出包含 input、机器/人读报告、执行日志、manifest、checksum 和
 verification；独立 verifier 13/13 为 `true`。回归测试
-`tests/test_competition_demo.py` 已纳入当前 `588 passed in 363.66s` 的完整回归。
+`tests/test_competition_demo.py` 已纳入当前 `631 passed in 411.04s` 的完整回归。
 clean-install 默认 verifier
 也已在隔离环境执行完整临时 demo；尚未完成的是独立离线 deterministic fallback
 资产和提交包验收。
@@ -219,7 +218,7 @@ python3.11 -m venv .venv
 完成 9/9 命令、383 项测试与 19/19 独立复验；bundle snapshot 为
 `dd75a9bcf06f37390c43acf6a019ea8a130ba26a998269ae10fe8bce78441d23`，外部 anchor
 SHA 为 `036dc0cad2cbe6eabac70793e3be1de44fd8f1882753e595560870bc3eddd686`。
-这只证明其锚定树的软件/证据可移植性，不是当前 588 项回归、冻结提交或性能证据；
+这只证明其锚定树的软件/证据可移植性，不是当前 631 项回归、冻结提交或性能证据；
 anchor 与 bundle 已进入内部审计包外层 manifest。内部 draft 位于
 `docs/competition/submission/generated/ppt-cdb66ca7-pdf-f6a19cf8/XA-202609-internal-audit-draft/`，
 共 366 文件；tar 为 4,665,696 bytes，SHA-256 为
@@ -242,13 +241,10 @@ ancilla=2.0`；新实验必须显式使用它们。默认 dataclass 的 CNOT/dep
 - 逻辑 resource score 不是硬件编译成本；不得外推为映射/噪声优势。
 - E3 只证明 synthetic heavy-hex-like profile 上的分解、路由、模拟和反馈干预；
   它不是真机、真实设备校准或硬件性能证据，也不证明量子加速/量子优势。
-- 当前反馈模型只调整根调度 utility；E6 极简四臂 development 实验已实际消费
-  replay observation 并形成确定性因果对照，但 QAOA final-measurement replay 相对
-  permuted-label control 的主效应为 `+0.0949778`（越低越好），必须保留为固定条件下
-  的显著反向结果。D1 机制诊断只用于确定改法；随后必须以全新未调参 evaluation
-  和匹配预算检验 resource-aligned QAOA replay 是否相对 strongest greedy 达到 paired
-  `delta Y<0`、95% CI upper `<0`、语义 100%、0 fallback；不得在当前 heldout 上
-  事后调参或据此声称 generalization/performance。
+- E6-D2 在全新 train/structured/OOD split 上表明 resource-gain teacher 能恢复
+  QAOA source-label 信号：structured/OOD 主差分别为 `-0.1688789442` 和
+  `-0.1535114735`，但 gain-QAOA 仍略弱于 greedy anchor。它只支持机制修复，不是
+  formal/performance/generalization evidence，也不能改写早期 legacy replay 的负结果。
 - E4 证明 AES 端到端链路与 QAOA direct execution 可运行，不证明 AES 性能优势；
   5/4096 noisy success 太稀疏，AES 尺度的逐 trial 原生全基态等价也未执行。
 - 离子阱 RXX/MS 路线、光量子 capability/unsupported-boundary 路线和三路线
@@ -264,9 +260,9 @@ ancilla=2.0`；新实验必须显式使用它们。默认 dataclass 的 CNOT/dep
 同步入口在 `docs/papers/resource_nmcts/overleaf/`。竞赛学术报告在
 `docs/competition/report/`；最终 PPT 将放在 `docs/competition/slides/`。`v40`
 仅是历史中间快照，后续只维护一份吸收有效 XA 证据的当前中文主稿，并同步到
-Overleaf，不把 `v40` 作为独立终版继续分叉。38 页当前主稿已吸收 formal v4、
-E4-v2、E5 负审计和 E6 development negative evidence，并通过 XeLaTeX clean build；
-PDF SHA-256 为 `fadd6965e39a390589086e1784e6e68984ce2121339dbace802775858d3fcfe3`，
-Overleaf `origin/main` 已同步到 commit `739b6c921e5c574871b12172024e2302aed8bb9c`。
-当前 14 页 PPT 已同步 E6 负向结果；PPT SHA-256 为
-`bf830dee8dd9adf5e9110cbf8b73f0ebbfbb3fe453c3aad03c057b031581d4e3`。旧内部审计包仍为 pre-E6 baseline。
+Overleaf，不把 `v40` 作为独立终版继续分叉。39 页当前主稿已吸收 formal v4、
+E4-v2、E5 负审计、E6 legacy 负结果与 D2 mechanism repair，并通过 XeLaTeX clean build；
+PDF SHA-256 为 `f6826f61595e5a7de9b311a13e6027b061c99323fbbdc626196986a7c3cbda95`，
+Overleaf `origin/main` 已同步到 commit `cb6962eab16974ce7a5734ae43094a15abf99138`。
+14 页答辩 PPT 也已同步 E6 legacy 负结果与 D2 mechanism repair，PPT SHA-256 为
+`fa7b319fa620a37a62302be24c04ed70fb432be91d7d0fafbd8cf2e08377412f`；旧内部审计包仍为 pre-E6 baseline。
