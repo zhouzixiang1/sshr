@@ -1,0 +1,131 @@
+{
+  "schema_version": "xa.e6-d2-resource-gain-teacher-config.v1",
+  "status": "single_researcher_deterministic_development_diagnostic",
+  "experiment": "e6-d2-resource-gain-replay-teacher",
+  "question": "does positive whole-program resource gain provide a better QAOA replay policy teacher than the legacy action-marginal label",
+  "design": {
+    "primary_pair": [
+      "gain_weighted_qaoa_vw0",
+      "gain_weighted_permuted_vw0"
+    ],
+    "training_source_arm_by_cell": {
+      "gain_weighted_qaoa_vw0": "qaoa_final_measurement_replay",
+      "gain_weighted_permuted_vw0": "qaoa_permuted_label_control",
+      "legacy_unweighted_qaoa_vw0": "qaoa_final_measurement_replay",
+      "greedy_vw0": "classical_greedy_repeated_selection_replay"
+    },
+    "target_mode_by_cell": {
+      "gain_weighted_qaoa_vw0": "qaoa_resource_gain_credit_v1",
+      "gain_weighted_permuted_vw0": "qaoa_resource_gain_credit_v1",
+      "legacy_unweighted_qaoa_vw0": "legacy_replay_v2",
+      "greedy_vw0": "legacy_replay_v2"
+    },
+    "value_loss_weight": 0.0,
+    "diagnostic_anchors": [
+      "legacy_unweighted_qaoa_vw0",
+      "greedy_vw0",
+      "frozen_initial_head"
+    ],
+    "anchor_interpretation": "diagnostic_only_not_members_of_the_primary_pair",
+    "ineligible_gain_group_handling": "skip_group_and_fail_if_no_eligible_training_group_remains",
+    "selection_rule": "D2_selects_only_the_next_mechanism_change_and_makes_no_performance_claim"
+  },
+  "splits": {
+    "train": {
+      "seed": 20261011,
+      "input_counts": [6, 7],
+      "role": "head_training_and_in_sample_teacher_diagnosis"
+    },
+    "structured_validation": {
+      "seed": 20261012,
+      "input_counts": [6, 7],
+      "role": "fresh_structured_teacher_diagnosis_not_used_for_gradient_updates"
+    },
+    "ood_endpoint": {
+      "seed": 20261013,
+      "input_counts": [4, 5],
+      "role": "opened_after_structured_diagnostics_not_used_for_training_or_hyperparameter_selection"
+    }
+  },
+  "replay": {
+    "observation_budget": 512,
+    "qaoa_p": 1,
+    "qaoa_optimizer_restarts": 2,
+    "qaoa_optimizer_steps": 6,
+    "required_execution_class": "direct_unrepaired",
+    "compute_budget_equal": false
+  },
+  "head_training": {
+    "foundation_checkpoint_sha256": "5b7cb23accde48915f619562b5be34221d4f0637422b7ec2e980e1a348c719f7",
+    "head_hidden": 32,
+    "head_seed": 20260907,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "policy_loss_weight": 1.0,
+    "value_loss_weight": 0.0,
+    "max_grad_norm": 1.0,
+    "sampler_seed": 20260913,
+    "device": "cpu",
+    "dtype": "float32",
+    "cpu_threads": 1,
+    "optimizer": "HeadOnlyIntegrityAdamW",
+    "scheduler": "none",
+    "early_stopping": false,
+    "resume": false
+  },
+  "endpoint": {
+    "candidate_universe_cap": 256,
+    "learned_top_k": 10,
+    "head_role": "rank_top_k_only",
+    "scheduler": "exact",
+    "scheduler_utility": "arm_neutral_raw_analytic_utility",
+    "scheduler_budget": 2,
+    "outcome": "total_abstract_score_over_direct_total_abstract_score_lower_is_better",
+    "semantic_verification": "all_x_all_initial_y_inputs_preserved_ancillas_zero"
+  },
+  "resource_weights": {
+    "t": 1.0,
+    "cnot": 0.04,
+    "depth": 0.015,
+    "gates": 0.01,
+    "ancilla": 2.0
+  },
+  "profiles": {
+    "tiny": {
+      "role": "unit_test_only_not_scientific_evidence",
+      "train_cases_per_input_count": 1,
+      "structured_validation_cases_per_input_count": 1,
+      "ood_cases_per_input_count": 1,
+      "update_steps": 4,
+      "batch_size": 2,
+      "replay_observation_budget": 64,
+      "qaoa_optimizer_restarts": 1,
+      "qaoa_optimizer_steps": 2
+    },
+    "full": {
+      "role": "development_mechanism_diagnostic",
+      "train_cases_per_input_count": 32,
+      "structured_validation_cases_per_input_count": 16,
+      "ood_cases_per_input_count": 16,
+      "update_steps": 256,
+      "batch_size": 4,
+      "replay_observation_budget": 512,
+      "qaoa_optimizer_restarts": 2,
+      "qaoa_optimizer_steps": 6
+    }
+  },
+  "output_contract": {
+    "files": [
+      "config.json",
+      "results.json",
+      "raw.jsonl",
+      "diagnostics.json",
+      "checksums.sha256"
+    ],
+    "overwrite": false,
+    "timing_recorded": false,
+    "formal_evaluation": false,
+    "performance_evidence": false
+  },
+  "claim_boundary": "single-researcher deterministic development diagnostic; no formal evaluation, equal-compute claim, hardware evidence, quantum advantage, cryptographic generalization, or performance evidence"
+}

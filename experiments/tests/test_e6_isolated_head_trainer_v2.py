@@ -5,6 +5,8 @@ from __future__ import annotations
 
 from dataclasses import replace
 import inspect
+import json
+from types import SimpleNamespace
 
 import pytest
 import torch
@@ -30,8 +32,12 @@ from e6.final_measurement_replay_v2 import (
 from e6.frozen_case import build_frozen_shared_case
 from e6.isolated_head_trainer_v2 import (
     CORPUS_LOCK_AUTHORITY,
+    ISOLATED_HEAD_TRAINER_V3_SCHEMA,
     ISOLATED_HEAD_TRAINING_CONFIG_V2_SCHEMA,
+    ISOLATED_HEAD_TRAINING_CONFIG_V3_SCHEMA,
     ISOLATED_HEAD_TRAINING_CORPUS_LOCK_V2_SCHEMA,
+    LEGACY_REPLAY_TARGET_MODE,
+    QAOA_RESOURCE_GAIN_TARGET_MODE,
     LockedReplayTrainingGroupV2,
     fit_isolated_head_from_locked_replay_v2,
 )
@@ -262,6 +268,25 @@ def _config_payload(*, source_arm: str = "classical_greedy_repeated_selection_re
     return canonical_json_bytes(payload)
 
 
+def _v3_config_payload(
+    *,
+    source_arm: str = "qaoa_final_measurement_replay",
+    target_mode: str = QAOA_RESOURCE_GAIN_TARGET_MODE,
+    policy_loss_weight: float = 1.0,
+    value_loss_weight: float = 0.0,
+):
+    payload = json.loads(_config_payload(source_arm=source_arm))
+    payload.update(
+        {
+            "schema_version": ISOLATED_HEAD_TRAINING_CONFIG_V3_SCHEMA,
+            "target_mode": target_mode,
+            "policy_loss_weight": policy_loss_weight,
+            "value_loss_weight": value_loss_weight,
+        }
+    )
+    return canonical_json_bytes(payload)
+
+
 def _corpus_payload(material, registry, lock):
     group = {
         "group_id": material.manifest.group_id,
@@ -313,7 +338,16 @@ def test_public_fit_is_raw_material_only_and_trains_heads_without_claims() -> No
     parameters = inspect.signature(
         fit_isolated_head_from_locked_replay_v2
     ).parameters
-    assert not {"model", "targets", "capability", "optimizer"} & set(parameters)
+    assert not {
+        "model",
+        "targets",
+        "target",
+        "target_mode",
+        "policy_target_transform",
+        "callback",
+        "capability",
+        "optimizer",
+    } & set(parameters)
     material, registry, lock = _locked_material()
     corpus = _corpus_payload(material, registry, lock)
     config = _config_payload()
@@ -321,6 +355,8 @@ def test_public_fit_is_raw_material_only_and_trains_heads_without_claims() -> No
     result = _fit(material, registry, corpus, config)
     report = result.report
 
+    assert type(report) is trainer_module.IsolatedHeadTrainingReportV2
+    assert report.schema_version == trainer_module.ISOLATED_HEAD_TRAINER_V2_SCHEMA
     assert report.source_arm == "classical_greedy_repeated_selection_replay"
     assert report.sample_count == 1
     assert report.input_counts == (6,)
@@ -350,6 +386,225 @@ def test_training_is_exactly_deterministic_for_the_same_locked_inputs() -> None:
     assert left.final_head_tensor_sha256 == right.final_head_tensor_sha256
     assert left.initial_weighted_loss == right.initial_weighted_loss
     assert left.final_weighted_loss == right.final_weighted_loss
+    assert left.training_schedule_sha256 == (
+        "0c7122c0e689e33e0ade6da89a79e3ed0859b001353c6675f7cee7f8a294fd1f"
+    )
+    assert left.initial_head_tensor_sha256 == (
+        "9119b1a067a65de718c1e22b389c05178b72b6bc8b1e5253766dbba6332d9fb0"
+    )
+    assert left.final_head_tensor_sha256 == (
+        "5ded67de994587b2ea65a5e75dbd775401b977162b9c5aac13fd1d818b856726"
+    )
+    assert left.initial_weighted_loss == 2.8449807167053223
+    assert left.final_weighted_loss == 1.443328619003296
+
+
+def test_v3_legacy_mode_preserves_v2_training_semantics() -> None:
+    material, registry, lock = _locked_material()
+    corpus = _corpus_payload(material, registry, lock)
+    v2 = _fit(material, registry, corpus, _config_payload()).report
+    v3 = _fit(
+        material,
+        registry,
+        corpus,
+        _v3_config_payload(
+            source_arm="classical_greedy_repeated_selection_replay",
+            target_mode=LEGACY_REPLAY_TARGET_MODE,
+            value_loss_weight=1.0,
+        ),
+    ).report
+
+    assert type(v2) is trainer_module.IsolatedHeadTrainingReportV2
+    assert type(v3) is trainer_module.IsolatedHeadTrainingReportV3
+    assert v2.initial_head_tensor_sha256 == v3.initial_head_tensor_sha256
+    assert v2.final_head_tensor_sha256 == v3.final_head_tensor_sha256
+    assert v2.initial_weighted_loss == v3.initial_weighted_loss
+    assert v2.final_weighted_loss == v3.final_weighted_loss
+    assert v3.schema_version == ISOLATED_HEAD_TRAINER_V3_SCHEMA
+    assert v3.target_mode == LEGACY_REPLAY_TARGET_MODE
+    assert v3.source_group_count == 1
+    assert v3.zero_gain_skipped_group_count == 0
+    assert v3.sample_count == 1
+    assert v3.sample_presentations == v2.sample_presentations == 2
+
+
+@pytest.mark.parametrize(
+    "source_arm",
+    ("qaoa_final_measurement_replay", "qaoa_permuted_label_control"),
+)
+def test_v3_resource_gain_source_and_control_are_deterministic(
+    source_arm: str,
+) -> None:
+    material, registry, lock = _locked_material()
+    corpus = _corpus_payload(material, registry, lock)
+    config = _v3_config_payload(source_arm=source_arm)
+
+    left = _fit(material, registry, corpus, config).report
+    right = _fit(material, registry, corpus, config).report
+
+    assert type(left) is trainer_module.IsolatedHeadTrainingReportV3
+    assert left == right
+    assert left.schema_version == ISOLATED_HEAD_TRAINER_V3_SCHEMA
+    assert left.target_mode == QAOA_RESOURCE_GAIN_TARGET_MODE
+    assert left.source_arm == source_arm
+    assert left.source_group_count == left.sample_count == 1
+    assert left.zero_gain_skipped_group_count == 0
+    assert left.sample_presentations == 2
+    assert left.formal_evaluation is False
+    assert left.performance_evidence is False
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "message"),
+    (
+        (
+            {"source_arm": "classical_greedy_repeated_selection_replay"},
+            "requires a QAOA source arm",
+        ),
+        ({"policy_loss_weight": 0.0}, "requires policy loss"),
+        ({"value_loss_weight": 1.0}, "requires value_loss_weight=0"),
+        ({"target_mode": "caller_defined"}, "target_mode is not registered"),
+    ),
+)
+def test_v3_resource_gain_invalid_combinations_fail_before_model(
+    monkeypatch, kwargs: dict[str, object], message: str
+) -> None:
+    material, registry, lock = _locked_material()
+    corpus = _corpus_payload(material, registry, lock)
+    model_calls = 0
+
+    def forbidden_model(*args, **kw):
+        nonlocal model_calls
+        model_calls += 1
+        raise AssertionError("model must not be constructed")
+
+    monkeypatch.setattr(
+        trainer_module, "FrozenFoundationV4SharedPolicyValueV2", forbidden_model
+    )
+    with pytest.raises(ValueError, match=message):
+        _fit(material, registry, corpus, _v3_config_payload(**kwargs))
+    assert model_calls == 0
+
+
+def test_v3_resource_gain_all_zero_fails_before_model_or_optimizer(
+    monkeypatch,
+) -> None:
+    import e6.resource_gain_replay_teacher_v1 as gain_module
+
+    material, registry, lock = _locked_material()
+    corpus = _corpus_payload(material, registry, lock)
+    model_calls = 0
+    optimizer_calls = 0
+
+    def no_gain(**kwargs):
+        del kwargs
+        return SimpleNamespace(
+            source_replay_target=None,
+            control_replay_target=None,
+        )
+
+    def forbidden_model(*args, **kwargs):
+        nonlocal model_calls
+        model_calls += 1
+        raise AssertionError("model must not be constructed")
+
+    def forbidden_optimizer(*args, **kwargs):
+        nonlocal optimizer_calls
+        optimizer_calls += 1
+        raise AssertionError("optimizer must not be constructed")
+
+    monkeypatch.setattr(
+        gain_module,
+        "derive_resource_gain_replay_teacher_pair_from_validated_v1",
+        no_gain,
+    )
+    monkeypatch.setattr(
+        trainer_module, "FrozenFoundationV4SharedPolicyValueV2", forbidden_model
+    )
+    monkeypatch.setattr(
+        trainer_module, "build_head_only_optimizer", forbidden_optimizer
+    )
+    with pytest.raises(ValueError, match="retained zero training groups"):
+        _fit(
+            material,
+            registry,
+            corpus,
+            _v3_config_payload(),
+        )
+    assert model_calls == optimizer_calls == 0
+
+
+def test_v3_resource_gain_mixed_groups_schedule_only_retained_samples(
+    monkeypatch,
+) -> None:
+    import e6.resource_gain_replay_teacher_v1 as gain_module
+    from e6.replay_training_corpus_v1 import (
+        CorpusBuildSpecV1,
+        build_replay_training_corpus_v1,
+    )
+
+    corpus = build_replay_training_corpus_v1(
+        CorpusBuildSpecV1(
+            seed=20261011,
+            cases_per_width=1,
+            observation_budget=64,
+            qaoa_optimizer_restarts=1,
+            qaoa_optimizer_steps=2,
+        )
+    )
+    assert len(corpus.groups) == 2
+    skipped_group_id = corpus.groups[0].material.manifest.group_id
+    retained_group_id = corpus.groups[1].material.manifest.group_id
+    original = gain_module.derive_resource_gain_replay_teacher_pair_from_validated_v1
+
+    def skip_one(**kwargs):
+        if kwargs["source_record"].group_id == skipped_group_id:
+            return SimpleNamespace(
+                source_replay_target=None,
+                control_replay_target=None,
+            )
+        return original(**kwargs)
+
+    monkeypatch.setattr(
+        gain_module,
+        "derive_resource_gain_replay_teacher_pair_from_validated_v1",
+        skip_one,
+    )
+    config = _v3_config_payload()
+    result = fit_isolated_head_from_locked_replay_v2(
+        corpus.materials,
+        corpus.registry,
+        corpus_lock_payload=corpus.corpus_lock_payload,
+        expected_corpus_lock_payload_sha256=sha256_bytes(
+            corpus.corpus_lock_payload
+        ),
+        config_payload=config,
+        expected_config_payload_sha256=sha256_bytes(config),
+    )
+    report = result.report
+    assert type(report) is trainer_module.IsolatedHeadTrainingReportV3
+    assert report.source_group_count == 2
+    assert report.sample_count == 1
+    assert report.zero_gain_skipped_group_count == 1
+    assert report.group_ids == (retained_group_id,)
+    assert report.sample_presentations == 2
+    expected_schedule = canonical_json_bytes(
+        {
+            "schema_version": "xa.e6-isolated-head-training-schedule.v3",
+            "sampler_seed": 20260908,
+            "update_steps": 2,
+            "batch_size": 1,
+            "group_ids_by_presentation": [retained_group_id, retained_group_id],
+            "target_mode": QAOA_RESOURCE_GAIN_TARGET_MODE,
+            "source_group_count": 2,
+            "zero_gain_skipped_group_count": 1,
+            "retained_group_ids": [retained_group_id],
+        }
+    )
+    assert report.training_schedule_sha256 == sha256_bytes(expected_schedule)
+    assert "unsealed" not in report.claim_boundary
+    assert report.formal_evaluation is False
+    assert report.performance_evidence is False
 
 
 @pytest.mark.parametrize(

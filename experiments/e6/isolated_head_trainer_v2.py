@@ -73,8 +73,14 @@ from src.contracts.codec import canonical_json_bytes, sha256_bytes
 ISOLATED_HEAD_TRAINER_V2_SCHEMA = (
     "xa.e6-isolated-head-training-report.v2-development"
 )
+ISOLATED_HEAD_TRAINER_V3_SCHEMA = (
+    "xa.e6-isolated-head-training-report.v3-development"
+)
 ISOLATED_HEAD_TRAINING_CONFIG_V2_SCHEMA = (
     "xa.e6-isolated-head-training-config.v2-development"
+)
+ISOLATED_HEAD_TRAINING_CONFIG_V3_SCHEMA = (
+    "xa.e6-isolated-head-training-config.v3-development"
 )
 ISOLATED_HEAD_TRAINING_CORPUS_LOCK_V2_SCHEMA = (
     "xa.e6-isolated-head-training-corpus-lock.v2-development"
@@ -86,6 +92,13 @@ CLAIM_BOUNDARY = (
     "development head-only training receipt; modified heads are unsealed; "
     "no formal evaluation or performance claim"
 )
+V3_CLAIM_BOUNDARY = (
+    "single-researcher development head-only training result; "
+    "no formal evaluation or performance evidence"
+)
+LEGACY_REPLAY_TARGET_MODE = "legacy_replay_v2"
+QAOA_RESOURCE_GAIN_TARGET_MODE = "qaoa_resource_gain_credit_v1"
+TARGET_MODES = (LEGACY_REPLAY_TARGET_MODE, QAOA_RESOURCE_GAIN_TARGET_MODE)
 
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
@@ -145,13 +158,22 @@ class IsolatedHeadTrainingReportV2:
 
 
 @dataclass(frozen=True)
+class IsolatedHeadTrainingReportV3(IsolatedHeadTrainingReportV2):
+    target_mode: str
+    source_group_count: int
+    zero_gain_skipped_group_count: int
+
+
+@dataclass(frozen=True)
 class IsolatedHeadTrainingResultV2:
     model: FrozenFoundationV4SharedPolicyValueV2
-    report: IsolatedHeadTrainingReportV2
+    report: IsolatedHeadTrainingReportV2 | IsolatedHeadTrainingReportV3
 
 
 @dataclass(frozen=True)
 class _TrainingConfigV2:
+    schema_version: str
+    target_mode: str
     source_arm: str
     update_steps: int
     batch_size: int
@@ -378,7 +400,7 @@ def _parse_training_config(
     payload = _strict_canonical_json(
         raw, expected_sha256=expected_sha256, name="training config"
     )
-    expected_fields = {
+    common_fields = {
         "schema_version",
         "source_arm",
         "update_steps",
@@ -400,8 +422,20 @@ def _parse_training_config(
         "resume",
         "performance_evidence",
     }
-    _exact_fields(payload, expected_fields, "training config")
-    if payload["schema_version"] != ISOLATED_HEAD_TRAINING_CONFIG_V2_SCHEMA:
+    schema_version = _require_native_string(
+        payload.get("schema_version"), "schema_version"
+    )
+    if schema_version == ISOLATED_HEAD_TRAINING_CONFIG_V2_SCHEMA:
+        _exact_fields(payload, common_fields, "training config")
+        target_mode = LEGACY_REPLAY_TARGET_MODE
+    elif schema_version == ISOLATED_HEAD_TRAINING_CONFIG_V3_SCHEMA:
+        _exact_fields(payload, common_fields | {"target_mode"}, "training config")
+        target_mode = _require_native_string(
+            payload["target_mode"], "target_mode"
+        )
+        if target_mode not in TARGET_MODES:
+            raise ValueError("training config target_mode is not registered")
+    else:
         raise ValueError("unsupported isolated-head training config schema")
     source_arm = _require_native_string(payload["source_arm"], "source_arm")
     if source_arm not in SOURCE_ARMS:
@@ -438,9 +472,21 @@ def _parse_training_config(
     value_loss_weight = _require_finite_number(
         payload["value_loss_weight"], "value_loss_weight", minimum=0.0
     )
-    if policy_loss_weight == 0.0 and value_loss_weight == 0.0:
+    if target_mode == QAOA_RESOURCE_GAIN_TARGET_MODE:
+        if source_arm not in {
+            "qaoa_final_measurement_replay",
+            "qaoa_permuted_label_control",
+        }:
+            raise ValueError("resource-gain target mode requires a QAOA source arm")
+        if policy_loss_weight <= 0.0:
+            raise ValueError("resource-gain target mode requires policy loss")
+        if value_loss_weight != 0.0:
+            raise ValueError("resource-gain target mode requires value_loss_weight=0")
+    elif policy_loss_weight == 0.0 and value_loss_weight == 0.0:
         raise ValueError("at least one isolated-head loss weight must be positive")
     return _TrainingConfigV2(
+        schema_version=schema_version,
+        target_mode=target_mode,
         source_arm=source_arm,
         update_steps=_require_native_int(
             payload["update_steps"], "update_steps", minimum=1
@@ -677,7 +723,7 @@ def _validate_and_derive_samples(
     registry: SplitRegistryV2,
     corpus: _CorpusLockV2,
     config: _TrainingConfigV2,
-) -> tuple[_TrainingSampleV2, ...]:
+) -> tuple[tuple[_TrainingSampleV2, ...], int]:
     if type(registry) is not SplitRegistryV2:
         raise TypeError("registry must be exact SplitRegistryV2")
     validate_split_registry_v2(
@@ -773,9 +819,7 @@ def _validate_and_derive_samples(
         lock = ExternalReplayLockV2.from_bytes(material.external_lock_payload)
         if lock.lock_sha256 != binding.external_lock_sha256:
             raise ValueError("external replay lock SHA does not match corpus lock")
-        # The returned internal object is intentionally discarded.  It is not a
-        # public trainer input or a durable trust capability.
-        validate_external_replay_lock_v2(
+        validated = validate_external_replay_lock_v2(
             lock,
             manifest,
             records,
@@ -824,6 +868,100 @@ def _validate_and_derive_samples(
             source_arm=config.source_arm,
             expected_observation_sha256=expected_observation_sha,
         )
+        if config.target_mode == QAOA_RESOURCE_GAIN_TARGET_MODE:
+            source_record = by_arm["qaoa_final_measurement_replay"]
+            control_record = by_arm["qaoa_permuted_label_control"]
+            source_sha = dict(binding.arm_observation_sha256)[source_record.source_arm]
+            control_sha = dict(binding.arm_observation_sha256)[control_record.source_arm]
+            source_target = (
+                target
+                if config.source_arm == source_record.source_arm
+                else derive_qaoa_replay_targets_from_external_lock_v2(
+                    source_record,
+                    manifest,
+                    records,
+                    case,
+                    registry,
+                    expected_observation_sha256=source_sha,
+                    expected_registry_sha256=corpus.split_registry_sha256,
+                    lock=lock,
+                    expected_lock_sha256=binding.external_lock_sha256,
+                    qaoa_counts_payload=material.qaoa_counts_payload,
+                    final_parameter_payload=material.final_parameter_payload,
+                    run_attestation=material.run_attestation,
+                )
+            )
+            control_target = (
+                target
+                if config.source_arm == control_record.source_arm
+                else derive_qaoa_replay_targets_from_external_lock_v2(
+                    control_record,
+                    manifest,
+                    records,
+                    case,
+                    registry,
+                    expected_observation_sha256=control_sha,
+                    expected_registry_sha256=corpus.split_registry_sha256,
+                    lock=lock,
+                    expected_lock_sha256=binding.external_lock_sha256,
+                    qaoa_counts_payload=material.qaoa_counts_payload,
+                    final_parameter_payload=material.final_parameter_payload,
+                    run_attestation=material.run_attestation,
+                )
+            )
+            _validate_target(
+                source_target,
+                case,
+                source_arm=source_record.source_arm,
+                expected_observation_sha256=source_sha,
+            )
+            _validate_target(
+                control_target,
+                case,
+                source_arm=control_record.source_arm,
+                expected_observation_sha256=control_sha,
+            )
+            source_audit = validated.audit_for(
+                source_record,
+                case,
+                registry,
+                expected_observation_sha256=source_sha,
+                expected_registry_sha256=corpus.split_registry_sha256,
+            )
+            control_audit = validated.audit_for(
+                control_record,
+                case,
+                registry,
+                expected_observation_sha256=control_sha,
+                expected_registry_sha256=corpus.split_registry_sha256,
+            )
+            from e6.resource_gain_replay_teacher_v1 import (
+                derive_resource_gain_replay_teacher_pair_from_validated_v1,
+            )
+
+            pair = derive_resource_gain_replay_teacher_pair_from_validated_v1(
+                source_record=source_record,
+                control_record=control_record,
+                case=case,
+                source_legacy_target=source_target,
+                control_legacy_target=control_target,
+                source_audit=source_audit,
+                control_audit=control_audit,
+            )
+            transformed = (
+                pair.source_replay_target
+                if config.source_arm == source_record.source_arm
+                else pair.control_replay_target
+            )
+            if transformed is None:
+                continue
+            target = transformed
+            _validate_target(
+                target,
+                case,
+                source_arm=config.source_arm,
+                expected_observation_sha256=expected_observation_sha,
+            )
         samples.append(_TrainingSampleV2(binding.group_id, case, target))
 
     registered_train_vectors = {
@@ -833,11 +971,18 @@ def _validate_and_derive_samples(
     }
     if registered_train_vectors != seen_registry_vectors:
         raise ValueError("global training registry contains unbound train vectors")
-    return tuple(samples)
+    skipped = len(corpus.groups) - len(samples)
+    if not samples:
+        raise ValueError("resource-gain target retained zero training groups")
+    return tuple(samples), skipped
 
 
 def _training_schedule(
-    samples: Sequence[_TrainingSampleV2], config: _TrainingConfigV2
+    samples: Sequence[_TrainingSampleV2],
+    config: _TrainingConfigV2,
+    *,
+    source_group_count: int,
+    zero_gain_skipped_group_count: int,
 ) -> tuple[tuple[int, ...], str]:
     required = config.update_steps * config.batch_size
     flat: list[int] = []
@@ -863,19 +1008,25 @@ def _training_schedule(
         selected[offset : offset + config.batch_size]
         for offset in range(0, required, config.batch_size)
     )
-    schedule_sha = sha256_bytes(
-        canonical_json_bytes(
-            {
-                "schema_version": "xa.e6-isolated-head-training-schedule.v2",
-                "sampler_seed": config.sampler_seed,
-                "update_steps": config.update_steps,
-                "batch_size": config.batch_size,
-                "group_ids_by_presentation": [
-                    samples[index].group_id for index in selected
-                ],
-            }
-        )
-    )
+    schedule_payload: dict[str, object] = {
+        "schema_version": "xa.e6-isolated-head-training-schedule.v2",
+        "sampler_seed": config.sampler_seed,
+        "update_steps": config.update_steps,
+        "batch_size": config.batch_size,
+        "group_ids_by_presentation": [
+            samples[index].group_id for index in selected
+        ],
+    }
+    if config.schema_version == ISOLATED_HEAD_TRAINING_CONFIG_V3_SCHEMA:
+        schedule_payload = {
+            **schedule_payload,
+            "schema_version": "xa.e6-isolated-head-training-schedule.v3",
+            "target_mode": config.target_mode,
+            "source_group_count": source_group_count,
+            "zero_gain_skipped_group_count": zero_gain_skipped_group_count,
+            "retained_group_ids": [sample.group_id for sample in samples],
+        }
+    schedule_sha = sha256_bytes(canonical_json_bytes(schedule_payload))
     return batches, schedule_sha
 
 
@@ -975,10 +1126,16 @@ def fit_isolated_head_from_locked_replay_v2(
         corpus_lock_payload,
         expected_sha256=expected_corpus_lock_payload_sha256,
     )
-    samples = _validate_and_derive_samples(
+    samples, zero_gain_skipped_group_count = _validate_and_derive_samples(
         canonical_materials, canonical_registry, corpus, config
     )
-    batches, schedule_sha = _training_schedule(samples, config)
+    source_group_count = len(corpus.groups)
+    batches, schedule_sha = _training_schedule(
+        samples,
+        config,
+        source_group_count=source_group_count,
+        zero_gain_skipped_group_count=zero_gain_skipped_group_count,
+    )
 
     with _deterministic_cpu_context():
         model = FrozenFoundationV4SharedPolicyValueV2(
@@ -1041,8 +1198,7 @@ def fit_isolated_head_from_locked_replay_v2(
         final_loss = _mean_weighted_loss(model, samples, config)
         model.assert_foundation_integrity()
 
-    report = IsolatedHeadTrainingReportV2(
-        schema_version=ISOLATED_HEAD_TRAINER_V2_SCHEMA,
+    report_fields: dict[str, object] = dict(
         source_arm=config.source_arm,
         sample_count=len(samples),
         group_ids=tuple(sample.group_id for sample in samples),
@@ -1071,6 +1227,19 @@ def fit_isolated_head_from_locked_replay_v2(
         performance_evidence=False,
         claim_boundary=CLAIM_BOUNDARY,
     )
+    if config.schema_version == ISOLATED_HEAD_TRAINING_CONFIG_V2_SCHEMA:
+        report = IsolatedHeadTrainingReportV2(
+            schema_version=ISOLATED_HEAD_TRAINER_V2_SCHEMA,
+            **report_fields,
+        )
+    else:
+        report = IsolatedHeadTrainingReportV3(
+            schema_version=ISOLATED_HEAD_TRAINER_V3_SCHEMA,
+            **{**report_fields, "claim_boundary": V3_CLAIM_BOUNDARY},
+            target_mode=config.target_mode,
+            source_group_count=source_group_count,
+            zero_gain_skipped_group_count=zero_gain_skipped_group_count,
+        )
     return IsolatedHeadTrainingResultV2(model=model, report=report)
 
 
@@ -1078,10 +1247,16 @@ __all__ = [
     "CLAIM_BOUNDARY",
     "CORPUS_LOCK_AUTHORITY",
     "ISOLATED_HEAD_TRAINER_V2_SCHEMA",
+    "ISOLATED_HEAD_TRAINER_V3_SCHEMA",
     "ISOLATED_HEAD_TRAINING_CONFIG_V2_SCHEMA",
+    "ISOLATED_HEAD_TRAINING_CONFIG_V3_SCHEMA",
     "ISOLATED_HEAD_TRAINING_CORPUS_LOCK_V2_SCHEMA",
     "IsolatedHeadTrainingReportV2",
+    "IsolatedHeadTrainingReportV3",
     "IsolatedHeadTrainingResultV2",
+    "LEGACY_REPLAY_TARGET_MODE",
     "LockedReplayTrainingGroupV2",
+    "QAOA_RESOURCE_GAIN_TARGET_MODE",
+    "TARGET_MODES",
     "fit_isolated_head_from_locked_replay_v2",
 ]
