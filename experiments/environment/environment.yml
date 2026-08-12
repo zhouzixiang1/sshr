@@ -1,0 +1,14 @@
+name: xa202609
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.11.15
+  - pip
+  - pip:
+      - numpy==2.4.6
+      - scipy==1.17.1
+      - PuLP==3.3.1
+      - torch==2.12.0
+      - pytest==9.0.3

@@ -1,0 +1,1102 @@
+\documentclass[UTF8,fontset=fandol,11pt]{ctexart}
+
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{float}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{xurl}
+\usepackage{hyperref}
+
+\hypersetup{
+  pdftitle={严格语义约束下面向密码 Boolean Oracle 的双向智能编译},
+  pdfauthor={周子翔},
+  pdfsubject={AI for Quantum 与 Quantum for AI 的 Boolean Oracle 编译},
+  pdfkeywords={Boolean Oracle, AI for Quantum, Quantum for AI, Neural MCTS, QAOA},
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!50!black
+}
+
+\graphicspath{{../english/figures/submission_v36/}}
+\setlength{\parskip}{0.34em}
+\setlength{\parindent}{2em}
+\setlength{\emergencystretch}{2em}
+
+\newcommand{\method}{Resource-NMCTS}
+\newcommand{\anf}{\ensuremath{\mathrm{ANF}}}
+\newcommand{\fprm}{\ensuremath{\mathrm{FPRM}}}
+\newcommand{\mcts}{\ensuremath{\mathrm{MCTS}}}
+\newcommand{\qaoa}{\ensuremath{\mathrm{QAOA}}}
+\newcommand{\xor}{\ensuremath{\oplus}}
+\newcommand{\mct}{\ensuremath{\mathrm{MCT}}}
+\newcommand{\rz}{\ensuremath{R_z}}
+\newcommand{\score}{\ensuremath{\mathrm{score}}}
+\newcommand{\ttable}{真值表}
+
+\title{严格语义约束下面向密码 Boolean Oracle 的双向智能编译\\
+\large 置换等变神经搜索、量子辅助预算调度与资源反馈}
+\author{周子翔\thanks{杭州电子科技大学，中国杭州。ORCID: \url{https://orcid.org/0009-0006-7485-9581}}}
+\date{2026年8月12日}
+
+\begin{document}
+\pagestyle{plain}
+\maketitle
+
+\begin{abstract}
+量子布尔函数 oracle 综合是 Grover 搜索、约束求解和量子密码分析中的基础编译环节。它同时受到三类资源错配的限制：变量重标号造成学习冗余，相似候选分支重复消耗树搜索预算，逻辑层代理又未必等价于目标硬件上的执行代价。本文把 bit-flip Boolean oracle synthesis 建模为 \anf{}/\fprm{} 项集合上的严格语义约束优化，并提出一个双向智能编译框架：在 AI for Quantum 方向，置换等变 policy/value 表示与 Neural \mcts{} 搜索低资源因子计划；在 Quantum for AI 方向，\qaoa{} 在冻结的候选池中求解固定基数的效用--多样性调度，从而决定哪些独立 action edge 获得有限搜索预算。所有学习或量子子程序只改变搜索次序与预算，最终正确性仍由 plan \anf{}、emitted-circuit GF(2) 和完整真值表验证器决定。
+
+在 $n\leq6$ 的 177 个传统函数上，Pareto-\method{} 相对 direct \anf{} 的平均 T-count 和加权资源分数分别降低 72.25\% 和 67.80\%；匹配 no-\mcts{} 对照把树搜索的额外平均收益限定为 1.44\%/4.69\%。在等变模型的因果 pilot 中，policy-only 相对无学习基线的平均 score 比值为 0.9812，而 value-only 和当前 policy+value 组合分别为 1.0079 和 1.0026，因此后续实验保留等变 policy 并关闭 learned value。进一步地，在 20 个 held-out 的 $n=8,9$ 函数、3 个搜索种子和 7 种调度器构成的 420 次同池实验中，\qaoa{}-shot 将局部 exact-objective 命中率由 greedy 的 65.0\% 提高到 81.7\%，regret 由 0.007694 降至 0.002288；但最终资源分数相对 greedy 的函数簇比值为 0.999734，95\% bootstrap 区间 $[0.998476,1.000921]$ 仍跨过 1。
+
+为检验局部调度质量能否通过硬件相关目标转化为端点收益，本文进一步把逻辑线路分解、路由为合成局部耦合图上的 $\{\rz,\mathrm{SX},X,\mathrm{CX}\}$ 原生门，并用实际 Pauli statevector trajectories 标定执行反馈。12 个 calibration 函数产生 56 条候选观测；在 12 个互斥 held-out 函数、2 个搜索种子和 4 个干预变体构成的 96 次测试中，反馈使 \qaoa{} 的根分支集合改变 6/24 次，但 Oracle task NLL 相对历史 \qaoa{} 的平均变化为 $+0.001293$，95\% 区间 $[-0.001170,0.004719]$，未支持改善假设。全部 96 条线路通过 plan、circuit、Oracle 与原生全基态等价验证。
+
+在 FIPS~197 AES S-box 的八个标量坐标函数上，进一步的端到端案例保持同一冻结 learned-policy 根候选池与固定分支预算。\qaoa{}-shot 在 8/8 个候选池上命中 exact objective，而 diversity-greedy 为 3/8；两者的准入集合在 5/8 个坐标上不同，并在 4/8 个坐标上传导为不同的逻辑 OpenQASM~3。该变化没有形成一致的下游优势：\qaoa{} 的平均逻辑资源分数增加 0.448\%，平均原生总门数和双比特门数分别降低 2.827\% 和 3.229\%，但后两项的逐坐标胜/负/平为 2/2/4；含噪端点仅观察到 5/4096 次成功，不能支持改善主张。进一步的跨路线验证把同一逻辑 IR 分别投影为超导 synthetic executable/noisy、离子阱 ideal resource adapter 和光量子 boundary-only 三种证据类型；统一 SHA-bound manifest 的 27 项独立检查全部通过，但三条路线均为 \texttt{hardware\_execution=false}。由此，本文既建立了 AI--量子调度--执行端点在密码案例上的可审计传播链，也将其当前边界定位为“局部量子调度目标有效，但尚未与逻辑和执行目标稳定对齐”；跨路线抽象扩大的是可审计接口，而不构成量子加速、真机优势或跨器件性能泛化。
+
+在后续的冻结检验中，执行感知 \qaoa{} 相对历史 \qaoa{} 的原生双比特门数差为 $-513.9375$，按 AES 输出坐标聚类的 95\% bootstrap 区间为 $[-2059.0625,589.9375]$，仍未通过改善门；这些 AES 坐标已在 E4 中出现，因而只构成 post-E4 复现而非泛化证据。进一步使用训练来源闭合的模型检验 ASCON 与 PRESENT 外部密码族时，标量坐标表示分别只产生 0 与 6 个可调度组。尽管事后负向审计对 90/90 条记录重建了搜索、线路和原生端点，预设的逐家族活动门仍失败，性能端点不能接受。两项负结果把尚未解决的问题从“怎样继续调权”收缩为“怎样构造同时可验证且具有可调度共享结构的多输出表示”。
+\end{abstract}
+
+\noindent\textbf{关键词：}AI for Quantum；Quantum for AI；量子 oracle 综合；置换等变学习；蒙特卡洛树搜索；QAOA；密码布尔函数
+
+\section{引言}
+
+给定布尔函数 $f:\{0,1\}^n\rightarrow\{0,1\}$，Boolean oracle synthesis 需要生成实现
+\begin{equation}
+  |x\rangle |y\rangle \mapsto |x\rangle |y\xor f(x)\rangle
+  \label{eq:oracle}
+\end{equation}
+的可逆逻辑线路。这个任务看似只是把经典逻辑嵌入量子程序，但在 fault-tolerant 或资源受限量子计算场景中，布尔表示、计算/反计算顺序、辅助比特复用和相位实现方式都会显著改变 T-count、CNOT、深度和辅助比特需求。因此，oracle synthesis 不是一个单步翻译问题，而是一个带有多资源目标和语义约束的离散搜索问题。
+
+已有工作从多个方向处理这个问题。ESOP、XAG、LUT 和 BDD 类方法通过经典逻辑网络降低乘法复杂度或局部函数成本\cite{wille2009bdd,meuli2020ros,meuli2022xag}；RevKit 和 mockturtle 提供了量子/经典逻辑综合工具链入口\cite{soeken2018epfl,revkit,mockturtle}；SSHR 则利用 hypercube 中 parallelotope 空间结构进行 small-scale CNOT-oriented synthesis\cite{zheng2025sshr}。这些方法给出了重要基线，但它们通常把候选结构或目标指标固定在某一类表示中。对于同时关注 T-count、CNOT、depth、gate count 和 peak ancilla 的逻辑层 oracle 综合，固定表示不一定能覆盖足够的资源折中空间。
+
+本文把上述困难概括为三种可证伪的错配。第一，单项式次序和变量重标号不改变 Boolean 函数，却可能迫使一般神经网络重复学习同构状态。第二，\mcts{} 根节点中的高效用动作往往相互重叠，逐一扩展会把固定预算浪费在相似分支上。第三，逻辑 T-count、CNOT 和 depth 只是代理目标，未必预测给定耦合图和噪声模型上的执行风险。对应地，本文用置换等变 policy/value 处理表示冗余，用 \qaoa{} 固定预算多样性调度处理搜索冗余，再用隔离的原生门含噪标定检验执行反馈能否缩小代理错配。三者共同构成 AI for Quantum 与 Quantum for AI 的闭环研究对象，而不是三个互不相干的功能模块。
+
+在这一路径中，AI 和量子子程序都不生成未经约束的门序列。我们用 \anf{} 与 \fprm{} 项集合表示状态，用布尔环因子、极性选择、线性奇偶因子和可逆仿射变换定义动作；等变 policy 为候选排序，\mcts{} 形成冻结候选池，\qaoa{} 或经典对照在同一池上选择获得预算的独立 action edge，Pareto archive 再保留多资源折中。任何候选只有通过 \anf{} 展开、GF(2) 符号模拟和完整 \ttable{} 逐点检查后才可进入比较。
+
+本文贡献如下：
+\begin{itemize}
+  \item 提出 \method{}，把量子布尔函数 oracle 综合建模为 \anf{}/\fprm{} 项集合上的资源约束搜索问题，而不是 SSHR parallelotope 空间的局部扩展。
+  \item 构造对单项式行置换不变、对输入变量重标号等变的共享 policy/value 主干，并用 C0--C7 因果消融区分 policy、value 与 progressive widening 的实际贡献；负向 value 结果被保留并用于冻结部署选择。
+  \item 将固定预算下的独立 MCTS 分支准入写成效用--多样性组合优化，给出 greedy、exact 与 \qaoa{} 的同池 QUBO 对照，使量子子程序能够真实改变 AI 搜索轨迹而不改变 Oracle 语义。
+  \item 在 FIPS~197 AES S-box 的八个标量坐标函数上贯通等变 policy、冻结候选池、greedy/\qaoa{} 调度、逻辑发射、原生映射和 seeded 含噪轨迹，以完整逻辑语义验证和受限执行证据揭示局部调度目标与下游资源目标的错配。
+  \item 以来源闭合的 policy/value 模型和冻结执行感知权重开展 post-E4 AES 复现及 ASCON/PRESENT 外部家族检验；区间跨零和家族活动门失败均作为负向证据保留，从而区分“机制可运行”“记录可重建”与“性能端点可接受”。
+  \item 构造从逻辑 MCT 到合成局部耦合图上 $\{\rz,\mathrm{SX},X,\mathrm{CX}\}$ 的可追溯分解与路由，并以 calibration/test 隔离的 Pauli trajectory 标签冻结执行反馈模型；held-out 负结果用于界定当前结构代理的失效边界，而不被删去或改写为正向优势。
+  \item 在统一 $X$/CNOT/MCT 逻辑 IR 上建立证据分级的三路线适配：超导路线提供 synthetic 原生编译与含噪执行，离子阱路线提供全连接 $\{R_z,R_x,R_{XX}\}$ 理想酉适配，光量子路线只声明编码、资源态、测量前馈与损耗前提；统一 manifest 不把不同强度的证据折叠为“硬件已支持”。
+  \item 设计由布尔环线性因子、\mcts{}、depth-frontier controller、Pareto archive 和 baseline-preserving guard 组成的逻辑层 synthesis pipeline，并给出强 no-\mcts{}、随机先验和随机深度对照。
+  \item 将是否追加 Pareto-\method{} 写成两动作上下文 bandit，在互斥的 320/160/160 train/validation/test 切分上学习并冻结 fitted-Q 预算策略，直接量化质量收益、搜索时间与 regret。
+  \item 建立分层比较协议：同任务逻辑基线支撑头部 T-count/score 结论，SSHR 和公开最优值提供反例边界，外部工具链提供压力测试，搜索消融提供因果归因；baseline fairness ledger 为 9/9 通过，SSHR Table IV--VIII crosswalk 为 5/5 通过。
+  \item 用 plan \anf{}、emitted-circuit GF(2)、完整 \ttable{}、phase up-to-global-phase 和原生全基态等价验证构建分层正确性证据链；E3 的 56 条 calibration 线路与 96 条 held-out 线路均通过原生与含噪执行契约，但只支持合成 profile 内的机制结论。
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{fig1_pipeline.pdf}
+\caption{\textbf{\method{} 的闭环算法流程。} 布尔函数先被规范化为
+\anf{}/\fprm{} 支撑集状态，再由神经先验与有界 \mcts{} 对可验证代数动作
+进行排序和探索。冻结的 fitted-Q 策略在 verified base pool 上选择 stop 或
+追加 Pareto 搜索；guard 保留更强的确定性 baseline。最终计划被发射为
+compute/reuse/uncompute 线路，并接受 plan、circuit、真值表或 phase 检查；
+失败候选被拒绝并回退到确定性候选池。Source data:
+\texttt{fig1\_pipeline.csv}.}
+\label{fig:pipeline}
+\end{figure}
+
+\section{相关工作}
+
+\subsection{布尔表示与 oracle 综合}
+
+低 T-count oracle 综合长期依赖合适的布尔中间表示。BDD-based reversible synthesis 以符号决策图处理大函数\cite{wille2009bdd}；ROS 把 oracle synthesis 写成 resource-constrained LUT mapping，并强调 LUT 分解和后续可逆实现的资源耦合\cite{meuli2020ros}；XAG 将 XOR 与 AND 结构分离，使 AND 节点数成为非 Clifford 成本的重要 proxy\cite{meuli2022xag}。ABC 提供成熟的 AIG/XAG/LUT/ESOP 逻辑优化流程\cite{brayton2010abc}，mockturtle、Caterpillar 与 CirKit 则分别提供可复用的逻辑网络、可逆 pebbling/API 和 shell 工具链入口\cite{soeken2018epfl,mockturtle,caterpillar,cirkit}。这些路线说明，经典逻辑表示、垃圾管理和实现策略会共同改变量子 oracle 资源。
+
+本文与上述工作共享“布尔表示决定量子资源”的前提，但不把搜索限制在某一种固定网络中。我们的状态是 \anf{}/\fprm{} 项集合，动作是可展开回 GF(2) 多项式的代数分解。这样做牺牲了部分已有工具链的成熟优化，但换来了更直接的语义验证和更自然的多资源候选组合。
+
+\subsection{SSHR 与小规模空间结构方法}
+
+SSHR 利用 Boolean hypercube 中 parallelotope 结构生成 MCT block，并以 CNOT reduction 为主要目标\cite{zheng2025sshr}。它适合本文作为 small-scale CNOT-oriented baseline，因为它关注小规模布尔函数、CNOT 计数和空间结构候选。本文不把 SSHR 当作主线方法：\method{} 的状态、动作和验证均定义在 \anf{}/\fprm{} 项集合和代数搜索上。因此，本文可以在结果中承认 SSHR-H 的 CNOT 优势，同时主张自身在 T-count 和加权 score 上更强。
+
+\subsection{学习式搜索与线路综合}
+
+学习式搜索已经被用于经典电路设计、量子线路综合和图重写优化。ShortCircuit 使用 AlphaZero 风格搜索处理经典布尔电路设计\cite{tsaras2024shortcircuit}；Gumbel AlphaZero 被用于 Clifford+T unitary synthesis\cite{rietsch2024unitary}；强化学习也被用于 ZX-calculus rewrite-rule selection\cite{riu2025rlzx}；MonteQ 使用 \mcts{} 处理量子线路合成中的动作排序\cite{machiya2026monteq}。另一方面，\qaoa{} 以交替问题哈密顿量与 mixer 哈密顿量近似求解离散组合优化\cite{farhi2014qaoa}。本文不把 \qaoa{} 当作预设优于经典算法的标签，而把它作为受 exact 解和全 bitstring QUBO 审计约束的分支调度器。上下文 bandit、Q-learning 与 fitted Q iteration 则为离线日志中的两动作预算决策提供了直接方法基础\cite{li2010contextual,watkins1992qlearning,ernst2005fittedq}。
+
+三篇最新工作需要特别比较。Q-PreSyn\cite{qpresyn2026}用强化学习选择局部线路编辑来减少已有 Clifford+T 线路的 T-count，属于后综合优化；\method{} 则在发射线\emph{之前}搜索布尔代数表示，两种方法正交且可叠加。Stab-QRAM\cite{stabqram2025}证明仿射布尔函数恰好允许零 T-count Clifford oracle，这为本文的 Affine-FPRM 搜索提供了理论锚点。BDD2Seq\cite{bdd2seq2025}用图神经网络优化 BDD 变量序，它针对 BDD 表示而非 \anf{}/\fprm{} 项集因子分解。
+
+本文的区别在于，学习策略和量子调度器都不直接写门序列。动作先验只对可验证的代数动作排序；\qaoa{} 只在固定候选池中选择获得预算的独立 edge；fitted-Q controller 只决定是否调用额外 Pareto 搜索；正确性始终来自代数展开和 circuit-level symbolic simulation。因而本文可以分别量化表示空间、等变 policy/value、\mcts{}、量子调度和预算策略的贡献，而不把模型或量子采样结果与线路语义混为一谈。
+
+\section{问题定义与资源模型}
+
+本文考虑 bit-flip Boolean oracle。输入函数可以表示为完整 \ttable{}，也可以表示为 square-free \anf{}
+\begin{equation}
+  f(x)=\bigoplus_{m\in\mathcal{M}}\prod_{i\in m}x_i ,
+  \label{eq:anf}
+\end{equation}
+其中 $\mathcal{M}$ 是 monomial 集合。这里“项集合”是多项式系数的支撑集，
+不是使函数取 1 的输入集合。一个 item $S\subseteq\{0,\ldots,n-1\}$ 表示
+平方自由单项式 $m_S=\prod_{i\in S}x_i$，空集表示常数 1；
+$\mathcal{M}_0=\{S:c_S=1\}$ 只保存 \anf{} 中系数非零的项，重复项在 GF(2)
+的 XOR 加法下相消。
+
+\fprm{} 状态在项集合外再保存极性向量 $p\in\{0,1\}^n$。令
+$z=x\xor p$，则
+\begin{equation}
+g_p(z)=f(z\xor p)=\bigoplus_{S\in\mathcal{M}_p}\prod_{i\in S}z_i,
+\label{eq:fprm-support-zh}
+\end{equation}
+搜索状态写为 $(p,\mathcal{M}_p)$；$p=0$ 时就是普通 \anf{}。例如，
+$f=1\xor x_0\xor x_1\xor x_0x_1$ 的 \anf{} 支撑集为
+$\{\varnothing,\{0\},\{1\},\{0,1\}\}$。若取 $p=(1,1)$，则
+$z_i=x_i\xor1$，同一函数化为 $f=z_0z_1$，对应的一项 \fprm{} 支撑集为
+$\mathcal{M}_p=\{\{0,1\}\}$。因此，极性搜索是在不改变目标函数的前提下，
+寻找项数更少或更容易分解的表示。输出线路使用 X、CNOT 和多控 Toffoli
+（\mct{}）抽象门，并在逻辑层估计 T-count、CNOT、depth、gate count 与
+peak ancilla。
+
+搜索排序采用统一加权分数
+\begin{equation}
+  \score = T + 0.04\,\mathrm{CNOT} + 0.015\,\mathrm{depth}
+         + 0.01\,\mathrm{gates} + 2\,\mathrm{ancilla}.
+  \label{eq:score}
+\end{equation}
+这个分数只用于逻辑层候选排序，并不代表真实设备运行时间或物理错误率。因此，本文同时报告 T、CNOT、depth 和 ancilla，避免单一 score 掩盖 trade-off。
+
+验证分为三层。第一层在小规模函数和高维 bridge 中构造完整 \ttable{}，逐点验证式~\eqref{eq:oracle}。第二层把 factor plan 展开回 \anf{} 项集合，检查目标多项式是否一致。第三层对 emitted X/CNOT/\mct{} circuit 做 GF(2) 符号模拟，检查输出线多项式、输入线复原和辅助线清零。第三层不枚举 $2^n$ 个输入，但验证的是最终 emitted circuit，而不只是搜索 plan。
+
+\section{方法}
+
+\subsection{项集合状态与可验证动作}
+
+\method{} 的状态是当前尚未综合的项集合 $\mathcal{M}$。一次动作选择一个可计算、可反算的代数结构，将 $\mathcal{M}$ 分解为 quotient 子问题和 rest 子问题，再递归生成 compute/action/uncompute 线路。候选动作包括公共单项式因子、\fprm{} 极性重写后的公共项、线性奇偶因子、布尔环线性因子和 root-action 扩展。动作被接受后，框架估计即时资源收益、子问题大小、辅助比特峰值和后续可分解性。
+
+神经动作先验用于对候选排序，\mcts{} 在有限预算内探索候选组合，rollout 使用确定性资源估计和已有 baseline 候选。最终 portfolio 在多个候选线路中按式~\eqref{eq:score} 选择最优者。这里 AI 的职责是搜索控制，而不是语义生成；任何候选线路都必须通过 \anf{} 或 circuit-level 验证。
+
+图~\ref{fig:pipeline} 给出完整控制流，算法~\ref{alg:resource-nmcts-zh}
+进一步给出逐行执行过程。基础搜索始终保留 direct \anf{} 作为 fallback；
+fitted-Q 只决定是否追加 Pareto 搜索，而不能跳过代数和线路验证。因此，
+神经评分较高只能增加候选的探索机会，不能使错误候选通过。
+
+\input{algorithms/resource_nmcts_budgeted_search_zh}
+
+\subsection{从具体布尔函数到量子线路的完整实例}
+\label{sec:worked-example-zh}
+
+考虑五变量函数
+\begin{equation}
+\begin{split}
+f(x)={}&x_0x_1x_2\xor x_0x_1x_3\xor x_1x_2x_3\\
+      &{}\xor x_0x_1x_4\xor x_2x_3x_4 .
+\end{split}
+\label{eq:worked-example-anf-zh}
+\end{equation}
+令输入编号为 $j=\sum_{i=0}^{4}2^i x_i$，则其 32 位真值表为
+\texttt{0xB008C880}，on-set 为
+$\{7,11,14,15,19,28,29,31\}$，其余 24 个输入均输出 0。该函数可改写为
+\begin{equation}
+f=x_0x_1(x_2\xor x_3\xor x_4)
+  \xor x_2x_3(x_1\xor x_4).
+\label{eq:worked-example-factor-zh}
+\end{equation}
+
+表~\ref{tab:worked-example-search-zh} 给出使用本文 logical-AND 资源模型、
+训练动作评分器、seed~7 和 128 次 MCTS simulation 得到的真实根节点轨迹。
+合并 prior 为 $p=h+2.5s_{\mathrm{NN}}$，其中 $h$ 是资源启发式分数，
+$s_{\mathrm{NN}}$ 是训练网络的输出。对 $x_0x_1$，神经网络以
+$s_{\mathrm{NN}}=0.927$ 把 $h=0.381$ 提升为 $p=2.700$。estimated score
+来自已访问动作的 MCTS Q 值或确定性 rollout。$x_0x_1$ 获得 96 次访问，$x_2x_3$ 获得
+32 次访问；两种先后顺序在 rest 子问题中选择另一个因子后得到相同最终
+score，因此确定性 tie order 首先输出 $x_0x_1$。重叠候选 $x_1x_2$ 和
+$x_1x_3$ 的 rollout score 更高，没有获得后续访问。
+
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.06}
+\caption{式~\eqref{eq:worked-example-anf-zh} 的根节点搜索轨迹。粗体为首先
+输出的因子；Combined 为 $h+2.5s_{\mathrm{NN}}$，estimated score 越低越好。}
+\label{tab:worked-example-search-zh}
+\input{../english/tables/worked_example_search}
+\end{table}
+
+完整 \method{} portfolio 与独立运行的 neural-MCTS ANF 分支收敛到相同
+双因子 plan。图~\ref{fig:worked-example-zh} 对比 AND-direct ANF 和最终
+factored circuit。Direct 线路对五个三阶单项式分别施加一次三控输出操作；
+搜索线路先计算 $a_0=x_0x_1$，依次复用于 $x_2,x_3,x_4$，反计算后再用
+同一条辅助线计算 $a_0=x_2x_3$，并复用于 $x_1,x_4$。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig8_worked_example.pdf}
+\caption{\textbf{\method{} 的完整线路实例。} (a) AND-direct ANF 对
+式~\eqref{eq:worked-example-anf-zh} 中每个单项式施加独立三控操作；
+(b) \method{} 按式~\eqref{eq:worked-example-factor-zh} 执行
+compute/reuse/uncompute，并把复用辅助线恢复为 0。图中是通过验证的
+X/CNOT/\mct{} 逻辑骨架；资源数字采用本文 logical-AND 口径，其中合取
+计算使用 4T，反计算使用 Clifford/measurement-assisted accounting。
+Source data: \texttt{fig8\_worked\_example.csv}.}
+\label{fig:worked-example-zh}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\caption{具体实例的逻辑资源。Factor anc. 为显式复用因子线；peak ancilla
+还包含分解 helper。Verified 为通过完整真值表检查的输入数。}
+\label{tab:worked-example-resources-zh}
+\resizebox{\linewidth}{!}{\input{../english/tables/worked_example_resources}}
+\end{table}
+
+该计划把 T-count 从 40 降到 28（30.00\%），CNOT 和 depth 从 65 降到
+55（15.38\%），gate count 从 25 降到 23（8.00\%），加权 score 从
+45.825 降到 33.255（27.43\%）。虽然增加了一条显式 factor line，但 direct
+三控操作在同一 logical-AND 分解模型下已经需要一个 helper，因此两条线路
+的 peak ancilla 都为 1。正确性同时通过三层检查：factor plan 展开含 5 个
+节点且 0 mismatch；9 个 emitted logical gate 的 GF(2) 模拟中输入、输出和
+辅助线 mismatch 均为 0；完整真值表 32/32 通过。
+
+这个实例用于解释核心因子搜索，而不是证明 learned prior 在该简单函数上
+不可替代。它没有覆盖非 identity FPRM/affine 动作、Pareto 预算控制器、
+phase/Rz 分支或高维 frontier policy。
+
+\subsection{布尔环线性因子}
+
+传统线性因子筛选往往要求线性因子变量和 quotient 变量不相交。本文的 Boolean-ring screen 允许二者共享变量，并在展开时使用 $x_i^2=x_i$ 与 GF(2) 偶数项消去。例如
+\begin{equation}
+  (x_i\xor x_j)x_i m = x_i m \xor x_i x_j m .
+  \label{eq:boolean-ring}
+\end{equation}
+线路层面仍可用 CNOT 计算线性奇偶量，再以该辅助量控制 quotient 子线路。该设计扩大了可搜索代数结构，而不是单纯增加 beam width。
+
+\subsection{Frontier policy、Pareto archive 与 guard}
+
+本文把 AI 模块拆为三类。第一类是动作排序，模型根据候选覆盖率、项数变化、变量覆盖密度、次数分布和即时资源估计对候选动作打分。第二类是结构选择，depth policy 判断当前项集合适合 single、depth-1 还是 depth-2 screen。第三类是 frontier 选择，depth-frontier policy 在 depth-2、depth-3 和 depth-4 screen 之间选择；quality policy 接近 all-depth frontier，cost-aware policy 用小幅 score 代价换取更低 plan time 和辅助线 lifetime area。
+
+Guard 负责限制学习策略风险。若学习候选相对确定性 baseline 出现 score 退化，则返回 baseline。Pareto archive 在多个候选中保留不同资源折中，再由目标 score 选择最终输出。这个设计使算法可以报告“质量提升”“时间节省”和“质量--时间折中”三类贡献。
+
+\subsection{上下文 bandit 拟合 Q 的 Pareto 预算策略}
+
+Pareto-\method{} 能改善线路资源，但其搜索开销明显高于 base \method{}。因此，本文在已经得到语义验证通过的 base 结果后，把“停止”或“追加 Pareto 搜索”建模为两动作上下文 bandit\cite{li2010contextual}。状态向量包含输入 \anf{} 的项数、次数和变量支持特征，以及 base 线路的 score、T-count、CNOT、depth、gate count 与 peak ancilla。两个动作最终都返回经过相同语义验证器检查的线路，学习模型不参与正确性判定。
+
+设 base score 为 $s_R$、Pareto score 为 $s_P$、Pareto 时间为 $t_P$，训练集 Pareto 时间中位数为 $\widetilde t_P$，则追加 Pareto 的日志回报定义为
+\begin{equation}
+r_{\mathrm{run}}=
+\frac{s_R-s_P}{\max(s_R,1)}
+-0.004\log_2\!\left(1+\frac{t_P}{\widetilde t_P}\right),
+\qquad
+r_{\mathrm{stop}}=0 .
+\label{eq:budget-policy-reward}
+\end{equation}
+由于日志中同时存在 stop 与 run 两个动作的结果，小型 fitted-Q 网络直接学习 run-action return，遵循 Q-learning 与 fitted Q iteration 的批量价值学习思路\cite{watkins1992qlearning,ernst2005fittedq}。策略使用 seed 42--43 的 320 个随机真值表函数训练，在 160 个 seed-44 函数上选定阈值 0.60，并冻结后在 160 个 seed-45 函数上测试；三组精确 $(n,\text{truth table})$ 指纹完全互斥。这个模块属于强化学习式搜索预算控制，而不是端到端 deep RL 或 learned circuit generator。
+
+\subsection{置换等变 policy/value 的 AI for Quantum 表示}
+
+一个 \anf{} 状态可编码为 $T\times n\times c$ 张量 $X$，其中 $T$ 是当前单项式数、$n$ 是输入变量数，通道记录成员关系、次数和局部资源特征。单项式行的排列不应改变状态表示，输入变量的重标号则应使动作分数按相同置换移动。为把这一对称性写入模型，本文采用 $S_T\times S_n$ 等变层
+\begin{equation}
+\begin{split}
+Y_{tv}={}&\phi_{\mathrm e}(X_{tv})
++\phi_{\mathrm r}\!\left(\frac{1}{n}\sum_{v'}X_{tv'}\right)
++\phi_{\mathrm c}\!\left(\frac{1}{T}\sum_{t'}X_{t'v}\right)\\
+&+\phi_{\mathrm g}\!\left(\frac{1}{Tn}\sum_{t',v'}X_{t'v'}\right),
+\end{split}
+\label{eq:equivariant-layer}
+\end{equation}
+其中四个映射只作用于通道维，参数量不随 $T$ 或 $n$ 增长。共享主干分别连接 action policy head 和 state value head；前者对可验证因子动作排序，后者估计当前状态在有限 rollout 下可达到的资源分数。等变性单元测试验证表示层的结构性质，但它本身不等于跨规模泛化证据，因此部署选择还必须经过固定预算 C0--C7 消融。
+
+\subsection{\qaoa{} 固定预算多样性调度的 Quantum for AI 路径}
+
+在根节点形成 $K$ 个合法且彼此独立的候选 action edge 后，调度器只允许其中 $B_{\mathrm{eff}}=\min(B,K)$ 个获得后续仿真。令 $u_i$ 为由等变 policy 与确定性资源特征给出的效用，$r_{ij}\in[0,1]$ 为两动作覆盖项集合的 Jaccard 冗余，则固定池上的选择目标为
+\begin{equation}
+\max_{x\in\{0,1\}^{K}}
+F(x)=\sum_i u_i x_i-\gamma\sum_{i<j}r_{ij}x_ix_j,
+\qquad \sum_i x_i=B_{\mathrm{eff}} .
+\label{eq:diversity-objective}
+\end{equation}
+相同的 $u$、$r$、$K$ 和 $B$ 被交给 random、top-$B$、greedy、exact 和 \qaoa{}，避免候选池变化掩盖求解器差异。\qaoa{} 最小化的 QUBO 为
+\begin{equation}
+H(x)=-F(x)+\rho\left(\sum_i x_i-B_{\mathrm{eff}}\right)^2,
+\label{eq:qaoa-qubo}
+\end{equation}
+其中罚项 $\rho$ 在小规模问题上通过 $2^K$ 全 bitstring 穷举检查，确保全局最低能量对应可行固定基数子集。当前实现执行交替 cost/mixer 电路，并分别记录 statevector mode、有限 shots 和测量比特翻转模式；直接样本、基数修复与经典 fallback 在 provenance 中分账，不能合并为“量子输出”。
+
+调度结果只改变树策略，不改变动作语义。每次 simulation 只评估一个已准入 edge；被排除 edge 的 visit count 必须保持为零，最终 plan 也不得重新引入它们。由此，\qaoa{} 对 AI 搜索的影响是可观察且可审计的：若所选子集不同，Neural \mcts{} 的访问轨迹随之改变；但任何资源结论仍须在相同的 plan、circuit 和 oracle 验证门之后比较。
+
+\subsection{执行反馈接口与证据边界}
+
+逻辑资源分数不能替代原生门、拓扑路由和含噪执行代价。为把这一差异变成可检验的闭环，本文先将逻辑 $X$/CNOT/MCT 线路编译到 $\{\rz,\mathrm{SX},X,\mathrm{CX}\}$：MCT 由无辅助比特的精确 parity-phase 展开实现，非局部 CX 通过确定性最短路 SWAP 路由，并保留逐逻辑门的原生区间、layout 变化、插入 SWAP、双比特门数和原生层深度。独立 NumPy 模拟器对小线路检查完整可逆基态作用；Toffoli 与三控制 MCT 还比较全酉矩阵到全局相位，避免仅凭输出概率遗漏相对相位错误。
+
+含噪标签由逐 shot statevector quantum trajectory 产生，而不是由门数解析公式代替。一比特原生门后以概率 $p_1$ 采样 $X/Y/Z$ Pauli，CX 后以概率 $p_2$ 采样 15 种非恒等双比特 Pauli，测量后再以 $p_r$ 独立翻转每个物理位；最终结果按路由后的 layout 反解码。对每条线路穷举全部 $x$ 和 $y\in\{0,1\}$，工作辅助位从 0 开始。若 $s$ 次 shot 同时满足输入保持、输出为 $y\xor f(x)$ 和辅助位回零，总 shot 数为 $N$，则执行标签定义为
+\begin{equation}
+L(C,h)=-\log\frac{s+0.5}{N+1},
+\label{eq:execution-nll}
+\end{equation}
+其中 Jeffreys 平滑只用于避免有限 shot 下的无穷 NLL。
+
+执行反馈模型只在 calibration 函数上拟合。令 $\phi(s,a)$ 为 StateKey 与 FactorAction 的置换不变结构特征，标准化参数 $\mu,\sigma$、岭回归系数 $\beta$ 和 calibration SHA 在拟合后冻结：
+\begin{equation}
+\widehat L_i=\max\!\left\{0,\beta_0+
+\beta^\top\frac{\phi(s,a_i)-\mu}{\sigma}\right\},\qquad
+u_i^{\mathrm{fb}}=u_i-\lambda
+\frac{\widehat L_i-\min_j\widehat L_j}
+{\max\{\max_j\widehat L_j-\min_j\widehat L_j,1\}}.
+\label{eq:execution-feedback}
+\end{equation}
+测试阶段通过模型 SHA 加载冻结参数，不接受测试 NLL、资源或标签输入。历史/反馈 utility 与 greedy/\qaoa{} 组成 $2\times2$ 干预矩阵；同一函数与搜索种子的候选池、rollout-completion Plan、raw utility、预算和噪声种子保持一致。因此，H4 检验的是 simulator-calibrated 根调度反馈，而不是 replay-buffer 驱动的 policy/value 再训练。
+
+\subsection{跨硬件路线的统一抽象与证据分级}
+
+硬件适配首先必须区分“共享逻辑语义”与“具有同等强度的执行证据”。设 $C_{\mathrm L}$ 是只含 $X$/CNOT/MCT 的逻辑线路，本文把路线 $r$ 上的适配定义为
+\begin{equation}
+\mathcal A_r(C_{\mathrm L})=(C_r,m_r,b_r),
+\label{eq:hardware-route-adapter}
+\end{equation}
+其中 $C_r$ 是路线原生线路，$m_r$ 记录资源与验证类型，$b_r$ 给出不得外推的主张边界。对仅有能力边界的路线，$C_r$ 必须为未定义；因此，“能接受同一逻辑契约”不会被自动解释为“已完成硬件执行”。
+
+超导路线延用前述 synthetic heavy-hex-like profile，提供确定性 $\{\rz,\mathrm{SX},X,\mathrm{CX}\}$ 分解、拓扑路由、完整基态等价与 seeded Pauli-trajectory 含噪执行，其证据类型为 synthetic executable/noisy。离子阱路线则在全连接参考拓扑上使用 $\{R_z,R_x,R_{XX}\}$，其中
+\begin{equation}
+R_{XX}(\theta)=\exp\!\left(-\mathrm i\theta X\otimes X/2\right).
+\label{eq:rxx-convention}
+\end{equation}
+$X$ 映射为 $R_x(\pi)$，CNOT 由一个 $R_{XX}(\pi/2)$ 与局部 $R_z/R_x$ 基变换组成，MCT 复用无辅助比特的精确 parity-phase 展开。全连接假设下不插入 SWAP，也不把 CX 保留为“原生门”；该路线只提供完整基态与 up-to-global-phase 全酉矩阵验证的 ideal resource adapter。
+
+光量子路线不在缺少编码、资源态、测量--feed-forward 规则、损耗/探测器模型与 heralding 定义时伪造门级映射。它只返回 boundary-only 能力声明，并对缺失的实现先决条件 fail closed。三路线产物以规范化 JSON 和 SHA-256 绑定，独立 verifier 重新编译可执行路线、重算语义并精确检查边界字段。该 manifest 统一的是逻辑契约与证据格式，而不是三种路线的执行强度或性能口径。
+
+\subsection{AES S-box 的端到端应用协议}
+
+为检验双向调度是否能从随机函数推广到具体密码构件，本文采用 FIPS~197 前向 S-box 的八个输出坐标\cite{nist2023aes}。令 $S:\{0,1\}^8\rightarrow\{0,1\}^8$，第 $j$ 个标量函数定义为 $f_j(x)=\operatorname{bit}_j(S(x))$，其中输入按 $x=\sum_{i=0}^{7}x_i2^i$ 编码，$j=0$ 表示输出最低位。每个坐标被独立综合为 $|x\rangle|y\rangle\mapsto|x\rangle|y\xor f_j(x)\rangle$；该设计能够逐坐标审计调度传播，但不等于一个共享中间量的联合多输出 SubBytes 线路。
+
+八个坐标共享同一冻结等变 checkpoint，并保持 learned policy 启用、learned value 关闭。每个根节点以 8 次 Neural \mcts{} simulation 形成 $K=6$ 的候选池，从中为 $B=3$ 条独立 action edge 分配预算。Classical diversity-greedy 与 $p=1$ 的 \qaoa{}-shot 读取完全相同的候选动作、效用、冗余矩阵和池 SHA；后者使用 512 shots、4 次 optimizer restart 与 12 步坐标搜索。小池的 $\binom{6}{3}=20$ 个可行子集被穷举，仅作为 exact objective 的审计参照，不参与两种部署调度器的后续搜索。
+
+每条 Plan 依次接受 plan \anf{}、emitted-circuit \anf{} 以及全部 256 个输入和两个目标初值的可逆 Oracle 检查。随后，逻辑线路在 synthetic heavy-hex-like profile 上分解和路由到 $\{\rz,\mathrm{SX},X,\mathrm{CX}\}$，并检查原生门白名单与所有双比特耦合边。含噪端点固定输入锚点 $\{0,83,124,255\}$ 和两个 noise-seed anchor；每个输入--噪声组合执行 32 shots，因此每条 trial 为 256 shots、16 条 trial 共 4096 shots。噪声参数仍为 $p_1=0.0002$、$p_2=0.003$ 和 $p_r=0.01$。由于 AES 坐标线路包含 10 个逻辑/工作量子位和数万原生门，本案例没有执行逐 trial 的 AES-scale 原生全基态 statevector 穷举等价；原生层证据仅覆盖分解/路由契约与声明锚点上的实际 seeded Pauli trajectories。
+
+\section{实验设置}
+
+实验围绕九个可证伪问题展开。H0 检查所有进入比较的线路是否严格保持 Oracle 语义；H1/H2 分别检查置换等变归纳偏置以及 policy、value、progressive widening 的可分离贡献；H3 检查 \qaoa{} 是否能在冻结候选池上改善固定预算多样性目标，并追踪这种局部改善能否转化为最终资源收益；H4 检查执行标定能否缩小逻辑代理与合成硬件 profile 上含噪指标之间的偏差；H5 检查同一调度干预在 AES S-box 坐标上能否从 exact-objective 命中传导到逻辑、原生和含噪端点；H6 检查同一 $X$/CNOT/MCT 逻辑契约能否在三条硬件路线上保留可验证语义或显式的不支持边界；H7 检查在 calibration 内冻结的执行感知 utility 能否在 post-E4 AES 复现中稳定降低原生双比特门数；H8 检查同一机制在 ASCON/PRESENT 外部密码族上是否具有足够的根动作活动度，从而使调度对比可识别。传统逻辑层比较同时回答 \method{} 相对同任务代数基线、SSHR、公开最优库及外部工具链的结论边界。H4--H8 与前述逻辑结果使用独立证据 bundle，不把合成或 ideal profile 外推为真机性能。
+
+传统核心切片包含 $n\leq6$ 的 177 个函数。weighted ESOP-MILP 对每个函数设置 10~s 求解上限，报告该加权 ESOP 模型返回的可行 incumbent；它不是量子线路全局最优证书。外部逻辑网络覆盖 ABC/BDD、ROS-style LUT、mockturtle、Caterpillar 和 CirKit；RevKit CLI 使用完整 permutation 上的 exact-oracle reversible synthesis，RevKit Python \texttt{oracle\_synth} 则单独作为 phase/Rz 边界。高维实验包括 $n=20,24,28,32,40$ 项集、$n=48,56,64$ 超大规模符号压力切片，以及 $n=21$--$30$ 的完整 \ttable{} bridge。所有配对比较只纳入名称匹配、语义检查成功且满足各自 timeout 契约的行。
+
+预算策略实验与 177 函数头部表完全分离：seed 42--43 的 320 个随机真值表函数用于训练，seed 44 的 160 个函数用于选定阈值，seed 45 的 160 个函数只用于冻结策略测试。策略时间采用保守口径：选择 run 时同时计入已经支付的 base-\method{} 时间与 Pareto-\method{} 时间，即使当前 Pareto 实现内部会重复部分 base 候选。
+
+等变模型的 C0--C7 validation pilot 使用 $n=6,7,8$ 各一个 held-out 随机函数和两个 solver seed，每个变体 6 行；所有变体共享同一 checkpoint、候选上限和 12 次 simulation。该样本只用于识别明显失效组件，不支撑跨函数族泛化。随后冻结 learned value 为关闭状态，在 E2 调度实验中使用 20 个与训练和验证均不重叠的随机 Boolean 函数（$n=8,9$ 各 10 个）、3 个 solver seed 和 7 个调度器，共 420 行。每行共享根候选池 $K=10$、准入预算 $B=4$、24 次 simulation 和相同的等变 policy 效用；\qaoa{} 使用 $p=1$，shot/noisy 模式各 1024 shots，noisy 模式施加 2\% 独立测量 bit-flip。聚合先在函数内平均三个 seed，再对 20 个函数簇进行 5000 次 bootstrap，避免把同一函数的重复 seed 当作独立样本。
+
+E3 使用独立冻结协议。Calibration 包含 seed base 310000 的 12 个随机 $n=4$ 函数和 56 条根动作 rollout-completion 线路；每条线路在合成 heavy-hex-like 图上以 $p_1=0.0002$、$p_2=0.003$、$p_r=0.01$ 执行全部 $x,y$，每输入 16 shots、两个 noise seed。岭参数只通过按函数留一交叉验证选择，随后在完整 calibration 上重拟合一次并冻结。Test 包含 seed base 410000 的 12 个新函数、2 个 search seed 和 4 个干预变体，共 96 条线路；calibration/test 完整真值表 SHA 交集为空。主比较先在函数内聚合 search seed，再对 12 个函数做 5000 次配对 bootstrap；测试 noisy outcome 不进入 utility、模型更新或超参数选择。
+
+E4 将上述路径固定在 8 个 AES S-box 坐标与 classical diversity-greedy/\qaoa{}-shot 两个调度变体上，共 16 条 trial。两种变体共享每个坐标的候选池、checkpoint、搜索预算、逻辑资源权重和噪声锚点；比较指标依次为 exact-objective 命中、准入集合与逻辑 QASM 变化、逻辑资源分数、原生总门数、原生双比特门数和 noisy Oracle success。由于每个坐标只有一个 scheduler seed，本案例不构造伪精确的显著性区间，而同时报告聚合均值变化与逐坐标胜/负/平。全部 4096 shots 仅用于检查声明 profile 下的执行失败模式，不把极低成功计数解释为性能估计。
+
+H6 使用独立硬件路线 bundle。离子阱分支固定检查 $X$、CNOT、Toffoli 和三控 MCT，对每个线路同时穷举基态并重算 up-to-global-phase 全酉矩阵；超导分支对三比特 $X+$CNOT$+$Toffoli 线路重算分解、全基态语义与 16 次固定种子噪声轨迹；光量子分支只精确检查 capability schema、先决条件与非可执行性。独立 verifier 不调用 bundle builder，并在语义篡改后即使重签 manifest 和外层 checksum 仍必须拒绝，从而把“文件完整”与“线路正确”分开。
+
+E4-v2 在运行前以本地协议锁冻结 12 个非 AES calibration 函数、固定 10-qubit synthetic profile、非负执行惩罚、四个调度臂与主端点。复现矩阵覆盖 8 个 AES 输出坐标、2 个 solver seed 和历史/执行感知 $\times$ greedy/\qaoa{} 四个臂，共 64 条 trial。主端点为执行感知 \qaoa{} 减历史 \qaoa{} 的原生双比特门数，先在坐标内聚合 seed，再以 8 个输出坐标为簇 bootstrap。AES 坐标已经进入 E4，故协议明确记录 \texttt{historically\_seen\_in\_E4=true} 与 \texttt{generalization\_claim=false}；含噪轨迹只作诊断，不参与 utility 或主端点。
+
+E5 先在不导入密码表的条件下，用 $n=6,7$ 各 6 个 calibration 函数冻结来源闭合的 v4 模型门、执行感知权重、固定 10-qubit profile、五个评估臂与 90 行矩阵；ASCON 5-bit 前向 S-box 为主家族，PRESENT 4-bit 前向 S-box 为次家族\cite{nist2025ascon,bogdanov2007present}。首次释放后的 v1 运行在 ASCON 输出坐标 0 的第一条分配上因根动作集合为空而 fail closed，未完成任何 trial 行或性能端点。v1.1 只修订零动作 direct root 的预声明记账，不改变模型、权重、预算、种子、profile 或端点；修订后的主分析仍要求每个密码家族至少有一个可调度组，避免把五臂同一 direct 线路的结构性平局解释为调度效果。
+
+为检验上述负向结论是否依赖单一数值软件构建，E5 另设跨构建可移植性审计。V3 审计只对预先列举的 learned prior、raw/adjusted utility 及其确定性连续派生量允许有限浮点差异，阈值固定为 $\operatorname{rtol}=10^{-6}$、$\operatorname{atol}=5\times10^{-6}$，并要求所有值有限；候选结构与顺序、准入集合、\qaoa{} 离散输出、Plan、逻辑 QASM、原生线路、端点和 summary 仍须严格一致。独立 fresh-validation v2 则从空 CPython~3.11 venv 记录依赖闭包、安装报告、测试与 verifier 命令，并要求调用方在解析 bundle 前提供外置 anchor SHA。该层只检验软件与证据可移植性，不把协议拒绝改写为性能结果，也不把版本固定等同于二进制完全复现。
+
+\begin{table}[H]
+\centering
+\tiny
+\setlength{\tabcolsep}{2.2pt}
+\renewcommand{\arraystretch}{1.05}
+\caption{比较对象与结论层级。只有同任务核心行支撑头部 T-count/score 结论；其余行分别承担压力测试、反例、归因或边界作用。}
+\label{tab:claim-hierarchy-zh}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.26\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.24\linewidth}}
+\toprule
+层级 & 对比对象 & 可支持结论 & 明确排除 \\
+\midrule
+头部证据 & Direct/AND-direct ANF、ESOP beam/MILP、ABC-ESOP/BDD & 匹配 bit-flip oracle 上更低 T-count 与加权 score & 普遍 CNOT、depth、ancilla、硬件或全局最优 \\
+外部压力 & ROS-style LUT、mockturtle、Caterpillar、CirKit、RevKit CLI、ABC 网络 & 结论并非只来自本地手写弱基线 & 完整 ROS、路由、原生门或硬件复现 \\
+反例边界 & SSHR CNOT、CirKit depth、Caterpillar CNOT、RevKit line/ancilla、STG optima & 其他方法保留真实单资源优势 & 完整 Pareto 支配或“击败全部基线” \\
+搜索归因 & no-\mcts{}、C0--C7、随机先验、fitted-Q、QAOA/exact & 等变 policy、\mcts{} 与量子调度提供可分离且有界的质量/预算信号 & deep RL 单独解释全部改善或量子加速 \\
+执行反馈归因 & 历史/反馈 utility $\times$ greedy/\qaoa{} & 原生含噪标签是否能改善 held-out 根调度 & 真机、真实校准或 policy/value 再训练 \\
+密码应用案例 & AES S-box 坐标上的 diversity-greedy/\qaoa{} & 局部调度变化是否传导至逻辑与原生线路 & 联合 SubBytes、完整 AES 轮、真机或量子优势 \\
+冻结执行感知复现 & post-E4 AES、历史/执行感知 $\times$ greedy/\qaoa{} & 固定权重下原生双比特门数的坐标簇效应 & 新家族留出、泛化、真机或性能改善 \\
+外部家族可识别性 & ASCON/PRESENT、来源闭合 v4 与五臂矩阵 & 标量表示是否产生足以比较调度器的非退化动作 & 把零动作平局或事后重建写成性能端点 \\
+跨硬件抽象 & 超导 synthetic、离子阱 ideal、光量子 boundary-only & 同一逻辑契约可进入路线特定且证据分级的接口 & 真实设备、跨路线性能比较或光量子门映射 \\
+规模验证 & $n=20$--$64$ 符号压力与 $n=21$--$30$ 完整 bridge & 在声明的验证包络内保持逻辑正确 & 高维全函数穷举或最优性证明 \\
+Phase 迁移 & RevKit \texttt{oracle\_synth}、ANF/FPRM phase parity 与 affine shortlist & 搜索框架可迁移到逻辑 phase/Rz proxy & 最终 Clifford+T 旋转综合或 bit-flip 头部结果 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\centering
+\tiny
+\setlength{\tabcolsep}{2.1pt}
+\renewcommand{\arraystretch}{1.04}
+\caption{实验论据阶梯。E1--E5 与三路线证据分别承担性能、机制、可识别性或边界作用；记录重建通过不等于协议性能门通过，不同层级的验证强度不可互换。}
+\label{tab:evidence-ladder-zh}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.17\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}rr>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.22\linewidth}}
+\toprule
+论据层级 & 范围 & 实例 & 验证行 & 作用 & 边界 \\
+\midrule
+精确同任务核心 & $n=3$--$6$ & 177 & 3819 & 完整真值表头部比较 & 小规模精确，不是大规模最优证书 \\
+公开最优值反例 & $n=4$--$5$ & 54 & 270 & 暴露更强 tiny-function optimum & 负向边界，不是本文胜利行 \\
+外部工具压力 & $n=3$--$18$ & 373 & 968 & export/readback 与逻辑网络检查 & 不是硬件映射或完整可逆后端 \\
+可逆/相位边界 & $n=3$--$6$ & 181 & 10109 & permutation、phase 与 coarse smoke & 不是最终近似 Clifford+T 比较 \\
+完整高维 bridge & $n=21$--$30$ & 60 & 880 & 完整真值表与 emitted-circuit 检查 & 只覆盖生成式窄切片 \\
+超大规模符号压力 & $n=20$--$64$ & 384 & 7392 & ANF 与 emitted-circuit 符号验证 & 不等于高维真值表穷举 \\
+AI/搜索控制归因 & $n=3$--$40$ & 385 & 15930 & 同预算、held-out 与独立 seed 对照 & 不说明深度学习单独导致全部收益 \\
+双向调度增量 & $n=6$--$9$ & 23 & 468 & C0--C7 与七种同池调度器；三层语义检查 & pilot 规模；不含原生门、门级噪声或量子加速 \\
+原生执行反馈 & $n=4$ & 24 & 152 & calibration/test 隔离；原生等价与实际 Pauli trajectories & 合成 profile；不外推 AES、真机或量子优势 \\
+AES 端到端案例 & $n=8$ S-box 坐标 & 8 & 16 & 完整逻辑 Oracle 与调度--QASM--原生传播 & 原生穷举等价未跑；noisy 端点为 sampled diagnostic \\
+AES 执行感知复现 & $n=8$ E4 已见坐标 & 8 & 64 & 四臂公平性、逻辑/原生契约与坐标簇区间 & post-E4 复现；不支持留出或泛化主张 \\
+外部密码族负向审计 & ASCON 5-bit/PRESENT 4-bit & 9 & 90 & 搜索链与逻辑/原生端点均 90/90 事后重建 & 家族活动门失败；不接受性能端点 \\
+硬件路线分级 & 3 路线/4 类离子阱门 & 3 & 27 & SHA、重编译、全酉矩阵与 boundary 检查 & 超导仅 synthetic；离子阱仅 ideal；光量子仅接口 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{结果}
+
+\subsection{传统函数上的多资源优势}
+
+图~\ref{fig:traditional} 和表~\ref{tab:traditional} 给出 $n\leq6$ 传统函数切片上的平均资源。Pareto-\method{} 相对 direct \anf{} 的平均 T-count 和 score 分别降低 72.25\% 和 67.80\%；相对 10~s 单函数限时 weighted ESOP-MILP 的平均 T-count 和 score 分别降低 32.77\% 和 29.84\%。对 SSHR-H，score 胜/负/平为 173/4/0，而 T-count 为 173/0/4；SSHR-H 的平均 CNOT 仍最低。配对 sign test、bootstrap effect interval 和多权重敏感性审计均保留了 T/score 主结论，但 CNOT-only 重新搜索继续显示 SSHR 是强反例。因此，本文主张的是匹配逻辑层任务上的低 T-count 与低加权 score，而不是 CNOT-only、全指标或全局最优支配。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{fig2_traditional_resources.pdf}
+\caption{\textbf{传统函数上的平均资源。} Pareto-\method{} 在 T-count 和 weighted score 上最低；SSHR-H 仍是强 CNOT-oriented baseline。Source data: \texttt{fig2\_traditional\_resources.csv}.}
+\label{fig:traditional}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\small
+\caption{$n\leq6$ 传统函数切片上的平均逻辑资源。}
+\label{tab:traditional}
+\begin{tabular}{lrrrrr}
+\toprule
+方法 & 平均 T & 平均 CNOT & 平均 depth & 平均 ancilla & 平均 score \\
+\midrule
+Direct ANF & 184.1 & 134.2 & 134.6 & 1.33 & 194.3 \\
+AND-direct ANF & 101.0 & 166.5 & 166.9 & 2.18 & 115.2 \\
+ESOP-MILP & 83.6 & 133.5 & 159.6 & 2.32 & 96.7 \\
+SSHR-H & 81.0 & \textbf{67.6} & 88.7 & 1.36 & 88.2 \\
+\method{} & 43.9 & 89.9 & 94.5 & 1.92 & 53.2 \\
+Pareto-\method{} & \textbf{40.4} & 83.0 & \textbf{88.0} & 2.03 & \textbf{49.6} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{扩展 ESOP-MILP 基线、结构化 benchmark 与中等规模真值表}
+\label{sec:extended-results-zh}
+
+为回应"ESOP-MILP 被限时过短"的质疑，我们在 105 个 $n=5,6$ 函数上以
+30~s 单函数上限重跑了 weighted ESOP-MILP。更长预算下 ESOP-MILP 改善
+14.07\%，在 34/105 个函数上找到更优解。但 Pareto-\method{} 仍然在全部
+105 个函数上获胜（105/0/0），平均 score 降低 41.81\%。
+
+表~\ref{tab:structured-benchmark-zh} 给出 Resource-\method{} 在算术与
+密码相关结构化布尔函数上的结果：多数函数、进位位和对称阈值函数
+（$n=6$--$8$），全部通过完整真值表验证。改善幅度 45\%--72\%。
+
+\begin{table}[H]
+\centering\small
+\caption{结构化 benchmark 函数（完整真值表验证）。}
+\label{tab:structured-benchmark-zh}
+\begin{tabular}{lrrrr}\toprule
+函数 & $n$ & Direct T & Resource T & Score 改善 \\ \midrule
+多数 & 7 & 756 & 200 & 67.5\% \\
+多数 & 8 & 3276 & 744 & 71.5\% \\
+内积 & 6 & 60 & 60 & 0.0\% \\
+进位 & 6 & 248 & 76 & 47.0\% \\
+进位 & 8 & 696 & 204 & 54.3\% \\
+对称 ($t{=}4$) & 8 & 1824 & 740 & 45.5\% \\ \bottomrule
+\end{tabular}\end{table}
+
+除了算术结构化函数外，表~\ref{tab:aes-sbox-zh} 给出 Resource-\method{}
+在 AES S-box 全部八个输出比特上的结果。每个比特是一个 8 变量布尔函数，
+通过穷举 $2^8$ 输入 oracle 验证。每个比特上 T-count 大约减半（score 改善
+48\%--54\%），显示代数因子搜索在密码学相关非线性函数上仍能发现低资源结构。
+
+\begin{table}[H]
+\centering\small
+\caption{AES S-box 输出比特 benchmark（完整真值表验证）。}
+\label{tab:aes-sbox-zh}
+\begin{tabular}{rrrrrr}
+\toprule
+比特 & Direct T & Resource T & Direct score & Resource score & 改善 \\
+\midrule
+0 & 1552 & 692 & 1743.2 & 797.2 & 54.3\% \\
+1 & 1604 & 760 & 1801.0 & 871.7 & 51.6\% \\
+2 & 1772 & 804 & 1988.5 & 920.2 & 53.7\% \\
+3 & 1688 & 764 & 1894.6 & 875.5 & 53.8\% \\
+4 & 1520 & 736 & 1707.7 & 843.4 & 50.6\% \\
+5 & 1348 & 672 & 1515.4 & 773.0 & 49.0\% \\
+6 & 1300 & 624 & 1461.9 & 716.6 & 51.0\% \\
+7 & 1296 & 660 & 1457.4 & 756.4 & 48.1\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+表~\ref{tab:medium-scale-zh} 把完整真值表验证从 $n\leq6$ 扩展到
+$n=7$--$12$。全部 49 个函数通过穷举 $2^n$ 输入 oracle 检查。
+
+\begin{table}[H]
+\centering\small
+\caption{中等规模完整真值表验证（$n > 6$）。}
+\label{tab:medium-scale-zh}
+\begin{tabular}{rrrrrr}\toprule
+$n$ & 函数数 & 正确 & Direct T 均值 & Resource T 均值 & Score 改善 \\ \midrule
+7 & 30 & 30/30 & 534 & 218 & 52.87\% \\
+8 & 10 & 10/10 & 2725 & 1134 & 52.63\% \\
+10 & 3 & 3/3 & 8153 & 3939 & 51.0\% \\
+11 & 3 & 3/3 & 18309 & 8940 & 50.6\% \\
+12 & 3 & 3/3 & 40659 & 19960 & 50.5\% \\ \bottomrule
+\end{tabular}\end{table}
+
+图~\ref{fig:baselines} 汇总外部和传统 baseline 的配对比较。Pareto-\method{} 相对 ESOP beam 为 174/0/3，平均 score 降低 36.09\%；相对 ESOP-MILP 为 167/3/7，平均 score 降低 29.84\%；相对 SSHR-H 的 T-count 为 173/0/4，平均降低 47.93\%。ROS-style LUT proxy 覆盖 309 个函数，best-$K$ proxy 比固定 $K=4$ 更强，但 Pareto-\method{} 相对该 proxy 仍为 309/0/0。mockturtle probe 用官方 header 将 KLUT network 重综合为 XAG；在传统 177 个函数上为 166/11/0，在 $n=14$ 的 64 个函数上为 64/0/0。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.94\linewidth]{fig3_baseline_comparisons.pdf}
+\caption{\textbf{配对基线比较。} 横轴为目标方法相对基线的平均变化；负值表示资源更低。数字标签给出胜/负/平；源数据见 \texttt{fig3\_baseline\_comparisons.csv}.}
+\label{fig:baselines}
+\end{figure}
+
+CirKit 3 shell AIG/MC probe 进一步补强外部工具链压力测试。该流程先用 ABC 把同一 BLIF benchmark 转成 AIGER，再由 CirKit 执行 \texttt{cut\_rewrite -a; resub -a; mccost -a}，最后把 CirKit Verilog 输出交给 ABC 回读成 BLIF 并逐行 truth-table 验证。表~\ref{tab:cirkit} 和表~\ref{tab:cirkit-highdim} 显示，传统集和 $n=14$ 集均为全行 correct；Pareto-\method{} 相对 CirKit AIG/MC 的 score 分别为 177/0/0 和 64/0/0，平均降低 62.34\% 和 94.46\%。同时，depth 指标在传统集为 16/156/5，在 $n=14$ 为 14/50/0，说明 CirKit AIG 在 depth proxy 上仍是强对手。
+
+\begin{table}[H]
+\centering
+\small
+\caption{CirKit 3 shell AIG/MC probe：$n\leq6$ 传统函数。负值表示目标方法资源更低。}
+\label{tab:cirkit}
+\input{../english/tables/cirkit_aig_probe.tex}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\caption{CirKit 3 shell AIG/MC probe：$n=14$ 高维函数。负值表示目标方法资源更低。}
+\label{tab:cirkit-highdim}
+\input{../english/tables/cirkit_aig_highdim_probe.tex}
+\end{table}
+
+Legacy RevKit CLI exact-oracle probe 则从可逆综合角度补强对比。该流程把每个函数嵌入为 $(x,y)\mapsto(x,y\xor f(x))$ 的完整 permutation，RevKit 用 \texttt{read\_spec -p} 读入后运行 TBS、DBS 和 RMS 三个 synthesis flow，并按 score 选择每个函数的 best-flow baseline。531/531 个直接 flow 行均返回，best-score portfolio 覆盖 177 个函数。表~\ref{tab:revkit-cli} 显示，Pareto-\method{} 相对 RevKit CLI best-score portfolio 的 score 为 173/0/4、平均降低 67.28\%，T-count 为 173/0/4、平均降低 72.59\%；但 peak ancilla 为 0/169/8，平均增加 153.11\%。因此该基线强化了低 T/score 结论，同时明确暴露辅助线 trade-off。
+
+\begin{table}[H]
+\centering
+\small
+\caption{RevKit CLI portfolio：$n\leq6$ 传统函数。负值表示目标方法资源更低。}
+\label{tab:revkit-cli}
+\input{../english/tables/revkit_cli_multiflow_traditional.tex}
+\end{table}
+
+Caterpillar XAG API probe 为外部工具链增加了另一组强反例。531/531 个策略行通过检查，Pareto-\method{} 的 score 相对 Caterpillar 为 177/0/0、平均降低 47.94\%；但 CNOT 为 4/173/0、平均增加 195.18\%。公开 STG 小函数最优库则给出更直接的负向控制：在可比的 T-count optimum 行上，Pareto-\method{} 为 0/40/14、平均高 84.26\%。这些结果不是本文的“失败数据”，而是限定结论不可越过的真实资源边界。
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.06}
+\caption{核心定量答卷与最强反例。W/L/T 均以 Pareto-\method{} 为第一方法；负百分比表示其资源更低。}
+\label{tab:comparison-answer-zh}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}X}
+\toprule
+比较对象 & 角色 & 有利结果 & 不利结果或边界 \\
+\midrule
+Direct \anf{} & 同任务头部基线 & score 172/1/4，$-67.80\%$ & 不推出大规模或全局最优 \\
+10~s ESOP-MILP & 同任务限时基线 & score 167/3/7，$-29.84\%$ & 仅为 ESOP 模型限时可行解 \\
+SSHR-H/SSHR-I & CNOT 导向反例 & SSHR-H score 173/4/0，$-41.06\%$ & SSHR-H CNOT 43/128/6，本文平均 $+18.99\%$ \\
+Caterpillar API & 外部 XAG probe & score 177/0/0，$-47.94\%$ & CNOT 4/173/0，本文平均 $+195.18\%$ \\
+CirKit / RevKit CLI & depth/ancilla 反例 & score 分别 177/0/0、173/0/4 & CirKit depth 16/156/5；RevKit ancilla 0/169/8 \\
+公开 STG optima & tiny-function 最优值反例 & 无头部胜利主张 & T optimum 0/40/14，本文平均 $+84.26\%$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+baseline fairness ledger 对同任务、SSHR、外部逻辑网络、公开最优库、RevKit exact-oracle、phase/Rz、AI 控制、大规模验证和资源敏感性九个比较族逐一核对输入归一化、验证器、资源抽象和允许用途，当前 9/9 通过。该数字表示公平性契约完整，不表示本文在九类对象上全部获胜。
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.2pt}
+\renewcommand{\arraystretch}{1.04}
+\caption{SSHR 原论文表格与当前复现范围的对照。}
+\label{tab:sshr-crosswalk-zh}
+\begin{tabularx}{\linewidth}{l>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.27\linewidth}}
+\toprule
+原论文表 & 当前覆盖 & 允许结论 & 明确未覆盖 \\
+\midrule
+Table IV & 有界参考 & 作为原始门分解与 CNOT 导向背景 & 不声称完整重跑 \\
+Table V & 177 个同函数 SSHR-H 行 & 同任务小函数 CNOT 参照 & 不等于全部随机实验复现 \\
+Table VI & 177 个限时 SSHR-I CNOT 行及 72 个 $n\leq4$ pilot & 限时 CNOT 对照，保留 timeout 元数据 & 不是完整聚合或最优证书 \\
+Table VII & 177 个限时 SSHR-I T 行及 72 个 $n\leq4$ pilot & 当前逻辑资源投影下的 T-oriented 参照 & 不覆盖全部 random/NPN 设置 \\
+Table VIII & $n=3$--$8$ 候选数精确复现 & 49、257、1539、10299、75905、609441 全部一致 & 候选计数不能替代 Tables IV--VII 重跑 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+这些对比有意义，但需要严格限定。ROS-style LUT 是 proxy，不是官方 ROS 全流程；mockturtle probe 是 KLUT-to-XAG 逻辑网络比较；CirKit probe 是 AIG multiplicative-complexity 逻辑网络比较；RevKit CLI probe 输出 exact oracle permutation 上的可逆 synthesis 统计，但 CNOT/depth 仍由 Toffoli control distribution 派生，也不包含 ROS/SAT garbage management 或硬件 mapping。RevKit \texttt{oracle\_synth} 返回 Rz-phase netlist，不能直接当作精确 T/Tdg 网络比较。本文据此只主张逻辑层资源优势，而不是工具链全流程或硬件后端优势。
+
+\subsection{搜索控制归因与强化学习预算策略}
+
+表~\ref{tab:ablation} 显示，最大算法增益首先来自可搜索的 affine/Boolean-ring 动作空间，而不是学习器本身。Full Affine-NMCTS 相对 fixed-coordinate MCTS 的平均 score 降低 14.82\%，Pareto archive 相对单一 \method{} 再降低 3.26\%。在更强的确定性 no-\mcts{} portfolio 对照下，base \method{} 为 54/0/123、平均 score 降低 1.44\%，Pareto-\method{} 为 106/0/71、平均降低 4.69\%。同预算 learned prior 相对八次随机先验均值只有 17/8/152、平均降低 0.15\%，且运行时间不利。因此，本文把神经先验写成有限质量信号，把 \mcts{}/Pareto 写成有界增量，而不把全部 67.8\% 资源改善归因于深度强化学习。
+
+\paragraph{神经先验 v2 与 MCTS 预算扫描。}
+\label{sec:neural-v2-mcts-sweep-zh}
+
+我们改进了神经动作先验，将特征向量从 12 维标量统计量扩展到 24 维结构化
+特征。新特征包括因子变量的共现密度、变量出现频率统计、次数分布集中度、
+残余结构重叠、每项资源节省效率、递归降次潜力和因子变量选择性比。网络
+架构增加了第三隐藏层（含 dropout 和 Xavier 初始化）。在相同的 177 个传统
+函数上，v2 模型相对原始 12 维模型改善 1.29\%（51/0/126 W/L/T），相对
+no-prior 基线改善 0.92\%（41/0/136 W/L/T）。旧模型实际上略差于 no-prior
+（$-0.38\%$），而新模型严格不退化。相对八次随机先验均值，v2 模型在全部
+八个 seed 上均胜，但总体幅度仍然很小（0.05\%）。
+我们还在 15 个 $n=8$ 随机函数上测试了 v2 神经先验。相对 no-prior 为
+5/10/0 W/L/T（$-0.603\%$）；相对八个同预算随机先验全部打平（$0/0/15$，
+$+0.072\%$）。这证实 $n\leq8$ 上 portfolio guard 和小动作空间会吸收先验差异，
+因此论文将增益归因于代数动作空间和 Pareto archive 是有实验依据的。
+
+为验证默认 MCTS 预算是否合理，我们在同样的 177 个函数上扫描了仿真次数
+$\{32,96,\allowbreak256,\allowbreak512,\allowbreak1024\}$。96 次（默认值）已经收敛：增加到 1024 次仅
+多赢 2 个函数（0.028\%），但时间增加 95 倍。这验证了默认预算的合理性。
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{搜索贡献分解。负的 mean $\Delta$ score 表示目标方法更优。}
+\label{tab:ablation}
+\input{../english/tables/search_contribution_decomposition.tex}
+\end{table}
+
+高维 frontier 控制进一步把“质量”和“搜索开销”分开。稀疏 depth-2/4 frontier 在审计切片上与完整 depth-2/3/4 frontier 得到相同资源结果，同时去除约四分之一到三分之一的 frontier evaluation time。learned depth-4 gate 在三组独立 seed、共 144 个 pair 上保持 0 false skip，只运行 106 次 depth-4 evaluation，减少 13.43\% sparse-frontier evaluation time；阈值扫描中的最佳 zero-false-skip 点节省 14.92\%。分阶段 controller 相对 all-depth 的 score 只高 0.04\%，staged planning time 降低 25.43\%。这些控制器是当前生成式切片上的经验 operating point，不证明 depth 3 或 depth 4 在所有实例上普遍无用。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.94\linewidth]{fig6_sparse_gate_sensitivity.pdf}
+\caption{\textbf{稀疏 depth-4 gate 的阈值审计。} 选定阈值位于零错误跳过平台内，本文采用保守工作点。}
+\label{fig:sparse-gate-sensitivity-zh}
+\end{figure}
+
+拟合 Q 的预算策略提供了当前最直接的强化学习证据。独立 seed-45 测试中，策略对 71/160 个函数追加 Pareto 搜索、对 89/160 个函数停止，因而把昂贵 Pareto 调用减少 55.6\%。相对 base \method{}，score 为 56/0/104、平均降低 3.48\%，T-count、CNOT 和 depth 分别降低 3.99\%、3.84\% 和 3.34\%。相对 always-Pareto，它保留 94.90\% 的平均 score 增益并使保守时间降低 13.13\%，但仍有 13 个函数损失部分 Pareto 增益，平均 score regret 为 0.506\%；peak ancilla 相对 base 增加 4.48\%。这支持“质量--搜索开销改善”，不支持对 always-Pareto 的 score 支配。
+
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{3.2pt}
+\renewcommand{\arraystretch}{1.06}
+\caption{上下文 bandit fitted-Q 预算策略的独立测试结果。}
+\label{tab:mcts-budget-policy-zh}
+\begin{tabularx}{\linewidth}{lrrrr>{\raggedright\arraybackslash}X}
+\toprule
+阈值 & Run/stop & 对 Pareto W/L/T & 对 base W/L/T & Score regret & 时间与收益边界 \\
+\midrule
+0.60 & 71/89 & 0/13/147 & 56/0/104 & $+0.506\%$ & 时间 $-13.13\%$；保留 94.90\% Pareto score gain \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{fig7_learned_control_summary.pdf}
+\caption{\textbf{学习与搜索控制证据汇总。} promoted controls 同时具备可验证的质量或开销收益；limited diagnostics 则保留小幅质量、运行时间反向或代理边界，防止把所有 AI 模块写成同等主贡献。Source data: \texttt{fig7\_learned\_control\_summary.csv}.}
+\label{fig:learned-control-summary-zh}
+\end{figure}
+
+\subsection{双向智能编译的因果检验}
+\label{sec:bidirectional-results-zh}
+
+\paragraph{H1/H2：等变 policy/value 的可分离贡献。}
+为判断结构归纳偏置是否真正改善 AI for Quantum 搜索，我们先在三个 held-out 函数、两个 solver seed 上运行 C0--C7 因果 pilot。表~\ref{tab:equivariant-causal-zh} 列出决定当前部署配置的关键变体。policy-only C1 相对无学习 C0 的平均 score 比值为 0.981169，即小样本平均改善 1.88\%，并在 6 行中取得 4/0/2 的胜/负/平；value-only C2 退化 0.79\%，当前 policy+value C5 退化 0.26\%。条件 oracle C7 只在模型给出的 top-$K$ shortlist 内用禁用 scorer 的确定性 rollout 排序，它用于估计 shortlist 内部 headroom，不能作为可部署方法或全局 oracle。该实验支持保留等变 policy 接口，但样本量不足以证明跨规模或跨密码族泛化；learned value 因负向结果在 E2 中被关闭。
+
+\begin{table}[H]
+\centering
+\small
+\caption{等变模型关键 C0--C7 变体。比值低于 1 表示相对无学习 C0 的资源分数更低；每个变体 6 行。}
+\label{tab:equivariant-causal-zh}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.14\linewidth}>{\raggedright\arraybackslash}Xrrr}
+\toprule
+变体 & 搜索组件 & Score/C0 & W/L/T & 当前解释 \\
+\midrule
+C0 & classical rollout，无 learned policy/value & 1.000000 & 0/0/6 & 无学习基线 \\
+C1 & 等变 policy-only & 0.981169 & 4/0/2 & 当前保留 \\
+C2 & learned value-only & 1.007893 & 0/4/2 & 当前关闭 \\
+C5 & policy+value+progressive widening & 1.002635 & 2/4/0 & 当前关闭 value \\
+C7 & top-$K$ 内条件 rollout oracle & 0.990734 & 4/0/2 & 诊断上界，非部署方法 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{H3：\qaoa{} 是否改善固定池调度。}
+表~\ref{tab:qaoa-scheduler-zh} 给出 420 次同池实验。random 明显劣于 greedy，证明固定预算确实会受无效分支分配影响；exact 相对 greedy 的函数簇资源比值为 0.999124，95\% CI 为 $[0.997985,0.999985]$，说明式~\eqref{eq:diversity-objective} 与最终资源存在方向一致但幅度很小的联系。\qaoa{}-shot 的 exact-objective 命中率为 81.7\%，高于 greedy 的 65.0\%，平均 regret 从 0.007694 降为 0.002288。它在 60 行中相对 greedy 改变了 27 个准入子集，并产生 7/4/49 的逐行胜/负/平，因而量子子程序确实进入了 AI 搜索控制链，而不是离线展示一个与 MCTS 无关的 QUBO。
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.06}
+\caption{固定候选池上的调度质量与端到端资源结果。资源分数比值低于 1 表示优于 greedy；置信区间以 20 个 Boolean 函数为簇。}
+\label{tab:qaoa-scheduler-zh}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.15\linewidth}rrr>{\raggedright\arraybackslash}Xr}
+\toprule
+调度器 & Exact hit & Objective regret & Score/greedy & 函数簇 95\% CI & W/L/T \\
+\midrule
+Random & 0.0\% & 0.135873 & 1.007852 & $[1.001311,1.015243]$ & 5/15/0 \\
+Top-$B$ & 0.0\% & 0.101250 & 1.000954 & $[0.998814,1.002967]$ & 5/9/6 \\
+Greedy & 65.0\% & 0.007694 & 1.000000 & $[1.000000,1.000000]$ & 0/0/20 \\
+Exact & 100.0\% & 0.000000 & 0.999124 & $[0.997985,0.999985]$ & 4/1/15 \\
+QAOA ideal & 26.7\% & 0.067263 & 1.000355 & $[0.997170,1.003417]$ & 7/6/7 \\
+QAOA shot & 81.7\% & 0.002288 & 0.999734 & $[0.998476,1.000921]$ & 4/3/13 \\
+QAOA noisy & 76.7\% & 0.003564 & 0.999734 & $[0.998532,1.000907]$ & 4/3/13 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\qaoa{}-shot 的端到端 score 比值置信区间仍跨过 1，因此局部组合优化改善尚不能写成稳定 Oracle 资源优势。ideal 模式取 statevector 的模态 bitstring，其中 35/60 行需要显式基数修复；shot/noisy 则从实际 counts 中选择最优可行样本，60/60 均为 direct non-fallback。2\% 测量 bit-flip 使 noisy 相对 shot 改变 4/60 个子集，但没有改变这 60 行的最终资源分数。三种模式共 180/180 次调用成功、0 fallback；420/420 条 trial 的 plan \anf{}、circuit \anf{} 和完整 Oracle 真值表检查全部通过，20/20 个候选池的 QUBO 恒等式、可行排序和罚项充分性也通过。故 H3 的当前结论是“量子采样提高了局部调度保真度并真实改变搜索轨迹”，而不是“量子加速”或“已稳定改善最终线路”。这一代理--结果错配给出 H4 的直接动机；下文用隔离的原生门与含噪执行标定检验反馈效用，而不再把局部 QUBO 命中率视为端点收益的充分条件。
+
+\paragraph{H4：执行标定能否改善 held-out 含噪端点。}
+Calibration 的 56 条候选均通过逻辑语义、原生门白名单、耦合边和全基态等价检查，并实际执行 57,344 个 noisy shots。按函数留一交叉验证在 $\alpha\in\{0.01,0.1,1,10\}$ 中选择 $\alpha=10$；完整 calibration 上的 MAE、$R^2$ 和 Spearman 分别为 0.04571、0.8995 和 0.8472。该结果表明结构特征包含可预测的执行风险信号，但它仍是标定内拟合，不构成 held-out 改善证据。
+
+表~\ref{tab:execution-feedback-zh} 给出冻结测试结果。96 条 trial 共执行 98,304 个 noisy shots，并全部通过 plan \anf{}、circuit \anf{}、完整 Oracle 和原生全基态等价验证。两个 \qaoa{} 变体均有 18 次 direct non-fallback 调用和 6 次 not-invoked，fallback 为 0。预注册主比较中，反馈 \qaoa{} 相对历史 \qaoa{} 的函数簇 NLL 差为 $+0.001293$，95\% CI 为 $[-0.001170,0.004719]$；几何成功率比为 0.998708，95\% CI 为 $[0.995236,1.001149]$，函数级 W/L/T 为 1/3/8。两个区间均未越过预设方向门，因此 H4 未获支持。
+
+\begin{table}[H]
+\centering
+\small
+\caption{冻结执行反馈的 held-out $2\times2$ 干预。NLL 越低、成功率越高越好；均值覆盖 12 个函数和两个搜索种子。}
+\label{tab:execution-feedback-zh}
+\begin{tabular}{lrrrr}
+\toprule
+变体 & 平均 NLL & 平滑成功率 & 平均原生 CX & 平均原生深度 \\
+\midrule
+历史 utility + greedy & 0.711321 & 0.505894 & 276.33 & 294.75 \\
+反馈 utility + greedy & 0.715732 & 0.504228 & 275.83 & 294.83 \\
+历史 utility + \qaoa{} & 0.718577 & 0.502805 & 278.13 & 296.21 \\
+反馈 utility + \qaoa{} & 0.719871 & 0.502276 & 278.00 & 296.42 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+负结果并非反馈接口未生效。反馈在 greedy 的 24 个配对搜索中改变 16 次准入集合和 10 次最终 Plan，在 \qaoa{} 路径中分别改变 6 次和 4 次；后者有 3 次进一步改变原生双比特门数。所有实际调用反馈的行都产生非零 penalty，但平均 penalty span 仅为 0.06625。因而当前瓶颈同时包含两层稀释：不同根动作可能收敛到同一 Plan，而不同 Plan 的原生差异又未稳定超过有限-shot 波动。H4 将“原生执行反馈”从待实现设想收缩为更具体的开放问题：纯结构代理不足，下一轮应在 calibration 内引入编译前可得的原生门数、SWAP、depth 与 duration 特征，并保持同一 held-out 门禁。
+
+\paragraph{H5：局部调度改善能否传导到 AES 密码 Oracle。}
+在八个 AES S-box 坐标的相同冻结池上，\qaoa{}-shot 的 8 次调用均为 direct、feasible、non-repaired 和 non-fallback，并全部命中穷举得到的 exact objective；diversity-greedy 仅在 3/8 个池上命中该目标。两种调度器在 5/8 个坐标上选择不同的 action 集合，其中 4/8 个进一步产生不同的逻辑 OpenQASM~3，表明 Quantum for AI 干预确实跨过了候选选择层并进入最终线路，而不是只改变未被访问的诊断变量。
+
+\begin{table}[H]
+\centering
+\small
+\caption{AES S-box 八个坐标上的 E4 配对结果。均值由每个变体的 8 条 trial 计算；变化率以 diversity-greedy 为分母。资源指标越低越好。}
+\label{tab:aes-bidirectional-e4-zh}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}Xrr>{\raggedright\arraybackslash}p{0.26\linewidth}}
+\toprule
+指标 & Diversity-greedy & \qaoa{}-shot & 配对解释 \\
+\midrule
+Exact-objective 命中 & 3/8 & 8/8 & 同一冻结候选池与 $B=3$ \\
+平均逻辑资源分数 & 1799.037 & 1807.097 & $+0.448\%$；1/3/4 \\
+平均原生总门数 & 26637.375 & 25884.250 & $-2.827\%$；2/2/4 \\
+平均原生双比特门数 & 23587.875 & 22826.250 & $-3.229\%$；2/2/4 \\
+Noisy Oracle success & 2/2048 & 3/2048 & 合计 5/4096；仅诊断 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+下游指标没有给出单向结论。\qaoa{} 的平均逻辑资源分数反而增加 0.448\%；原生总门数和双比特门数虽在聚合均值上分别降低 2.827\% 和 3.229\%，但逐坐标均为 2/2/4，且总门数的主要降幅来自输出坐标 0 单行的 21.50\% 改善。含噪轨迹更不足以区分两种调度器：在 4096 shots 中仅有 5 次满足输入保持、目标位正确和辅助位归零，稀疏计数对 seed 与单次 Pauli trajectory 高度敏感。因此 H5 支持“\qaoa{} 更准确地求解冻结池目标，并能改变 AES 逻辑/原生线路”，却不支持“该目标已改善 AES 资源或含噪成功率”。16/16 条 trial 的 plan、circuit、完整 256 输入与双目标初值 Oracle 检查均通过，原生门集与耦合契约也通过；未执行的 AES-scale 原生全基态等价不能由这些检查替代。
+
+\paragraph{H6：统一逻辑契约能否形成分级的硬件路线证据。}
+该正式 bundle 的独立 verifier 对精确文件集、内外层 SHA、重编译结果、语义与边界共重算 27 项，27/27 为 true。表~\ref{tab:hardware-routes-zh} 显示，“接入同一抽象”与“获得同等强度的硬件证据”是两个不同命题。
+
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\caption{三条硬件路线的证据强度与主张边界。}
+\label{tab:hardware-routes-zh}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.25\linewidth}}
+\toprule
+路线 & 状态 & 验证观测 & 当前结论边界 \\
+\midrule
+超导 & synthetic executable/noisy & 25 个原生门、11 个 CX、0 SWAP；8/8 基态等价；固定 seed 下 15/16 shots 成功 & 只对声明的合成拓扑与 Pauli 噪声有效 \\
+离子阱 & ideal resource adapter & $X$/CNOT/Toffoli/三控 MCT 为 1/15/163/531 门，其中 $R_{XX}$ 为 0/1/10/34；最大全酉误差 $1.10\times10^{-14}$ & 无校准、脉冲、链重配置或含噪执行 \\
+光量子 & boundary-only & 能力 schema 与缺失先决条件精确匹配；可执行标志为 false & 无门映射、资源态、feed-forward 或成功概率 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+离子阱分支的四个线路均不包含 CX 或 SWAP，完整基态与全酉矩阵检查均通过；超导分支的含噪计数只证明实际执行了声明的轨迹模拟，16 shots 不用于估计性能。语义篡改后即使重签路线 manifest、artifact manifest 和 checksum，独立 verifier 仍因 $R_{XX}$ 语义不一致而拒绝。因此 H6 支持的是“三路线抽象可审计，且证据强度不被混淆”，而不是真机可用性、跨路线性能可比性或量子优势。
+
+\paragraph{H7：冻结执行感知目标能否在 AES 上稳定降低原生双比特门数。}
+E4-v2 的 64/64 条 trial 均通过候选池公平性、逻辑语义、固定原生门集与耦合契约。执行感知 \qaoa{} 相对历史 \qaoa{} 的 intention-to-treat 主比较覆盖 16 个 seed 配对；原生双比特门数平均差为 $-513.9375$，按 8 个 AES 输出坐标聚类的 95\% bootstrap 区间为 $[-2059.0625,589.9375]$，坐标级胜/负/平为 2/1/5。执行感知 greedy 相对历史 greedy 的次比较为 $-1110.3125$，95\% 区间 $[-3176.3125,514.4375]$，胜/负/平为 2/2/4。两个方向的点估计均为负，但区间跨过零，故 H7 未获支持。384 次 sampled noisy trajectory 的成功计数为 0，只确认诊断路径被实际执行，不用于调权或性能推断。更重要的是，这八个坐标已在 E4 中用于目标与结果审计；冻结发生在本次复现之前，却不能逆转其 post-E4、非泛化的数据角色。
+
+\paragraph{H8：外部密码族上是否存在可识别的调度干预。}
+E5-v1 在释放并核对 ASCON/PRESENT 标准表后，于第一条 ASCON 分配上发现根结构候选集合为空并 fail closed；该次尝试完成 0 条 trial，未产生端点或比较。保持 v4 checkpoint、执行权重、搜索/\qaoa{} 预算、种子、profile 和端点不变的 v1.1 修订，把零动作情形记为五个臂共享的 direct-root 退化组，并完成预定的 90 条记录。结果显示 ASCON 的可调度组为 0，PRESENT 为 6；后者对应 3 个输出坐标和 2 个 solver seed。ASCON 主比较的全零差异和 PRESENT 三个可调度坐标簇上的零 \qaoa{} 差异，都不能补救预设的“每个家族至少一个可调度组”门。
+
+声明 verifier 因家族活动度与四臂公平性条件不满足而保持失败；实验完成字段与性能主张字段均为 false。随后独立的 post-hoc negative audit 在不改写原 bundle 的条件下，对搜索--Plan--scheduler 链和逻辑--原生端点各完成 90/90 重建；其 \texttt{ok=true} 只认证失败证据与重建完整性，原协议接受状态仍为 false。因此，H8 给出的不是一个“零效应性能结果”，而是更前置的可识别性结论：当标量坐标表示没有产生动作时，policy、value、执行感知 utility 与 \qaoa{} 调度之间不存在可被实验区分的干预。
+
+跨构建 V3 审计在参考 Conda 环境与全新 pip venv 中均通过 20/20 项检查。后者相对参考构建的连续量最大绝对与相对差分别为 $3.814697\times10^{-6}$ 和 $5.046907\times10^{-7}$，落在冻结容差内；90/90 行的候选离散投影、选择、Plan、逻辑/原生 QASM 与端点保持严格一致。fresh-validation v2 的两个环境又分别通过 19/19 项外置 anchor 检查；其冻结的全新环境运行记录 383 项测试，并通过 smoke 与默认安装 verifier。加入 submission 自包含验证与根路径污染回归后，当前集成树进一步达到 407 项测试全通过。上述结果说明 E5 的负向结论不是某一个 Torch 二进制构建的离散决策偶然产物；它仍然没有改变 ASCON 为 0、PRESENT 为 6 个可调度组以及 \texttt{protocol\_acceptance=false} 的科学结论。
+
+\subsection{Phase/Rz 边界与 Affine-FPRM 搜索}
+
+RevKit \texttt{oracle\_synth} 在 177 个传统函数上全部返回，但 171/177 行含非 Clifford \rz{}，总数为 9242。因此，如果只按 lower-bound phase netlist 计分，比较会低估 RevKit 输出在 Clifford+T 近似综合中的成本。为把该边界转化为本文内部可验证分支，我们实现 phase-parity \anf{} emitter，并进一步加入 fixed-polarity \fprm{} search 和 Affine-FPRM phase search。
+
+图~\ref{fig:phase} 显示，Affine-FPRM 在 $T/R_z=30$ proxy 下相对 fixed-polarity FPRM 为 81/0/96，平均 score 降低 2.51\%；相对 phase-parity \anf{} 为 85/0/92，平均降低 2.98\%；相对 RevKit 为 177/0/0，平均降低 65.50\%。在 177 个函数中，81 个选择非 identity 线性变换，43 个选择非零极性。这个结果说明 phase/Rz 分支已经从成本敏感性讨论推进为可验证的代数搜索；但它仍是 parity-gadget 级逻辑 emitter，不包含近似旋转序列生成或硬件映射。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{fig4_phase_affine.pdf}
+\caption{\textbf{Affine-FPRM 相位搜索。} 左图为 Affine-FPRM 相对 fixed FPRM、ANF 和 RevKit proxy 的平均变化；右图为非 identity 线性变换和非零极性的选择频率；源数据见 \texttt{fig4\_phase\_affine.csv}.}
+\label{fig:phase}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Affine-FPRM phase-parity search 的配对比较。}
+\label{tab:phase}
+\input{../english/tables/phase_parity_affine.tex}
+\end{table}
+
+为了检验该分支是否仍受搜索预算限制，本文进一步把 affine transform budget 从 32 扩展到 128，保持同一随机种子和确定性候选前缀，并输出独立结果文件。该设置使每个函数的候选 affine forms 均值从 1031.2 增加到 4124.9，并在 $n=6$ 函数上进入更复杂的随机可逆线性变换，而不改变 phase-polynomial emitter 或验证方式。结果见表~\ref{tab:phase-budget}：对 rank metric 本身，wide128 相对 budget32 均无 score-loss；在 $T/R_z=30$ 目标下为 43/0/134，平均 synth-score 再降低 0.60\%。同时，total Rz、CNOT 和 depth 分别降低 2.39\%、1.74\% 和 1.93\%。这说明 phase/Rz 分支的增益尚未耗尽，后续 learned phase/Rz policy 可以有明确的搜索空间承接，而不是只做固定极性枚举。
+
+\begin{table}[H]
+\centering
+\small
+\caption{Affine-FPRM phase search 的预算扩展结果。比较对象为 transform-budget 128 相对 transform-budget 32 的同名 selected rows；负值表示 budget 128 更低。}
+\label{tab:phase-budget}
+\input{../english/tables/phase_affine_budget_wide128_vs_32.tex}
+\end{table}
+
+在此基础上，本文把 phase candidate policy 更新为 rank-label 训练与 deterministic diversity rerank。训练仍使用 $n\leq5$，held-out $n=6$ 的 38 个函数只用于测试；每个函数从 transform-budget 128 生成的 8192 个 affine/polarity 候选中选择 shortlist，最终资源仍由 exact phase emitter 和 up-to-global-phase verifier 计算。diverse top-512 只精确计分 512/8192 个候选，相对 budget-32 为 17/0/21、平均 $T/R_z=30$ synth-score 降低 2.477\%，相对 wide-128 的均值 gap 仅 $+0.003\%$，因而减少 93.75\% 的 wide-search exact scoring。
+
+同预算随机对照使该结论更加有界。diverse top-512 相对每函数八次 random shortlist 均值为 17/0/21、平均差 $-0.012\%$，paired sign test 为 $p=1.53\times10^{-5}$，且均值低于全部八个 random seed mean；但绝对差异仍很小。因此，该分支支持“learned pruned-search feasibility”和搜索预算前沿改善，不支持显著支配随机 shortlist 或 phase 全局最优。
+
+旋转成本审计进一步把每个 non-Clifford \rz{} 按 $\lceil3\log_2(1/\epsilon)\rceil$ 计入 T/depth/gate proxy。在 $\epsilon=10^{-6}$ 时，Affine-128 相对 RevKit \texttt{oracle\_synth} 为 177/0/0、平均 score 降低 66.118\%；diverse top-512 相对 budget-32 为 17/0/21、平均降低 2.381\%，相对 wide-128 只高 0.002\%。来源于实际 phase-search 输出的 20 个高频角在 $\epsilon=0.125$ 的 coarse Clifford+T sequence smoke 中 20/20 通过，但在 $\epsilon=0.05$ 时只有 5/20 通过。当前环境没有完整高精度 rotation backend，因此这些结果仍不是最终 Clifford+T 旋转综合。
+
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\caption{Phase learned shortlist、精度敏感性与序列级边界。负值表示目标方法资源更低。}
+\label{tab:phase-policy}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}X}
+\toprule
+比较 & 主要结果 & 解释边界 \\
+\midrule
+diverse top-512 vs budget-32 & 17/0/21，score $-2.477\%$ & 只精确计分 512/8192 个候选 \\
+diverse top-512 vs wide-128 & 均值 gap $+0.003\%$ & 接近宽搜索，不是 score 支配 \\
+diverse top-512 vs random mean & 17/0/21，$p=1.53\times10^{-5}$ & 绝对幅度约 $0.01\%$ \\
+rotation sequence smoke & 20/20 at $\epsilon=0.125$；5/20 at 0.05 & 仅为 coarse sequence sanity check \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{高维验证与 bridge}
+
+图~\ref{fig:validation} 汇总本稿主图采用的验证覆盖。$n=20$--$64$ item-level symbolic runs 为 6120/6120，其中 $n=48,56,64$ 超大规模压力切片为 480/480；width probe 为 1512/1512，phase-search selected rows 为 531/531，phase-policy selected rows 为 7611/7611，合计 15,774 条符号、phase-search 和 policy-pruning 行通过所属验证器。完整 \ttable{} bridge 在 $n=21$--$30$ 上为 700/700：$n=21,22$ 基础 bridge 120 行，$n=23$ 基础、large-policy 与 cost-aware 三类共 160 行，$n=24$--$30$ 各 60 行。全部 bridge 行同时通过完整 oracle、plan \anf{} 和 emitted-circuit 符号验证。超大规模行只证明生成式实例在符号验证包络内可运行，不等价于 $2^n$ 真值表穷举。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.94\linewidth]{fig5_validation.png}
+\caption{\textbf{验证覆盖。} 主图区分符号验证、phase/policy 验证和完整 \ttable{} bridge；不同验证强度不作等价解释。Source data: \texttt{fig5\_validation.csv}.}
+\label{fig:validation}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\small
+\caption{高维验证与边界。}
+\label{tab:validation}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.34\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}X}
+\toprule
+验证项 & 当前覆盖 & 边界 \\
+\midrule
+$n=20$--$64$ item-level symbolic runs & 6120/6120 & 含 480/480 条 $n=48,56,64$ 压力行；不是完整 \ttable{} 枚举。 \\
+Width probe symbolic runs & 1512/1512 & 证明盲目加宽不是主收益来源，但仍是项集级验证。 \\
+$n=21$--$30$ complete bridge & 700/700 & 生成式小样本完整枚举，不能外推为 $n=31$--$64$ 全部函数。 \\
+Phase-search selected rows & 531/531 & up to global phase 验证，不输出高精度旋转序列。 \\
+Phase-policy selected rows & 7611/7611 & learned shortlist 的候选级验证，不是 phase 全局最优。 \\
+Rotation-sequence smoke & 20/20 at $\epsilon=0.125$ & 粗粒度单比特 sanity check；$\epsilon=0.05$ 仅 5/20。 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{讨论}
+
+当前证据支持一个具体而有边界的结论：\method{} 是一种逻辑层、资源约束的量子布尔函数 oracle 综合方法，它在同函数、同验证器的 bit-flip benchmark 上降低 T-count 和加权资源分数。该结论不是“击败所有指标”。SSHR-H/SSHR-I 保留 CNOT 优势，CirKit 保留 depth 优势，Caterpillar 保留 CNOT 优势，RevKit CLI 在多数传统函数上使用更少辅助线，公开 STG 小函数最优库也显著优于本文的 tiny-function T-count。把这些负向结果放入正文，能够区分“强 T/score operating point”与“不存在的全资源支配”。
+
+消融进一步校准了 AI 的作用。最大资源改善来自可搜索的 \anf{}/\fprm{}/Boolean-ring 动作空间和受 guard 保护的 portfolio，而不是 learned prior 单独产生。强 no-\mcts{} 对照把 base/Pareto \mcts{} 的额外 score 收益限定为 1.44\%/4.69\%；随机先验对照则显示 generic bit-flip learned prior 的绝对收益较小且运行时间不利。上下文 bandit fitted-Q controller 是本文最明确的强化学习模块，但它只工作在 search-budget 层：独立测试显示，它以 0.506\% 的平均 always-Pareto score regret 换取 13.13\% 的保守搜索时间下降，并保留 94.90\% 的 Pareto score gain。因而正确表述是“强化学习式质量--搜索开销控制”，而不是端到端 deep RL 生成线路或保证语义正确性。
+
+双向智能实验进一步说明，结构正确不等于学习有效，局部求解更优也不等于全局线路更优。式~\eqref{eq:equivariant-layer} 的等变性质已由单元测试严格验证，但当前 C0--C7 pilot 只足以保留 policy-only 路径；learned value 的负向结果表明，错误的价值目标会覆盖结构归纳偏置带来的收益。类似地，\qaoa{}-shot 在式~\eqref{eq:diversity-objective} 上比 greedy 更接近 exact，却没有获得置信区间排除 1 的端到端资源改善。两组结果共同把下一步问题从“是否再加一个模型或量子模块”转化为“哪一种训练与调度目标能够预测非局部搜索回报”。
+
+就 Quantum for AI 而言，E2 已满足最小的因果条件：\qaoa{} 输出决定哪些独立 action edge 获得预算，27/60 行的准入集合相对 greedy 改变，搜索轨迹因而改变；repair、fallback 和 not-invoked 又被单独记录。该阶段的 noisy 模式仅在 QAOA 测量端施加独立 bit-flip，用于审计调度器鲁棒性，不是线路执行噪声。固定 $p=1$ 的 statevector/shot 模拟既不构成复杂度加速证据，也不能外推到真实设备。因此，当前 Q4AI 结果应称为“量子子程序辅助 AI 搜索的受审计原型”，而非量子优势。
+
+E3 则把 AI for Quantum 闭环推进到不同的证据层：逻辑 Plan 经精确原生分解和耦合路由后，由含一比特、双比特与读出 Pauli 错误的实际 quantum trajectories 产生标签，再由冻结模型调整 held-out 搜索效用。标定内 $R^2=0.8995$ 表明结构特征能够预测执行风险，但主比较的 NLL 差为正且置信区间跨零，说明“预测得准”并不自动产生“干预后更优”。根动作到最终 Plan 的多对一收敛，以及 Plan 差异到有限-shot 端点的再次稀释，是与数据一致的机制解释；样本仅含 $n=4$ 函数、噪声方差较大也仍是竞争解释。由于 test 标签从未参与模型或超参数选择，本文保留该负结果，而不在留出集上调反馈权重追逐正向结论。
+
+AES E4 案例把这种错配从随机小函数推进到密码构件。\qaoa{} 在 8/8 个冻结池上达到 exact objective，并使 5/8 个准入集合和 4/8 个逻辑 QASM 相对 greedy 发生变化，证明局部组合解能够传导到应用线路；然而逻辑资源分数恶化 0.448\%，原生门均值的下降又只有 2/2/4 的逐坐标支持，并主要由单个坐标驱动。两种方向并存说明，式~\eqref{eq:diversity-objective} 中的 learned utility 与集合冗余尚未表达路由后的双比特开销。含噪成功仅 5/4096，则进一步阻止从当前样本估计可靠的执行差异。因而 E4 的学术价值不是提供一个 AES 优势数字，而是定位可证伪的目标错配：下一轮 Quantum for AI 调度应在不读取 held-out 标签的前提下，把 calibration 中可获得的原生 2q、SWAP、depth 与预测执行风险写入同一选择目标，再检验局部 exact 命中是否与应用端点同向。
+
+E4-v2 实际执行了上述目标修正，却没有把点估计升级为稳定结论。执行感知 \qaoa{} 的原生双比特门数差为负，但区间 $[-2059.0625,589.9375]$ 跨零；而且 AES 坐标已被 E4 观察，故该结果只能检验冻结机制的可重复执行，不能支持跨家族泛化。E5 随后用来源闭合的 v4 模型、释放前冻结的权重与 ASCON/PRESENT 外部家族进一步收紧证据，却暴露了更基础的矛盾：ASCON 的五个标量坐标全部落入零动作 direct root，PRESENT 也只有 6 个 family-bit-seed 组能够调用调度器。此时把主比较写成“差异为零”会混淆“干预无效”与“干预从未存在”；预设活动门和事后 90/90 重建共同阻止了这种解释。
+
+跨构建与全新安装复验进一步排除了一个较弱的替代解释：E5 的协议拒绝并非由某个 Torch/BLAS 构建改变了离散搜索决策所致。神经连续分数在两个构建间出现微小且有界的舍入差异，但候选结构、\qaoa{} 选择和最终线路逐项不变。该证据提升的是负结果的可移植性，而不是方法效果；软件合同通过也不能替代家族活动门、真实硬件或性能区间门。
+
+这一矛盾指向 E6-MSO（多输出共享表达式 Boolean Oracle），而不是简单降低单坐标最小因子次数阈值。标量坐标逐一综合便于完整真值表验证，却删除了不同输出之间可复用的 monomial 与 semi-affine 结构；放宽单坐标阈值只能增加局部候选，不能恢复被表示切断的跨输出共享关系。本文已实现隔离的机制 MVP：以 VectorANF 同时表示多个输出支撑集，为每个合法共享表达式完整枚举 fanout 不小于 2 的目标子集，并将计算、向多个目标位 fanout 和反计算写成可验证的 compute--fanout--uncompute 动作；整条程序复用不超过 2 条显式 workspace 线。该资源口径仅是 abstract logical X/CNOT/MCT proxy，不包含 MCT 分解所需的隐式辅助位，也不是硬件精确门数。
+
+候选的输出--项 footprint 形成硬冲突，软冗余与操作级效用进入同一冻结 QUBO；解析罚项门和小规模全 $2^K$ 能量审计保证不可行最低能态不能被静默接受。\qaoa{} phase 只接收这组 QUBO 系数，测量后再分别记录直接可行、精确 repair 与 fallback，因而 Quantum for AI 子程序没有借用额外 feasibility oracle。独立整改复审已覆盖 partial-fanout、phase Hamiltonian、罚项、大数比较和资源边界，但这仍只是机制与语义合同。AI for Quantum 侧的输入/输出置换等变 shared policy/value、Quantum for AI 轨迹 replay、来源冻结 bundle 和锁后盲测均未完成，因此本文不把该 MVP 写成 E6 性能结果。
+
+ASCON 与 PRESENT 的表、坐标及退化结构已经在 E5 中被观察，后续不能再把它们标为盲测。E6 的泛化检验应先锁定 VectorANF、冲突定义、模型、训练数据、端点和 verifier，再由锁后承诺的 SHA 派生此前未见的双射 S-box；只有在每个新家族满足预设最小活动度后，才允许比较 shared policy/value、经典调度与 \qaoa{} replay 的资源效应。
+
+三条硬件路线进一步表明，可移植性应拆分为逻辑契约的可接入性、路线内的语义保真性与执行证据三层。超导路线达到合成拓扑上的完整基态与含噪轨迹，离子阱路线达到 ideal 全酉矩阵等价，光量子路线只达到可机器检查的先决条件边界。这种不对称不是把三条路线拼成一个模块列表，而是使未获得的证据成为 manifest 中的可审计状态。由于原生字母表、耦合模型和资源定义不同，当前门数不能跨路线直接比较，也不能用 ideal 等价推断设备级性能。
+
+高维结果主要回答可扩展性与正确性包络，而不是最优性。$n=20$--$64$ 的符号行验证了 plan 与 emitted circuit 的 GF(2) 语义，$n=21$--$30$ 的 700/700 方法行进一步通过完整真值表检查。两类证据相互补充，但强度不同：符号验证可以扩展到更大 $n$，完整真值表 bridge 则受指数增长限制，只覆盖生成式窄切片。实验论据阶梯因此把头部小函数、外部工具、可逆/phase、完整 bridge、超大规模符号压力和 AI 归因分开报告。
+
+phase/Rz 分支同样保持有界。Affine-FPRM、wide-128 和 diverse shortlist 证明该代数搜索可以迁移到 up-to-global-phase 的逻辑 proxy，并在不同旋转成本假设下保持稳定趋势。random shortlist 的绝对差异仍很小，coarse rotation-sequence smoke 也没有形成高精度后端。由此不能把 RevKit \texttt{oracle\_synth} 的 phase netlist 直接换算成精确 Clifford+T T-count，也不能声称已解决近似旋转综合。
+
+跨路线抽象也留下了明确的设备级缺口。离子阱路线只在全连接理想参考上统计 $R_z/R_x/R_{XX}$，没有脉冲 duration、heating、串扰、离子链重配置或标定噪声；光量子路线尚未选定编码与资源态，也未定义测量、feed-forward、损耗、探测与 heralding，因而没有门级映射或成功概率。三条路线的 \texttt{hardware\_execution} 均为 false，不支持真机可用性或性能主张。
+
+其余限制均来自当前实验设计本身。ROS-style LUT 和 garbage-aware rows 仍是 proxy，而不是官方 ROS/SAT 全流程；mockturtle、Caterpillar、CirKit 和 ABC 行是逻辑网络或 API probe；RevKit CLI 是 exact-oracle reversible-synthesis counterpoint，但仍不包含统一硬件 mapping。E3/E4 及超导路线只使用 synthetic heavy-hex-like 局部耦合图、固定初始布局、确定性最短路 SWAP 和独立 Pauli 噪声；它们没有优化 placement、脉冲级 scheduling、真实设备校准、弛豫、串扰、magic-state factory 或容错开销模型。原生映射与含噪反馈因而只支持所声明 profile 内的机制检验，不能反向提升全部逻辑层基线为硬件结论。E4 已覆盖 FIPS~197 AES S-box 八个标量坐标的完整逻辑 Oracle 语义、调度干预和 sampled noisy endpoints，但没有执行 AES-scale 原生全基态穷举等价，也没有联合综合共享中间量的多输出 SubBytes、完整 AES 轮或攻击电路。ASCON/PRESENT 已进入 E5 development 观察却没有可接受的性能端点，不能继续充当未见盲测；SM4 仍因标准表与独立 checksum 未完成审计而保持阻断。
+
+\section{结论}
+
+本文把密码 Boolean Oracle 编译中的表示冗余、搜索冗余和执行代理错配统一为一个双向智能研究问题。AI for Quantum 路径用置换等变 policy 引导严格可验证的 Neural \mcts{}；Quantum for AI 路径用 \qaoa{} 在固定预算下选择独立分支；原生门、路由与实际含噪轨迹再把执行风险反馈到 AI 搜索。传统小函数与外部逻辑工具证据支持 \method{} 的低 T-count/低加权 score operating point，而 C0--C7 与 420 次同池调度实验进一步表明：policy-only 存在小幅有效信号，当前 learned value 应关闭；\qaoa{}-shot 更接近 exact 的局部组合解并真实改变搜索轨迹，但最终资源收益尚未稳定超过 greedy。AES E4 的 8/8 exact-objective 命中、5/8 准入集合变化和 4/8 QASM 变化又把这一干预传播到密码案例，同时由逻辑、原生和 noisy 指标的分歧排除了未经证据支持的应用优势结论。
+
+E3 完成了闭环机制，却没有通过改善门：冻结执行反馈相对历史 \qaoa{} 的 held-out NLL 差为 $+0.001293$，95\% CI 为 $[-0.001170,0.004719]$。E4 又表明，即使 \qaoa{} 完全命中冻结池 exact objective，逻辑资源、原生资源和含噪端点仍可能不同向。E4-v2 把执行特征直接写入冻结 utility 后，原生双比特门数点估计转为 $-513.9375$，但 95\% CI $[-2059.0625,589.9375]$ 仍跨零，且只能作为 post-E4 复现。E5 在 ASCON/PRESENT 上进一步发现 0/6 个可调度组；90/90 事后重建没有改变家族活动门失败，也没有产生可接受的性能端点。
+
+E5 的跨构建 V3 与 fresh-validation v2 又表明，这一拒绝在不同 Torch 二进制构建及全新依赖安装中保持同一离散搜索、线路和端点。它闭合的是负向证据的可移植性，而非 AI for Quantum 的性能收益或 Quantum for AI 的量子优势。
+
+这些证据把后续创新问题从“是否接入硬件代理”推进为“标量候选表示是否为双向智能提供了可识别的共享动作”。E6-MSO 的机制 MVP 已把 VectorANF、跨输出 monomial/semi-affine 共享、compute--fanout--uncompute 与冲突 QUBO 纳入同一可测试语义合同；下一步才是输出置换等变 shared policy/value 与 \qaoa{} replay。当前尚无 E6 正式性能结果；未来只有在协议锁后由承诺 SHA 派生的未见双射 S-box 上，同时通过家族活动门、语义门和区间门，才能把当前受审计的双向原型升级为具有跨家族证据的密码 Oracle 编译方法。
+
+三路线硬件 bundle 把这一闭环置于可审计的设备抽象之上：超导 synthetic 路线提供原生/含噪执行层，离子阱 ideal 路线提供全酉矩阵级语义保真，光量子路线则在先决条件不足时显式拒绝伪映射。这一结果扩展的是 AI for Quantum 与 Quantum for AI 共享的证据接口，并不改变无真机、无跨路线性能比较与无量子优势的结论边界。
+
+\section*{数据与代码可用性}
+
+本文使用的当前代码、实验驱动、模型、已选择的 XA evidence、LaTeX 表格和审计报告维护在项目仓库的 \path{experiments/} 与 \path{docs/} 目录；历史原始 CSV、旧 sweep、旧投稿包和早期文稿在 \path{misc/archive/} 中只读保存。E1--E4、E4-v2 与硬件路线的正式证据 bundle，以及 E5 的 preflight、seal、失败与负向审计证据，统一维护在 \path{experiments/results/xa202609/} 或其明确标注的只读历史路径。每个正式 run 均包含 raw JSONL 或路线 payload、summary/manifest、verifier、环境或语义契约 SHA、artifact manifest 和 checksum；通过的完整性 verifier、失败的性能协议门与事后负向审计在文中分别解释，不互相替代。
+
+E2 的完整 run ID、冻结配置与 manifest SHA 记录在 \path{docs/competition/evidence/E2_QAOA_SCHEDULER_EVIDENCE.md}。E3 的 calibration/test run ID、预注册判据、完整 SHA 和负向结果解释记录在 \path{docs/competition/evidence/E3_NATIVE_FEEDBACK_EVIDENCE.md}；其中冻结模型、calibration summary、test summary 与原生/噪声 profile 的 SHA-256 前缀依次为 \texttt{b9b0df42}、\texttt{9945a2f3}、\texttt{328e12e2} 与 \texttt{57b9a651}。E3 是合成 profile 上的实际含噪模拟，不含真机数据；相关产物不会被表述为真实硬件优势。
+
+E4 的正式 run ID 为 \texttt{20260812-e4-aes-bidirectional-pilot-v1-s520000}。其 dataset SHA-256 为 \texttt{5861a36a\ldots83c0}，覆盖 FIPS~197 前向 S-box 的全部八个坐标；独立 verifier 的 17 项重算检查全部为 true。该 bundle 的原生门数来自确定性 synthetic profile 编译，noisy outcome 来自 seeded statevector Pauli trajectories；二者均不是真机数据，且 bundle 明确记录 AES-scale 原生穷举等价未运行。
+
+E4-v2 的 calibration/replication run ID 分别为 \path{20260812-e4-v2-frozen-replication-v1-s530000-cal} 与 \path{20260812-e4-v2-frozen-replication-v1-s530000-test}。Replication summary 将数据角色明确标为 post-E4 frozen AES replication，并同时关闭泛化主张与性能改善主张；主比较、四臂公平性、逻辑/原生契约和 sampled noisy diagnostic 均可由独立 verifier 重算。
+
+E5 使用的来源闭合模型 bundle 为 \path{20260812-foundation-v4-provenance-formal-s20260904}。v1 的 preflight/seal run ID 为 \path{20260812-e5-preflight-external-crypto-v1-s840000} 与 \path{20260812-e5-seal-external-crypto-v1-s840000}；首次释放失败证据只读保存在 \path{misc/archive/experiments/xa202609-development/e5-first-release-root-scheduler-contract-failure-20260812/}。v1.1 的 preflight、seal、90 行评估与事后负向审计分别为 \path{20260812-e5-v11-preflight-external-crypto-v1-s840000}、\path{20260812-e5-v11-seal-external-crypto-v1-s840000}、\path{20260812-e5-v11-ascon-primary-present-secondary-v1-s940000} 与 \path{20260812-e5-v11-negative-audit-v1-s950000}。评估 bundle 的声明 verifier 因 ASCON 无可调度组而保持 \texttt{ok=false}；负向审计 verifier 的 \texttt{ok=true} 只认证 90/90 重建和原失败状态未被改写。
+
+E5 的跨构建科学审计与全新安装证据分别位于 \path{20260812-e5-v11-portable-negative-audit-v3-s950000} 和 \path{20260812-e5-v11-portable-fresh-validation-v2-s970000}。前者的 bundle snapshot SHA-256 为 \texttt{4ba1d958\ldots02ea}，后者为 \texttt{dd75a9bc\ldots1d23}；fresh-validation 外置 anchor 位于 \path{experiments/configs/xa202609/e5_v11_portable_fresh_validation_v2.anchor.json}，其 SHA-256 为 \texttt{036dc0ca\ldots{}d686}。验证器必须由 bundle 外部获得该 anchor 值后再解析内容，从而避免用自含 checksum 证明自身；当前内部审计包的上层 manifest 已同时固定 anchor、八个完整依赖九件套及其逐文件 SHA。两个证据层均保持 \texttt{protocol\_acceptance=false} 与 \texttt{experiment\_completed=false}，不构成性能、真机或量子优势证据。
+
+硬件路线正式 run ID 为 \texttt{20260812-hardware-routes-v1-s202609}，routes manifest SHA-256 前缀为 \texttt{6c3b3758}。独立 bundle verifier 的 27 项检查全部为 true，并重算超导路线、离子阱路线与光量子边界的语义而不信任 builder 摘要。三条路线均显式记录 \texttt{hardware\_execution=false}。
+
+\begin{thebibliography}{99}
+
+\bibitem{brayton2010abc}
+R.~K. Brayton and A.~Mishchenko.
+\newblock ABC: An academic industrial-strength verification tool.
+\newblock In \emph{Computer Aided Verification}, LNCS 6174, pp.~24--40, 2010.
+
+\bibitem{nist2023aes}
+National Institute of Standards and Technology.
+\newblock Advanced Encryption Standard (AES).
+\newblock FIPS PUB 197-upd1, 2023. \url{https://doi.org/10.6028/NIST.FIPS.197-upd1}.
+
+\bibitem{nist2025ascon}
+National Institute of Standards and Technology.
+\newblock Ascon-Based Lightweight Cryptography Standards for Constrained Devices.
+\newblock NIST SP 800-232, 2025. \url{https://doi.org/10.6028/NIST.SP.800-232}.
+
+\bibitem{bogdanov2007present}
+A.~Bogdanov, L.~R. Knudsen, G.~Leander, C.~Paar, A.~Poschmann,
+M.~J.~B. Robshaw, Y.~Seurin, and C.~Vikkelsoe.
+\newblock PRESENT: An ultra-lightweight block cipher.
+\newblock In \emph{CHES 2007}, LNCS 4727, pp.~450--466, 2007.
+\newblock \url{https://doi.org/10.1007/978-3-540-74735-2_31}.
+
+\bibitem{caterpillar}
+G.~Meuli and collaborators.
+\newblock Caterpillar: Quantum circuit synthesis for Boolean functions.
+\newblock \url{https://github.com/gmeuli/caterpillar}, 2026.
+
+\bibitem{li2010contextual}
+L.~Li, W.~Chu, J.~Langford, and R.~E. Schapire.
+\newblock A contextual-bandit approach to personalized news article recommendation.
+\newblock In \emph{Proceedings of WWW}, pp.~661--670, 2010.
+
+\bibitem{watkins1992qlearning}
+C.~J. C.~H. Watkins and P.~Dayan.
+\newblock Q-learning.
+\newblock \emph{Machine Learning}, 8:279--292, 1992.
+
+\bibitem{ernst2005fittedq}
+D.~Ernst, P.~Geurts, and L.~Wehenkel.
+\newblock Tree-based batch mode reinforcement learning.
+\newblock \emph{Journal of Machine Learning Research}, 6:503--556, 2005.
+
+\bibitem{farhi2014qaoa}
+E.~Farhi, J.~Goldstone, and S.~Gutmann.
+\newblock A quantum approximate optimization algorithm.
+\newblock \emph{arXiv:1411.4028}, 2014.
+
+\bibitem{wille2009bdd}
+R.~Wille and R.~Drechsler.
+\newblock BDD-based synthesis of reversible logic for large functions.
+\newblock In \emph{Proceedings of DAC}, pp.~270--275, 2009.
+
+\bibitem{meuli2020ros}
+G.~Meuli, M.~Soeken, M.~Roetteler, and G.~De Micheli.
+\newblock ROS: Resource-constrained oracle synthesis for quantum computers.
+\newblock \emph{Electronic Proceedings in Theoretical Computer Science}, 318:119--130, 2020.
+
+\bibitem{meuli2022xag}
+G.~Meuli, M.~Soeken, and G.~De Micheli.
+\newblock Xor-And-Inverter Graphs for quantum compilation.
+\newblock \emph{npj Quantum Information}, 8:7, 2022.
+
+\bibitem{soeken2018epfl}
+M.~Soeken, G.~Meuli, E.~Testa, H.~Nada, M.~Reymond, B.~Dang, G.~De Micheli, and A.~Mishchenko.
+\newblock The EPFL logic synthesis libraries.
+\newblock \emph{arXiv:1805.05121}, 2018.
+
+\bibitem{revkit}
+M.~Soeken and collaborators.
+\newblock RevKit: Python quantum compilation library.
+\newblock \url{https://github.com/msoeken/revkit}.
+
+\bibitem{mockturtle}
+M.~Soeken and collaborators.
+\newblock mockturtle: logic network optimization and synthesis.
+\newblock \url{https://mockturtle.readthedocs.io/}.
+
+\bibitem{cirkit}
+M.~Soeken and collaborators.
+\newblock CirKit: logic synthesis and optimization framework.
+\newblock \url{https://github.com/msoeken/cirkit}.
+
+\bibitem{zheng2025sshr}
+Q.~Zheng, Y.~Xu, J.~Zhang, Z.~Su, and S.~Zheng.
+\newblock CNOT oriented synthesis for small-scale Boolean functions using spatial structures of parallelotopes.
+\newblock In \emph{Proceedings of ICCAD}, 2025.
+
+\bibitem{tsaras2024shortcircuit}
+D.~Tsaras, A.~Grosnit, L.~Chen, Z.~Xie, H.~Bou-Ammar, and M.~Yuan.
+\newblock ShortCircuit: AlphaZero-driven circuit design.
+\newblock \emph{arXiv:2408.09858}, 2024.
+
+\bibitem{rietsch2024unitary}
+S.~Rietsch, A.~Y. Dubey, C.~Ufrecht, M.~Periyasamy, A.~Plinge, C.~Mutschler, and D.~D. Scherer.
+\newblock Unitary synthesis of Clifford+T circuits with reinforcement learning.
+\newblock In \emph{IEEE International Conference on Quantum Computing and Engineering}, pp.~824--835, 2024.
+
+\bibitem{riu2025rlzx}
+J.~Riu, J.~Nogu{\'e}, G.~Vilaplana, A.~Garcia-Saez, and M.~P. Estarellas.
+\newblock Reinforcement learning based quantum circuit optimization via ZX-calculus.
+\newblock \emph{Quantum}, 9:1758, 2025.
+
+\bibitem{machiya2026monteq}
+M.~Machiya, M.~Menickelly, P.~Hovland, and J.~Liu.
+\newblock MonteQ: A Monte Carlo tree search based quantum circuit synthesis framework.
+\newblock \emph{arXiv:2604.19029}, 2026.
+
+\bibitem{qpresyn2026}
+D.~Lizzio Bosco, L.~Cincio, G.~Serra, and M.~Cerezo.
+\newblock Quantum circuit pre-synthesis: Learning local edits to reduce $T$-count.
+\newblock \emph{arXiv:2601.19738}, 2026.
+
+\bibitem{stabqram2025}
+G.~Li, Y.~Gan, Z.~Wu, X.~Zhang, Z.~Zhang, and J.~Liu.
+\newblock Stab-QRAM: An all-Clifford quantum random access memory for special data.
+\newblock \emph{arXiv:2509.26494}, 2025.
+
+\bibitem{bdd2seq2025}
+M.~Miao, J.~Tang, G.~Hu, and H.~Zhang.
+\newblock BDD2Seq: Enabling scalable reversible-circuit synthesis via graph-to-sequence learning.
+\newblock \emph{arXiv:2511.08315}, 2025.
+
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,290 @@
+{"kind":"slide","id":"sl/y90nupkv","slide":1,"title":"面向密码 Boolean Oracle 的","textShapes":2}
+{"kind":"textbox","id":"sh/7qp4be9c","slide":1,"name":"矩形 3","text":"面向密码 Boolean Oracle 的\n双向智能编译","textPreview":"面向密码 Boolean Oracle 的 | 双向智能编译","textChars":28,"textLines":2,"bbox":[-0.47,119.4,1281.93,306.6]}
+{"kind":"textbox","id":"sh/fu94fe98","slide":1,"name":"文本框 7","text":"AI for Quantum：置换等变 Neural MCTS\nQuantum for AI：QAOA 固定预算调度\n执行闭环：原生门、路由与含噪反馈\nXA-202609｜杭州电子科技大学｜周子翔","textPreview":"AI for Quantum：置换等变 Neural MCTS | Quantum for AI：QAOA 固定预算调度 | 执行闭环：原生门、路由与含噪反馈 | XA-202609｜杭州电子科技大学｜周子翔","textChars":98,"textLines":4,"bbox":[546.93,425.07,734.47,268.93]}
+{"kind":"image","id":"im/7mp0jixo","slide":1,"name":"图片 4","bbox":[802.53,10,451,109.33]}
+{"kind":"image","id":"im/jqxw72dk","slide":1,"name":"图片 1","bbox":[0.87,426.67,422.4,259.27]}
+{"kind":"notes","id":"nt/y90nupkv","slide":1,"text":"开场：本项目把密码 Boolean Oracle 编译作为 AI4Q 与 Q4AI 的同一决策接口。\n强调 AI 和量子子程序只改变搜索次序与预算，语义正确性由确定性验证器裁决。\n[Sources]\n- docs/papers/resource_nmcts/chinese/main.tex\n- docs/project/PROJECT_STATUS_XA202609.md"}
+{"kind":"slide","id":"sl/hwbqtkby","slide":2,"title":"三类错配约束编译","textShapes":5}
+{"kind":"shape","id":"sh/b29kza94","slide":2,"name":"矩形 3","bbox":[-0.47,128.13,1281.93,16]}
+{"kind":"textbox","id":"sh/x4r21kru","slide":2,"name":"文本框 5","text":"三类错配约束编译","textPreview":"三类错配约束编译","textChars":8,"textLines":1,"bbox":[93.47,26.47,760,90.67]}
+{"kind":"textbox","id":"sh/w3i1sfa9","slide":2,"name":"圆角矩形 6","text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[36.2,41.07,57.27,61.47]}
+{"kind":"shape","id":"sh/ozy1ofad","slide":2,"name":"文本框 2","bbox":[36.2,144.13,596.2,130.93]}
+{"kind":"textbox","id":"sh/9072xkry","slide":2,"name":"矩形 1","text":"等变 policy、QAOA 调度与执行反馈分别对应三类错配，并接受独立检验。","textPreview":"等变 policy、QAOA 调度与执行反馈分别对应三类错配，并接受独立检验。","textChars":39,"textLines":1,"bbox":[54.13,621.87,1152,53.67]}
+{"kind":"textbox","id":"sh/mtwrmxg7","slide":2,"name":"矩形 11","text":"● 表示错配：变量重标号不改函数，却造成重复学习\n● 搜索错配：高效用分支相互重叠，浪费固定预算\n● 执行错配：逻辑 T/CNOT/depth 不等于含噪风险","textPreview":"● 表示错配：变量重标号不改函数，却造成重复学习 | ● 搜索错配：高效用分支相互重叠，浪费固定预算 | ● 执行错配：逻辑 T/CNOT/depth 不等于含噪风险","textChars":79,"textLines":3,"bbox":[36.2,144.53,1136.33,110.8]}
+{"kind":"shape","id":"sh/xcrupg3u","slide":2,"name":"矩形 36","bbox":[74.67,267.8,511.33,333.67]}
+{"kind":"shape","id":"sh/nu58f2hs","slide":2,"name":"矩形 12","bbox":[632.47,266.6,556,333.67]}
+{"kind":"textbox","id":"sh/wjy9sry9","slide":2,"name":"文本框 13","text":"证据：中文主稿 §1、§4；PROJECT_STATUS_XA202609","textPreview":"证据：中文主稿 §1、§4；PROJECT_STATUS_XA202609","textChars":37,"textLines":1,"bbox":[0,688.93,1271.33,31.07]}
+{"kind":"image","id":"im/tgritonm","slide":2,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
+{"kind":"image","id":"im/sfi1kjm1","slide":2,"name":"","bbox":[94.6,277.93,464.26,320.87]}
+{"kind":"image","id":"im/onmt8ral","slide":2,"name":"","bbox":[658.4,286.86,505.93,302.87]}
+{"kind":"notes","id":"nt/hwbqtkby","slide":2,"text":"这一页定义科学问题，而不是罗列功能。三种错配分别对应 H1-H4 的可证伪实验。\n左图说明逻辑资源存在多目标折中；右图说明学习控制与语义权威被分离。\n[Sources]\n- docs/papers/resource_nmcts/chinese/main.tex\n- docs/project/PROJECT_STATUS_XA202609.md\n- docs/papers/resource_nmcts/english/figures/submission_v36/fig1_pipeline.png\n- docs/papers/resource_nmcts/english/figures/submission_v36/fig2_traditional_resources.png"}
+{"kind":"slide","id":"sl/ofy9wn61","slide":3,"title":"双向闭环共用接口","textShapes":22}
+{"kind":"shape","id":"sh/298ryl4v","slide":3,"name":"矩形 3","bbox":[-0.47,128.13,1281.93,16]}
+{"kind":"textbox","id":"sh/obq90bml","slide":3,"name":"文本框 5","text":"双向闭环共用接口","textPreview":"双向闭环共用接口","textChars":8,"textLines":1,"bbox":[93.47,26.47,702.27,90.67]}
+{"kind":"textbox","id":"sh/pcjqtg36","slide":3,"name":"圆角矩形 6","text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[36.2,41.07,57.27,61.47]}
+{"kind":"shape","id":"sh/83ulovat","slide":3,"name":"矩形 12","bbox":[34.53,183.2,1210.93,129.93]}
+{"kind":"textbox","id":"sh/n2l4fq98","slide":3,"name":"矩形 9","text":"Neural MCTS 优化 Oracle","textPreview":"Neural MCTS 优化 Oracle","textChars":21,"textLines":1,"bbox":[298.2,228.8,544.47,53.13]}
+{"kind":"textbox","id":"sh/943mhgre","slide":3,"name":"矩形 11","text":"严格验证","textPreview":"严格验证","textChars":4,"textLines":1,"bbox":[941.78,228.8,284.13,53.13]}
+{"kind":"textbox","id":"sh/v6l4jq94","slide":3,"name":"矩形 13","text":"AI4Q","textPreview":"AI4Q","textChars":4,"textLines":1,"bbox":[67.52,228.8,213.13,45.6]}
+{"kind":"shape","id":"sh/x8nml0ra","slide":3,"name":"右箭头 15","bbox":[859.18,234.8,66.07,35.73]}
+{"kind":"textbox","id":"sh/ja54na9g","slide":3,"name":"矩形 17","text":"双向目标","textPreview":"双向目标","textChars":4,"textLines":1,"bbox":[419.93,159.53,440.07,45.6]}
+{"kind":"textbox","id":"sh/czmhc7id","slide":3,"name":"矩形 34","text":"变量重标号","textPreview":"变量重标号","textChars":5,"textLines":1,"bbox":[75.28,473.79,284.13,53.13]}
+{"kind":"shape","id":"sh/hwzihwzi","slide":3,"name":"矩形 37","bbox":[34.47,369,1211,333.13]}
+{"kind":"textbox","id":"sh/wv61obyx","slide":3,"name":"矩形 38","text":"表示错配","textPreview":"表示错配","textChars":4,"textLines":1,"bbox":[102.42,406.96,228,45.6]}
+{"kind":"textbox","id":"sh/32l0j2dw","slide":3,"name":"矩形 42","text":"同一决策闭环","textPreview":"同一决策闭环","textChars":6,"textLines":1,"bbox":[420.03,346.14,440,45.6]}
+{"kind":"textbox","id":"sh/byd032h8","slide":3,"name":"矩形 35","text":"冻结候选池","textPreview":"冻结候选池","textChars":5,"textLines":1,"bbox":[505.34,473.87,284.13,53.13]}
+{"kind":"textbox","id":"sh/4nuhs7uh","slide":3,"name":"矩形 39","text":"搜索错配","textPreview":"搜索错配","textChars":4,"textLines":1,"bbox":[533.41,407.41,228,45.6]}
+{"kind":"textbox","id":"sh/a10b6p03","slide":3,"name":"文本框 50","text":"执行错配","textPreview":"执行错配","textChars":4,"textLines":1,"bbox":[946.3,406.96,228,48.47]}
+{"kind":"textbox","id":"sh/xoruhkje","slide":3,"name":"矩形 51","text":"原生门 + NLL","textPreview":"原生门 + NLL","textChars":9,"textLines":1,"bbox":[918.23,471.52,284.13,53.13]}
+{"kind":"shape","id":"sh/2p4f6dk3","slide":3,"name":"右箭头 15","bbox":[398.63,410.12,66.07,35.73]}
+{"kind":"shape","id":"sh/3qxwfilo","slide":3,"name":"右箭头 15","bbox":[842.59,415.09,66.07,35.73]}
+{"kind":"textbox","id":"sh/tgry9ofu","slide":3,"name":"文本框 26","text":"π(σ·s)=σ·π(s)","textPreview":"π(σ·s)=σ·π(s)","textChars":13,"textLines":1,"bbox":[245.57,568.2,124.47,67.2]}
+{"kind":"textbox","id":"sh/psfeh83u","slide":3,"name":"文本框 62","text":"等变 policy","textPreview":"等变 policy","textChars":9,"textLines":1,"bbox":[48.7,541.13,195.07,85.47]}
+{"kind":"textbox","id":"sh/qtofadkf","slide":3,"name":"文本框 63","text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[213.23,562.44,37.48,41.59]}
+{"kind":"textbox","id":"sh/bexwjil0","slide":3,"name":"文本框 64","text":"QAOA 选 B/K","textPreview":"QAOA 选 B/K","textChars":10,"textLines":1,"bbox":[445.2,562.73,189,37.73]}
+{"kind":"textbox","id":"sh/dgfyls3q","slide":3,"name":"文本框 66","text":"独立 action edge","textPreview":"独立 action edge","textChars":14,"textLines":1,"bbox":[657.34,562.53,202.73,53.13]}
+{"kind":"textbox","id":"sh/6xkvytkb","slide":3,"name":"文本框 67","text":"feedback","textPreview":"feedback","textChars":8,"textLines":1,"bbox":[914.86,526.77,131.59,107.63]}
+{"kind":"textbox","id":"sh/m1c3mlsn","slide":3,"name":"文本框 10","text":"root utility","textPreview":"root utility","textChars":12,"textLines":1,"bbox":[1104.5,525.13,105.16,93.95]}
+{"kind":"textbox","id":"sh/e10f2twf","slide":3,"name":"文本框 19","text":"held-out endpoint","textPreview":"held-out endpoint","textChars":17,"textLines":1,"bbox":[996.13,625.33,229.87,49.4]}
+{"kind":"textbox","id":"sh/03ix43e5","slide":3,"name":"文本框 21","text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[955,625.2,86.27,45.73]}
+{"kind":"shape","id":"sh/m5cra54z","slide":3,"name":"箭头: 右 20","bbox":[630.6,574.09,36.1,34.76]}
+{"kind":"shape","id":"sh/n6ls3alk","slide":3,"name":"箭头: 右 20","bbox":[1057.47,561.83,36.1,34.76]}
+{"kind":"image","id":"im/0v6l8nu9","slide":3,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
+{"kind":"notes","id":"nt/ofy9wn61","slide":3,"text":"AI4Q 路径：结构学习用于排序合法动作；Q4AI 路径：QAOA 决定有限预算给哪些独立根边。\n执行反馈再把原生/含噪标签作用回根效用，形成同一闭环。\n[Sources]\n- docs/papers/resource_nmcts/chinese/main.tex\n- docs/project/TECHNICAL_DESIGN.md"}
+{"kind":"slide","id":"sl/jyx0ra1s","slide":4,"title":"双向架构贯通证据","textShapes":16}
+{"kind":"shape","id":"sh/rm1k7yt4","slide":4,"name":"矩形 3","bbox":[-0.47,128.13,1281.93,16]}
+{"kind":"textbox","id":"sh/doj29oba","slide":4,"name":"文本框 5","text":"双向架构贯通证据","textPreview":"双向架构贯通证据","textChars":8,"textLines":1,"bbox":[93.47,26.47,702.27,90.67]}
+{"kind":"textbox","id":"sh/sna103ap","slide":4,"name":"圆角矩形 6","text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[36.2,41.07,57.27,61.47]}
+{"kind":"shape","id":"sh/2xkrih8b","slide":4,"name":"矩形 22","bbox":[36.2,187.66,572.01,505.88]}
+{"kind":"textbox","id":"sh/tsrqlc7u","slide":4,"name":"矩形 27","text":"逻辑搜索与调度","textPreview":"逻辑搜索与调度","textChars":7,"textLines":1,"bbox":[159.38,155.13,312.23,54.12]}
+{"kind":"shape","id":"sh/5cva1cfq","slide":4,"name":"矩形 10","bbox":[671.79,187.66,572.91,505.88]}
+{"kind":"shape","id":"sh/jadsz2xk","slide":4,"name":"文本框 12","bbox":[1181.42,188.62,54.43,141.37]}
+{"kind":"textbox","id":"sh/w72947yt","slide":4,"name":"矩形 13","text":"原生执行与反馈","textPreview":"原生执行与反馈","textChars":7,"textLines":1,"bbox":[829.66,155.13,312.23,54.12]}
+{"kind":"textbox","id":"sh/h4fa9wfy","slide":4,"name":"矩形 18","text":"ANF / FPRM\n合法代数动作","textPreview":"ANF / FPRM | 合法代数动作","textChars":17,"textLines":2,"bbox":[351.87,255.6,228.67,99.93]}
+{"kind":"shape","id":"sh/gv29g7q5","slide":4,"name":"箭头: 右 24","bbox":[447.18,372.68,38.01,43.97]}
+{"kind":"textbox","id":"sh/knex8j21","slide":4,"name":"矩形 31","text":"等变 policy","textPreview":"等变 policy","textChars":9,"textLines":1,"bbox":[351.84,424.51,228.7,54.12]}
+{"kind":"shape","id":"sh/axcf29kj","slide":4,"name":"箭头: 右 33","bbox":[447.18,494.77,38.01,43.97]}
+{"kind":"textbox","id":"sh/vy5gbe14","slide":4,"name":"矩形 34","text":"Neural MCTS","textPreview":"Neural MCTS","textChars":11,"textLines":1,"bbox":[369.6,552.8,193.2,54.13]}
+{"kind":"textbox","id":"sh/mtcfypkn","slide":4,"name":"矩形 37","text":"冻结候选池","textPreview":"冻结候选池","textChars":5,"textLines":1,"bbox":[700.73,255.6,241.8,54.13]}
+{"kind":"textbox","id":"sh/fm5c3q54","slide":4,"name":"矩形 39","text":"QAOA 选 B/K","textPreview":"QAOA 选 B/K","textChars":10,"textLines":1,"bbox":[679.2,393.6,275.87,54.13]}
+{"kind":"textbox","id":"sh/p0batw72","slide":4,"name":"文本框 19","text":"正确性门：Plan ANF → Circuit GF(2) → Truth table → Native full-basis","textPreview":"正确性门：Plan ANF → Circuit GF(2) → Truth table → Native full-basis","textChars":63,"textLines":1,"bbox":[67.51,642.1,241.9,38.01]}
+{"kind":"shape","id":"sh/ilwf69kv","slide":4,"name":"箭头: 右 29","bbox":[809.21,327.15,38.01,43.97]}
+{"kind":"shape","id":"sh/476d076h","slide":4,"name":"直接箭头连接符 50","bbox":[1040.99,398.56,37.47,0]}
+{"kind":"shape","id":"sh/36xw7m5c","slide":4,"name":"直接箭头连接符 54","bbox":[1048.91,440.59,22.04,7.1]}
+{"kind":"shape","id":"sh/i5ovyhor","slide":4,"name":"直接箭头连接符 56","bbox":[1017.38,447.7,51.67,34.83]}
+{"kind":"textbox","id":"sh/wr694nm1","slide":4,"name":"文本框 57","text":"负结果\n也留痕","textPreview":"负结果 | 也留痕","textChars":7,"textLines":2,"bbox":[1082.91,430.21,93.84,60.53]}
+{"kind":"shape","id":"sh/1cj2d8b6","slide":4,"name":"箭头: 右 30","bbox":[831.2,454.69,38.01,43.97]}
+{"kind":"textbox","id":"sh/0ba143al","slide":4,"name":"矩形 2","text":"含噪执行","textPreview":"含噪执行","textChars":4,"textLines":1,"bbox":[985.78,588.67,228.7,54.12]}
+{"kind":"shape","id":"sh/v6tsv2xo","slide":4,"name":"矩形 16","bbox":[687.64,539.25,541.21,125.62]}
+{"kind":"textbox","id":"sh/1wbapc7q","slide":4,"name":"矩形 23","text":"原生分解 / 路由","textPreview":"原生分解 / 路由","textChars":9,"textLines":1,"bbox":[713.87,588.39,228.7,54.12]}
+{"kind":"textbox","id":"sh/fu9sn2p0","slide":4,"name":"矩形 25","text":"执行反馈回根效用","textPreview":"执行反馈回根效用","textChars":8,"textLines":1,"bbox":[829.73,511.93,258.93,54.13]}
+{"kind":"shape","id":"sh/ih8ju9sn","slide":4,"name":"矩形 8","bbox":[351.93,543.67,228.6,136]}
+{"kind":"textbox","id":"sh/kbm987y5","slide":4,"name":"矩形 9","text":"Pareto 档案","textPreview":"Pareto 档案","textChars":9,"textLines":1,"bbox":[369.67,617.53,193.2,54.07]}
+{"kind":"textbox","id":"sh/3ihk3et8","slide":4,"name":"文本框 7","text":"AI4Q：模型只排序可验证动作，不直接生成门序列","textPreview":"AI4Q：模型只排序可验证动作，不直接生成门序列","textChars":24,"textLines":1,"bbox":[67.51,427.36,241.9,38.01]}
+{"kind":"image","id":"im/kr2l4zyt","slide":4,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
+{"kind":"notes","id":"nt/jyx0ra1s","slide":4,"text":"从输入到输出，AI 和量子模块没有任何一步可以越过验证器。\n这使每个创新模块都能独立替换、消融或失败，而不会损坏 Oracle 语义。\n[Sources]\n- docs/papers/resource_nmcts/chinese/main.tex\n- docs/project/TECHNICAL_DESIGN.md\n- experiments/src/synthesizers.py"}
+{"kind":"slide","id":"sl/i107q5of","slide":5,"title":"等变策略消除重复","textShapes":11}
+{"kind":"shape","id":"sh/fid07u98","slide":5,"name":"矩形 39","bbox":[456.27,150.87,327.73,377.27]}
+{"kind":"shape","id":"sh/z2tcnm5s","slide":5,"name":"矩形 3","bbox":[-0.47,128.13,1281.93,16]}
+{"kind":"textbox","id":"sh/l4bupwny","slide":5,"name":"文本框 5","text":"等变策略消除重复","textPreview":"等变策略消除重复","textChars":8,"textLines":1,"bbox":[93.47,26.47,702.27,90.67]}
+{"kind":"textbox","id":"sh/032tgr6d","slide":5,"name":"圆角矩形 6","text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[36.2,41.07,57.27,61.47]}
+{"kind":"shape","id":"sh/58vehgvy","slide":5,"name":"文本框 14","bbox":[934.09,133.43,226.93,54.12]}
+{"kind":"textbox","id":"sh/cf2tcr61","slide":5,"name":"矩形 2","text":"状态编码\nT×n×12 结构张量","textPreview":"状态编码 | T×n×12 结构张量","textChars":16,"textLines":2,"bbox":[63.2,218.6,332.07,90.93]}
+{"kind":"textbox","id":"sh/n6dcr65o","slide":5,"name":"矩形 7","text":"共享聚合\n单项式行置换不变","textPreview":"共享聚合 | 单项式行置换不变","textChars":13,"textLines":2,"bbox":[63.2,383.67,332.07,90.93]}
+{"kind":"textbox","id":"sh/m5kbi1oj","slide":5,"name":"矩形 8","text":"动作头\n变量重标号等变","textPreview":"动作头 | 变量重标号等变","textChars":11,"textLines":2,"bbox":[63.2,548.73,332.07,90.93]}
+{"kind":"shape","id":"sh/tcfel0vu","slide":5,"name":"箭头: 右 18","bbox":[213.67,330.87,46.27,31.47]}
+{"kind":"textbox","id":"sh/dgbulwnm","slide":5,"name":"矩形 1","text":"候选排序\n只作用于合法动作","textPreview":"候选排序 | 只作用于合法动作","textChars":13,"textLines":2,"bbox":[899.93,218.73,299.47,89.85]}
+{"kind":"textbox","id":"sh/kny587i9","slide":5,"name":"矩形 28","text":"C0–C7 因果消融\npolicy / value 可分离","textPreview":"C0–C7 因果消融 | policy / value 可分离","textChars":29,"textLines":2,"bbox":[900,381.13,299.4,89.26]}
+{"kind":"shape","id":"sh/ji5kf2ho","slide":5,"name":"箭头: 右 34","bbox":[1026.47,326.08,46.47,36.44]}
+{"kind":"shape","id":"sh/kjelony9","slide":5,"name":"箭头: 右 35","bbox":[1028.85,490.85,41.71,36.44]}
+{"kind":"textbox","id":"sh/5kn2hszu","slide":5,"name":"矩形 36","text":"部署 gate\n保留 policy-only","textPreview":"部署 gate | 保留 policy-only","textChars":22,"textLines":2,"bbox":[900,543.27,299.4,96.47]}
+{"kind":"shape","id":"sh/v2twb6dw","slide":5,"name":"矩形 12","bbox":[40.67,177.93,381.53,475.4]}
+{"kind":"textbox","id":"sh/j6dwfqds","slide":5,"name":"矩形 16","text":"等变表示","textPreview":"等变表示","textChars":4,"textLines":1,"bbox":[133.27,151.33,179.8,54.13]}
+{"kind":"shape","id":"sh/gfi5grih","slide":5,"name":"矩形 20","bbox":[878.93,177.93,339.87,475.4]}
+{"kind":"textbox","id":"sh/sb6xsvu9","slide":5,"name":"矩形 17","text":"可审计决策","textPreview":"可审计决策","textChars":5,"textLines":1,"bbox":[955.26,149.37,188.82,54.12]}
+{"kind":"shape","id":"sh/ud0ne10b","slide":5,"name":"箭头: 右 22","bbox":[213.67,495.93,46.27,31.47]}
+{"kind":"shape","id":"sh/2h0ni107","slide":5,"name":"文本框 26","bbox":[488.57,473.92,132.73,22.83]}
+{"kind":"shape","id":"sh/k7mxovud","slide":5,"name":"矩形 13","bbox":[583.4,427,128.87,15.33]}
+{"kind":"textbox","id":"sh/wve1knyx","slide":5,"name":"文本框 31","text":"结构归纳偏置只负责搜索控制；语义由确定性验证器裁决。","textPreview":"结构归纳偏置只负责搜索控制；语义由确定性验证器裁决。","textChars":26,"textLines":1,"bbox":[-0.47,685.33,1199.87,37]}
+{"kind":"shape","id":"sh/ihw3mxg3","slide":5,"name":"直接连接符 33","bbox":[784.6,536.33,115.87,10.4]}
+{"kind":"shape","id":"sh/e1sjatgz","slide":5,"name":"直接连接符 37","bbox":[784.6,636.33,116.93,33.6]}
+{"kind":"shape","id":"sh/bqx0fe9g","slide":5,"name":"直接连接符 47","bbox":[395.27,151,63.6,67.6]}
+{"kind":"shape","id":"sh/qp4jm98v","slide":5,"name":"直接连接符 48","bbox":[394.87,308.87,59.73,217.6]}
+{"kind":"image","id":"im/329w3qho","slide":5,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
+{"kind":"image","id":"im/i10fulg3","slide":5,"name":"图片 44","bbox":[456.27,536.73,327.73,134.2]}
+{"kind":"image","id":"im/54re5gzu","slide":5,"name":"图片 10","bbox":[481.6,354.67,277,167.6]}
+{"kind":"image","id":"im/43ixwvy9","slide":5,"name":"图片 11","bbox":[463.67,151.22,315.82,200.08]}
+{"kind":"notes","id":"nt/i107q5of","slide":5,"text":"等变结构对应表示错配：变量重标号后，动作分数随标签同步移动。\npolicy 和 value 独立开关，因此可以用因果消融决定部署配置。\n[Sources]\n- docs/papers/resource_nmcts/chinese/main.tex\n- experiments/src/foundation/encoding.py\n- experiments/src/foundation/equivariant.py"}
+{"kind":"slide","id":"sl/x8f69ofe","slide":6,"title":"E1：Policy 胜出","textShapes":9}
+{"kind":"shape","id":"sh/87ipkzal","slide":6,"name":"矩形 3","bbox":[-0.47,128.13,1281.93,16]}
+{"kind":"textbox","id":"sh/ml07i9sv","slide":6,"name":"文本框 5","text":"E1：Policy 胜出","textPreview":"E1：Policy 胜出","textChars":12,"textLines":1,"bbox":[93.47,26.47,595.2,90.67]}
+{"kind":"textbox","id":"sh/7m98ru9g","slide":6,"name":"圆角矩形 6","text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[36.2,41.07,57.27,61.47]}
+{"kind":"textbox","id":"sh/yhg7epsj","slide":6,"name":"文本框 1","text":"● 因果 pilot：C1/C0=0.981169，W/L/T=4/0/2；独立 gate：0.96415，95% CI [0.93739,0.98970]\n● value-only=1.007893；policy+value=1.002635","textPreview":"● 因果 pilot：C1/C0=0.981169，W/L/T=4/0/2；独立 gate：0.96415，95% CI [0.93739,0.98970] | ● value-only=1.007893；policy+value=1.002635","textChars":122,"textLines":2,"bbox":[27.53,145.67,1233.6,70.47]}
+{"kind":"textbox","id":"sh/svmt4v6t","slide":6,"name":"文本框 18","text":"证据：E1 validation + independent policy-gate test；均为 held-out 小样本，不外推跨族泛化。","textPreview":"证据：E1 validation + independent policy-gate test；均为 held-out 小样本，不外推跨族泛化。","textChars":72,"textLines":1,"bbox":[0,688.8,1200.13,31.53]}
+{"kind":"textbox","id":"sh/0fy5k3id","slide":6,"name":"矩形 23","text":"决策：等变 policy 进入后续实验；当前 learned value 关闭，负结果保留。","textPreview":"决策：等变 policy 进入后续实验；当前 learned value 关闭，负结果保留。","textChars":46,"textLines":1,"bbox":[36.2,617.87,1200.13,49.13]}
+{"kind":"shape","id":"sh/lg76d8zy","slide":6,"name":"矩形 24","bbox":[62.93,264.73,368.27,342.47]}
+{"kind":"textbox","id":"sh/zep4byhs","slide":6,"name":"文本框 26","text":"因果消融：score/C0","textPreview":"因果消融：score/C0","textChars":13,"textLines":1,"bbox":[94,561.87,300,37.13]}
+{"kind":"shape","id":"sh/w32twb6l","slide":6,"name":"矩形 10","bbox":[847.47,266,384.2,341.13]}
+{"kind":"textbox","id":"sh/v2tcn650","slide":6,"name":"文本框 11","text":"效果与搜索代价","textPreview":"效果与搜索代价","textChars":7,"textLines":1,"bbox":[908.67,561.87,303.27,36.47]}
+{"kind":"shape","id":"sh/u1kbu1ov","slide":6,"name":"矩形 12","bbox":[443.47,266,384.73,341.13]}
+{"kind":"textbox","id":"sh/5svutgni","slide":6,"name":"文本框 13","text":"独立 gate：95% CI","textPreview":"独立 gate：95% CI","textChars":14,"textLines":1,"bbox":[489,562.47,303,36.47]}
+{"kind":"textbox","id":"sh/idk7ehkr","slide":6,"name":"E1 diagnostic metrics","text":"函数簇 W / L / T\n4 / 0 / 4\n\n时间比\n1.1336\n\n8 个 held-out 函数簇","textPreview":"函数簇 W / L / T | 4 / 0 / 4 |  | 时间比 | 1.1336 |  | 8 个 held-out 函数簇","textChars":53,"textLines":7,"bbox":[853.2,273.8,377.93,269.67]}
+{"kind":"chart","id":"ch/knmpczix","slide":6,"name":"Chart","chartType":"bar","bbox":[68.67,274.53,351.27,282.6]}
+{"kind":"chart","id":"ch/bydoza1g","slide":6,"name":"Chart","chartType":"line","bbox":[446.87,273.87,377.93,269.67]}
+{"kind":"image","id":"im/6l0nax83","slide":6,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
+{"kind":"notes","id":"nt/x8f69ofe","slide":6,"text":"这页只做配置选择：policy-only 有初步且独立的正向证据；value 目标当前不可靠。\n独立 gate test 覆盖 8 个函数簇、n=6–9、3 个 solver seeds；仍属于 preliminary evidence。\n[Sources]\n- experiments/results/xa202609/20260809-e1-policy-gate-test-v3-t96-v2/summary.json\n- docs/planning/EXPERIMENT_ROADMAP_XA202609.md\n- docs/contracts/COMPETITION_ACCEPTANCE_MATRIX.json"}
+{"kind":"slide","id":"sl/gnmp4jqx","slide":7,"title":"QAOA 重排预算","textShapes":13}
+{"kind":"shape","id":"sh/ydkbm5sv","slide":7,"name":"矩形 3","bbox":[-0.47,128.13,1281.93,16]}
+{"kind":"textbox","id":"sh/kzmdova1","slide":7,"name":"文本框 5","text":"QAOA 重排预算","textPreview":"QAOA 重排预算","textChars":9,"textLines":1,"bbox":[93.47,26.47,702.27,90.67]}
+{"kind":"textbox","id":"sh/l0vuh0rm","slide":7,"name":"圆角矩形 6","text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[36.2,41.07,57.27,61.47]}
+{"kind":"shape","id":"sh/c3a5wzq5","slide":7,"name":"矩形 34","bbox":[36.53,175.53,482.77,518]}
+{"kind":"textbox","id":"sh/b2h4nupk","slide":7,"name":"矩形 35","text":"冻结候选池","textPreview":"冻结候选池","textChars":5,"textLines":1,"bbox":[147.31,155.13,261.21,45.6]}
+{"kind":"shape","id":"sh/a18nup8z","slide":7,"name":"矩形 36","bbox":[553,179.6,668.67,513.93]}
+{"kind":"textbox","id":"sh/lsj6t47m","slide":7,"name":"矩形 37","text":"固定基数选择","textPreview":"固定基数选择","textChars":6,"textLines":1,"bbox":[733.75,158.76,337.29,45.6]}
+{"kind":"textbox","id":"sh/fi9c369c","slide":7,"name":"矩形 8","text":"QUBO：效用 − λ·重叠","textPreview":"QUBO：效用 − λ·重叠","textChars":14,"textLines":1,"bbox":[612.63,233.27,286.27,60.35]}
+{"kind":"shape","id":"sh/p8fih03e","slide":7,"name":"椭圆 15","bbox":[1013.27,280.59,13.72,13.12]}
+{"kind":"shape","id":"sh/sj6l0zel","slide":7,"name":"直接箭头连接符 17","bbox":[961.74,291.82,53.53,32.8]}
+{"kind":"textbox","id":"sh/eh4jil4r","slide":7,"name":"文本框 18","text":"高效用候选","textPreview":"高效用候选","textChars":5,"textLines":1,"bbox":[889.13,317.09,86.87,23.62]}
+{"kind":"textbox","id":"sh/r2dkrq5g","slide":7,"name":"矩形 24","text":"Exact / Greedy / QAOA\n共享输入","textPreview":"Exact / Greedy / QAOA | 共享输入","textChars":26,"textLines":2,"bbox":[612.6,395.53,286.33,89.87]}
+{"kind":"shape","id":"sh/d4f2t0nm","slide":7,"name":"椭圆 26","bbox":[1013.02,419.43,13.72,13.12]}
+{"kind":"shape","id":"sh/e5o32lor","slide":7,"name":"椭圆 27","bbox":[976.83,349.86,13.72,13.12]}
+{"kind":"shape","id":"sh/p0zmlk7u","slide":7,"name":"椭圆 29","bbox":[1051.39,419.43,13.72,13.12]}
+{"kind":"shape","id":"sh/ozq5szq9","slide":7,"name":"椭圆 30","bbox":[977.67,455.04,13.72,13.12]}
+{"kind":"shape","id":"sh/nyh4jupo","slide":7,"name":"椭圆 31","bbox":[1125.1,349.86,13.72,13.12]}
+{"kind":"shape","id":"sh/2x8nqp83","slide":7,"name":"椭圆 32","bbox":[999.3,488.98,13.72,13.12]}
+{"kind":"textbox","id":"sh/x4j6p47q","slide":7,"name":"文本框 33","text":"低重叠子集","textPreview":"低重叠子集","textChars":5,"textLines":1,"bbox":[1013.02,479,132.45,37.99]}
+{"kind":"textbox","id":"sh/honq18ru","slide":7,"name":"矩形 40","text":"独立 root edge","textPreview":"独立 root edge","textChars":12,"textLines":1,"bbox":[612.63,577.35,286.27,60.35]}
+{"kind":"shape","id":"sh/betc36tg","slide":7,"name":"椭圆 53","bbox":[1012.17,587.09,13.72,13.12]}
+{"kind":"shape","id":"sh/adkbu1cv","slide":7,"name":"椭圆 54","bbox":[975.98,517.52,13.72,13.12]}
+{"kind":"shape","id":"sh/xgbu5gbm","slide":7,"name":"椭圆 55","bbox":[1050.54,587.09,13.72,13.12]}
+{"kind":"shape","id":"sh/cf2twbu1","slide":7,"name":"椭圆 56","bbox":[976.83,622.7,13.72,13.12]}
+{"kind":"shape","id":"sh/ripsrmtc","slide":7,"name":"椭圆 57","bbox":[1124.26,517.52,13.72,13.12]}
+{"kind":"textbox","id":"sh/uponm90b","slide":7,"name":"文本框 59","text":"搜索轨迹改变","textPreview":"搜索轨迹改变","textChars":6,"textLines":1,"bbox":[1012.17,646.67,132.45,37.99]}
+{"kind":"shape","id":"sh/gbq5ojih","slide":7,"name":"椭圆 61","bbox":[992.69,656.64,13.72,13.12]}
+{"kind":"shape","id":"sh/hczmhoz2","slide":7,"name":"箭头: 右 62","bbox":[723.55,334.39,64.43,37.04]}
+{"kind":"shape","id":"sh/6loni90f","slide":7,"name":"箭头: 右 63","bbox":[723.24,512.8,64.43,37.04]}
+{"kind":"textbox","id":"sh/7mx4buh0","slide":7,"name":"矩形 64","text":"同一候选池 K=10 / B=4","textPreview":"同一候选池 K=10 / B=4","textChars":16,"textLines":1,"bbox":[82.29,234.66,374.99,55.02]}
+{"kind":"shape","id":"sh/q143ylov","slide":7,"name":"矩形 23","bbox":[110.73,459.13,216.07,19.87]}
+{"kind":"shape","id":"sh/a9ojq5kz","slide":7,"name":"椭圆 10","bbox":[126.29,600.1,13.72,13.12]}
+{"kind":"shape","id":"sh/xcz2l03q","slide":7,"name":"椭圆 11","bbox":[164.63,530.53,13.72,13.12]}
+{"kind":"shape","id":"sh/25ojml43","slide":7,"name":"椭圆 14","bbox":[202.04,564.06,13.72,13.12]}
+{"kind":"shape","id":"sh/9k3qx8ry","slide":7,"name":"椭圆 44","bbox":[238.34,635.7,13.72,13.12]}
+{"kind":"shape","id":"sh/mxc7mts7","slide":7,"name":"椭圆 45","bbox":[90.94,564.04,13.72,13.12]}
+{"kind":"shape","id":"sh/cj2lo3id","slide":7,"name":"直接箭头连接符 46","bbox":[102.67,575.27,25.6,26.73]}
+{"kind":"shape","id":"sh/dkb2h8ji","slide":7,"name":"直接箭头连接符 47","bbox":[138,541.73,28.67,60.27]}
+{"kind":"shape","id":"sh/qhk3mtk7","slide":7,"name":"直接箭头连接符 48","bbox":[140,575.27,64.07,31.4]}
+{"kind":"shape","id":"sh/ritkfy1s","slide":7,"name":"直接箭头连接符 49","bbox":[138,611.33,102.33,26.27]}
+{"kind":"shape","id":"sh/q5s7edkj","slide":7,"name":"椭圆 76","bbox":[323.89,600.03,13.72,13.12]}
+{"kind":"shape","id":"sh/54jq58je","slide":7,"name":"椭圆 77","bbox":[362.23,530.46,13.72,13.12]}
+{"kind":"shape","id":"sh/4japc32t","slide":7,"name":"椭圆 78","bbox":[399.64,563.99,13.72,13.12]}
+{"kind":"shape","id":"sh/gj2doje1","slide":7,"name":"椭圆 79","bbox":[435.94,635.64,13.72,13.12]}
+{"kind":"shape","id":"sh/hkvuxovm","slide":7,"name":"椭圆 80","bbox":[288.54,565.57,13.72,13.12]}
+{"kind":"shape","id":"sh/jmxofml8","slide":7,"name":"直接箭头连接符 81","bbox":[300.27,576.8,25.6,26.73]}
+{"kind":"shape","id":"sh/ilonmhkn","slide":7,"name":"直接箭头连接符 82","bbox":[335.6,541.67,28.67,60.27]}
+{"kind":"shape","id":"sh/58z6hw3y","slide":7,"name":"直接箭头连接符 83","bbox":[337.6,575.2,64.07,31.4]}
+{"kind":"shape","id":"sh/k765or2d","slide":7,"name":"直接箭头连接符 84","bbox":[335.6,611.33,102.33,26.27]}
+{"kind":"textbox","id":"sh/2l4vqtc7","slide":7,"name":"文本框 85","text":"准入预算 B","textPreview":"准入预算 B","textChars":6,"textLines":1,"bbox":[312.8,651.87,112.53,32.8]}
+{"kind":"textbox","id":"sh/3mdczydc","slide":7,"name":"文本框 86","text":"候选池 K","textPreview":"候选池 K","textChars":5,"textLines":1,"bbox":[115.8,651.87,112.53,32.8]}
+{"kind":"image","id":"im/axo7m9k3","slide":7,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
+{"kind":"image","id":"im/byhove18","slide":7,"name":"图片 9","bbox":[977.93,211.33,161.15,118.3]}
+{"kind":"image","id":"im/wzqpoj2t","slide":7,"name":"图片 25","bbox":[977.67,349.86,161.15,118.3]}
+{"kind":"image","id":"im/x0z6x4je","slide":7,"name":"图片 52","bbox":[976.83,517.52,161.15,118.3]}
+{"kind":"image","id":"im/y187q9kz","slide":7,"name":"图片 2","bbox":[82.33,308.6,373.93,200.8]}
+{"kind":"image","id":"im/j2hoze1k","slide":7,"name":"图片 7","bbox":[90.94,530.53,161.15,118.3]}
+{"kind":"image","id":"im/vq1onehs","slide":7,"name":"图片 75","bbox":[288.54,530.46,161.15,118.3]}
+{"kind":"notes","id":"nt/gnmp4jqx","slide":7,"text":"QAOA 不生成量子线路，它求解固定基数的效用—多样性组合优化。\n被选中的动作才成为独立 root action edge，排除动作的访问数保持为零。\n[Sources]\n- docs/competition/evidence/E2_QAOA_SCHEDULER_EVIDENCE.md\n- experiments/configs/xa202609/e2_qaoa_scheduler_v1.json\n- docs/papers/resource_nmcts/chinese/main.tex"}
+{"kind":"slide","id":"sl/fu1gfa1s","slide":8,"title":"E2：局部优，端点未定","textShapes":6}
+{"kind":"shape","id":"sh/ri9g7uhw","slide":8,"name":"矩形 3","bbox":[-0.47,128.13,1281.93,16]}
+{"kind":"textbox","id":"sh/tkby9kzm","slide":8,"name":"文本框 5","text":"E2：局部优，端点未定","textPreview":"E2：局部优，端点未定","textChars":11,"textLines":1,"bbox":[93.47,26.47,760,90.67]}
+{"kind":"textbox","id":"sh/sjix0zy1","slide":8,"name":"圆角矩形 6","text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[36.2,41.07,57.27,61.47]}
+{"kind":"textbox","id":"sh/18byd4zy","slide":8,"name":"文本框 1","text":"● 20 个 held-out 函数 × 3 seeds × 7 调度器 = 420 trials；QAOA-shot 改变 27/60 个准入集合","textPreview":"● 20 个 held-out 函数 × 3 seeds × 7 调度器 = 420 trials；QAOA-shot 改变 27/60 个准入集合","textChars":74,"textLines":1,"bbox":[27.53,145.67,1228.13,70.47]}
+{"kind":"textbox","id":"sh/lgbepgvm","slide":8,"name":"文本框 18","text":"E2 bundle 20260810-e2-qaoa-scheduler-v1-s120000；24/24 verifier；180/180 QAOA，fallback=0。","textPreview":"E2 bundle 20260810-e2-qaoa-scheduler-v1-s120000；24/24 verifier；180/180 QAOA，fallback=0。","textChars":87,"textLines":1,"bbox":[0,674.73,1200.13,31.53]}
+{"kind":"textbox","id":"sh/5sne5wne","slide":8,"name":"矩形 23","text":"QAOA-shot：Exact hit 81.7%，regret 0.002288；Score/greedy 的 95% CI 仍跨 1。","textPreview":"QAOA-shot：Exact hit 81.7%，regret 0.002288；Score/greedy 的 95% CI 仍跨 1。","textChars":69,"textLines":1,"bbox":[36.2,617.87,1200.13,49.13]}
+{"kind":"shape","id":"sh/kredcr6t","slide":8,"name":"矩形 24","bbox":[62.93,264.73,368.27,342.47]}
+{"kind":"textbox","id":"sh/i5wva1o3","slide":8,"name":"文本框 26","text":"冻结池命中率","textPreview":"冻结池命中率","textChars":6,"textLines":1,"bbox":[165.13,561.87,188.67,37.13]}
+{"kind":"chart","id":"ch/w3ypovep","slide":8,"name":"Chart","chartType":"bar","bbox":[68.67,274.53,351.27,282.6]}
+{"kind":"table","id":"tb/9ojapsvq","slide":8,"name":"","rows":5,"cols":4,"preview":"指标 | Greedy | QAOA-shot | 判读","bbox":[455.93,277.2,747.73,318.27]}
+{"kind":"image","id":"im/uhsbqhkf","slide":8,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
+{"kind":"notes","id":"nt/fu1gfa1s","slide":8,"text":"QAOA-shot 明显提高局部 exact-objective 命中并真实改变搜索轨迹。\n但最终资源分数的函数簇区间跨 1，因此不能表述为稳定资源收益或量子加速。\n[Sources]\n- docs/competition/evidence/E2_QAOA_SCHEDULER_EVIDENCE.md\n- experiments/results/xa202609/20260810-e2-qaoa-scheduler-v1-s120000/summary.json"}
+{"kind":"slide","id":"sl/udsvah03","slide":9,"title":"原生执行生成标签","textShapes":16}
+{"kind":"shape","id":"sh/nex4jq5k","slide":9,"name":"矩形 3","bbox":[-0.47,128.13,1281.93,16]}
+{"kind":"textbox","id":"sh/9gzml0nq","slide":9,"name":"文本框 5","text":"原生执行生成标签","textPreview":"原生执行生成标签","textChars":8,"textLines":1,"bbox":[93.47,26.47,702.27,90.67]}
+{"kind":"textbox","id":"sh/ofq5svm5","slide":9,"name":"圆角矩形 6","text":"4","textPreview":"4","textChars":1,"textLines":1,"bbox":[36.2,41.07,57.27,61.47]}
+{"kind":"shape","id":"sh/ml8j6p8n","slide":9,"name":"矩形 22","bbox":[36.2,187.66,572.01,505.88]}
+{"kind":"textbox","id":"sh/xgzitk76","slide":9,"name":"矩形 27","text":"离线 calibration","textPreview":"离线 calibration","textChars":14,"textLines":1,"bbox":[159.38,155.13,312.23,54.12]}
+{"kind":"shape","id":"sh/p0ji9kf2","slide":9,"name":"矩形 10","bbox":[671.79,187.66,572.91,505.88]}
+{"kind":"shape","id":"sh/3y107axw","slide":9,"name":"文本框 12","bbox":[1181.42,188.62,54.43,141.37]}
+{"kind":"textbox","id":"sh/cnu1kzyd","slide":9,"name":"矩形 13","text":"冻结 held-out 干预","textPreview":"冻结 held-out 干预","textChars":14,"textLines":1,"bbox":[829.66,155.13,312.23,54.12]}
+{"kind":"textbox","id":"sh/lsn2h4fa","slide":9,"name":"矩形 18","text":"逻辑 Plan\nX/CNOT/MCT","textPreview":"逻辑 Plan | X/CNOT/MCT","textChars":18,"textLines":2,"bbox":[351.87,255.6,228.67,99.93]}
+{"kind":"shape","id":"sh/wba1cjqp","slide":9,"name":"箭头: 右 24","bbox":[447.18,372.68,38.01,43.97]}
+{"kind":"textbox","id":"sh/onmxcv69","slide":9,"name":"矩形 31","text":"原生分解","textPreview":"原生分解","textChars":4,"textLines":1,"bbox":[351.84,424.51,228.7,54.12]}
+{"kind":"shape","id":"sh/apofe5of","slide":9,"name":"箭头: 右 33","bbox":[447.18,494.77,38.01,43.97]}
+{"kind":"textbox","id":"sh/bqxg7q50","slide":9,"name":"矩形 34","text":"最短路路由","textPreview":"最短路路由","textChars":5,"textLines":1,"bbox":[369.6,552.8,193.2,54.13]}
+{"kind":"textbox","id":"sh/qtkf21ob","slide":9,"name":"矩形 37","text":"56 条候选观测","textPreview":"56 条候选观测","textChars":8,"textLines":1,"bbox":[700.73,255.6,241.8,54.13]}
+{"kind":"textbox","id":"sh/7y14jyd8","slide":9,"name":"矩形 39","text":"ridge α=10","textPreview":"ridge α=10","textChars":10,"textLines":1,"bbox":[679.2,393.6,275.87,54.13]}
+{"kind":"textbox","id":"sh/98ji147e","slide":9,"name":"文本框 19","text":"加噪前：原生门白名单 + 耦合边 + 终态 layout 解码 + 全基态等价","textPreview":"加噪前：原生门白名单 + 耦合边 + 终态 layout 解码 + 全基态等价","textChars":39,"textLines":1,"bbox":[67.51,642.1,241.9,38.01]}
+{"kind":"shape","id":"sh/2l4faloj","slide":9,"name":"箭头: 右 29","bbox":[809.21,327.15,38.01,43.97]}
+{"kind":"shape","id":"sh/svitszu1","slide":9,"name":"直接箭头连接符 50","bbox":[1040.99,398.56,37.47,0]}
+{"kind":"shape","id":"sh/ru9sjudg","slide":9,"name":"直接箭头连接符 54","bbox":[1048.91,440.59,22.04,7.1]}
+{"kind":"shape","id":"sh/6t0bqpcv","slide":9,"name":"直接箭头连接符 56","bbox":[1017.38,447.7,51.67,34.83]}
+{"kind":"textbox","id":"sh/43ul03a1","slide":9,"name":"文本框 57","text":"冻结后\n不再调参","textPreview":"冻结后 | 不再调参","textChars":8,"textLines":2,"bbox":[1082.91,430.21,93.84,60.53]}
+{"kind":"shape","id":"sh/1cfmhgne","slide":9,"name":"箭头: 右 30","bbox":[831.2,454.69,38.01,43.97]}
+{"kind":"textbox","id":"sh/0b65obm9","slide":9,"name":"矩形 2","text":"2×2 同池干预","textPreview":"2×2 同池干预","textChars":8,"textLines":1,"bbox":[985.78,588.67,228.7,54.12]}
+{"kind":"shape","id":"sh/bml0buxs","slide":9,"name":"矩形 16","bbox":[687.64,539.25,541.21,125.62]}
+{"kind":"textbox","id":"sh/hcji5o7a","slide":9,"name":"矩形 23","text":"根动作罚项","textPreview":"根动作罚项","textChars":5,"textLines":1,"bbox":[713.87,588.39,228.7,54.12]}
+{"kind":"textbox","id":"sh/va103ep4","slide":9,"name":"矩形 25","text":"风险模型 → 根效用","textPreview":"风险模型 → 根效用","textChars":10,"textLines":1,"bbox":[829.73,511.93,258.93,54.13]}
+{"kind":"shape","id":"sh/ah8nu54b","slide":9,"name":"矩形 8","bbox":[351.93,543.67,228.6,136]}
+{"kind":"textbox","id":"sh/oza1gfyh","slide":9,"name":"矩形 9","text":"含噪轨迹","textPreview":"含噪轨迹","textChars":4,"textLines":1,"bbox":[369.67,617.53,193.2,54.07]}
+{"kind":"textbox","id":"sh/bih4na5w","slide":9,"name":"文本框 7","text":"synthetic heavy-hex-like profile｜57,344 calibration shots","textPreview":"synthetic heavy-hex-like profile｜57,344 calibration shots","textChars":57,"textLines":1,"bbox":[67.51,427.36,241.9,38.01]}
+{"kind":"image","id":"im/4f21wnmt","slide":9,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
+{"kind":"notes","id":"nt/udsvah03","slide":9,"text":"E3 将逻辑线路转换为 profile-specific 原生线路，并以实际 statevector Pauli trajectories 生成标签。\nCalibration 和 held-out test 完全隔离；test 标签不参与模型或反馈权重选择。\n[Sources]\n- docs/competition/evidence/E3_NATIVE_FEEDBACK_EVIDENCE.md\n- experiments/src/hardware/superconducting.py\n- experiments/src/hardware/noise.py\n- experiments/src/search/execution_feedback.py"}
+{"kind":"slide","id":"sl/m90b6t0r","slide":10,"title":"E3：端点未改善","textShapes":6}
+{"kind":"shape","id":"sh/zelojyl8","slide":10,"name":"矩形 3","bbox":[-0.47,128.13,1281.93,16]}
+{"kind":"textbox","id":"sh/l036l83y","slide":10,"name":"文本框 5","text":"E3：端点未改善","textPreview":"E3：端点未改善","textChars":8,"textLines":1,"bbox":[93.47,26.47,595.2,90.67]}
+{"kind":"textbox","id":"sh/kzu5c32t","slide":10,"name":"圆角矩形 6","text":"4","textPreview":"4","textChars":1,"textLines":1,"bbox":[36.2,41.07,57.27,61.47]}
+{"kind":"textbox","id":"sh/cbu58j2h","slide":10,"name":"矩形 2","text":"NLL Δ=+0.001293，95% CI [-0.001170,0.004719]：负结果保留，不在留出集追逐正结论。","textPreview":"NLL Δ=+0.001293，95% CI [-0.001170,0.004719]：负结果保留，不在留出集追逐正结论。","textChars":61,"textLines":1,"bbox":[55.2,587.73,1172.53,59.87]}
+{"kind":"textbox","id":"sh/p0ru503u","slide":10,"name":"文本框 18","text":"E3 calibration/test bundles；test 为 12 个互斥函数、2 seeds、4 variants。","textPreview":"E3 calibration/test bundles；test 为 12 个互斥函数、2 seeds、4 variants。","textChars":63,"textLines":1,"bbox":[0,675.19,1200.13,44.81]}
+{"kind":"textbox","id":"sh/xc3mho32","slide":10,"name":"文本框 1","text":"● 反馈确实改变决策：QAOA 根选择 6/24 → Plan 4/24 → 原生 2q 3/24；但 H4 未获支持","textPreview":"● 反馈确实改变决策：QAOA 根选择 6/24 → Plan 4/24 → 原生 2q 3/24；但 H4 未获支持","textChars":59,"textLines":1,"bbox":[27.53,145.67,1246.87,70.47]}
+{"kind":"textbox","id":"sh/atwbelcn","slide":10,"name":"矩形 22","text":"Calibration\nR² = 0.8995\nMAE = 0.0457\n\n决策差异\n6 → 4 → 3\n根动作 → Plan → 2q","textPreview":"Calibration | R² = 0.8995 | MAE = 0.0457 |  | 决策差异 | 6 → 4 → 3 | 根动作 → Plan → 2q","textChars":68,"textLines":7,"bbox":[1009.73,267,254.8,306.67]}
+{"kind":"chart","id":"ch/0bqt8r6p","slide":10,"name":"Chart","chartType":"line","bbox":[45,292,780,278]}
+{"kind":"image","id":"im/u5obql8f","slide":10,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
+{"kind":"notes","id":"nt/m90b6t0r","slide":10,"text":"Calibration 内 R²=0.8995，但 held-out NLL 主比较为正且区间跨零。\n6→4→3 展示两层稀释：根动作可能收敛到同一 Plan，Plan 差异又可能被有限-shot 噪声稀释。\n[Sources]\n- docs/competition/evidence/E3_NATIVE_FEEDBACK_EVIDENCE.md\n- experiments/results/xa202609/20260811-e3-cal-native-feedback-v1-s310000/summary.json\n- experiments/results/xa202609/20260811-e3-test-native-feedback-v1-s410000/summary.json"}
+{"kind":"slide","id":"sl/jetc3ut0","slide":11,"title":"局部收益止于统计与协议门","textShapes":6}
+{"kind":"shape","id":"sh/n69grmpw","slide":11,"name":"矩形 3","bbox":[-0.47,128.13,1281.93,16]}
+{"kind":"textbox","id":"sh/98rytw72","slide":11,"name":"文本框 5","text":"局部收益止于统计与协议门","textPreview":"局部收益止于统计与协议门","textChars":12,"textLines":1,"bbox":[93.47,26.47,780,90.67]}
+{"kind":"textbox","id":"sh/o7ih0r6h","slide":11,"name":"圆角矩形 6","text":"5","textPreview":"5","textChars":1,"textLines":1,"bbox":[36.2,41.07,57.27,61.47]}
+{"kind":"shape","id":"sh/wbih4b6d","slide":11,"name":"文本框 2","bbox":[36.2,144.13,596.2,130.93]}
+{"kind":"textbox","id":"sh/xcryxg7y","slide":11,"name":"矩形 1","text":"局部目标可改善，但统计区间与协议门共同阻止端点主张升级。","textPreview":"局部目标可改善，但统计区间与协议门共同阻止端点主张升级。","textChars":28,"textLines":1,"bbox":[54.13,621.87,1152,53.67]}
+{"kind":"textbox","id":"sh/mdobedg3","slide":11,"name":"矩形 11","text":"● E4｜冻结池 exact hit 3/8 → 8/8；selection 5/8，logical QASM 4/8\n● E4-v2｜native 2q Δ=−513.94；95% CI [−2059.06, 589.94]，跨 0\n● E5｜ASCON 0 / PRESENT 6 schedulable groups；audit 90/90，protocol_acceptance=false","textPreview":"● E4｜冻结池 exact hit 3/8 → 8/8；selection 5/8，logical QASM 4/8 | ● E4-v2｜native 2q Δ=−513.94；95% CI [−2059.06, 589.94]，跨 0 | ● E5｜ASCON 0 / ...","textChars":199,"textLines":3,"bbox":[36.2,144.53,1136.33,110.8]}
+{"kind":"shape","id":"sh/14ze9c3i","slide":11,"name":"矩形 36","bbox":[74.67,267.8,511.33,333.67]}
+{"kind":"shape","id":"sh/nehs7iho","slide":11,"name":"矩形 12","bbox":[632.47,266.6,556,333.67]}
+{"kind":"textbox","id":"sh/0b6tc3yx","slide":11,"name":"文本框 13","text":"E4/E4-v2/E5 frozen bundles；PROJECT_STATUS_XA202609","textPreview":"E4/E4-v2/E5 frozen bundles；PROJECT_STATUS_XA202609","textChars":50,"textLines":1,"bbox":[0,688.93,1271.33,31.07]}
+{"kind":"textbox","id":"sh/3qhsfypc","slide":11,"name":"E4-v2 statistical boundary","text":"post-E4 replication\nCI 跨 0｜generalization=false","textPreview":"post-E4 replication | CI 跨 0｜generalization=false","textChars":47,"textLines":2,"bbox":[93.47,515.93,466.53,82.87]}
+{"kind":"chart","id":"ch/tgvm947a","slide":11,"name":"Chart","chartType":"line","bbox":[93.47,277.93,466.53,232]}
+{"kind":"table","id":"tb/bql8va1o","slide":11,"name":"","rows":5,"cols":4,"preview":"门 | 观测 | 审计 | 判读","bbox":[658.4,277.93,505.93,320.73]}
+{"kind":"image","id":"im/hgn69gbe","slide":11,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
+{"kind":"notes","id":"nt/jetc3ut0","slide":11,"text":"E4 仅证明同一冻结候选池中的局部目标命中改善：QAOA 8/8 vs greedy 3/8，且选择差异只有 4/8 传到 logical QASM。\nE4-v2 是 AES 已在 E4 出现后的 post-E4 frozen replication，不是 held-out。primary native-2q 差为 -513.9375，95% CI [-2059.0625, 589.9375] 跨 0，generalization_claim=false。\nE5-v1.1 虽生成 90 行 ASCON/PRESENT 矩阵，但 ASCON 可调度 group 为 0、PRESENT 为 6，family-activity gate 失败。独立 negative audit 重建 90/90 行，仍明确 protocol_acceptance=false。\n因此 E5 没有 accepted endpoint，E4-v2 也没有支持性能改善。\n[Sources]\n- experiments/results/xa202609/20260812-e4-aes-bidirectional-pilot-v1-s520000/summary.json\n- experiments/results/xa202609/20260812-e4-v2-frozen-replication-v1-s530000-test/summary.json\n- experiments/results/xa202609/20260812-e4-v2-frozen-replication-v1-s530000-test/verifier.json\n- experiments/results/xa202609/20260812-e5-v11-ascon-primary-present-secondary-v1-s940000/summary.json\n- experiments/results/xa202609/20260812-e5-v11-negative-audit-v1-s950000/summary.json\n- experiments/results/xa202609/20260812-e5-v11-negative-audit-v1-s950000/verifier.json"}
+{"kind":"slide","id":"sl/8f2psfyx","slide":12,"title":"分层证据链约束主张","textShapes":4}
+{"kind":"shape","id":"sh/b6d4f2lc","slide":12,"name":"文本框 7","bbox":[24.53,215.27,909.93,488.87]}
+{"kind":"shape","id":"sh/ra943il8","slide":12,"name":"矩形 3","bbox":[-0.47,128.13,1281.93,16]}
+{"kind":"textbox","id":"sh/dcbm583y","slide":12,"name":"文本框 5","text":"分层证据链约束主张","textPreview":"分层证据链约束主张","textChars":9,"textLines":1,"bbox":[93.47,26.47,595.2,90.67]}
+{"kind":"textbox","id":"sh/sb2lcnmd","slide":12,"name":"圆角矩形 6","text":"5","textPreview":"5","textChars":1,"textLines":1,"bbox":[36.2,41.07,57.27,61.47]}
+{"kind":"textbox","id":"sh/a543mx4r","slide":12,"name":"文本框 8","text":"● 407 tests + smoke ok｜E4-v2 external：cal 26/26、rep 32/32\n● E5 V3 current/fresh 20/20；fresh-v2 19/19；protocol=false｜35 页中文主稿已同步 Overleaf｜hardware=false","textPreview":"● 407 tests + smoke ok｜E4-v2 external：cal 26/26、rep 32/32 | ● E5 V3 current/fresh 20/20；fresh-v2 19/19；protocol=false｜35 页中文主稿已同步 Overlea...","textChars":151,"textLines":2,"bbox":[24.53,144.13,857,240]}
+{"kind":"textbox","id":"sh/wvupgz6t","slide":12,"name":"文本框 9","text":"E4-v2 26/26 + 32/32\nE5 V3 20/20｜fresh-v2 19/19｜protocol=false","textPreview":"E4-v2 26/26 + 32/32 | E5 V3 20/20｜fresh-v2 19/19｜protocol=false","textChars":61,"textLines":2,"bbox":[993.8,660.07,234.27,44.07]}
+{"kind":"image","id":"im/qp47yl47","slide":12,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
+{"kind":"image","id":"im/dsv6903i","slide":12,"name":"图片 1","bbox":[962.33,147.07,297.27,521.67]}
+{"kind":"image","id":"im/srmp0vmd","slide":12,"name":"屏幕录制 2025-10-21 174103","bbox":[36.2,227.2,880.27,451.13]}
+{"kind":"notes","id":"nt/8f2psfyx","slide":12,"text":"分层验证把语义正确性、调度实现、原生门与 bundle 完整性分别交给独立检查。\n当前集成树回归为 407 passed in 334.05s；legacy smoke 为 smoke ok。\n锚定 fresh-validation V2 的 383 passed in 295.779s 仅为历史冻结锚定，不代表当前集成树。\n交付外层检查记录 E4-v2 calibration 26/26、replication 32/32，E5 V3 current/fresh 20/20、fresh-v2 19/19；这些数字只表示证据链检查通过，不是性能成功率。\nE4-v2 calibration 只使用 12 个非 AES 函数和 72 个候选记录；replication 是 AES 已见坐标上的 64 条 post-E4 四臂复验。E5 portable V3 与 fresh-v2 只闭合跨 build 软件验证，仍明确 protocol_acceptance=false、experiment_completed=false，没有 accepted endpoint。\n35 页唯一中文主稿已同步 Overleaf origin/main c5c6993d1589469a61dfe18000a313d798b1c02f；本地 PDF SHA-256 为 f6a19cf8a7d2e245505777838a934f30219b378a063703784bf6cf535f908d8f。\n所有执行证据仍为 synthetic profile，hardware=false；无真机、量子加速或量子优势主张。\n[Sources]\n- docs/contracts/COMPETITION_ACCEPTANCE_MATRIX.json\n- experiments/results/xa202609/20260812-e4-v2-frozen-replication-v1-s530000-cal/verifier.json\n- experiments/results/xa202609/20260812-e4-v2-frozen-replication-v1-s530000-test/verifier.json\n- experiments/results/xa202609/20260812-e5-v11-portable-negative-audit-v3-s950000/verifier.json\n- experiments/results/xa202609/20260812-e5-v11-portable-fresh-validation-v2-s970000/verifier.json\n- docs/papers/resource_nmcts/chinese/main.tex\n- docs/papers/resource_nmcts/overleaf/worktree (origin/main c5c6993d1589469a61dfe18000a313d798b1c02f)\n- docs/papers/resource_nmcts/chinese/resource_nmcts_competition_current.pdf (SHA-256 f6a19cf8a7d2e245505777838a934f30219b378a063703784bf6cf535f908d8f)"}
+{"kind":"slide","id":"sl/hgzapcr6","slide":13,"title":"下一研究门是 E6-MSO","textShapes":3}
+{"kind":"shape","id":"sh/o3i5w3ad","slide":13,"name":"矩形 3","bbox":[-0.47,128.13,1281.93,16]}
+{"kind":"textbox","id":"sh/21gnuts7","slide":13,"name":"文本框 5","text":"下一研究门是 E6-MSO","textPreview":"下一研究门是 E6-MSO","textChars":13,"textLines":1,"bbox":[93.47,26.47,647.8,90.67]}
+{"kind":"textbox","id":"sh/32ponyts","slide":13,"name":"圆角矩形 6","text":"6","textPreview":"6","textChars":1,"textLines":1,"bbox":[36.2,41.07,57.27,61.47]}
+{"kind":"textbox","id":"sh/q50nydsj","slide":13,"name":"文本框 1","text":"AI4Q｜置换等变 policy + 可验证 Neural MCTS\n把 Boolean 对称性写入结构先验；formal v4 只闭合 provenance，性能仍未验收。\n\nQ4AI｜同池 QAOA + execution-aware utility\nE2/E4 支持局部选择；E4-v2 CI 跨 0，E5 无 accepted endpoint。\n\nNEXT｜E6-MSO 多输出共享表达式\nVectorANF + shared action + compute–fanout–uncompute；显式 workspace peak≤2（MCT 分解未计）。\nmechanism MVP 尚无 shared head / QAOA replay / formal blind result；598→581 仅开发观察。","textPreview":"AI4Q｜置换等变 policy + 可验证 Neural MCTS | 把 Boolean 对称性写入结构先验；formal v4 只闭合 provenance，性能仍未验收。 |  | Q4AI｜同池 QAOA + execution-aware utility | E...","textChars":363,"textLines":9,"bbox":[36.13,155.13,1197.93,537]}
+{"kind":"image","id":"im/p8bm9k72","slide":13,"name":"图片 4","bbox":[873.4,26.47,373.8,90.6]}
+{"kind":"notes","id":"nt/hgzapcr6","slide":13,"text":"已闭合的贡献是：等变 policy 的结构先验、同池同预算 QAOA 的局部调度证据，以及独立验证器对语义/执行主张的约束。\nE4-v2 和 E5 表明端点改善并未验收：前者区间跨 0，后者协议验收失败。\nE6-MSO 是下一个可证伪问题：跨输出共享表达与同池 QAOA，但当前仅有 mechanism MVP。output-permutation-equivariant shared head、QAOA replay 和锁后未见 S-box formal bundle 都未完成。\n这里的资源计数仅指 abstract logical X/CNOT/MCT proxy，不是分解后或硬件精确门数。\n598→581 不是正式性能证据；不主张真机结果、量子加速或量子优势。\n[Sources]\n- docs/papers/resource_nmcts/chinese/main.tex\n- docs/project/PROJECT_STATUS_XA202609.md\n- docs/planning/EXPERIMENT_ROADMAP_XA202609.md\n- docs/contracts/COMPETITION_ACCEPTANCE_MATRIX.json"}
+{"kind":"slide","id":"sl/6lsnupw7","slide":14,"title":"AI for Quantum × Quantum for AI","textShapes":3}
+{"kind":"textbox","id":"sh/xc7eds76","slide":14,"name":"矩形 1","text":"AI for Quantum × Quantum for AI\n让每一次搜索预算都接受\n语义与端点证据检验","textPreview":"AI for Quantum × Quantum for AI | 让每一次搜索预算都接受 | 语义与端点证据检验","textChars":53,"textLines":3,"bbox":[-0.07,106.93,1280.13,355.13]}
+{"kind":"textbox","id":"sh/wbydknq1","slide":14,"name":"文本框 2","text":"XA-202609｜答辩","textPreview":"XA-202609｜答辩","textChars":12,"textLines":1,"bbox":[510.87,624,291.53,96]}
+{"kind":"textbox","id":"sh/ehwvat8n","slide":14,"name":"文本框 8","text":"杭州电子科技大学量子线路编译组","textPreview":"杭州电子科技大学量子线路编译组","textChars":15,"textLines":1,"bbox":[635,524.47,593.87,66.73]}
+{"kind":"image","id":"im/fu1cza1s","slide":14,"name":"图片 7","bbox":[200.8,512.53,373.8,90.6]}
+{"kind":"notes","id":"nt/6lsnupw7","slide":14,"text":"收束：双向赋能不是把 AI 与 QAOA 并列堆叠，而是让二者在同一搜索预算接口上接受语义和端点检验。\n当前证据支持局部机制，也通过 E4-v2 跨零区间和 E5 协议失败明确终止过度主张。\n下一研究门是 E6-MSO，必须在 shared head、QAOA replay 与锁后 formal blind result 全部就位后才升级性能主张。\n[Sources]\n- docs/papers/resource_nmcts/chinese/main.tex\n- docs/project/PROJECT_STATUS_XA202609.md\n- docs/planning/EXPERIMENT_ROADMAP_XA202609.md"}

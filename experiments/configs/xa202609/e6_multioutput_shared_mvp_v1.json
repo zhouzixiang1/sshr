@@ -1,0 +1,123 @@
+{
+  "schema_version": "xa.e6-multioutput-shared-mvp-config.v1.1",
+  "status": "development_mechanism_mvp_not_formal_experiment",
+  "experiment": "e6-mso-vector-anf-shared-action-mechanism",
+  "scope": {
+    "package": "e6",
+    "isolated_from_src": true,
+    "scalar_synthesize_modified": false,
+    "formal_runner_present": false,
+    "formal_result_bundle_present": false,
+    "performance_evidence": false
+  },
+  "vector_oracle_contract": {
+    "map": "|x,y,0> -> |x,y xor f(x),0>",
+    "representation": "one GF(2) ANF monomial-mask set per output coordinate",
+    "bit_order": "LSB indexed inputs and outputs",
+    "action_types": [
+      "shared_monomial",
+      "shared_semi_affine_monomial_times_affine_xor"
+    ],
+    "action_target_feature": "LSB-indexed target_mask",
+    "candidate_target_subsets": "every eligible subset with fanout_at_least_2 in ascending target_mask order",
+    "output_relabeling_contract": "old-output-to-new-output permutation acts on VectorANF coordinates and action target_mask",
+    "emission": "compute_fanout_uncompute_then_direct_residual",
+    "footprint": "output_index_and_anf_monomial_mask",
+    "selected_footprints_must_be_disjoint": true,
+    "max_reusable_explicit_ancilla": 2,
+    "verification": {
+      "all_x": true,
+      "all_initial_y": true,
+      "inputs_preserved": true,
+      "ancillas_return_to_zero": true
+    }
+  },
+  "shared_utility": {
+    "metric": "abstract_logical_mct_proxy_not_hardware",
+    "resource_layer": "abstract logical X/CNOT/MCT only",
+    "exact_hardware_resource_claim": false,
+    "mct_decomposition_implicit_ancillas_included": false,
+    "weights": {
+      "T": 1.0,
+      "CNOT": 0.04,
+      "depth": 0.015,
+      "gates": 0.01,
+      "whole_program_explicit_workspace_peak_weight": 2.0
+    },
+    "ancilla_boundary": "at most two explicit reusable workspace wires; report peak once for the whole emitted program, never once per action",
+    "interpretation": "deterministic abstract comparison proxy, not an exact decomposition, mapping, noise, or hardware cost"
+  },
+  "scheduler": {
+    "real_action_budget": 2,
+    "methods": ["greedy", "exact", "direct_qaoa"],
+    "soft_redundancy": "0.7 polynomial-term Jaccard plus 0.3 target-set Jaccard",
+    "redundancy_weight": 0.25,
+    "hard_constraint": "pairwise disjoint action footprints",
+    "fixed_cardinality_encoding": "append B_eff zero-utility dummy variables and enforce sum(real,dummy)=B_eff",
+    "analytic_penalty_contract": {
+      "objective_magnitude_bound": "sum_i abs(utility_i) plus gamma times sum_i_lt_j redundancy_ij",
+      "rho_requirement": "strictly greater than objective_magnitude_bound",
+      "conflict_penalty_requirement": "strictly greater than objective_magnitude_bound",
+      "insufficient_override": "fail_closed_before_solver"
+    },
+    "qaoa": {
+      "backend": "existing src.search.qaoa_scheduler.run_qaoa",
+      "mode": "shot",
+      "p": 1,
+      "shots": 512,
+      "optimizer_restarts": 2,
+      "optimizer_steps": 6,
+      "maximum_augmented_variables": 12,
+      "phase_input": "QUBO linear and quadratic coefficients only; no feasible callback and no repair callback",
+      "postprocessing": "filter measured counts by frozen-QUBO feasibility, minimise frozen phase energy, then count/lexicographic tie-break",
+      "no_feasible_sample": "explicit exact feasible repair with separate accounting",
+      "backend_failure": "explicit greedy fallback with reason"
+    },
+    "audit": {
+      "enumeration": "all_2_power_K_augmented_bitstrings",
+      "maximum_augmented_variables": 16,
+      "checks": [
+        "expanded_polynomial_energy_identity",
+        "actual_backend_phase_linear_quadratic_energy_identity",
+        "backend_cost_offset_and_scale_match_full_phase_space_audit",
+        "phase_to_full_energy_constant_offset_identity",
+        "analytic_penalty_lower_bounds_hold",
+        "all_global_minima_fixed_cardinality_and_conflict_free",
+        "global_minimum_real_selections_match_exact_feasible_optima",
+        "penalty_sufficient_true_or_fail_closed"
+      ]
+    }
+  },
+  "development_regression": {
+    "primary_fixtures": "small_synthetic_vector_boolean_functions",
+    "observed_only_families": ["ASCON", "PRESENT"],
+    "observed_only_role": "development_semantic_regression_after_prior_E5_exposure",
+    "not_new_holdout": true,
+    "not_model_selection": true,
+    "not_formal_evidence": true,
+    "private_tmp_prototype_is_evidence": false
+  },
+  "ai_quantum_boundary": {
+    "quantum_for_ai": "direct QAOA can schedule a fixed-cardinality conflict-aware shared-action pool",
+    "ai_for_quantum": "a three-axis output/union-term/input permutation-equivariant policy/value architecture is implemented; it is not yet trained, selected, or connected to formal scheduling",
+    "shared_model_architecture_implemented": true,
+    "shared_model_schema": "xa.e6-shared-policy-value-model.v1",
+    "shared_model_symmetry": {
+      "state_axes": ["output_coordinate", "union_anf_term", "input_variable"],
+      "linear_paths": "all 2^3 retained-or-mean-pooled axis subsets",
+      "policy_contract": "simultaneous vector/action relabeling preserves the mapped action logit",
+      "value_contract": "input/output/term relabeling leaves the scalar value unchanged",
+      "candidate_order_contract": "candidate reordering only reorders logits"
+    },
+    "learned_multioutput_head_connected": false,
+    "qaoa_trajectory_replay_update_connected": false,
+    "training_or_finetuning_performed": false
+  },
+  "next_gates": [
+    "freeze one canonical shared case before greedy/exact/QAOA solve and bind pool/utility/redundancy/QUBO/checkpoint SHA",
+    "train and causally validate the implemented permutation-equivariant multi-output shared-action head",
+    "bind QAOA trajectory schema to replay ingestion without contaminating evaluation",
+    "add independent formal runner and verifier only after protocol freeze",
+    "evaluate on a future unobserved vector-function family"
+  ]
+}

@@ -1,0 +1,7 @@
+# XA-202609 core runtime, verified on CPython 3.11.15 (2026-08-12).
+# Keep exact pins for evidence reproduction; choose a platform-appropriate
+# PyTorch wheel/index when recreating this environment on CUDA hosts.
+numpy==2.4.6
+scipy==1.17.1
+PuLP==3.3.1
+torch==2.12.0

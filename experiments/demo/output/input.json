@@ -1,0 +1,1 @@
+{"case":"aes_sbox_bit0","hardware":"superconducting_noise","scheduler":"qaoa_diversity","schema_version":"xa.competition-demo-input.v1","seed":930000,"synthesizer":"foundation_nmcts","workers":4}

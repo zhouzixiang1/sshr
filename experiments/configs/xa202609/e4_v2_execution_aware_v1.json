@@ -1,0 +1,117 @@
+{
+  "schema_version": "xa.e4-v2-execution-aware-config.v1",
+  "experiment": "post_e4_frozen_aes_execution_aware_replication",
+  "experiment_role": "frozen_replication",
+  "dataset_role": "post_e4_frozen_aes_replication",
+  "historically_seen_in_E4": true,
+  "generalization_claim": false,
+  "protocol_lock": {
+    "schema_version": "xa.e4-v2-local-protocol-lock.v1",
+    "path": "configs/xa202609/e4_v2_execution_aware_v1.protocol.lock.json",
+    "freeze_semantics": "locally_frozen_prior_to_run"
+  },
+  "compute_contract": {
+    "torch_device": "cpu",
+    "torch_intraop_threads": 1,
+    "torch_interop_threads": 1,
+    "torch_deterministic_algorithms": true
+  },
+  "checkpoint": {
+    "path": "models/boolean_oracle_fm_v3.pt",
+    "sha256": "87904409966e6d9d18aae3711dff54d696608e6eefcf0e5cb5bb98ae96d4f57d"
+  },
+  "calibration": {
+    "family": "seeded-non-aes-boolean-functions",
+    "n": 8,
+    "case_count": 12,
+    "seed_base": 530000,
+    "allowed_inputs": [
+      "truth_table",
+      "learned_policy_candidate_pool",
+      "raw_scheduler_utility",
+      "compile_time_native_features"
+    ],
+    "forbidden_inputs": [
+      "replication_aes_coordinates",
+      "test_plan",
+      "test_native_result",
+      "noisy_endpoint"
+    ]
+  },
+  "test": {
+    "family": "FIPS-197-AES-forward-S-box",
+    "dataset_role": "post_e4_frozen_aes_replication",
+    "historically_seen_in_E4": true,
+    "generalization_claim": false,
+    "coordinates": [0, 1, 2, 3, 4, 5, 6, 7],
+    "solver_seeds": [1, 2],
+    "endpoint_inputs": [0, 83, 255],
+    "noise_seed_anchors": [101],
+    "endpoint_shots": 2
+  },
+  "search": {
+    "simulations": 8,
+    "candidate_top_k": 8,
+    "max_factor_ancilla": 1,
+    "max_factor_size": 5,
+    "policy_term_threshold": 96,
+    "scheduler_pool_size": 6,
+    "scheduler_budget": 3,
+    "scheduler_min_candidates": 4,
+    "redundancy_weight": 0.25,
+    "redundancy_alpha": 0.7,
+    "utility_clip": 1.0,
+    "scheduler_seed_base": 2026090400,
+    "noise_seed_base": 730000
+  },
+  "qaoa": {
+    "mode": "shot",
+    "p": 1,
+    "shots": 256,
+    "optimizer_restarts": 2,
+    "optimizer_steps": 8,
+    "measurement_bitflip_probability": 0.0
+  },
+  "native_profile": {
+    "family": "synthetic-heavy-hex-like-fixed-10q-v1",
+    "frozen_n_qubits": 10,
+    "native_gate_set": ["rz", "sx", "x", "cx"],
+    "one_qubit_error": 0.0002,
+    "two_qubit_error": 0.003,
+    "readout_error": 0.01,
+    "one_qubit_duration_ns": 35.0,
+    "two_qubit_duration_ns": 300.0
+  },
+  "weight_selection": {
+    "rule": "fixed-mixture-median-positive-scale-v1",
+    "target_penalty_at_component_medians": 0.15,
+    "feature_mixture": {
+      "native_one_qubit": 0.0,
+      "native_two_qubit": 0.8,
+      "inserted_swap": 0.0,
+      "native_depth": 0.2,
+      "duration_ns": 0.0,
+      "model_risk": 0.0
+    },
+    "selection_objective": "none-no-test-guided-model-selection",
+    "tie_break": "not_applicable_single_locally_frozen_rule"
+  },
+  "primary_endpoint": {
+    "metric": "native.two_qubit_gate_count",
+    "direction": "lower_is_better",
+    "primary_comparison": "execution_aware_qaoa_shot-minus-historical_qaoa_shot",
+    "secondary_comparison": "execution_aware_greedy-minus-historical_greedy",
+    "estimand": "intention_to_treat_all_assigned_trials",
+    "trial_pairing": ["aes_output_bit", "solver_seed"],
+    "cluster_unit": "aes_output_bit",
+    "seed_aggregation_within_cluster": "arithmetic_mean",
+    "direct_unrepaired_sensitivity": true,
+    "noisy_success_role": "diagnostic_only_not_a_tuning_or_primary_endpoint"
+  },
+  "statistics": {
+    "bootstrap_resamples": 5000,
+    "bootstrap_seed": 20260904,
+    "confidence_level": 0.95
+  },
+  "claim_boundary": "This protocol is locally frozen prior to each run and is a post-E4 replication on AES coordinates already seen in E4. It cannot support a held-out or generalization claim. Calibration uses only frozen non-AES functions, learned-policy root pools, raw utility and deterministic compile-time native features. Checkpoint inference is frozen to CPU with one PyTorch intra-op thread, one inter-op thread and deterministic algorithms enabled. Frozen non-negative weights are evaluated without refitting on all eight AES replication coordinates. All four arms use one fixed synthetic 10-qubit heavy-hex-like profile. Native resources are synthetic-profile proxies; noisy success is diagnostic only. This is not real hardware, a device calibration, a quantum speedup claim, or a quantum-advantage claim."
+}

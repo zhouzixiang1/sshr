@@ -1,0 +1,179 @@
+{
+  "amendment": {
+    "classification": "post_release_pre_endpoint_protocol_amendment",
+    "degenerate_estimand_rule": "all_five_assigned_arms_solve_compile_and_enter_itt_with_zero_within_assignment_difference",
+    "direct_sensitivity_rule": "exclude_not_invoked_rows_and_record_per_cluster_reason",
+    "eligibility_rule": "arm_independent_root_action_count_from_unscored_structural_candidate_actions",
+    "execution_status_taxonomy": [
+      "classical_invoked",
+      "direct_unrepaired",
+      "direct_repaired",
+      "fallback",
+      "not_invoked_degenerate",
+      "not_invoked_small_pool",
+      "invalid"
+    ],
+    "exposure_ledger": {
+      "comparisons_observed": false,
+      "endpoint_results_observed": false,
+      "model_selection_after_release": false,
+      "noisy_outcomes_observed": false,
+      "performance_outcomes_observed": false,
+      "persisted_trial_rows": 0,
+      "release_gate_completed": true,
+      "tables_verified_at_release": [
+        "ASCON",
+        "PRESENT"
+      ],
+      "trial_search_entered": [
+        {
+          "arm": "heuristic_historical_greedy",
+          "family": "ASCON",
+          "output_bit": 0,
+          "solver_seed": 1
+        }
+      ],
+      "trial_search_not_entered_for_remaining_assignments": true,
+      "weight_refit_after_release": false
+    },
+    "failure_evidence_rule": "every_exception_writes_a_non_overwriting_nine_file_failed_attempt_bundle_and_separates_evidence_ok_from_experiment_completed",
+    "family_activity_rule": "each_family_must_contain_at_least_one_schedulable_family_bit_seed_group",
+    "frozen_invariants": {
+      "model_changed": false,
+      "native_profile_changed": false,
+      "primary_endpoint_changed": false,
+      "qaoa_hyperparameters_changed": false,
+      "search_hyperparameters_changed": false,
+      "secondary_endpoints_changed": false,
+      "solver_seeds_changed": false,
+      "weights_changed": false
+    },
+    "incident": {
+      "attempt_sha256": "4d528325dfed821af01fe98a422636347b5d90a35d8d5ff533cac64babde5423",
+      "checksums_sha256": "04f043ecf8b48338f15dbf1c7591d77cf24e29335aba9d657fa22e739f26c0bd",
+      "first_release_run_id": "20260812-e5-ascon-primary-present-secondary-v1-s940000",
+      "first_trial_error": "E5 root scheduler missing for ASCON bit 0, seed 1, arm heuristic_historical_greedy",
+      "path": "misc/archive/experiments/xa202609-development/e5-first-release-root-scheduler-contract-failure-20260812",
+      "readme_sha256": "f9df9fd23b223abcc84c44a8042a74c394bd3e5fc10a6d39d4952d308dec4ec6"
+    },
+    "parent_v1": {
+      "config_canonical_sha256": "6a01191cdb326506db9f3a4f01fd6bd2022f0c65e7de472d098a028fd3960929",
+      "config_file_sha256": "d1b8559f2cdd34f448d9c0c27c0d6672817aaf43e6c7aeae8a0dbbb8ae351e44",
+      "contract_test_sha256": "40dfb9133d17df4d848f08111b2b9bc80c092c2842a0c95ebb27c84e6a914f52",
+      "preflight": {
+        "bundle": "results/xa202609/20260812-e5-preflight-external-crypto-v1-s840000",
+        "calibration_sha256": "5a8419c9f347ca4238948b860fceedbc06f083cfe2218040c19ad8e3ce20c5db",
+        "checksums_sha256": "7af02e8bb7fe7381874ee2f5cef08c8df217032fcf697e3a4e54fc70a9e19b2b",
+        "manifest_sha256": "561f70af444c052d1617ed5a3d3620825b61bc028f9e35d21fd2c8592e576bb0",
+        "preflight_rows_sha256": "b45a26eda65a548560d5e1ea8a38bbe90b19530a03f64f2c907a73e60c28e89a",
+        "raw_sha256": "20d0d34029bf75af512faa5d55af4169256d449cf516160712423468dffba6e5",
+        "summary_sha256": "c138a97cb76fcaf97c65815d864d82fe075d0d0490fa65500387d44ca1fc353e",
+        "weights_sha256": "b5e832cae44ff4660192a8f4c9800ad19b87299084fc172de79f6ea481f1da5e"
+      },
+      "runner_sha256": "611a27cb0eefe6134e254a695d44a7e40758d672e3fb8d928a399eb4a9ff9738",
+      "seal": {
+        "bundle": "results/xa202609/20260812-e5-seal-external-crypto-v1-s840000",
+        "checksums_sha256": "b45baa058f0d434bebf5236a8f6ffceb7564000871a4ab68fec7a344e8038330",
+        "evaluation_lock_sha256": "dd05ab6a3370dd64252e36d429b4a12507d4d99309c176f1dce443b988adceba",
+        "manifest_sha256": "7d56e50229fb3e3cc9c18692c3f8706ec730cf6fcd07483c54fdf277bc722c71",
+        "summary_sha256": "e2ea176ebb139aac7e54b6154cb0ceca9d00deb75d4e2c47b317658dc93d9b9c"
+      },
+      "static_lock_canonical_sha256": "029eb6d3ceb5afdf12fd1a2e406d96919a1ae7fa8f0359d510060d8e44cbde19",
+      "verifier_sha256": "628abde452cdaf4bced0fec8cdcf1c7ea689ce25c748f56b86d0bad47cdf118f"
+    },
+    "root_eligibility_classes": [
+      "schedulable",
+      "degenerate_direct_root"
+    ],
+    "schedulable_mechanism_rule": "learned_policy_value_activity_and_four_arm_same_pool_are_required_only_when_root_action_count_is_positive",
+    "schema_version": "xa.e5-post-release-amendment.v1.1",
+    "scientific_reason": "The first released v1 evaluate attempt reached ASCON output bit 0 seed 1 and failed before completing its first assigned arm because the root had zero arm-independent structural actions and the v1 runner incorrectly required a scheduler decision. No trial row, endpoint, comparison, performance outcome, model selection, refit or noisy diagnostic was produced."
+  },
+  "amendment_sha256": "7517288c3389d657bfb37db567ecaaa2186d958bac50d786b337f12a691f9879",
+  "arm_matrix_sha256": "9e5d3a900af4acd0957e13bf9e66ed93bce4ef0b2a44e09c6f6f7c06d84e46da",
+  "compute_contract": {
+    "device": "cpu",
+    "torch_deterministic_algorithms": true,
+    "torch_interop_threads": 1,
+    "torch_intraop_threads": 1
+  },
+  "compute_contract_sha256": "f43b1586387bfbbb3f663355c4f52d8663e009c24160c2f62033bf616b0008c3",
+  "config": {
+    "canonical_sha256": "eca0a399601d20ecc77ba2da659a1f752f91d2a0fdda8e779a243bbe5d968e24",
+    "file_sha256": "c046e68aff93afaa113ab352f53d5fcdd69a8fdc0e1e2536d9e18651c46eb838",
+    "path": "configs/xa202609/e5_external_crypto_holdout_v1.json"
+  },
+  "crypto_registry": {
+    "path": "src/benchmarks/crypto_oracles.py",
+    "sha256": "cf517ec057d4e0b0e5b9cdcfb72a8edb8a66778f55e2591911d0690dfba3fc62"
+  },
+  "foundation_v4": {
+    "bundle": "results/xa202609/20260812-foundation-v4-provenance-formal-s20260904",
+    "checkpoint_sha256": "5b7cb23accde48915f619562b5be34221d4f0637422b7ec2e980e1a348c719f7",
+    "dataset_sha256": "4b8e1e02d74f5ebd1d121431bca49266e39123c0b3d09c4e9d8967ebfa3af33f",
+    "model_card_sha256": "681a2ae3a692c6bc733874c38d01c79fb365edc2b7274202ea9991f4c3913e17",
+    "source_manifest_sha256": "1ba583be4575a057fd30de5dc08addd910873d10f8c8a72e5fa2610e593b2b29"
+  },
+  "freeze_semantics": "frozen_before_preflight_and_holdout_release",
+  "parent_v1_static_lock_canonical_sha256": "029eb6d3ceb5afdf12fd1a2e406d96919a1ae7fa8f0359d510060d8e44cbde19",
+  "primary_endpoint": {
+    "claim_rule": "effect_estimate_only_no_binary_superiority_due_five_clusters",
+    "cluster_unit": [
+      "family",
+      "output_bit"
+    ],
+    "comparison": "v4_execution_aware_qaoa_shot-minus-v4_historical_qaoa_shot",
+    "direct_unrepaired_sensitivity": true,
+    "direction": "lower_is_better",
+    "estimand": "intention_to_treat_all_assigned_trials",
+    "family": "ASCON",
+    "metric": "native.two_qubit_gate_count",
+    "pairing": [
+      "family",
+      "output_bit",
+      "solver_seed"
+    ],
+    "seed_aggregation_within_cluster": "arithmetic_mean"
+  },
+  "primary_endpoint_sha256": "1492669a1f57e007f53efd73ced1f748367705f89a118f613397980174d55320",
+  "schema_version": "xa.e5-static-protocol-lock.v1.1",
+  "source_tree_sha256": "240c69f99dc1c183b9c85280116963da7340913588161d018317e082c3746dde",
+  "sources": {
+    "compiler": {
+      "path": "src/hardware/superconducting.py",
+      "sha256": "15b53124e576ef76668cd0ed9f50289f68d4b44f2116e97a15ac4882211e9d78"
+    },
+    "contract_test": {
+      "path": "tests/test_e5_external_crypto_holdout.py",
+      "sha256": "ecf8965347540151de79ea31625c64ee46b829a1116e0d25fe26149552da1208"
+    },
+    "execution_aware_core": {
+      "path": "src/search/execution_aware_utility.py",
+      "sha256": "eabe434a5f756dc7144b434b31114cc0e2389d81bd7eddb26584a19a8eb1d58e"
+    },
+    "foundation_adapter": {
+      "path": "src/foundation/adapter.py",
+      "sha256": "5af919cec093007e640decf73a2832ab702b933868d01bf8fc2e722069180b2b"
+    },
+    "runner": {
+      "path": "scripts/run_e5_external_crypto_holdout.py",
+      "sha256": "7ca25afbdef41137d32e1b26519f6082d14c54f2cf9acd17d0e6727cb94943f0"
+    },
+    "scheduler": {
+      "path": "src/search/mcts_scheduler.py",
+      "sha256": "a0f2b3eb46d1a2c9a3cd8c2f0fe1c26469f56e5da95b18ae1c5efd071d6b34b1"
+    },
+    "solver": {
+      "path": "src/nmcts_solver.py",
+      "sha256": "55232d25fd090fccc109efe02bc996126be53c2dba740424e6eff748616bf2d6"
+    },
+    "value_estimator": {
+      "path": "src/search/value_net.py",
+      "sha256": "482389558f4175a201d879753196bc2602563b4880d48f18ff66b0eb807d912f"
+    },
+    "verifier": {
+      "path": "scripts/verify_e5_external_crypto_holdout_bundle.py",
+      "sha256": "534c96654fb88f7b0f357f8ba39dbafab0ccd5ba3acf79821948d97ae004f00e"
+    }
+  }
+}

@@ -3,12 +3,32 @@ __pycache__/
 *.py[cod]
 *.egg-info/
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
 
 # macOS
 .DS_Store
 
 # Windows download markers (illegal ':' in NTFS filenames)
 *:Zone.Identifier
+
+# Editors and local agents
+.claude/
+.vscode/
+.idea/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
 
 # LaTeX build outputs
 *.aux
@@ -17,10 +37,30 @@ __pycache__/
 *.fls
 *.fdb_latexmk
 *.synctex.gz
+*.xdv
+*.blg
+**/build/
 
-# Archived external tools (1.8GB, not tracked)
-_archive/external-tools/
-_archive/misc/
+# Historical/local archives are deliberately excluded from the clean server repo.
+/misc/archive/
+/misc/generated/
+/misc/local-config/
 
-# Model checkpoints are tracked, but large experiment re-runs are not
+# A separately versioned Overleaf working copy lives under the manuscript
+# documentation tree.  Keep it local and never treat it as a submodule.
+/docs/papers/resource_nmcts/overleaf/worktree/
+
+# Generated experiment and release artifacts
+/misc/tmp/
+experiments/results/raw*.csv
+experiments/results/server_*/
+experiments/benchmark_exports/*
+!experiments/benchmark_exports/README.md
+experiments/submission_package
+
+# The two curated demo outputs are submission evidence and remain tracked.
+# Put ad-hoc reruns in this ignored scratch directory instead.
+/experiments/demo/runs/
+
+# Model checkpoints are selected explicitly; large experiment re-runs are not.
 *.tmp

@@ -1,0 +1,3 @@
+# This QA report is a frozen, hash-referenced delivery artifact. Preserve its
+# Markdown hard-break bytes while excluding them from whitespace diagnostics.
+docs/competition/slides/qa_report.md -whitespace

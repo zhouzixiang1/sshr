@@ -1,0 +1,43 @@
+"""Auditable benchmark families used by the XA-202609 experiments."""
+
+from .crypto_oracles import (
+    CANONICAL_SUBSTITUTION_TABLE_ENCODING,
+    CANONICAL_TRUTH_TABLE_ENCODING,
+    CRYPTO_HOLDOUT_EXCLUSION_LABEL,
+    CryptoOracleCoordinate,
+    CryptoOracleFamilySpec,
+    CryptoOracleHoldoutAccessError,
+    CryptoOracleVerificationError,
+    UnsupportedCryptoOracleError,
+    available_crypto_holdout_families,
+    available_crypto_oracle_families,
+    get_crypto_holdout_oracle_coordinate,
+    get_crypto_holdout_oracle_coordinates,
+    get_crypto_oracle_coordinate,
+    get_crypto_oracle_coordinates,
+    get_crypto_oracle_family_spec,
+    reconstruct_substitution_value,
+    verify_crypto_holdout_oracle_family,
+    verify_crypto_oracle_family,
+)
+
+__all__ = [
+    "CANONICAL_SUBSTITUTION_TABLE_ENCODING",
+    "CANONICAL_TRUTH_TABLE_ENCODING",
+    "CRYPTO_HOLDOUT_EXCLUSION_LABEL",
+    "CryptoOracleCoordinate",
+    "CryptoOracleFamilySpec",
+    "CryptoOracleHoldoutAccessError",
+    "CryptoOracleVerificationError",
+    "UnsupportedCryptoOracleError",
+    "available_crypto_holdout_families",
+    "available_crypto_oracle_families",
+    "get_crypto_holdout_oracle_coordinate",
+    "get_crypto_holdout_oracle_coordinates",
+    "get_crypto_oracle_coordinate",
+    "get_crypto_oracle_coordinates",
+    "get_crypto_oracle_family_spec",
+    "reconstruct_substitution_value",
+    "verify_crypto_holdout_oracle_family",
+    "verify_crypto_oracle_family",
+]

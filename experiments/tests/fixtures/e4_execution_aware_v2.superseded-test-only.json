@@ -1,0 +1,75 @@
+{
+  "schema_version": "xa.e4-execution-aware-config.v2",
+  "experiment": "aes_calibration_frozen_execution_aware_scheduler",
+  "checkpoint": "models/boolean_oracle_fm_v3.pt",
+  "calibration": {
+    "n": 8,
+    "case_count": 12,
+    "seed_base": 530000,
+    "input_anchors": [0, 83, 124, 255],
+    "include_output_zero_and_one": true,
+    "shots_per_input": 8,
+    "noise_seeds": [101, 103]
+  },
+  "test": {
+    "solver_seeds": [1, 2, 3],
+    "coordinates": [0, 1, 2, 3, 4, 5, 6, 7],
+    "input_anchors": [0, 83, 124, 255],
+    "shots_per_input": 32,
+    "noise_seeds": [101, 103]
+  },
+  "search": {
+    "simulations": 8,
+    "candidate_top_k": 8,
+    "max_factor_ancilla": 1,
+    "max_factor_size": 5,
+    "policy_term_threshold": 96,
+    "scheduler_pool_size": 6,
+    "scheduler_budget": 3,
+    "scheduler_min_candidates": 4,
+    "redundancy_weight": 0.25,
+    "redundancy_alpha": 0.7,
+    "utility_clip": 1.0,
+    "scheduler_seed_base": 2026090400,
+    "noise_seed_base": 730000
+  },
+  "qaoa": {"p": 1, "shots": 512, "optimizer_restarts": 4, "optimizer_steps": 12},
+  "native_profile": {
+    "family": "synthetic-heavy-hex-like-dynamic-v1",
+    "native_gate_set": ["rz", "sx", "x", "cx"],
+    "one_qubit_error": 0.0002,
+    "two_qubit_error": 0.003,
+    "readout_error": 0.01,
+    "one_qubit_duration_ns": 35.0,
+    "two_qubit_duration_ns": 300.0
+  },
+  "primary_metric": {
+    "schema": "balanced-oracle-contract-metric-v1",
+    "source": "NoisyExecutionResult.counts",
+    "bitstring_order": "logical-q[n-1]...q[0]",
+    "components": ["input_preservation", "target_correct", "ancilla_zero"],
+    "input_preservation_contract": "all input bits equal their expected logical bits",
+    "target_correct_contract": "target bit equals its expected logical bit",
+    "ancilla_zero_contract": "all allocated ancilla bits are zero",
+    "component_weighting": "equal-over-three-components",
+    "no_ancilla_rule": "ancilla-zero-is-vacuous-success-for-every-shot-and-vacuous-is-recorded",
+    "component_smoothing": "jeffreys-(success+0.5)/(shots+1)",
+    "balanced_accuracy": "arithmetic-mean-of-unsmoothed-component-accuracies",
+    "balanced_probability": "geometric-mean-of-three-component-jeffreys-probabilities",
+    "primary_nll": "arithmetic-mean-of-three-component-jeffreys-nll",
+    "secondary_metric": "exact-full-state-jeffreys-nll"
+  },
+  "weight_selection": {
+    "ridge_alpha_grid": [0.01, 0.1, 1.0, 10.0],
+    "lambda_grid": [0.0, 0.05, 0.1, 0.2, 0.35],
+    "max_mean_raw_objective_loss": 0.02,
+    "component_mixtures": [
+      {"name": "native_balanced", "native_one_qubit": 0.1, "native_two_qubit": 0.3, "inserted_swap": 0.2, "native_depth": 0.2, "duration_ns": 0.2, "model_risk": 0.0},
+      {"name": "native_plus_risk", "native_one_qubit": 0.05, "native_two_qubit": 0.2, "inserted_swap": 0.15, "native_depth": 0.15, "duration_ns": 0.15, "model_risk": 0.3},
+      {"name": "twoq_depth", "native_one_qubit": 0.0, "native_two_qubit": 0.6, "inserted_swap": 0.0, "native_depth": 0.4, "duration_ns": 0.0, "model_risk": 0.0},
+      {"name": "risk_only", "native_one_qubit": 0.0, "native_two_qubit": 0.0, "inserted_swap": 0.0, "native_depth": 0.0, "duration_ns": 0.0, "model_risk": 1.0}
+    ]
+  },
+  "statistics": {"bootstrap_resamples": 5000, "bootstrap_seed": 20260904},
+  "claim_boundary": "Synthetic-topology NumPy statevector/Pauli-trajectory evidence only. Penalty weights and the structural risk model are selected only from non-AES calibration functions, frozen by SHA-256, and loaded without fitting for the eight held-out FIPS 197 AES coordinates. This is not a real-device result, a device calibration, evidence of quantum speedup, or evidence of quantum advantage."
+}

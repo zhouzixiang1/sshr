@@ -1,0 +1,6 @@
+# Optional Qiskit interoperability/QNN stack.  The checked-in QAOA scheduler,
+# native mapper and Pauli-trajectory backend are NumPy implementations and do
+# not require this file.
+qiskit~=2.4.0
+qiskit-aer~=0.17.2
+qiskit-machine-learning~=0.9.0

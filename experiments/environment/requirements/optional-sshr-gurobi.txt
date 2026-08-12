@@ -1,0 +1,3 @@
+# Optional SSHR-I backend only.  A separately obtained Gurobi licence is also
+# required; installing this file does not provide or validate that licence.
+gurobipy==13.0.2

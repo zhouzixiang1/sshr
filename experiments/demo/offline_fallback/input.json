@@ -1,0 +1,1 @@
+{"case":"aes_sbox_bit0","fallback_only":true,"hardware":"synthetic_superconducting_noise","input_x":83,"learned_policy_enabled":false,"learned_value_enabled":false,"output_bit":0,"qaoa_enabled":false,"scheduler":"none","schema_version":"xa.offline-fallback-input.v1","seed":940000,"shots":1,"synthesizer":"direct_anf"}

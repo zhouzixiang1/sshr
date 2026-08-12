@@ -1,0 +1,5 @@
+# Control plane for the future local experiment service and UI backend.
+# No server API is implemented in the current snapshot.
+fastapi>=0.116,<1
+uvicorn[standard]>=0.35,<1
+pydantic>=2.11,<3

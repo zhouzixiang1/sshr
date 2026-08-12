@@ -1,0 +1,1 @@
+{"checks":{"checkpoint_from_scratch":true,"crypto_input_widths_excluded":true,"crypto_truth_table_hashes_excluded":true,"dataset_identity_unique":true,"evaluation_not_accessed":true,"source_contract_matches":true,"split_disjoint":true,"training_log_finite":true},"schema_version":"xa.foundation-training-self-check.v4"}

@@ -1,0 +1,59 @@
+{
+  "schema_version": "xa.e3-native-feedback-config.v1",
+  "experiment": "simulator_calibrated_root_scheduler_feedback",
+  "checkpoint": "models/boolean_oracle_fm_v3.pt",
+  "calibration": {
+    "n": 4,
+    "case_count": 12,
+    "seed_base": 310000
+  },
+  "test": {
+    "n": 4,
+    "case_count": 12,
+    "seed_base": 410000,
+    "solver_seeds": [1, 2]
+  },
+  "search": {
+    "simulations": 8,
+    "candidate_top_k": 8,
+    "max_factor_ancilla": 2,
+    "max_factor_size": 4,
+    "scheduler_pool_size": 6,
+    "scheduler_budget": 2,
+    "scheduler_min_candidates": 2,
+    "redundancy_weight": 0.25,
+    "redundancy_alpha": 0.7,
+    "utility_clip": 1.0
+  },
+  "qaoa": {
+    "p": 1,
+    "shots": 512,
+    "measurement_bitflip_probability": 0.02,
+    "optimizer_restarts": 4,
+    "optimizer_steps": 12
+  },
+  "native_profile": {
+    "family": "synthetic-heavy-hex-like-dynamic-v1",
+    "native_gate_set": ["rz", "sx", "x", "cx"],
+    "one_qubit_error": 0.0002,
+    "two_qubit_error": 0.003,
+    "readout_error": 0.01,
+    "one_qubit_duration_ns": 35.0,
+    "two_qubit_duration_ns": 300.0
+  },
+  "noise_execution": {
+    "shots_per_input": 16,
+    "noise_seeds": [101, 103],
+    "include_output_zero_and_one": true,
+    "max_trajectory_qubits": 10
+  },
+  "feedback_model": {
+    "ridge_alpha_grid": [0.01, 0.1, 1.0, 10.0],
+    "penalty_weight": 0.35
+  },
+  "statistics": {
+    "bootstrap_resamples": 5000,
+    "bootstrap_seed": 20260903
+  },
+  "claim_boundary": "Synthetic-topology NumPy statevector/Pauli-trajectory evidence only. The execution feedback is fitted only on calibration functions and changes root scheduling utility on disjoint held-out functions. It is not a real-device result, a calibrated hardware model, a learned policy/value update, or evidence of quantum speedup or quantum advantage."
+}

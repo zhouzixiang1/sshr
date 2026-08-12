@@ -1,0 +1,1 @@
+{"checks":{"circuit_anf_100_percent":true,"dataset_sha_present":true,"method_count_matches":true,"model_sha_present_or_skipped":true,"oracle_truth_table_100_percent":true,"plan_anf_100_percent":true,"source_sha_present":true},"ok":true,"schema_version":"xa.p0-freeze-verifier.v1"}

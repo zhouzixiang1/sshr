@@ -1,0 +1,387 @@
+{
+  "schema_version": "xa.competition-staging-spec.v1",
+  "competition_id": "XA-202609",
+  "archive_root": "XA-202609_submission",
+  "required_files": [
+    "docs/papers/resource_nmcts/chinese/README.md",
+    "docs/papers/resource_nmcts/chinese/main.tex",
+    "docs/papers/resource_nmcts/chinese/algorithms/resource_nmcts_budgeted_search_zh.tex",
+    "docs/papers/resource_nmcts/chinese/resource_nmcts_competition_current.pdf",
+    "docs/papers/resource_nmcts/english/tables/worked_example_search.tex",
+    "docs/papers/resource_nmcts/english/tables/worked_example_resources.tex",
+    "docs/papers/resource_nmcts/english/tables/cirkit_aig_probe.tex",
+    "docs/papers/resource_nmcts/english/tables/cirkit_aig_highdim_probe.tex",
+    "docs/papers/resource_nmcts/english/tables/revkit_cli_multiflow_traditional.tex",
+    "docs/papers/resource_nmcts/english/tables/search_contribution_decomposition.tex",
+    "docs/papers/resource_nmcts/english/tables/phase_parity_affine.tex",
+    "docs/papers/resource_nmcts/english/tables/phase_affine_budget_wide128_vs_32.tex",
+    "docs/papers/resource_nmcts/english/figures/submission_v36/fig1_pipeline.pdf",
+    "docs/papers/resource_nmcts/english/figures/submission_v36/fig2_traditional_resources.pdf",
+    "docs/papers/resource_nmcts/english/figures/submission_v36/fig3_baseline_comparisons.pdf",
+    "docs/papers/resource_nmcts/english/figures/submission_v36/fig4_phase_affine.pdf",
+    "docs/papers/resource_nmcts/english/figures/submission_v36/fig5_validation.png",
+    "docs/papers/resource_nmcts/english/figures/submission_v36/fig6_sparse_gate_sensitivity.pdf",
+    "docs/papers/resource_nmcts/english/figures/submission_v36/fig7_learned_control_summary.pdf",
+    "docs/papers/resource_nmcts/english/figures/submission_v36/fig8_worked_example.pdf",
+    "docs/competition/evidence/README.md",
+    "docs/competition/evidence/CLEAN_INSTALL_EVIDENCE.md",
+    "docs/competition/evidence/E2_QAOA_SCHEDULER_EVIDENCE.md",
+    "docs/competition/evidence/E3_NATIVE_FEEDBACK_EVIDENCE.md",
+    "docs/competition/evidence/E4_AES_BIDIRECTIONAL_EVIDENCE.md",
+    "experiments/models/boolean_oracle_fm_v3.pt",
+    "experiments/models/MODEL_CARD_boolean_oracle_fm_v3.md",
+    "experiments/environment/environment.yml",
+    "experiments/environment/requirements/README.md",
+    "experiments/environment/requirements/core.txt",
+    "experiments/environment/requirements/dev.txt",
+    "experiments/environment/requirements/optional-sshr-gurobi.txt",
+    "experiments/environment/requirements/quantum.txt",
+    "experiments/environment/requirements/research.txt",
+    "experiments/environment/requirements/server.txt",
+    "experiments/configs/xa202609/README.md",
+    "experiments/configs/xa202609/e2_qaoa_scheduler_v1.json",
+    "experiments/configs/xa202609/e3_native_feedback_v1.json",
+    "experiments/configs/xa202609/e4_v2_execution_aware_v1.json",
+    "experiments/configs/xa202609/e4_v2_execution_aware_v1.protocol.lock.json",
+    "experiments/configs/xa202609/e5_external_crypto_holdout_v1.json",
+    "experiments/configs/xa202609/e5_external_crypto_holdout_v1.protocol.lock.json",
+    "experiments/configs/xa202609/e5_v11_portable_fresh_validation_v2.anchor.json",
+    "experiments/configs/xa202609/e6_multioutput_shared_mvp_v1.json",
+    "experiments/configs/xa202609/foundation_v4_provenance.json",
+    "experiments/src/hardware/README.md",
+    "experiments/tests/fixtures/e4_execution_aware_v2.superseded-test-only.json",
+    "experiments/demo/README.md",
+    "experiments/demo/output/checksums.sha256",
+    "experiments/demo/output/demo_manifest.json",
+    "experiments/demo/output/execution.log",
+    "experiments/demo/output/input.json",
+    "experiments/demo/output/report.json",
+    "experiments/demo/output/report.md",
+    "experiments/demo/output/verification.json",
+    "experiments/demo/offline_fallback/checksums.sha256",
+    "experiments/demo/offline_fallback/execution.log",
+    "experiments/demo/offline_fallback/fallback_manifest.json",
+    "experiments/demo/offline_fallback/input.json",
+    "experiments/demo/offline_fallback/logical.qasm",
+    "experiments/demo/offline_fallback/native.qasm",
+    "experiments/demo/offline_fallback/report.json",
+    "experiments/demo/offline_fallback/report.md",
+    "experiments/demo/offline_fallback/verification.json",
+    "experiments/scripts/demo_competition.py",
+    "experiments/scripts/verify_demo_output.py",
+    "experiments/scripts/demo_offline_fallback.py",
+    "experiments/scripts/verify_offline_fallback.py",
+    "experiments/scripts/verify_clean_install.py",
+    "experiments/scripts/train_expert_iteration.py",
+    "experiments/scripts/run_qaoa_scheduler_pilot.py",
+    "experiments/scripts/run_hardware_feedback_eval.py",
+    "experiments/scripts/verify_hardware_feedback_bundle.py",
+    "experiments/scripts/run_aes_bidirectional_pilot.py",
+    "experiments/scripts/verify_aes_bidirectional_bundle.py",
+    "experiments/scripts/run_e4_v2_execution_aware.py",
+    "experiments/scripts/verify_e4_v2_bundle.py",
+    "experiments/scripts/run_e5_external_crypto_holdout.py",
+    "experiments/scripts/verify_e5_external_crypto_holdout_bundle.py",
+    "experiments/scripts/train_foundation_v4.py",
+    "experiments/scripts/verify_foundation_v4_bundle.py",
+    "experiments/scripts/_pilot_artifacts.py",
+    "experiments/analysis/audit_e5_v11_negative_bundle.py",
+    "experiments/analysis/verify_e5_v11_negative_audit_bundle.py",
+    "experiments/analysis/build_e5_v11_fresh_validation_v2.py",
+    "experiments/analysis/verify_e5_v11_fresh_validation_v2.py",
+    "experiments/tests/test_e5_v11_negative_audit.py",
+    "experiments/tests/test_e5_v11_fresh_validation_v2.py",
+    "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/checkpoint.pt",
+    "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/command.json",
+    "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/config_snapshot.json",
+    "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/dataset_manifest.json",
+    "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/model_card.json",
+    "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/resource_estimate.json",
+    "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/self_checks.json",
+    "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/source_manifest.json",
+    "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/training_log.jsonl",
+    "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/training_summary.json",
+    "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/artifacts.manifest.json",
+    "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/checksums.sha256",
+    "experiments/submission/verify_competition_package.py"
+  ],
+  "required_globs": [
+    "experiments/src/**/*.py",
+    "experiments/e6/*.py",
+    "experiments/tests/*.py"
+  ],
+  "report_release": {
+    "path": "docs/papers/resource_nmcts/chinese/resource_nmcts_competition_current.pdf",
+    "sha256": "f6a19cf8a7d2e245505777838a934f30219b378a063703784bf6cf535f908d8f",
+    "page_count": 35
+  },
+  "presentation_release": {
+    "path": "docs/competition/slides/XA-202609_双向智能Boolean_Oracle答辩稿.pptx",
+    "sha256": "cdb66ca733a6783cd020fd7b9ab8c568e7a80ef876d1109330cb62b3084680ae"
+  },
+  "presentation_candidates": [
+    "docs/competition/slides/XA-202609_双向智能Boolean_Oracle答辩稿.pptx"
+  ],
+  "evidence_bundles": [
+    {
+      "id": "E2",
+      "source": "experiments/results/xa202609/20260810-e2-qaoa-scheduler-v1-s120000"
+    },
+    {
+      "id": "E3_CAL",
+      "source": "experiments/results/xa202609/20260811-e3-cal-native-feedback-v1-s310000"
+    },
+    {
+      "id": "E3_TEST",
+      "source": "experiments/results/xa202609/20260811-e3-test-native-feedback-v1-s410000"
+    },
+    {
+      "id": "E4",
+      "source": "experiments/results/xa202609/20260812-e4-aes-bidirectional-pilot-v1-s520000",
+      "claim_profile": "e4_aes_pilot"
+    },
+    {
+      "id": "E4V2_CAL",
+      "source": "experiments/results/xa202609/20260812-e4-v2-frozen-replication-v1-s530000-cal",
+      "claim_profile": "e4_v2_calibration_not_performance"
+    },
+    {
+      "id": "E4V2_TEST",
+      "source": "experiments/results/xa202609/20260812-e4-v2-frozen-replication-v1-s530000-test",
+      "claim_profile": "e4_v2_post_e4_replication_not_generalization"
+    },
+    {
+      "id": "E5_V1_PREFLIGHT",
+      "source": "experiments/results/xa202609/20260812-e5-preflight-external-crypto-v1-s840000",
+      "claim_profile": "e5_pre_endpoint_contract_only"
+    },
+    {
+      "id": "E5_V1_SEAL",
+      "source": "experiments/results/xa202609/20260812-e5-seal-external-crypto-v1-s840000",
+      "claim_profile": "e5_pre_endpoint_contract_only"
+    },
+    {
+      "id": "E5_V11_PREFLIGHT",
+      "source": "experiments/results/xa202609/20260812-e5-v11-preflight-external-crypto-v1-s840000",
+      "claim_profile": "e5_pre_endpoint_contract_only"
+    },
+    {
+      "id": "E5_V11_SEAL",
+      "source": "experiments/results/xa202609/20260812-e5-v11-seal-external-crypto-v1-s840000",
+      "claim_profile": "e5_pre_endpoint_contract_only"
+    },
+    {
+      "id": "E5_V11_UNACCEPTED_EVAL",
+      "source": "experiments/results/xa202609/20260812-e5-v11-ascon-primary-present-secondary-v1-s940000",
+      "claim_profile": "e5_unaccepted_endpoint"
+    },
+    {
+      "id": "E5_V11_FAILED_ATTEMPT",
+      "source": "experiments/results/xa202609/20260812-e5-v11-ascon-primary-present-secondary-v1-s940000-failed-attempt-a3eaff70252b",
+      "claim_profile": "e5_failed_attempt_not_completion"
+    },
+    {
+      "id": "E5_V11_NEGATIVE_AUDIT",
+      "source": "experiments/results/xa202609/20260812-e5-v11-negative-audit-v1-s950000",
+      "claim_profile": "e5_negative_audit_no_accepted_endpoint"
+    }
+  ],
+  "evidence_snapshot_files": [
+    "run.json",
+    "summary.json",
+    "verifier.json",
+    "artifacts.manifest.json",
+    "checksums.sha256"
+  ],
+  "externally_anchored_bundles": {
+    "anchor": {
+      "path": "experiments/configs/xa202609/e5_v11_portable_fresh_validation_v2.anchor.json",
+      "sha256": "036dc0cad2cbe6eabac70793e3be1de44fd8f1882753e595560870bc3eddd686"
+    },
+    "verifier": "experiments/analysis/verify_e5_v11_fresh_validation_v2.py",
+    "bundles": [
+      {
+        "id": "E5_V11_PREFLIGHT_SOURCE_LINK",
+        "role": "scientific_source_linked_preflight_only",
+        "source": "experiments/results/xa202609/20260812-e5-v11-preflight-external-crypto-v1-s840000",
+        "snapshot_sha256": "467176bc8a7f592eca48172f028a5afbc183d6a5f7d41809a0aee53eb6da99d8",
+        "files": [
+          "artifacts.manifest.json",
+          "checksums.sha256",
+          "events.jsonl",
+          "raw.jsonl",
+          "run.json",
+          "stderr.log",
+          "stdout.log",
+          "summary.json",
+          "verifier.json"
+        ]
+      },
+      {
+        "id": "E5_V11_SEAL_SOURCE_LINK",
+        "role": "scientific_source_linked_seal_only",
+        "source": "experiments/results/xa202609/20260812-e5-v11-seal-external-crypto-v1-s840000",
+        "snapshot_sha256": "6489be0c7bc808d2962082158799939cfa339187bf34917af8f7e719ff3f1d4b",
+        "files": [
+          "artifacts.manifest.json",
+          "checksums.sha256",
+          "events.jsonl",
+          "raw.jsonl",
+          "run.json",
+          "stderr.log",
+          "stdout.log",
+          "summary.json",
+          "verifier.json"
+        ]
+      },
+      {
+        "id": "E5_V11_SCIENTIFIC_SOURCE_PREDECESSOR",
+        "role": "scientific_source_predecessor_only_unaccepted_endpoint",
+        "source": "experiments/results/xa202609/20260812-e5-v11-ascon-primary-present-secondary-v1-s940000",
+        "snapshot_sha256": "922838ff8dc0d47d6a13a390b8b4e2c1a9fde2516f7c84abfebca5163cbc4313",
+        "files": [
+          "artifacts.manifest.json",
+          "checksums.sha256",
+          "events.jsonl",
+          "raw.jsonl",
+          "run.json",
+          "stderr.log",
+          "stdout.log",
+          "summary.json",
+          "verifier.json"
+        ]
+      },
+      {
+        "id": "E5_NEGATIVE_V1_PREDECESSOR",
+        "role": "provenance_predecessor_only",
+        "anchor_key": "predecessor_snapshots",
+        "anchor_run_id": "20260812-e5-v11-negative-audit-v1-s950000",
+        "source": "experiments/results/xa202609/20260812-e5-v11-negative-audit-v1-s950000",
+        "snapshot_sha256": "eec9d17bd7d17e3d2219781d0f010d8bca553e530d23f2ea7efcb5546b0ea75c",
+        "files": [
+          "artifacts.manifest.json",
+          "checksums.sha256",
+          "events.jsonl",
+          "raw.jsonl",
+          "run.json",
+          "stderr.log",
+          "stdout.log",
+          "summary.json",
+          "verifier.json"
+        ]
+      },
+      {
+        "id": "E5_PORTABLE_V2_PREDECESSOR",
+        "role": "provenance_predecessor_only",
+        "anchor_key": "predecessor_snapshots",
+        "anchor_run_id": "20260812-e5-v11-portable-negative-audit-v2-s950000",
+        "source": "experiments/results/xa202609/20260812-e5-v11-portable-negative-audit-v2-s950000",
+        "snapshot_sha256": "f57a5e2fe0605f413a1187e1de69b2a51a5e312f5205108a6532782dfa791974",
+        "files": [
+          "artifacts.manifest.json",
+          "checksums.sha256",
+          "events.jsonl",
+          "raw.jsonl",
+          "run.json",
+          "stderr.log",
+          "stdout.log",
+          "summary.json",
+          "verifier.json"
+        ]
+      },
+      {
+        "id": "E5_FRESH_V1_PREDECESSOR",
+        "role": "provenance_predecessor_only",
+        "anchor_key": "predecessor_snapshots",
+        "anchor_run_id": "20260812-e5-v11-portable-fresh-validation-v1-s960000",
+        "source": "experiments/results/xa202609/20260812-e5-v11-portable-fresh-validation-v1-s960000",
+        "snapshot_sha256": "fc641602e29c1f8416dda6007d3ff64ce36d4b003b7e699ec0a5e202467ef4bc",
+        "files": [
+          "artifacts.manifest.json",
+          "checksums.sha256",
+          "events.jsonl",
+          "raw.jsonl",
+          "run.json",
+          "stderr.log",
+          "stdout.log",
+          "summary.json",
+          "verifier.json"
+        ]
+      },
+      {
+        "id": "E5_PORTABLE_V3",
+        "role": "current_negative_scientific_audit",
+        "anchor_key": "scientific_v3_bundle",
+        "source": "experiments/results/xa202609/20260812-e5-v11-portable-negative-audit-v3-s950000",
+        "snapshot_sha256": "4ba1d958296866ce50df2a695223091db96296189f218fb1cec8412ed1ad02ea",
+        "files": [
+          "artifacts.manifest.json",
+          "checksums.sha256",
+          "events.jsonl",
+          "raw.jsonl",
+          "run.json",
+          "stderr.log",
+          "stdout.log",
+          "summary.json",
+          "verifier.json"
+        ]
+      },
+      {
+        "id": "E5_FRESH_V2",
+        "role": "current_fresh_software_validation",
+        "anchor_key": "fresh_v2_bundle",
+        "source": "experiments/results/xa202609/20260812-e5-v11-portable-fresh-validation-v2-s970000",
+        "snapshot_sha256": "dd75a9bcf06f37390c43acf6a019ea8a130ba26a998269ae10fe8bce78441d23",
+        "files": [
+          "artifacts.manifest.json",
+          "checksums.sha256",
+          "events.jsonl",
+          "raw.jsonl",
+          "run.json",
+          "stderr.log",
+          "stdout.log",
+          "summary.json",
+          "verifier.json"
+        ]
+      }
+    ]
+  },
+  "final_model_release": {
+    "checkpoint": "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/checkpoint.pt",
+    "human_model_card": "experiments/models/MODEL_CARD_boolean_oracle_fm_v3.md",
+    "machine_model_card": "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/model_card.json",
+    "candidate_schema_version": "xa.foundation-model-card.v4",
+    "required_final_schema_version": "xa.final-model-card.v1",
+    "expected_checkpoint_sha256": "5b7cb23accde48915f619562b5be34221d4f0637422b7ec2e980e1a348c719f7",
+    "provenance_bundle": "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904",
+    "source_globs": [
+      "experiments/src/**/*.py"
+    ],
+    "source_files": [
+      "experiments/scripts/train_expert_iteration.py",
+      "experiments/scripts/train_foundation_v4.py",
+      "experiments/scripts/verify_foundation_v4_bundle.py",
+      "experiments/scripts/_pilot_artifacts.py"
+    ],
+    "evidence_files": [
+      "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/command.json",
+      "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/config_snapshot.json",
+      "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/dataset_manifest.json",
+      "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/training_log.jsonl",
+      "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/training_summary.json",
+      "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/source_manifest.json",
+      "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/self_checks.json",
+      "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/artifacts.manifest.json",
+      "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/checksums.sha256"
+    ]
+  },
+  "final_authorization_documents": [
+    "LICENSE",
+    "IP_STATEMENT.md",
+    "CODE_PROVENANCE.json",
+    "THIRD_PARTY_NOTICES.md",
+    "REGISTRATION_APPROVAL.pdf",
+    "SUBMISSION_AUTHORIZATION.json",
+    "SBOM.cdx.json"
+  ]
+}

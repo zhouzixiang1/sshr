@@ -1,0 +1,88 @@
+{
+  "schema_version": "xa.frozen-experiment-config.v1",
+  "status": "validated",
+  "track": "e2-qaoa",
+  "experiment": "fixed-budget-diversity-scheduler-comparison",
+  "run_id": "20260810-e2-qaoa-scheduler-v1-s120000",
+  "entrypoint": "scripts/run_qaoa_scheduler_pilot.py",
+  "evidence": {
+    "relative_path": "results/xa202609/20260810-e2-qaoa-scheduler-v1-s120000",
+    "artifact_manifest_sha256": "63f522f36bb66a00167bc839a1d92b2948797b953d0e33ccfa61dcec0e1619c4",
+    "summary_sha256": "5665bf6ec1fb2dff3331e7d4771634a8d0364b08e684366dc114c796eb2103e8",
+    "verifier_sha256": "881961640ac95c521c3b68f730a7c935c88ae5378e2f6581c0354f4aa0c83806",
+    "verifier_ok": true
+  },
+  "source": {
+    "commit_sha": "2d264f23bbdcfaf7bf844beefb7df58af90b7b37",
+    "dirty": true,
+    "dirty_diff_sha256": "8ab3fdf1cf910f9374b45165906caef72f21662be8d0b96026ee75f3f8800ea8",
+    "source_tree_sha256": "d59746daef0ab0bbcdc59fe79238670eade2414ce1b5966bd6c258b0f9a222c5"
+  },
+  "dataset": {
+    "generator_id": "xa.qaoa-heldout-random.v1",
+    "split": "test",
+    "holdout_seed_base": 120000,
+    "sizes": [8, 9],
+    "per_size": 10,
+    "solver_seeds": [1, 2, 3],
+    "dataset_sha256": "bbfe2af6e2997d52dc8b1df4a61dcd945bb01d741d31441e10c4d8df8982f288"
+  },
+  "model": {
+    "path": "models/boolean_oracle_fm_v3.pt",
+    "sha256": "87904409966e6d9d18aae3711dff54d696608e6eefcf0e5cb5bb98ae96d4f57d",
+    "policy_term_threshold": 96,
+    "learned_value": false
+  },
+  "search": {
+    "simulations": 24,
+    "candidate_top_k": 10,
+    "gate_mode": "mct",
+    "max_factor_ancilla": 4,
+    "max_factor_size": 5,
+    "min_factor_count": 2,
+    "use_relative_phase": true,
+    "weights": {
+      "t": 1.0,
+      "cnot": 0.04,
+      "depth": 0.015,
+      "gates": 0.01,
+      "ancilla": 2.0
+    }
+  },
+  "scheduler": {
+    "variants": [
+      "random",
+      "top_b",
+      "greedy",
+      "exact",
+      "qaoa_ideal",
+      "qaoa_shot",
+      "qaoa_noisy"
+    ],
+    "pool_size": 10,
+    "budget_requested": 4,
+    "min_candidates": 6,
+    "max_depth": 0,
+    "redundancy_weight": 0.25,
+    "redundancy_alpha": 0.7,
+    "utility_clip": 1.0,
+    "scheduler_seed_base": 202609,
+    "exact_max_candidates": 12
+  },
+  "qaoa": {
+    "backend": "numpy_statevector",
+    "p": 1,
+    "shots": 1024,
+    "noise_model": "independent_measurement_bitflip",
+    "noise_bitflip_probability": 0.02,
+    "optimizer_restarts": 8,
+    "optimizer_steps": 20,
+    "penalty_rho": "auto"
+  },
+  "statistics": {
+    "independent_unit": "Boolean-function cluster",
+    "bootstrap_resamples": 5000,
+    "primary_endpoint": "qaoa_shot score ratio versus greedy"
+  },
+  "claim_boundary": "Small fixed-p NumPy statevector evidence only. Learned value is disabled. No quantum speedup, hardware performance, or universal advantage is claimed."
+}

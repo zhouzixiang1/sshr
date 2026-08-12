@@ -1,0 +1,1 @@
+{"checks":{"checkpoint_sha_consistent":true,"circuit_anf_100_percent":true,"complete_case_variant_matrix":true,"expected_record_count":true,"oracle_100_percent":true,"plan_anf_100_percent":true,"summary_counts_recomputed":true},"ok":true,"schema_version":"xa.prior-diagnostic-verifier.v1"}
