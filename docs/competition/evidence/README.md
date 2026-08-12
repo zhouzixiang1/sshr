@@ -15,6 +15,9 @@ run_id 和可验证聚合规则。
 | `E4_AES_BIDIRECTIONAL_EVIDENCE.md` | 双向机制能否贯通 AES 坐标 Oracle | QAOA 8/8 命中冻结池最优，但逻辑、原生和含噪目标不一致 |
 | `HARDWARE_ROUTES_EVIDENCE.md` | 超导、离子阱、光量子三路线的兼容证据边界是什么 | run `20260812-hardware-routes-v1-s202609` 的 27/27 项独立检查通过；超导为 synthetic executable/noisy，离子阱为 ideal unitary adapter，光量子仅 boundary-only，均非真机 |
 | `CLEAN_INSTALL_EVIDENCE.md` | 当前树能否在全新环境复演 | 精确依赖、完整 demo 与 217 项测试通过；不含可选 SDK 或真机 |
+| E6 five-file development bundle | QAOA final-measurement replay 是否优于同分布 permuted-label control | 64 train + 32 held-out；11/11 verifier；主差 `+0.0949778`（下优），CI 全正，显著反向于改善 |
 
-五份证据共同约束主张：局部调度、逻辑综合、原生映射与含噪执行必须分层报告，
-任何上游改善都不能自动外推为量子优势或硬件执行优势。
+这些证据共同约束主张：局部调度、逻辑综合、原生映射与含噪执行必须分层报告，
+任何上游变化都不能自动外推为量子优势或硬件执行优势。E6 bundle 位于
+`experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/`，其
+formal/performance/generalization/hardware/advantage 标志均为 false。

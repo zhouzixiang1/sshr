@@ -75,7 +75,7 @@
         "experiments/src/synthesizers.py: foundation_nmcts",
         "experiments/models/boolean_oracle_fm_v3.pt",
         "experiments/models/MODEL_CARD_boolean_oracle_fm_v3.md",
-        "557 complete current-development-tree tests passed in 316.28 seconds on 2026-08-12; the E6 head/replay/trainer/seal adversarial subset passes 150 tests, and the most recent legacy smoke and default clean-install verifier are green. The externally anchored fresh-validation V2 historical record remains exactly 383 tests in 295.779 seconds, while the frozen PPT/Overleaf/internal-audit package remains the pre-E6-v2 407-test delivery baseline. Coverage includes equivariance, scheduler, QUBO, QAOA, NMCTS integration, native decomposition/routing, Pauli trajectory, execution-feedback, E3/E4 artifacts, demo, clean-install, E4-v2, formal-v4, E5 portability/fresh-validation, E6 mechanism, isolated head/replay/trainer/seal contracts, submission self-scan, and polluted-environment package-root rebinding regression",
+        "The current development tree passes 588 tests in 363.66 seconds with zero failures or errors; the submission-targeted subset passes 10/10 and the E6 five-file causal development bundle independently verifies 11/11. The externally anchored fresh-validation V2 historical record remains exactly 383 tests in 295.779 seconds, while the old internal-audit package remains the pre-E6-v2 407-test delivery baseline; the current PPT is synchronized separately.",
         "experiments/results/xa202609/20260809-p0-freeze-contract-v1-s202609: direct_anf and foundation_nmcts detailed records with PlanTrace, logical IR/QASM, three logical verification layers, source/model/dataset SHA and passing bundle checksum verification",
         "experiments/results/xa202609/20260809-e1-prior-pilot-v3-s1-oraclev3: corrected 9-case one-seed pilot, model prior mean score ratio 0.96837 versus shuffled with W/L/T 8/1/0 and 54.1% of scorer-free classical rollout ordering headroom captured within the frozen model-selected top-K shortlist; all semantic and bundle checks pass; preliminary only. Earlier runs are retained immutably in misc/archive but their oracle wording/evidence is superseded.",
         "experiments/results/xa202609/20260809-e1-value-pilot-v3-s1: 382 held-out states, deployed-target MAE 0.06378 versus constant 0.17331, R2 0.7693 and target drift -0.00386; bundle checks pass; preliminary only",
@@ -88,7 +88,7 @@
       "missing_evidence": [
         "full 135-function multi-seed C0-C7 causal experiment beyond the completed validation and 8-function gated-policy test pilots",
         "an accepted external performance endpoint; E5-v1 failed before row one and E5-v1.1 failed the ASCON family-activity gate",
-        "E6-MSO real four-arm replay training run, real trained/sealed shared policy/value artifact, externally locked final-measurement replay causal ablation, and formal evaluation",
+        "E6-MSO has completed a real four-arm development replay training and causal ablation, but the QAOA treatment significantly regresses; D1 mechanism diagnosis and a separately specified new evaluation remain required before any performance claim",
         "frozen-commit final reproduction beyond the validated current-tree clean install"
       ]
     },
@@ -110,13 +110,14 @@
         "experiments/src/search/execution_aware_utility.py and experiments/tests/test_execution_aware_utility.py: root-rollout execution-aware utility core/adapter is implemented and unit-validated for shared classical/QAOA scheduling",
         "experiments/results/xa202609/20260812-e4-v2-frozen-replication-v1-s530000-test: 8 AES coordinates x 2 seeds x 4 arms = 64 trials; all 32 QAOA rows are direct-unrepaired with zero fallback/repair; primary native-two-qubit delta -513.9375 has 95% CI [-2059.0625, 589.9375]",
         "E5-v1.1 contains 90 ASCON/PRESENT rows but has no accepted endpoint: ASCON has zero schedulable groups and the declared family-activity/fairness checks fail"
+        ,"experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912: clean-source four-arm development replay training over 64 n=6/7 cases and 32 SHA-ranked n=4/5 whole-vector heldout cases; primary QAOA-minus-permuted-control score-ratio delta +0.0949778 (lower is better), 95% CI [0.0696384,0.1237673], two-sided sign-flip p=9.9999e-6, W/T/L 0/3/29, and both width effects are positive; QAOA and random endpoints match 32/32 with 31/32 empty selections each; independent verifier passes 11/11"
       ],
       "missing_evidence": [
-        "E6-MSO equal-budget final-measurement replay causal experiment using the implemented isolated output/input/candidate-equivariant shared policy/value head and deterministic single-arm trainer",
+        "D1 mechanism diagnosis for the E6 QAOA/random endpoint identity and 31/32 empty selections, followed only by a separately specified new-data evaluation if the diagnosis motivates a new intervention",
         "protocol-locked blind multi-output evaluation not selected by candidate availability",
         "frozen-commit final reproduction beyond the validated current-tree clean install"
       ],
-      "claim_boundary": "E2 supports improved local fixed-pool combinatorial selection quality, not stable end-to-end Oracle resource improvement: the function-cluster confidence interval crosses 1. E4 confirms direct non-fallback QAOA scheduling on all eight AES coordinates and real selection changes, but its logical score is 0.448% higher and only 5/4096 noisy shots succeed overall. E4-v2 is a post-E4 replication whose primary native-two-qubit interval crosses zero. E5 has no accepted endpoint. These NumPy/synthetic-profile results do not establish hardware execution, quantum speedup, or quantum advantage."
+      "claim_boundary": "E2 supports improved local fixed-pool combinatorial selection quality, not stable end-to-end Oracle resource improvement. E4-v2 is a post-E4 replication whose primary interval crosses zero, and E5 has no accepted endpoint. E6 closes a real replay-to-head development causal loop but its primary QAOA treatment significantly regresses; formal_evaluation, performance_evidence, generalization, hardware, speedup, and quantum-advantage claims all remain false."
     },
     {
       "id": "native_noise_feedback",
@@ -195,7 +196,7 @@
       "missing_evidence": [
         "accepted external performance evaluation",
         "complete C0-C7 causal matrix",
-        "E6-MSO real replay-trained and sealed shared-output model plus causal replay evidence",
+        "E6-MSO now has a real development replay-trained four-arm causal result, but still lacks a final accepted model artifact and formal performance evidence",
         "final redistribution approval"
       ],
       "claim_boundary": "The formal v4 bundle closes training provenance and model identity only. Its internal holdout is an accept gate, E5 has no accepted endpoint, and no hardware, generalization, universal-foundation-model, speedup, or quantum-advantage claim is supported."
@@ -223,26 +224,30 @@
     },
     {
       "id": "e6_mso_multi_output_shared_oracle",
-      "status": "mechanism_head_replay_trainer_and_development_sealed_loader_validated_no_real_training_or_formal_result",
+      "status": "development_four_arm_causal_experiment_verified_qaoa_regresses_no_formal_performance_result",
       "definition_of_done": "VectorANF shares monomial/semi-affine actions across outputs, emits verified compute-fanout-uncompute circuits with at most two explicit reusable workspace wires, compares greedy/exact/QAOA on one conflict-aware frozen pool and budget, trains and seals the isolated frozen-formal-v4 output/input/candidate-equivariant shared policy/value head, runs externally locked final-measurement replay causal ablations, and evaluates a protocol-locked SHA-derived unseen n=4/5 bijective S-box set without candidate-based filtering. Exact decomposition-resource accounting is a later native-layer contract, not part of the abstract logical-MCT MVP.",
       "current_evidence": [
         "experiments/e6/shared_oracle.py implements VectorANF, full legal partial-fanout target subsets, shared monomial/semi-affine actions, and compute-fanout-uncompute emission with whole-program explicit reusable workspace peak at most two",
         "experiments/e6/shared_scheduler.py implements one conflict-aware frozen QUBO for greedy/exact/QAOA, analytic fail-closed penalty bounds, exhaustive small-K energy audit, pure-QUBO QAOA phase execution, and separate measured-feasible/repair/fallback accounting",
         "33 E6 mechanism tests plus related QAOA/scheduler regression total 109 passed and legacy smoke passed; an independent read-only re-audit closed the prior partial-target, phase-Hamiltonian, penalty, large-value comparison, and resource-boundary findings",
         "experiments/e6/frozen_foundation_v4_shared_head_v2.py and its tests implement an isolated CPU-only thin head over the exact-SHA frozen formal-v4 trunk, with output/input/candidate equivariance, integrity, exact payload validation, and head-only optimizer contracts",
-        "experiments/e6/final_measurement_replay_v2.py and its tests implement strict four-arm final-measurement bitstring-count observations, split/orbit registry, same-call external replay-lock revalidation, degenerate ITT accounting, and replay-target derivation; this is not optimizer trajectory capture and no real replay run or model update has occurred",
+        "experiments/e6/final_measurement_replay_v2.py and its tests implement strict four-arm final-measurement bitstring-count observations, split/orbit registry, degenerate ITT accounting, and replay-target derivation; this is not optimizer trajectory capture",
         "experiments/e6/isolated_head_trainer_v2.py and its adversarial tests implement deterministic one-source-arm-per-call head-only training from raw four-arm material, with externally rooted corpus/config/registry/manifest/replay bytes, fixed optimizer schedule, weighted policy/value loss, and fail-closed split/integrity checks",
-        "experiments/e6/sealed_trained_shared_head_v2.py and its adversarial tests implement a development trained-head-only schema and bounded one-read exact-SHA inference loader with strict metadata/tensor validation and narrow head-submodule restoration; no real trained checkpoint has been sealed",
-        "the current development tree passes 557 tests in 316.28 seconds; the E6 head/replay/trainer/seal adversarial subset passes 150 tests",
+        "experiments/e6/sealed_trained_shared_head_v2.py and its adversarial tests implement a development trained-head-only schema and bounded exact-SHA inference loader; the current five-file run intentionally records head SHA receipts rather than promoting a development head to a final sealed performance artifact",
+        "experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912 contains exactly config.json, results.json, raw.jsonl, heldout_evaluation.json, and checksums.sha256; source commit e850c0c, evidence commit 8cc5f3c, snapshot 18b758ac3e432a5d4e9f0ba1f8be7e17bd1b848b6212234eea9d2e842d4cc76a, independent verifier 11/11",
+        "the run trains four arms sequentially from one fixed initialization on 64 n=6/7 training cases and evaluates 32 SHA-ranked n=4/5 whole-vector heldout development cases; all semantic checks pass with no fallback or degradation",
+        "primary qaoa_final_measurement_replay minus qaoa_permuted_label_control score-ratio delta is +0.0949778 (lower is better), 95% CI [0.0696384,0.1237673], two-sided sign-flip p=9.9999e-6, W/T/L 0/3/29, and n=4/n=5 effects are both positive; claim_supported=false",
+        "QAOA and random endpoints are identical in 32/32 cases and each has 31/32 empty selections; greedy mean Y=0.775639 is descriptive only because compute is not matched",
+        "the current development tree passes 588 tests in 363.66 seconds with zero failures or errors; the submission-targeted subset passes 10/10",
         "the resource metric is explicitly an abstract logical X/CNOT/MCT proxy; MCT decomposition ancillae and exact hardware resources are outside the MVP contract",
         "prototype 598-to-581 is retained as a development observation only"
       ],
       "missing_evidence": [
-        "externally presealed real replay corpus/config, four-arm per-source training runs, training manifests, and a real sealed trained-head checkpoint",
-        "externally locked real four-arm final-measurement replay run and causal experiment",
-        "protocol lock, SHA-derived unseen bijective S-box dataset, nine-file formal run bundle, and independent verifier"
+        "D1 mechanism diagnosis of QAOA/random endpoint identity, empty selections, replay labels, head top-K ranking, and exact-scheduler interaction without tuning the existing heldout set",
+        "a separately specified new-data experiment only if D1 yields a testable intervention; the current negative result must remain unchanged",
+        "a formal performance evaluation and final trained model artifact; the current five-file run explicitly sets formal/performance/generalization/hardware/advantage evidence to false"
       ],
-      "claim_boundary": "E6-MSO currently has a validated mechanism MVP plus isolated development implementations for the frozen-foundation shared head, externally locked final-measurement replay, deterministic single-arm head-only trainer, and sealed-head schema/inference loader. No real replay training run, real trained/sealed artifact, causal experiment, formal runner/bundle/verifier/result, or performance evidence exists. ASCON/PRESENT are development-only, 598-to-581 is not evidence, and there is no accepted performance, hardware, speedup, or quantum-advantage claim."
+      "claim_boundary": "E6-MSO now has a real deterministic four-arm development replay-to-head causal experiment and an 11/11 independent verifier. The primary QAOA treatment significantly regresses versus its same-distribution permuted-label control, QAOA matches random endpoints in all 32 cases, and 31/32 selections are empty in both arms. This is development negative evidence only: formal_evaluation, performance_evidence, generalization, hardware, speedup, and quantum-advantage claims are false. Greedy Y=0.775639 is descriptive because compute is not matched. Next is D1 mechanism diagnosis, not post-hoc tuning of the existing heldout set."
     }
   ],
   "deliverables": [
@@ -261,12 +266,12 @@
         "experiments/scripts/demo_competition.py accepts aes_sbox_bit0/foundation_nmcts/qaoa_diversity/superconducting_noise and writes checked input, machine/human reports, execution log, manifest, checksums, and verification",
         "experiments/demo/output passes experiments/scripts/verify_demo_output.py with 13/13 checks; QAOA is direct non-fallback, hardware_execution is false, and performance_evidence is false",
         "a fresh CPython 3.11 venv installed from experiments/environment/requirements/dev.txt passed pip check, the updated SHA-aware full clean-install verifier with exact checkpoint-SHA validation, the temporary complete demo, and the then-current 217-test suite in 62.50 seconds; this is a historical snapshot",
-        "anchored fresh-validation V2 completed all 9/9 declared commands in a new venv, including pip check, targeted tests, 383 full tests in 295.779 seconds, smoke, the default clean-install verifier, and portable V3 20/20 verification; its independent externally anchored verifier passes 19/19; this historical snapshot is distinct from the current 557-test development tree",
+        "anchored fresh-validation V2 completed all 9/9 declared commands in a new venv, including pip check, targeted tests, 383 full tests in 295.779 seconds, smoke, the default clean-install verifier, and portable V3 20/20 verification; its independent externally anchored verifier passes 19/19; this historical snapshot is distinct from the current 588-test passing development tree",
         "the 366-file non-distributable internal-audit draft binds the anchor and eight complete nine-file evidence bundles: portable V3, fresh-v2, and six predecessor/source/link bundles; directory and tar poisoned-environment verifiers pass, package-native fresh-v2 passes 19/19, and exactly two locked historical stdout local-path exceptions are allowed as non-runtime bytes"
       ],
       "blocking_gaps": [
         "AES-scale native-equivalence acceptance strategy beyond the current declared scale-bound check",
-        "E6-MSO real replay training/sealed-artifact causal loop and protocol-locked blind evaluation",
+        "E6-MSO D1 mechanism diagnosis and, only after a separately specified hypothesis, a new-data evaluation; the completed negative result remains immutable",
         "separate deterministic offline-fallback asset",
         "bind the validated install and demo evidence to the final clean frozen commit"
       ],
@@ -324,7 +329,7 @@
       "blocking_gaps": [
         "untracked development files",
         "legacy/demo paths still reference v3 while v4 is the provenance-closed evaluation candidate",
-        "v4 has no accepted external performance endpoint; the isolated E6-MSO trainer and development sealed loader are implemented, but a real replay training run, real trained/sealed checkpoint, and formal evidence remain missing",
+        "v4 has no accepted external performance endpoint; E6 has completed real development replay training, but no final accepted trained model artifact or formal performance evidence exists",
         "missing approved project license and third-party notices",
         "src/sshr_lib internal lineage is mapped to commits 85c4d01 and 497dc2c, but initial authorship, any external-source use, rights ownership, and redistribution authorization remain unconfirmed"
       ],
@@ -343,14 +348,14 @@
       "status": "partial_synchronized",
       "definition_of_done": "A XA-202609-specific Chinese PDF covers requirements, architecture, mathematics, hardware routes, experiments, cryptographic cases, limitations, reproducibility, value, and IP/compliance, with every number traceable to a competition manifest.",
       "current_evidence": [
-        "docs/papers/resource_nmcts/chinese/main.tex is the single current 35-page Chinese competition manuscript and has integrated formal v4 provenance, E4-v2 post-E4 unsupported-improvement evidence, the complete E5 failure/non-acceptance boundary, portable V3 negative audit and fresh-validation V2 installation evidence, and the validated E6-MSO mechanism contract",
+        "docs/papers/resource_nmcts/chinese/main.tex is the single current 38-page Chinese competition manuscript and integrates formal v4 provenance, E4-v2 unsupported improvement, the E5 failure boundary, and the verifier-backed E6 development conditional negative result",
         "docs/competition/evidence/E2_QAOA_SCHEDULER_EVIDENCE.md records the verified scheduler evidence and claim boundary",
         "docs/competition/evidence/E3_NATIVE_FEEDBACK_EVIDENCE.md records frozen calibration/test evidence, full hashes, the unsupported primary hypothesis, mechanism analysis, and claim boundary",
-        "docs/papers/resource_nmcts/overleaf/worktree is the controlled clone for Overleaf project 6a748d57e970d09ad3c0dda4; origin/main commit c5c6993d1589469a61dfe18000a313d798b1c02f contains the current synchronized manuscript; the 35-page XeLaTeX PDF SHA-256 is f6a19cf8a7d2e245505777838a934f30219b378a063703784bf6cf535f908d8f and the clean build has no overfull, undefined reference/citation, or fatal error; v40 is only an intermediate historical snapshot"
+        "docs/papers/resource_nmcts/overleaf/worktree is the controlled clone for Overleaf project 6a748d57e970d09ad3c0dda4; origin/main commit 739b6c921e5c574871b12172024e2302aed8bb9c contains the synchronized E6-negative manuscript; the 38-page XeLaTeX PDF SHA-256 is fadd6965e39a390589086e1784e6e68984ce2121339dbace802775858d3fcfe3 and the clean build has no overfull, undefined reference/citation, or fatal error; the current PPT is synchronized while the old internal-audit package remains the pre-E6 baseline"
       ],
       "blocking_gaps": [
-        "integrate E6-MSO result claims only after a formal verifier-backed result exists; the 598-to-581 prototype must remain out of the result claims",
-        "final PDF rebuild after the remaining evidence is incorporated",
+        "retain the E6 result as development conditional negative evidence; the 598-to-581 prototype remains outside result claims",
+        "final PDF rebuild after later evidence is incorporated",
         "claim-to-evidence audit"
       ],
       "manuscript_policy": "Maintain one current Chinese academic main manuscript synchronized to Overleaf. Absorb valid v40 material and verified E1/E2 evidence; do not freeze or present v40 as a separate final version.",
@@ -369,8 +374,8 @@
         "a fresh CPython 3.11 venv installed from experiments/environment/requirements/dev.txt passes pip check with no conflicts",
         "the default experiments/scripts/verify_clean_install.py report is ok=true and covers exact versions/imports, SciPy MILP, PuLP, the 60,450-parameter checkpoint, direct QAOA, synthetic native/noise, legacy smoke, and a temporary complete demo plus independent verifier",
         "the fresh isolated environment completed the then-current 217 tests in 62.50 seconds; this is retained as a historical snapshot",
-        "anchored fresh-validation V2 completed 9/9 commands in a new venv, including pip check, targeted tests, 383 full tests in 295.779 seconds, smoke, default clean-install verification, and portable V3 verification; its independent verifier passes 19/19; this historical record is distinct from the current 557-test development tree",
-        "the current Conda development tree passes 557 tests in 316.28 seconds; the E6 head/replay/trainer/seal adversarial subset passes 150 tests. The most recent smoke and default clean-install verifier are green, while the anchored fresh-validation V2 historical record remains exactly 383 tests in 295.779 seconds and portable V3 passes 20/20 in both recorded environments",
+        "anchored fresh-validation V2 completed 9/9 commands in a new venv, including pip check, targeted tests, 383 full tests in 295.779 seconds, smoke, default clean-install verification, and portable V3 verification; its independent verifier passes 19/19; this historical record is distinct from the current 588-test passing development tree",
+        "the current Conda development tree passes 588 tests in 363.66 seconds with zero failures or errors; the submission-targeted subset passes 10/10 and the E6 five-file bundle independently verifies 11/11. Legacy smoke reports smoke ok; the default clean-install verifier reports ok=true with hardware/performance=false.",
         "fresh-validation V2 bundle snapshot dd75a9bcf06f37390c43acf6a019ea8a130ba26a998269ae10fe8bce78441d23 is checked against external anchor experiments/configs/xa202609/e5_v11_portable_fresh_validation_v2.anchor.json with SHA-256 036dc0cad2cbe6eabac70793e3be1de44fd8f1882753e595560870bc3eddd686",
         "docs/competition/submission/generated/ppt-cdb66ca7-pdf-f6a19cf8/XA-202609-internal-audit-draft binds the anchor and eight complete nine-file evidence bundles: portable V3, fresh-v2, and six predecessor/source/link bundles; the 366-file directory and 4,665,696-byte tar pass under a poisoned inherited environment, package-native fresh-v2 passes 19/19, tree-digest prefix e850a3b9 remains identical before/after with zero cache files, and the archive SHA-256 is 86b1b75b287ea2f7d042e388215168d96d2de2600d3731a6e6dbc07e82844e45",
         "the package permits exactly two locked local-path strings in historical verifier stdout fields; they are immutable provenance bytes and not runtime dependencies",
@@ -401,8 +406,8 @@
         "experiments/scripts/verify_demo_output.py independently checks hashes, inner evidence, AES logical scope, direct non-fallback QAOA, native/noise reporting, and claim boundaries",
         "experiments/demo/output contains input.json, report.json, report.md, execution.log, demo_manifest.json, checksums.sha256, and verification.json; all 13 verifier checks are true",
         "the persisted report records direct non-fallback QAOA, hardware_execution=false, performance_evidence=false, and quantum_advantage_claimed=false",
-        "experiments/tests/test_competition_demo.py is included in the current development tree, whose full suite passes 557 tests in 316.28 seconds; the frozen deck/package still records its pre-E6-v2 407-test baseline",
-        "the current competition PPT SHA-256 is cdb66ca733a6783cd020fd7b9ab8c568e7a80ef876d1109330cb62b3084680ae",
+        "experiments/tests/test_competition_demo.py is included in the current development tree, whose full suite passes 588 tests in 363.66 seconds; the current deck records 588 while the old internal-audit package retains its pre-E6-v2 407-test baseline",
+        "the current competition PPT SHA-256 is bf830dee8dd9adf5e9110cbf8b73f0ebbfbb3fe453c3aad03c057b031581d4e3",
         "the fresh-venv default clean-install verifier executes a temporary complete demo and its independent verifier successfully"
       ],
       "blocking_gaps": [

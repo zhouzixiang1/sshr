@@ -59,6 +59,8 @@
 在 FIPS~197 AES S-box 的八个标量坐标函数上，进一步的端到端案例保持同一冻结 learned-policy 根候选池与固定分支预算。\qaoa{}-shot 在 8/8 个候选池上命中 exact objective，而 diversity-greedy 为 3/8；两者的准入集合在 5/8 个坐标上不同，并在 4/8 个坐标上传导为不同的逻辑 OpenQASM~3。该变化没有形成一致的下游优势：\qaoa{} 的平均逻辑资源分数增加 0.448\%，平均原生总门数和双比特门数分别降低 2.827\% 和 3.229\%，但后两项的逐坐标胜/负/平为 2/2/4；含噪端点仅观察到 5/4096 次成功，不能支持改善主张。进一步的跨路线验证把同一逻辑 IR 分别投影为超导 synthetic executable/noisy、离子阱 ideal resource adapter 和光量子 boundary-only 三种证据类型；统一 SHA-bound manifest 的 27 项独立检查全部通过，但三条路线均为 \texttt{hardware\_execution=false}。由此，本文既建立了 AI--量子调度--执行端点在密码案例上的可审计传播链，也将其当前边界定位为“局部量子调度目标有效，但尚未与逻辑和执行目标稳定对齐”；跨路线抽象扩大的是可审计接口，而不构成量子加速、真机优势或跨器件性能泛化。
 
 在后续的冻结检验中，执行感知 \qaoa{} 相对历史 \qaoa{} 的原生双比特门数差为 $-513.9375$，按 AES 输出坐标聚类的 95\% bootstrap 区间为 $[-2059.0625,589.9375]$，仍未通过改善门；这些 AES 坐标已在 E4 中出现，因而只构成 post-E4 复现而非泛化证据。进一步使用训练来源闭合的模型检验 ASCON 与 PRESENT 外部密码族时，标量坐标表示分别只产生 0 与 6 个可调度组。尽管事后负向审计对 90/90 条记录重建了搜索、线路和原生端点，预设的逐家族活动门仍失败，性能端点不能接受。两项负结果把尚未解决的问题从“怎样继续调权”收缩为“怎样构造同时可验证且具有可调度共享结构的多输出表示”。
+
+最后，E6-MSO 在单配置、确定性串行运行条件下贯通了真实的 replay--head--held-out 开发评估链：四个回放臂在 64 个 $n=6,7$ 训练函数上分别训练 head，并在 32 个 $n=4,5$ 多输出函数簇上比较。主比较中，\qaoa{} 最终测量回放相对同 counts 的置换标签对照使资源比 $Y$ 的均值增加 $0.094978$（越低越好），95\% bootstrap 区间为 $[0.069638,0.123767]$。该反向结果不支持改善主张，只是单一固定语料、初始化与 seed 下的 development conditional 机制诊断；它不是正式或性能评估、密码家族泛化、硬件执行或量子优势证据。
 \end{abstract}
 
 \noindent\textbf{关键词：}AI for Quantum；Quantum for AI；量子 oracle 综合；置换等变学习；蒙特卡洛树搜索；QAOA；密码布尔函数
@@ -85,6 +87,7 @@
   \item 将固定预算下的独立 MCTS 分支准入写成效用--多样性组合优化，给出 greedy、exact 与 \qaoa{} 的同池 QUBO 对照，使量子子程序能够真实改变 AI 搜索轨迹而不改变 Oracle 语义。
   \item 在 FIPS~197 AES S-box 的八个标量坐标函数上贯通等变 policy、冻结候选池、greedy/\qaoa{} 调度、逻辑发射、原生映射和 seeded 含噪轨迹，以完整逻辑语义验证和受限执行证据揭示局部调度目标与下游资源目标的错配。
   \item 以来源闭合的 policy/value 模型和冻结执行感知权重开展 post-E4 AES 复现及 ASCON/PRESENT 外部家族检验；区间跨零和家族活动门失败均作为负向证据保留，从而区分“机制可运行”“记录可重建”与“性能端点可接受”。
+  \item 在 E6-MSO 中贯通 \qaoa{} 最终测量 replay、等变 shared head、top-$K$ 共享动作选择与完整多输出语义验证，并以同 counts 的置换标签对照形成可重算的 development conditional 诊断；该结果用于定位训练标签与下游资源目标的错配，不被升级为性能或泛化证据。
   \item 构造从逻辑 MCT 到合成局部耦合图上 $\{\rz,\mathrm{SX},X,\mathrm{CX}\}$ 的可追溯分解与路由，并以 calibration/test 隔离的 Pauli trajectory 标签冻结执行反馈模型；held-out 负结果用于界定当前结构代理的失效边界，而不被删去或改写为正向优势。
   \item 在统一 $X$/CNOT/MCT 逻辑 IR 上建立证据分级的三路线适配：超导路线提供 synthetic 原生编译与含噪执行，离子阱路线提供全连接 $\{R_z,R_x,R_{XX}\}$ 理想酉适配，光量子路线只声明编码、资源态、测量前馈与损耗前提；统一 manifest 不把不同强度的证据折叠为“硬件已支持”。
   \item 设计由布尔环线性因子、\mcts{}、depth-frontier controller、Pareto archive 和 baseline-preserving guard 组成的逻辑层 synthesis pipeline，并给出强 no-\mcts{}、随机先验和随机深度对照。
@@ -371,9 +374,22 @@ $X$ 映射为 $R_x(\pi)$，CNOT 由一个 $R_{XX}(\pi/2)$ 与局部 $R_z/R_x$ �
 
 每条 Plan 依次接受 plan \anf{}、emitted-circuit \anf{} 以及全部 256 个输入和两个目标初值的可逆 Oracle 检查。随后，逻辑线路在 synthetic heavy-hex-like profile 上分解和路由到 $\{\rz,\mathrm{SX},X,\mathrm{CX}\}$，并检查原生门白名单与所有双比特耦合边。含噪端点固定输入锚点 $\{0,83,124,255\}$ 和两个 noise-seed anchor；每个输入--噪声组合执行 32 shots，因此每条 trial 为 256 shots、16 条 trial 共 4096 shots。噪声参数仍为 $p_1=0.0002$、$p_2=0.003$ 和 $p_r=0.01$。由于 AES 坐标线路包含 10 个逻辑/工作量子位和数万原生门，本案例没有执行逐 trial 的 AES-scale 原生全基态 statevector 穷举等价；原生层证据仅覆盖分解/路由契约与声明锚点上的实际 seeded Pauli trajectories。
 
+\subsection{E6-MSO replay--head 因果协议}
+
+E6 采用单一配置与确定性串行运行。该配置生成 64 个 synthetic VectorANF 训练函数（$n=6,7$ 各 32 个），固定来源闭合的置换等变 trunk，并从同一 head 初始化分别训练四个臂：classical random bitstring replay、classical greedy repeated-selection replay、\qaoa{} final-measurement replay，以及 \qaoa{} permuted-label control。\qaoa{} 使用 $p=1$ 和 512 shots；回放只读取最终测量 bitstring counts，不读取优化器轨迹。置换标签对照保留与 \qaoa{} 臂完全相同的 counts 和 value target，只置换 action--label 对应关系，因此主比较隔离的是保留该对应关系的条件效应。四臂的观察预算相同，但经典 greedy 与 \qaoa{} 的计算预算并不相等，故两者只作描述性次比较。
+
+固定的 held-out 开发评估包含 32 个 synthetic 多输出双射函数（$n=4,5$ 各 16 个），并以完整 vector function 为聚类单位；该集合不含密码函数，也不承担跨家族检验。对每个函数，候选先按 arm-neutral raw analytic utility 排序并截断为至多 256 个动作，head 再将该公共池排序并截取 top-$K=10$，不直接向调度器传递 logit 数值。随后所有臂共享同一 raw utility 和同一 exact scheduler，从 shortlist 中选择至多 $B=2$ 个无冲突共享动作。资源分数固定为
+\begin{equation}
+S=T+0.04\,\mathrm{CNOT}+0.015\,\mathrm{depth}+0.01\,\mathrm{gates}+2\,\mathrm{ancilla},
+\qquad
+Y=\frac{S_{\mathrm{shared}}}{S_{\mathrm{direct}}},
+\label{eq:e6-development-endpoint}
+\end{equation}
+其中 $Y$ 越低越好。每条输出程序均穷举所有 $x$ 与所有初始目标向量 $y$，检查输入保持、输出正确及显式 workspace 回零。该端点只统计 abstract logical $X$/CNOT/MCT proxy，不包含 MCT 分解所需的隐式辅助位、原生编译或硬件执行。
+
 \section{实验设置}
 
-实验围绕九个可证伪问题展开。H0 检查所有进入比较的线路是否严格保持 Oracle 语义；H1/H2 分别检查置换等变归纳偏置以及 policy、value、progressive widening 的可分离贡献；H3 检查 \qaoa{} 是否能在冻结候选池上改善固定预算多样性目标，并追踪这种局部改善能否转化为最终资源收益；H4 检查执行标定能否缩小逻辑代理与合成硬件 profile 上含噪指标之间的偏差；H5 检查同一调度干预在 AES S-box 坐标上能否从 exact-objective 命中传导到逻辑、原生和含噪端点；H6 检查同一 $X$/CNOT/MCT 逻辑契约能否在三条硬件路线上保留可验证语义或显式的不支持边界；H7 检查在 calibration 内冻结的执行感知 utility 能否在 post-E4 AES 复现中稳定降低原生双比特门数；H8 检查同一机制在 ASCON/PRESENT 外部密码族上是否具有足够的根动作活动度，从而使调度对比可识别。传统逻辑层比较同时回答 \method{} 相对同任务代数基线、SSHR、公开最优库及外部工具链的结论边界。H4--H8 与前述逻辑结果使用独立证据 bundle，不把合成或 ideal profile 外推为真机性能。
+实验围绕十个可证伪问题展开。H0 检查所有进入比较的线路是否严格保持 Oracle 语义；H1/H2 分别检查置换等变归纳偏置以及 policy、value、progressive widening 的可分离贡献；H3 检查 \qaoa{} 是否能在冻结候选池上改善固定预算多样性目标，并追踪这种局部改善能否转化为最终资源收益；H4 检查执行标定能否缩小逻辑代理与合成硬件 profile 上含噪指标之间的偏差；H5 检查同一调度干预在 AES S-box 坐标上能否从 exact-objective 命中传导到逻辑、原生和含噪端点；H6 检查同一 $X$/CNOT/MCT 逻辑契约能否在三条硬件路线上保留可验证语义或显式的不支持边界；H7 检查在 calibration 内冻结的执行感知 utility 能否在 post-E4 AES 复现中稳定降低原生双比特门数；H8 检查同一机制在 ASCON/PRESENT 外部密码族上是否具有足够的根动作活动度，从而使调度对比可识别；H9 检查在 E6-MSO 中保留 \qaoa{} 最终测量回放的 action--label 对应关系，能否相对同 counts 的置换标签对照降低固定开发集上的资源比 $Y$。传统逻辑层比较同时回答 \method{} 相对同任务代数基线、SSHR、公开最优库及外部工具链的结论边界。H4--H9 与前述逻辑结果使用独立证据 bundle，不把 development、synthetic 或 ideal profile 外推为真机性能。
 
 传统核心切片包含 $n\leq6$ 的 177 个函数。weighted ESOP-MILP 对每个函数设置 10~s 求解上限，报告该加权 ESOP 模型返回的可行 incumbent；它不是量子线路全局最优证书。外部逻辑网络覆盖 ABC/BDD、ROS-style LUT、mockturtle、Caterpillar 和 CirKit；RevKit CLI 使用完整 permutation 上的 exact-oracle reversible synthesis，RevKit Python \texttt{oracle\_synth} 则单独作为 phase/Rz 边界。高维实验包括 $n=20,24,28,32,40$ 项集、$n=48,56,64$ 超大规模符号压力切片，以及 $n=21$--$30$ 的完整 \ttable{} bridge。所有配对比较只纳入名称匹配、语义检查成功且满足各自 timeout 契约的行。
 
@@ -392,6 +408,8 @@ E4-v2 在运行前以本地协议锁冻结 12 个非 AES calibration 函数、�
 E5 先在不导入密码表的条件下，用 $n=6,7$ 各 6 个 calibration 函数冻结来源闭合的 v4 模型门、执行感知权重、固定 10-qubit profile、五个评估臂与 90 行矩阵；ASCON 5-bit 前向 S-box 为主家族，PRESENT 4-bit 前向 S-box 为次家族\cite{nist2025ascon,bogdanov2007present}。首次释放后的 v1 运行在 ASCON 输出坐标 0 的第一条分配上因根动作集合为空而 fail closed，未完成任何 trial 行或性能端点。v1.1 只修订零动作 direct root 的预声明记账，不改变模型、权重、预算、种子、profile 或端点；修订后的主分析仍要求每个密码家族至少有一个可调度组，避免把五臂同一 direct 线路的结构性平局解释为调度效果。
 
 为检验上述负向结论是否依赖单一数值软件构建，E5 另设跨构建可移植性审计。V3 审计只对预先列举的 learned prior、raw/adjusted utility 及其确定性连续派生量允许有限浮点差异，阈值固定为 $\operatorname{rtol}=10^{-6}$、$\operatorname{atol}=5\times10^{-6}$，并要求所有值有限；候选结构与顺序、准入集合、\qaoa{} 离散输出、Plan、逻辑 QASM、原生线路、端点和 summary 仍须严格一致。独立 fresh-validation v2 则从空 CPython~3.11 venv 记录依赖闭包、安装报告、测试与 verifier 命令，并要求调用方在解析 bundle 前提供外置 anchor SHA。该层只检验软件与证据可移植性，不把协议拒绝改写为性能结果，也不把版本固定等同于二进制完全复现。
+
+E6 full profile 固定总 seed 为 20260912、head 初始化 seed 为 20260907、训练采样 seed 为 20260913，开发评估数据 seed 为 20260921；四个 head 均在 CPU 单线程、float32 下执行 256 个 AdamW update，不使用 early stopping、resume 或基于开发端点的模型选择。主效应定义为 32 个 whole-vector 函数簇上 \qaoa{} final-measurement replay 减 permuted-label control 的配对平均 $Y$ 差；95\% 区间使用 10,000 次簇 bootstrap，并辅以 100,000 次 sign-flip 检验和 $n=4,5$ 分层方向门。全部超参数、语料生成器与统计种子在运行前由同一配置文件固定，但这仍是单一配置、单一初始化与单一运行 seed 的 development conditional 实验，不是 formal evaluation 或泛化检验。
 
 \begin{table}[H]
 \centering
@@ -412,6 +430,7 @@ E5 先在不导入密码表的条件下，用 $n=6,7$ 各 6 个 calibration 函�
 密码应用案例 & AES S-box 坐标上的 diversity-greedy/\qaoa{} & 局部调度变化是否传导至逻辑与原生线路 & 联合 SubBytes、完整 AES 轮、真机或量子优势 \\
 冻结执行感知复现 & post-E4 AES、历史/执行感知 $\times$ greedy/\qaoa{} & 固定权重下原生双比特门数的坐标簇效应 & 新家族留出、泛化、真机或性能改善 \\
 外部家族可识别性 & ASCON/PRESENT、来源闭合 v4 与五臂矩阵 & 标量表示是否产生足以比较调度器的非退化动作 & 把零动作平局或事后重建写成性能端点 \\
+E6 replay--head 诊断 & 四种回放监督与固定 held-out 开发集 & action--label 对应关系是否改善 top-$K$ 后的共享表达式选择 & 正式性能、跨家族泛化、同算力或量子优势 \\
 跨硬件抽象 & 超导 synthetic、离子阱 ideal、光量子 boundary-only & 同一逻辑契约可进入路线特定且证据分级的接口 & 真实设备、跨路线性能比较或光量子门映射 \\
 规模验证 & $n=20$--$64$ 符号压力与 $n=21$--$30$ 完整 bridge & 在声明的验证包络内保持逻辑正确 & 高维全函数穷举或最优性证明 \\
 Phase 迁移 & RevKit \texttt{oracle\_synth}、ANF/FPRM phase parity 与 affine shortlist & 搜索框架可迁移到逻辑 phase/Rz proxy & 最终 Clifford+T 旋转综合或 bit-flip 头部结果 \\
@@ -424,7 +443,7 @@ Phase 迁移 & RevKit \texttt{oracle\_synth}、ANF/FPRM phase parity 与 affine 
 \tiny
 \setlength{\tabcolsep}{2.1pt}
 \renewcommand{\arraystretch}{1.04}
-\caption{实验论据阶梯。E1--E5 与三路线证据分别承担性能、机制、可识别性或边界作用；记录重建通过不等于协议性能门通过，不同层级的验证强度不可互换。}
+\caption{实验论据阶梯。E1--E6 与三路线证据分别承担性能、机制、可识别性或边界作用；记录重建通过不等于协议性能门通过，不同层级的验证强度不可互换。}
 \label{tab:evidence-ladder-zh}
 \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.17\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}rr>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.22\linewidth}}
 \toprule
@@ -442,6 +461,7 @@ AI/搜索控制归因 & $n=3$--$40$ & 385 & 15930 & 同预算、held-out 与独�
 AES 端到端案例 & $n=8$ S-box 坐标 & 8 & 16 & 完整逻辑 Oracle 与调度--QASM--原生传播 & 原生穷举等价未跑；noisy 端点为 sampled diagnostic \\
 AES 执行感知复现 & $n=8$ E4 已见坐标 & 8 & 64 & 四臂公平性、逻辑/原生契约与坐标簇区间 & post-E4 复现；不支持留出或泛化主张 \\
 外部密码族负向审计 & ASCON 5-bit/PRESENT 4-bit & 9 & 90 & 搜索链与逻辑/原生端点均 90/90 事后重建 & 家族活动门失败；不接受性能端点 \\
+E6 replay--head 开发实验 & synthetic VectorANF $n=4$--$7$ & 96 & 96 & 64 个训练函数与 32 个多输出 held-out 函数闭合实际回放链 & 单配置 development conditional；非密码、非正式性能证据 \\
 硬件路线分级 & 3 路线/4 类离子阱门 & 3 & 27 & SHA、重编译、全酉矩阵与 boundary 检查 & 超导仅 synthetic；离子阱仅 ideal；光量子仅接口 \\
 \bottomrule
 \end{tabularx}
@@ -826,6 +846,28 @@ E5-v1 在释放并核对 ASCON/PRESENT 标准表后，于第一条 ASCON 分配�
 
 跨构建 V3 审计在参考 Conda 环境与全新 pip venv 中均通过 20/20 项检查。后者相对参考构建的连续量最大绝对与相对差分别为 $3.814697\times10^{-6}$ 和 $5.046907\times10^{-7}$，落在冻结容差内；90/90 行的候选离散投影、选择、Plan、逻辑/原生 QASM 与端点保持严格一致。fresh-validation v2 的两个环境又分别通过 19/19 项外置 anchor 检查；其冻结的全新环境运行记录 383 项测试，并通过 smoke 与默认安装 verifier。加入 submission 自包含验证与根路径污染回归后，当前集成树进一步达到 407 项测试全通过。上述结果说明 E5 的负向结论不是某一个 Torch 二进制构建的离散决策偶然产物；它仍然没有改变 ASCON 为 0、PRESENT 为 6 个可调度组以及 \texttt{protocol\_acceptance=false} 的科学结论。
 
+\paragraph{H9：\qaoa{} 最终测量回放能否改善 E6-MSO head。}
+四个 head 均完成同一固定语料上的 256 次更新，训练损失均下降。表~\ref{tab:e6-replay-head-zh} 给出 32 个 held-out 开发函数的端点。\qaoa{} final-measurement replay 与 random replay 的平均 $Y$ 均为 0.999172，且 32/32 个函数的最终资源端点逐项相同；两臂又各有 31/32 个函数的 exact scheduler 返回空共享动作集。Greedy replay 的平均 $Y$ 为 0.775639，32/32 个函数均选择至少一个共享动作；置换标签对照的平均 $Y$ 为 0.904194，3/32 个函数为空。
+
+\begin{table}[H]
+\centering
+\small
+\caption{E6-MSO 四种回放监督在固定 held-out 开发集上的资源比。$Y<1$ 表示相对 direct emitter 更低，数值越低越好；greedy 与 \qaoa{} 的计算预算不相等。}
+\label{tab:e6-replay-head-zh}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}Xrr>{\raggedright\arraybackslash}p{0.27\linewidth}}
+\toprule
+回放监督臂 & 平均 $Y$ & 空选择 & 比较角色 \\
+\midrule
+Random bitstring & 0.999172 & 31/32 & 描述性次对照 \\
+Greedy repeated-selection & 0.775639 & 0/32 & 最强当前描述性基线，非同算力主对照 \\
+\qaoa{} final measurement & 0.999172 & 31/32 & 主比较处理臂 \\
+\qaoa{} permuted label & 0.904194 & 3/32 & 同 counts、同 value target 主对照 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+主比较的配对平均差 $\Delta Y=Y_{\mathrm{QAOA}}-Y_{\mathrm{perm}}$ 为 $+0.094978$，95\% 簇 bootstrap 区间为 $[+0.069638,+0.123767]$，双侧 sign-flip $p=9.9999\times10^{-6}$，函数级胜/平/负为 0/3/29；分层均值在 $n=4$ 和 $n=5$ 上分别为 $+0.154025$ 与 $+0.035931$。32/32 个函数在四臂下均通过完整语义检查且没有 fallback，独立 verifier 对配置、语料、确定性重训、top-$K$、exact 调度、发射、语义、统计与 checksum 的 11/11 项重算全部通过。由于效应方向与预设改善方向相反，\texttt{claim\_supported=false} 且 \texttt{performance\_evidence=false}；formal evaluation、hardware execution 与 quantum advantage 也均未建立，故 H9 未获支持。
+
 \subsection{Phase/Rz 边界与 Affine-FPRM 搜索}
 
 RevKit \texttt{oracle\_synth} 在 177 个传统函数上全部返回，但 171/177 行含非 Clifford \rz{}，总数为 9242。因此，如果只按 lower-bound phase netlist 计分，比较会低估 RevKit 输出在 Clifford+T 近似综合中的成本。为把该边界转化为本文内部可验证分支，我们实现 phase-parity \anf{} emitter，并进一步加入 fixed-polarity \fprm{} search 和 Affine-FPRM phase search。
@@ -931,9 +973,11 @@ E4-v2 实际执行了上述目标修正，却没有把点估计升级为稳定�
 
 这一矛盾指向 E6-MSO（多输出共享表达式 Boolean Oracle），而不是简单降低单坐标最小因子次数阈值。标量坐标逐一综合便于完整真值表验证，却删除了不同输出之间可复用的 monomial 与 semi-affine 结构；放宽单坐标阈值只能增加局部候选，不能恢复被表示切断的跨输出共享关系。本文已实现隔离的机制 MVP：以 VectorANF 同时表示多个输出支撑集，为每个合法共享表达式完整枚举 fanout 不小于 2 的目标子集，并将计算、向多个目标位 fanout 和反计算写成可验证的 compute--fanout--uncompute 动作；整条程序复用不超过 2 条显式 workspace 线。该资源口径仅是 abstract logical X/CNOT/MCT proxy，不包含 MCT 分解所需的隐式辅助位，也不是硬件精确门数。
 
-候选的输出--项 footprint 形成硬冲突，软冗余与操作级效用进入同一冻结 QUBO；解析罚项门和小规模全 $2^K$ 能量审计保证不可行最低能态不能被静默接受。\qaoa{} phase 只接收这组 QUBO 系数，测量后再分别记录直接可行、精确 repair 与 fallback，因而 Quantum for AI 子程序没有借用额外 feasibility oracle。独立整改复审已覆盖 partial-fanout、phase Hamiltonian、罚项、大数比较和资源边界，但这仍只是机制与语义合同。AI for Quantum 侧的输入/输出置换等变 shared policy/value、Quantum for AI 轨迹 replay、来源冻结 bundle 和锁后盲测均未完成，因此本文不把该 MVP 写成 E6 性能结果。
+候选的输出--项 footprint 形成硬冲突，软冗余与操作级效用进入同一 QUBO；解析罚项门和小规模全 $2^K$ 能量审计保证不可行最低能态不能被静默接受。\qaoa{} phase 只接收这组 QUBO 系数，测量后再分别记录直接可行、精确 repair 与 fallback，因而 Quantum for AI 子程序没有借用额外 feasibility oracle。E6 fixed-run experiment 进一步把实际最终测量 counts 写入 replay，依次贯通 replay、head training、top-$K$、exact scheduler、共享表达式发射和完整语义验证。它完成的是此前缺失的端到端机制链，而不是性能改善：主效应为正且区间完全位于零以上，说明当前 action--label 对应关系在这一次固定开发运行中产生了反向结果。
 
-ASCON 与 PRESENT 的表、坐标及退化结构已经在 E5 中被观察，后续不能再把它们标为盲测。E6 的泛化检验应先锁定 VectorANF、冲突定义、模型、训练数据、端点和 verifier，再由锁后承诺的 SHA 派生此前未见的双射 S-box；只有在每个新家族满足预设最小活动度后，才允许比较 shared policy/value、经典调度与 \qaoa{} replay 的资源效应。
+训练损失下降却没有转化为可用 shortlist。\qaoa{} replay head 的 top-$K$ 平均 raw analytic utility 仅为 0.2103，32 个函数中只有 1 个 shortlist 含可被 exact scheduler 接受的正收益组合，因此 31/32 个函数退化为空选择；置换标签对照与 greedy replay 的对应均值分别为 6.974 和 42.391。其训练 teacher 来自最终测量的可行 bitstring 边际，而不是直接的 raw-utility 排序标签；64 个训练函数中又有 41 个 \qaoa{} 终态取 $\gamma=0$，这些分布不携带 cost-Hamiltonian 的 utility phase 信息。与此同时，训练时每个六输出函数只保留 6 个候选，held-out 的四/五输出函数却向 head 提供 33--256 个候选后再截取 top-10，构成明显的候选支持域变化。三项观测共同支持“当前 teacher 与下游 raw utility 未对齐，且候选支持域发生迁移”这一机制诊断，但单一固定语料、初始化与 seed 不能排除偶然初始化、语料构成和表征容量等竞争解释。置换标签对照优于原标签也不能被解释为置换本身具有一般收益，它可能只是在本次条件下破坏了有害关联。Greedy replay 虽给出最低平均 $Y$，但其计算预算与 \qaoa{} 不相等，当前实验不能据此声称同算力优势。
+
+因此，E6 的下一步不是依据当前 held-out 开发集直接修改 replay teacher、候选池或超参数，而是先在全新 seed 上预注册 D1 机制诊断。D1 固定现有 teacher、候选池构造与上限、观察/训练预算及 exact scheduler，在 structured $n=6,7$ validation 与 OOD $n=4,5$ endpoint 上运行 $\{\text{QAOA labels},\text{permuted labels}\}\times\{\text{value weight}=1,0\}$ 的 $2\times2$ 分解；greedy replay 与冻结初始 head 只作为诊断锚，不进入改善主张。预注册读数分别检验 teacher target 与 raw utility 的一致性、候选支持变化后的 top-$K$ 正收益覆盖/空选择，以及 shared value loss 是否干扰 policy 排序。旧 seed 20260921 只保留为本节负向证据，不用于选择 D1 方案、阈值或解释。只有 D1 在预设读数上确认 target、support 或 shared-value 机制后，才另开 D2、使用再一组新 seed 修改 teacher 或候选池，并单独注册比较与验收门。ASCON 与 PRESENT 已在 E5 中被观察，不能充当新的跨家族证据。
 
 三条硬件路线进一步表明，可移植性应拆分为逻辑契约的可接入性、路线内的语义保真性与执行证据三层。超导路线达到合成拓扑上的完整基态与含噪轨迹，离子阱路线达到 ideal 全酉矩阵等价，光量子路线只达到可机器检查的先决条件边界。这种不对称不是把三条路线拼成一个模块列表，而是使未获得的证据成为 manifest 中的可审计状态。由于原生字母表、耦合模型和资源定义不同，当前门数不能跨路线直接比较，也不能用 ideal 等价推断设备级性能。
 
@@ -953,13 +997,15 @@ E3 完成了闭环机制，却没有通过改善门：冻结执行反馈相对�
 
 E5 的跨构建 V3 与 fresh-validation v2 又表明，这一拒绝在不同 Torch 二进制构建及全新依赖安装中保持同一离散搜索、线路和端点。它闭合的是负向证据的可移植性，而非 AI for Quantum 的性能收益或 Quantum for AI 的量子优势。
 
-这些证据把后续创新问题从“是否接入硬件代理”推进为“标量候选表示是否为双向智能提供了可识别的共享动作”。E6-MSO 的机制 MVP 已把 VectorANF、跨输出 monomial/semi-affine 共享、compute--fanout--uncompute 与冲突 QUBO 纳入同一可测试语义合同；下一步才是输出置换等变 shared policy/value 与 \qaoa{} replay。当前尚无 E6 正式性能结果；未来只有在协议锁后由承诺 SHA 派生的未见双射 S-box 上，同时通过家族活动门、语义门和区间门，才能把当前受审计的双向原型升级为具有跨家族证据的密码 Oracle 编译方法。
+这些证据把后续创新问题从“是否接入硬件代理”推进为“多输出共享动作的训练标签是否与下游资源目标一致”。E6-MSO 已把 VectorANF、跨输出 monomial/semi-affine 共享、compute--fanout--uncompute、冲突 QUBO 以及真实 final-measurement replay--head--held-out 开发评估纳入同一可重算链；32/32 个函数均保持语义且无 fallback。然而，\qaoa{} replay 相对同 counts 置换标签对照的 $\Delta Y=+0.094978$，95\% CI 为 $[+0.069638,+0.123767]$，表明当前标签关联没有形成资源改善。这一结果是用于定位目标错配的诊断基线，不是 E6 的最终目标，也不是 formal、generalization 或 performance evidence。
+
+下一阶段先在全新 seed 上预注册 D1：保持当前 teacher、候选池与预算不变，以 structured $n=6,7$ validation 和 OOD $n=4,5$ endpoint 执行 $\{\text{QAOA labels},\text{permuted labels}\}\times\{\text{value weight}=1,0\}$；greedy 与冻结初始 head 仅作诊断锚，旧 seed 20260921 不参与方案选择。只有 D1 确认 target、candidate-support 或 shared-value 机制，才在独立 D2 新 seed 上修改 teacher 或候选池并重新注册性能门。D1 本身不改变本轮负结论，也不支持 AI for Quantum 性能改善、Quantum for AI 优势或密码家族泛化。
 
 三路线硬件 bundle 把这一闭环置于可审计的设备抽象之上：超导 synthetic 路线提供原生/含噪执行层，离子阱 ideal 路线提供全酉矩阵级语义保真，光量子路线则在先决条件不足时显式拒绝伪映射。这一结果扩展的是 AI for Quantum 与 Quantum for AI 共享的证据接口，并不改变无真机、无跨路线性能比较与无量子优势的结论边界。
 
 \section*{数据与代码可用性}
 
-本文使用的当前代码、实验驱动、模型、已选择的 XA evidence、LaTeX 表格和审计报告维护在项目仓库的 \path{experiments/} 与 \path{docs/} 目录；历史原始 CSV、旧 sweep、旧投稿包和早期文稿在 \path{misc/archive/} 中只读保存。E1--E4、E4-v2 与硬件路线的正式证据 bundle，以及 E5 的 preflight、seal、失败与负向审计证据，统一维护在 \path{experiments/results/xa202609/} 或其明确标注的只读历史路径。每个正式 run 均包含 raw JSONL 或路线 payload、summary/manifest、verifier、环境或语义契约 SHA、artifact manifest 和 checksum；通过的完整性 verifier、失败的性能协议门与事后负向审计在文中分别解释，不互相替代。
+本文使用的当前代码、实验驱动、模型、已选择的 XA evidence、LaTeX 表格和审计报告维护在项目仓库的 \path{experiments/} 与 \path{docs/} 目录；历史原始 CSV、旧 sweep、旧投稿包和早期文稿在 \path{misc/archive/} 中只读保存。E1--E4、E4-v2 与硬件路线的正式证据 bundle，E5 的发布失败与负向审计证据，以及 E6 的 development conditional bundle，统一维护在 \path{experiments/results/xa202609/} 或其明确标注的只读历史路径。各证据层的 raw payload、summary、verifier 与 checksum 只认证其声明范围；完整性通过、性能协议失败和事后负向审计在文中分别解释，不互相替代。
 
 E2 的完整 run ID、冻结配置与 manifest SHA 记录在 \path{docs/competition/evidence/E2_QAOA_SCHEDULER_EVIDENCE.md}。E3 的 calibration/test run ID、预注册判据、完整 SHA 和负向结果解释记录在 \path{docs/competition/evidence/E3_NATIVE_FEEDBACK_EVIDENCE.md}；其中冻结模型、calibration summary、test summary 与原生/噪声 profile 的 SHA-256 前缀依次为 \texttt{b9b0df42}、\texttt{9945a2f3}、\texttt{328e12e2} 与 \texttt{57b9a651}。E3 是合成 profile 上的实际含噪模拟，不含真机数据；相关产物不会被表述为真实硬件优势。
 
@@ -970,6 +1016,8 @@ E4-v2 的 calibration/replication run ID 分别为 \path{20260812-e4-v2-frozen-r
 E5 使用的来源闭合模型 bundle 为 \path{20260812-foundation-v4-provenance-formal-s20260904}。v1 的 preflight/seal run ID 为 \path{20260812-e5-preflight-external-crypto-v1-s840000} 与 \path{20260812-e5-seal-external-crypto-v1-s840000}；首次释放失败证据只读保存在 \path{misc/archive/experiments/xa202609-development/e5-first-release-root-scheduler-contract-failure-20260812/}。v1.1 的 preflight、seal、90 行评估与事后负向审计分别为 \path{20260812-e5-v11-preflight-external-crypto-v1-s840000}、\path{20260812-e5-v11-seal-external-crypto-v1-s840000}、\path{20260812-e5-v11-ascon-primary-present-secondary-v1-s940000} 与 \path{20260812-e5-v11-negative-audit-v1-s950000}。评估 bundle 的声明 verifier 因 ASCON 无可调度组而保持 \texttt{ok=false}；负向审计 verifier 的 \texttt{ok=true} 只认证 90/90 重建和原失败状态未被改写。
 
 E5 的跨构建科学审计与全新安装证据分别位于 \path{20260812-e5-v11-portable-negative-audit-v3-s950000} 和 \path{20260812-e5-v11-portable-fresh-validation-v2-s970000}。前者的 bundle snapshot SHA-256 为 \texttt{4ba1d958\ldots02ea}，后者为 \texttt{dd75a9bc\ldots1d23}；fresh-validation 外置 anchor 位于 \path{experiments/configs/xa202609/e5_v11_portable_fresh_validation_v2.anchor.json}，其 SHA-256 为 \texttt{036dc0ca\ldots{}d686}。验证器必须由 bundle 外部获得该 anchor 值后再解析内容，从而避免用自含 checksum 证明自身；当前内部审计包的上层 manifest 已同时固定 anchor、八个完整依赖九件套及其逐文件 SHA。两个证据层均保持 \texttt{protocol\_acceptance=false} 与 \texttt{experiment\_completed=false}，不构成性能、真机或量子优势证据。
+
+E6 replay--head 开发诊断位于 \path{experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/}，目录只含 \path{config.json}、\path{results.json}、\path{raw.jsonl}、\path{heldout_evaluation.json} 与 \path{checksums.sha256} 五个文件。独立 verifier 从配置重建训练语料，依次重训四个 head，并重算 held-out 的 top-$K$、exact 调度、发射、语义与统计，11/11 项检查全部通过。Bundle 显式记录 \texttt{performance\_evidence=false} 与 \texttt{formal\_evaluation=false}；该路径保存的是单一固定运行的 development conditional 负向诊断，不是正式或泛化结果。
 
 硬件路线正式 run ID 为 \texttt{20260812-hardware-routes-v1-s202609}，routes manifest SHA-256 前缀为 \texttt{6c3b3758}。独立 bundle verifier 的 27 项检查全部为 true，并重算超导路线、离子阱路线与光量子边界的语义而不信任 builder 摘要。三条路线均显式记录 \texttt{hardware\_execution=false}。
 

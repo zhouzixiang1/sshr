@@ -29,6 +29,8 @@ YYYYMMDD-HHMMSS-<track>-<slug>-s<seed>/
 - `e4-crypto`：AES/SM4/PRESENT/ASCON 案例；
 - `hardware-routes`：三路线 capability、离子阱理想酉适配与光量子 fail-closed 边界；
 - `e5-e2e`：端到端原型与演示。
+- `e6-q4ai-causal`：QAOA final-measurement replay 到 shared policy/value head 的
+  四臂单研究者确定性 development 因果实验。
 
 `raw.jsonl`、事件流和日志默认留在本机/服务器 artifact storage；经 verifier
 确认的小型 summary、manifest、校验和及 claim map 才复制到
@@ -49,3 +51,23 @@ YYYYMMDD-HHMMSS-<track>-<slug>-s<seed>/
 - `20260812-hardware-routes-v1-s202609/`：7 个 canonical/SHA-bound 文件；
   独立 verifier 重算超导编译与 seeded noise、离子阱全基态/全酉矩阵和光量子
   unsupported boundary，全部检查通过；三条路线均为 `hardware_execution=false`。
+
+当前 E6 Q4AI development 负证据：
+
+- `20260812-e6-q4ai-causal-v1-full-s20260912/`：采用精简的五文件合同
+  `config.json/results.json/raw.jsonl/heldout_evaluation.json/checksums.sha256`，绑定
+  clean source `e850c0c` 和 snapshot
+  `18b758ac3e432a5d4e9f0ba1f8be7e17bd1b848b6212234eea9d2e842d4cc76a`；64 个
+  `n=6/7` train case、32 个 `n=4/5` held-out case，独立 verifier 11/11 通过。
+  primary QAOA-control 差为 `+0.0949778`（越低越好），95% CI
+  `[0.0696384,0.1237673]`，`p=9.9999e-6`，W/T/L=`0/3/29`；QAOA 与 random
+  endpoint 32/32 相同且各有 31/32 空选择。greedy `Y=0.775639` 仅作非等计算
+  描述。该目录是 development negative evidence，不是 formal/performance/
+  generalization/hardware/advantage evidence。
+
+复验命令：
+
+```bash
+/opt/anaconda3/envs/mcts-qoracle/bin/python scripts/verify_e6_replay_training_bundle_v1.py \
+  results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912
+```

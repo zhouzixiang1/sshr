@@ -34,9 +34,11 @@ X/CNOT/MCT 层的布尔 Oracle 综合。QAOA 固定预算调度、synthetic-prof
 成本模型，也不是真机、量子加速或性能优势证据。
 
 当前 XA 证据只保留在 `experiments/results/xa202609/`，覆盖 P0/E1、E2 QAOA、
-E3 原生/含噪反馈、E4/E4-v2、formal v4 与 E5 负审计/可移植性链；每个目录是否
-完成必须以 manifest/verifier 为准。参数扫描、被替代的 run 和旧论文实验均在
-`misc/archive/`，只读且不应被重写。
+E3 原生/含噪反馈、E4/E4-v2、formal v4、E5 负审计/可移植性链，以及 E6
+QAOA replay→shared-head 的四臂开发因果实验；每个目录是否完成必须以对应
+verifier 为准。E6 的五文件 bundle 已完成 64 个训练 case、32 个 `n=4/5`
+held-out case 和 11/11 独立复验，但主比较显著反向于改善，因此只构成开发负证据。
+参数扫描、被替代的 run 和旧论文实验均在 `misc/archive/`，只读且不应被重写。
 
 ## 文稿原则
 

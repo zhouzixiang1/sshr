@@ -28,6 +28,7 @@
     "docs/competition/evidence/E2_QAOA_SCHEDULER_EVIDENCE.md",
     "docs/competition/evidence/E3_NATIVE_FEEDBACK_EVIDENCE.md",
     "docs/competition/evidence/E4_AES_BIDIRECTIONAL_EVIDENCE.md",
+    "docs/competition/evidence/E6_Q4AI_CAUSAL_NEGATIVE_EVIDENCE.md",
     "experiments/models/boolean_oracle_fm_v3.pt",
     "experiments/models/MODEL_CARD_boolean_oracle_fm_v3.md",
     "experiments/environment/environment.yml",
@@ -47,6 +48,7 @@
     "experiments/configs/xa202609/e5_external_crypto_holdout_v1.protocol.lock.json",
     "experiments/configs/xa202609/e5_v11_portable_fresh_validation_v2.anchor.json",
     "experiments/configs/xa202609/e6_multioutput_shared_mvp_v1.json",
+    "experiments/configs/xa202609/e6_q4ai_causal_v1.json",
     "experiments/configs/xa202609/foundation_v4_provenance.json",
     "experiments/src/hardware/README.md",
     "experiments/tests/fixtures/e4_execution_aware_v2.superseded-test-only.json",
@@ -82,6 +84,8 @@
     "experiments/scripts/verify_e4_v2_bundle.py",
     "experiments/scripts/run_e5_external_crypto_holdout.py",
     "experiments/scripts/verify_e5_external_crypto_holdout_bundle.py",
+    "experiments/scripts/run_e6_q4ai_causal_v1.py",
+    "experiments/scripts/verify_e6_replay_training_bundle_v1.py",
     "experiments/scripts/train_foundation_v4.py",
     "experiments/scripts/verify_foundation_v4_bundle.py",
     "experiments/scripts/_pilot_artifacts.py",
@@ -103,6 +107,11 @@
     "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/training_summary.json",
     "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/artifacts.manifest.json",
     "experiments/results/xa202609/20260812-foundation-v4-provenance-formal-s20260904/checksums.sha256",
+    "experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/config.json",
+    "experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/results.json",
+    "experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/raw.jsonl",
+    "experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/heldout_evaluation.json",
+    "experiments/results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/checksums.sha256",
     "experiments/submission/verify_competition_package.py"
   ],
   "required_globs": [
@@ -112,12 +121,12 @@
   ],
   "report_release": {
     "path": "docs/papers/resource_nmcts/chinese/resource_nmcts_competition_current.pdf",
-    "sha256": "f6a19cf8a7d2e245505777838a934f30219b378a063703784bf6cf535f908d8f",
-    "page_count": 35
+    "sha256": "fadd6965e39a390589086e1784e6e68984ce2121339dbace802775858d3fcfe3",
+    "page_count": 38
   },
   "presentation_release": {
     "path": "docs/competition/slides/XA-202609_双向智能Boolean_Oracle答辩稿.pptx",
-    "sha256": "cdb66ca733a6783cd020fd7b9ab8c568e7a80ef876d1109330cb62b3084680ae"
+    "sha256": "bf830dee8dd9adf5e9110cbf8b73f0ebbfbb3fe453c3aad03c057b031581d4e3"
   },
   "presentation_candidates": [
     "docs/competition/slides/XA-202609_双向智能Boolean_Oracle答辩稿.pptx"

@@ -30,15 +30,31 @@ ancilla=2.0`；裸 `SearchConfig()` 的默认权重不同。
 ## 结果与历史
 
 `results/xa202609/` 保留当前 P0/E1--E4 证据、E4-v2 两阶段 frozen replication、
-formal v4 provenance bundle，以及 E5 preflight/seal/v1.1/negative-audit 记录。
+formal v4 provenance bundle、E5 preflight/v1.1/negative-audit 记录，以及 E6
+Q4AI 四臂 development 因果实验。
 目录存在不等于实验验收：E4-v2 改善未获支持，E5 没有 accepted endpoint。
 探索性阈值扫描、被替代的 pilot、E5 首次 release 失败记录和旧论文实验在
 `../../misc/archive/experiments/`；这些归档只读，不得覆盖。下一核心方向为
-E6-MSO 多输出共享 Oracle：机制 MVP、隔离 frozen-formal-v4 shared head、外部锁
-final-measurement replay 合同、确定性单 arm head-only trainer 和 development
-sealed-head schema/inference loader 均已实现并完成对抗测试；但尚无真实 replay 训练
-run、真实 trained/sealed artifact、因果实验、formal runner/bundle/verifier/result 或
-性能证据，598→581 不作正式证据。
+E6-MSO 的 D1 机制诊断：机制 MVP、frozen-formal-v4 shared head、final-measurement
+replay 与确定性单 arm trainer 已经进入真实四臂 run；结果 bundle 为
+`results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/`。它包含 64 个训练
+case 和 32 个 held-out case，独立 verifier 11/11 通过，但 primary QAOA-control
+差为 `+0.0949778`（越低越好），95% CI `[0.0696384,0.1237673]`，显著反向于改善。
+下一步先诊断 QAOA/random 32/32 endpoint 相同、31/32 空选择的作用链，不在本次
+held-out 上事后调参。greedy `Y=0.775639` 只作非等计算描述。
+
+E6 复验从 `experiments/` 执行：
+
+```bash
+/opt/anaconda3/envs/mcts-qoracle/bin/python scripts/verify_e6_replay_training_bundle_v1.py \
+  results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912
+```
+
+该五文件 bundle 绑定代码提交 `e850c0c`、证据提交 `8cc5f3c` 与 snapshot
+`18b758ac3e432a5d4e9f0ba1f8be7e17bd1b848b6212234eea9d2e842d4cc76a`。原始 full
+runner 用时 140.32 秒，独立 full verifier 用时 145.03 秒；这些时间只用于操作
+预估，不是速度性能证据。formal/performance/generalization/hardware/advantage 均为
+false。
 
 `paper_latex`、`paper_latex_zh` 和 `submission_package` 是指向文档/归档的兼容
 链接，目的是让旧的投稿工具仍能定位历史资源；新文稿从 `../../docs/papers/` 管理。

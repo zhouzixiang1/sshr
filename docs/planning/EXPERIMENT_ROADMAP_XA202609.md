@@ -23,7 +23,9 @@ heavy-hex-like profile 上形成超导原生分解、路由、逐 shot Pauli tra
 根效用反馈的最小闭环，但 held-out NLL 差为 `+0.001293`，95% CI
 `[-0.001170, 0.004719]`，主改善假设未获支持。仍不得使用“量子优势”“量子加速”、
 “真机效果”“通用基础模型”或“完整三路线硬件闭环”等表述；真机、真实校准、
-离子阱/光量子路线、三路线统一 manifest 和实际 policy/value replay→trainer→因果闭环均未完成。
+离子阱/光量子路线和三路线统一 manifest 均未完成。E6 已完成实际
+policy/value replay→trainer→heldout 机制对照，但 QAOA replay 结果显著反向，
+只构成后续提升工作的诊断基线。
 
 E4 已将 FIPS 197 AES S-box 8 坐标贯通到 learned-policy 同池调度、逻辑验证、
 synthetic-profile 原生映射与逐 shot 含噪采样：16 条 trial 全部通过语义/门集/耦合
@@ -42,6 +44,16 @@ family-activity gate。因此没有 E5 accepted endpoint，ASCON/PRESENT 已观�
 20/20；learned continuous 最大绝对/相对漂移为 `3.814697e-06`/`5.046907e-07`，
 其余离散选择与下游工件严格一致。该可移植性结果只加固负结论，仍为
 `protocol_acceptance=false`，不支持性能、硬件或量子优势主张。
+
+E6 极简单研究者确定性 development 实验已完成（代码 `e850c0c`，结果
+`8cc5f3c`）：64 个 n6/n7 training case、32 个 n4/n5 whole-vector heldout cluster，
+random/greedy/QAOA final-measurement/permuted-label 四臂依次训练。主比较
+QAOA-control 的资源比 Y 差为 `+0.0949778`（越低越好），95% CI
+`[0.0696384, 0.1237673]`，`p=9.9999e-6`，W/T/L=`0/3/29`，
+`claim_supported=false`；四臂 mean Y
+为 `0.99917168/0.77563923/0.99917168/0.90419388`。语义全过、无
+fallback/degraded，独立确定性重训 verifier 11/11。该结果不是可接受终点；当前
+QAOA/permuted 只作机制对照，下一阶段先做 D1 机制诊断，不在当前 heldout 事后调参。
 
 ## 2. 立即冻结的范围
 
@@ -143,7 +155,8 @@ E4 已完成 AES 8 坐标同池复验，QAOA attempted/succeeded/direct 为 8/8/
 逻辑 score 高 0.448%，没有形成端到端收益。E4-v2 execution-aware 四臂冻结复验
 也已完成：32 条 QAOA 行全部 direct-unrepaired、0 fallback/repair，但 primary
 native-2q CI 跨 0。它是 AES 已在 E4 出现后的 replication，不能改写为 held-out
-或 generalization。剩余核心任务是 E6-MSO 的同池 QAOA 与 policy/value replay；
+或 generalization。E6-MSO 的同池 QAOA 与 policy/value replay 已形成负向机制对照；
+剩余核心任务是先做 D1 机制诊断，解释 QAOA/random endpoint 重合和空选择；
 不用经典 fallback 成绩冒充 QAOA 成绩，也不把 E3/E4/E4-v2 负向端点改写成改善。
 
 ### P0-E：原生门、路由与噪声反馈（E3/E4-v2 均完成受限检验，改善未获支持）
@@ -174,8 +187,8 @@ replication outcome；随后在 E4 已出现过的 AES 8 坐标、2 seeds、4 ar
 `[-2059.0625, 589.9375]`，不支持改善。noisy 384 shots 为 0 success，只作诊断。
 
 因此该阶段下一步不是重复 E4-v2，也不是把 AES 称为新 held-out。execution-aware
-feedback 暂保留为经审计的受限机制；policy/value replay 必须在 E6-MSO 中作为独立
-因果阶段验证，不把“接入根效用”写成“模型已学习执行反馈”。若以后重新检验原生
+feedback 暂保留为经审计的受限机制；E6 已独立验证 policy/value replay 因果对照且
+结果显著反向，不把“接入根效用”写成“模型已学习并改善执行反馈”。若以后重新检验原生
 端点，必须使用锁后生成、此前未见且不按 candidate 可用性筛选的新实例。
 
 离子阱全连接/RXX-MS 映射、光量子 capability boundary 和三路线统一 manifest
@@ -246,25 +259,23 @@ fresh-v2 原生复验 19/19。锁定 stdout 本机路径例外恰为 2，且仅�
    所有输出与 ancilla 回零；
 3. 在同一候选池上建立 conflict-aware QUBO，固定 pool、utility、redundancy、K/B、
    simulation 与 seed，公平比较 greedy、exact、QAOA；
-4. 隔离 v2 已实现冻结 formal-v4 scalar trunk 的 output/input/candidate-equivariant
-   shared policy/value thin head、带 split registry/外部锁的最终测量 replay 合同、
-   确定性单 arm head-only trainer，以及 development sealed-head schema/inference
-   loader，并已做对抗测试；下一步使用外部预封印的真实四臂素材分 arm
-   训练并封印真实 checkpoint，再用同预算 QAOA 最终测量 bitstring-count
-   observation 做因果消融，不能把它称为 optimizer trajectory；
-5. ASCON/PRESENT 只作开发调试。正式盲测在 protocol lock 后由 SHA 派生此前未见的
-   `n=4/5` 双射 S-box；抽样不能按 candidate pool 是否非空筛选，degenerate case
-   必须进入 ITT 记账；
-6. mechanism MVP 已实现并通过独立整改复审：partial-fanout 枚举、纯冻结 QUBO
-   phase、可行样本后筛选/repair/fallback、解析罚项门和抽象资源口径均有回归；
-   isolated v2 head/replay/trainer/sealed-loader 仍只承认开发接口与安全合同。当前没有
-   真实 replay 训练 run、真实 trained/sealed artifact、因果实验或 formal/performance
-   evidence；`598→581` 是 prototype 观察，不进入报告结果表。
-
-E6 验收门：多输出语义 100%；共享 action、uncompute 与 ancilla contract 可重建；
-classic/exact/QAOA 同池同预算；direct/repair/fallback/degenerate 完整分账；冻结
-training/replay/evaluation split；九件套 bundle 与独立 verifier。未跨门时不升级
-AI4Q/Q4AI 性能主张，更不声称真机、量子加速或量子优势。
+4. 极简四臂 development 实验已完成：同一 runner 固定语料、初始化、seed 与训练
+   顺序，依次运行 random、greedy、QAOA final-measurement replay、permuted-label
+   control；64 个 n6/n7 train 与 32 个 n4/n5 whole-vector heldout cluster 全部语义
+   通过，0 fallback/degraded，独立重训 verifier 11/11；
+5. 当前 primary 机制对照 QAOA-control 为 `+0.0949778`（Y 越低越好），95% CI
+   `[0.0696384,0.1237673]`，`p=9.9999e-6`，W/T/L=`0/3/29`，n4/n5 均反向；
+   QAOA 与 random endpoint 32/32 相同且各有 31/32 空选择；random/greedy/QAOA/control
+   mean Y 为 `0.99917168/0.77563923/0.99917168/0.90419388`。该 run 只作为诊断
+   基线，不是 formal/generalization/performance evidence；
+6. 五文件 bundle 绑定 clean source `e850c0c`、证据提交 `8cc5f3c` 和 snapshot
+   `18b758ac3e432a5d4e9f0ba1f8be7e17bd1b848b6212234eea9d2e842d4cc76a`；runner/
+   full verifier 用时 140.32/145.03 秒，仅用于操作预估；
+7. D1 机制诊断只用于确定改法：分解 replay 标签、head top-K 与 exact scheduler
+   对空选择/endpoint 的作用。随后必须实现 resource-aligned QAOA replay，不得使用
+   当前 heldout 事后调参；最终在全新未调参 evaluation 上与匹配预算 strongest greedy
+   同跑，要求 paired `delta Y<0`、95% CI upper `<0`、语义 100%、0 fallback。未跨门
+   不得写成 AI4Q/Q4AI 提升，更不得声称真机、量子加速或量子优势。
 
 ### P0-H：报告、PPT、演示和提交冻结（与 E6 并行）
 
@@ -279,8 +290,9 @@ AI4Q/Q4AI 性能主张，更不声称真机、量子加速或量子优势。
 - 外层 package verifier 将 `XA_E5_PROJECT_ROOT` 显式重绑定到包内 `experiments/`，
   不继承测试收集或调用环境的污染值；polluted-environment 回归已闭合；
 - final 模式继续因人工授权/身份材料、final frozen model、accepted external performance
-  evidence 与 clean frozen commit 缺失而 fail-closed；权威计数为 7 份人工授权/身份
-  文档与 4 个技术 blocker，该 draft non-distributable。
+  evidence 与 final model card 缺失而 fail-closed；权威计数为 7 份人工授权/身份
+  文档与 3 个固定技术 blocker，仅当仓库 dirty 时再增加第 4 个
+  `repository_not_clean_frozen_commit` blocker；该 draft non-distributable。
 
 进入最终候选阶段后只允许修复、复验、补人工字段和打包；在此之前，所有已经
 通过验收门的实质结果应立即进入唯一中文主稿、Overleaf 和 PPT，不等待人为版本号。
@@ -289,12 +301,14 @@ AI4Q/Q4AI 性能主张，更不声称真机、量子加速或量子优势。
 
 | 顺序 | Run track | 目的 | 当前入口 | 阻塞 |
 |---:|---|---|---|---|
-| 完成（机制层） | `e6-mso-mechanism` | 完成多输出共享表达式、显式 workspace peak≤2 与 compute–fanout–uncompute 语义闭环 | mechanism MVP 已实现并独立复审；109 项相关回归和 smoke 通过；598→581 仅开发观察 | 无 formal runner/result；不能只降低 `min_factor_count`，也不能把抽象 MCT proxy 写成硬件资源 |
-| 2 | `e6-mso-shared-policy-qaoa` | 建立 output-equivariant AI4Q 与同池等预算 Q4AI | frozen-formal-v4 shared head、external-lock final-measurement replay、确定性单 arm trainer 与 development sealed schema/loader 均已实现并对抗测试 | 真实四臂 replay 训练 run、真实 trained/sealed checkpoint、公平预算因果消融与 formal bundle/verifier |
-| 3 | `e6-mso-blind-bijection` | 在未见多输出双射 S-box 上做正式验收 | 待 protocol lock | 锁后 SHA 派生 n4/5 双射；不按 candidate 筛选；九件套 bundle/verifier |
+| 1 | `e6-d1-mechanism-diagnosis` | 查明 QAOA replay 为何退化并与 random endpoint 重合，为资源对齐改法提供依据 | 分解 replay target、head top-K、exact scheduler 与空选择 | 诊断不是终点；不得在当前 heldout 事后调参 |
+| 完成（诊断基线） | `e6-q4ai-causal-v1` | 检验 final-measurement replay 的标签关联机制 | `run_e6_q4ai_causal_v1.py`；64 train/32 heldout；verifier 11/11 | QAOA-control `+0.0949778`、CI 全正；当前 QAOA/permuted 只作机制对照，不能作为可接受终点 |
+| 完成（机制层） | `e6-mso-mechanism` | 完成多输出共享表达式、workspace peak≤2 与 compute–fanout–uncompute 语义闭环 | mechanism MVP 已实现并独立复审；109 项相关回归和 smoke 通过；598→581 仅开发观察 | 抽象 MCT proxy 不能写成硬件资源 |
+| 2 | `e6-resource-aligned-replay` | 训练资源对齐的 QAOA replay，并公平挑战当前 strongest greedy | D1 后实现；训练/monitor 不读取最终 evaluation | 固定可审计 compute ledger；新 evaluation 同跑；paired `delta Y<0`、CI upper `<0`、语义 100%、0 fallback |
+| 3 | `e6-mso-fresh-evaluation` | 在全新未调参多输出函数上检验预声明提升假设 | resource-aligned runner/verifier | 不按 candidate 筛选；与 matched greedy 同跑；当前负结果保持不变 |
 | 4 | `e1-c0c7-full` | 冻结最终 AI for Quantum 核心证据 | formal v4 provenance 已闭环，旧 pilot/policy gate 已完成 | 完整 C0–C7 与 accepted external performance gate |
-| 5 | `ppt-demo-final` | 从同一证据链维护答辩 PPT 与演示交付 | 中文主稿、E1--E4 bundle、已验证 demo/clean install | 吸收 E4-v2/E5 负向边界和后续 E6 有效证据；离线 fallback/冻结绑定 |
-| 6 | `p0-freeze-final` | 固定环境、SHA、权重、语义回归 | `scripts/run_p0_freeze.py` | clean Git 与最终依赖 |
+| 5 | `ppt-demo-final` | 从同一证据链维护答辩 PPT 与演示交付 | 中文主稿、E1--E4 bundle、已验证 demo/clean install | 先吸收 E6 诊断负基线；提升主张只在新 primary gate 通过后加入 |
+| 后置 | `p0-delivery-final` | 整理最终环境、SHA 与语义回归 | 性能门通过后集中处理 | 当前只保持普通 Git 提交和干净工作树，不增加实验封印流程 |
 | 完成 | `e2-scheduler` | 经典四路与 QAOA 公平比较 | `scripts/run_qaoa_scheduler_pilot.py` | 420 trials；24/24 verifier；端到端 CI 跨 1 |
 | 完成但不升级主张 | `e3-native-feedback-v1` | synthetic-profile 原生/含噪反馈最小闭环 | calibration/test 两阶段 bundle | 96/96 原生等价；NLL `+0.001293`，CI 跨 0；改善未过门 |
 | 完成但性能证据不足 | `e4-aes-end-to-end` | AES S-box 8 坐标逻辑→QAOA→原生/含噪 pilot | `scripts/run_aes_bidirectional_pilot.py` | 16 trials；QAOA 8/8 direct；verifier/checksum 通过；noisy 5/4096 |
@@ -325,20 +339,28 @@ AI4Q/Q4AI 性能主张，更不声称真机、量子加速或量子优势。
   不得只摘录 90 行中的 effect estimate；
 - E5 V3 只可写为跨构建负结论可移植，必须同时保留 `protocol_acceptance=false`；
   fresh V2 只证明当前树安装/验证合同，不得写成性能、硬件或冻结提交证据；
-- E6 只有通过锁后盲测与独立 verifier 的结果才进入正文；已实现的
-  head/replay/trainer/sealed-loader 只是开发合同，`598→581` 只留开发记录；
+- E6 四臂结果可作为明确标注的 synthetic development 负结果进入正文：QAOA-control
+  `+0.0949778`、CI 全正、`p=9.9999e-6`、W/T/L=`0/3/29`、verifier 11/11；它是
+  诊断基线，不是性能主张。D1 只确定改法；最终必须由 resource-aligned QAOA replay
+  在全新未调参 evaluation 上通过 matched strongest-greedy 提升门；`598→581` 只留开发记录；
 - 每次形成实质更新后同步唯一主稿到 Overleaf，并验证可编译性；
 - 最终 PPT 从同一 claim-to-evidence 主线抽取内容，避免与主稿数字漂移。
 
-当前 35 页主稿已吸收 formal v4、E4-v2 post-E4 负结果、E5 首次失败/v1.1 未验收/
-V3 可移植负审计与当前树全新安装证据，以及 E6-MSO 方向。XeLaTeX clean build 无
+当前 38 页主稿已吸收 formal v4、E4-v2 post-E4 负结果、E5 首次失败/v1.1
+未验收/V3 可移植负审计与 E6 四臂 development negative evidence。其 XeLaTeX clean build 无
 overfull、未定义引用或致命错误；PDF SHA-256 为
-`f6a19cf8a7d2e245505777838a934f30219b378a063703784bf6cf535f908d8f`，Overleaf
-`origin/main` 已同步到 commit `c5c6993d1589469a61dfe18000a313d798b1c02f`；当前 PPT
-SHA-256 为 `cdb66ca733a6783cd020fd7b9ab8c568e7a80ef876d1109330cb62b3084680ae`。
+`fadd6965e39a390589086e1784e6e68984ce2121339dbace802775858d3fcfe3`，Overleaf
+`origin/main` 已同步到 commit `739b6c921e5c574871b12172024e2302aed8bb9c`。当前 14 页 PPT
+也已同步 E6 负向结果；PPT SHA-256 为
+`bf830dee8dd9adf5e9110cbf8b73f0ebbfbb3fe453c3aad03c057b031581d4e3`。旧内部审计包仍为 pre-E6 baseline。
 后续继续以该工作树为唯一交付主线。
 
 ## 6. 每个 run 的最低完成定义
+
+默认正式 run 使用下述九件套；E6 单研究者 development 因果实验采用显式批准的
+精简五文件合同 `config.json/results.json/raw.jsonl/heldout_evaluation.json/
+checksums.sha256`，由独立 verifier 重建科学统计。精简合同不能据此升级为 formal
+或 performance evidence。
 
 每个 run 必须包含：
 
@@ -360,10 +382,12 @@ checksums.sha256
 
 ## 7. 当前执行快照（2026-08-12）
 
-- 目录入口已完成重构与断链验收；当前开发树全套 `557 passed in 316.28s`；
-  E6 head/replay/trainer/seal 四组对抗回归 `150 passed`；legacy smoke 与默认
-  clean-install verifier 最近一次通过；锚定 fresh-validation V2 的全新
-  venv 记录保持 `383 passed in 295.779s`。
+- 目录入口已完成重构与断链验收。当前开发树全套为
+  `588 passed in 363.66s`，0 fail/error；submission 定向回归 10/10。legacy
+  smoke=`smoke ok`；默认 clean-install verifier 为 `ok=true`，且
+  `hardware/performance=false`。锚定 fresh-validation V2 的
+  venv 记录保持 `383 passed in 295.779s`。旧内部审计包仍对应 pre-E6-v2 的
+  407-test 交付基线；当前 PPT/Overleaf/PDF 已同步 E6 负向结果。
 - 已新增 `DetailedSynthesisResult`、稳定 `PlanTrace`、逻辑 IR/QASM JSON adapter、
   `ExperimentManifest` 与拒绝覆盖/路径穿越的 `ArtifactBundle`。
 - 首个 bundle：
@@ -416,7 +440,7 @@ checksums.sha256
   greedy 3/8，但 noisy success 总计仅 5/4096，性能证据不足。
 - 竞赛单命令 demo 已实跑 AES bit0 的完整缩小链路；QAOA direct non-fallback，
   持久化输出独立 verifier 13/13 通过，且明确 hardware/performance evidence 均为
-  false。`test_competition_demo` 已进入当前通过的 557 项测试。
+  false。`test_competition_demo` 已进入当前 `588 passed in 363.66s` 的完整回归。
 - E4 已进入中文主稿，Overleaf 已同步 commit `9745a76`。
 - formal v4 bundle `20260812-foundation-v4-provenance-formal-s20260904` 已从随机
   初始化完成训练，208 条 `n=6,7` 数据与密码宽度排除、训练命令/source/log/
@@ -432,11 +456,13 @@ checksums.sha256
   独立 negative audit 重建 90/90 行，同时确认 `protocol_acceptance=false`。
 - E5 V3 跨构建负审计在当前/全新环境均为 20/20，最大 absolute/relative learned-float
   drift 为 `3.814697e-06`/`5.046907e-07`，所有离散/下游工件严格一致；协议仍未接受。
-- E6-MSO 已完成并独立复审机制 MVP；隔离 v2 frozen shared head、最终测量
-  external-lock replay 合同、确定性单 arm head-only trainer 和 development sealed-head
-  schema/inference loader 均已实现并对抗测试。但真实 replay 训练 run、真实
-  trained/sealed artifact、因果实验、锁后 SHA 派生未见双射 S-box runner/bundle/
-  verifier 与 formal/performance evidence 尚未完成，`598→581` 不作正式证据。
+- E6-MSO 机制 MVP 与实际四臂 replay→trainer→heldout development 因果实验均已
+  完成：代码 `e850c0c`、结果 `8cc5f3c`；64 个 n6/n7 train、32 个 n4/n5 whole-vector
+  heldout cluster；语义全过、0 fallback/degraded、确定性重训 verifier 11/11。
+  QAOA-control 为 `+0.0949778`（越低越好），95% CI `[0.0696384,0.1237673]`，
+  `p=9.9999e-6`，W/T/L=`0/3/29`，且 n4/n5 均为正，故这是诊断负基线，不是
+  formal/performance evidence。QAOA 与 random endpoint 32/32 相同且各有 31/32
+  空选择。
 - clean install 已在全新 CPython 3.11 venv 从 exact-pinned `dev.txt` 安装并通过
   `pip check`；默认 `verify_clean_install.py` 为 `ok=true`，覆盖 SciPy MILP、PuLP、
   60,450 参数 checkpoint、direct QAOA、synthetic native/noise、legacy smoke 与
@@ -453,9 +479,11 @@ checksums.sha256
   锁定 stdout 路径例外恰为 2 且非运行依赖。
 - 外层 package verifier 已把 `XA_E5_PROJECT_ROOT` 重绑定到包内 `experiments/`；
   污染环境下的顺序依赖回归已闭合。
-- final submission 仍因 7 份人工授权/身份文档与 4 个技术 blocker（外部性能证据、
-  final frozen model、final model card、clean frozen commit）缺失而 fail-closed；
+- final submission 仍因 7 份人工授权/身份文档与 3 个固定技术 blocker（外部性能证据、
+  final frozen model、final model card）缺失而 fail-closed；仅当仓库 dirty 时再增加
+  第 4 个 `repository_not_clean_frozen_commit` blocker；
   该内部 draft non-distributable。
-- 下一步是 E6-MSO 真实四臂 replay 分 arm 训练与封印、因果消融/盲测闭环、离线
-  fallback、冻结提交绑定和最终
-  文稿/PPT/提交包验收，不是重复 E4-v2、重复 E5 已 release 家族或把负结果改写成优势。
+- 下一步做 D1 机制诊断：分解 replay 标签、head top-K 与 exact scheduler 对空选择
+  和 endpoint 重合的作用。不在现有 heldout 事后调参，也不把负结果改写成优势；
+  任何新干预先形成独立假设，再在预先指定的新数据上验证。文稿/PPT 同步后保持
+  普通 Git 干净提交；最终提交包工作后置。

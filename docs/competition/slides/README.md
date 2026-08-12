@@ -12,8 +12,9 @@
 
 叙事主线为：密码 Boolean Oracle 场景与三类资源错配 → AI for Quantum 的置换等变
 policy/value 与可验证 Neural MCTS → Quantum for AI 的固定预算 QAOA diversity
-scheduler → 原生门、路由、含噪反馈 → E1--E4 正负证据 → 贡献和边界。当前 E4-v2
-尚未写成正式结果。
+scheduler → 原生门、路由、含噪反馈 → E1--E5 正负证据 → E6 replay--head 四臂
+development 负向结果 → D1 机制诊断与主张边界。E4-v2、E5 与 E6 均未被写成
+formal/performance/hardware/advantage 证据。
 
 当前本机唯一生成入口是
 `misc/tmp/ppt/xa202609-deck/build-final-deck.mjs`；它与用户提供的“2025挑战”模板、

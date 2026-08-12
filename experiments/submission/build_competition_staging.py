@@ -26,6 +26,17 @@ from typing import Any
 SCRIPT = Path(__file__).resolve()
 REPO_ROOT = SCRIPT.parents[2]
 SPEC_PATH = SCRIPT.with_name("competition_staging_spec.json")
+E6_RESULT_BUNDLE_REL = (
+    "experiments/results/xa202609/"
+    "20260812-e6-q4ai-causal-v1-full-s20260912"
+)
+E6_RESULT_SNAPSHOT_SHA256 = (
+    "18b758ac3e432a5d4e9f0ba1f8be7e17bd1b848b6212234eea9d2e842d4cc76a"
+)
+E6_RESULT_BASENAMES = {
+    "config.json", "results.json", "raw.jsonl", "heldout_evaluation.json",
+    "checksums.sha256",
+}
 TEXT_SUFFIXES = {
     ".cfg", ".csv", ".json", ".jsonl", ".log", ".md", ".py", ".qasm",
     ".sha256", ".sh", ".tex", ".txt", ".yaml", ".yml",
@@ -64,6 +75,18 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def e6_result_snapshot_sha256(path: Path) -> str:
+    files = {item.name for item in path.iterdir() if item.is_file() and not item.is_symlink()}
+    if files != E6_RESULT_BASENAMES:
+        raise BuildError("E6 development result bundle must contain exactly five files")
+    records = [
+        {"name": name, "sha256": sha256_file(path / name), "bytes": (path / name).stat().st_size}
+        for name in sorted(files)
+    ]
+    payload = (json.dumps(records, sort_keys=True, separators=(",", ":")) + "\n").encode("utf-8")
+    return sha256_bytes(payload)
 
 
 def canonical_json(data: Any) -> bytes:
@@ -661,9 +684,29 @@ def research_claim_status(external_evidence: dict[str, Any]) -> dict[str, Any]:
     e5 = json.loads(resolve_repo_file(
         "experiments/results/xa202609/20260812-e5-v11-negative-audit-v1-s950000/summary.json"
     ).read_text(encoding="utf-8"))
-    e6 = json.loads(resolve_repo_file(
+    e6_mechanism = json.loads(resolve_repo_file(
         "experiments/configs/xa202609/e6_multioutput_shared_mvp_v1.json"
     ).read_text(encoding="utf-8"))
+    e6_bundle_rel = validate_relative_path(E6_RESULT_BUNDLE_REL)
+    e6_bundle = REPO_ROOT.joinpath(*e6_bundle_rel.parts)
+    if not e6_bundle.is_dir() or e6_bundle.is_symlink():
+        raise BuildError(f"required directory is missing or unsafe: {E6_RESULT_BUNDLE_REL}")
+    e6_snapshot_sha256 = e6_result_snapshot_sha256(e6_bundle)
+    if e6_snapshot_sha256 != E6_RESULT_SNAPSHOT_SHA256:
+        raise BuildError("E6 development result bundle snapshot mismatch")
+    e6_results = json.loads((e6_bundle / "results.json").read_text(encoding="utf-8"))
+    e6_heldout = json.loads(
+        (e6_bundle / "heldout_evaluation.json").read_text(encoding="utf-8")
+    )
+    e6_primary = e6_heldout.get("statistics", {}).get("primary", {})
+    e6_bootstrap = e6_primary.get("bootstrap", {})
+    e6_signflip = e6_primary.get("signflip", {})
+    e6_reports = e6_results.get("training_report_by_arm", {})
+    e6_sample_counts = {
+        report.get("sample_count")
+        for report in e6_reports.values()
+        if isinstance(report, dict)
+    }
     comparison = e4.get("primary_comparison", {})
     external_by_id = {row.get("id"): row for row in external_evidence.get("bundles", [])}
     return {
@@ -702,10 +745,37 @@ def research_claim_status(external_evidence: dict[str, Any]) -> dict[str, Any]:
             "quantum_advantage_claimed": False,
         },
         "e6": {
-            "status": e6.get("status"),
-            "formal_result_bundle_present": e6.get("scope", {}).get("formal_result_bundle_present"),
-            "performance_evidence": e6.get("scope", {}).get("performance_evidence"),
-            "development_observation_598_to_581_is_performance_evidence": False,
+            "status": "development_causal_negative_result_verified",
+            "mechanism_status": e6_mechanism.get("status"),
+            "development_result_bundle_present": True,
+            "formal_result_bundle_present": False,
+            "bundle_path": E6_RESULT_BUNDLE_REL,
+            "bundle_snapshot_sha256": e6_snapshot_sha256,
+            "run_id": e6_results.get("run_id"),
+            "source_commit": e6_results.get("source_commit"),
+            "training_or_finetuning_performed": bool(e6_reports),
+            "train_case_count": next(iter(e6_sample_counts)) if len(e6_sample_counts) == 1 else None,
+            "heldout_case_count": e6_primary.get("case_count"),
+            "primary_comparison": e6_primary.get("comparison"),
+            "mean_effect": e6_primary.get("effect_estimate"),
+            "bootstrap_95_ci": [
+                e6_bootstrap.get("ci_lower"),
+                e6_bootstrap.get("ci_upper"),
+            ],
+            "signflip_p": e6_signflip.get("p_value"),
+            "wins": e6_primary.get("wins"),
+            "ties": e6_primary.get("ties"),
+            "losses": e6_primary.get("losses"),
+            "claim_supported": e6_heldout.get("statistics", {})
+            .get("claim_gate", {})
+            .get("claim_supported"),
+            "compute_budget_equal": False,
+            "development_conditional_only": True,
+            "formal_evaluation": e6_heldout.get("formal_evaluation"),
+            "performance_evidence": e6_heldout.get("performance_evidence"),
+            "generalization_claim": False,
+            "hardware_execution": False,
+            "quantum_advantage_claimed": False,
         },
     }
 
@@ -962,7 +1032,7 @@ def report_release_status(spec: dict[str, Any]) -> dict[str, Any]:
         "path": rel,
         "sha256": observed,
         "page_count": pages,
-        "release_note": "SHA-locked 35-page Chinese competition manuscript",
+        "release_note": "SHA-locked 38-page Chinese competition manuscript",
     }
 
 
@@ -1074,7 +1144,7 @@ def package_readme(
         f"- final model/release evidence ready: `{str(technical_release['ready_for_final']).lower()}`",
         f"- formal v4 training provenance closed: `{str(technical_release['training_provenance']['closed']).lower()}`",
         f"- external E5 portability anchor: `{technical_release['externally_anchored_evidence']['anchor']['sha256']}`",
-        "- raw experiment logs are excluded except the eight exact E5 verifier-closure nine-file bundles (six provenance/scientific-source/link inputs plus V3/fresh-v2); `misc/archive/` is always excluded",
+        "- raw experiment logs are excluded except the eight exact E5 verifier-closure nine-file bundles and the SHA-locked five-file E6 development result; `misc/archive/` is always excluded",
         "- two locked historical stdout local-path strings are allowed only in the exact fresh-v1/fresh-v2 raw artifacts and are not runtime dependencies",
         "- `SBOM-LITE.json` records declared direct requirements only; the approved final gate also requires `authorization/SBOM.cdx.json`",
         "",
@@ -1092,7 +1162,7 @@ def package_readme(
                 "",
                 "Foundation v3 remains the development demo checkpoint. Formal v4 closes training provenance only and is still a development candidate.",
                 "Formal v4 is not performance evidence; human authorization cannot promote it to a final model.",
-                "E4-v2 is post-E4 replication, E5 has no accepted endpoint, and E6 is mechanism-only development work.",
+                "E4-v2 is post-E4 replication and E5 has no accepted endpoint. E6 contains a verified development conditional negative result, not formal or performance evidence.",
                 "The E5 V3/fresh-v2 anchor closes software-portability provenance only; protocol/performance remain false.",
             ]
         )
@@ -1303,8 +1373,9 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
                 "IP statement, code provenance, third-party notices, registration evidence, human attestation, and "
                 "transitive CycloneDX SBOM remains a hard blocker. Formal v4 has a verified command, split, seed, "
                 "training log/hash, checkpoint identity, and source-SHA provenance, but remains a provenance-only "
-                "development candidate without accepted external performance evidence. E5 has no accepted endpoint "
-                "and E6 has no formal result bundle; declarations cannot override these evidence boundaries.\n"
+                "development candidate without accepted external performance evidence. E5 has no accepted endpoint. "
+                "E6 records a development conditional negative result, but formal/performance claims remain false; "
+                "declarations cannot override these evidence boundaries.\n"
             ).encode("utf-8")
             marker_entry = safe_write_bytes(output, "INCOMPLETE_INTERNAL_AUDIT_DRAFT.md", marker)
             marker_entry.update({"kind": "incomplete_marker"})

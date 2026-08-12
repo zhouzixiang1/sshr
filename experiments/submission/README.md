@@ -12,7 +12,8 @@ canonical E4-v2, and E5 v1/v1.1 evidence snapshots, and writes
 `PROVENANCE.json`, and `AUTHORIZATION_STATUS.json`.  It refuses to overwrite an
 existing staging directory or archive.
 
-Eight exact E5 bundles are the only raw/log exception: portable negative audit
+Eight exact E5 bundles and the SHA-locked five-file E6 development result are
+the only raw/log exceptions. The E5 set comprises portable negative audit
 V3, fresh-v2, the three anchor predecessors, the original unaccepted 90-row
 scientific-source predecessor, and its linked preflight/seal inputs.  This
 minimal dependency closure supports in-package 19/19 native verification and
@@ -35,8 +36,10 @@ record, identity record, or transitive SBOM is synthesized by these tools.  See
 Final mode also requires `TECHNICAL_RELEASE_STATUS.json` to be ready.  Formal
 v4 now closes command/config/split/seed/log/checkpoint/source-SHA provenance,
 but remains a development candidate and is not performance evidence.  The
-independent verifier additionally preserves E4-v2 as post-E4 replication,
-E5 as having no accepted endpoint, and E6 as a mechanism-only MVP with no
-formal result.  A human declaration cannot promote any of these states: final
+independent verifier additionally preserves E4-v2 as post-E4 replication and
+E5 as having no accepted endpoint. E6 records a four-arm development conditional
+negative result; training occurred, but formal/performance/hardware/generalization/
+advantage claims remain false. No seal/preseal workflow is added. A human
+declaration cannot promote any of these states: final
 still requires a non-development final-frozen model card, accepted external
 performance evidence, and a clean frozen Git state.

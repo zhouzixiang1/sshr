@@ -6,7 +6,7 @@
 - `experiments/submission/build_competition_staging.py`：确定性 staging/archive builder；
 - `experiments/submission/verify_competition_package.py`：不导入 builder、也不信任包内白名单的独立 verifier。
 
-白名单纳入 SHA 锁定的 35 页中文主稿 PDF 与可编译 LaTeX 依赖、经单独 SHA 锁定的最终
+白名单纳入 SHA 锁定的 38 页中文主稿 PDF 与可编译 LaTeX 依赖、经单独 SHA 锁定的最终
 PPT、核心源码与测试、formal v4 训练 provenance bundle、精确 requirements、竞赛 demo
 脚本和样例报告，以及 E2/E3/E4、canonical E4-v2 与 E5 v1/v1.1 的
 `run/summary/verifier/manifest/checksum` 精简快照。另完整纳入由外部 anchor 锁定的 E5
@@ -15,7 +15,12 @@ portable V3、fresh-v2 及原生 19-check verifier 所需的六个 predecessor/s
 provenance 输入，不进入性能主张或推荐结果，outer manifest 逐文件绑定 anchor、snapshot
 与 SHA。原始 90-row v1.1 source 的角色固定为
 `scientific_source_predecessor_only_unaccepted_endpoint`，其 preflight/seal 仅作 source-link
-输入。E6 只纳入 mechanism MVP 源码、配置与测试。除上述八个精确九件套外，大型
+输入。E6 除 mechanism MVP 源码、配置与测试外，还完整纳入五文件 development
+conditional negative bundle（`config.json`、`results.json`、`raw.jsonl`、
+`heldout_evaluation.json`、`checksums.sha256`）；该 bundle 已实际完成 random、greedy、
+QAOA final-measurement 与 permuted-label 四臂训练，但 formal/performance/hardware/
+generalization/advantage 均为 `false`。这是单研究者确定性开发实验，不增加 seal/preseal
+流程。除上述八个精确九件套与 E6 五文件 bundle 外，大型
 `raw.jsonl`、事件/日志、`misc/archive/`、旧论文 submission package、缓存和构建产物一律
 不复制；精简 evidence 会记录完整源 bundle 的文件名、字节数和 SHA-256，同时明确哪些
 大文件未复制。精简快照中含本机绝对路径的 JSON 会规范化为 `${REPO_ROOT}`，原始 SHA 与
@@ -89,11 +94,14 @@ provenance 输入，不进入性能主张或推荐结果，outer manifest 逐文
   原始字节均不可在不破坏 snapshot 的前提下清洗，因此 verifier 只对这两个精确文件、
   `command_id=portable_v3_verifier`、`stdout.text` 和同一 V3 目标各放行一次；全包总数必须
   恰为 2，其余文件仍对本机绝对路径 fail-closed。该字符串不是运行依赖；
-- E6 只有多输出共享 mechanism MVP，没有 formal runner/result bundle，`598→581` 只能作为
-  development observation，不能作为性能结果。
+- E6 五文件 bundle 已闭合 64 个 `n=6/7` training case、32 个 `n=4/5` whole-vector
+  heldout development case 与真实四臂训练，独立 verifier 为 11/11；主比较显著反向于
+  改善，只构成 development conditional negative evidence。该 run 的 formal/performance/
+  hardware/generalization/advantage 均为 `false`，不采用 seal/preseal，也不能作为性能结果。
 
 因此当前 final 模式仍必须因“模型卡不是 final frozen、缺少 accepted external performance
-evidence、仓库未绑定 clean frozen commit”和人工授权材料缺失而拒绝。机器可读最终模型卡
+evidence”和人工授权材料缺失而拒绝；仅当仓库 dirty 时再增加
+`repository_not_clean_frozen_commit`。机器可读最终模型卡
 必须使用 `xa.final-model-card.v1`，且至少满足：
 
 ```json

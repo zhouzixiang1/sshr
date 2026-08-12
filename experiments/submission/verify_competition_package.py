@@ -122,17 +122,34 @@ FORMAL_V4_BASENAMES = {
     "training_log.jsonl", "training_summary.json", "artifacts.manifest.json",
     "checksums.sha256",
 }
+E6_RESULT_PREFIX = (
+    "experiments/results/xa202609/"
+    "20260812-e6-q4ai-causal-v1-full-s20260912"
+)
+E6_RESULT_FILE_SHA256 = {
+    "config.json": "735c78cdc6a4d0c1ebd5c808bafba0471082ccd7b8e2f3b3f8d17653ebc2b5aa",
+    "results.json": "a4ab20dbf8892355d6dc96c14817504da5117428fe97af1c75bcb04ee3313d1f",
+    "raw.jsonl": "d0f64a9140b8e42a4eb242155b0ec58555eccbf2ebe666bc622507939efc69c3",
+    "heldout_evaluation.json": "f0684623495424515dd17391bff56cbfcfcaba21efe19771cf74b01e771c909b",
+    "checksums.sha256": "b52bf90bb97c829de5285c1e407172411d46537c5b4757d63e4e81d64a6d2f8f",
+}
+E6_RESULT_SNAPSHOT_SHA256 = (
+    "18b758ac3e432a5d4e9f0ba1f8be7e17bd1b848b6212234eea9d2e842d4cc76a"
+)
 EXACT_REPOSITORY_FILES |= {
     "experiments/configs/xa202609/e5_external_crypto_holdout_v1.json",
     "experiments/configs/xa202609/e5_external_crypto_holdout_v1.protocol.lock.json",
     "experiments/configs/xa202609/e5_v11_portable_fresh_validation_v2.anchor.json",
     "experiments/configs/xa202609/e6_multioutput_shared_mvp_v1.json",
+    "experiments/configs/xa202609/e6_q4ai_causal_v1.json",
     "experiments/configs/xa202609/foundation_v4_provenance.json",
     "experiments/src/hardware/README.md",
     "experiments/scripts/run_e4_v2_execution_aware.py",
     "experiments/scripts/verify_e4_v2_bundle.py",
     "experiments/scripts/run_e5_external_crypto_holdout.py",
     "experiments/scripts/verify_e5_external_crypto_holdout_bundle.py",
+    "experiments/scripts/run_e6_q4ai_causal_v1.py",
+    "experiments/scripts/verify_e6_replay_training_bundle_v1.py",
     "experiments/scripts/train_foundation_v4.py",
     "experiments/scripts/verify_foundation_v4_bundle.py",
     "experiments/scripts/_pilot_artifacts.py",
@@ -142,7 +159,9 @@ EXACT_REPOSITORY_FILES |= {
     "experiments/analysis/verify_e5_v11_fresh_validation_v2.py",
     "experiments/tests/test_e5_v11_negative_audit.py",
     "experiments/tests/test_e5_v11_fresh_validation_v2.py",
+    "docs/competition/evidence/E6_Q4AI_CAUSAL_NEGATIVE_EVIDENCE.md",
     *(f"{FORMAL_V4_PREFIX}/{name}" for name in FORMAL_V4_BASENAMES),
+    *(f"{E6_RESULT_PREFIX}/{name}" for name in E6_RESULT_FILE_SHA256),
 }
 EXTERNAL_ANCHOR_PATH = "experiments/configs/xa202609/e5_v11_portable_fresh_validation_v2.anchor.json"
 EXTERNAL_ANCHOR_SHA256 = "036dc0cad2cbe6eabac70793e3be1de44fd8f1882753e595560870bc3eddd686"
@@ -264,12 +283,12 @@ FORBIDDEN_SEGMENTS = {
 MAX_FILE_BYTES = 50 * 1024 * 1024
 MAX_TOTAL_BYTES = 250 * 1024 * 1024
 PRESENTATION_PATH = "docs/competition/slides/XA-202609_双向智能Boolean_Oracle答辩稿.pptx"
-PRESENTATION_SHA256 = "cdb66ca733a6783cd020fd7b9ab8c568e7a80ef876d1109330cb62b3084680ae"
+PRESENTATION_SHA256 = "bf830dee8dd9adf5e9110cbf8b73f0ebbfbb3fe453c3aad03c057b031581d4e3"
 MACHINE_MODEL_CARD_PATH = f"{FORMAL_V4_PREFIX}/model_card.json"
 FINAL_CHECKPOINT_PATH = f"{FORMAL_V4_PREFIX}/checkpoint.pt"
 REPORT_PATH = "docs/papers/resource_nmcts/chinese/resource_nmcts_competition_current.pdf"
-REPORT_SHA256 = "f6a19cf8a7d2e245505777838a934f30219b378a063703784bf6cf535f908d8f"
-REPORT_PAGE_COUNT = 35
+REPORT_SHA256 = "fadd6965e39a390589086e1784e6e68984ce2121339dbace802775858d3fcfe3"
+REPORT_PAGE_COUNT = 38
 LOCKED_LOCAL_PATH_FILES = {
     (
         "experiments/results/xa202609/"
@@ -346,6 +365,18 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def e6_result_snapshot_sha256(path: Path) -> str | None:
+    files = {item.name for item in path.iterdir() if item.is_file() and not item.is_symlink()}
+    if files != set(E6_RESULT_FILE_SHA256):
+        return None
+    records = [
+        {"name": name, "sha256": sha256_file(path / name), "bytes": (path / name).stat().st_size}
+        for name in sorted(files)
+    ]
+    payload = (json.dumps(records, sort_keys=True, separators=(",", ":")) + "\n").encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
 
 
 def safe_rel(value: str) -> PurePosixPath | None:
@@ -1161,10 +1192,34 @@ def verify_research_claims(root: Path, status: dict[str, Any]) -> list[str]:
             "quantum_advantage_claimed": False,
         },
         "e6": {
-            "status": "development_mechanism_mvp_not_formal_experiment",
+            "status": "development_causal_negative_result_verified",
+            "mechanism_status": "development_mechanism_mvp_not_formal_experiment",
+            "development_result_bundle_present": True,
             "formal_result_bundle_present": False,
+            "bundle_path": E6_RESULT_PREFIX,
+            "bundle_snapshot_sha256": E6_RESULT_SNAPSHOT_SHA256,
+            "run_id": "20260812-e6-q4ai-causal-v1-full-s20260912",
+            "source_commit": "e850c0ce91aa0ae9897f4ce0f5268171dbb22532",
+            "training_or_finetuning_performed": True,
+            "train_case_count": 64,
+            "heldout_case_count": 32,
+            "primary_comparison": (
+                "qaoa_final_measurement_replay_minus_qaoa_permuted_label_control"
+            ),
+            "mean_effect": 0.09497779579431545,
+            "bootstrap_95_ci": [0.06963836434546339, 0.12376730228100935],
+            "signflip_p": 0.00000999990000099999,
+            "wins": 0,
+            "ties": 3,
+            "losses": 29,
+            "claim_supported": False,
+            "compute_budget_equal": False,
+            "development_conditional_only": True,
+            "formal_evaluation": False,
             "performance_evidence": False,
-            "development_observation_598_to_581_is_performance_evidence": False,
+            "generalization_claim": False,
+            "hardware_execution": False,
+            "quantum_advantage_claimed": False,
         },
     }
     if status.get("research_claims") != expected_claims:
@@ -1242,24 +1297,139 @@ def verify_research_claims(root: Path, status: dict[str, Any]) -> list[str]:
     ):
         issues.append("E5 negative audit does not preserve protocol rejection")
 
-    e6 = load_object(
+    e6_mechanism = load_object(
         root / "experiments/configs/xa202609/e6_multioutput_shared_mvp_v1.json",
         "E6 MVP config",
         issues,
     )
     if not (
-        e6.get("schema_version") == "xa.e6-multioutput-shared-mvp-config.v1.1"
-        and e6.get("status") == "development_mechanism_mvp_not_formal_experiment"
-        and e6.get("scope", {}).get("formal_result_bundle_present") is False
-        and e6.get("scope", {}).get("performance_evidence") is False
-        and e6.get("development_regression", {}).get("not_formal_evidence") is True
-        and e6.get("development_regression", {}).get("private_tmp_prototype_is_evidence") is False
-        and e6.get("ai_quantum_boundary", {}).get("shared_model_architecture_implemented") is True
-        and e6.get("ai_quantum_boundary", {}).get("learned_multioutput_head_connected") is False
-        and e6.get("ai_quantum_boundary", {}).get("qaoa_trajectory_replay_update_connected") is False
-        and e6.get("ai_quantum_boundary", {}).get("training_or_finetuning_performed") is False
+        e6_mechanism.get("schema_version") == "xa.e6-multioutput-shared-mvp-config.v1.1"
+        and e6_mechanism.get("status") == "development_mechanism_mvp_not_formal_experiment"
+        and e6_mechanism.get("scope", {}).get("formal_result_bundle_present") is False
+        and e6_mechanism.get("scope", {}).get("performance_evidence") is False
+        and e6_mechanism.get("development_regression", {}).get("not_formal_evidence") is True
+        and e6_mechanism.get("ai_quantum_boundary", {}).get("shared_model_architecture_implemented") is True
     ):
-        issues.append("E6 is not bound as development-only/no-formal-evidence")
+        issues.append("E6 mechanism baseline is not bound as development-only evidence")
+
+    e6_config = load_object(
+        root / "experiments/configs/xa202609/e6_q4ai_causal_v1.json",
+        "E6 Q4AI causal config",
+        issues,
+    )
+    e6_bundle = root / E6_RESULT_PREFIX
+    actual_e6_files = (
+        {item.name for item in e6_bundle.iterdir() if item.is_file() and not item.is_symlink()}
+        if e6_bundle.is_dir()
+        else set()
+    )
+    if actual_e6_files != set(E6_RESULT_FILE_SHA256):
+        issues.append("E6 development result file set mismatch")
+    for name, expected_sha in E6_RESULT_FILE_SHA256.items():
+        target = e6_bundle / name
+        if not target.is_file() or target.is_symlink() or sha256_file(target) != expected_sha:
+            issues.append(f"E6 development result SHA mismatch: {name}")
+    if e6_bundle.is_dir() and e6_result_snapshot_sha256(e6_bundle) != E6_RESULT_SNAPSHOT_SHA256:
+        issues.append("E6 development result snapshot mismatch")
+    try:
+        e6_checksums, e6_checksum_issues = parse_checksums(e6_bundle / "checksums.sha256")
+    except OSError as exc:
+        e6_checksums, e6_checksum_issues = {}, [f"unreadable checksums: {exc}"]
+    issues.extend(f"E6 development result: {issue}" for issue in e6_checksum_issues)
+    expected_e6_payload_hashes = {
+        name: digest
+        for name, digest in E6_RESULT_FILE_SHA256.items()
+        if name != "checksums.sha256"
+    }
+    if e6_checksums != expected_e6_payload_hashes:
+        issues.append("E6 development result checksum inventory mismatch")
+
+    e6_results = load_object(e6_bundle / "results.json", "E6 development results", issues)
+    e6_heldout = load_object(
+        e6_bundle / "heldout_evaluation.json", "E6 heldout development evaluation", issues
+    )
+    e6_primary = e6_heldout.get("statistics", {}).get("primary", {})
+    e6_claim_gate = e6_heldout.get("statistics", {}).get("claim_gate", {})
+    e6_reports = e6_results.get("training_report_by_arm", {})
+    expected_arms = [
+        "classical_random_bitstring_replay",
+        "classical_greedy_repeated_selection_replay",
+        "qaoa_final_measurement_replay",
+        "qaoa_permuted_label_control",
+    ]
+    reports_ok = (
+        isinstance(e6_reports, dict)
+        and set(e6_reports) == set(expected_arms)
+        and all(
+            isinstance(report, dict)
+            and report.get("source_arm") == arm
+            and report.get("sample_count") == 64
+            and report.get("head_training_status") == "modified_unsealed"
+            and report.get("formal_evaluation") is False
+            and report.get("performance_evidence") is False
+            and report.get("final_head_tensor_sha256")
+            == e6_results.get("final_head_sha_by_arm", {}).get(arm)
+            for arm, report in e6_reports.items()
+        )
+    )
+    case_rows = e6_heldout.get("case_rows", [])
+    rows_ok = (
+        isinstance(case_rows, list)
+        and len(case_rows) == 32
+        and sum(row.get("input_count") == 4 for row in case_rows if isinstance(row, dict)) == 16
+        and sum(row.get("input_count") == 5 for row in case_rows if isinstance(row, dict)) == 16
+        and all(
+            isinstance(row, dict)
+            and row.get("formal_evaluation") is False
+            and row.get("performance_evidence") is False
+            and isinstance(row.get("direct_semantic_verification"), dict)
+            and row["direct_semantic_verification"].get("ok") is True
+            and isinstance(row.get("arms"), dict)
+            and set(row["arms"]) == set(expected_arms)
+            and all(
+                isinstance(arm_row, dict)
+                and arm_row.get("semantic_verification") is True
+                and arm_row.get("degraded") is False
+                and arm_row.get("direct_fallback_used") is False
+                for arm_row in row["arms"].values()
+            )
+            for row in case_rows
+        )
+    )
+    if not (
+        e6_config.get("schema_version") == "xa.e6-q4ai-causal-config.v1"
+        and e6_config.get("status")
+        == "development_causal_experiment_not_formal_or_performance_evidence"
+        and e6_config.get("profiles", {}).get("full", {}).get("train_case_count") == 64
+        and e6_config.get("profiles", {}).get("full", {}).get("heldout_cases_per_input_count") == 16
+        and e6_config.get("profiles", {}).get("full", {}).get("heldout_dataset_seed") == 20260921
+        and e6_results.get("schema_version") == "xa.e6-replay-training-results.v1-development"
+        and e6_results.get("run_id") == "20260812-e6-q4ai-causal-v1-full-s20260912"
+        and e6_results.get("source_commit") == "e850c0ce91aa0ae9897f4ce0f5268171dbb22532"
+        and e6_results.get("source_dirty") is False
+        and e6_results.get("arms") == expected_arms
+        and e6_results.get("performance_evidence") is False
+        and reports_ok
+        and e6_heldout.get("schema_version")
+        == "xa.e6-replay-training-heldout-evaluation.v1-development"
+        and e6_heldout.get("heldout_development_evaluation") is True
+        and e6_heldout.get("formal_evaluation") is False
+        and e6_heldout.get("performance_evidence") is False
+        and e6_primary.get("comparison")
+        == "qaoa_final_measurement_replay_minus_qaoa_permuted_label_control"
+        and e6_primary.get("case_count") == 32
+        and e6_primary.get("effect_estimate") == 0.09497779579431545
+        and e6_primary.get("bootstrap", {}).get("ci_lower") == 0.06963836434546339
+        and e6_primary.get("bootstrap", {}).get("ci_upper") == 0.12376730228100935
+        and e6_primary.get("signflip", {}).get("p_value") == 0.00000999990000099999
+        and (e6_primary.get("wins"), e6_primary.get("ties"), e6_primary.get("losses"))
+        == (0, 3, 29)
+        and e6_claim_gate.get("claim_supported") is False
+        and e6_claim_gate.get("formal_evaluation") is False
+        and e6_claim_gate.get("performance_evidence") is False
+        and rows_ok
+    ):
+        issues.append("E6 development negative result/claim boundary mismatch")
     return issues
 
 
@@ -1310,8 +1480,14 @@ def verify_technical_release(
         "final_external_performance_evidence_missing",
         "legacy_v3_demo_model_is_development_candidate",
         "machine_model_card_is_provenance_candidate_not_final_frozen",
-        "repository_not_clean_frozen_commit",
     }
+    repository_dirty = source.get("repository_dirty") is not False
+    provenance_dirty = provenance.get("git", {}).get("dirty") is not False
+    repository_blocked = "repository_not_clean_frozen_commit" in blockers
+    if repository_dirty != provenance_dirty:
+        issues.append("technical/provenance repository dirty status mismatch")
+    if repository_blocked != repository_dirty:
+        issues.append("repository dirty/blocker mismatch")
     if legacy_development and "legacy_v3_demo_model_is_development_candidate" not in blockers:
         issues.append("legacy v3 development-candidate status is not reflected in technical blockers")
     machine_path = root / MACHINE_MODEL_CARD_PATH
@@ -1439,10 +1615,10 @@ def verify_tree(root: Path, allow_incomplete: bool) -> dict[str, Any]:
             "path": REPORT_PATH,
             "sha256": REPORT_SHA256,
             "page_count": REPORT_PAGE_COUNT,
-            "release_note": "SHA-locked 35-page Chinese competition manuscript",
+            "release_note": "SHA-locked 38-page Chinese competition manuscript",
         }
     ):
-        issues.append("35-page Chinese manuscript release identity mismatch")
+        issues.append("38-page Chinese manuscript release identity mismatch")
     required_exact = EXACT_REPOSITORY_FILES - {PRESENTATION_PATH}
     missing_required = sorted((required_exact | REQUIRED_CORE_PATHS) - actual)
     if missing_required:

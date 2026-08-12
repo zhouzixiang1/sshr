@@ -12,9 +12,10 @@ cd experiments
 /opt/anaconda3/envs/mcts-qoracle/bin/python tests/tests_smoke.py
 ```
 
-当前开发树全套为 `557 passed in 316.28s`；E6 head/replay/trainer/seal 四组
-对抗回归为 `150 passed`。legacy smoke 与默认 `verify_clean_install.py` 最近一次均为
-`ok`。其中新增的
+当前开发树全套为 `588 passed in 363.66s`，0 fail/error；submission 定向回归
+10/10，E6 Q4AI 五文件 bundle 独立 verifier 11/11 通过。legacy smoke 为
+`smoke ok`；默认 `verify_clean_install.py` 为 `ok=true`，且
+`hardware/performance=false`。其中新增的
 安装合同回归覆盖 repository-relative quick self-check；完整 clean-install 验收
 仍应使用默认模式执行 smoke 与临时竞赛 demo。
 
@@ -49,7 +50,7 @@ checkpoint SHA，隔离环境当时树全套为 `217 passed in 62.50s`。该历�
 `dd75a9bcf06f37390c43acf6a019ea8a130ba26a998269ae10fe8bce78441d23`；外部 anchor
 `configs/xa202609/e5_v11_portable_fresh_validation_v2.anchor.json` 的 SHA-256 为
 `036dc0cad2cbe6eabac70793e3be1de44fd8f1882753e595560870bc3eddd686`。该证据只证明
-该锚定树的软件安装与证据复验合同；它不是当前 557 项回归。anchor 与完整 bundle
+该锚定树的软件安装与证据复验合同；它不是当前 588 项回归。anchor 与完整 bundle
 已由内部审计包外层 manifest 绑定。内部 draft 位于
 `docs/competition/submission/generated/ppt-cdb66ca7-pdf-f6a19cf8/XA-202609-internal-audit-draft/`，
 共 366 文件；tar 为 4,665,696 bytes，SHA-256 为
@@ -62,8 +63,9 @@ predecessor/source/link）；锁定 stdout 本机路径例外
 `cdb66ca733a6783cd020fd7b9ab8c568e7a80ef876d1109330cb62b3084680ae`，Overleaf 为
 `c5c6993d1589469a61dfe18000a313d798b1c02f`。该 non-distributable internal draft
 不是最终提交包，不能据此声称冻结提交复现、性能改善、硬件执行或量子优势；
-final 仍因 7 份人工授权/身份文档和 4 个技术 blocker（外部性能证据、final frozen
-model、final model card、clean frozen commit）缺失而 fail-closed。外层包 verifier 显式将 `XA_E5_PROJECT_ROOT` 重绑定到包内
+final 仍因 7 份人工授权/身份文档和 3 个固定技术 blocker（外部性能证据、final frozen
+model、final model card）缺失而 fail-closed；仅当仓库 dirty 时再增加第 4 个
+`repository_not_clean_frozen_commit` blocker。外层包 verifier 显式将 `XA_E5_PROJECT_ROOT` 重绑定到包内
 `experiments/`，不再继承污染的调用环境；对应 polluted-environment 回归已闭合。
 
 阅读顺序：
@@ -170,7 +172,8 @@ E4 已完成密码 Oracle 端到端 pilot；其当前树单命令竞赛 demo 也
 checksum 和 verification。独立 verifier 13/13 通过；QAOA 实际 direct 且无
 fallback。输出显式记录 `hardware_execution=false` 和
 `performance_evidence=false`，只用于展示链路与核验契约。对应回归测试
-`tests/test_competition_demo.py` 已通过，并纳入当前开发树通过的 557 项测试。
+`tests/test_competition_demo.py` 已通过，并纳入当前 `588 passed in 363.66s` 的
+完整回归。
 
 ## E4-v2：正式 post-E4 frozen replication
 
@@ -241,7 +244,7 @@ native、endpoint 与 summary 均严格一致。该跨构建一致性只加固�
   --expected-anchor-sha256 036dc0cad2cbe6eabac70793e3be1de44fd8f1882753e595560870bc3eddd686
 ```
 
-## E6-MSO 当前开发边界
+## E6-MSO 四臂 development 因果实验
 
 E6-MSO 多输出共享表达式 mechanism MVP 已实现并独立复审：`VectorANF` 跨输出
 共享 monomial/semi-affine action，完整枚举 partial-fanout target 子集，以
@@ -250,19 +253,37 @@ E6-MSO 多输出共享表达式 mechanism MVP 已实现并独立复审：`Vector
 再对测量结果进行可行筛选/repair/fallback 分账。资源仅为 abstract logical
 X/CNOT/MCT proxy，不包含 MCT 隐式分解 ancilla 或硬件精确资源主张。
 
-隔离 v2 还实现并对抗测试了四项开发合同：一是冻结 formal-v4 scalar trunk、仅训练
-薄 head 的 output/input/candidate-equivariant shared policy/value；二是把 QAOA 最终
-测量 bitstring-count observation 与 random/greedy/exact 对照绑定到 split registry、
-外部锁和完整 ITT 记账；三是每次只训练一个 source arm、固定日程的确定性 head-only
-trainer；四是 development sealed-head schema 与窄范围 inference loader。replay 合同
-不是 optimizer trajectory replay；当前仍无真实 replay 训练 run、真实 trained/sealed
-head artifact、因果实验、formal runner/bundle/verifier/result 或性能证据。
-正式盲测只使用 protocol lock 后由 SHA 派生、此前未见的 `n=4/5` 双射 S-box，且不
-按 candidate 是否存在筛选。`598→581` 是开发观察，不是正式 evidence。
+冻结 formal-v4 scalar trunk、output/input/candidate-equivariant shared head、QAOA
+最终测量 bitstring-count replay 与确定性单 arm head-only trainer 已进入一次真实、
+单研究者、顺序四臂 development run。代码提交为 `e850c0c`，结果提交为
+`8cc5f3c`，五文件 bundle 为
+`results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912/`，snapshot 为
+`18b758ac3e432a5d4e9f0ba1f8be7e17bd1b848b6212234eea9d2e842d4cc76a`。固定同一
+初始化后依次用 random、greedy、QAOA final-measurement replay 与 permuted-label
+control 训练 thin head；训练覆盖 64 个 `n=6/7` case，held-out development 评估
+覆盖 32 个 SHA-ranked `n=4/5` whole-vector case。所有语义检查通过且无 fallback/
+degraded，独立 verifier 11/11 通过。
+
+primary `qaoa_final_measurement_replay - qaoa_permuted_label_control` 的 score-ratio
+差为 `+0.0949778`（越低越好），95% CI `[0.0696384,0.1237673]`，双侧 sign-flip
+`p=9.9999e-6`，W/T/L=`0/3/29`；`n=4`、`n=5` 分层均为正，故改善门明确失败。
+QAOA 与 random endpoint 32/32 相同且各有 31/32 空选择，提示当前 replay 标签没有
+形成有效区分；greedy 平均 `Y=0.775639` 仅为非等计算描述性信号。runner 用时
+140.32 秒，独立 full verifier 用时 145.03 秒。replay 只记录最终测量 counts，不是
+optimizer trajectory；formal/performance/generalization/hardware/advantage 均为 false。
+
+```bash
+cd experiments
+/opt/anaconda3/envs/mcts-qoracle/bin/python scripts/verify_e6_replay_training_bundle_v1.py \
+  results/xa202609/20260812-e6-q4ai-causal-v1-full-s20260912
+```
+
+下一步是 D1 机制诊断：先查明空选择、random/QAOA endpoint 重合与标签边际对齐的
+作用链，再用预先指定的新数据验证；不得在当前 held-out 上事后调参。
 
 能力边界：这些结果仅来自 synthetic heavy-hex-like profile 和 NumPy 模拟器，
 无真机或真实校准证据，也不证明量子优势。离子阱、光量子两条适配路线及三路线
-统一 manifest 尚未完成；QAOA 最终测量 observation 经外部锁验证后被 trainer
-真实消费并更新 policy/value 的因果闭环也尚未运行。E4 在 AES 尺度没有逐 trial 运行原生全基态等价；其逻辑 Oracle 语义
+统一 manifest 尚未完成；E6 的 replay→trainer→policy/value 开发闭环已经实际运行，
+但结果显著反向且不构成性能证据。E4 在 AES 尺度没有逐 trial 运行原生全基态等价；其逻辑 Oracle 语义
 已对 256 个输入和两个目标值穷举验证，原生层只做了声明范围内的映射契约与采样
 含噪端点，不得混称为 AES 原生层穷举等价。

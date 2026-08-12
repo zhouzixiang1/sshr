@@ -104,6 +104,20 @@ def test_staging_spec_is_explicit_and_excludes_archives_except_anchored_raw() ->
         "experiments/demo/offline_fallback/report.md",
         "experiments/demo/offline_fallback/verification.json",
     } <= required_files
+    e6_bundle = (
+        "experiments/results/xa202609/"
+        "20260812-e6-q4ai-causal-v1-full-s20260912"
+    )
+    assert {
+        "docs/competition/evidence/E6_Q4AI_CAUSAL_NEGATIVE_EVIDENCE.md",
+        "experiments/configs/xa202609/e6_q4ai_causal_v1.json",
+        "experiments/scripts/run_e6_q4ai_causal_v1.py",
+        "experiments/scripts/verify_e6_replay_training_bundle_v1.py",
+        *(f"{e6_bundle}/{name}" for name in (
+            "config.json", "results.json", "raw.jsonl",
+            "heldout_evaluation.json", "checksums.sha256",
+        )),
+    } <= required_files
     assert payload["final_authorization_documents"] == [
         "LICENSE",
         "IP_STATEMENT.md",
@@ -123,12 +137,12 @@ def test_staging_spec_is_explicit_and_excludes_archives_except_anchored_raw() ->
     assert payload["final_model_release"]["evidence_files"]
     assert payload["report_release"] == {
         "path": "docs/papers/resource_nmcts/chinese/resource_nmcts_competition_current.pdf",
-        "sha256": "f6a19cf8a7d2e245505777838a934f30219b378a063703784bf6cf535f908d8f",
-        "page_count": 35,
+        "sha256": "fadd6965e39a390589086e1784e6e68984ce2121339dbace802775858d3fcfe3",
+        "page_count": 38,
     }
     assert payload["presentation_release"] == {
         "path": "docs/competition/slides/XA-202609_双向智能Boolean_Oracle答辩稿.pptx",
-        "sha256": "cdb66ca733a6783cd020fd7b9ab8c568e7a80ef876d1109330cb62b3084680ae",
+        "sha256": "bf830dee8dd9adf5e9110cbf8b73f0ebbfbb3fe453c3aad03c057b031581d4e3",
     }
     assert payload["presentation_candidates"] == [payload["presentation_release"]["path"]]
     assert "experiments/e6/*.py" in payload["required_globs"]
@@ -150,7 +164,6 @@ def test_final_build_fails_closed_without_authorization(tmp_path: Path) -> None:
     assert "training_command_unverified" not in result.stderr
     assert "dataset_split_manifest_unverified" not in result.stderr
     assert "training_source_sha_provenance_unverified" not in result.stderr
-    assert "repository_not_clean_frozen_commit" in result.stderr
     assert not output.exists()
 
 
@@ -290,12 +303,15 @@ def test_internal_draft_has_closed_manifest_and_verifies_only_with_override(
     assert "legacy_v3_demo_model_is_development_candidate" in technical["blockers"]
     assert "machine_model_card_is_provenance_candidate_not_final_frozen" in technical["blockers"]
     assert "final_external_performance_evidence_missing" in technical["blockers"]
+    assert (
+        "repository_not_clean_frozen_commit" in technical["blockers"]
+    ) is technical["source"]["repository_dirty"]
     assert manifest["technical_release"] == technical
     package_readme = (staging / "README_PACKAGE.md").read_text(encoding="utf-8")
     assert "Formal v4 closes training provenance only" in package_readme
     assert "E5 has no accepted endpoint" in package_readme
     assert not any("misc/archive" in path.as_posix() for path in staging.rglob("*"))
-    anchored_raw = {
+    included_raw = {
         path.relative_to(staging).as_posix()
         for path in staging.rglob("*")
         if path.is_file() and path.name in {"raw.jsonl", "events.jsonl"}
@@ -310,11 +326,16 @@ def test_internal_draft_has_closed_manifest_and_verifies_only_with_override(
         "20260812-e5-v11-portable-negative-audit-v3-s950000",
         "20260812-e5-v11-portable-fresh-validation-v2-s970000",
     }
-    assert anchored_raw == {
+    expected_raw = {
         f"experiments/results/xa202609/{run_id}/{name}"
         for run_id in anchored_run_ids
         for name in ("raw.jsonl", "events.jsonl")
     }
+    expected_raw.add(
+        "experiments/results/xa202609/"
+        "20260812-e6-q4ai-causal-v1-full-s20260912/raw.jsonl"
+    )
+    assert included_raw == expected_raw
     for rel in (
         "experiments/demo/output/checksums.sha256",
         "experiments/demo/output/demo_manifest.json",
@@ -406,7 +427,24 @@ def test_claim_boundaries_are_explicit_and_not_promoted(
     assert claims["e5"]["fresh_full_pytest_passed"] == 383
     assert claims["e5"]["scientific_evidence"] is False
     assert claims["e5"]["hardware_execution"] is False
+    assert claims["e6"]["status"] == "development_causal_negative_result_verified"
+    assert claims["e6"]["development_result_bundle_present"] is True
     assert claims["e6"]["formal_result_bundle_present"] is False
+    assert claims["e6"]["bundle_snapshot_sha256"] == (
+        "18b758ac3e432a5d4e9f0ba1f8be7e17bd1b848b6212234eea9d2e842d4cc76a"
+    )
+    assert claims["e6"]["training_or_finetuning_performed"] is True
+    assert claims["e6"]["train_case_count"] == 64
+    assert claims["e6"]["heldout_case_count"] == 32
+    assert claims["e6"]["mean_effect"] == 0.09497779579431545
+    assert claims["e6"]["bootstrap_95_ci"] == [
+        0.06963836434546339,
+        0.12376730228100935,
+    ]
+    assert claims["e6"]["signflip_p"] == 0.00000999990000099999
+    assert (claims["e6"]["wins"], claims["e6"]["ties"], claims["e6"]["losses"]) == (0, 3, 29)
+    assert claims["e6"]["claim_supported"] is False
+    assert claims["e6"]["formal_evaluation"] is False
     assert claims["e6"]["performance_evidence"] is False
     e6_config = json.loads(
         (staging / "experiments/configs/xa202609/e6_multioutput_shared_mvp_v1.json").read_text(
@@ -420,6 +458,21 @@ def test_claim_boundaries_are_explicit_and_not_promoted(
     assert e6_config["ai_quantum_boundary"]["training_or_finetuning_performed"] is False
     assert e6_config["scope"]["formal_result_bundle_present"] is False
     assert e6_config["scope"]["performance_evidence"] is False
+    e6_bundle = staging / claims["e6"]["bundle_path"]
+    assert {path.name for path in e6_bundle.iterdir()} == {
+        "config.json", "results.json", "raw.jsonl",
+        "heldout_evaluation.json", "checksums.sha256",
+    }
+    e6_results = json.loads((e6_bundle / "results.json").read_text(encoding="utf-8"))
+    e6_heldout = json.loads(
+        (e6_bundle / "heldout_evaluation.json").read_text(encoding="utf-8")
+    )
+    assert e6_results["schema_version"] == "xa.e6-replay-training-results.v1-development"
+    assert {report["sample_count"] for report in e6_results["training_report_by_arm"].values()} == {64}
+    assert e6_heldout["formal_evaluation"] is False
+    assert e6_heldout["performance_evidence"] is False
+    assert e6_heldout["statistics"]["claim_gate"]["claim_supported"] is False
+    assert len(e6_heldout["case_rows"]) == 32
     assert (staging / "experiments/e6/shared_oracle.py").is_file()
     assert (staging / "experiments/e6/shared_scheduler.py").is_file()
     assert (staging / "experiments/tests/test_e6_shared_semantics.py").is_file()
