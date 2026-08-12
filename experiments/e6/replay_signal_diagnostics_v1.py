@@ -177,6 +177,15 @@ def _finite_result(value: float, name: str) -> float:
     return 0.0 if converted == 0.0 else converted
 
 
+def _probability_mass_result(
+    value: float, name: str, *, tolerance: float = 1.0e-12
+) -> float:
+    converted = _finite_result(value, name)
+    if converted < -tolerance or converted > 1.0 + tolerance:
+        raise FloatingPointError(f"computed {name} lies outside [0, 1]")
+    return min(1.0, max(0.0, converted))
+
+
 def _finite_tuple(value: object, name: str, *, nonempty: bool = True) -> tuple[float, ...]:
     if type(value) is not tuple:
         raise TypeError(f"{name} must be an exact native tuple")
@@ -638,7 +647,7 @@ def diagnose_replay_signal_case_v1(
         index for index, value in enumerate(teacher) if value == teacher_maximum
     )
     teacher_raw_hits = len(set(raw_best) & set(teacher_argmax))
-    teacher_raw_positive_mass = _finite_result(
+    teacher_raw_positive_mass = _probability_mass_result(
         math.fsum(
             probability
             for probability, utility in zip(teacher, raw)
@@ -646,7 +655,7 @@ def diagnose_replay_signal_case_v1(
         ),
         "teacher raw-positive mass",
     )
-    teacher_raw_best_mass = _finite_result(
+    teacher_raw_best_mass = _probability_mass_result(
         math.fsum(teacher[index] for index in raw_best),
         "teacher raw-best mass",
     )

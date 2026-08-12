@@ -9,6 +9,7 @@ from types import SimpleNamespace
 
 import pytest
 
+import e6.replay_signal_diagnostics_v1 as replay_signal_diagnostics
 from e6.final_measurement_replay_v2 import SOURCE_ARMS, ReplayTargetsV2
 from e6.frozen_case import build_frozen_shared_case, canonical_action_sha256
 from e6.isolated_head_trainer_v2 import LockedReplayTrainingGroupV2
@@ -161,6 +162,40 @@ def test_teacher_and_model_alignment_metrics_are_exact_and_semantic() -> None:
     assert math.isfinite(row["score_ratio_y"])
     json.dumps(row, sort_keys=True, allow_nan=False)
     _assert_native_finite(row)
+
+
+def test_derived_probability_masses_clamp_only_roundoff(monkeypatch) -> None:
+    vector, actions = _vector_actions()
+    monkeypatch.setattr(
+        replay_signal_diagnostics,
+        "shared_action_utility",
+        lambda action, *, weights: 1.0,
+    )
+    policy = (0.1, 0.2, 0.3, 0.4000000000000002)
+    row = diagnose_replay_signal_case_v1(
+        split="validation",
+        case_id="rounded-mass",
+        arm="cell",
+        teacher_role="roundoff_test",
+        value_weight=0.0,
+        vector=vector,
+        actions=actions,
+        raw_utilities=(1.0, 1.0, 1.0, 1.0),
+        teacher_policy=policy,
+        teacher_value_target=0.0,
+        model=_StaticModel((1.0, 1.0, 1.0, 1.0), value=0.0),
+        top_k=2,
+        scheduler_budget=1,
+        weights=TEST_WEIGHTS,
+    )
+    assert row["teacher_raw_positive_mass"] == 1.0
+    assert row["teacher_raw_best_mass"] == 1.0
+    aggregate = aggregate_replay_signal_diagnostics_v1((row,))
+    assert aggregate["groups"][0]["teacher_raw_positive_mass_mean"] == 1.0
+    assert aggregate["groups"][0]["teacher_raw_best_mass_mean"] == 1.0
+
+    with pytest.raises(FloatingPointError, match="outside"):
+        replay_signal_diagnostics._probability_mass_result(1.0 + 2.0e-12, "mass")
 
 
 def test_ties_use_average_ranks_and_raw_best_recall_counts_all_maxima() -> None:
