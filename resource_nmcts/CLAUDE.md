@@ -1,6 +1,6 @@
 # CLAUDE.md — Resource-NMCTS
 
-Resource-Constrained Neural MCTS for Boolean Oracle synthesis. Git 根在上级目录 `/Users/zhouzixiang/Desktop/tzb`，工作目录是本目录 `resource_nmcts/`。完整项目文档见上级 `CLAUDE.md`。
+Resource-Constrained Neural MCTS for Boolean Oracle synthesis. Git 根在上级目录 `/Users/zhouzixiang/Desktop/resource_nmcts_v40`，分支 `v40-20260718`。工作目录是本目录 `resource_nmcts/`。完整项目文档见上级 `CLAUDE.md` 与 `AGENTS.md`。不要到 `tzb` 或 `tzb/xa202609-oracle/` 里改 v40（该交接快照已于 2026-08-13 移出至 tzb）。
 
 ## 数据流（一句话）
 

@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+> **工作区覆盖**：本副本的 Git 根是 `/Users/zhouzixiang/Desktop/resource_nmcts_v40`，分支 `v40-20260718`。改 v40 只改本目录的 `resource_nmcts/` 等 v40 文件。不要编辑 `/Users/zhouzixiang/Desktop/tzb`（竞赛 `main`）。`xa202609-oracle/` 已于 2026-08-13 移出至 `/Users/zhouzixiang/Desktop/tzb/xa202609-oracle/`（独立私有 Git，tzb 已 gitignore），本目录不再保留它。详见 `AGENTS.md`。
+
 此文件为 Claude Code (claude.ai/code) 提供项目指导。
 
 ## 项目概述
@@ -10,7 +12,7 @@
 
 ## 目录结构
 
-Git 仓库根是本目录（`/Users/zhouzixiang/Desktop/tzb`），工作目录是 `resource_nmcts/`。所有命令都从 `resource_nmcts/` 下执行。
+Git 仓库根是本目录（`/Users/zhouzixiang/Desktop/resource_nmcts_v40`），工作目录是 `resource_nmcts/`。所有命令都从 `resource_nmcts/` 下执行。
 
 | 目录 | 用途 |
 |------|------|
@@ -27,8 +29,9 @@ Git 仓库根是本目录（`/Users/zhouzixiang/Desktop/tzb`），工作目录�
 | `resource_nmcts/submission_package/` | 投稿材料包（`dist/*.tar.gz` 是最终产物） |
 | `resource_nmcts/benchmark_exports/` | 导出的基准文件（BLIF, PLA, truth-JSON，给外部工具链） |
 | `resource_nmcts/tools/` | mockturtle BLIF→XAG C++ 探针 |
+| `xa202609-oracle/` | 已于 2026-08-13 移出至 `/Users/zhouzixiang/Desktop/tzb/xa202609-oracle/`（独立私有 Git；只读；tzb 已 gitignore） |
 
-归档项目在 `_archive/` 目录（只读参考，含此前 4 个研究轨道）。
+归档项目在 `_archive/` 目录（只读参考，含此前 4 个研究轨道 + 2026-08-13 归档的 `resource_nmcts_zh_history/` 中文手稿历史版本）。`xa202609-oracle/` 已移出本目录，不属于公开 `v40-20260718` 分支。
 
 ## 开发环境
 

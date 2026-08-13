@@ -19,5 +19,11 @@ __pycache__/
 _archive/external-tools/
 _archive/misc/
 
+# XA-202609 handoff snapshot was relocated to /Users/zhouzixiang/Desktop/tzb/xa202609-oracle/
+# on 2026-08-13. This ignore rule is kept for historical reference; the directory
+# no longer exists in this worktree. The snapshot is gitignored in tzb to avoid leaking
+# the private handoff into the public sshr main branch.
+xa202609-oracle/
+
 # Model checkpoints are tracked, but large experiment re-runs are not
 *.tmp
